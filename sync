@@ -1,0 +1,9 @@
+#!/bin/bash
+cd ~
+truncate -s 0 gorooms.deploy.log
+cd ~/gorooms.ru/docs
+git fetch --all
+git reset --hard master
+git pull
+php -d extension=phar.so composer.phar install
+php artisan migrate
