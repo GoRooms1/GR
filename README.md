@@ -34,7 +34,7 @@ Use
 To create a user with administrator privileges
 
 ```php
-php artisan users:create --email=admin@admin.com --password=123456 --name=Admin --is_admin=true
+php artisan users:create --email=admin@admin.com --password=123456 --name=Admin --is_admin=1
 ```
 
 ## Contributing
