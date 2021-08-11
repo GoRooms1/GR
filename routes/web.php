@@ -17,8 +17,6 @@ Route::get('/', 'HomeController@index')->name('index');
 
 Auth::routes();
 
-Route::get('/home', 'Admin\HomeController@index')->name('home');
-
 Route::get('/hotels', 'HotelController@index')->name('hotels.index');
 Route::get('/hotels/{hotel}', 'HotelController@show')->name('hotels.show');
 Route::get('/rooms', 'RoomController@index')->name('rooms.index');

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 | Admin routes
 |--------------------------------------------------------------------------
 */
+Route::get('/', 'HomeController@index')->name('index');
 
 Route::resource('hotels', 'HotelController');
 Route::resource('rooms', 'RoomController', [
