@@ -165,7 +165,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Spatie\Permission\PermissionServiceProvider::class,
         Fomvasss\Dadata\DadataServiceProvider::class,
         /*
          * Application Service Providers...
