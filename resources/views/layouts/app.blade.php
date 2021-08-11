@@ -10,10 +10,6 @@
     <meta name="format-detection" content="address=no">
     <meta http-equiv="x-rim-auto-match" content="none">
 
-
-
-
-
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
@@ -22,18 +18,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @if(\Route::getCurrentRoute()->getName() === 'hotels.show' && isset($hotel))
-        <title>{{ $hotel->meta_title }}</title>
-        <meta name="keywords" content="{{ $hotel->meta_keywords }}">
-        <meta name="author" content="{{ $hotel->name }}">
-        <meta name="description" content="{{ $pageAbout->meta_description }}">
-        <meta property="og:locale" content="ru_RU" />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content="{{ $pageAbout->title  }}" />
-        <meta property="og:description" content="{{ $pageAbout->meta_description }}" />
-        <meta property="og:url" content="https://gorooms.ru{{ $pageAbout->url }}" />
-        <meta property="og:image" content="https://gorooms.ru/img/logo.svg" />
-        <meta property="og:site_name" content="https://gorooms.ru/" />    @if($hotel->meta_keywords)
-    <link rel="canonical" href="{{ $hotel->meta_keywords }}" />
+      <title>{{ $hotel->meta_title }}</title>
+      <meta name="keywords" content="{{ $hotel->meta_keywords }}">
+      <meta name="author" content="{{ $hotel->name }}">
+      <meta name="description" content="{{ $pageAbout->meta_description }}">
+      <meta property="og:locale" content="ru_RU" />
+      <meta property="og:type" content="article" />
+      <meta property="og:title" content="{{ $pageAbout->title  }}" />
+      <meta property="og:description" content="{{ $pageAbout->meta_description }}" />
+      <meta property="og:url" content="https://gorooms.ru{{ $pageAbout->url }}" />
+      <meta property="og:image" content="https://gorooms.ru/img/logo.svg" />
+      <meta property="og:site_name" content="https://gorooms.ru/" />    @if($hotel->meta_keywords)
+      <link rel="canonical" href="{{ $hotel->meta_keywords }}" />
     @endif
     @else
     @if(isset($pageAbout))
@@ -69,10 +65,6 @@
     <link rel="canonical" href="{{ url(Request::url()) }}" />
     <script src="https://api-maps.yandex.ru/2.1/?apikey={{ config('services.yandex.map.key') }}&lang=ru_RU"
             type="text/javascript">
-=======
-    <link rel="canonical" href="{{ url()->current() }}">
-    <script src="https://api-maps.yandex.ru/2.1/?apikey={{ config('services.yandex.map.key') }}&lang=ru_RU" type="text/javascript">
->>>>>>> 75ed0b8143edd00c38fbd5e8dc7ffaf52c008e26
     </script>
     @stack('header')
 </head>
@@ -91,9 +83,24 @@
                 </a>
                 @endif
                 <div class="header-top-btns">
-                    <a href="" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border" data-href="#obj-popup" data-toggle="modal" data-target="#obj-popup">Зарегистрировать свой объект</a>
-                    <a href="" class="header-top-btn header-top-btn-signin btn btn-sm btn-light" data-href="#signin-popup" data-toggle="modal" data-target="#signin-popup">Войти</a>
-                    <a href="" class="header-top-btn header-top-btn-reg btn btn-sm btn-light" data-href="#reg-popup" data-toggle="modal" data-target="#reg-popup">Регистрация</a>
+                  @auth
+{{--                TODO: Добавить ссылку на личный кабинет    --}}
+                    <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Зарегистрировать свой объект</a>
+                    @if(auth()->user()->is_admin)
+                      <a href="{{ route('admin.index') }}" class="header-top-btn btn btn-sm btn-light" style="width: auto; padding: 0 10px">Административная панель</a>
+                    @endif
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                       class="header-top-btn btn btn-sm btn-light"
+                       style="width: auto; padding: 0 10px">Выйти</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                          style="display: none;">
+                      @csrf
+                    </form>
+                  @else
+                    <a href="{{ route('login') }}" class="header-top-btn header-top-btn-signin btn btn-sm btn-light">Войти</a>
+                    <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>
+                  @endauth
                 </div>
                 <button id="js-menu-btn" class="header-menu-btn" type="button">
                     <span class="header-menu-btn-item header-menu-btn-item-1"></span>

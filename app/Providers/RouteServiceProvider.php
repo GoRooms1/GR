@@ -12,7 +12,7 @@ class RouteServiceProvider extends ServiceProvider
    *
    * @var string
    */
-  public const HOME = '/home';
+  public const HOME = '/';
   /**
    * This namespace is applied to your controller routes.
    *
@@ -23,6 +23,7 @@ class RouteServiceProvider extends ServiceProvider
   protected $namespace = 'App\Http\Controllers';
   protected string $admin_namespace = 'App\Http\Controllers\Admin';
   protected string $render_namespace = 'App\Http\Controllers';
+  protected string $lk_namespace = 'App\Http\Controllers\Lk';
 
   /**
    * Define your route model bindings, pattern filters, etc.
@@ -45,6 +46,7 @@ class RouteServiceProvider extends ServiceProvider
   {
     $this->mapApiRoutes();
     $this->mapAdminRoutes();
+    $this->mapLkRoutes();
     $this->mapRenderRoutes();
     $this->mapWebRoutes();
   }
@@ -98,5 +100,21 @@ class RouteServiceProvider extends ServiceProvider
     Route::middleware('web')
       ->namespace($this->namespace)
       ->group(base_path('routes/web.php'));
+  }
+
+  /**
+   * Define the "lk" routes for the application.
+   *
+   * These routes all receive session state, CSRF protection, etc.
+   *
+   * @return void
+   */
+  protected function mapLkRoutes(): void
+  {
+    Route::middleware(['web', 'auth'])
+      ->prefix('lk')
+      ->name('lk.')
+      ->namespace($this->lk_namespace)
+      ->group(base_path('routes/lk.php'));
   }
 }
