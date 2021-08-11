@@ -14,5 +14,4 @@ npm i
 npm run dev
 
 ### Создание пользователя
-php artisan users:create --email=admin@admin.com --password=123456 --name=Admin
-php artisan users:add_role admin@admin.com admin
+* php artisan users:create --email=admin@admin.com --password=123456 --name=Admin --is_admin=true
