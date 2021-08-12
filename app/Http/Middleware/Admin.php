@@ -28,6 +28,6 @@ class Admin
       }
     }
 
-    return route('index');
+    return redirect()->route('index');
   }
 }
