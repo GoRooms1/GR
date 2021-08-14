@@ -120,7 +120,8 @@
                     </ul>
                     <div class="room-btns-bar">
                         <a href="" class="btn btn-orange btn-block" data-href="#book-popup" data-toggle="modal"
-                           data-target="#book-popup" data-action="{{ route('booking.room', $room->id) }}">Забронировать</a>
+                           data-target="#book-popup" data-action="{{ route('booking.room', $room->id) }}"
+                           onclick="showFormBookRoom('{{$room->id}}')">Забронировать</a>
                         @if ($room->phone || $room->hotel->phone)
                             <p class="show-tel-wrapper">
                                 <button class="btn btn-blue btn-block js-show-tel-btn" type="button">Показать телефон

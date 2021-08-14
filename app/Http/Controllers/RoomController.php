@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\BookRoomJob;
 use App\Models\Form;
 use App\Models\Room;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -61,5 +62,16 @@ class RoomController extends Controller
         $form->save();
         BookRoomJob::dispatch($id, $validated);
         return redirect()->back()->with(['showSuccessModal' => true]);
+    }
+
+    /**
+     * Получить по api информацию о номере
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getRoomInfo(int $id): JsonResponse
+    {
+        return \response()->json(['room_info' => Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first()]);
     }
 }
