@@ -111,7 +111,7 @@ class RouteServiceProvider extends ServiceProvider
    */
   protected function mapLkRoutes(): void
   {
-    Route::middleware(['web', 'auth'])
+    Route::middleware(['web', 'auth', 'lk'])
       ->prefix('lk')
       ->name('lk.')
       ->namespace($this->lk_namespace)

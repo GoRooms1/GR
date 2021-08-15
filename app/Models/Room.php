@@ -30,6 +30,27 @@ class Room extends Model
         'costs',
     ];
 
+  ### SCOPES
+
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::addGlobalScope('moderation', function (Builder $builder) {
+      if (auth()->check()) {
+        if (!auth()->user()->is_admin && !auth()->user()->is_moderate) {
+          $builder->whereHas('hotel', function ($q) {
+            $q->where('moderate', '=', false);
+          })->where('moderate', '=', false);
+        }
+      } else {
+         $builder->whereHas('hotel', function ($q) {
+            $q->where('moderate', '=', false);
+          })->where('moderate', '=', false);
+      }
+    });
+  }
+
     public function hotel(): BelongsTo
     {
         return $this->belongsTo(Hotel::class);

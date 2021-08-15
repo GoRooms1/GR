@@ -13,4 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('index');
+Route::redirect('/', 'lk/object/edit')->name('index');
+Route::get('object/edit', 'ObjectController@edit')->name('object.edit');

@@ -8,11 +8,11 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class Admin
+class Lk
 {
   /**
    * Handle an incoming request.
-   * Check isset user Admin Flag
+   * Check isset user exist Hotel
    *
    * @param Request $request
    * @param Closure $next
@@ -23,9 +23,10 @@ class Admin
     if (Auth::check()) {
 //    If logged in
       $user = User::find(auth()->id());
-      if ($user->is_admin) {
+      if ($user->hotel()->exists()) {
         return $next($request);
       }
+      return redirect()->route('lk.start');
     }
 
     return redirect()->route('index');

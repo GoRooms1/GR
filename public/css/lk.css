@@ -1346,3 +1346,30 @@ main {
 #newObject .field {
 	font-size: 16px;
 }
+
+.select2.select2-container {
+    height: 50px;
+}
+.select2 .select2-selection  {
+    height: 100%;
+}
+
+.select2 .select2-selection__arrow {
+    top: 13px!important;
+    right: 10px!important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-width: 9px 7px 0 7px;
+    margin-left: -7px;
+    margin-top: -4px;
+}
+
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b  {
+    border-width: 0 7px 9px 7px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 50px;
+}
