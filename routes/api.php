@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,3 +40,5 @@ Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.m
 //});
 
 Route::get('/address/helper', 'Api\AddressController@helper');
+
+Route::get('/room-info/{id}', [RoomController::class, 'getRoomInfo']);
