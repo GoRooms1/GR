@@ -37,6 +37,15 @@ To create a user with administrator privileges
 php artisan users:create --email=admin@admin.com --password=123456 --name=Admin --is_admin=1
 ```
 
+## Hotels (Moderation)
+
+На данный момет администратор и модератор видит все отели и комнаты. Обычные же пользователи видят только принятые отели.
+За доступность видения отелей отвечает свойство `moderate`, а роль администратора `is_admin`, и модератор `is_moderate`
+
+```php
+php artisan users:create --email=user@email.com --password=123456 --name=User --is_moderate=1
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
