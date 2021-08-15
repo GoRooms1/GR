@@ -85,7 +85,16 @@
                 <div class="header-top-btns">
                   @auth
 {{--                TODO: Добавить ссылку на личный кабинет    --}}
-                    <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Зарегистрировать свой объект</a>
+
+                    @if(!auth()->user()->hotel()->exists())
+                      <a href="{{ route('lk.start') }}"
+                         class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
+                        Зарегистрировать свой объект
+                      </a>
+                    @else
+                      <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный кабинет</a>
+                    @endif
+
                     @if(auth()->user()->is_admin)
                       <a href="{{ route('admin.index') }}" class="header-top-btn btn btn-sm btn-light" style="width: auto; padding: 0 10px">Административная панель</a>
                     @endif
@@ -98,6 +107,10 @@
                       @csrf
                     </form>
                   @else
+                    <a href="{{ route('lk.start') }}"
+                       class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
+                      Зарегистрировать свой объект
+                    </a>
                     <a href="{{ route('login') }}" class="header-top-btn header-top-btn-signin btn btn-sm btn-light">Войти</a>
                     <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>
                   @endauth
@@ -210,14 +223,6 @@
         </div>
     </div>
     <div id="reg-popup" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"></button>
-                <p class="modal-text-inprogress">Раздел находится в разработке</p>
-            </div>
-        </div>
-    </div>
-    <div id="obj-popup" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"></button>

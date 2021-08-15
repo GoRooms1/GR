@@ -6,6 +6,7 @@ use App\Http\Middleware\Admin;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\Lk;
 use App\Http\Middleware\noDebugbar;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\SecureRedirectMiddleware;
@@ -92,5 +93,6 @@ class Kernel extends HttpKernel
     'verified' => EnsureEmailIsVerified::class,
     'noDebugbar' => noDebugbar::class,
     'admin' => Admin::class,
+    'lk' => Lk::class
   ];
 }

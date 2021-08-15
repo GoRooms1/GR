@@ -21,8 +21,9 @@ class AddSlugToHotels extends Migration
             $start_slug = \Illuminate\Support\Str::slug($hotel->name);
             $slug = $start_slug;
             $try = 0;
-            while (\Illuminate\Support\Facades\DB::table('hotels')->where('slug', $slug)->exists())
-                $slug = $start_slug.'-'.$try++;
+            while (\Illuminate\Support\Facades\DB::table('hotels')->where('slug', $slug)->exists()) {
+              $slug = $start_slug . '-' . $try++;
+            }
 
             $hotel->slug = $slug;
             $hotel->save();
