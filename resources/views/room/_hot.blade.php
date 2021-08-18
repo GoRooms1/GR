@@ -128,7 +128,7 @@
             <div class="room-card-btns">
                 <a href="" class="btn btn-orange btn-block" data-href="#book-popup" data-toggle="modal"
                    data-target="#book-popup" data-action="{{ route('booking.room', $room->id) }}"
-                   onclick="showFormBookRoom('{{json_encode($room->id)}}')">Забронировать</a>
+                   onclick="showFormBookRoom('{{$room->id}}')">Забронировать</a>
             </div>
         </div>
     </div>

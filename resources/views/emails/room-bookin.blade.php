@@ -335,12 +335,42 @@
                                 <td class="content-cell">
                                     <div class="h2">Бронирование номера "{{ $room->name }}"</div>
                                     <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-                                        @foreach($fields ?? [] as $name => $value)
-                                            <tr>
-                                                <td><strong>@lang($name)</strong>:</td>
-                                                <td>{{ $value }}</td>
-                                            </tr>
-                                        @endforeach
+                                        <tr>
+                                            <td><strong>Объект размещения</strong>:</td>
+                                            <td>{{ $room->hotel->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Категория</strong>:</td>
+                                            <td>{{ $room->hotel->type->single_name ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Номер</strong>:</td>
+                                            <td>{{ $room->name ?? $room->id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Заезд</strong>:</td>
+                                            <td>{{ $fields['from-date'] ?? '' }} {{ $fields['from-time'] ?? '' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Кол-во часов</strong>:</td>
+                                            <td>{{ $fields['book_by'] ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Выезд</strong>:</td>
+                                            <td>{{ $fields['to-date'] ?? '' }} {{ $fields['to-time'] ?? '' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Имя</strong>:</td>
+                                            <td>{{ $fields['book-name'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Телефон</strong>:</td>
+                                            <td>{{ $fields['book-tel'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Комментарий</strong>:</td>
+                                            <td>{{ $fields['book-comment'] ?? '' }}</td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>

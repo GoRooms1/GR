@@ -39,7 +39,10 @@ class BookRoomJob implements ShouldQueue
     {
         $room = Room::findOrFail($this->room_id);
         $email = Settings::option('notify', 'gorooms@walfter.ru');
-        Mail::to($email)->send(new RoomBookingMail($room, $this->fields));
-        Mail::to($room->hotel->email)->send(new RoomBookingMail($room, $this->fields));
+        if ($room->hotel->email != null) {
+            Mail::to($room->hotel->email)->send(new RoomBookingMail($room, $this->fields));
+        } else {
+            Mail::to($email)->send(new RoomBookingMail($room, $this->fields));
+        }
     }
 }

@@ -264,9 +264,6 @@
       </div>
       <form id="book-form" class="book-form" action="" method="post">
         @csrf
-        <div hidden>
-          <input type="text" name="book-email">
-        </div>
         <div class="row">
           <div class="col-lg-6 row mb-3 align-content-start">
             <div class="col-12">
@@ -332,21 +329,21 @@
                 </div>
                 <div class="col-12 col-lg-3">
                   <input type="radio" id="book_by_2_hour" class="checkbox"
-                         name="book_by"  checked value="2">
+                         name="book_by" value="2">
                   <label for="book_by_2_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">2
                     часа</label>
                 </div>
                 <div class="col-12 col-lg-3">
                   <input type="radio" id="book_by_3_hour" class="checkbox"
-                         name="book_by"  checked value="3">
+                         name="book_by" value="3">
                   <label for="book_by_3_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">3
                     часа</label>
                 </div>
                 <div class="col-12 col-lg-3">
                   <input type="radio" id="book_by_4_hour" class="checkbox"
-                         name="book_by"  checked value="4">
+                         name="book_by" value="4">
                   <label for="book_by_4_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">4
                     часа</label>
@@ -451,8 +448,9 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close"></button>
-      <p class="modal-text-inprogress"><img src="{{ asset('img/ico-check-blue.svg') }}" alt="">Ваше сообщение
-        отправлено</p>
+      <p class="modal-text-inprogress"><img src="{{ asset('img/ico-check-blue.svg') }}" alt="">
+        {!!   Session::get('SuccessModalMessage') ?? '' !!}
+      </p>
     </div>
   </div>
 </div>
