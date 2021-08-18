@@ -41,6 +41,7 @@
     @elseif(isset($pageDescription) && !is_null($pageDescription))
       <title>{{ $pageDescription->title ?? config('app.name', 'GoRooms') }}</title>
       <meta name="description" content="{{ $pageDescription->meta_description }}">
+      <meta name="keywords" content="{{ $pageDescription->meta_keywords }}">
       @if(@$pageDescription->meta_keywords)
         <link rel="canonical" href="{{ $pageDescription->meta_keywords }}"/>
       @endif
