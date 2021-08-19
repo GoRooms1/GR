@@ -150,19 +150,48 @@
         <li class="header-menu-item">
           <a href="/contacts" class="header-menu-link">Контакты</a>
         </li>
-        <li class="header-menu-item header-menu-item-mobile">
-          <a href="" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border"
-             data-href="#obj-popup" data-toggle="modal" data-target="#obj-popup">Зарегистрировать свой
-            объект</a>
-        </li>
-        <li class="header-menu-item header-menu-item-mobile">
-          <a href="" class="header-top-btn header-top-btn-signin btn btn-sm btn-light"
-             data-href="#signin-popup" data-toggle="modal" data-target="#signin-popup">Войти</a>
-        </li>
-        <li class="header-menu-item header-menu-item-mobile">
-          <a href="" class="header-top-btn header-top-btn-reg btn btn-sm btn-light" data-href="#reg-popup"
-             data-toggle="modal" data-target="#reg-popup">Регистрация</a>
-        </li>
+
+        @auth
+          {{--                TODO: Добавить ссылку на личный кабинет    --}}
+          @if(!auth()->user()->hotel()->exists())
+            <li class="header-menu-item header-menu-item-mobile">
+              <a href="{{ route('lk.start') }}"
+                 class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
+                Зарегистрировать свой объект
+              </a>
+            </li>
+          @else
+            <li class="header-menu-item header-menu-item-mobile">
+              <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный кабинет</a>
+            </li>
+          @endif
+
+          @if(auth()->user()->is_admin)
+            <li class="header-menu-item header-menu-item-mobile">
+              <a href="{{ route('admin.index') }}" class="header-top-btn btn btn-sm btn-light"
+                 style="width: auto; padding: 0 10px">Административная панель</a>
+            </li>
+          @endif
+          <li class="header-menu-item header-menu-item-mobile">
+            <a href="{{ route('logout') }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+               class="header-top-btn btn btn-sm btn-light"
+               style="width: auto; padding: 0 10px">Выйти</a>
+          </li>
+        @else
+          <li class="header-menu-item header-menu-item-mobile">
+            <a href="{{ route('lk.start') }}"
+               class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
+              Зарегистрировать свой объект
+            </a>
+          </li>
+          <li class="header-menu-item header-menu-item-mobile">
+            <a href="{{ route('login') }}" class="header-top-btn header-top-btn-signin btn btn-sm btn-light">Войти</a>
+          </li>
+          <li class="header-menu-item header-menu-item-mobile">
+            <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>
+          </li>
+        @endauth
       </ul>
     </div>
   </nav>
