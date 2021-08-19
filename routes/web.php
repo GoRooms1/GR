@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,17 +33,17 @@ Route::get('/address/{city}/{area?}/{district?}/{street?}', 'SearchController@ad
 Route::get('/image/{path}', 'ImageController@show')->where('path', '.*');
 Route::middleware('noDebugbar')->get('sitemap.xml', 'SiteMapController@index');
 Route::get('/contacts', 'PageController@show')->name('pages.show');
-Route::get('/bonuse', 'PageController@show')->name('pages.show');
-Route::get('/rules', 'PageController@show')->name('pages.show');
+//Route::get('/bonuse', 'PageController@show')->name('pages.show');
+//Route::get('/rules', 'PageController@show')->name('pages.show');
 
 Route::get('lk/start', 'Lk\HomeController@start')->name('lk.start');
 Route::post('lk/object/store', 'Lk\ObjectController@store')->name('lk.object.store');
 
-Route::any('{error}', function () {
-    return redirect()->to('/');
-})->where('any', '.*');
-
-Route::any('{page}/{error}', function () {
-    return redirect()->to('{page}');
-})->where('any', '.*');
+//Route::any('{error}', function () {
+//    return redirect()->to('/');
+//})->where('any', '.*');
+//
+//Route::any('{page}/{error}', function () {
+//    return redirect()->to('{page}');
+//})->where('any', '.*');
 

@@ -48,8 +48,22 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $exception): \Symfony\Component\HttpFoundation\Response
     {
+      if($this->isHttpException($exception))
+      {
+        switch ((int)$exception->getStatusCode()) {
+          // not found
+          case 500:
+          case 404:
+            return redirect()->route('index');
+            break;
+
+          default:
+            return $this->renderHttpException($exception);
+            break;
+        }
+      }
         return parent::render($request, $exception);
     }
 }
