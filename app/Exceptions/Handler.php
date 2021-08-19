@@ -50,14 +50,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception): \Symfony\Component\HttpFoundation\Response
     {
-      if($this->isHttpException($exception))
-      {
-        if ((int)$exception->getStatusCode() === 404) {
-          return redirect()->route('index');
-        }
+//      if($this->isHttpException($exception))
+//      {
+//        if ((int)$exception->getStatusCode() === 404) {
+//          return redirect()->route('index');
+//        }
 
-        return $this->renderHttpException($exception);
-      }
+//        return $this->renderHttpException($exception);
+//      }
         return parent::render($request, $exception);
     }
 }
