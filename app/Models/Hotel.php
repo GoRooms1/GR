@@ -78,15 +78,15 @@ class Hotel extends Model
   {
     parent::boot();
 
-    static::addGlobalScope('moderation', function (Builder $builder) {
-      if (auth()->check()) {
-        if (!auth()->user()->is_admin && !auth()->user()->is_moderate) {
-          $builder->where('moderate', '=', false);
-        }
-      } else {
-        $builder->where('moderate', '=', false);
-      }
-    });
+//    static::addGlobalScope('moderation', function (Builder $builder) {
+//      if (auth()->check()) {
+//        if (!auth()->user()->is_admin && !auth()->user()->is_moderate) {
+//          $builder->where('moderate', '=', false);
+//        }
+//      } else {
+//        $builder->where('moderate', '=', false);
+//      }
+//    });
 
     self::creating(function (Hotel $hotel) {
       $hotel->slug = $hotel->slug ?? Str::slug($hotel->name);

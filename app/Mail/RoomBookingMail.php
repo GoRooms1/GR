@@ -33,7 +33,7 @@ class RoomBookingMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Забронирован номер ' . $this->room->name)
+        return $this->subject('Сервис GoRooms – новое бронирование ' . $this->fields['book_number'])
             ->view('emails.room-bookin');
     }
 }

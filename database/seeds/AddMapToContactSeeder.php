@@ -18,7 +18,11 @@ class AddMapToContactSeeder extends Seeder
     <p class="contacts-list-item contacts-list-item-address">г. Люберцы, квартал 3, дом 57 ул. оф. 1</p>
     </div>
     <div class="text-section">
-    <p></p>
+    <p class="font-weight-bold">Реквизиты:</p>
+    <p>ООО "Го Румс"</p>
+    <p>ОГРН: 1217700386738</p>
+    <p>ИНН: 7720853164</p>
+    <p>КПП: 772001001</p>
     </div>
     </div>
     <div class="col-lg-5 contacts-info">
