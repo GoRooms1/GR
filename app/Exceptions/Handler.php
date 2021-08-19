@@ -52,17 +52,11 @@ class Handler extends ExceptionHandler
     {
       if($this->isHttpException($exception))
       {
-        switch ((int)$exception->getStatusCode()) {
-          // not found
-          case 500:
-          case 404:
-            return redirect()->route('index');
-            break;
-
-          default:
-            return $this->renderHttpException($exception);
-            break;
+        if ((int)$exception->getStatusCode() === 404) {
+          return redirect()->route('index');
         }
+
+        return $this->renderHttpException($exception);
       }
         return parent::render($request, $exception);
     }
