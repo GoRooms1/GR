@@ -39,11 +39,28 @@ php artisan users:create --email=admin@admin.com --password=123456 --name=Admin 
 
 ## Hotels (Moderation)
 
-На данный момет администратор и модератор видит все отели и комнаты. Обычные же пользователи видят только принятые отели.
-За доступность видения отелей отвечает свойство `moderate`, а роль администратора `is_admin`, и модератор `is_moderate`
-
+At the moment, the administrator and moderator sees all the hotels and rooms. Regular users see only accepted hotels.
+The property `moderate` is responsible for the availability of the hotel vision, and the role of the administrator is` is_admin`, and the moderator is `is_moderate`
 ```php
 php artisan users:create --email=user@email.com --password=123456 --name=User --is_moderate=1
+```
+
+## New DB
+
+Remove all data from the `costs` table, but make sure to do a` backup`.
+
+```php
+// All rooms
+$rooms = \App\Models\Room::all();
+
+// Periods
+$periods = \App\Models\Period::all();
+
+// All periods of the room
+\App\Models\Room::fisrt()->costs->pluck('period')
+
+// Beautiful information for the front
+\App\Models\Period::first()->info
 ```
 
 ## Contributing
