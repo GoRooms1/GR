@@ -1,30 +1,44 @@
 <?php
+/*
+ * Copyright (c) 2021.
+ * This code is the property of the Fulliton developer.
+ * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
+ */
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Стоимость комнат п периодам
+ */
 class Cost extends Model
 {
-    protected $fillable = [
-        'value',
-        'description',
-        'type_id',
-        'user_id'
-    ];
+  /**
+   * Columns
+   *
+   * @var string[]
+   */
+  protected $fillable = [
+    'value',
+    'room_id',
+    'period_id'
+  ];
 
-    protected $with = [
-        'type'
-    ];
+  public function room(): BelongsTo
+  {
+    return $this->belongsTo(Room::class);
+  }
 
-    public function type()
-    {
-        return $this->belongsTo(CostType::class);
-    }
+  public function period(): BelongsTo
+  {
+    return $this->belongsTo(Period::class);
+  }
 
-    public function scopeMinValues(Builder $query, Array $rooms)
-    {
-        return $query->whereIn('model_id', $rooms)->where('model_type', Room::class)->min('value')->groupBy('type_id');
-    }
+  public function scopeMinValues(Builder $query, array $rooms)
+  {
+    return $query->whereIn('room_id', $rooms)->min('value')->groupBy('cost_type_id');
+  }
 }
