@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
@@ -20,9 +19,9 @@ class Room extends Model
     use UseImages;
     use CreatedAtOrdered;
 
-    const PER_PAGE = 6;
+    public const PER_PAGE = 6;
 
-    public $no_image = 'img/img-room-sm-1.jpg';
+    public string $no_image = 'img/img-room-sm-1.jpg';
 
     protected $with = [
         'attrs',
@@ -71,9 +70,9 @@ class Room extends Model
         return $query->where('is_hot', true);
     }
 
-    public function costs(): MorphMany
+    public function costs(): HasMany
     {
-        return $this->morphMany(Cost::class, 'model');
+        return $this->hasMany(Cost::class, 'room_id', 'id');
     }
 
     public function meta(): HasOne
