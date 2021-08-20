@@ -24,7 +24,7 @@
                             <tr>
                                 <td>{{ $page->id }}</td>
                                 <td>
-                                    {{ $page->option }}
+                                    {{ mb_substr($page->option, 4) }}
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
