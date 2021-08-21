@@ -39,6 +39,8 @@ class Cost extends Model
 
   public function scopeMinValues(Builder $query, array $rooms)
   {
-    return $query->whereIn('room_id', $rooms)->min('value')->groupBy('cost_type_id');
+    return $query->whereIn('room_id', $rooms)->min('value')->with(['period.type' => function($query){
+      $query->groupBy('id');
+    }]);
   }
 }

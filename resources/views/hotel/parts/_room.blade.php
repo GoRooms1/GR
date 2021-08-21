@@ -129,14 +129,14 @@
             </div>
             <a href="{{ route('hotels.show', $room->hotel) }}#room-{{ $room->id }}">
                 <ul class="room-card-prices">
-                    @foreach($room->costs->sortBy('type.sort') AS $cost)
+                    @foreach($room->costs->sortBy('period.type.sort') AS $cost)
                         <li class="room-card-prices-item">
                             <div>
-                                <p class="room-card-prices-item-title">{{ $cost->type->name }}</p>
+                                <p class="room-card-prices-item-title">{{ $cost->period->type->name }}</p>
                                 <p class="room-card-prices-item-price">@if($cost->value !== '0'){{ $cost->value }}
                                     руб.@endif</p>
                             </div>
-                            <p class="room-card-prices-item-time">{{ $cost->value === '0' ? 'не предоставляется' : $cost->description }}</p>
+                            <p class="room-card-prices-item-time">{{ $cost->value === '0' ? 'не предоставляется' : $cost->info }}</p>
                         </li>
                     @endforeach
                 </ul>

@@ -36,11 +36,11 @@
             </div>
             <a href="{{ route('rooms.show', $room) }}">
                 <ul class="room-card-prices">
-                    @foreach($room->costs->sortBy('type.sort') AS $cost)
+                    @foreach($room->costs->sortBy('period.type.sort') AS $cost)
                         <li class="room-card-prices-item">
-                            <p class="room-card-prices-item-title">{{ $cost->type->name }} - от {{ $cost->value }}
+                            <p class="room-card-prices-item-title">{{ $cost->period->type->name }} - от {{ $cost->value }}
                                 руб.</p>
-                            <p class="room-card-prices-item-price">{{ $cost->description }}</p>
+                            <p class="room-card-prices-item-price">{{ $cost->info }}</p>
                         </li>
                     @endforeach
                 </ul>

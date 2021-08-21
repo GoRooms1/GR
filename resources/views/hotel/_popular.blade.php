@@ -102,7 +102,7 @@ $rating_categories = \Illuminate\Support\Facades\Cache::remember('rating_categor
                                 - от {{ $minimal->value ?? $minimal['value'] ?? '' }}
                                 руб.@endif</p>
                         <p class="hotel-card-prices-item-info">@if($minimal['value'] === '0') не
-                            предоставляется @else{{ $minimal->description ?? $minimal['description'] ?? '' }}@endif</p>
+                            предоставляется @else{{ $minimal->info ?? $minimal['info'] ?? '' }}@endif</p>
                     </li>
                         @break($loop->iteration > 2)
                 @endforeach

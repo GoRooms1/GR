@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -55,7 +56,6 @@ class Hotel extends Model
     'reviews',
     'metros',
     'images',
-    'costs',
     'image',
     'type'
   ];
@@ -154,11 +154,6 @@ class Hotel extends Model
     return $this->hasMany(Category::class)->orderBy('created_at');
   }
 
-  public function costs(): MorphMany
-  {
-    return $this->morphMany(Cost::class, 'model');
-  }
-
   public function type(): BelongsTo
   {
     return $this->belongsTo(HotelType::class);
@@ -215,19 +210,21 @@ class Hotel extends Model
     $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
       $rooms = $this->rooms->pluck('id')->toArray();
       $costs = [];
-      foreach ($this->costs->sortBy('type.sort') as $cost) {
-        $type_id = $cost->type->id;
+      foreach ($this->costs->sortBy('period.type.sort') as $cost) {
+        $type_id = $cost->period->type->id;
         $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
-          return Cost::where('model_type', Room::class)
-              ->whereIn('model_id', $rooms)
-              ->where('type_id', $type_id)
+          return Cost::whereIn('room_id', $rooms)
+              ->whereHas('period', function ($q) use ($type_id) {
+                $q->where('cost_type_id', $type_id);
+              })
               ->where('value', '>', 0)
               ->min('value') ?? '0';
         });
         $costs[] = [
-          'name' => $cost->type->name,
-          'id' => $cost->type->id,
+          'name' => $cost->period->type->name,
+          'id' => $cost->period->type->id,
           'description' => $cost->description,
+          'info' => $cost->period->info,
           'value' => $min_in_rooms,
         ];
       }
@@ -235,6 +232,11 @@ class Hotel extends Model
     });
 
     return (object)$costs;
+  }
+
+  public function getCostsAttribute(): Collection
+  {
+    return $this->rooms()->get()->pluck('costs')->flatten();
   }
 
   public function getMetaKeywordsAttribute()
