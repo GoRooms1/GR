@@ -30,7 +30,7 @@ class FixPageDescriptionsSeeder extends Seeder
                 ]);
             } else {
                 PageDescription::create([
-                    'url' => $page,
+                    'url' => '/'.$page,
                     'model_type' => null,
                     'title' => 'gorooms.ru'
                 ]);
