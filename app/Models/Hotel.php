@@ -210,23 +210,27 @@ class Hotel extends Model
     $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
       $rooms = $this->rooms->pluck('id')->toArray();
       $costs = [];
+      $types = [];
       foreach ($this->costs->sortBy('period.type.sort') as $cost) {
         $type_id = $cost->period->type->id;
-        $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
-          return Cost::whereIn('room_id', $rooms)
-              ->whereHas('period', function ($q) use ($type_id) {
-                $q->where('cost_type_id', $type_id);
-              })
-              ->where('value', '>', 0)
-              ->min('value') ?? '0';
-        });
-        $costs[] = [
-          'name' => $cost->period->type->name,
-          'id' => $cost->period->type->id,
-          'description' => $cost->description,
-          'info' => $cost->period->info,
-          'value' => $min_in_rooms,
-        ];
+        if (!in_array($type_id, $types)) {
+          $types[] = $type_id;
+          $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
+            return Cost::whereIn('room_id', $rooms)
+                ->whereHas('period', function ($q) use ($type_id) {
+                  $q->where('cost_type_id', $type_id);
+                })
+                ->where('value', '>', 0)
+                ->min('value') ?? '0';
+          });
+          $costs[] = [
+            'name' => $cost->period->type->name,
+            'id' => $cost->period->type->id,
+            'description' => $cost->description,
+            'info' => $cost->period->info,
+            'value' => $min_in_rooms,
+          ];
+        }
       }
       return $costs;
     });
