@@ -21,17 +21,20 @@ class FixPageDescriptionsSeeder extends Seeder
             }
         }
 
-        PageDescription::where('url', '/')->first()->update([
-            'model_type' => null
-        ]);
-        PageDescription::where('url', 'hotels')->first()->update([
-            'model_type' => null
-        ]);
-        PageDescription::where('url', 'rooms')->first()->update([
-            'model_type' => null
-        ]);
-        PageDescription::where('url', 'rooms/hot')->first()->update([
-            'model_type' => null
-        ]);
+        $pages = ['/', 'hotels', 'rooms', 'rooms/hot'];
+        foreach ($pages as $page) {
+            $currentPage = PageDescription::where('url', $page)->first();
+            if ($currentPage) {
+                $currentPage->update([
+                    'model_type' => null
+                ]);
+            } else {
+                PageDescription::create([
+                    'url' => $page,
+                    'model_type' => null,
+                    'title' => 'gorooms.ru'
+                ]);
+            }
+        }
     }
 }
