@@ -21,7 +21,7 @@ class FixPageDescriptionsSeeder extends Seeder
             }
         }
 
-        $pages = ['/', 'hotels', 'rooms', 'rooms/hot'];
+        $pages = ['/', '/hotels', '/rooms', '/rooms/hot'];
         foreach ($pages as $page) {
             $currentPage = PageDescription::where('url', $page)->first();
             if ($currentPage) {
@@ -30,7 +30,7 @@ class FixPageDescriptionsSeeder extends Seeder
                 ]);
             } else {
                 PageDescription::create([
-                    'url' => '/'.$page,
+                    'url' => $page,
                     'model_type' => null,
                     'title' => 'gorooms.ru'
                 ]);
