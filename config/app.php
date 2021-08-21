@@ -14,7 +14,6 @@ return [
   */
 
   'name' => env('APP_NAME', 'Laravel'),
-  'glide_path' => env('IMAGE_PATH_GLIDE', 'storage/app/public'),
 
   /*
   |--------------------------------------------------------------------------
