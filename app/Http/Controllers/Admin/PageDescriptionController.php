@@ -36,6 +36,9 @@ class PageDescriptionController extends Controller
             'meta_keywords' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
         ]);
+        if (substr($data['url'], -1) == '/' && $data['url'] != '/') {
+            $data['url'] = substr($data['url'],0,-1);
+        }
         $description->fill($data);
         $description->save();
         return redirect()->route('admin.descriptions.index');

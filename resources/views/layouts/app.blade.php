@@ -32,18 +32,18 @@
       <link rel="canonical" href="{{ $hotel->meta_keywords }}"/>
     @endif
   @else
-    @if(isset($pageAbout))
-      <title>{{ $pageAbout->title ?? config('app.name', 'GoRooms') }}</title>
-      <meta name="description" content="{{ $pageAbout->meta_description }}">
-      @if(@$pageAbout->meta_keywords)
-        <link rel="canonical" href="{{ $pageAbout->meta_keywords }}"/>
-      @endif
-    @elseif(isset($pageDescription) && !is_null($pageDescription))
+    @if( isset($pageDescription) && !is_null($pageDescription))
       <title>{{ $pageDescription->title ?? config('app.name', 'GoRooms') }}</title>
       <meta name="description" content="{{ $pageDescription->meta_description }}">
       <meta name="keywords" content="{{ $pageDescription->meta_keywords }}">
-      @if(@$pageDescription->meta_keywords)
+      @if( $pageDescription->meta_keywords)
         <link rel="canonical" href="{{ $pageDescription->meta_keywords }}"/>
+      @endif
+    @elseif( isset($pageAbout))
+      <title>{{ $pageAbout->title ?? config('app.name', 'GoRooms') }}</title>
+      <meta name="description" content="{{ $pageAbout->meta_description }}">
+      @if( $pageAbout->meta_keywords)
+        <link rel="canonical" href="{{ $pageAbout->meta_keywords }}"/>
       @endif
     @else
       <title>{{ config('app.name', 'GoRooms') }}</title>
