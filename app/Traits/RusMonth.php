@@ -13,7 +13,7 @@ trait RusMonth {
     protected $monthNames = [
         1 => [
             'short' => 'янв',
-            'full' => 'янваврь',
+            'full' => 'январь',
         ],
         2 => [
             'short' => 'фев',
@@ -57,7 +57,7 @@ trait RusMonth {
         ],
         12 => [
             'short' => 'дек',
-            'full' => 'декбрь',
+            'full' => 'декабрь',
         ],
     ];
 
