@@ -19,23 +19,46 @@
           <p class="heading">Тип: {{ $hotel->type->name }}</p>
         </div>
       </div>
-      <div class="row part__content">
-        <div class="col-4">
-          <input type="phone" class="field" value="{{ $hotel->phone }}" name="phone" placeholder="Телефон 1 объекта">
+      <form action="{{ route('lk.object.update') }}" method="POST">
+        @csrf
+        <input type="hidden" value="phone" name="type_update">
+        <div class="row part__content">
+          <div class="col-4">
+            <input type="phone"
+                   class="field"
+                   value="{{ $hotel->phone }}"
+                   name="phone"
+                   placeholder="Телефон 1 объекта"
+                   {{ $hotel->checkSaved(['phone']) ? 'disabled' : '' }}
+            >
+          </div>
+          <div class="col-4">
+            <input type="phone"
+                   class="field"
+                   value="{{ $hotel->phone_2 }}"
+                   name="phone_2"
+                   placeholder="Телефон 2 объекта"
+                   {{ $hotel->checkSaved(['phone_2']) ? 'disabled' : '' }}
+            >
+          </div>
+          <div class="col-4">
+            <input type="email"
+                   class="field"
+                   value="{{ $hotel->email }}"
+                   name="email"
+                   placeholder="Email объекта для бронирований"
+                   {{ $hotel->checkSaved(['email']) ? 'disabled' : '' }}
+            >
+          </div>
         </div>
-        <div class="col-4">
-          <input type="phone" class="field" value="{{ $hotel->phone_2 }}" name="phone_2" placeholder="Телефон 2 объекта">
-        </div>
-        <div class="col-4">
-          <input type="email" class="field" value="{{ $hotel->email }}" name="email" placeholder="Email объекта для бронирований">
-        </div>
-      </div>
-      <div class="row part__bottom">
-        <div class="col-12">
-          <button class="button save-button" id="save1">Сохранить</button>
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button class="button save-button" type="submit" {{ $hotel->checkSaved(['phone', 'phone_2', 'email']) ? 'disabled' : '' }} id="save1">Сохранить</button>
 
+          </div>
         </div>
-      </div>
+      </form>
+
     </div>
   </section>
   <section class="part">
@@ -62,23 +85,26 @@
         </div>
 
       </div>
-
-      <div class="row">
-        <div class="col-12">
-          <div class="d-flex align-items-start">
-            <p class="text-bold adress">Комментарий к адресу: </p>
-            <textarea class="bordered comment-field" placeholder="Введите текст">{{ old('comment', $hotel->address->comment) }}</textarea>
+      <form action="{{ route('lk.object.update') }}" method="POST">
+        @csrf
+        <input type="hidden" value="address" name="type_update">
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex align-items-start">
+              <p class="text-bold adress">Комментарий к адресу: </p>
+              <textarea class="bordered comment-field" {{ $hotel->checkSaved(['address_comment']) ? 'disabled' : '' }} name="comment" placeholder="Введите текст">{{ old('comment', $hotel->address->comment) }}</textarea>
+            </div>
           </div>
         </div>
 
-      </div>
 
-      <div class="row part__bottom">
-        <div class="col-12">
-          <button class="button">Сохранить</button>
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button class="button" type="submit" {{ $hotel->checkSaved(['address_comment']) ? 'disabled' : '' }} >Сохранить</button>
 
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </section>
 
@@ -537,8 +563,6 @@
         name: "{{ $image->name }}",
         path: "{{ url($image->path) }}"
       })
-{{--      mockFile = { name: "{{ $image->name }}", size: {{ File::size($image->getRawOriginal('path')) }} };--}}
-      {{--uploader.displayExistingFile(mockFile, '{{ url($image->path) }}');--}}
 
       mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
       uploader.emit("addedfile", mockFile);
