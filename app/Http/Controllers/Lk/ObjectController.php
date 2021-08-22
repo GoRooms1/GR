@@ -4,41 +4,22 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attribute;
-use App\Models\CostType;
+use App\Models\AttributeCategory;
 use App\Models\Hotel;
 use App\Models\HotelType;
+use App\Traits\UploadImage;
 use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class ObjectController extends Controller
 {
-  /**
-   * Display a listing of the resource.
-   *
-   * @return Response
-   */
-  public function index()
-  {
-    //
-  }
-
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return Response
-   */
-  public function create()
-  {
-    //
-  }
-
+  use UploadImage;
   /**
    * Store a newly created resource in storage.
    *
@@ -98,20 +79,49 @@ class ObjectController extends Controller
   public function edit()
   {
     $hotel = auth()->user()->hotel;
-    $attributes = Attribute::where('model', Hotel::class)->orWhereNull('model')->get();
-    $costTypes = CostType::orderBy('sort')->get();
-    $hotelTypes = HotelType::orderBy('sort')->get();
-    return view('lk.object.edit', compact('hotel', 'costTypes', 'attributes', 'hotelTypes'));
+    $attributes = Attribute::where('model', Hotel::class)
+      ->orWhereNull('model')->get();
+    $hotelTypes = HotelType::orderBy('sort')
+      ->get();
+    $attributeCategories = AttributeCategory::with(['attributes' => function ($q) {
+        $q->whereModel(Hotel::class)->get();
+      }])
+      ->get();
+    return view('lk.object.edit',
+      compact('hotel',
+        'attributeCategories',
+        'attributes',
+        'hotelTypes')
+    );
   }
 
   /**
    * Update the specified resource in storage.
    *
    * @param Request $request
-   * @return Response
+   * @return RedirectResponse|array
    */
   public function update(Request $request)
   {
-    //
+    $request->validate([
+      'type_update' => 'required|string'
+    ]);
+    $hotel = Hotel::find(auth()->user()->hotel->id);
+    if ($hotel) {
+      if ($request->get('type_update') === 'attr') {
+        $request->validate([
+          'attr.*' => 'required'
+        ]);
+        $attr = [];
+        foreach ($request->get('attr') as $item => $value) {
+          if ($value === 'true') {
+            $attr[] = $item;
+          }
+        }
+
+        $hotel->attrs()->sync($attr);
+      }
+    }
+    return redirect()->back()->with('success', 'Данные сохранены');
   }
 }
