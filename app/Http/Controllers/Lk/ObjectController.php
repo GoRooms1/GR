@@ -107,6 +107,8 @@ class ObjectController extends Controller
       'type_update' => 'required|string'
     ]);
     $hotel = Hotel::find(auth()->user()->hotel->id);
+    $hotel->updateFillable();
+
     if ($hotel) {
       if ($request->get('type_update') === 'attr') {
         $request->validate([
@@ -120,8 +122,30 @@ class ObjectController extends Controller
         }
 
         $hotel->attrs()->sync($attr);
+      } else if ($request->get('type_update') === 'phone') {
+
+        $this->saveData($request, $hotel);
+
+      } else if ($request->get('type_update') === 'address') {
+        $hotel->address()->update($request->except(['type_update', '_token']));
+        $hotel->checked(['address_comment']);
       }
     }
     return redirect()->back()->with('success', 'Данные сохранены');
+  }
+
+  public function saveData (Request $request, Hotel $hotel): void
+  {
+    $arr = [];
+    foreach ($request->except(['type_update', '_token']) as $key => $item) {
+      if (!$hotel->checkSaved([$key]) && $item) {
+        $hotel->$key = $item;
+        $arr[] = $key;
+      }
+    }
+
+    $hotel->checked($arr);
+
+    $hotel->save();
   }
 }
