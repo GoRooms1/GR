@@ -83,6 +83,7 @@ class Hotel extends Model
   protected static function boot()
   {
     parent::boot();
+
 //    TODO: Moderate Scope
 //    static::addGlobalScope('moderation', function (Builder $builder) {
 //      if (auth()->check()) {
@@ -355,6 +356,14 @@ class Hotel extends Model
     }
 
     return $flag;
+  }
+
+  public function updateFillable (): void
+  {
+    $arr = $this->getFillable();
+//    $arr = array_diff_assoc($arr, $this->save_columns->columns);
+    $arr = array_filter($arr,fn($key) => !in_array($key,$this->save_columns->columns,ARRAY_FILTER_USE_KEY));
+    $this->fillable($arr);
   }
   ### END OVERWRITES
 }
