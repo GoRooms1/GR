@@ -6,7 +6,7 @@
   <title>Gorooms - @yield('title', 'Личный кабинет')</title>
 
   <!-- Fonts -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
@@ -20,6 +20,14 @@
   <meta name="viewport" content="width=1200">
 </head>
 <body>
+@if(session()->has('success'))
+<div class="alert alert-success alert-dismissible position-fixed w-auto fade show" style="top: 50px; z-index: 1000; right: 20px" role="alert">
+  <strong>Успешно</strong> {{ session()->get('success') }}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+@endif
 
 <header class="header">
   <div class="header__top">
@@ -32,7 +40,7 @@
           </a>
         </div>
         <div class="col-6 text-right">
-         @if (auth()->check())
+          @if (auth()->check())
             <button type="button"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                     class="sign">
@@ -43,7 +51,7 @@
                   style="display: none;">
               @csrf
             </form>
-         @endif
+          @endif
         </div>
       </div>
     </div>
@@ -96,6 +104,7 @@
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/i18n/ru.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @yield('js')
 
 </body>
