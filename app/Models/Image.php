@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\CreatedAtOrdered;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -94,7 +95,7 @@ class Image extends Model
             Log::error($exception);
         }
       }
-      @Storage::delete(str_replace('storage/', '', $image->path));
+      File::delete($image->getRawOriginal('path'));
     });
   }
 
