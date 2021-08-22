@@ -21,6 +21,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class Hotel extends Model
 {
@@ -337,6 +338,23 @@ class Hotel extends Model
   public function getRouteKeyName()
   {
     return 'slug';
+  }
+
+  public function checkSaved ($attributes): bool
+  {
+    if (!isset($this->save_columns->columns)) {
+      $this->save_columns = (object) ['columns' => []];
+      $this->save();
+      return false;
+    }
+    $flag = true;
+    foreach ($attributes as $key) {
+      if (!in_array($key, $this->save_columns->columns, true)) {
+        $flag = false;
+      }
+    }
+
+    return $flag;
   }
   ### END OVERWRITES
 }
