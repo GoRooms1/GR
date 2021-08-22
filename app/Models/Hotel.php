@@ -41,7 +41,10 @@ class Hotel extends Model
     'user_id',
     'hide_phone',
     'email',
-    'type_fond'
+    'type_fond',
+    'save_columns',
+    'old_moderate',
+    'moderate'
   ];
 
   protected $hidden = [
@@ -61,7 +64,9 @@ class Hotel extends Model
   ];
 
   protected $casts = [
-    'moderate' => 'boolean'
+    'moderate' => 'boolean',
+    'old_moderate' => 'boolean',
+    'save_columns' => 'object'
   ];
 
   public const ROOMS_TYPE = 'rooms';
