@@ -365,5 +365,12 @@ class Hotel extends Model
     $arr = array_filter($arr,fn($key) => !in_array($key,$this->save_columns->columns,ARRAY_FILTER_USE_KEY));
     $this->fillable($arr);
   }
+
+  public function checked (array $attrs)
+  {
+    $arr =  $this->save_columns->columns;
+    $this->save_columns = (object) ['columns' => array_unique(array_merge($arr, $attrs))];
+    $this->save();
+  }
   ### END OVERWRITES
 }
