@@ -64,6 +64,11 @@ class Hotel extends Model
     'type'
   ];
 
+//   save_columns->columns = [
+//     "name",
+//     "phone",
+//   ]
+
   protected $casts = [
     'moderate' => 'boolean',
     'old_moderate' => 'boolean',
