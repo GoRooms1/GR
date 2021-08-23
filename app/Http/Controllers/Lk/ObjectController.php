@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LK\ObjectUpdateRequest;
 use App\Models\Attribute;
 use App\Models\AttributeCategory;
 use App\Models\Hotel;
 use App\Models\HotelType;
+use App\Models\Metro;
 use App\Traits\UploadImage;
 use App\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -98,21 +100,22 @@ class ObjectController extends Controller
   /**
    * Update the specified resource in storage.
    *
-   * @param Request $request
+   * @param ObjectUpdateRequest $request
    * @return RedirectResponse
    */
-  public function update(Request $request): RedirectResponse
+  public function update(ObjectUpdateRequest $request): RedirectResponse
   {
-    $request->validate([
-      'type_update' => 'required|string'
-    ]);
+//    $request->validate([
+//      'type_update' => 'required|string'
+//    ]);
     $hotel = Hotel::find(auth()->user()->hotel->id);
+    $type = $request->get('type_update');
 
     if ($hotel) {
-      if ($request->get('type_update') === 'attr') {
-        $request->validate([
-          'attr.*' => 'required'
-        ]);
+      if ($type === 'attr') {
+//        $request->validate([
+//          'attr.*' => 'required'
+//        ]);
         $attr = [];
         foreach ($request->get('attr') as $item => $value) {
           if ($value === 'true') {
@@ -121,12 +124,27 @@ class ObjectController extends Controller
         }
 
         $hotel->attrs()->sync($attr);
-      } else if ($request->get('type_update') === 'phone') {
+      } else if ($type === 'phone' || $type === 'description') {
 
         $hotel->update($request->all());
 
-      } else if ($request->get('type_update') === 'address') {
+      } else if ($type === 'address') {
         $hotel->address()->update($request->except(['type_update', '_token']));
+      } else if ($type === 'metros') {
+        $hotel->metros()->delete();
+        $distance = $request->get('metros_time');
+        $color = $request->get('metros_color');
+        foreach ($request->get('metros', []) as $index => $metro) {
+          $metros = [
+            'name'     => $metro,
+            'hotel_id' => $hotel->id,
+            'distance' => $distance[$index],
+            'color'    => $color[$index]
+          ];
+          Metro::create($metros);
+        }
+      } else {
+        return redirect()->back()->with('error', 'Не верные данные');
       }
     }
     return redirect()->back()->with('success', 'Данные сохранены');
