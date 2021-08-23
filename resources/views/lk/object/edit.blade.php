@@ -25,33 +25,49 @@
         <div class="row part__content">
           <div class="col-4">
             <input type="phone"
-                   class="field"
-                   value="{{ $hotel->phone }}"
-                   name="phone"
+                   class="field form-control @error('phone') is-invalid @enderror"
+                   value="{{ old('phone', $hotel->phone) }}"
+                   name="phone_2"
                    placeholder="Телефон 1 объекта"
+                   required
             >
+            @error('phone')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
           <div class="col-4">
             <input type="phone"
-                   class="field"
-                   value="{{ $hotel->phone_2 }}"
+                   class="field form-control @error('phone_2') is-invalid @enderror"
+                   value="{{ old('phone_2', $hotel->phone_2) }}"
                    name="phone_2"
                    placeholder="Телефон 2 объекта"
             >
+            @error('phone_2')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+           @enderror
           </div>
           <div class="col-4">
             <input type="email"
-                   class="field"
-                   value="{{ $hotel->email }}"
+                   class="field form-control @error('email') is-invalid @enderror"
+                   value="{{ old('email', $hotel->email) }}"
                    name="email"
                    placeholder="Email объекта для бронирований"
+                   required
             >
+            @error('email')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+            @enderror
           </div>
         </div>
         <div class="row part__bottom">
           <div class="col-12">
             <button class="button save-button" type="submit" id="save1">Сохранить</button>
-
           </div>
         </div>
       </form>
@@ -89,11 +105,16 @@
           <div class="col-12">
             <div class="d-flex align-items-start">
               <p class="text-bold adress">Комментарий к адресу: </p>
-              <textarea class="bordered comment-field"
-                        name="comment"
-                        placeholder="Введите текст">
-                {{ old('comment', $hotel->address->comment) }}
-              </textarea>
+              <input class="bordered form-control field @error('comment') is-invalid @enderror"
+                     name="comment"
+                     value="{{ old('comment', $hotel->address->comment) }}"
+                     placeholder="Введите текст">
+
+              @error('comment')
+                <div class="invalid-feedback">
+                  {{ $message }}
+                </div>
+              @enderror
             </div>
           </div>
         </div>
@@ -123,17 +144,31 @@
         </div>
       </div>
 
-      <div class="row part__content">
-        <div class="col-10">
-          <textarea placeholder="Введите текст" id="editor">{!! old('description', $hotel->description) !!}</textarea>
+      <form action="{{ route('lk.object.update') }}" method="POST">
+        @csrf
+        <input type="hidden" value="description" name="type_update">
+        <div class="row part__content">
+          <div class="col-10">
+            <textarea placeholder="Введите текст"
+                      name="description"
+                      id="editor"
+                      class="field form-control @error('description') is-invalid @enderror">
+              {!! old('description', $hotel->description) !!}
+            </textarea>
+            @error('description')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
+          </div>
         </div>
-      </div>
-      <div class="row part__bottom">
-        <div class="col-12">
-          <button class="button">Сохранить</button>
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button class="button" type="submit">Сохранить</button>
 
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </section>
 
@@ -149,32 +184,57 @@
           <p class="caption">Выберите ближайшие станции метро к Вашему объекту размещения и укажите за какое время можно добраться до объекта пешком в минутах.</p>
         </div>
       </div>
-
-      <div id="metros" class="row part__content">
-        <div class="col-12" data-id="1">
-          <div class="d-flex align-items-center station">
-            <div class="select" style="width: 45%">
-              <select name="metro[]" class="metro w-100"></select>
+      <form action="{{ route('lk.object.update') }}" method="POST">
+        @csrf
+        <input type="hidden" value="metros" name="type_update">
+        <div id="metro" class="row part__content">
+          @forelse($hotel->metros as $index => $m)
+            <div class="col-12" data-id="{{ $m->id }}">
+              <div class="d-flex align-items-center station">
+                <div class="select" style="width: 45%">
+                  <select name="metros[]" class="form-control field metros w-100" required>
+                    <option value="{{ $m->name }}">{{ $m->name }}</option>
+                  </select>
+                </div>
+                <input type="hidden" name="metros_color[]" value="{{ $m->color }}">
+                <input type="number" min="1" name="metros_time[]" value="{{ $m->distance }}" class="field field_small station-field" required>
+                <p class="text">минут пешком до объекта</p>
+                <button onclick="deleteMetro({{ $m->id }})" type="button" class="mx-3 button w-auto px-3">-</button>
+              </div>
             </div>
-            <input type="number" min="1" name="metro_time[]" class="field field_small station-field">
-            <p class="text">минут пешком до объекта</p>
-            <button onclick="deleteMetro(1)" class="mx-3 button w-auto px-3">-</button>
+          @empty
+            <div class="col-12" data-id="1">
+              <div class="d-flex align-items-center station">
+                <div class="select" style="width: 45%">
+                  <select name="metros[]" class="form-control field metros w-100" required>
+                  </select>
+                </div>
+                <input type="hidden" name="metros_color[]">
+                <input type="number" min="1" name="metros_time[]" class="field field_small station-field" required>
+                <p class="text">минут пешком до объекта</p>
+                <button onclick="deleteMetro(1)" type="button" class="mx-3 button w-auto px-3">-</button>
+              </div>
+            </div>
+          @endforelse
+
+        </div>
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button onclick="addMetro()" type="button" class="button">Добавить станцию</button>
+
           </div>
         </div>
-
-      </div>
-      <div class="row part__bottom">
-        <div class="col-12">
-          <button onclick="addMetro()" class="button">Добавить станцию</button>
-
+        @error('metros')
+        <div class="invalid-feedback">
+          {{ $message }}
         </div>
-      </div>
-      <div class="row part__bottom">
-        <div class="col-12">
-          <button class="button">Сохранить</button>
-
+        @enderror
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button class="button" type="submit">Сохранить</button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </section>
 
@@ -309,60 +369,34 @@
   <script>
 
     $(document).ready(function() {
-      $('.metro').select2({
-        placeholder: "Название станции",
-        language: "ru",
-        ajax: {
-          delay: 250,
-          type: "POST",
-          headers: {
-            "Content-Type": 'application/json',
-            "Accept": 'application/json',
-            "Authorization": "Token be33fe1fe0328828d9632c248dcad68166e62740"
-          },
-          url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/metro',
-          data: function (params) {
-            return JSON.stringify({
-              query: params.term,
-              filters: [
-                {
-                  "city": '{{ $hotel->address->city }}',
-                }
-              ]
-            })
-          },
-          processResults: function (data) {
-            return {
-              results: data.suggestions.map((e) => {
-                return {
-                  text: e.value,
-                  id: e.value
-                };
-              })
-            };
-          }
-        }
-      });
+      selectInit()
     });
 
-    let metros_ids = 1;
+    let metros_ids = {{ $hotel->metros->pluck('distance')->max() ?? 1 }};
 
     function addMetro() {
       metros_ids++;
-      $('#metros').append(
+      $('#metro').append(
         "<div class='col-12' data-id='" + metros_ids + "'>" +
           "<div class='d-flex align-items-center station'>" +
             "<div class='select' style='width: 45%'>" +
-              "<select name='metro[]' class='metro w-100'></select>" +
+              "<select name='metros[]' class='form-control field metros w-100' required></select>" +
             "</div>" +
-            "<input type='number' name='metro_time[]' class='field field_small station-field'>" +
+            "<input type='hidden' name='metros_color[]' class='color'>" +
+            "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
             "<p class='text'>минут пешком до объекта</p>" +
             "<button onclick='deleteMetro(" + metros_ids +")' class='mx-3 button w-auto px-3'>-</button>" +
           "</div>" +
         "</div>"
       )
 
-      $('.metro').select2({
+      selectInit()
+
+      $('.metros').on("select2:select", takeColor);
+    }
+
+    function selectInit () {
+      $('.metros').select2({
         placeholder: "Название станции",
         language: "ru",
         ajax: {
@@ -389,13 +423,21 @@
               results: data.suggestions.map((e) => {
                 return {
                   text: e.value,
-                  id: e.value
+                  id: e.value,
+                  color: e.data.color
                 };
               })
             };
           }
         }
       });
+    }
+
+    $('.metros').on("select2:select", takeColor);
+
+    function takeColor (e) {
+      console.log($(e.currentTarget).parent().parent().children('input[type="hidden"]').get(0).value = e.params.data.color)
+      console.log(e.params.data.color);
     }
 
     function deleteMetro(id) {
