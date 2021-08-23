@@ -29,7 +29,6 @@
                    value="{{ $hotel->phone }}"
                    name="phone"
                    placeholder="Телефон 1 объекта"
-                   {{ $hotel->checkSaved(['phone']) ? 'disabled' : '' }}
             >
           </div>
           <div class="col-4">
@@ -38,7 +37,6 @@
                    value="{{ $hotel->phone_2 }}"
                    name="phone_2"
                    placeholder="Телефон 2 объекта"
-                   {{ $hotel->checkSaved(['phone_2']) ? 'disabled' : '' }}
             >
           </div>
           <div class="col-4">
@@ -47,13 +45,12 @@
                    value="{{ $hotel->email }}"
                    name="email"
                    placeholder="Email объекта для бронирований"
-                   {{ $hotel->checkSaved(['email']) ? 'disabled' : '' }}
             >
           </div>
         </div>
         <div class="row part__bottom">
           <div class="col-12">
-            <button class="button save-button" type="submit" {{ $hotel->checkSaved(['phone', 'phone_2', 'email']) ? 'disabled' : '' }} id="save1">Сохранить</button>
+            <button class="button save-button" type="submit" id="save1">Сохранить</button>
 
           </div>
         </div>
@@ -92,7 +89,11 @@
           <div class="col-12">
             <div class="d-flex align-items-start">
               <p class="text-bold adress">Комментарий к адресу: </p>
-              <textarea class="bordered comment-field" {{ $hotel->checkSaved(['address_comment']) ? 'disabled' : '' }} name="comment" placeholder="Введите текст">{{ old('comment', $hotel->address->comment) }}</textarea>
+              <textarea class="bordered comment-field"
+                        name="comment"
+                        placeholder="Введите текст">
+                {{ old('comment', $hotel->address->comment) }}
+              </textarea>
             </div>
           </div>
         </div>
@@ -100,7 +101,7 @@
 
         <div class="row part__bottom">
           <div class="col-12">
-            <button class="button" type="submit" {{ $hotel->checkSaved(['address_comment']) ? 'disabled' : '' }} >Сохранить</button>
+            <button class="button" type="submit">Сохранить</button>
 
           </div>
         </div>

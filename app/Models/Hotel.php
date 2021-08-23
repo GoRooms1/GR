@@ -64,15 +64,11 @@ class Hotel extends Model
     'type'
   ];
 
-//   save_columns->columns = [
-//     "name",
-//     "phone",
-//   ]
 
   protected $casts = [
     'moderate' => 'boolean',
     'old_moderate' => 'boolean',
-    'save_columns' => 'object'
+    'show' => 'boolean'
   ];
 
   public const ROOMS_TYPE = 'rooms';
@@ -346,36 +342,5 @@ class Hotel extends Model
     return 'slug';
   }
 
-  public function checkSaved ($attributes): bool
-  {
-    if (!isset($this->save_columns->columns)) {
-      $this->save_columns = (object) ['columns' => []];
-      $this->save();
-      return false;
-    }
-    $flag = true;
-    foreach ($attributes as $key) {
-      if (!in_array($key, $this->save_columns->columns, true)) {
-        $flag = false;
-      }
-    }
-
-    return $flag;
-  }
-
-  public function updateFillable (): void
-  {
-    $arr = $this->getFillable();
-//    $arr = array_diff_assoc($arr, $this->save_columns->columns);
-    $arr = array_filter($arr,fn($key) => !in_array($key,$this->save_columns->columns,ARRAY_FILTER_USE_KEY));
-    $this->fillable($arr);
-  }
-
-  public function checked (array $attrs)
-  {
-    $arr =  $this->save_columns->columns;
-    $this->save_columns = (object) ['columns' => array_unique(array_merge($arr, $attrs))];
-    $this->save();
-  }
   ### END OVERWRITES
 }

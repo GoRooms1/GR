@@ -1,10 +1,18 @@
 <?php
+/*
+ * Copyright (c) 2021.
+ * This code is the property of the Fulliton developer.
+ * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
+ */
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSavedColumnsInHotelTable extends Migration
+/**
+ *
+ */
+class ChangeDefaultDataModerateInHotelTable extends Migration
 {
   /**
    * Run the migrations.
@@ -14,9 +22,8 @@ class AddSavedColumnsInHotelTable extends Migration
   public function up(): void
   {
     Schema::table('hotels', function (Blueprint $table) {
-      $table->boolean('old_moderate')->default(false)->after('route');
-      $table->boolean('show')->default(false)->after('old_moderate');
-      $table->dropColumn(['moderate']);
+
+      $table->boolean('moderate')->default(false)->after('show');
     });
   }
 
@@ -28,8 +35,7 @@ class AddSavedColumnsInHotelTable extends Migration
   public function down(): void
   {
     Schema::table('hotels', function (Blueprint $table) {
-      $table->dropColumn(['old_moderate', 'show']);
-      $table->boolean('moderate')->default('false');
+      $table->dropColumn(['moderate']);
     });
   }
 }
