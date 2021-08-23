@@ -29,6 +29,15 @@
 </div>
 @endif
 
+@if(session()->has('error'))
+  <div class="alert alert-danger alert-dismissible position-fixed w-auto fade show" style="top: 50px; z-index: 1000; right: 20px" role="alert">
+    <strong>Ошибка</strong> {{ session()->get('error') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+@endif
+
 <header class="header">
   <div class="header__top">
     <div class="container">
