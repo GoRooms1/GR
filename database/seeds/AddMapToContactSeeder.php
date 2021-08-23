@@ -18,16 +18,23 @@ class AddMapToContactSeeder extends Seeder
     <p class="contacts-list-item contacts-list-item-address">г. Люберцы, квартал 3, дом 57 ул. оф. 1</p>
     </div>
     <div class="text-section">
-    <p class="font-weight-bold">Реквизиты:</p>
+    <p><b>Реквизиты:</b></p>
     <p>ООО "Го Румс"</p>
-    <p>ОГРН: 1217700386738</p>
-    <p>ИНН: 7720853164</p>
-    <p>КПП: 772001001</p>
+    ОГРН: 1217700386738 <br>   
+    ИНН: 7720853164 <br>
+    КПП: 772001001</p>
+    <hr>
+    <p>Расчетный счет: 40702810100000193243<br>
+    Наименование банка: АО "Райффайзенбанк", г.Москва<br>
+    Корреспондентский счет: 30101810200000000700 - Главное управление Центрального банка Российской Федерации по Центральному федеральному округу г. Москва</p>
+    <p>БИК: 044525700<br>
+    ИНН: 7744000302<br>
+    КПП: 770201001</p>
     </div>
     </div>
     <div class="col-lg-5 contacts-info">
         <div class="contacts-list">
-            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A41126df763f7d92380a8f348f43df796fa3e00459fa23bd2f99ec86442d52007&amp;source=constructor" width="500" height="400" frameborder="0"></iframe>
+            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A41126df763f7d92380a8f348f43df796fa3e00459fa23bd2f99ec86442d52007&amp;source=constructor" width="500" height="550" frameborder="0"></iframe>
         </div>
     </div>
     <form id="contacts-form" class="form-section" action="/form" method="post">

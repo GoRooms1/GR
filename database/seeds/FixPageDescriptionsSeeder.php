@@ -28,12 +28,6 @@ class FixPageDescriptionsSeeder extends Seeder
                 $currentPage->update([
                     'model_type' => null
                 ]);
-            } else {
-                PageDescription::create([
-                    'url' => $page,
-                    'model_type' => null,
-                    'title' => 'gorooms.ru'
-                ]);
             }
         }
     }
