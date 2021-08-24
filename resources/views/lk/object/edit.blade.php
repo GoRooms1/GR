@@ -350,7 +350,7 @@
                 <div class="dz-preview dz-file-preview">
                   <img data-dz-thumbnail />
                   <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-                  <div class="dz-success-mark"><span>Проверка модератором</span></div>
+                  <div data-dz-success class="dz-success-mark"><span>Проверка модератором</span></div>
                   <div class="dz-error-mark"><span>✘</span></div>
                   <div class="dz-error-message"><span data-dz-errormessage></span></div>
                 </div>
@@ -445,6 +445,19 @@
       console.log($(str).remove())
     }
 
+    function findExistImage (file) {
+      return existFile.filter(x => {
+        if (file.xhr) {
+          let image = JSON.parse(file.xhr.response).payload.images[0]
+          console.log("{{ url('/') }}" + "/"+ image.path)
+          return ("{{ url('/') }}" + "/"+ image.path) === x.path
+        } else {
+          console.log(1)
+          return x.path === file.dataURL
+        }
+      }).pop()
+    }
+
 
     $("#address").suggestions({
       token: "a35c9ab8625a02df0c3cab85b0bc2e9c0ea27ba4",
@@ -493,6 +506,16 @@
       init: function() {
 
         this.on("complete", function (file) {
+
+          let f = findExistImage(file)
+          console.log(f)
+
+          let d = file.previewElement.querySelector("[data-dz-success]");
+          d.innerHTML = f.moderate_text
+          if (!f.moderate) {
+            d.style.color="#2f64ad"
+          }
+
           $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
           $('#file-dropzone').appendTo('.visualizacao')
         });
@@ -519,24 +542,23 @@
           existFile.push({
             id: image.id,
             path: "{{ url('/') }}" + "/" + image.path,
-            name: image.name
+            name: image.name,
+            moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
+            moderate: image.moderate
           })
         });
 
-        this.on("addedfile", function(event) {
-          console.log(this)
+        this.on("addedfile", function(file) {
           while (this.files.length  > this.options.maxFiles) {
             this.removeFile(this.files[0]);
-            console.log(event, this.files.length, this.options.maxFiles)
+            existFile.shift();
+            console.log(file, this.files.length, this.options.maxFiles)
           }
         });
-
-
         this.on("reset", function (file) {
           $('#file-dropzone').show()
 
         });
-
         this.on('drop', function (file) {
         });
         this.on("removedfile", function (file) {
@@ -604,7 +626,9 @@
       existFile.push({
         id: "{{ $image->id }}",
         name: "{{ $image->name }}",
-        path: "{{ url($image->path) }}"
+        path: "{{ url($image->path) }}",
+        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+        moderate: {!! $image->moderate ? 'true' : 'false' !!}
       })
 
       mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
