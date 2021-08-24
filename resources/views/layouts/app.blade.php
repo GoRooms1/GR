@@ -14,6 +14,7 @@
   <link rel="shortcut icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
   <link rel="canonical" href="{{ url(Request::url()) }}"/>
+  <link rel="stylesheet" href="{{ asset('css/metro.css') }}">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
