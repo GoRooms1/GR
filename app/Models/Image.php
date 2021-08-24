@@ -1,4 +1,9 @@
 <?php
+/*
+ * Copyright (c) 2021.
+ * This code is the property of the Fulliton developer.
+ * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
+ */
 
 namespace App\Models;
 
@@ -15,12 +20,15 @@ class Image extends Model
 
   public const DEFAULT = 'img/img-hotel.jpg';
 
-  protected static $orderDirection = 'ASC';
-
+  protected static string $orderDirection = 'ASC';
+  public $casts = [
+    'moderate' => 'boolean'
+  ];
   protected $fillable = [
     'name',
     'path',
     'default',
+    'moderate'
   ];
 
   public static function upload($request, &$uploadTo, $attr_name = 'image')
