@@ -92,6 +92,8 @@ use Illuminate\Support\Str;
  * @method static Builder|Hotel whereUpdatedAt($value)
  * @method static Builder|Hotel whereUserId($value)
  * @mixin Eloquent
+ * @property bool $checked_type_fond
+ * @method static Builder|Hotel whereCheckedTypeFond($value)
  */
 class Hotel extends Model
 {
@@ -102,10 +104,10 @@ class Hotel extends Model
   public const PER_PAGE = 6;
   public const ROOMS_TYPE = 'rooms';
   public const CATEGORIES_TYPE = 'categories';
-  public const TYPES_FOND = [
+  public const TYPES_FOND = array(
     self::ROOMS_TYPE,
     self::CATEGORIES_TYPE
-  ];
+  );
   protected $fillable = [
     'name',
     'description',
@@ -120,7 +122,9 @@ class Hotel extends Model
     'type_fond',
     'save_columns',
     'old_moderate',
-    'moderate'
+    'moderate',
+    'show',
+    'checked_type_fond'
   ];
   protected $hidden = [
     'email',
@@ -137,9 +141,10 @@ class Hotel extends Model
     'type'
   ];
   protected $casts = [
-    'moderate'      => 'boolean',
-    'old_moderate'  => 'boolean',
-    'show'          => 'boolean'
+    'moderate'          => 'boolean',
+    'old_moderate'      => 'boolean',
+    'show'              => 'boolean',
+    'checked_type_fond' => 'boolean'
   ];
 
   ### SCOPES
