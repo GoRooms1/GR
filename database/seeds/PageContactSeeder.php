@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class AddMapToContactSeeder extends Seeder
+class PageContactSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,33 +11,45 @@ class AddMapToContactSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Page::where("title", "Контакты")->first()->update(["content"=>'
+        \App\Models\Page::where("title", "Контакты")->first()->update(["content" => '
         <div class="row">
-    <div class="col-lg-5 contacts-info">
-    <div class="contacts-list"><a class="contacts-list-item contacts-list-item-tel" href="tel:+74955996674"> +7 (495) 599 66 74&nbsp; &nbsp; &nbsp;info@gorooms.ru</a>
-    <p class="contacts-list-item contacts-list-item-address">г. Люберцы, квартал 3, дом 57 ул. оф. 1</p>
+    <div class="col-lg-6 contacts-info">
+    <div class="contacts-list">
+        <a class="contacts-list-item contacts-list-item-tel" href="tel:+74955996674"> +7 (495) 599 66 74</a>
+        <a class="contacts-list-item contacts-list-item-email" href="mailto:info@gorooms.ru"> info@gorooms.ru</a>
+        <a class="contacts-list-item contacts-list-item-address"> 111558, Москва, Напольный проезд, 10</a>
+        <br>
     </div>
+   
     <div class="text-section">
-    <p><b>Реквизиты:</b></p>
-    <p>ООО "Го Румс"</p>
-    ОГРН: 1217700386738 <br>   
-    ИНН: 7720853164 <br>
-    КПП: 772001001</p>
-    <hr>
-    <p>Расчетный счет: 40702810100000193243<br>
-    Наименование банка: АО "Райффайзенбанк", г.Москва<br>
-    Корреспондентский счет: 30101810200000000700 - Главное управление Центрального банка Российской Федерации по Центральному федеральному округу г. Москва</p>
-    <p>БИК: 044525700<br>
-    ИНН: 7744000302<br>
-    КПП: 770201001</p>
-    </div>
-    </div>
-    <div class="col-lg-5 contacts-info">
-        <div class="contacts-list">
-            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A41126df763f7d92380a8f348f43df796fa3e00459fa23bd2f99ec86442d52007&amp;source=constructor" width="500" height="550" frameborder="0"></iframe>
+        <h1 class="section-title">Реквизиты</h1>
+        <b>ООО «Го Румс»</b> <br>
+        111558, Москва, Напольный проезд, 10 <br>
+        <p>
+        ОГРН: 1217700386738
+        &nbsp; &nbsp; &nbsp;
+        ИНН: 7720853164
+        &nbsp; &nbsp; &nbsp;
+        КПП: 772001001
+        </p>
+        <hr>
+        Расчетный счет: 40702810100000193243 <br>
+        <p>
+            Наименование банка: АО "Райффайзенбанк", г.Москва<br>
+            Корреспондентский счет: 30101810200000000700 <br>
+            БИК: 044525700
+            &nbsp; &nbsp;
+            ИНН: 7744000302
+            &nbsp; &nbsp;
+            КПП: 770201001
+        </p>
         </div>
     </div>
-    <form id="contacts-form" class="form-section" action="/form" method="post">
+    <div class="col-lg-6 contacts-info">
+        <div class="contacts-list">
+<iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A7093c7fe3b67dfb23a76afe92eb5b652bdb2db6520236a5a12300683599fa132&amp;source=constructor" width="500" height="500" frameborder="0"></iframe>        </div>
+    </div>
+    <form id="contacts-form" class="form-section" action="/form" method="post" style="margin: 0 auto;">
     <h2 class="section-title">Обратная связь</h2>
     <div class="row">
     <div class="col-lg-4">
