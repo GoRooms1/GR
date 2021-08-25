@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Events\FormSend;
 use App\Listeners\FormSendMailEvent;
 use App\Models\Image;
+use App\Models\Room;
 use App\Observers\ImageObserver;
+use App\Observers\RoomObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -35,6 +37,7 @@ class EventServiceProvider extends ServiceProvider
   {
 //        parent::boot();
     Image::observe(ImageObserver::class);
+    Room::observe(RoomObserver::class);
 
   }
 }
