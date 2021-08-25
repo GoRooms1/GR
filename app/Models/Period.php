@@ -2,9 +2,36 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\Period
+ *
+ * @property int $id
+ * @property string $start_at
+ * @property string|null $end_at
+ * @property int $cost_type_id
+ * @property string|null $description
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read string $info
+ * @property-read CostType $type
+ * @method static Builder|Period newModelQuery()
+ * @method static Builder|Period newQuery()
+ * @method static Builder|Period query()
+ * @method static Builder|Period whereCostTypeId($value)
+ * @method static Builder|Period whereCreatedAt($value)
+ * @method static Builder|Period whereDescription($value)
+ * @method static Builder|Period whereEndAt($value)
+ * @method static Builder|Period whereId($value)
+ * @method static Builder|Period whereStartAt($value)
+ * @method static Builder|Period whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Period extends Model
 {
   protected $fillable = [
@@ -44,7 +71,7 @@ class Period extends Model
       return 'С ' . $this->start_at . ' до ' . $this->end_at;
     }
 
-    return 'От ' . $this->start_at . $this->theEnding($this->start_at) .  ' часов';
+    return 'От ' . $this->start_at . $this->theEnding($this->start_at) . ' часов';
   }
 
   /**
@@ -53,9 +80,9 @@ class Period extends Model
    * @param $value
    * @return string
    */
-  public function theEnding ($value): string
+  public function theEnding($value): string
   {
-    $value = (int) $value;
+    $value = (int)$value;
     if ($value < 2) {
       return '-го';
     }
@@ -73,7 +100,7 @@ class Period extends Model
 
   public function __toString()
   {
-     return "$this->info" . PHP_EOL .
+    return "$this->info" . PHP_EOL .
       "Тип: {$this->type->name}";
   }
 }

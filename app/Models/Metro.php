@@ -2,10 +2,36 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * App\Models\Metro
+ *
+ * @property int $id
+ * @property string $color
+ * @property string $name
+ * @property int $distance
+ * @property int $hotel_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Hotel $hotel
+ * @method static Builder|Metro newModelQuery()
+ * @method static Builder|Metro newQuery()
+ * @method static Builder|Metro query()
+ * @method static Builder|Metro whereColor($value)
+ * @method static Builder|Metro whereCreatedAt($value)
+ * @method static Builder|Metro whereDistance($value)
+ * @method static Builder|Metro whereHotelId($value)
+ * @method static Builder|Metro whereId($value)
+ * @method static Builder|Metro whereName($value)
+ * @method static Builder|Metro whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Metro extends Model
 {
   public const COLORS = [
