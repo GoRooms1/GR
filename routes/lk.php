@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', 'lk/object/edit')->name('index');
+
 Route::get('object/edit', 'ObjectController@edit')->name('object.edit');
 Route::post('object/update', 'ObjectController@update')->name('object.update');
 Route::post('object/image/upload', 'ObjectController@uploadFor')->name('object.image.upload');
 Route::post('object/image/delete/{image}', 'ObjectController@delete')->name('object.image.delete');
+
+Route::get('room/edit', 'RoomController@edit')->name('room.edit');
+Route::post('room/edit/fond', 'RoomController@fondUpdate')->name('room.fond.update');

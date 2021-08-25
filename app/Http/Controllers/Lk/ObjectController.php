@@ -105,17 +105,12 @@ class ObjectController extends Controller
    */
   public function update(ObjectUpdateRequest $request): RedirectResponse
   {
-//    $request->validate([
-//      'type_update' => 'required|string'
-//    ]);
+
     $hotel = Hotel::find(auth()->user()->hotel->id);
     $type = $request->get('type_update');
 
     if ($hotel) {
       if ($type === 'attr') {
-//        $request->validate([
-//          'attr.*' => 'required'
-//        ]);
         $attr = [];
         foreach ($request->get('attr') as $item => $value) {
           if ($value === 'true') {
