@@ -27,11 +27,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int|null $category_id
  * @property int $is_hot
  * @property-read Collection|Attribute[] $attrs
  * @property-read int|null $attrs_count
- * @property-read Category|null $category
  * @property-read Collection|Cost[] $costs
  * @property-read int|null $costs_count
  * @property-read mixed $meta_description
@@ -49,7 +47,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Query\Builder|Room onlyTrashed()
  * @method static Builder|Room query()
  * @method static bool|null restore()
- * @method static Builder|Room whereCategoryId($value)
  * @method static Builder|Room whereCreatedAt($value)
  * @method static Builder|Room whereDeletedAt($value)
  * @method static Builder|Room whereDescription($value)
@@ -108,11 +105,6 @@ class Room extends Model
   public function attrs(): BelongsToMany
   {
     return $this->belongsToMany(Attribute::class, 'attribute_room', 'room_id', 'attribute_id');
-  }
-
-  public function category(): BelongsTo
-  {
-    return $this->belongsTo(Category::class);
   }
 
   public function scopeHot(Builder $query): Builder
