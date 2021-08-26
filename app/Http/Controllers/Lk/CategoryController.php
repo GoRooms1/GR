@@ -10,12 +10,13 @@ namespace App\Http\Controllers\Lk;
 use Exception;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\LK\CategoryRequest;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
-  public function update(Request $request): JsonResponse
+  public function update(CategoryRequest $request): JsonResponse
   {
     $category = Category::findOrFail($request->get('id'));
 
@@ -26,7 +27,7 @@ class CategoryController extends Controller
     return response()->json(['status' => 'error']);
   }
 
-  public function create(Request $request): JsonResponse
+  public function create(CategoryRequest $request): JsonResponse
   {
     $category = new Category();
 
@@ -38,6 +39,11 @@ class CategoryController extends Controller
     }
 
     return response()->json(['status' => 'error']);
+  }
+
+  public function delete(CategoryRequest $request): JsonResponse
+  {
+    return response()->json(['status' => Category::destroy($request->get('id'))]);
   }
 
   public function save(&$category, $data): bool

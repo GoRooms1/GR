@@ -180,16 +180,15 @@ $('.category-change').bind('click', function() {
 
 $('.category-good').bind('click', function() {
 
-	let categoryVal = $(this).parents('.categories__item').find('.field_hidden-room').val(),
-	categoryValQuote = $(this).parents('.categories__item').find('.field_hidden-quote').val()
+	let categoryVal = $(this).parents('.categories__item').find('.field_hidden-room').val()
+	let categoryValQuote = $(this).parents('.categories__item').find('.field_hidden-quote').val()
 
-	if (categoryVal == "" || categoryValQuote == "") {
+	if (categoryVal === "" || categoryValQuote === "") {
 
 	} else {
-	  console.log(categoryVal, categoryValQuote)
-
     let item = $(this).parents('.categories__item').get(0)
-    console.log(item)
+    let oldVal = $(item).find('.categories__name').get(0).innerText
+    console.log(oldVal)
     $(item).removeClass('open')
     $(item).find('.categories__name').text(categoryVal)
     $(item).find('.categories__quote').text(categoryValQuote)
@@ -199,18 +198,27 @@ $('.category-good').bind('click', function() {
       let url = $('[name="category.update"]').get(0)
       if (url) {
         url = url.value
+        let hotel_id = $('[name="hotel_id"]').get(0).value
 
         axios.put(url, {
           id: id,
-          name: categoryVal
+          name: categoryVal,
+          hotel_id: hotel_id
         })
           .then(response => {
             if (response.data.status === 'error') {
+              $(item).find('.categories__name').text(oldVal)
               alert('Ошибка сохранения')
             }
           })
           .catch(error => {
             console.error(error)
+            $(item).find('.categories__name').text(oldVal)
+            if (error.response.data.errors) {
+              error.response.data.errors.name.forEach(e => {
+                alert(e)
+              })
+            }
           })
       } else {
         alert('Ошибка сохранения')
@@ -230,31 +238,61 @@ $('.category-good').bind('click', function() {
           .then(response => {
             if (response.data.status === 'error') {
               alert('Ошибка сохранения')
-            } else {
-              if (response.data.category) {
+              $(item).find('.categories__name').text(oldVal)
+            } else if (response.data.category) {
                 console.log(response.data.category)
                 let category = response.data.category
                 item.dataset.id = category.id
-              }
             }
           })
           .catch(error => {
             console.error(error)
+            $(item).find('.categories__name').text(oldVal)
+            if (error.response.data.errors) {
+              error.response.data.errors.forEach(e => {
+                alert(e)
+              })
+            }
           })
       } else {
         alert('Ошибка сохранения')
       }
     }
-
-    // axios.post.
 	}
 	
 })
 
 // Удаление категории
 $('.categoryRemove').bind('click', function() {
-	$(this).parents('.categories__item').remove()
-	event.preventDefault();
+
+  let item = $(this).parents('.categories__item').get(0);
+
+  let id = item.dataset.id
+  if (id) {
+    let url = $('[name="category.delete"]').get(0)
+    if (url) {
+      url = url.value
+
+      axios.delete(url, {
+        id: id
+      })
+        .then(response => {
+          if (response.data.status === 'error') {
+            alert('Ошибка сохранения')
+          } else {
+            $(item).remove()
+          }
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    }
+  } else {
+    $(item).remove()
+  }
+
+
+  event.preventDefault();
 })
 
 
@@ -270,24 +308,24 @@ $('.show-all').bind('click', function() {
 
 $('#orderRoom').bind('click focused bloor', function() {
 	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find$('#orderRoomText').slideDown(1)
+	$(this).parents('.shadow').find('#orderRoomText').slideDown(1)
 })
 
 $('#numberRoom').bind('click focused bloor', function() {
-	$(this).parents('.shadow').find$('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find$('#numberRoomText').slideDown(1)
+	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
+	$(this).parents('.shadow').find('#numberRoomText').slideDown(1)
 })
 
 
 $('#nameRoom').bind('click focused bloor', function() {
-	$(this).parents('.shadow').find$('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find$('#nameRoomText').slideDown(1)
+	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
+	$(this).parents('.shadow').find('#nameRoomText').slideDown(1)
 })
 
 
 $('#selectRoom').bind('click focused bloor', function() {
-	$(this).parents('.shadow').find$('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find$('#selectRoomText').slideDown(1)
+	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
+	$(this).parents('.shadow').find('#selectRoomText').slideDown(1)
 })
 
 // $('#saveRoom').bind('click', function() {
