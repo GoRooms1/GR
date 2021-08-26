@@ -1,3 +1,10 @@
+// axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+let token = document.head.querySelector('meta[name="csrf-token"]');
+if (token) {
+  axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+} else {
+  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
 
 let select = true
 $('.select__top').bind('click', function() {
@@ -135,6 +142,7 @@ let change = true
 
 $('.category__add').bind('click', function() {
 	$('.categories__item:last-child').clone(true, true).addClass('open').prependTo('.categories')
+
 	event.preventDefault();
 })
 
@@ -178,14 +186,72 @@ $('.category-good').bind('click', function() {
 	if (categoryVal == "" || categoryValQuote == "") {
 
 	} else {
-		$(this).parents('.categories__item').removeClass('open')
-		$(this).parents('.categories__item').find('.categories__name').text(categoryVal)
-		$(this).parents('.categories__item').find('.categories__quote').text(categoryValQuote)
+	  console.log(categoryVal, categoryValQuote)
+
+    let item = $(this).parents('.categories__item').get(0)
+    console.log(item)
+    $(item).removeClass('open')
+    $(item).find('.categories__name').text(categoryVal)
+    $(item).find('.categories__quote').text(categoryValQuote)
+    let id = item.dataset.id
+    // Если есть id то редактировать
+    if (id) {
+      let url = $('[name="category.update"]').get(0)
+      if (url) {
+        url = url.value
+
+        axios.put(url, {
+          id: id,
+          name: categoryVal
+        })
+          .then(response => {
+            if (response.data.status === 'error') {
+              alert('Ошибка сохранения')
+            }
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      } else {
+        alert('Ошибка сохранения')
+      }
+
+    //  Если нет то создавать
+    } else {
+      let url = $('[name="category.create"]').get(0)
+      let hotel_id = $('[name="hotel_id"]').get(0).value
+      if (url) {
+        url = url.value
+
+        axios.post(url, {
+          name: categoryVal,
+          hotel_id: hotel_id
+        })
+          .then(response => {
+            if (response.data.status === 'error') {
+              alert('Ошибка сохранения')
+            } else {
+              if (response.data.category) {
+                console.log(response.data.category)
+                let category = response.data.category
+                item.dataset.id = category.id
+              }
+            }
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      } else {
+        alert('Ошибка сохранения')
+      }
+    }
+
+    // axios.post.
 	}
-	
 	
 })
 
+// Удаление категории
 $('.categoryRemove').bind('click', function() {
 	$(this).parents('.categories__item').remove()
 	event.preventDefault();

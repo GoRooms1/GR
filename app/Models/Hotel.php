@@ -2,26 +2,26 @@
 
 namespace App\Models;
 
-use App\Traits\ClearValidated;
-use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use App\User;
 use Eloquent;
 use Exception;
-use Fomvasss\Dadata\Facades\DadataSuggest;
-use Illuminate\Database\Eloquent\Builder;
+use App\Traits\UseImages;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Traits\ClearValidated;
+use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Fomvasss\Dadata\Facades\DadataSuggest;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 /**
  * App\Models\Hotel
@@ -104,10 +104,10 @@ class Hotel extends Model
   public const PER_PAGE = 6;
   public const ROOMS_TYPE = 'rooms';
   public const CATEGORIES_TYPE = 'categories';
-  public const TYPES_FOND = array(
+  public const TYPES_FOND = [
     self::ROOMS_TYPE,
     self::CATEGORIES_TYPE
-  );
+  ];
   protected $fillable = [
     'name',
     'description',
@@ -141,9 +141,9 @@ class Hotel extends Model
     'type'
   ];
   protected $casts = [
-    'moderate'          => 'boolean',
-    'old_moderate'      => 'boolean',
-    'show'              => 'boolean',
+    'moderate' => 'boolean',
+    'old_moderate' => 'boolean',
+    'show' => 'boolean',
     'checked_type_fond' => 'boolean'
   ];
 

@@ -7,6 +7,7 @@
 
 namespace App\Http\Controllers\Lk;
 
+use App\Models\Room;
 use App\Models\Hotel;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -29,10 +30,13 @@ class RoomController extends Controller
   public function edit(): View
   {
     $hotel = Auth::user()->hotel;
+//    If Hotel don`t have type and zero rooms
     if (!$hotel->checked_type_fond && $hotel->rooms()->count() < 1) {
       return view('lk.room.fond', compact('hotel'));
     }
-    return view('lk.room.edit');
+
+    $rooms = $hotel->rooms()->get();
+    return view('lk.room.edit', compact('hotel', 'rooms'));
   }
 
   /**

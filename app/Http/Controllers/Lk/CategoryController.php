@@ -1,0 +1,59 @@
+<?php
+/*
+ * Copyright (c) 2021.
+ * This code is the property of the Fulliton developer.
+ * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
+ */
+
+namespace App\Http\Controllers\Lk;
+
+use Exception;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+
+class CategoryController extends Controller
+{
+  public function update(Request $request): JsonResponse
+  {
+    $category = Category::findOrFail($request->get('id'));
+
+    if ($this->save($category, $request->all())) {
+      return response()->json(['status' => 'success']);
+    }
+
+    return response()->json(['status' => 'error']);
+  }
+
+  public function create(Request $request): JsonResponse
+  {
+    $category = new Category();
+
+    if ($this->save($category, $request->all())) {
+      return response()->json([
+        'status' => 'success',
+        'category' => $category
+      ]);
+    }
+
+    return response()->json(['status' => 'error']);
+  }
+
+  public function save(&$category, $data): bool
+  {
+    try {
+      $category->name = $data['name'];
+
+      if (isset($data['hotel_id'])) {
+        $category->hotel()->associate($data['hotel_id']);
+      }
+
+      $category->save();
+
+      return true;
+    } catch (Exception $exception) {
+      return false;
+    }
+  }
+}
