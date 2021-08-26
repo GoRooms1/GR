@@ -25,3 +25,4 @@ Route::post('room/edit/fond', 'RoomController@fondUpdate')->name('room.fond.upda
 
 Route::put('category/update', 'CategoryController@update')->name('category.update');
 Route::post('category/create', 'CategoryController@create')->name('category.create');
+Route::delete('category/delete/{category}', 'CategoryController@delete')->name('category.delete');

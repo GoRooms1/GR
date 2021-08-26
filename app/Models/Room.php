@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\UseImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Room
@@ -59,6 +59,12 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Query\Builder|Room withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Room withoutTrashed()
  * @mixin Eloquent
+ * @property int|null $number
+ * @property int|null $order
+ * @property int|null $category_id
+ * @method static Builder|Room whereCategoryId($value)
+ * @method static Builder|Room whereNumber($value)
+ * @method static Builder|Room whereOrder($value)
  */
 class Room extends Model
 {
@@ -69,6 +75,20 @@ class Room extends Model
   public const PER_PAGE = 6;
 
   public string $no_image = 'img/img-room-sm-1.jpg';
+
+  protected $fillable = [
+    'name',
+    'number',
+    'order',
+    'moderate',
+    'description',
+    'is_hot'
+  ];
+
+  protected $casts = [
+    'moderate' => 'boolean',
+    'is_hot' => 'boolean'
+  ];
 
   protected $with = [
     'attrs',
@@ -146,17 +166,17 @@ class Room extends Model
     return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
   }
 
-  public function getMetaDescriptionAttribute()
+  public function getMetaDescriptionAttribute(): ?string
   {
     return @$this->meta->meta_description ?? null;
   }
 
-  public function getMetaKeywordsAttribute()
+  public function getMetaKeywordsAttribute(): ?string
   {
     return @$this->meta->meta_keywords ?? null;
   }
 
-  public function getMetaTitleAttribute()
+  public function getMetaTitleAttribute(): ?string
   {
     return @$this->meta->title ?? null;
   }
