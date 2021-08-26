@@ -72,17 +72,8 @@
                     <li class="nav-item">
                         <a href="{{ route('admin.descriptions.index') }}" class="nav-link">Описания</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Настройки <span class="caret"></span>
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a href="{{ route('admin.settings.index') }}" class="dropdown-item">Основные настройки</a>
-                            <a href="{{ route('admin.settings.seo') }}" class="dropdown-item">Seo настройки</a>
-
-                        </div>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.settings.index') }}" class="nav-link">Настройки</a>
                     </li>
                 </ul>
             @endauth
