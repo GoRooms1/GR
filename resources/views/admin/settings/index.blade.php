@@ -100,16 +100,22 @@
                         <button class="btn btn-success">Обновить</button>
                     </div>
                 </form>
-                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
-                    @csrf
-                    <div class="{{ $first_col }}">Текст на главной</div>
-                    <div class="{{ $second_col }}"><textarea class="form-control editor"
-                                                             name="about">{!! html_entity_decode(Settings::option('about')) !!}</textarea>
-                    </div>
-                    <div class="{{ $third_col }}">
-                        <button class="btn btn-success">Обновить</button>
-                    </div>
-                </form>
+                @foreach( $pages as $page)
+                    <form class="row" action="{{ route('admin.settings.seo.update', $page) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label for="content">{{ $names[$page->option] }}</label>
+                                <textarea name="value" id="content" class="form-control editor ">{{ old('content') ?? @$page->value ?? '' }}</textarea>
+                                @error('content')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <button class="btn btn-success">Обновить</button>
+                        </div>
+                    </form>
+                @endforeach
                 <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
                     @csrf
                     <div class="{{ $first_col }}">Город по умолчанию</div>

@@ -13,7 +13,10 @@ class SettingsController extends Controller
 {
     public function index(): View
     {
-        return view('admin.settings.index');
+        return view('admin.settings.index', [
+            'pages' => Settings::where('option', 'LIKE', 'seo_%')->get(),
+            'names' => ['seo_/' => 'Главная страница', 'seo_/rooms/hot' => 'Горячее', 'seo_/rooms' => 'Комнаты', 'seo_/hotels' => 'Отели']
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -42,26 +45,12 @@ class SettingsController extends Controller
         return back();
     }
 
-    public function seo(): View
-    {
-        return view('admin.settings.seo', [
-            'pages' => Settings::where('option', 'LIKE', 'seo_%')->get()
-        ]);
-    }
-
-    public function seoEdit($id): View
-    {
-        return view('admin.settings.seoEdit', [
-            'page' => Settings::find($id)
-        ]);
-    }
-
     public function seoUpdate($id): RedirectResponse
     {
         Settings::find($id)->update([
             'value' => \request()->value,
         ]);
         Artisan::call('optimize:clear');
-        return redirect()->route('admin.settings.seo');
+        return redirect()->back();
     }
 }
