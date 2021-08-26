@@ -61,6 +61,12 @@ $periods = \App\Models\Period::all();
 
 // Beautiful information for the front
 \App\Models\Period::first()->info
+
+//Взять все категории из комнат для данного отеля
+$hotel->rooms->pluck('category')->unique('category')
+
+//Взять ве категории для данного отеля
+$hotel->categories
 ```
 
 ## Contributing
