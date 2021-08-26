@@ -3,7 +3,7 @@
 @section('content')
   <input type="hidden" name="category.update" value="{{ route('lk.category.update') }}">
   <input type="hidden" name="category.create" value="{{ route('lk.category.create') }}">
-  <input type="hidden" name="category.delete" value="{{ route('lk.category.delete') }}">
+  <input type="hidden" name="category.delete" value="{{ route('lk.category.delete', '') }}">
 
   <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
   <section class="part">

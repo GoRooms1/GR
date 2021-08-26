@@ -271,11 +271,9 @@ $('.categoryRemove').bind('click', function() {
   if (id) {
     let url = $('[name="category.delete"]').get(0)
     if (url) {
-      url = url.value
+      url = url.value + '/' + id
 
-      axios.delete(url, {
-        id: id
-      })
+      axios.delete(url)
         .then(response => {
           if (response.data.status === 'error') {
             alert('Ошибка сохранения')

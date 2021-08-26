@@ -41,9 +41,13 @@ class CategoryController extends Controller
     return response()->json(['status' => 'error']);
   }
 
-  public function delete(CategoryRequest $request): JsonResponse
+  /**
+   * @throws Exception
+   */
+  public function delete(Category $category): JsonResponse
   {
-    return response()->json(['status' => Category::destroy($request->get('id'))]);
+    $status = $category->delete();
+    return response()->json(['status' => (boolean) $status]);
   }
 
   public function save(&$category, $data): bool
