@@ -7,12 +7,12 @@
 
 namespace App\Http\Controllers\Lk;
 
-use App\Http\Controllers\Controller;
 use App\Models\Hotel;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Models\Room;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * Edit Room in Hotel user
@@ -20,16 +20,29 @@ use Illuminate\Support\Facades\Auth;
 class RoomController extends Controller
 {
 
-  public function edit ()
+  /**
+   * Edit Page.
+   * Show edit page or Page checked type fond
+   *
+   * @return View
+   */
+  public function edit(): View
   {
     $hotel = Auth::user()->hotel;
-    if ($hotel->rooms()->count() < 1 && !$hotel->checked_type_fond) {
+    if (!$hotel->checked_type_fond && $hotel->rooms()->count() < 1) {
       return view('lk.room.fond', compact('hotel'));
     }
     return view('lk.room.edit');
   }
 
-  public function fondUpdate (Request $request): RedirectResponse
+  /**
+   * Method Update Type fond in Hotel
+   *
+   * @param Request $request
+   *
+   * @return RedirectResponse
+   */
+  public function fondUpdate(Request $request): RedirectResponse
   {
     $TYPES_FOND = Hotel::TYPES_FOND;
     $request->validate([
