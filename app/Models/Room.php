@@ -117,6 +117,11 @@ class Room extends Model
 //    });
   }
 
+  public function category ()
+  {
+    return $this->belongsTo(Category::class);
+  }
+
   public function hotel(): BelongsTo
   {
     return $this->belongsTo(Hotel::class);
