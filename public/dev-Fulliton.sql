@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 25 2021 г., 19:58
+-- Время создания: Авг 26 2021 г., 11:17
 -- Версия сервера: 5.7.33
 -- Версия PHP: 7.4.20
 
@@ -6255,10 +6255,21 @@ INSERT INTO `bookings` (`id`, `book_number`, `client_fio`, `client_phone`, `book
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `room_id` bigint(20) UNSIGNED NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `hotel_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `description`, `hotel_id`, `created_at`, `updated_at`) VALUES
+(1, 'wertwertqwe222222222222222', 'wertwertrt', 144, NULL, '2021-08-26 01:14:54'),
+(2, 'asdasda', NULL, 144, '2021-08-26 01:11:10', '2021-08-26 01:11:10'),
+(3, 'Прикол нет', NULL, 144, '2021-08-26 01:15:22', '2021-08-26 01:15:33'),
+(4, 'Как дела', NULL, 144, '2021-08-26 01:15:28', '2021-08-26 01:15:28');
 
 -- --------------------------------------------------------
 
@@ -9986,8 +9997,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (106, '2021_08_23_164725_change_metro2_table', 17),
 (107, '2021_08_24_144641_moderate_images_table', 18),
 (110, '2021_08_25_130626_change_nullable_column_in_hotel_table', 19),
-(111, '2021_08_25_162425_remove_category_in_room_table', 20),
-(112, '2021_08_25_162818_rewrite_category_table', 21);
+(111, '2021_08_25_162425_remove_category_in_room_table', 20);
 
 -- --------------------------------------------------------
 
@@ -11522,7 +11532,7 @@ ALTER TABLE `bookings`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `categories_room_id_foreign` (`room_id`);
+  ADD KEY `categories_hotel_id_foreign` (`hotel_id`);
 
 --
 -- Индексы таблицы `city_coords`
@@ -11724,7 +11734,7 @@ ALTER TABLE `bookings`
 -- AUTO_INCREMENT для таблицы `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `city_coords`
@@ -11790,7 +11800,7 @@ ALTER TABLE `metros`
 -- AUTO_INCREMENT для таблицы `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT для таблицы `pages`
@@ -11898,7 +11908,7 @@ ALTER TABLE `attribute_room`
 -- Ограничения внешнего ключа таблицы `categories`
 --
 ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_room_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `categories_hotel_id_foreign` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `costs`

@@ -22,3 +22,6 @@ Route::post('object/image/delete/{image}', 'ObjectController@delete')->name('obj
 
 Route::get('room/edit', 'RoomController@edit')->name('room.edit');
 Route::post('room/edit/fond', 'RoomController@fondUpdate')->name('room.fond.update');
+
+Route::put('category/update', 'CategoryController@update')->name('category.update');
+Route::post('category/create', 'CategoryController@create')->name('category.create');
