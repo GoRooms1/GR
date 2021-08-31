@@ -7,16 +7,16 @@
 
 namespace App;
 
-use App\Models\Hotel;
 use Eloquent;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Notifications\DatabaseNotificationCollection;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Hotel;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 
 /**
  * User Table
@@ -100,8 +100,8 @@ class User extends Authenticatable
    */
   protected $casts = [
     'email_verified_at' => 'datetime',
-    'is_admin'          => 'boolean',
-    'is_moderate'       => 'boolean'
+    'is_admin' => 'boolean',
+    'is_moderate' => 'boolean'
   ];
 
   /**

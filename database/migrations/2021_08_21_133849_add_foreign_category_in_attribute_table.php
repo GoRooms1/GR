@@ -5,9 +5,9 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class AddForeignCategoryInAttributeTable extends Migration
 {
@@ -19,7 +19,7 @@ class AddForeignCategoryInAttributeTable extends Migration
   public function up(): void
   {
     Schema::table('attributes', function (Blueprint $table) {
-      $table->unsignedBigInteger('attribute_category_id')->after('');
+      $table->unsignedBigInteger('attribute_category_id')->after('name');
     });
 
     \App\Models\Attribute::query()
