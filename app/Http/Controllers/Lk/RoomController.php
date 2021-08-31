@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Lk;
 
 use App\Models\Room;
 use App\Models\Hotel;
+use App\Models\CostType;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +37,8 @@ class RoomController extends Controller
     }
 
     $rooms = $hotel->rooms()->get();
-    return view('lk.room.edit', compact('hotel', 'rooms'));
+    $costTypes = CostType::all();
+    return view('lk.room.edit', compact('hotel', 'rooms', 'costTypes'));
   }
 
   /**
