@@ -445,19 +445,6 @@
       console.log($(str).remove())
     }
 
-    function findExistImage (file) {
-      return existFile.filter(x => {
-        if (file.xhr) {
-          let image = JSON.parse(file.xhr.response).payload.images[0]
-          console.log("{{ url('/') }}" + "/"+ image.path)
-          return ("{{ url('/') }}" + "/"+ image.path) === x.path
-        } else {
-          console.log(1)
-          return x.path === file.dataURL
-        }
-      }).pop()
-    }
-
 
     $("#address").suggestions({
       token: "a35c9ab8625a02df0c3cab85b0bc2e9c0ea27ba4",
@@ -507,32 +494,18 @@
 
         this.on("complete", function (file) {
 
-          let f = findExistImage(file)
+          let f = findExistImage(file, existFile)
           console.log(f)
 
           let d = file.previewElement.querySelector("[data-dz-success]");
           d.innerHTML = f.moderate_text
+
           if (!f.moderate) {
             d.style.color="#2f64ad"
           }
 
           $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
           $('#file-dropzone').appendTo('.visualizacao')
-        });
-
-        this.on('completemultiple', function (file, json) {
-
-          // $('.sortable').sortable({
-          // 	items: '.dz-image-preview',
-          // });
-
-          // if (this.files.length > 6) {
-          //   this.removeFile(this.files[0]);
-          // }
-
-        });
-        this.on("maxfilesexceeded", function(file) {
-
         });
 
         this.on('success', function (file, json) {
@@ -558,8 +531,6 @@
         this.on("reset", function (file) {
           $('#file-dropzone').show()
 
-        });
-        this.on('drop', function (file) {
         });
         this.on("removedfile", function (file) {
           console.log(file)
