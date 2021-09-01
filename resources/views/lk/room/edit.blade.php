@@ -95,7 +95,7 @@
               <p class="head-text head-text_bold">{{ $room->name }}</p>
             </div>
             <div class="col-3 offset-sm-2">
-              <p class="head-text">{{ $room->category ? $room->category->name : '' }}</p>
+              <p class="head-text">{{ $room->category->name ?? '' }}</p>
             </div>
             <div class="col-1 text-right">
               <button class="quote__remove text-white">
@@ -170,7 +170,10 @@
                 </div>
                 <ul class="select__hidden">
                   @foreach($hotel->categories as $category)
-                    <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}" data-id="{{ $category->id }}">{{ $category->name }}</li>
+                    <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}"
+                        data-id="{{ $category->id }}">
+                      {{ $category->name }}
+                    </li>
                   @endforeach
                 </ul>
               </div>
@@ -178,8 +181,8 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <div class="uploud-photo" id="file-dropzone"></div>
-              <ul class="visualizacao sortable dropzone-previews" id="original_items">
+              <div class="uploud-photo file-dropzone" data-id="{{$room->id}}" id="file-dropzone"></div>
+              <ul class="visualizacao sortable dropzone-previews visualizacao-{{$room->id}}" id="original_items">
               </ul>
               <ul id="cloned_items">
               </ul>
@@ -189,7 +192,7 @@
                     <div class="dz-preview dz-file-preview">
                       <img data-dz-thumbnail/>
                       <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-                      <div class="dz-success-mark"><span>Проверка модератором</span></div>
+                      <div data-dz-success class="dz-success-mark"><span>Проверка модератором</span></div>
                       <div class="dz-error-mark"><span>✘</span></div>
                       <div class="dz-error-message"><span data-dz-errormessage></span></div>
                     </div>
@@ -297,60 +300,158 @@
     });
 
     Dropzone.autoDiscover = false;
-    // instantiate the uploader
-    if ($('#file-dropzone').hasClass('dropzone_disabled')) {
+    let blockDropZone =  $('.file-dropzone')
+    let uploader = []
+    blockDropZone.each(function() {
+      let zone = this
+      // instantiate the uploader
+      if ($(zone).hasClass('dropzone_disabled')) {
 
-    } else {
-      $('#file-dropzone').dropzone({
+      } else {
+        // Dropzone initial
+        uploader[zone.dataset.id] = new Dropzone(this, {
+          url: "{{ route('lk.room.image.upload') }}",
+          maxFiles: 6,
+          paramName: "image",
+          thumbnailWidth: 352,
+          thumbnailHeight: 260,
+          addRemoveLinks: true,
+          uploadMultiple: false,
+          previewsContainer: '.visualizacao-' + zone.dataset.id,
+          previewTemplate: $(zone).siblings('.preview').html(),
+          acceptedFiles: "image/*",
+          headers: {
+            'x-csrf-token': "{{ csrf_token() }}",
+          },
+          sending: function(file, xhr, formData) {
+            formData.append('model_name', "Room")
+            formData.append('modelID', zone.dataset.id)
+          },
+          init: function () {
+            this.on("complete", function (file) {
 
-        url: "/file/post",
-        maxFiles: 6,
-        thumbnailWidth: 352,
-        thumbnailHeight: 260,
-        addRemoveLinks: true,
-        previewsContainer: '.visualizacao',
-        previewTemplate: $('.preview').html(),
-        init: function () {
+              let f = findExistImage(file, existFile[zone.dataset.id])
+              console.log(f)
 
+              let d = file.previewElement.querySelector("[data-dz-success]");
+              d.innerHTML = f.moderate_text
+              if (!f.moderate) {
+                d.style.color="#2f64ad"
+              }
 
-          this.on("complete", function (file) {
-            $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
-            $('#file-dropzone').appendTo('.visualizacao')
-          });
+              $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
+              let str = $('ul.visualizacao-' + zone.dataset.id).get(0)
+              $(zone).appendTo(str)
+            });
+            this.on('success', function (file, json) {
+              console.log(json)
+              let image = json.payload.images[0]
+              let word = 'image'
+              existFile[zone.dataset.id].push({
+                id: image.id,
+                path: "{{ url('/') }}" + "/" + image.path,
+                name: image.name,
+                moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
+                moderate: image.moderate
+              })
+            });
+            this.on("addedfile", function(file) {
+              while (this.files.length  > this.options.maxFiles) {
+                this.removeFile(this.files[0]);
+                existFile[zone.dataset.id].shift();
+                console.log(file, this.files.length, this.options.maxFiles)
+              }
+            });
+            this.on("reset", function (file) {
+              $(zone).show()
+            });
+            this.on('queuecomplete', function (file) {
+              $(this).parents(".shadow").find('.uploud__min').hide()
+            });
+            this.on("removedfile", function (file) {
+              console.log(file)
+              if (existFile[zone.dataset.id].length === 1) {
+                if (file.xhr) {
+                  let image = JSON.parse(file.xhr.response).payload.images[0]
+                  console.log("{{ url('/') }}" + "/"+ image.path)
+                  mockFile = { name: file.name, dataURL: "{{ url('/') }}" + "/"+ image.path, size: 0 };
+                } else {
+                  mockFile = { name: file.name, dataURL: file.dataURL, size: 0 };
+                }
 
-          this.on('completemultiple', function (file, json) {
+                uploader[zone.dataset.id].displayExistingFile(file, mockFile.dataURL)
+                return false;
+              }
 
-            // $('.sortable').sortable({
-            // 	items: '.dz-image-preview',
-            // });
+              let flag = false
+              existFile[zone.dataset.id].forEach(f => {
+                if(f.path === file.dataURL) {
+                  flag = true
+                  let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
+                  axios.post(url)
+                    .then(response => {
+                      console.log(response)
+                      let index = existFile[zone.dataset.id].indexOf(f)
+                      if (index > -1) {
+                        existFile[zone.dataset.id].splice(index, 1);
+                      }
+                    })
+                    .catch(error => {
+                      alert('Ошибка при удалении')
+                    })
+                  return;
+                }
+              })
+              if (!flag) {
+                existFile[zone.dataset.id].forEach(f => {
+                  if(f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
+                    flag = true
+                    let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
+                    axios.post(url)
+                      .then(response => {
+                        console.log(response)
+                        let index = existFile[zone.dataset.id].indexOf(f)
+                        if (index > -1) {
+                          existFile[zone.dataset.id].splice(index, 1);
+                        }
+                      })
+                      .catch(error => {
+                        alert('Ошибка при удалении')
+                      })
+                    return;
+                  }
+                })
+              }
+            })
+          }
+        });
+      }
+    })
 
-            if (this.files.length > 6) {
-              this.removeFile(this.files[0]);
-            }
+    let mockFile
+    let existFile = []
 
-          });
+    @foreach($rooms as $room)
+      existFile[{{ $room->id }}] = []
+      @foreach($room->images as $image)
 
-          // $('.uploud-photo').draggable( "disable" )
-          this.on('success', function (file, json) {
+        existFile[{{ $room->id }}].push({
+          id: "{{ $image->id }}",
+          name: "{{ $image->name }}",
+          path: "{{ url($image->path) }}",
+          moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+          moderate: {!! $image->moderate ? 'true' : 'false' !!}
+        })
 
-          });
+        mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
+        uploader[{{ $room->id }}].emit("addedfile", mockFile);
+        uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
+        uploader[{{ $room->id }}].emit("complete", mockFile);
+        uploader[{{ $room->id }}].files.push(mockFile)
 
-          this.on('addedfile', function (file) {
+      @endforeach
+    @endforeach
 
-          });
-
-
-          this.on("reset", function (file) {
-            $('#file-dropzone').show()
-
-          });
-
-          this.on('queuecomplete', function (file) {
-            $(this).parents(".shadow").find('.uploud__min').hide()
-          });
-        }
-      });
-    }
 
   </script>
 @endsection

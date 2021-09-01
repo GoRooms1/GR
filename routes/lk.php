@@ -13,16 +13,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', 'lk/object/edit')->name('index');
+Route::redirect('/', 'lk/object/edit')
+  ->name('index');
 
-Route::get('object/edit', 'ObjectController@edit')->name('object.edit');
-Route::post('object/update', 'ObjectController@update')->name('object.update');
-Route::post('object/image/upload', 'ObjectController@uploadFor')->name('object.image.upload');
-Route::post('object/image/delete/{image}', 'ObjectController@delete')->name('object.image.delete');
+Route::get('object/edit', 'ObjectController@edit')
+  ->name('object.edit');
+Route::post('object/update', 'ObjectController@update')
+  ->name('object.update');
+Route::post('object/image/upload', 'ObjectController@uploadFor')
+  ->name('object.image.upload');
+Route::post('object/image/delete/{image}', 'ObjectController@delete')
+  ->name('object.image.delete');
 
-Route::get('room/edit', 'RoomController@edit')->name('room.edit');
-Route::post('room/edit/fond', 'RoomController@fondUpdate')->name('room.fond.update');
+Route::get('room/edit', 'RoomController@edit')
+  ->name('room.edit');
+Route::post('room/edit/fond', 'RoomController@fondUpdate')
+  ->name('room.fond.update');
+Route::post('room/image/upload', 'RoomController@uploadFor')
+  ->name('room.image.upload');
+Route::post('room/image/delete/{image}', 'RoomController@delete')
+  ->name('room.image.delete');
 
-Route::put('category/update', 'CategoryController@update')->name('category.update');
-Route::post('category/create', 'CategoryController@create')->name('category.create');
-Route::delete('category/delete/{category}', 'CategoryController@delete')->name('category.delete');
+Route::put('category/update', 'CategoryController@update')
+  ->name('category.update');
+Route::post('category/create', 'CategoryController@create')
+  ->name('category.create');
+Route::delete('category/delete/{category}', 'CategoryController@delete')
+  ->name('category.delete');

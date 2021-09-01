@@ -505,3 +505,16 @@ $('input[type="phone"]').bind('keyup', function() {
 		
 	}
 })
+
+function findExistImage (file, files) {
+  return files.filter(x => {
+    if (file.xhr) {
+      let image = JSON.parse(file.xhr.response).payload.images[0]
+      console.log(window.location.origin + "/" + image.path)
+      return (window.location.origin + "/" + image.path) === x.path
+    } else {
+      console.log(1)
+      return x.path === file.dataURL
+    }
+  }).pop()
+}
