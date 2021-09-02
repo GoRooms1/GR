@@ -297,6 +297,7 @@
         items: '.dz-image-preview',
       });
 
+      $('.quote__read').each(saveRoom)
     });
 
     Dropzone.autoDiscover = false;
