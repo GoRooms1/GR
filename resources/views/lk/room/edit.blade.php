@@ -87,6 +87,10 @@
           <input type="hidden"
                  name="url"
                  value="{{ route('lk.room.save') }}">
+          <input type="hidden"
+                 name="url-delete"
+                 value="{{ route('lk.room.deleteRoom', $room->id) }}">
+
           <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
             <div class="col-1">
               <p class="head-text">#{{ $room->order }}</p>

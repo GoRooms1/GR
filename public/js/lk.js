@@ -345,7 +345,22 @@ $('#selectRoom').bind('click focused bloor', function() {
 // })
 
 $('.quote__remove').bind('click', function() {
-	$(this).parents('.shadow').remove()
+  let shadow = $(this).parents('.shadow').get(0)
+
+
+//  axios
+//  TODO: delete variable uploader and existFile
+  let url = $(shadow).find('input[name=url-delete]').val()
+  axios.delete(url)
+  .then(response => {
+    if (response.data.success) {
+      shadow.remove()
+    }
+  })
+  .catch(error => {
+    alert('Error server side')
+    console.log(error)
+  })
 })
 
 // $('.save-button').bind('click', function() {
