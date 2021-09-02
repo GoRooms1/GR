@@ -10,7 +10,6 @@ use App\Traits\CreatedAtOrdered;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -65,10 +64,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|Room whereCategoryId($value)
  * @method static Builder|Room whereNumber($value)
  * @method static Builder|Room whereOrder($value)
+ * @property-read Category|null $category
  */
 class Room extends Model
 {
-  use SoftDeletes;
   use UseImages;
   use CreatedAtOrdered;
 
@@ -117,7 +116,7 @@ class Room extends Model
 //    });
   }
 
-  public function category (): BelongsTo
+  public function category(): BelongsTo
   {
     return $this->belongsTo(Category::class);
   }
