@@ -47,7 +47,11 @@ class Period extends Model
    * @var string[]
    */
   protected $with = [
-    'type',
+    'type'
+  ];
+
+  protected $appends = [
+    'info'
   ];
 
   /**

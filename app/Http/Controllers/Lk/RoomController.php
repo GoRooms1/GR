@@ -7,12 +7,15 @@
 
 namespace App\Http\Controllers\Lk;
 
+use Exception;
 use App\Models\Room;
+use App\Models\Cost;
 use App\Models\Hotel;
 use App\Models\CostType;
 use Illuminate\View\View;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -63,5 +66,55 @@ class RoomController extends Controller
     $hotel->save();
 
     return redirect()->route('lk.room.edit')->with('success', 'Тип Фонда обновлён');
+  }
+
+  /**
+   * @throws Exception
+   */
+  public function saveRoom(Request $request): JsonResponse
+  {
+    $request->validate([
+      'id' => 'sometimes|required|exists:rooms,id'
+    ]);
+
+    $hotel = Hotel::whereHas('rooms', function ($q) use($request) {
+      $q->where('id', $request->get('id'));
+    })->first();
+
+    if (!$hotel) {
+      throw new Exception('Не найдет отель для комнаты');
+    }
+
+    $request->validate([
+      'order' => 'sometimes|required|unique:rooms,order,'. $request->get('id') .',id,hotel_id,' . $hotel->id,
+      'number' => 'sometimes|required',
+      'name' => 'sometimes|required',
+      'category' => 'sometimes|required|exists:categories,id',
+      'types' => 'sometimes|required|array',
+      'types.*.id' =>'required|exists:cost_types,id',
+      'types.*.value' =>'required',
+      'types.*.data' =>'required|exists:periods,id',
+    ]);
+
+    $room = Room::find($request->id);
+    $room->name = $request->get('name');
+    $room->order = $request->get('order');
+    $room->number = $request->get('number');
+    $room->category()->associate($request->get('category'));
+    $room->moderate = true;
+
+    $room->costs()->delete();
+
+    foreach ($request->get('types') as $type) {
+      $cost = new Cost();
+      $cost->value = $type['value'];
+      $cost->period()->associate($type['data']);
+      $cost->room()->associate($room->id);
+      $cost->save();
+    }
+
+    $room->save();
+
+    return response()->json(['success' => true, 'room' => $room]);
   }
 }

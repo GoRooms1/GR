@@ -5,7 +5,6 @@
   <div class="overlay open"></div>
 
   <div class="popup popup_horizontal open" id="newObject">
-    {{ dump($errors) }}
     <form action="{{ route('lk.object.store') }}" method="post">
       @csrf
       <img src="{{ asset('img/lk/close.png') }}" alt="" id="close" class="close-this">
@@ -71,7 +70,7 @@
           </div>
           <ul class="select__hidden">
             @foreach($types as $type)
-              <li class="select__item select__item_blue {{ old('hotel.type') === $type->id ? 'active' : '' }}" data-value="{{ $type->id }}">{{ $type->name }}</li>
+              <li class="select__item select__item_blue {{ old('hotel.type') === $type->id ? 'active' : '' }}" data-id="{{ $type->id }}">{{ $type->name }}</li>
             @endforeach
           </ul>
         </div>
@@ -112,13 +111,13 @@
         $('#registerObject').prop('disabled', true)
       }
     })
-    let el = document.getElementsByClassName('select__item_blue')
-    for(let i =0; i < el.length; i++) {
-      el[i].onclick = function () {
-        console.log(this.dataset.value)
-        document.getElementById('hotel_type').value = this.dataset.value
-      };
-    }
+    // let el = document.getElementsByClassName('select__item_blue')
+    // for(let i =0; i < el.length; i++) {
+    //   el[i].onclick = function () {
+    //     console.log(this.dataset.value)
+    //     document.getElementById('hotel_type').value = this.dataset.value
+    //   };
+    // }
 
     document.getElementById('close').onclick = function () {
       window.location.href = '{{ route('index') }}'

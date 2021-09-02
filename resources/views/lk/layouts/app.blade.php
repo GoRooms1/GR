@@ -22,16 +22,18 @@
 </head>
 <body>
 @if(session()->has('success'))
-<div class="alert alert-success alert-dismissible position-fixed w-auto fade show" style="top: 50px; z-index: 1000; right: 20px" role="alert">
-  <strong>Успешно</strong> {{ session()->get('success') }}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
+  <div class="alert alert-success alert-dismissible position-fixed w-auto fade show"
+       style="top: 50px; z-index: 1000; right: 20px" role="alert">
+    <strong>Успешно</strong> {{ session()->get('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 @endif
 
 @if(session()->has('error'))
-  <div class="alert alert-danger alert-dismissible position-fixed w-auto fade show" style="top: 50px; z-index: 1000; right: 20px" role="alert">
+  <div class="alert alert-danger alert-dismissible position-fixed w-auto fade show"
+       style="top: 50px; z-index: 1000; right: 20px" role="alert">
     <strong>Ошибка</strong> {{ session()->get('error') }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -73,8 +75,10 @@
           <nav class="menu">
             <a href="#" class="menu__item">Календарь цен</a>
             <a href="#" class="menu__item">Маркетинг</a>
-            <a href="{{ route('lk.object.edit') }}" class="menu__item {{ Route::currentRouteNamed('lk.object.*') ? 'active' : '' }}">Объект</a>
-            <a href="{{ route('lk.room.edit') }}" class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">Номерной фонд</a>
+            <a href="{{ route('lk.object.edit') }}"
+               class="menu__item {{ Route::currentRouteNamed('lk.object.*') ? 'active' : '' }}">Объект</a>
+            <a href="{{ route('lk.room.edit') }}"
+               class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">Номерной фонд</a>
             <a href="#" class="menu__item">Сотрудники</a>
             <a href="#" class="menu__item">Инструкции</a>
           </nav>
@@ -87,7 +91,7 @@
 
 {{-- MAIN--}}
 
-<main class="content">
+<main class="content" id="app">
 
   @yield('content')
 
@@ -98,6 +102,7 @@
 
 
 <!-- Scripts -->
+<script src="{{ mix('js/lk/lk.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script
@@ -106,7 +111,9 @@
     crossorigin="anonymous"></script>
 
 <script src="{{ asset('js/dropzone.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
