@@ -20,29 +20,27 @@
 
   @if(\Route::getCurrentRoute()->getName() === 'hotels.show' && isset($hotel))
     <title>{{ $hotel->meta_title }}</title>
-    <meta name="keywords" content="{{ $hotel->meta_keywords }}">
-    <meta name="author" content="{{ $hotel->name }}">
-    <meta name="description" content="{{ $pageAbout->meta_description }}">
+    <meta name="keywords" content="{{ $hotel->meta_keywords ?? '' }}">
+    <meta name="author" content="{{ $hotel->name ?? ''}}">
+    <meta name="description" content="{{ $pageAbout->meta_description ?? ''}}">
     <meta property="og:locale" content="ru_RU"/>
     <meta property="og:type" content="article"/>
-    <meta property="og:title" content="{{ $pageAbout->title  }}"/>
-    <meta property="og:description" content="{{ $pageAbout->meta_description }}"/>
-    <meta property="og:url" content="https://gorooms.ru{{ $pageAbout->url }}"/>
+    <meta property="og:title" content="{{ $pageAbout->title ?? '' }}"/>
+    <meta property="og:description" content="{{ $pageAbout->meta_description ?? ''}}"/>
+    <meta property="og:url" content="https://gorooms.ru{{ $pageAbout->url ?? '' }}"/>
     <meta property="og:image" content="https://gorooms.ru/img/logo.svg"/>
     <meta property="og:site_name" content="https://gorooms.ru/"/>    @if($hotel->meta_keywords)
       <link rel="canonical" href="{{ $hotel->meta_keywords }}"/>
     @endif
   @else
-    @if( isset($pageDescription) && !is_null($pageDescription))
+    @if( isset($pageDescription) && !is_null($pageDescription) ?? get_class($pageDescription) == 'App\Models\PageDescription')
       <title>{{ $pageDescription->title ?? config('app.name', 'GoRooms') }}</title>
-      <meta name="description" content="{{ $pageDescription->meta_description }}">
-      <meta name="keywords" content="{{ $pageDescription->meta_keywords }}">
-      @if( $pageDescription->meta_keywords)
-        <link rel="canonical" href="{{ $pageDescription->meta_keywords }}"/>
-      @endif
+      <meta name="description" content="{{ $pageDescription->meta_description ?? ''}}">
+      <meta name="keywords" content="{{ $pageDescription->meta_keywords ?? '' }}">
+        <link rel="canonical" href="{{ $pageDescription->meta_keywords ?? '' }}"/>
     @elseif( isset($pageAbout))
       <title>{{ $pageAbout->title ?? config('app.name', 'GoRooms') }}</title>
-      <meta name="description" content="{{ $pageAbout->meta_description }}">
+      <meta name="description" content="{{ $pageAbout->meta_description ?? '' }}">
       @if( $pageAbout->meta_keywords)
         <link rel="canonical" href="{{ $pageAbout->meta_keywords }}"/>
       @endif
