@@ -83,7 +83,10 @@
 
       {{--      Rooms   --}}
       @foreach($rooms as $room)
-        <div class="shadow shadow-complete">
+        <div class="shadow shadow-complete" data-id="{{ $room->id }}">
+          <input type="hidden"
+                 name="url"
+                 value="{{ route('lk.room.save') }}">
           <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
             <div class="col-1">
               <p class="head-text">#{{ $room->order }}</p>
@@ -213,15 +216,21 @@
             <ul class="hours">
               @foreach($costTypes as $type)
                 @php
-                  $costRoom = $room->costs()->where('period_id', $type->id)->first();
+                  $id = $type->id;
+                  $costRoom = $room->costs()->whereHas('period', function ($q) use($id) {
+                    $q->where('cost_type_id', $id);
+                  })->first();
+                  debug($costRoom);
                 @endphp
                 <li class="hour">
                   <p class="heading hours__heading">
                     {{ $type->name }}
                   </p>
                   <div class="d-flex align-items-center">
-                    <input type="text"
+                    <input type="number"
+                           min="0"
                            class="field hours__field"
+                           id="value-{{ $room->id }}-{{$type->id}}"
                            placeholder="{{ $costRoom->value ?? '0000' }}"
                            value="{{ $costRoom->value ?? '' }}">
 
@@ -231,14 +240,21 @@
                     </div>
 
                     <span class="rub">руб.</span>
+
                     <div class="select hours__select">
+                      <input type="hidden"
+                             name="type[]"
+                             data-id="{{$type->id}}"
+                             value="{{ $costRoom->period->id ?? '' }}">
+
                       <div class="select__top">
-                        <span class="select__current">От 2-х часов</span>
-                        <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+                        <span class="select__current">{{ $costRoom->period->info ?? 'Период' }}</span>
+                        <img class="select__arrow"
+                             src="{{ asset('img/lk/arrow.png') }}" alt="">
                       </div>
                       <ul class="select__hidden">
                         @foreach($type->periods as $period)
-                          <li class="select__item">{{ $period->info }}</li>
+                          <li class="select__item" data-id="{{ $period->id }}">{{ $period->info }}</li>
                         @endforeach
                       </ul>
                     </div>
@@ -297,6 +313,7 @@
         items: '.dz-image-preview',
       });
 
+      $('.quote__read').each(saveFontDate)
     });
 
     Dropzone.autoDiscover = false;

@@ -1,5 +1,11 @@
-// axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+/*
+ * Copyright (c) 2021.
+ * This code is the property of the Fulliton developer.
+ * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
+ */
+
 let token = document.head.querySelector('meta[name="csrf-token"]');
+
 if (token) {
   axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
@@ -17,6 +23,10 @@ $('.select__top').bind('click', function() {
 $('.select__item').bind('click', function() {
 	$(this).siblings('.select__item').removeClass('active')
 	$(this).addClass('active')
+  let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
+
+  $(input).val(this.dataset.id)
+
 	$(this).parent('.select__hidden').slideUp()
 	$(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
 	$(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
@@ -51,7 +61,6 @@ $('.check').bind('click', function() {
 	// }
 })
 
-
 $('input[name="fond1"]').bind('change', function() {
 	if ($('#everyRoom').prop('checked')) {
 		$('#fondText1').fadeIn(1)
@@ -72,8 +81,6 @@ $('.overlay').bind('click', function() {
 	$('.popup').removeClass('open')
 })
 
-
-
 $('.staff-item_staff').bind('click', function() {
 	$('#popupStaff').addClass('open')
 	$('.overlay').addClass('open')
@@ -93,7 +100,6 @@ $('#objectBtn').bind('click', function() {
 	$('#popupObject').addClass('open')
 	$('.overlay').addClass('open')
 })
-
 
 $('#stationBtn').bind('click', function() {
 	$('#popupStation').addClass('open')
@@ -137,15 +143,10 @@ let change = true
 
 // })
 
-
-
-
 $('.category__add').bind('click', function() {
 	$('.categories__item:last-child').clone(true, true).addClass('open').prependTo('.categories')
-
 	event.preventDefault();
 })
-
 
 // let category = true
 // $('.category-change').bind('click', function() {
@@ -176,7 +177,6 @@ $('.category-change').bind('click', function() {
 	$(this).parents('.categories__item').find('.field_hidden-room').val(categoryText)
 	$(this).parents('.categories__item').find('.field_hidden-quote').val(categoryQuote)
 })
-
 
 $('.category-good').bind('click', function() {
 
@@ -293,10 +293,9 @@ $('.categoryRemove').bind('click', function() {
   event.preventDefault();
 })
 
-
 $('.show-all').bind('click', function() {
 	if ($(this).hasClass('show-all_disabled')) {
-		e.preventDefault();
+		event.preventDefault();
 	} else {
 		$('#popupDetails').addClass('open')
 		$('.overlay').addClass('open')
@@ -314,12 +313,10 @@ $('#numberRoom').bind('click focused bloor', function() {
 	$(this).parents('.shadow').find('#numberRoomText').slideDown(1)
 })
 
-
 $('#nameRoom').bind('click focused bloor', function() {
 	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
 	$(this).parents('.shadow').find('#nameRoomText').slideDown(1)
 })
-
 
 $('#selectRoom').bind('click focused bloor', function() {
 	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
@@ -424,56 +421,9 @@ $('.agreement-choice').bind('click', function() {
 	}
 })
 
-$('.save-room').bind('click', function() {
-	if ($(this).parents('.shadow').find('.dz-image-preview').length == 0) {
+$('.save-room').bind('click', saveRoom)
 
-	} else {
-		$('.remove-btn').hide()
-		$(this).hide()
-		$(this).parents('.shadow').find(".show-all").addClass('show-all_disabled')
-		$(this).parents('.shadow').find('.quote__read').show()
-		$(this).parents('.shadow').find('.row-status').show()
-		$(this).parents('.shadow').addClass('shadow-complete')
-		$(this).parents('.shadow').find('.row__head').css('display', 'flex');
-		$(this).parents('.shadow').find('.caption-block').hide();
-		$(this).parents('.shadow').find('.room-details').hide();
-		$(this).parents('.shadow').find('.more-details').hide();
-		$(this).parents('.shadow-complete').find('.hours__field').prop('disabled', true)
-
-		$(this).parents('.shadow').find('.upload__remove').hide()
-		$(this).parents('.shadow').find('.sortable').sortable('disable');
-		$(this).parents('.shadow').find('.uploud-photo').hide()
-	}
-	
-})
-
-
-$('.quote__read').bind('click', function() {
-	$(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled')
-	$(this).parents('.shadow').find('.quote__read').show()
-	$(this).parents('.shadow').find('.quote__status').hide()
-	$(this).parents('.shadow').removeClass('shadow-complete')
-	$(this).parents('.shadow').find('.row__head').hide()
-	$(this).parents('.shadow').find('.caption-block').show();
-	$(this).parents('.shadow').find('.room-details').show();
-	$(this).parents('.shadow').find('.more-details').show();
-	$(this).parents('.shadow-complete').find('.hours__field').prop('disabled', false)
-	$(this).parents('.shadow').find('.upload__remove').show()
-	$(this).parents('.shadow').find('.sortable').sortable('enable');
-	$(this).parents('.shadow').find('.uploud-photo').show()
-	$(this).parents('.shadow').find('.save-room').show()
-	$(this).hide()
-	// $(this).parents('.shadow').not('.shadow-now').css('margin-top', '40px')
-
-})
-
-$('.shadow-complete').find('.hours__field').prop('disabled', false)
-
-
-function validateEmail(email) {
-	var emailReg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	return emailReg.test(email);
-}
+$('.quote__read').bind('click', allowedEditRoom)
 
 $('input[type="email"]').bind('keyup', function() {
 	var email = $(this).val();
@@ -487,13 +437,6 @@ $('input[type="email"]').bind('keyup', function() {
 	}
 })
 
-
-function validatePhone(phone){
-	let regex = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
-	return regex.test(phone);
-}
-
-
 $('input[type="phone"]').bind('keyup', function() {
 	var phone = $(this).val();
 	if (!validatePhone(phone)) {
@@ -506,6 +449,16 @@ $('input[type="phone"]').bind('keyup', function() {
 	}
 })
 
+function validateEmail(email) {
+  var emailReg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return emailReg.test(email);
+}
+
+function validatePhone(phone){
+  let regex = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+  return regex.test(phone);
+}
+
 function findExistImage (file, files) {
   return files.filter(x => {
     if (file.xhr) {
@@ -517,4 +470,99 @@ function findExistImage (file, files) {
       return x.path === file.dataURL
     }
   }).pop()
+}
+
+/*
+  Редактирование комнаты по кнопке
+ */
+function allowedEditRoom ()  {
+  $(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled')
+  $(this).parents('.shadow').find('.quote__read').show()
+  $(this).parents('.shadow').find('.quote__status').hide()
+  $(this).parents('.shadow').removeClass('shadow-complete')
+  $(this).parents('.shadow').find('.row__head').hide()
+  $(this).parents('.shadow').find('.caption-block').show();
+  $(this).parents('.shadow').find('.room-details').show();
+  $(this).parents('.shadow').find('.more-details').show();
+  $(this).parents('.shadow').find('.hours__field').prop('disabled', false)
+  $(this).parents('.shadow').find('.upload__remove').show()
+  $(this).parents('.shadow').find('.sortable').sortable('enable');
+  $(this).parents('.shadow').find('.uploud-photo').show()
+  $(this).parents('.shadow').find('.save-room').show()
+  $(this).hide()
+}
+
+/*
+  Сохранение комнаты, фронт
+ */
+function saveRoom () {
+  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
+    saveFontDate.call(this)
+    let shadow = $(this).parents('.shadow').get(0)
+
+    let number = $(shadow).find('input[name=number]').val()
+    let order = $(shadow).find('input[name=order]').val()
+    let name = $(shadow).find('input[name=name]').val()
+    let category = $(shadow).find('input[name=category_id]').val()
+    axios.post($(shadow).find('input[name=url]').val(), {
+      id: shadow.dataset.id,
+      number,
+      order,
+      name,
+      category,
+      types: $(shadow).find('input[name^=type]').map(function () {
+        return {
+          id: this.dataset.id,
+          data: $(this).val(),
+          value: $('#value-' + shadow.dataset.id + '-' +this.dataset.id).val()
+        }
+      }).get()
+    })
+    .then(response => {
+      if (response.data.success) {
+        if (!response.data.room.moderate) {
+          $(shadow).find('.row__head').removeClass('row__head_blue')
+          $(shadow).find('.quote__status').text('Проверка модератором')
+          $(shadow).find('.quote__status').removeClass('quote__status_blue').addClass('quote__status_red')
+        }
+      }
+    })
+      .catch(error => {
+        console.log(error)
+        alert('Ошибка в сохранении комнаты')
+      })
+
+  }
+}
+
+function saveFontDate () {
+  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
+    let shadow = $(this).parents('.shadow')
+    $(shadow).find('.remove-btn').hide()
+    $(this).hide()
+    $(shadow).find(".show-all").addClass('show-all_disabled')
+    $(shadow).find('.quote__read').show()
+    $(shadow).find('.row-status').show()
+    $(shadow).addClass('shadow-complete')
+    $(shadow).find('.row__head').css('display', 'flex');
+    $(shadow).find('.caption-block').hide();
+    $(shadow).find('.room-details').hide();
+    $(shadow).find('.more-details').hide();
+    $(this).parents('.shadow-complete').find('.hours__field').prop('disabled', true)
+    $(shadow).find('.quote__status').show()
+    $(shadow).find('.upload__remove').hide()
+    $(shadow).find('.sortable').sortable('disable');
+    $(shadow).find('.uploud-photo').hide()
+
+    let number = $(shadow).find('input[name=number]').val()
+    let order = $(shadow).find('input[name=order]').val()
+    let name = $(shadow).find('input[name=name]').val()
+    let category = $(shadow).find('input[name=category_id]').siblings('.select__top').find('.select__current').text()
+    category = category === 'Категория' ? '' : category
+
+    $($(shadow).find('.head-text').get(0)).html('#' + order)
+    $($(shadow).find('.head-text').get(1)).html('№' + number)
+    $($(shadow).find('.head-text').get(2)).html(name)
+    $($(shadow).find('.head-text').get(3)).html(category)
+  }
 }
