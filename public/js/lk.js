@@ -521,9 +521,13 @@ function saveRoom () {
     .then(response => {
       if (response.data.success) {
         if (!response.data.room.moderate) {
-          $(shadow).find('.row__head').removeClass('row__head_blue')
-          $(shadow).find('.quote__status').text('Проверка модератором')
-          $(shadow).find('.quote__status').removeClass('quote__status_blue').addClass('quote__status_red')
+          $(shadow).find('.row__head')
+            .removeClass('row__head_blue')
+          $(shadow).find('.quote__status')
+            .text('Проверка модератором')
+          $(shadow).find('.quote__status')
+            .removeClass('quote__status_blue')
+            .addClass('quote__status_red')
         }
       }
     })
@@ -548,7 +552,9 @@ function saveFontDate () {
     $(shadow).find('.caption-block').hide();
     $(shadow).find('.room-details').hide();
     $(shadow).find('.more-details').hide();
-    $(this).parents('.shadow-complete').find('.hours__field').prop('disabled', true)
+    $(this).parents('.shadow-complete')
+      .find('.hours__field')
+      .prop('disabled', true)
     $(shadow).find('.quote__status').show()
     $(shadow).find('.upload__remove').hide()
     $(shadow).find('.sortable').sortable('disable');
@@ -557,7 +563,10 @@ function saveFontDate () {
     let number = $(shadow).find('input[name=number]').val()
     let order = $(shadow).find('input[name=order]').val()
     let name = $(shadow).find('input[name=name]').val()
-    let category = $(shadow).find('input[name=category_id]').siblings('.select__top').find('.select__current').text()
+    let category = $(shadow).find('input[name=category_id]')
+      .siblings('.select__top')
+      .find('.select__current')
+      .text()
     category = category === 'Категория' ? '' : category
 
     $($(shadow).find('.head-text').get(0)).html('#' + order)
