@@ -81,230 +81,606 @@
         </div>
       </div>
 
-      {{--      Rooms   --}}
-      @foreach($rooms as $room)
-        <div class="shadow shadow-complete" data-id="{{ $room->id }}">
-          <input type="hidden"
-                 name="url"
-                 value="{{ route('lk.room.save') }}">
-          <input type="hidden"
-                 name="url-delete"
-                 value="{{ route('lk.room.deleteRoom', $room->id) }}">
+      <div id="rooms">
+        @foreach($rooms as $room)
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}">
+            <input type="hidden"
+                   name="url"
+                   value="{{ route('lk.room.save') }}">
+            <input type="hidden"
+                   name="url-delete"
+                   value="{{ route('lk.room.deleteRoom', $room->id) }}">
 
-          <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
-            <div class="col-1">
-              <p class="head-text">#{{ $room->order }}</p>
-            </div>
-            <div class="col-1 offset-sm-1">
-              <p class="head-text">№ {{ $room->number }}</p>
-            </div>
-            <div class="col-2 offset-sm-1">
-              <p class="head-text head-text_bold">{{ $room->name }}</p>
-            </div>
-            <div class="col-3 offset-sm-2">
-              <p class="head-text">{{ $room->category->name ?? '' }}</p>
-            </div>
-            <div class="col-1 text-right">
-              <button class="quote__remove text-white">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </div>
-
-{{--          Status--}}
-          @if($room->moderate)
-            <div class="row">
-              <div class="col-12">
-                <p class="text quote__status quote__status_red">Проверка модератором</p>
+            <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
+              <div class="col-1">
+                <p class="head-text">#{{ $room->order }}</p>
               </div>
-            </div>
-          @else
-            <div class="row">
-              <div class="col-12">
-                <p class="text quote__status quote__status_blue">Опубликовано</p>
+              <div class="col-1 offset-sm-1">
+                <p class="head-text">№ {{ $room->number }}</p>
               </div>
-            </div>
-
-          @endif
-
-
-          <div class="row room-details">
-            <div class="col-2">
-
-              <label class="room-text" for="orderRoom-{{ $room->id }}">Ордер</label>
-              <input type="text"
-                     name="order"
-                     class="field field_border"
-                     id="orderRoom-{{ $room->id }}"
-                     placeholder="#1"
-                     value="{{ $room->order }}">
-
-
-            </div>
-            <div class="col-2">
-
-              <label class="room-text" for="numberRoo-{{ $room->id }}m">Номер</label>
-              <input type="text"
-                     name="number"
-                     class="field field_border"
-                     id="numberRoom-{{ $room->id }}"
-                     placeholder="№1"
-                     value="{{ $room->number }}">
-
-
-            </div>
-            <div class="col-4">
-
-              <label class="room-text" for="nameRoom-{{ $room->id }}">Название</label>
-              <input type="text"
-                     name="name"
-                     class="field field_border"
-                     id="nameRoom-{{ $room->id }}"
-                     placeholder="Название"
-                     value="{{ $room->name }}">
-
-
-            </div>
-            <div class="col-4">
-              <p class="room-text">
-                Категория
-              </p>
-              <div class="select" id="selectRoom">
-                <input type="hidden" name="category_id" value="{{ $room->category->id ?? '' }}">
-                <div class="select__top select__top_100">
-                  <span class="select__current">{{ $room->category->name ?? 'Категория' }}</span>
-                  <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
-                </div>
-                <ul class="select__hidden">
-                  @foreach($hotel->categories as $category)
-                    <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}"
-                        data-id="{{ $category->id }}">
-                      {{ $category->name }}
-                    </li>
-                  @endforeach
-                </ul>
+              <div class="col-2 offset-sm-1">
+                <p class="head-text head-text_bold">{{ $room->name }}</p>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="uploud-photo file-dropzone" data-id="{{$room->id}}" id="file-dropzone"></div>
-              <ul class="visualizacao sortable dropzone-previews visualizacao-{{$room->id}}" id="original_items">
-              </ul>
-              <ul id="cloned_items">
-              </ul>
-              <div class="preview" style="display:none;">
-                <li>
-                  <div>
-                    <div class="dz-preview dz-file-preview">
-                      <img data-dz-thumbnail/>
-                      <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-                      <div data-dz-success class="dz-success-mark"><span>Проверка модератором</span></div>
-                      <div class="dz-error-mark"><span>✘</span></div>
-                      <div class="dz-error-message"><span data-dz-errormessage></span></div>
-                    </div>
-                  </div>
-                </li>
+              <div class="col-3 offset-sm-2">
+                <p class="head-text">{{ $room->category->name ?? '' }}</p>
               </div>
-            </div>
-
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <p class="uploud__min text">
-                (минимум 1 фотография, максимум 6)
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <ul class="hours">
-              @foreach($costTypes as $type)
-                @php
-                  $id = $type->id;
-                  $costRoom = $room->costs()->whereHas('period', function ($q) use($id) {
-                    $q->where('cost_type_id', $id);
-                  })->first();
-                  debug($costRoom);
-                @endphp
-                <li class="hour">
-                  <p class="heading hours__heading">
-                    {{ $type->name }}
-                  </p>
-                  <div class="d-flex align-items-center">
-                    <input type="number"
-                           min="0"
-                           class="field hours__field"
-                           id="value-{{ $room->id }}-{{$type->id}}"
-                           placeholder="{{ $costRoom->value ?? '0000' }}"
-                           value="{{ $costRoom->value ?? '' }}">
-
-                    <div class="hours__hidden">
-                      <span class="hours__money">{{ $costRoom->value ?? '0000' }}</span>
-                      <span class="hours__rub">руб.</span>
-                    </div>
-
-                    <span class="rub">руб.</span>
-
-                    <div class="select hours__select">
-                      <input type="hidden"
-                             name="type[]"
-                             data-id="{{$type->id}}"
-                             value="{{ $costRoom->period->id ?? '' }}">
-
-                      <div class="select__top">
-                        <span class="select__current">{{ $costRoom->period->info ?? 'Период' }}</span>
-                        <img class="select__arrow"
-                             src="{{ asset('img/lk/arrow.png') }}" alt="">
-                      </div>
-                      <ul class="select__hidden">
-                        @foreach($type->periods as $period)
-                          <li class="select__item" data-id="{{ $period->id }}">{{ $period->info }}</li>
-                        @endforeach
-                      </ul>
-                    </div>
-                    <span class="hours__after">
-                      От 2-х часов
-                    </span>
-                  </div>
-                </li>
-              @endforeach
-            </ul>
-          </div>
-          <div class="row more-details">
-            <div class="col-12">
-              <p class="text">Детально о номере</p>
-              <p class="caption caption_mt">
-                Выберите пункты наиболее точно отражающие преимущества данного номера
-                / группы номеров. (минимум 3, максимум 9 пунктов)
-              </p>
-            </div>
-
-          </div>
-
-          <div class="row">
-            <div class="col-12">
-              <a class="show-all show-all_orange">Показать все</a>
-            </div>
-          </div>
-          <div class="row row__bottom">
-            <div class="col-12">
-              <div class="d-flex align-items-center quote__buttons">
-                <button class="button save-room" id="saveRoom">Сохранить</button>
-                <button class="quote__read quote__read_1">
-                  <img src="{{ asset('img/lk/pen.png') }}" alt="">
-                </button>
-                <button class="quote__remove remove-btn">
+              <div class="col-1 text-right">
+                <button class="quote__remove text-white">
                   <i class="fa fa-trash"></i>
                 </button>
-
               </div>
             </div>
-          </div>
 
-        </div>
-      @endforeach
+            {{--          Status--}}
+            @if($room->moderate)
+              <div class="row">
+                <div class="col-12">
+                  <p class="text quote__status quote__status_red">Проверка модератором</p>
+                </div>
+              </div>
+            @else
+              <div class="row">
+                <div class="col-12">
+                  <p class="text quote__status quote__status_blue">Опубликовано</p>
+                </div>
+              </div>
+
+            @endif
+
+
+            <div class="row room-details">
+              <div class="col-2">
+
+                <label class="room-text" for="orderRoom-{{ $room->id }}">Ордер</label>
+                <input type="text"
+                       name="order"
+                       class="field field_border"
+                       id="orderRoom-{{ $room->id }}"
+                       placeholder="#1"
+                       value="{{ $room->order }}">
+
+
+              </div>
+              <div class="col-2">
+
+                <label class="room-text" for="numberRoo-{{ $room->id }}m">Номер</label>
+                <input type="text"
+                       name="number"
+                       class="field field_border"
+                       id="numberRoom-{{ $room->id }}"
+                       placeholder="№1"
+                       value="{{ $room->number }}">
+
+
+              </div>
+              <div class="col-4">
+
+                <label class="room-text" for="nameRoom-{{ $room->id }}">Название</label>
+                <input type="text"
+                       name="name"
+                       class="field field_border"
+                       id="nameRoom-{{ $room->id }}"
+                       placeholder="Название"
+                       value="{{ $room->name }}">
+
+
+              </div>
+              <div class="col-4">
+                <p class="room-text">
+                  Категория
+                </p>
+                <div class="select" id="selectRoom">
+                  <input type="hidden" name="category_id" value="{{ $room->category->id ?? '' }}">
+                  <div class="select__top select__top_100">
+                    <span class="select__current">{{ $room->category->name ?? 'Категория' }}</span>
+                    <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+                  </div>
+                  <ul class="select__hidden">
+                    @foreach($hotel->categories as $category)
+                      <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}"
+                          data-id="{{ $category->id }}">
+                        {{ $category->name }}
+                      </li>
+                    @endforeach
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="uploud-photo file-dropzone" data-id="{{$room->id}}" id="file-dropzone"></div>
+                <ul class="visualizacao sortable dropzone-previews visualizacao-{{$room->id}}" id="original_items">
+                </ul>
+                <ul id="cloned_items">
+                </ul>
+                <div class="preview" style="display:none;">
+                  <li>
+                    <div>
+                      <div class="dz-preview dz-file-preview">
+                        <img data-dz-thumbnail/>
+                        <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                        <div data-dz-success class="dz-success-mark"><span>Проверка модератором</span></div>
+                        <div class="dz-error-mark"><span>✘</span></div>
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <p class="uploud__min text">
+                  (минимум 1 фотография, максимум 6)
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <ul class="hours">
+                @foreach($costTypes as $type)
+                  @php
+                    $id = $type->id;
+                    $costRoom = $room->costs()->whereHas('period', function ($q) use($id) {
+                      $q->where('cost_type_id', $id);
+                    })->first();
+                    debug($costRoom);
+                  @endphp
+                  <li class="hour">
+                    <p class="heading hours__heading">
+                      {{ $type->name }}
+                    </p>
+                    <div class="d-flex align-items-center">
+                      <input type="number"
+                             min="0"
+                             class="field hours__field"
+                             id="value-{{ $room->id }}-{{$type->id}}"
+                             placeholder="{{ $costRoom->value ?? '0000' }}"
+                             value="{{ $costRoom->value ?? '' }}">
+
+                      <div class="hours__hidden">
+                        <span class="hours__money">{{ $costRoom->value ?? '0000' }}</span>
+                        <span class="hours__rub">руб.</span>
+                      </div>
+
+                      <span class="rub">руб.</span>
+
+                      <div class="select hours__select">
+                        <input type="hidden"
+                               name="type[]"
+                               data-id="{{$type->id}}"
+                               value="{{ $costRoom->period->id ?? '' }}">
+
+                        <div class="select__top">
+                          <span class="select__current">{{ $costRoom->period->info ?? 'Период' }}</span>
+                          <img class="select__arrow"
+                               src="{{ asset('img/lk/arrow.png') }}" alt="">
+                        </div>
+                        <ul class="select__hidden">
+                          @foreach($type->periods as $period)
+                            <li class="select__item" data-id="{{ $period->id }}">{{ $period->info }}</li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <span class="hours__after">
+                      От 2-х часов
+                    </span>
+                    </div>
+                  </li>
+                @endforeach
+              </ul>
+            </div>
+            <div class="row more-details">
+              <div class="col-12">
+                <p class="text">Детально о номере</p>
+                <p class="caption caption_mt">
+                  Выберите пункты наиболее точно отражающие преимущества данного номера
+                  / группы номеров. (минимум 3, максимум 9 пунктов)
+                </p>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <a class="show-all show-all_orange">Показать все</a>
+              </div>
+            </div>
+            <div class="row row__bottom">
+              <div class="col-12">
+                <div class="d-flex align-items-center quote__buttons">
+                  <button class="button save-room" id="saveRoom">Сохранить</button>
+                  <button class="quote__read quote__read_1">
+                    <img src="{{ asset('img/lk/pen.png') }}" alt="">
+                  </button>
+                  <button class="quote__remove remove-btn">
+                    <i class="fa fa-trash"></i>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        @endforeach
+      </div>
+
     </div>
   </section>
+
+  <div class="shadow shadow-now d-none" id="new_room">
+    <div class="row row__head">
+      <div class="col-1">
+        <p class="head-text">#1</p>
+      </div>
+      <div class="col-1 offset-sm-1">
+        <p class="head-text">№1</p>
+      </div>
+      <div class="col-2 offset-sm-1">
+        <p class="head-text head-text_bold">Блейз</p>
+      </div>
+      <div class="col-3 offset-sm-2">
+        <p class="head-text">Стандарт</p>
+      </div>
+      <div class="col-1 text-right">
+        <button class="quote__remove" style="color: white;">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row row-status">
+      <div class="col-12">
+        <p class="text quote__status quote__status_red">Проверка модератором</p>
+      </div>
+    </div>
+
+    <div class="row room-details">
+      <div class="col-2">
+        <label class="room-text" for="orderRoom">Ордер</label>
+        <input type="text" class="field field_border" id="orderRoom" placeholder="#1" autofocus>
+      </div>
+      <div class="col-2">
+        <label class="room-text" for="numberRoom">Номер</label>
+        <input type="text" class="field field_border" id="numberRoom" placeholder="№1">
+      </div>
+      <div class="col-4">
+        <label class="room-text" for="nameRoom">Название</label>
+        <input type="text" class="field field_border" id="nameRoom" placeholder="Блейз">
+      </div>
+      <div class="col-4">
+        <p class="room-text">
+          Категория
+        </p>
+        <div class="select" id="selectRoom">
+          <input type="hidden" >
+          <div class="select__top select__top_100">
+            <span class="select__current">Стандарт</span>
+            <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+          </div>
+          <ul class="select__hidden">
+            <li class="select__item">ГОСТ</li>
+            <li class="select__item">ТУ</li>
+            <li class="select__item">ЖКХ</li>
+            <li class="select__item">Грр..</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="uploud-photo" id="file-dropzone"></div>
+        <ul class="visualizacao sortable dropzone-previews" id="original_items">
+        </ul>
+        <ul id="cloned_items">
+        </ul>
+        <div class="preview" style="display:none;">
+          <li>
+            <div>
+              <div class="dz-preview dz-file-preview">
+                <img data-dz-thumbnail />
+                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                <div class="dz-success-mark"><span>Проверка модератором</span></div>
+                <div class="dz-error-mark"><span>✘</span></div>
+                <div class="dz-error-message"><span data-dz-errormessage></span></div>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <p class="uploud__min text">
+          (минимум 1 фотография, максимум 6)
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <ul class="hours">
+        <li class="hour">
+          <p class="heading hours__heading">
+            1 час
+          </p>
+          <div class="d-flex align-items-center">
+            <input type="text" class="field hours__field" placeholder="0000">
+
+            <div class="hours__hidden">
+              <span class="hours__money">0000</span>
+              <span class="hours__rub">руб.</span>
+            </div>
+
+            <span class="rub">руб.</span>
+            <div class="select hours__select">
+              <div class="select__top">
+                <span class="select__current">От 2-х часов</span>
+                <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+              </div>
+              <ul class="select__hidden">
+                <li class="select__item">Станция 1</li>
+                <li class="select__item">Станция 2</li>
+                <li class="select__item">Станция 3</li>
+                <li class="select__item">Станция 4</li>
+              </ul>
+            </div>
+            <span class="hours__after">
+										От 2-х часов
+									</span>
+          </div>
+        </li>
+        <li class="hour">
+          <p class="heading hours__heading">
+            Ночь
+          </p>
+          <div class="d-flex align-items-center">
+            <input type="text" class="field hours__field" placeholder="0000">
+
+            <div class="hours__hidden hours__field">
+              <span class="hours__money">0000</span>
+              <span class="hours__rub">руб.</span>
+            </div>
+
+            <span class="rub">руб.</span>
+            <div class="select hours__select">
+              <div class="select__top">
+                <span class="select__current">с 22:00 до 10:00</span>
+                <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+              </div>
+              <ul class="select__hidden">
+                <li class="select__item">Станция 1</li>
+                <li class="select__item">Станция 2</li>
+                <li class="select__item">Станция 3</li>
+                <li class="select__item">Станция 4</li>
+              </ul>
+            </div>
+            <span class="hours__after">
+										с 22:00 до 10:00
+									</span>
+          </div>
+        </li>
+        <li class="hour">
+          <p class="heading hours__heading">
+            Сутки
+          </p>
+          <div class="d-flex align-items-center">
+            <input type="text" class="field hours__field" placeholder="0000">
+
+            <div class="hours__hidden">
+              <span class="hours__money">0000</span>
+              <span class="hours__rub">руб.</span>
+            </div>
+
+            <span class="rub">руб.</span>
+            <div class="select hours__select">
+              <div class="select__top">
+                <span class="select__current">с 14:00 до 12:00</span>
+                <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+              </div>
+              <ul class="select__hidden">
+                <li class="select__item">Станция 1</li>
+                <li class="select__item">Станция 2</li>
+                <li class="select__item">Станция 3</li>
+                <li class="select__item">Станция 4</li>
+              </ul>
+            </div>
+            <span class="hours__after">
+										с 14:00 до 12:00
+									</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="row more-details">
+      <div class="col-12">
+        <p class="text">Детально о номере</p>
+        <p class="caption caption_mt">
+          Выберите пункты наиболее точно отражающие преимущества данного номера / группы номеров. (минимум 3, максимум 9 пунктов)
+        </p>
+      </div>
+
+    </div>
+    <div class="row room__checkboxes">
+      <!-- <div class="col-10">
+        <ul class="details quote__details">
+          <li class="detail">
+            <p class="text-bold_small details__title">Заголовок</p>
+            <div class="choice">
+              <input type="checkbox" id="detail1" name="details1" checked="">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail1">Пункт 1</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail2" name="details1">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail2">Пункт 2</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail3" name="details1">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail3">Пункт 3</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail4" name="details1">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail4">Пункт 4</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail5" name="details1">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail5">Пункт 5</label>
+            </div>
+          </li>
+          <li class="detail">
+            <p class="text-bold_small details__title">Заголовок</p>
+            <div class="choice">
+              <input type="checkbox" id="detail6" name="details2" checked="">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail6">Пункт 1</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail7" name="details2">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail7">Пункт 2</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail8" name="details2">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail8">Пункт 3</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail9" name="details2">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail9">Пункт 4</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail10" name="details2">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail10">Пункт 5</label>
+            </div>
+          </li>
+          <li class="detail">
+            <p class="text-bold_small details__title">Заголовок</p>
+            <div class="choice">
+              <input type="checkbox" id="detail11" name="details3" checked="">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail11">Пункт 1</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail12" name="details3">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail12">Пункт 2</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail13" name="details3">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail13">Пункт 3</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail14" name="details3">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail14">Пункт 4</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail15" name="details3">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail15">Пункт 5</label>
+            </div>
+          </li>
+          <li class="detail">
+            <p class="text-bold_small details__title">Заголовок</p>
+            <div class="choice">
+              <input type="checkbox" id="detail16" name="details4" checked="">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail16">Пункт 1</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail17" name="details4">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail17">Пункт 2</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail18" name="details4">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail18">Пункт 3</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail19" name="details4">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail19">Пункт 4</label>
+            </div>
+            <div class="choice">
+              <input type="checkbox" id="detail20" name="details4">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="detail20">Пункт 5</label>
+            </div>
+          </li>
+
+        </ul>
+      </div> -->
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <a class="show-all show-all_orange">Показать все</a>
+      </div>
+    </div>
+    <div class="row row__bottom">
+      <div class="col-12">
+        <div class="d-flex align-items-center quote__buttons">
+          <button class="button save-room" id="saveRoom">Сохранить</button>
+          <button class="quote__read quote__read_1">
+            <img src="{{ asset('img/lk/pen.png') }}" alt="">
+          </button>
+          <button class="quote__remove remove-btn">
+            <i class="fa fa-trash"></i>
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 
 @endsection

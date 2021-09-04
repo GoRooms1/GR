@@ -13,24 +13,16 @@ if (token) {
 }
 
 let select = true
-$('.select__top').bind('click', function() {
-	$('.select__arrow').not($(this).find('.select__arrow')).removeClass('open')
-	$(this).find('.select__arrow').toggleClass('open')
-	$('.select__hidden').not($(this).siblings('.select__hidden')).slideUp(1)
-	$(this).siblings('.select__hidden').slideToggle()
-})
+$('.select__top').bind('click', selectTop)
 
-$('.select__item').bind('click', function() {
-	$(this).siblings('.select__item').removeClass('active')
-	$(this).addClass('active')
-  let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
+function selectTop () {
+  $('.select__arrow').not($(this).find('.select__arrow')).removeClass('open')
+  $(this).find('.select__arrow').toggleClass('open')
+  $('.select__hidden').not($(this).siblings('.select__hidden')).slideUp(1)
+  $(this).siblings('.select__hidden').slideToggle()
+}
 
-  $(input).val(this.dataset.id)
-
-	$(this).parent('.select__hidden').slideUp()
-	$(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
-	$(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
-})
+$('.select__item').bind('click', selectItem)
 
 $(document).mouseup(function (e) {
 	var container = $(".select");
@@ -363,6 +355,17 @@ $('.quote__remove').bind('click', function() {
   })
 })
 
+$('.room__add').on('click', function () {
+  let room = $('#new_room').clone();
+  let rooms = $('#rooms')
+
+  rooms.prepend(room);
+  room.removeClass('d-none')
+
+  $('.select__item').bind('click', selectItem)
+  $('.select__top').bind('click', selectTop)
+})
+
 // $('.save-button').bind('click', function() {
 // 	if () else {
 // 		$(this).parents('.part').find('input').prop('readonly', true);
@@ -552,6 +555,18 @@ function saveRoom () {
       })
 
   }
+}
+
+function selectItem () {
+  $(this).siblings('.select__item').removeClass('active')
+  $(this).addClass('active')
+  let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
+
+  $(input).val(this.dataset.id)
+
+  $(this).parent('.select__hidden').slideUp()
+  $(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
+  $(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
 }
 
 function saveFontDate () {
