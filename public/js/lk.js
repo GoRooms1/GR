@@ -390,6 +390,18 @@ $('.room__add').on('click', function () {
   let room = $('#new_room').clone();
   let rooms = $('#rooms')
 
+  $(room).removeAttr('id')
+
+  axios.post('/lk/room/create', {
+    hotel_id: 1,
+  })
+  .then(response => {
+    console.log(response.data)
+    if (response.data.success) {
+      room.attr('id', response.data.room.id)
+    }
+  })
+
   rooms.prepend(room);
   room.removeClass('d-none')
 

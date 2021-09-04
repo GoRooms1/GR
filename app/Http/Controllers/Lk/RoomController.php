@@ -128,4 +128,14 @@ class RoomController extends Controller
 //    TODO: deleting image;
     return response()->json(['success' => $status]);
   }
+
+  public function create (Request $request): JsonResponse
+  {
+
+    $room = new Room();
+    $room->hotel()->associate($request->get('hotel_id'));
+    $status = $room->save();
+
+    return response()->json(['success' => $status, 'room' => $room ]);
+  }
 }

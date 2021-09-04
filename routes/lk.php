@@ -30,6 +30,8 @@ Route::delete('room/delete/{id}', 'RoomController@deleteRoom')
 
 Route::get('room/edit', 'RoomController@edit')
   ->name('room.edit');
+Route::post('room/create', 'RoomController@create')
+  ->name('room.create');
 Route::post('room/edit/fond', 'RoomController@fondUpdate')
   ->name('room.fond.update');
 Route::post('room/save', 'RoomController@saveRoom')
