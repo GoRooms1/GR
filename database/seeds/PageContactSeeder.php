@@ -13,7 +13,7 @@ class PageContactSeeder extends Seeder
     {
         \App\Models\Page::where("title", "Контакты")->first()->update(["content" => '
         <div class="row">
-    <div class="col-lg-6 contacts-info">
+    <div class="col-lg-5 contacts-info">
     <div class="contacts-list">
         <a class="contacts-list-item contacts-list-item-tel" href="tel:+74955996674"> +7 (495) 599 66 74</a>
         <a class="contacts-list-item contacts-list-item-email" href="mailto:info@gorooms.ru"> info@gorooms.ru</a>
@@ -45,11 +45,20 @@ class PageContactSeeder extends Seeder
         </p>
         </div>
     </div>
-    <div class="col-lg-6 contacts-info">
+    <div class="col-lg-4 contacts-info">
         <div class="contacts-list">
-<iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A7093c7fe3b67dfb23a76afe92eb5b652bdb2db6520236a5a12300683599fa132&amp;source=constructor" width="500" height="500" frameborder="0"></iframe>        </div>
+            <iframe 
+            src="https://yandex.ru/map-widget/v1/?um=constructor%3A7093c7fe3b67dfb23a76afe92eb5b652bdb2db6520236a5a12300683599fa132&amp;source=constructor" 
+            width="500"  
+            height="440" 
+            style="
+                max-width:460px; 
+                float: left;"
+            frameborder="0"
+            ></iframe>        
+        </div>
     </div>
-    <form id="contacts-form" class="form-section" action="/form" method="post" style="margin: 0 auto;">
+    <form id="contacts-form" class="form-section" action="/form" method="post">
     <h2 class="section-title">Обратная связь</h2>
     <div class="row">
     <div class="col-lg-4">
