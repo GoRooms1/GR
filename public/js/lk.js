@@ -374,10 +374,13 @@ $('.quote__remove').bind('click', function() {
 //  axios
 //  TODO: delete variable uploader and existFile
   let url = $(shadow).find('input[name=url-delete]').val()
+  let id = shadow.dataset.id
   axios.delete(url)
   .then(response => {
     if (response.data.success) {
       shadow.remove()
+      delete existFile[id]
+      delete uploader[id]
     }
   })
   .catch(error => {
@@ -387,26 +390,60 @@ $('.quote__remove').bind('click', function() {
 })
 
 $('.room__add').on('click', function () {
-  let room = $('#new_room').clone();
-  let rooms = $('#rooms')
-
-  $(room).removeAttr('id')
-
+  let hotel_id = $('input[name=hotel_id]').val()
   axios.post('/lk/room/create', {
-    hotel_id: 1,
+    hotel_id
   })
   .then(response => {
     console.log(response.data)
     if (response.data.success) {
-      room.attr('id', response.data.room.id)
+      let room = $('#new_room').clone();
+      let rooms = $('#rooms')
+
+      $(room).removeAttr('id')
+      let roomId = response.data.room.id
+      room.attr('data-id', roomId)
+
+      rooms.prepend(room);
+      room.removeClass('d-none')
+
+      $('.select__item').attr("onclick", "").unbind("click")
+      $('.select__top').attr("onclick", "").unbind("click")
+
+      $('.select__item').bind('click', selectItem)
+      $('.select__top').bind('click', selectTop)
+
+      $('.sortable').sortable({
+        items: '.dz-image-preview',
+      });
+
+      $('.save-room').unbind("click").bind('click', saveRoom)
+
+      $('.quote__read').unbind("click").bind('click', allowedEditRoom)
+
+      let urlVal =  $(room).find('input[name=url-delete]').val()
+
+      $(room).find('input[name=url-delete]').val(urlVal + '/' + roomId)
+      $('#orderRoom').removeAttr('id').attr('id', 'orderRoom-' + roomId)
+      $('label[for=orderRoom]').removeAttr('for').attr('for', 'orderRoom-' + roomId)
+
+      $('#nameRoom').removeAttr('id').attr('id', 'nameRoom-' + roomId)
+      $('label[for=nameRoom]').removeAttr('for').attr('for', 'nameRoom-' + roomId)
+
+      $('#numberRoom').removeAttr('id').attr('id', 'numberRoom-' + roomId)
+      $('label[for=numberRoom]').removeAttr('for').attr('for', 'numberRoom-' + roomId)
+
+      $(room).find('#file-dropzone').addClass('file-dropzone').attr('data-id', roomId)
+      $(room).find('.visualizacao').addClass('visualizacao-' + roomId)
+
+      $(room).find('li.hour').each(function () {
+        $(this).find('input#value').removeAttr('id').attr('id', 'value-' + roomId + '-' + this.dataset.id)
+      })
+      let zone = $(room).find('.file-dropzone').get(0)
+      uploader[roomId] = new Dropzone(zone, initialDropZone.call(zone))
+      existFile[roomId] = []
     }
   })
-
-  rooms.prepend(room);
-  room.removeClass('d-none')
-
-  $('.select__item').bind('click', selectItem)
-  $('.select__top').bind('click', selectTop)
 })
 
 // $('.save-button').bind('click', function() {

@@ -253,6 +253,8 @@ ul {
 }
 
 .select__hidden {
+    max-height: 178px;
+    overflow: auto;
 	position: absolute;
 	top: 50px;
 	z-index: 2;
