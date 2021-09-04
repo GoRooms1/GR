@@ -175,7 +175,7 @@
                     <span class="select__current">{{ $room->category->name ?? 'Категория' }}</span>
                     <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
                   </div>
-                  <ul class="select__hidden">
+                  <ul class="select__hidden category__list">
                     @foreach($hotel->categories as $category)
                       <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}"
                           data-id="{{ $category->id }}">

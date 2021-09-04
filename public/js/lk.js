@@ -201,6 +201,18 @@ $('.category-good').bind('click', function() {
             if (response.data.status === 'error') {
               $(item).find('.categories__name').text(oldVal)
               alert('Ошибка сохранения')
+            } else {
+
+              let ul = $('.category__list')
+              ul.each(function(i) {
+                let li = $(this).find('li')
+                li.each(function () {
+                  console.log($.trim($(this).text()))
+                  if ($.trim($(this).text()) === oldVal) {
+                    $(this).text(categoryVal)
+                  }
+                })
+              })
             }
           })
           .catch(error => {
@@ -232,9 +244,26 @@ $('.category-good').bind('click', function() {
               alert('Ошибка сохранения')
               $(item).find('.categories__name').text(oldVal)
             } else if (response.data.category) {
-                console.log(response.data.category)
-                let category = response.data.category
-                item.dataset.id = category.id
+              console.log(response.data.category)
+              let category = response.data.category
+              item.dataset.id = category.id
+
+              let ul = $('.category__list')
+
+              ul.each(function(i) {
+                let li = $($(ul).find('li').get(0)).clone()
+                if (li.length === 0) {
+                  li = document.createElement('li')
+                  $(li).addClass('select__item')
+                }
+                $(li).appendTo($(this))
+                console.log(li, this)
+                $(li).attr("data-id", category.id)
+                $(li).removeClass('active')
+                $(li).text(category.name)
+                $(li).on('click', selectItem)
+              })
+
             }
           })
           .catch(error => {
@@ -271,6 +300,8 @@ $('.categoryRemove').bind('click', function() {
             alert('Ошибка сохранения')
           } else {
             $(item).remove()
+
+            $('li.select__item[data-id=' + id +']').remove()
           }
         })
         .catch(error => {
