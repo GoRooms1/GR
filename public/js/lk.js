@@ -13,24 +13,16 @@ if (token) {
 }
 
 let select = true
-$('.select__top').bind('click', function() {
-	$('.select__arrow').not($(this).find('.select__arrow')).removeClass('open')
-	$(this).find('.select__arrow').toggleClass('open')
-	$('.select__hidden').not($(this).siblings('.select__hidden')).slideUp(1)
-	$(this).siblings('.select__hidden').slideToggle()
-})
+$('.select__top').bind('click', selectTop)
 
-$('.select__item').bind('click', function() {
-	$(this).siblings('.select__item').removeClass('active')
-	$(this).addClass('active')
-  let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
+function selectTop () {
+  $('.select__arrow').not($(this).find('.select__arrow')).removeClass('open')
+  $(this).find('.select__arrow').toggleClass('open')
+  $('.select__hidden').not($(this).siblings('.select__hidden')).slideUp(1)
+  $(this).siblings('.select__hidden').slideToggle()
+}
 
-  $(input).val(this.dataset.id)
-
-	$(this).parent('.select__hidden').slideUp()
-	$(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
-	$(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
-})
+$('.select__item').bind('click', selectItem)
 
 $(document).mouseup(function (e) {
 	var container = $(".select");
@@ -209,6 +201,18 @@ $('.category-good').bind('click', function() {
             if (response.data.status === 'error') {
               $(item).find('.categories__name').text(oldVal)
               alert('Ошибка сохранения')
+            } else {
+
+              let ul = $('.category__list')
+              ul.each(function(i) {
+                let li = $(this).find('li')
+                li.each(function () {
+                  console.log($.trim($(this).text()))
+                  if ($.trim($(this).text()) === oldVal) {
+                    $(this).text(categoryVal)
+                  }
+                })
+              })
             }
           })
           .catch(error => {
@@ -240,9 +244,26 @@ $('.category-good').bind('click', function() {
               alert('Ошибка сохранения')
               $(item).find('.categories__name').text(oldVal)
             } else if (response.data.category) {
-                console.log(response.data.category)
-                let category = response.data.category
-                item.dataset.id = category.id
+              console.log(response.data.category)
+              let category = response.data.category
+              item.dataset.id = category.id
+
+              let ul = $('.category__list')
+
+              ul.each(function(i) {
+                let li = $($(ul).find('li').get(0)).clone()
+                if (li.length === 0) {
+                  li = document.createElement('li')
+                  $(li).addClass('select__item')
+                }
+                $(li).appendTo($(this))
+                console.log(li, this)
+                $(li).attr("data-id", category.id)
+                $(li).removeClass('active')
+                $(li).text(category.name)
+                $(li).on('click', selectItem)
+              })
+
             }
           })
           .catch(error => {
@@ -279,6 +300,8 @@ $('.categoryRemove').bind('click', function() {
             alert('Ошибка сохранения')
           } else {
             $(item).remove()
+
+            $('li.select__item[data-id=' + id +']').remove()
           }
         })
         .catch(error => {
@@ -345,7 +368,82 @@ $('#selectRoom').bind('click focused bloor', function() {
 // })
 
 $('.quote__remove').bind('click', function() {
-	$(this).parents('.shadow').remove()
+  let shadow = $(this).parents('.shadow').get(0)
+
+
+//  axios
+//  TODO: delete variable uploader and existFile
+  let url = $(shadow).find('input[name=url-delete]').val()
+  let id = shadow.dataset.id
+  axios.delete(url)
+  .then(response => {
+    if (response.data.success) {
+      shadow.remove()
+      delete existFile[id]
+      delete uploader[id]
+    }
+  })
+  .catch(error => {
+    alert('Error server side')
+    console.log(error)
+  })
+})
+
+$('.room__add').on('click', function () {
+  let hotel_id = $('input[name=hotel_id]').val()
+  axios.post('/lk/room/create', {
+    hotel_id
+  })
+  .then(response => {
+    console.log(response.data)
+    if (response.data.success) {
+      let room = $('#new_room').clone();
+      let rooms = $('#rooms')
+
+      $(room).removeAttr('id')
+      let roomId = response.data.room.id
+      room.attr('data-id', roomId)
+
+      rooms.prepend(room);
+      room.removeClass('d-none')
+
+      $('.select__item').attr("onclick", "").unbind("click")
+      $('.select__top').attr("onclick", "").unbind("click")
+
+      $('.select__item').bind('click', selectItem)
+      $('.select__top').bind('click', selectTop)
+
+      $('.sortable').sortable({
+        items: '.dz-image-preview',
+      });
+
+      $('.save-room').unbind("click").bind('click', saveRoom)
+
+      $('.quote__read').unbind("click").bind('click', allowedEditRoom)
+
+      let urlVal =  $(room).find('input[name=url-delete]').val()
+
+      $(room).find('input[name=url-delete]').val(urlVal + '/' + roomId)
+      $('#orderRoom').removeAttr('id').attr('id', 'orderRoom-' + roomId)
+      $('label[for=orderRoom]').removeAttr('for').attr('for', 'orderRoom-' + roomId)
+
+      $('#nameRoom').removeAttr('id').attr('id', 'nameRoom-' + roomId)
+      $('label[for=nameRoom]').removeAttr('for').attr('for', 'nameRoom-' + roomId)
+
+      $('#numberRoom').removeAttr('id').attr('id', 'numberRoom-' + roomId)
+      $('label[for=numberRoom]').removeAttr('for').attr('for', 'numberRoom-' + roomId)
+
+      $(room).find('#file-dropzone').addClass('file-dropzone').attr('data-id', roomId)
+      $(room).find('.visualizacao').addClass('visualizacao-' + roomId)
+
+      $(room).find('li.hour').each(function () {
+        $(this).find('input#value').removeAttr('id').attr('id', 'value-' + roomId + '-' + this.dataset.id)
+      })
+      let zone = $(room).find('.file-dropzone').get(0)
+      uploader[roomId] = new Dropzone(zone, initialDropZone.call(zone))
+      existFile[roomId] = []
+    }
+  })
 })
 
 // $('.save-button').bind('click', function() {
@@ -521,9 +619,13 @@ function saveRoom () {
     .then(response => {
       if (response.data.success) {
         if (!response.data.room.moderate) {
-          $(shadow).find('.row__head').removeClass('row__head_blue')
-          $(shadow).find('.quote__status').text('Проверка модератором')
-          $(shadow).find('.quote__status').removeClass('quote__status_blue').addClass('quote__status_red')
+          $(shadow).find('.row__head')
+            .removeClass('row__head_blue')
+          $(shadow).find('.quote__status')
+            .text('Проверка модератором')
+          $(shadow).find('.quote__status')
+            .removeClass('quote__status_blue')
+            .addClass('quote__status_red')
         }
       }
     })
@@ -533,6 +635,18 @@ function saveRoom () {
       })
 
   }
+}
+
+function selectItem () {
+  $(this).siblings('.select__item').removeClass('active')
+  $(this).addClass('active')
+  let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
+
+  $(input).val(this.dataset.id)
+
+  $(this).parent('.select__hidden').slideUp()
+  $(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
+  $(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
 }
 
 function saveFontDate () {
@@ -548,7 +662,9 @@ function saveFontDate () {
     $(shadow).find('.caption-block').hide();
     $(shadow).find('.room-details').hide();
     $(shadow).find('.more-details').hide();
-    $(this).parents('.shadow-complete').find('.hours__field').prop('disabled', true)
+    $(this).parents('.shadow-complete')
+      .find('.hours__field')
+      .prop('disabled', true)
     $(shadow).find('.quote__status').show()
     $(shadow).find('.upload__remove').hide()
     $(shadow).find('.sortable').sortable('disable');
@@ -557,7 +673,10 @@ function saveFontDate () {
     let number = $(shadow).find('input[name=number]').val()
     let order = $(shadow).find('input[name=order]').val()
     let name = $(shadow).find('input[name=name]').val()
-    let category = $(shadow).find('input[name=category_id]').siblings('.select__top').find('.select__current').text()
+    let category = $(shadow).find('input[name=category_id]')
+      .siblings('.select__top')
+      .find('.select__current')
+      .text()
     category = category === 'Категория' ? '' : category
 
     $($(shadow).find('.head-text').get(0)).html('#' + order)

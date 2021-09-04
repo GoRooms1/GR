@@ -117,4 +117,25 @@ class RoomController extends Controller
 
     return response()->json(['success' => true, 'room' => $room]);
   }
+
+  /**
+   * @throws Exception
+   */
+  public function deleteRoom (int $id): JsonResponse
+  {
+    $room = Room::findOrFail($id);
+    $status = $room->delete();
+//    TODO: deleting image;
+    return response()->json(['success' => $status]);
+  }
+
+  public function create (Request $request): JsonResponse
+  {
+
+    $room = new Room();
+    $room->hotel()->associate($request->get('hotel_id'));
+    $status = $room->save();
+
+    return response()->json(['success' => $status, 'room' => $room ]);
+  }
 }
