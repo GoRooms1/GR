@@ -51,6 +51,7 @@ class SettingsController extends Controller
     {
         Settings::find($id)->update([
             'value' => \request()->value,
+            'header' => \request()->header,
         ]);
         Artisan::call('optimize:clear');
         return redirect()->back();
