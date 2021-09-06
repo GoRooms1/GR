@@ -63,6 +63,7 @@ class RoomController extends Controller
 
     $hotel->type_fond = $request->get('fond');
     $hotel->checked_type_fond = true;
+
     $hotel->save();
 
     return redirect()->route('lk.room.edit')->with('success', 'Тип Фонда обновлён');

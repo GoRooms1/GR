@@ -367,27 +367,7 @@ $('#selectRoom').bind('click focused bloor', function() {
 // 	$(this).parents('.shadow').find('.row-status').show()
 // })
 
-$('.quote__remove').bind('click', function() {
-  let shadow = $(this).parents('.shadow').get(0)
-
-
-//  axios
-//  TODO: delete variable uploader and existFile
-  let url = $(shadow).find('input[name=url-delete]').val()
-  let id = shadow.dataset.id
-  axios.delete(url)
-  .then(response => {
-    if (response.data.success) {
-      shadow.remove()
-      delete existFile[id]
-      delete uploader[id]
-    }
-  })
-  .catch(error => {
-    alert('Error server side')
-    console.log(error)
-  })
-})
+$('.quote__remove').bind('click', removeRoom)
 
 $('.room__add').on('click', function () {
   let hotel_id = $('input[name=hotel_id]').val()
@@ -420,6 +400,8 @@ $('.room__add').on('click', function () {
       $('.save-room').unbind("click").bind('click', saveRoom)
 
       $('.quote__read').unbind("click").bind('click', allowedEditRoom)
+
+      $('.quote__remove').unbind("click").bind('click', removeRoom)
 
       let urlVal =  $(room).find('input[name=url-delete]').val()
 
@@ -684,4 +666,28 @@ function saveFontDate () {
     $($(shadow).find('.head-text').get(2)).html(name)
     $($(shadow).find('.head-text').get(3)).html(category)
   }
+}
+
+function removeRoom () {
+  let shadow = $(this).parents('.shadow').get(0)
+//  axios
+//  TODO: delete variable uploader and existFile
+  let url = $(shadow).find('input[name=url-delete]').val()
+  let id = shadow.dataset.id
+  axios.delete(url)
+    .then(response => {
+      if (response.data.success) {
+        shadow.remove()
+        delete existFile[id]
+        delete uploader[id]
+
+        if ($('#rooms').find('.shadow').length === 0) {
+          document.location.reload();
+        }
+      }
+    })
+    .catch(error => {
+      alert('Error server side')
+      console.log(error)
+    })
 }

@@ -45,7 +45,16 @@ class RoomObserver
    */
   public function deleted(Room $room): void
   {
-    //
+    $hotel = $room->hotel;
+
+    if ($hotel->rooms()->count() === 0) {
+      $hotel->type_fond = null;
+      $hotel->checked_type_fond = false;
+      $hotel->old_moderate = true;
+
+      $hotel->categories()->delete();
+      $hotel->save();
+    }
   }
 
   /**
