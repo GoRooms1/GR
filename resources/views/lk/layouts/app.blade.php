@@ -73,14 +73,29 @@
       <div class="row">
         <div class="col-12">
           <nav class="menu">
-            <a href="#" class="menu__item">Календарь цен</a>
-            <a href="#" class="menu__item">Маркетинг</a>
+            <a href="#"
+               class="menu__item">
+              Календарь цен
+            </a>
+            <a href="#"
+               class="menu__item">
+              Маркетинг
+            </a>
             <a href="{{ route('lk.object.edit') }}"
-               class="menu__item {{ Route::currentRouteNamed('lk.object.*') ? 'active' : '' }}">Объект</a>
+               class="menu__item {{ Route::currentRouteNamed('lk.object.*') ? 'active' : '' }}"
+            >
+              Объект
+            </a>
             <a href="{{ route('lk.room.edit') }}"
-               class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">Номерной фонд</a>
+               class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">
+              Номерной фонд
+            </a>
             <a href="#" class="menu__item">Сотрудники</a>
-            <a href="#" class="menu__item">Инструкции</a>
+            <a href="{{ route('lk.instruction.index') }}"
+               class="menu__item {{ Route::currentRouteNamed('lk.instruction.*') ? 'active' : '' }}"
+            >
+              Инструкции
+            </a>
           </nav>
         </div>
       </div>
