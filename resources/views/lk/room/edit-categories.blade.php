@@ -27,9 +27,13 @@
 
             @foreach($hotel->categories as $category)
               <li class="categories__item" data-id="{{ $category->id }}">
-                <div class="categories__first categories__first_big">
+                <div class="categories__first">
                   <span class="categories__name categories__hide">{{ $category->name }}</span>
                   <input type="text" class="field field_hidden field_hidden-room" placeholder="Введите категорию">
+                </div>
+                <div class="categories__second">
+                  <span class="categories__quote categories__hide">{{ $category->value }}</span>
+                  <input type="text" class="field field_hidden field_hidden-quote" placeholder="Квота">
                 </div>
 
                 <div class="categories__control">
@@ -45,9 +49,14 @@
             @endforeach
 
             <li class="categories__item">
-              <div class="categories__first categories__first_big">
+              <div class="categories__first">
                 <span class="categories__name categories__hide"></span>
                 <input type="text" class="field field_hidden field_hidden-room" placeholder="Введите категорию">
+              </div>
+
+              <div class="categories__second">
+                <span class="categories__quote categories__hide"></span>
+                <input type="text" class="field field_hidden field_hidden-quote" placeholder="Квота">
               </div>
 
               <div class="categories__control">
@@ -503,7 +512,12 @@
 
 @endsection
 
+@section('header-js')
+  <script src="{{ asset('js/lk/room-categories.js') }}" async></script>
+@endsection
+
 @section('js')
+
   <script>
 
     $(document).ready(function () {
@@ -511,7 +525,7 @@
         items: '.dz-image-preview',
       });
 
-      $('.quote__read').each(saveFontDate)
+      $('.quote__read').each(saveFrontData)
     });
 
     Dropzone.autoDiscover = false;
@@ -533,28 +547,27 @@
 
     @foreach($rooms as $room)
       existFile[{{ $room->id }}] = []
-      @foreach($room->images as $image)
+    @foreach($room->images as $image)
 
-        existFile[{{ $room->id }}].push({
-          id: "{{ $image->id }}",
-          name: "{{ $image->name }}",
-          path: "{{ url($image->path) }}",
-          moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-          moderate: {!! $image->moderate ? 'true' : 'false' !!}
-        })
+      existFile[{{ $room->id }}].push({
+      id: "{{ $image->id }}",
+      name: "{{ $image->name }}",
+      path: "{{ url($image->path) }}",
+      moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+      moderate: {!! $image->moderate ? 'true' : 'false' !!}
+    })
 
-        mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
-        uploader[{{ $room->id }}].emit("addedfile", mockFile);
-        uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
-        uploader[{{ $room->id }}].emit("complete", mockFile);
-        uploader[{{ $room->id }}].files.push(mockFile)
+    mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
+    uploader[{{ $room->id }}].emit("addedfile", mockFile);
+    uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
+    uploader[{{ $room->id }}].emit("complete", mockFile);
+    uploader[{{ $room->id }}].files.push(mockFile)
 
-      @endforeach
+    @endforeach
     @endforeach
 
 
-    function initialDropZone ()
-    {
+    function initialDropZone () {
       let zone = this
       return {
         url: "{{ route('lk.room.image.upload') }}",

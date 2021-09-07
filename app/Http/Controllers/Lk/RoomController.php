@@ -43,7 +43,11 @@ class RoomController extends Controller
 
     $rooms = $hotel->rooms()->get();
     $costTypes = CostType::all();
-    return view('lk.room.edit', compact('hotel', 'rooms', 'costTypes'));
+    if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
+      return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes'));
+    }
+
+    return view('lk.room.edit-categories', compact('hotel', 'rooms', 'costTypes'));
   }
 
   /**

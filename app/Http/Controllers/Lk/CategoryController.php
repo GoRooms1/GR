@@ -54,6 +54,7 @@ class CategoryController extends Controller
   {
     try {
       $category->name = $data['name'];
+      $category->value = $data['value'];
 
       if (isset($data['hotel_id'])) {
         $category->hotel()->associate($data['hotel_id']);
