@@ -410,5 +410,10 @@ class Hotel extends Model
     return 'slug';
   }
 
+  public function getDisabledSaveAttribute(): string
+  {
+    return $this->old_moderate ? 'disabled' : '';
+  }
+
   ### END OVERWRITES
 }
