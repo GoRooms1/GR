@@ -15,6 +15,7 @@ class RoomObserver
    * Handle the room "created" event.
    * Сбрасывает о том что недавно выбрали тип.
    * При удалении всех комнат будет выбор типа фонда в отеле
+   * При создании самой первой комнаты, отель падает на модерацию
    *
    * @param Room $room
    * @return void
@@ -22,7 +23,14 @@ class RoomObserver
   public function created(Room $room): void
   {
     $hotel = $room->hotel;
+
+    if ($hotel->moderate === false && $hotel->checked_type_fond && $hotel->rooms()->count() === 1) {
+      $hotel->moderate = true;
+    }
+
     $hotel->checked_type_fond = false;
+    $hotel->old_moderate = true;
+
     $hotel->save();
   }
 
@@ -50,7 +58,6 @@ class RoomObserver
     if ($hotel->rooms()->count() === 0) {
       $hotel->type_fond = null;
       $hotel->checked_type_fond = false;
-      $hotel->old_moderate = true;
 
       $hotel->categories()->delete();
       $hotel->save();
