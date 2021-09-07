@@ -33,19 +33,23 @@ $(document).mouseup(function (e) {
 });
 
 $('.check').bind('click', function() {
-	$(this).siblings('input[type="radio"]').prop('checked', true)
+  if (!$(this).is('[disabled]'))
+	  $(this).siblings('input[type="radio"]').prop('checked', true)
 })
 
 let check = true
 $('.check').bind('click', function() {
 
-	if ($(this).siblings('input[type="checkbox"]').prop('checked')) {
-		$(this).siblings('input[type="checkbox"]').prop('checked', false)
+  if (!$(this).is('[disabled]')) {
+    if ($(this).siblings('input[type="checkbox"]').prop('checked')) {
+      $(this).siblings('input[type="checkbox"]').prop('checked', false)
 
-	} else {
-		$(this).siblings('input[type="checkbox"]').prop('checked', true)
+    } else {
+      $(this).siblings('input[type="checkbox"]').prop('checked', true)
 
-	}
+    }
+  }
+
 	// if (check == true) {
 	// 	check = false
 	// } else if (check == false) {
