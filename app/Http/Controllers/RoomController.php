@@ -108,6 +108,10 @@ class RoomController extends Controller
    */
   public function getRoomInfo(int $id): JsonResponse
   {
-    return \response()->json(['room_info' => Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first()]);
+      $room = Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first();
+    return \response()->json([
+        'room_info' => $room,
+        'costs' => $room->costs->pluck('period')
+    ]);
   }
 }
