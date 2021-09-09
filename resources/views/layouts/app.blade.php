@@ -350,7 +350,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 mb-3" id="book-on-title">
+            <div class="col-12 mb-3" id="book-on-title"  v-if="showBookOn">
               <div>
                 <p class="form-group-date-label">Забронировать на:</p>
               </div>
