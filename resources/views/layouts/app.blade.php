@@ -291,7 +291,7 @@
         <span>@{{ category_name }}</span>
         в объекте размещения “<span>@{{ roomInfo.hotel.name }}</span>”
       </div>
-      <form id="book-form" class="book-form" action="" method="post" :action="action">
+      <form id="book-form" class="book-form" action="" method="post" :action="action" @submit="submit">
         @csrf
         <div class="row">
           <div class="col-lg-6 row mb-3 align-content-start">
@@ -328,10 +328,10 @@
                          :disabled="dateTime.fromDate.disabled"
                          v-model="dateTime.fromDate.value"
                          class="form-control form-control-date" placeholder="06.06.2021" required>
-                  <input id="from-time" name="from-time" type="text"
+                  <input name="from-time" type="time"
                          :disabled="dateTime.fromTime.disabled"
                          v-model="dateTime.fromTime.value"
-                         class="form-control form-control-time js-time" placeholder="14:00" required>
+                         class="form-control form-control-time" placeholder="14:00" required>
                 </div>
               </div>
             </div>
@@ -346,7 +346,7 @@
                   <input id="to-time" name="to-time" type="text"
                          :disabled="dateTime.toTime.disabled"
                          v-model="dateTime.toTime.value"
-                         class="form-control form-control-time js-time" placeholder="14:00" required>
+                         class="form-control form-control-time" placeholder="14:00" required>
                 </div>
               </div>
             </div>
@@ -360,27 +360,27 @@
               <div class="row ml-0">
                 <div class="col-12 col-lg-3" v-if="1 >= costs.byHour.start_at">
                   <input type="radio" id="book_by_1_hour" class="checkbox"
-                         name="book_by" value="1" @change="setHourTime(1)">
+                         name="book_by" value="1" @change="currentHours = 1">
                   <label for="book_by_1_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">1 час</label>
                 </div>
                 <div class="col-12 col-lg-3"  v-if="2 >= costs.byHour.start_at">
                   <input type="radio" id="book_by_2_hour" class="checkbox"
-                         name="book_by" value="2" @change="setHourTime(2)">
+                         name="book_by" value="2" @change="currentHours = 2">
                   <label for="book_by_2_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">2
                     часа</label>
                 </div>
                 <div class="col-12 col-lg-3"  v-if="3 >= costs.byHour.start_at">
                   <input type="radio" id="book_by_3_hour" class="checkbox"
-                         name="book_by" value="3" @change="setHourTime(3)">
+                         name="book_by" value="3" @change="currentHours = 3">
                   <label for="book_by_3_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">3
                     часа</label>
                 </div>
                 <div class="col-12 col-lg-3">
                   <input type="radio" id="book_by_4_hour" checked class="checkbox"
-                         name="book_by" value="4" @change="setHourTime(4)">
+                         name="book_by" value="4" @change="currentHours = 4">
                   <label for="book_by_4_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">4
                     часа</label>
@@ -428,7 +428,7 @@
 
     </div>
     @if(config('app.debug'))
-    <script src="{{ asset('js/vue-dev.js') }}"></script>
+      <script src="{{ asset('js/vue-dev.js') }}"></script>
     @else
       <script src="{{ asset('js/vue@2.js') }}"></script>
     @endif
@@ -457,9 +457,13 @@
               },
               byNight: {
                 exists: false,
+                start_at: '',
+                end_at: ''
               },
               byDay: {
                 exists: false,
+                start_at: '',
+                end_at: ''
               },
             },
             dateTime: {
@@ -481,6 +485,38 @@
               },
             },
             showBookOn: true,
+            currentHours: 4,
+            currentPosition: 'byHours'
+          }
+        },
+        watch: {
+          currentHours: function () {
+            this.setHoursTime();
+          },
+          'dateTime.fromDate.value': function (value) {
+            if (this.showBookOn) {
+              this.setHoursTime();
+            }
+            if (this.currentPosition === 'byNight') {
+              let from = new Date(this.dateTime.fromDate.value);
+              from.setHours(this.costs.byNight.start_at);
+              from.setMinutes(0)
+              let to = new Date(from.getTime());
+              to.setHours(this.costs.byNight.end_at);
+              to.setDate(to.getDate()+1)
+              this.setDate(from, to)
+            }
+          },
+          'dateTime.fromTime.value': function (value) {
+            if (this.showBookOn) {
+              let from = new Date();
+              from.setHours(value.slice(0,2));
+              let min = value.slice(3,5);
+              from.setMinutes(min)
+              let to = new Date(from.getTime());
+              to.setHours(to.getHours() + 1 + this.currentHours);
+              this.setDate(from, to)
+            }
           }
         },
         mounted() {
@@ -489,7 +525,7 @@
           dateNow.setHours(dateNow.getHours()+1);
           dateEnd.setHours(dateNow.getHours()+2);
           this.setDate(dateNow, dateEnd);
-          this.setHourTime(4);
+          this.currentHours = 4;
         },
         computed: {
           category_name: function () {
@@ -500,6 +536,19 @@
           }
         },
         methods: {
+          submit() {
+            this.dateTime.fromDate.disabled = false;
+            this.dateTime.fromTime.disabled = false;
+            this.dateTime.toDate.disabled = false;
+            this.dateTime.toTime.disabled = false;
+          },
+          setHoursTime() {
+            let from = new Date()
+            from.setHours(from.getHours()+1);
+            let to = new Date();
+            to.setHours(to.getHours() + 1 + this.currentHours);
+            this.setDate(from, to, true)
+          },
           showFormBookRoom(room_id) {
             this.action = location.protocol + '//' + location.host + "/rooms/" + room_id;
 
@@ -513,7 +562,6 @@
             let byNight = this.roomInfo.costs.find(el => el.period.type.id === 2);
             let byDay = this.roomInfo.costs.find(el => el.period.type.id === 3);
 
-            console.log(byHour);
             if (byHour === undefined) {
               this.costs.byHour.exists = false;
             } else {
@@ -524,26 +572,30 @@
               this.costs.byNight.exists = false;
             } else {
               this.costs.byNight.exists = true;
+              this.costs.byNight.start_at = byNight.period.start_at;
+              this.costs.byNight.end_at = byNight.period.end_at;
             }
             if (byDay === undefined) {
               this.costs.byDay.exists = false;
             } else {
               this.costs.byDay.exists = true;
+              this.costs.byDay.start_at = byDay.period.start_at;
+              this.costs.byDay.end_at = byDay.period.end_at;
             }
           },
-          setHourTime(countHours) {
-            console.log(countHours);
-          },
-          setDate(from, to) {
+          setDate(from, to, ignoreDate = false) {
             from = new Date(from);
             to = new Date(to);
             let dateIn = `${from.getFullYear()}-${('0' + (from.getMonth()+1)).slice(-2)}-${('0' + (from.getDate())).slice(-2)}`;
             let dateOut = `${to.getFullYear()}-${('0' + (to.getMonth()+1)).slice(-2)}-${('0' + (to.getDate())).slice(-2)}`;
-            let timeIn = `${('0' + (from.getHours())%24).slice(-2)}:00`;
-            let timeOut = `${('0' + (to.getHours())%24).slice(-2)}:00`;
-            this.dateTime.fromDate.value = dateIn;
+            let timeIn = `${('0' + (from.getHours())%24).slice(-2)}:${('0' + from.getMinutes()).slice(-2)}`;
+            let timeOut = `${('0' + (to.getHours())%24).slice(-2)}:${('0' + to.getMinutes()).slice(-2)}`;
+            if (!ignoreDate) {
+              this.dateTime.fromDate.value = dateIn;
+              this.dateTime.toDate.value = dateOut;
+            }
             this.dateTime.fromTime.value = timeIn;
-            this.dateTime.toDate.value = dateOut;
+
             this.dateTime.toTime.value = timeOut;
           },
           setForm(value) {
@@ -555,7 +607,8 @@
               this.dateTime.toDate.disabled = true;
               this.dateTime.toTime.disabled = true;
 
-              this.setHourTime(4);
+              this.currentHours = 4;
+              this.currentPosition = 'byHours';
             }
             else if (value === 'night') {
               this.showBookOn = false;
@@ -563,7 +616,16 @@
               this.dateTime.fromTime.disabled = true;
               this.dateTime.toDate.disabled = true;
               this.dateTime.toTime.disabled = true;
-              // todo поставить время
+
+              this.currentPosition = 'byNight';
+
+              let from = new Date();
+              from.setHours(this.costs.byNight.start_at);
+              from.setMinutes(0)
+              let to = new Date(from.getTime());
+              to.setHours(this.costs.byNight.end_at);
+              to.setDate(to.getDate()+1)
+              this.setDate(from, to)
             }
             else if (value === 'day') {
               this.showBookOn = false;
@@ -571,7 +633,16 @@
               this.dateTime.fromTime.disabled = true;
               this.dateTime.toDate.disabled = false;
               this.dateTime.toTime.disabled = true;
-              // todo поставить время
+
+              this.currentPosition = 'byDay';
+
+              let from = new Date();
+              from.setHours(this.costs.byDay.start_at);
+              from.setMinutes(0)
+              let to = new Date(from.getTime());
+              to.setHours(this.costs.byDay.end_at);
+              to.setDate(to.getDate()+1)
+              this.setDate(from, to)
             }
           }
         }
