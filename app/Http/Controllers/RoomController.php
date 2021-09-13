@@ -49,15 +49,15 @@ class RoomController extends Controller
   public function booking(int $id, Request $request): RedirectResponse
   {
     $validated = $request->validate([
-      'book-name' => ['required', 'string',],
-      'book-tel' => ['required', 'string',],
-      'from-date' => ['required', 'date',],
-      'from-time' => ['required', 'string',],
+      'book-name' => ['required', 'string',],///+
+      'book-tel' => ['required', 'string',],//+
+      'from-date' => ['required', 'date',],//+
+      'from-time' => ['required', 'string',],//+
       'to-date' => ['required', 'date',],
       'to-time' => ['required', 'string'],
-      'book-comment' => ['nullable'],
-      'book_by' => ['string'],
-      'order_at' => ['string'],
+      'book-comment' => ['nullable'],//+
+      'book_by' => ['string'],//+
+      'order_at' => ['string'],//+
     ]);
 
     //todo form - это то, где раньше хранились заказы (и остаются лежать старый заказы), скорее всего это надо будет удалить
@@ -88,9 +88,12 @@ class RoomController extends Controller
     BookRoomJob::dispatch($id, $validated);
 
     $room = Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first();
-    $message = "Вы совершили бронирование в номере<br>" . $room->name ?? $room->id;
+
+    $message = "Бронирование № ".$validated['book_number'].'<br><br>';
+    $message .= "Вы совершили бронирование в номере<br>" . $room->name ?? $room->id;
     $message .= $room->category_id ? ' , в категории "' . $room->category->name . '"' : '';
     $message .= '<br>в объекте размещения: "' . $room->hotel->type->single_name . ': ' . $room->hotel->name . '".';
+    $message .= '';
     $message .= '<br>Администратор ' . $room->hotel->name . ' свяжется с Вами в случае необходимости!
                     <br>Ждем Вас и приятного отдыха!';
 
@@ -108,6 +111,10 @@ class RoomController extends Controller
    */
   public function getRoomInfo(int $id): JsonResponse
   {
-    return \response()->json(['room_info' => Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first()]);
+      $room = Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first();
+    return \response()->json([
+        'room_info' => $room,
+        'costs' => $room->costs->pluck('period')
+    ]);
   }
 }
