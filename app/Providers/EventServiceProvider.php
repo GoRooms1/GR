@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\FormSend;
+use App\Models\Category;
+use App\Observers\CategoryObserver;
 use App\Listeners\FormSendMailEvent;
 use App\Models\Image;
 use App\Models\Room;
@@ -33,11 +35,12 @@ class EventServiceProvider extends ServiceProvider
    *
    * @return void
    */
-  public function boot()
+  public function boot(): void
   {
 //        parent::boot();
     Image::observe(ImageObserver::class);
     Room::observe(RoomObserver::class);
+    Category::observe(CategoryObserver::class);
 
   }
 }

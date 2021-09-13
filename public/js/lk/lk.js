@@ -324,15 +324,17 @@ function findExistImage (file, files) {
   Действия при клике на итем в меню
  */
 function selectItem () {
-  $(this).siblings('.select__item').removeClass('active')
-  $(this).addClass('active')
-  let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
+  if ($(this).attr('disable') !== true) {
+    $(this).siblings('.select__item').removeClass('active')
+    $(this).addClass('active')
+    let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
 
-  $(input).val(this.dataset.id)
+    $(input).val(this.dataset.id)
 
-  $(this).parent('.select__hidden').slideUp()
-  $(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
-  $(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
+    $(this).parent('.select__hidden').slideUp()
+    $(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
+    $(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
+  }
 }
 
 /*
@@ -356,6 +358,14 @@ function removeCategory () {
             $(item).remove()
 
             $('li.select__item[data-id=' + id +']').remove()
+
+            if (typeof afterRemoveCategory === 'function') {
+              afterRemoveCategory(id)
+            }
+
+            if (response.data.reload) {
+              location.reload();
+            }
           }
         })
         .catch(error => {
@@ -418,6 +428,13 @@ function createCategory () {
                   }
                 })
               })
+              if (typeof afterUpdateCategory === 'function') {
+                afterUpdateCategory({
+                  name: categoryVal,
+                  value: categoryValQuote,
+                  id
+                })
+              }
             }
           })
           .catch(error => {
@@ -454,10 +471,20 @@ function createCategory () {
               let category = response.data.category
               item.dataset.id = category.id
 
+              if (typeof afterCreateCategory === 'function') {
+                afterCreateCategory({
+                  name: categoryVal,
+                  value: categoryValQuote,
+                  id,
+                  room_id: response.data.room.id
+                });
+              }
+
               let ul = $('.category__list')
 
               ul.each(function(i) {
                 let li = $($(ul).find('li').get(0)).clone()
+                $(li).attr('disable', false)
                 if (li.length === 0) {
                   li = document.createElement('li')
                   $(li).addClass('select__item')
@@ -494,4 +521,14 @@ function selectTop () {
   $(this).find('.select__arrow').toggleClass('open')
   $('.select__hidden').not($(this).siblings('.select__hidden')).slideUp(1)
   $(this).siblings('.select__hidden').slideToggle()
+}
+
+if ($('.arrow-up'))
+  $('.arrow-up').on('click', upOrderRoom)
+
+if ($('.arrow-down'))
+  $('.arrow-down').on('click', downOrderRoom)
+
+if (typeof updateArrow === 'function') {
+  updateArrow()
 }

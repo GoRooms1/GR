@@ -78,21 +78,10 @@
 
   <section class="part category-list">
     <div class="container">
-      <div class="row part__top">
-        <div class="col-12">
-          <div class="d-flex align-items-center rooms-head">
-            <h2 class="title">Список номеров</h2>
-            <button class="room__add">
-              <span>Добавить номер</span>
-              <span class="plus">+</span>
-            </button>
-          </div>
-        </div>
-      </div>
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('lk.room.save') }}">
@@ -100,21 +89,29 @@
                    name="url-delete"
                    value="{{ route('lk.room.deleteRoom', $room->id) }}">
 
-            <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
+            <div class="row row__head {{ !$room->moderate ? 'row__head_blue' : '' }}">
+              <div class="col-6">
+                {{--    Название категории    --}}
+                <p class="head-text head-text_bold"> {{ $room->category->name }}</p>
+              </div>
+
+              <div class="col-3">
+                {{--        Сколько мест --}}
+                <p class="head-text">Квота <span> {{ $room->category->value }} </span></p>
+              </div>
               <div class="col-1">
-                <p class="head-text">#{{ $room->order }}</p>
+                <button class="bg-transparent arrow-up border-0 text-white">
+                  <i class="fa fa-arrow-up p-3"></i>
+                </button>
               </div>
-              <div class="col-1 offset-sm-1">
-                <p class="head-text">№ {{ $room->number }}</p>
-              </div>
-              <div class="col-2 offset-sm-1">
-                <p class="head-text head-text_bold">{{ $room->name }}</p>
-              </div>
-              <div class="col-3 offset-sm-2">
-                <p class="head-text">{{ $room->category->name ?? '' }}</p>
+              <div class="col-1">
+                <button class="bg-transparent arrow-down border-0 text-white">
+                  <i class="fa fa-arrow-down"></i>
+                </button>
               </div>
               <div class="col-1 text-right">
-                <button class="quote__remove text-white">
+                {{--        Удалить комнату --}}
+                <button class="quote__remove">
                   <i class="fa fa-trash"></i>
                 </button>
               </div>
@@ -136,65 +133,23 @@
 
             @endif
 
-
-            <div class="row room-details">
-              <div class="col-2">
-
-                <label class="room-text" for="orderRoom-{{ $room->id }}">Ордер</label>
-                <input type="text"
-                       name="order"
-                       class="field field_border"
-                       id="orderRoom-{{ $room->id }}"
-                       placeholder="#1"
-                       value="{{ $room->order }}">
-
-
-              </div>
-              <div class="col-2">
-
-                <label class="room-text" for="numberRoom-{{ $room->id }}m">Номер</label>
-                <input type="text"
-                       name="number"
-                       class="field field_border"
-                       id="numberRoom-{{ $room->id }}"
-                       placeholder="№1"
-                       value="{{ $room->number }}">
-
-
-              </div>
-              <div class="col-4">
-
-                <label class="room-text" for="nameRoom-{{ $room->id }}">Название</label>
-                <input type="text"
-                       name="name"
-                       class="field field_border"
-                       id="nameRoom-{{ $room->id }}"
-                       placeholder="Название"
-                       value="{{ $room->name }}">
-
-
-              </div>
-              <div class="col-4">
-                <p class="room-text">
-                  Категория
-                </p>
-                <div class="select" id="selectRoom">
-                  <input type="hidden" name="category_id" value="{{ $room->category->id ?? '' }}">
-                  <div class="select__top select__top_100">
-                    <span class="select__current">{{ $room->category->name ?? 'Категория' }}</span>
-                    <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+            <div class="row caption-details">
+              <div class="col-12">
+                <div class="d-flex align-items-center">
+                  <div class="select category-select">
+                    <input type="hidden" name="category_id" value="{{ $room->category->id }}">
+                    <div class="select__top">
+                      <span class="select__current">{{ $room->category->name }}</span>
+                    </div>
                   </div>
-                  <ul class="select__hidden category__list">
-                    @foreach($hotel->categories as $category)
-                      <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}"
-                          data-id="{{ $category->id }}">
-                        {{ $category->name }}
-                      </li>
-                    @endforeach
-                  </ul>
+                  <div class="quote-text d-flex align-items-center">
+                    <p class="quote-text__main">Квота</p>
+                    <p class="quote-text__number">{{ $room->category->value }}</p>
+                  </div>
                 </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-12">
                 <div class="uploud-photo file-dropzone" data-id="{{$room->id}}" id="file-dropzone"></div>
@@ -326,78 +281,46 @@
            value="{{ route('lk.room.deleteRoom', '') }}">
 
     <div class="row row__head">
-      <div class="col-1">
-        <p class="head-text"></p>
-      </div>
-      <div class="col-1 offset-sm-1">
-        <p class="head-text"></p>
-      </div>
-      <div class="col-2 offset-sm-1">
+      <div class="col-8">
+{{--    Название категории    --}}
         <p class="head-text head-text_bold"></p>
       </div>
-      <div class="col-3 offset-sm-2">
-        <p class="head-text"></p>
+
+      <div class="col-3">
+{{--        Сколько мест --}}
+        <p class="head-text">Квота <span></span></p>
       </div>
       <div class="col-1 text-right">
-        <button class="quote__remove" style="color: white;">
+{{--        Удалить комнату --}}
+        <button class="quote__remove">
           <i class="fa fa-trash"></i>
         </button>
       </div>
     </div>
-
+{{-- Статус --}}
     <div class="row row-status">
       <div class="col-12">
         <p class="text quote__status quote__status_red">Проверка модератором</p>
       </div>
     </div>
 
-    <div class="row room-details">
-      <div class="col-2">
-        <label class="room-text" for="orderRoom">Ордер</label>
-        <input type="text"
-               name="order"
-               class="field field_border"
-               id="orderRoom"
-               placeholder="#1"
-               autofocus>
-      </div>
-      <div class="col-2">
-        <label class="room-text" for="numberRoom">Номер</label>
-        <input type="text"
-               name="number"
-               class="field field_border"
-               id="numberRoom"
-               placeholder="№1">
-      </div>
-      <div class="col-4">
-        <label class="room-text" for="nameRoom">Название</label>
-        <input type="text"
-               name="name"
-               class="field field_border"
-               id="nameRoom"
-               placeholder="Блейз">
-      </div>
-      <div class="col-4">
-        <p class="room-text">
-          Категория
-        </p>
-        <div class="select" id="selectRoom">
-          <input type="hidden"  name="category_id">
-          <div class="select__top select__top_100">
-            <span class="select__current">Категория</span>
-            <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+    <div class="row caption-details">
+      <div class="col-12">
+        <div class="d-flex align-items-center">
+          <div class="select category-select">
+            <input type="hidden"  name="category_id">
+            <div class="select__top">
+              <span class="select__current"></span>
+            </div>
           </div>
-          <ul class="select__hidden category__list">
-            @foreach($hotel->categories as $category)
-              <li class="select__item"
-                  data-id="{{ $category->id }}">
-                {{ $category->name }}
-              </li>
-            @endforeach
-          </ul>
+          <div class="quote-text d-flex align-items-center">
+            <p class="quote-text__main">Квота</p>
+            <p class="quote-text__number"></p>
+          </div>
         </div>
       </div>
     </div>
+
     <div class="row">
       <div class="col-12">
         <div class="uploud-photo" id="file-dropzone"></div>
@@ -518,153 +441,133 @@
 
 @section('js')
 
-  <script>
+  <script defer="defer">
 
     $(document).ready(function () {
       $('.sortable').sortable({
         items: '.dz-image-preview',
       });
 
-      $('.quote__read').each(saveFrontData)
-    });
-
-    Dropzone.autoDiscover = false;
-    let blockDropZone =  $('.file-dropzone')
-    let uploader = []
-    blockDropZone.each(function() {
-      let zone = this
-      // instantiate the uploader
-      if ($(zone).hasClass('dropzone_disabled')) {
-
-      } else {
-        // Dropzone initial
-        uploader[zone.dataset.id] = new Dropzone(this, initialDropZone.call(this) );
-      }
-    })
-
-    let mockFile
-    let existFile = []
-
-    @foreach($rooms as $room)
-      existFile[{{ $room->id }}] = []
-    @foreach($room->images as $image)
-
-      existFile[{{ $room->id }}].push({
-      id: "{{ $image->id }}",
-      name: "{{ $image->name }}",
-      path: "{{ url($image->path) }}",
-      moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-      moderate: {!! $image->moderate ? 'true' : 'false' !!}
-    })
-
-    mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
-    uploader[{{ $room->id }}].emit("addedfile", mockFile);
-    uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
-    uploader[{{ $room->id }}].emit("complete", mockFile);
-    uploader[{{ $room->id }}].files.push(mockFile)
-
-    @endforeach
-    @endforeach
 
 
-    function initialDropZone () {
-      let zone = this
-      return {
-        url: "{{ route('lk.room.image.upload') }}",
-        maxFiles: 6,
-        paramName: "image",
-        thumbnailWidth: 352,
-        thumbnailHeight: 260,
-        addRemoveLinks: true,
-        uploadMultiple: false,
-        previewsContainer: '.visualizacao-' + zone.dataset.id,
-        previewTemplate: $(zone).siblings('.preview').html(),
-        acceptedFiles: "image/*",
-        headers: {
-          'x-csrf-token': "{{ csrf_token() }}",
-        },
-        sending: function(file, xhr, formData) {
-          formData.append('model_name', "Room")
-          formData.append('modelID', zone.dataset.id)
-        },
-        init: function () {
-          this.on("complete", function (file) {
+      Dropzone.autoDiscover = false;
+      let blockDropZone =  $('.file-dropzone')
+      let uploader = []
+      blockDropZone.each(function() {
+        let zone = this
+        // instantiate the uploader
+        if ($(zone).hasClass('dropzone_disabled')) {
 
-            let f = findExistImage(file, existFile[zone.dataset.id])
-            console.log(f)
+        } else {
+          // Dropzone initial
+          uploader[zone.dataset.id] = new Dropzone(this, initialDropZone.call(this) );
+        }
+      })
 
-            let d = file.previewElement.querySelector("[data-dz-success]");
-            d.innerHTML = f.moderate_text
-            if (!f.moderate) {
-              d.style.color="#2f64ad"
-            }
+      let mockFile
+      let existFile = []
 
-            $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
-            let str = $('ul.visualizacao-' + zone.dataset.id).get(0)
-            $(zone).appendTo(str)
-          });
-          this.on('success', function (file, json) {
-            console.log(json)
-            let image = json.payload.images[0]
-            let word = 'image'
-            existFile[zone.dataset.id].push({
-              id: image.id,
-              path: "{{ url('/') }}" + "/" + image.path,
-              name: image.name,
-              moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
-              moderate: image.moderate
-            })
-          });
-          this.on("addedfile", function(file) {
-            while (this.files.length  > this.options.maxFiles) {
-              this.removeFile(this.files[0]);
-              existFile[zone.dataset.id].shift();
-              console.log(file, this.files.length, this.options.maxFiles)
-            }
-          });
-          this.on("reset", function (file) {
-            $(zone).show()
-          });
-          this.on('queuecomplete', function (file) {
-            $(this).parents(".shadow").find('.uploud__min').hide()
-          });
-          this.on("removedfile", function (file) {
-            console.log(file)
-            if (existFile[zone.dataset.id].length === 1) {
-              if (file.xhr) {
-                let image = JSON.parse(file.xhr.response).payload.images[0]
-                console.log("{{ url('/') }}" + "/"+ image.path)
-                mockFile = { name: file.name, dataURL: "{{ url('/') }}" + "/"+ image.path, size: 0 };
-              } else {
-                mockFile = { name: file.name, dataURL: file.dataURL, size: 0 };
+      @foreach($rooms as $room)
+        existFile[{{ $room->id }}] = []
+      @foreach($room->images as $image)
+
+        existFile[{{ $room->id }}].push({
+        id: "{{ $image->id }}",
+        name: "{{ $image->name }}",
+        path: "{{ url($image->path) }}",
+        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+        moderate: {!! $image->moderate ? 'true' : 'false' !!}
+      })
+
+      mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
+      uploader[{{ $room->id }}].emit("addedfile", mockFile);
+      uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
+      uploader[{{ $room->id }}].emit("complete", mockFile);
+      uploader[{{ $room->id }}].files.push(mockFile)
+
+      @endforeach
+      @endforeach
+
+
+      function initialDropZone () {
+        let zone = this
+        return {
+          url: "{{ route('lk.room.image.upload') }}",
+          maxFiles: 6,
+          paramName: "image",
+          thumbnailWidth: 352,
+          thumbnailHeight: 260,
+          addRemoveLinks: true,
+          uploadMultiple: false,
+          previewsContainer: '.visualizacao-' + zone.dataset.id,
+          previewTemplate: $(zone).siblings('.preview').html(),
+          acceptedFiles: "image/*",
+          headers: {
+            'x-csrf-token': "{{ csrf_token() }}",
+          },
+          sending: function(file, xhr, formData) {
+            formData.append('model_name', "Room")
+            formData.append('modelID', zone.dataset.id)
+          },
+          init: function () {
+            this.on("complete", function (file) {
+
+              let f = findExistImage(file, existFile[zone.dataset.id])
+              console.log(f)
+
+              let d = file.previewElement.querySelector("[data-dz-success]");
+              d.innerHTML = f.moderate_text
+              if (!f.moderate) {
+                d.style.color="#2f64ad"
               }
 
-              uploader[zone.dataset.id].displayExistingFile(file, mockFile.dataURL)
-              return false;
-            }
-
-            let flag = false
-            existFile[zone.dataset.id].forEach(f => {
-              if(f.path === file.dataURL) {
-                flag = true
-                let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
-                axios.post(url)
-                  .then(response => {
-                    console.log(response)
-                    let index = existFile[zone.dataset.id].indexOf(f)
-                    if (index > -1) {
-                      existFile[zone.dataset.id].splice(index, 1);
-                    }
-                  })
-                  .catch(error => {
-                    alert('Ошибка при удалении')
-                  })
-                return;
+              $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
+              let str = $('ul.visualizacao-' + zone.dataset.id).get(0)
+              $(zone).appendTo(str)
+            });
+            this.on('success', function (file, json) {
+              console.log(json)
+              let image = json.payload.images[0]
+              let word = 'image'
+              existFile[zone.dataset.id].push({
+                id: image.id,
+                path: "{{ url('/') }}" + "/" + image.path,
+                name: image.name,
+                moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
+                moderate: image.moderate
+              })
+            });
+            this.on("addedfile", function(file) {
+              while (this.files.length  > this.options.maxFiles) {
+                this.removeFile(this.files[0]);
+                existFile[zone.dataset.id].shift();
+                console.log(file, this.files.length, this.options.maxFiles)
               }
-            })
-            if (!flag) {
+            });
+            this.on("reset", function (file) {
+              $(zone).show()
+            });
+            this.on('queuecomplete', function (file) {
+              $(this).parents(".shadow").find('.uploud__min').hide()
+            });
+            this.on("removedfile", function (file) {
+              console.log(file)
+              if (existFile[zone.dataset.id].length === 1) {
+                if (file.xhr) {
+                  let image = JSON.parse(file.xhr.response).payload.images[0]
+                  console.log("{{ url('/') }}" + "/"+ image.path)
+                  mockFile = { name: file.name, dataURL: "{{ url('/') }}" + "/"+ image.path, size: 0 };
+                } else {
+                  mockFile = { name: file.name, dataURL: file.dataURL, size: 0 };
+                }
+
+                uploader[zone.dataset.id].displayExistingFile(file, mockFile.dataURL)
+                return false;
+              }
+
+              let flag = false
               existFile[zone.dataset.id].forEach(f => {
-                if(f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
+                if(f.path === file.dataURL) {
                   flag = true
                   let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
                   axios.post(url)
@@ -681,11 +584,35 @@
                   return;
                 }
               })
-            }
-          })
+              if (!flag) {
+                existFile[zone.dataset.id].forEach(f => {
+                  if(f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
+                    flag = true
+                    let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
+                    axios.post(url)
+                      .then(response => {
+                        console.log(response)
+                        let index = existFile[zone.dataset.id].indexOf(f)
+                        if (index > -1) {
+                          existFile[zone.dataset.id].splice(index, 1);
+                        }
+                      })
+                      .catch(error => {
+                        alert('Ошибка при удалении')
+                      })
+                    return;
+                  }
+                })
+              }
+            })
+          }
         }
       }
-    }
+
+      $('.quote__read').each(function () {
+        saveFrontData.call(this, true)
+      })
+    });
 
   </script>
 @endsection
