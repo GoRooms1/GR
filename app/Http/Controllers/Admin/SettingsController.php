@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Settings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,8 +15,9 @@ class SettingsController extends Controller
     public function index(): View
     {
         return view('admin.settings.index', [
-            'pages' => Settings::where('option', 'LIKE', 'seo_%')->get(),
-            'names' => ['seo_/' => 'Главная страница', 'seo_/rooms/hot' => 'Горячее', 'seo_/rooms' => 'Комнаты', 'seo_/hotels' => 'Отели']
+                'pages' => Settings::where('option', 'LIKE', 'seo_%')->get(),
+                'names' => ['seo_/' => 'Главная страница', 'seo_/rooms/hot' => 'Горячее', 'seo_/rooms' => 'Комнаты', 'seo_/hotels' => 'Отели'],
+                'search_city' => Address::groupBy('city')->pluck('city')->toArray()
         ]);
     }
 
@@ -49,6 +51,7 @@ class SettingsController extends Controller
     {
         Settings::find($id)->update([
             'value' => \request()->value,
+            'header' => \request()->header,
         ]);
         Artisan::call('optimize:clear');
         return redirect()->back();
