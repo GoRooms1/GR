@@ -37,7 +37,12 @@ function afterCreateCategory (category)
   console.log(category)
 
   createFrontData(category.room_id, category)
+  if ($('.arrow-up'))
+    $('.arrow-up').on('click', upOrderRoom)
 
+  if ($('.arrow-down'))
+    $('.arrow-down').on('click', downOrderRoom)
+  updateArrow()
 }
 
 /*
@@ -64,6 +69,12 @@ function afterRemoveCategory (id)
 {
   console.log(id)
   let shadow = $('.shadow[data-category-id=' + id + ']').remove();
+  if ($('.arrow-up'))
+    $('.arrow-up').on('click', upOrderRoom)
+
+  if ($('.arrow-down'))
+    $('.arrow-down').on('click', downOrderRoom)
+  updateArrow()
 }
 
 
@@ -175,7 +186,7 @@ function saveFrontData (save = false)
  */
 function removeRoom ()
 {
-
+  updateArrow()
 }
 
 /*
@@ -196,8 +207,11 @@ function createFrontData (room_id, category)
   $($(room).find('.row__head').find('.head-text').get(0)).html(category.name)
   $($(room).find('.row__head').find('.head-text').get(1)).find('span').html(category.value)
 
-  rooms.prepend(room);
+  rooms.append(room)
   room.removeClass('d-none')
+  $('html, body').animate({
+    scrollTop: $(room).offset().top - 50
+  }, 0);
   let select_item = $('.select__item')
   let select_top = $('.select__top')
   select_item.attr("onclick", "").unbind("click")
@@ -260,23 +274,55 @@ function upOrderRoom ()
 {
   let room = $(this).parents('.shadow').get(0)
   // let scrollPos = $(window).scrollTop();
-  $(room).insertBefore($(room).prev().get(0))
 
-  $('html, body').animate({
-    scrollTop: $(room).offset().top - 50
-  }, 0);
-  updateArrow()
+  $('.arrow-down').hide(300)
+  $('.arrow-up').hide(300)
+
+  axios.post('/api/room/order/up/' + $(room).attr('data-id'))
+    .then(response => {
+      console.log(response.data)
+      if (response.data.success) {
+        $(room).insertBefore($(room).prev().get(0))
+        $('.arrow-down').show(300)
+        $('.arrow-up').show(300)
+        $('html, body').animate({
+          scrollTop: $(room).offset().top - 50
+        }, 0);
+      }
+      setTimeout(() => {
+        updateArrow()
+      }, 300)
+    })
+    .catch(error => {
+      alert('Ошибка смены расположения комнаты')
+    })
 
 }
 
 function downOrderRoom ()
 {
   let room = $(this).parents('.shadow').get(0)
-  $(room).insertAfter($(room).next().get(0))
 
-  $('html, body').animate({
-    scrollTop: $(room).offset().top - 50
-  }, 0)
+  $('.arrow-down').hide(300)
+  $('.arrow-up').hide(300)
 
-  updateArrow()
+  axios.post('/api/room/order/down/' + $(room).attr('data-id'))
+    .then(response => {
+      console.log(response.data)
+      if (response.data.success) {
+        $('.arrow-down').show(300)
+        $('.arrow-up').show(300)
+        $(room).insertAfter($(room).next().get(0))
+        $('html, body').animate({
+          scrollTop: $(room).offset().top - 50
+        }, 0)
+      }
+      setTimeout(() => {
+        updateArrow()
+      }, 300)
+    })
+    .catch(error => {
+      updateArrow()
+      alert('Ошибка смены расположения комнаты')
+    });
 }

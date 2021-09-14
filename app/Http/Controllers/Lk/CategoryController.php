@@ -44,7 +44,13 @@ class CategoryController extends Controller
         if ($count === 0) {
           $room->order = 1;
         } else if ($count > 0) {
-          $room->order = $hotel->rooms()->get()->sortByDesc('order')->first()->order + 1;
+          $roomLastOrder = Room::whereHas('hotel', function ($q) use ($hotel) {
+            $q->whereId($hotel->id);
+          })
+            ->orderByDesc('order')
+            ->firstOrFail();
+
+          $room->order = $roomLastOrder->order + 1;
         }
         $room->save();
         return response()->json([

@@ -42,7 +42,7 @@ class RoomController extends Controller
       return view('lk.room.fond', compact('hotel'));
     }
 
-    $rooms = $hotel->rooms()->get()->sortByDesc('order');
+    $rooms = $hotel->rooms()->get()->sortBy('order');
     $costTypes = CostType::all();
     if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
       return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes'));

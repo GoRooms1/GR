@@ -106,15 +106,15 @@
               </div>
               <div class="col-1">
                 <button class="bg-transparent arrow-down border-0 text-white">
-                  <i class="fa fa-arrow-down"></i>
+                  <i class="fa fa-arrow-down p-3"></i>
                 </button>
               </div>
-              <div class="col-1 text-right">
-                {{--        Удалить комнату --}}
-                <button class="quote__remove">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
+{{--              <div class="col-1 text-right">--}}
+{{--                --}}{{--        Удалить комнату --}}
+{{--                <button class="quote__remove">--}}
+{{--                  <i class="fa fa-trash"></i>--}}
+{{--                </button>--}}
+{{--              </div>--}}
             </div>
 
             {{--          Status--}}
@@ -256,9 +256,9 @@
                   <button class="quote__read quote__read_1">
                     <img src="{{ asset('img/lk/pen.png') }}" alt="">
                   </button>
-                  <button class="quote__remove remove-btn">
-                    <i class="fa fa-trash"></i>
-                  </button>
+{{--                  <button class="quote__remove remove-btn">--}}
+{{--                    <i class="fa fa-trash"></i>--}}
+{{--                  </button>--}}
 
                 </div>
               </div>
@@ -281,7 +281,7 @@
            value="{{ route('lk.room.deleteRoom', '') }}">
 
     <div class="row row__head">
-      <div class="col-8">
+      <div class="col-6">
 {{--    Название категории    --}}
         <p class="head-text head-text_bold"></p>
       </div>
@@ -290,12 +290,22 @@
 {{--        Сколько мест --}}
         <p class="head-text">Квота <span></span></p>
       </div>
-      <div class="col-1 text-right">
-{{--        Удалить комнату --}}
-        <button class="quote__remove">
-          <i class="fa fa-trash"></i>
+      <div class="col-1">
+        <button class="bg-transparent arrow-up border-0 text-white">
+          <i class="fa fa-arrow-up p-3"></i>
         </button>
       </div>
+      <div class="col-1">
+        <button class="bg-transparent arrow-down border-0 text-white">
+          <i class="fa fa-arrow-down p-3"></i>
+        </button>
+      </div>
+{{--      <div class="col-1 text-right">--}}
+{{--        Удалить комнату --}}
+{{--        <button class="quote__remove">--}}
+{{--          <i class="fa fa-trash"></i>--}}
+{{--        </button>--}}
+{{--      </div>--}}
     </div>
 {{-- Статус --}}
     <div class="row row-status">
@@ -422,9 +432,9 @@
           <button class="quote__read quote__read_1">
             <img src="{{ asset('img/lk/pen.png') }}" alt="">
           </button>
-          <button class="quote__remove remove-btn">
-            <i class="fa fa-trash"></i>
-          </button>
+{{--          <button class="quote__remove remove-btn">--}}
+{{--            <i class="fa fa-trash"></i>--}}
+{{--          </button>--}}
 
         </div>
       </div>
@@ -442,6 +452,130 @@
 @section('js')
 
   <script defer="defer">
+    let blockDropZone =  $('.file-dropzone')
+    let uploader = []
+    let mockFile
+    let existFile = []
+
+    function initialDropZone () {
+      let zone = this
+      return {
+        url: "{{ route('lk.room.image.upload') }}",
+        maxFiles: 6,
+        paramName: "image",
+        thumbnailWidth: 352,
+        thumbnailHeight: 260,
+        addRemoveLinks: true,
+        uploadMultiple: false,
+        previewsContainer: '.visualizacao-' + zone.dataset.id,
+        previewTemplate: $(zone).siblings('.preview').html(),
+        acceptedFiles: "image/*",
+        headers: {
+          'x-csrf-token': "{{ csrf_token() }}",
+        },
+        sending: function(file, xhr, formData) {
+          formData.append('model_name', "Room")
+          formData.append('modelID', zone.dataset.id)
+        },
+        init: function () {
+          this.on("complete", function (file) {
+
+            let f = findExistImage(file, existFile[zone.dataset.id])
+            console.log(f)
+
+            let d = file.previewElement.querySelector("[data-dz-success]");
+            d.innerHTML = f.moderate_text
+            if (!f.moderate) {
+              d.style.color="#2f64ad"
+            }
+
+            $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
+            let str = $('ul.visualizacao-' + zone.dataset.id).get(0)
+            $(zone).appendTo(str)
+          });
+          this.on('success', function (file, json) {
+            console.log(json)
+            let image = json.payload.images[0]
+            let word = 'image'
+            existFile[zone.dataset.id].push({
+              id: image.id,
+              path: "{{ url('/') }}" + "/" + image.path,
+              name: image.name,
+              moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
+              moderate: image.moderate
+            })
+          });
+          this.on("addedfile", function(file) {
+            while (this.files.length  > this.options.maxFiles) {
+              this.removeFile(this.files[0]);
+              existFile[zone.dataset.id].shift();
+              console.log(file, this.files.length, this.options.maxFiles)
+            }
+          });
+          this.on("reset", function (file) {
+            $(zone).show()
+          });
+          this.on('queuecomplete', function (file) {
+            $(this).parents(".shadow").find('.uploud__min').hide()
+          });
+          this.on("removedfile", function (file) {
+            console.log(file)
+            if (existFile[zone.dataset.id].length === 1) {
+              if (file.xhr) {
+                let image = JSON.parse(file.xhr.response).payload.images[0]
+                console.log("{{ url('/') }}" + "/"+ image.path)
+                mockFile = { name: file.name, dataURL: "{{ url('/') }}" + "/"+ image.path, size: 0 };
+              } else {
+                mockFile = { name: file.name, dataURL: file.dataURL, size: 0 };
+              }
+
+              uploader[zone.dataset.id].displayExistingFile(file, mockFile.dataURL)
+              return false;
+            }
+
+            let flag = false
+            existFile[zone.dataset.id].forEach(f => {
+              if(f.path === file.dataURL) {
+                flag = true
+                let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
+                axios.post(url)
+                  .then(response => {
+                    console.log(response)
+                    let index = existFile[zone.dataset.id].indexOf(f)
+                    if (index > -1) {
+                      existFile[zone.dataset.id].splice(index, 1);
+                    }
+                  })
+                  .catch(error => {
+                    alert('Ошибка при удалении')
+                  })
+                return;
+              }
+            })
+            if (!flag) {
+              existFile[zone.dataset.id].forEach(f => {
+                if(f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
+                  flag = true
+                  let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
+                  axios.post(url)
+                    .then(response => {
+                      console.log(response)
+                      let index = existFile[zone.dataset.id].indexOf(f)
+                      if (index > -1) {
+                        existFile[zone.dataset.id].splice(index, 1);
+                      }
+                    })
+                    .catch(error => {
+                      alert('Ошибка при удалении')
+                    })
+                  return;
+                }
+              })
+            }
+          })
+        }
+      }
+    }
 
     $(document).ready(function () {
       $('.sortable').sortable({
@@ -451,8 +585,7 @@
 
 
       Dropzone.autoDiscover = false;
-      let blockDropZone =  $('.file-dropzone')
-      let uploader = []
+
       blockDropZone.each(function() {
         let zone = this
         // instantiate the uploader
@@ -463,9 +596,6 @@
           uploader[zone.dataset.id] = new Dropzone(this, initialDropZone.call(this) );
         }
       })
-
-      let mockFile
-      let existFile = []
 
       @foreach($rooms as $room)
         existFile[{{ $room->id }}] = []
@@ -487,127 +617,6 @@
 
       @endforeach
       @endforeach
-
-
-      function initialDropZone () {
-        let zone = this
-        return {
-          url: "{{ route('lk.room.image.upload') }}",
-          maxFiles: 6,
-          paramName: "image",
-          thumbnailWidth: 352,
-          thumbnailHeight: 260,
-          addRemoveLinks: true,
-          uploadMultiple: false,
-          previewsContainer: '.visualizacao-' + zone.dataset.id,
-          previewTemplate: $(zone).siblings('.preview').html(),
-          acceptedFiles: "image/*",
-          headers: {
-            'x-csrf-token': "{{ csrf_token() }}",
-          },
-          sending: function(file, xhr, formData) {
-            formData.append('model_name', "Room")
-            formData.append('modelID', zone.dataset.id)
-          },
-          init: function () {
-            this.on("complete", function (file) {
-
-              let f = findExistImage(file, existFile[zone.dataset.id])
-              console.log(f)
-
-              let d = file.previewElement.querySelector("[data-dz-success]");
-              d.innerHTML = f.moderate_text
-              if (!f.moderate) {
-                d.style.color="#2f64ad"
-              }
-
-              $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
-              let str = $('ul.visualizacao-' + zone.dataset.id).get(0)
-              $(zone).appendTo(str)
-            });
-            this.on('success', function (file, json) {
-              console.log(json)
-              let image = json.payload.images[0]
-              let word = 'image'
-              existFile[zone.dataset.id].push({
-                id: image.id,
-                path: "{{ url('/') }}" + "/" + image.path,
-                name: image.name,
-                moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
-                moderate: image.moderate
-              })
-            });
-            this.on("addedfile", function(file) {
-              while (this.files.length  > this.options.maxFiles) {
-                this.removeFile(this.files[0]);
-                existFile[zone.dataset.id].shift();
-                console.log(file, this.files.length, this.options.maxFiles)
-              }
-            });
-            this.on("reset", function (file) {
-              $(zone).show()
-            });
-            this.on('queuecomplete', function (file) {
-              $(this).parents(".shadow").find('.uploud__min').hide()
-            });
-            this.on("removedfile", function (file) {
-              console.log(file)
-              if (existFile[zone.dataset.id].length === 1) {
-                if (file.xhr) {
-                  let image = JSON.parse(file.xhr.response).payload.images[0]
-                  console.log("{{ url('/') }}" + "/"+ image.path)
-                  mockFile = { name: file.name, dataURL: "{{ url('/') }}" + "/"+ image.path, size: 0 };
-                } else {
-                  mockFile = { name: file.name, dataURL: file.dataURL, size: 0 };
-                }
-
-                uploader[zone.dataset.id].displayExistingFile(file, mockFile.dataURL)
-                return false;
-              }
-
-              let flag = false
-              existFile[zone.dataset.id].forEach(f => {
-                if(f.path === file.dataURL) {
-                  flag = true
-                  let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
-                  axios.post(url)
-                    .then(response => {
-                      console.log(response)
-                      let index = existFile[zone.dataset.id].indexOf(f)
-                      if (index > -1) {
-                        existFile[zone.dataset.id].splice(index, 1);
-                      }
-                    })
-                    .catch(error => {
-                      alert('Ошибка при удалении')
-                    })
-                  return;
-                }
-              })
-              if (!flag) {
-                existFile[zone.dataset.id].forEach(f => {
-                  if(f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
-                    flag = true
-                    let url = "{{ url('lk/room/image/delete/') }}" + '/' + f.id
-                    axios.post(url)
-                      .then(response => {
-                        console.log(response)
-                        let index = existFile[zone.dataset.id].indexOf(f)
-                        if (index > -1) {
-                          existFile[zone.dataset.id].splice(index, 1);
-                        }
-                      })
-                      .catch(error => {
-                        alert('Ошибка при удалении')
-                      })
-                    return;
-                  }
-                })
-              }
-            })
-          }
-        }
-      }
 
       $('.quote__read').each(function () {
         saveFrontData.call(this, true)
