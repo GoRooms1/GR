@@ -108,7 +108,6 @@ function createRoom ()
 function saveRoom ()
 {
   if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
-    saveFrontData.call(this)
     let shadow = $(this).parents('.shadow').get(0)
 
     let category = $(shadow).find('input[name=category_id]').val()
@@ -125,6 +124,7 @@ function saveRoom ()
     })
       .then(response => {
         if (response.data.success) {
+          saveFrontData.call(this)
           if (response.data.room.moderate) {
             $(shadow).find('.row__head')
               .removeClass('row__head_blue')
@@ -148,7 +148,16 @@ function saveRoom ()
       })
       .catch(error => {
         console.log(error)
-        alert('Ошибка в сохранении комнаты')
+        if (error.response.data.errors) {
+          let str = '';
+          Object.keys(error.response.data.errors).forEach(key => {
+            str += error.response.data.errors[key][0] + ' \n'
+          })
+
+          alert(str)
+        } else {
+          alert('Ошибка в сохранении комнаты')
+        }
       })
 
   }

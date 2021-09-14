@@ -87,8 +87,6 @@ class RoomController extends Controller
 
     if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
       $room = $this->saveDataTypeRoom($request->all(), $room);
-    } else {
-      $room = $this->saveDataTypeCategories($request->all(), $room, $hotel);
     }
 
     $room->moderate = true;
@@ -106,34 +104,6 @@ class RoomController extends Controller
     $room->save();
 
     return response()->json(['success' => true, 'room' => $room]);
-  }
-
-  /**
-   * Save data if hotel has type Categories
-   *
-   * @param $data
-   * @param Room $room
-   * @param Hotel $hotel
-   *
-   * @return Room
-   */
-  private function saveDataTypeCategories ($data, Room $room, Hotel $hotel): Room
-  {
-    if (!isset($data['order'])) {
-      $roomLastOrder = $hotel->rooms()->orderBy('order')->first();
-
-      if ($roomLastOrder) {
-        $order = $roomLastOrder->order;
-        $room->order = $order++;
-      } else {
-        $room->order = 1;
-      }
-
-    } else {
-      $room->order = $data['order'];
-    }
-
-    return $room;
   }
 
   /**

@@ -504,11 +504,16 @@
 @endsection
 
 @section('header-js')
-  <script src="{{ asset('js/lk/room.js') }}" async></script>
+  <script src="{{ asset('js/lk/room.js') }}"></script>
 @endsection
 
 @section('js')
   <script>
+    Dropzone.autoDiscover = false;
+    let blockDropZone =  $('.file-dropzone')
+    let uploader = []
+    let mockFile
+    let existFile = []
 
     $(document).ready(function () {
       $('.sortable').sortable({
@@ -516,46 +521,41 @@
       });
 
       $('.quote__read').each(saveFrontData)
-    });
 
-    Dropzone.autoDiscover = false;
-    let blockDropZone =  $('.file-dropzone')
-    let uploader = []
-    blockDropZone.each(function() {
-      let zone = this
-      // instantiate the uploader
-      if ($(zone).hasClass('dropzone_disabled')) {
+      blockDropZone.each(function() {
+        let zone = this
+        // instantiate the uploader
+        if ($(zone).hasClass('dropzone_disabled')) {
 
-      } else {
-        // Dropzone initial
-        uploader[zone.dataset.id] = new Dropzone(this, initialDropZone.call(this) );
-      }
-    })
+        } else {
+          // Dropzone initial
+          uploader[zone.dataset.id] = new Dropzone(this, initialDropZone.call(this) );
+        }
+      })
 
-    let mockFile
-    let existFile = []
-
-    @foreach($rooms as $room)
-      existFile[{{ $room->id }}] = []
+      @foreach($rooms as $room)
+        existFile[{{ $room->id }}] = []
       @foreach($room->images as $image)
 
         existFile[{{ $room->id }}].push({
-          id: "{{ $image->id }}",
-          name: "{{ $image->name }}",
-          path: "{{ url($image->path) }}",
-          moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-          moderate: {!! $image->moderate ? 'true' : 'false' !!}
-        })
+        id: "{{ $image->id }}",
+        name: "{{ $image->name }}",
+        path: "{{ url($image->path) }}",
+        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+        moderate: {!! $image->moderate ? 'true' : 'false' !!}
+      })
 
-        mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
-        uploader[{{ $room->id }}].emit("addedfile", mockFile);
-        uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
-        uploader[{{ $room->id }}].emit("complete", mockFile);
-        uploader[{{ $room->id }}].files.push(mockFile)
+      mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
+      uploader[{{ $room->id }}].emit("addedfile", mockFile);
+      uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
+      uploader[{{ $room->id }}].emit("complete", mockFile);
+      uploader[{{ $room->id }}].files.push(mockFile)
 
       @endforeach
-    @endforeach
+      @endforeach
 
+
+    });
 
     function initialDropZone () {
       let zone = this

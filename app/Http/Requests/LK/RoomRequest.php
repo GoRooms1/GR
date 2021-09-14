@@ -48,15 +48,31 @@ class RoomRequest extends FormRequest
       ];
     }
 
+
     return [
-      'order' => 'sometimes', 'required', 'unique:rooms,order,'. $id .',id,hotel_id,' . $hotel_id,
-      'number' => 'sometimes', 'required',
-      'name' => 'sometimes', 'required',
-      'category' => 'sometimes', 'required', 'exists:categories,id',
-      'types' => 'sometimes', 'required', 'array',
-      'types.*.id' =>'required', 'exists:cost_types,id',
-      'types.*.value' =>'required',
+      'order' => 'required', 'unique:rooms,order,'. $id .',id,hotel_id,' . $hotel_id,
+      'number' => 'required',
+      'name' => 'required',
+      'category' => 'required', 'exists:categories,id',
+      'types' => 'required', 'array',
+      'types.*.id' => 'required', 'exists:cost_types,id',
+      'types.*.value' => 'required',
       'types.*.data' =>'required', 'exists:periods,id',
+    ];
+  }
+
+  public function messages (): array
+  {
+    return [
+      'order.required' => 'Ордер должен быть уникальным и обязательным.',
+      'order.unique' => 'Ордер должен быть уникальным и обязательным.',
+      'number.required' => 'Номер должен быть обязательным.',
+      'name.required' => 'Название должно быть обязательным.',
+      'category.required' => 'Категория должна быть обязательным.',
+      'types.required' => 'Периоды должны быть обязательным.',
+      'types.*.id.required' => 'Выбранный тип периода обязателен.',
+      'types.*.value.required' => 'Стоимость периода обязателен.',
+      'types.*.data.required' => 'Необходимо выбрать время периода.',
     ];
   }
 }

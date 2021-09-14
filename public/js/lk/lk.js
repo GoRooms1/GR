@@ -523,10 +523,10 @@ function selectTop () {
   $(this).siblings('.select__hidden').slideToggle()
 }
 
-if ($('.arrow-up'))
+if ($('.arrow-up').length > 0)
   $('.arrow-up').on('click', upOrderRoom)
 
-if ($('.arrow-down'))
+if ($('.arrow-down').length > 0)
   $('.arrow-down').on('click', downOrderRoom)
 
 if (typeof updateArrow === 'function') {
