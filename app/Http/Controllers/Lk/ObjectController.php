@@ -62,11 +62,11 @@ class ObjectController extends Controller
     }
 
     $hotel = new Hotel();
-    $hotel->name = $request->get('hotel.name');
+    $hotel->name = $request->get('hotel')['name'];
     $hotel->phone = $request->get('phone');
     $hotel->email = $request->get('email');
 
-    $hotel->type()->associate($request->get('hotel.type'));
+    $hotel->type()->associate($request->get('hotel')['type']);
     $hotel->user()->associate($user->id);
     $hotel->save();
     $hotel->saveAddress($request->get('address', ''));
