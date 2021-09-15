@@ -12,16 +12,17 @@ class FixPageDescriptionsSeeder extends Seeder
      */
     public function run()
     {
+        $pages = ['/', '/hotels', '/rooms', '/rooms/hot'];
+
         $pageDescriptions = PageDescription::all();
         foreach ($pageDescriptions as $description) {
-            if(substr($description->url, -1) == '/' && $description->url != '/') {
+            if(substr($description->url, -1) == '/' && $description->url != '/' && !in_array(substr($description->url,0,-1), $pages) ) {
                 $description->update([
                     'url' => substr($description->url,0,-1)
                 ]);
             }
         }
 
-        $pages = ['/', '/hotels', '/rooms', '/rooms/hot'];
         foreach ($pages as $page) {
             $currentPage = PageDescription::where('url', $page)->first();
             if ($currentPage) {
