@@ -13,7 +13,7 @@ class Create extends Command
    *
    * @var string
    */
-  protected $signature = 'users:create {--email= : User email} {--password= : User password} {--name= : User name} {--is_admin= : Admin flag}';
+  protected $signature = 'users:create {--email= : User email} {--password= : User password} {--name= : User name} {--is_admin= : Admin flag} {--is_moderate= : Moderate flag}';
 
   /**
    * The console command description.
@@ -21,16 +21,6 @@ class Create extends Command
    * @var string
    */
   protected $description = 'Command description';
-
-  /**
-   * Create a new command instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    parent::__construct();
-  }
 
   /**
    * Execute the console command.
@@ -42,12 +32,14 @@ class Create extends Command
     $email = $this->option('email');
     $password = $this->option('password');
     $name = $this->option('name');
-    $is_admin = $this->option('is_admin');
+    $is_admin = $this->option('is_admin') ?? false;
+    $is_moderate = $this->option('is_moderate') ?? false;
     $user = User::create([
       'name' => $name,
       'password' => Hash::make($password),
       'email' => $email,
-      'is_admin' => $is_admin
+      'is_admin' => $is_admin,
+      'is_moderate' => $is_moderate
     ]);
     $this->line('Created user:');
     $this->line("\tUser id: <info>$user->id</info>");

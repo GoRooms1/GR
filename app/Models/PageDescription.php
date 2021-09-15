@@ -7,6 +7,37 @@ use App\Traits\UseImages;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * App\Models\PageDescription
+ *
+ * @property int $id
+ * @property string $url
+ * @property string|null $title
+ * @property string|null $meta_description
+ * @property string|null $meta_keywords
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $model_type
+ * @property int|null $model_id
+ * @property-read \App\Models\Image $image
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
+ * @property-read int|null $images_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereMetaKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\PageDescription whereUrl($value)
+ * @mixin \Eloquent
+ */
 class PageDescription extends Model
 {
     use UseImages;

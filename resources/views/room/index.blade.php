@@ -20,7 +20,13 @@
     <div class="section">
         <div class="container">
             <div class="section-header">
-                <h1 class="section-title">{{ $title ?? 'Биржа номеров' }}</h1>
+                <h1 class="section-title">
+                    @if (Request::is('rooms/hot'))
+                        {!! html_entity_decode(Settings::header('seo_/rooms/hot')) !!}
+                    @else
+                        {!! html_entity_decode(Settings::header('seo_/rooms')) !!}
+                    @endif
+                </h1>
                 @if(!isset($hide_filter) && !$hide_filter)
                     <form id="search-filter" class="search-filter" method="get">
                         <div class="search-filter-item search-filter-sort">

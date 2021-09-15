@@ -5,6 +5,7 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
+use App\Models\Hotel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,7 +25,7 @@ class AddColumnsInHotelTable extends Migration
 //      Удаление лишней колонки
       $table->dropColumn('about');
 //      Либо каждая комната отдельно, либо отели по типу и с выбором кол-ва продаж. (rooms, categories)
-      $table->string('type_fond')->default('rooms')->after('phone_2');
+      $table->string('type_fond')->default(Hotel::ROOMS_TYPE)->after('phone_2');
 //      Заголовок Как добраться
       $table->string('route_title', 255)->default('Как добраться')->after('route');
 //      На модерации

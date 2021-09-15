@@ -12,5 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(PagesSeeder::class);
+        $this->call(AddSeoSettingsSeeder::class);
+        $this->call(FixTypeHotelSeeder::class);
+        $this->call(FixPageDescriptionsSeeder::class);
+        $this->call(PageContactSeeder::class);
     }
 }

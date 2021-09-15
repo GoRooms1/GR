@@ -2,25 +2,99 @@
 
 namespace App\Models;
 
-use App\Traits\ClearValidated;
-use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use App\User;
+use Eloquent;
 use Exception;
-use Fomvasss\Dadata\Facades\DadataSuggest;
-use Illuminate\Database\Eloquent\Builder;
+use App\Traits\UseImages;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Traits\ClearValidated;
+use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Fomvasss\Dadata\Facades\DadataSuggest;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
+/**
+ * App\Models\Hotel
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property string $phone
+ * @property string|null $phone_2
+ * @property string $type_fond
+ * @property int $user_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $is_popular
+ * @property int|null $type_id
+ * @property string|null $route
+ * @property bool $old_moderate
+ * @property bool $show
+ * @property bool $moderate
+ * @property string $route_title
+ * @property string|null $slug
+ * @property int $hide_phone
+ * @property string|null $email
+ * @property-read Address $address
+ * @property-read \Illuminate\Database\Eloquent\Collection|Attribute[] $attrs
+ * @property-read int|null $attrs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read mixed $costs
+ * @property-read mixed $meta_description
+ * @property-read mixed $meta_keywords
+ * @property-read mixed $meta_title
+ * @property-read Image $image
+ * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $images
+ * @property-read int|null $images_count
+ * @property-read PageDescription $meta
+ * @property-read \Illuminate\Database\Eloquent\Collection|Metro[] $metros
+ * @property-read int|null $metros_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Rating[] $ratings
+ * @property-read int|null $ratings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Review[] $reviews
+ * @property-read int|null $reviews_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Room[] $rooms
+ * @property-read int|null $rooms_count
+ * @property-read HotelType|null $type
+ * @property-read User $user
+ * @method static Builder|Hotel newModelQuery()
+ * @method static Builder|Hotel newQuery()
+ * @method static Builder|Hotel popular()
+ * @method static Builder|Hotel query()
+ * @method static Builder|Hotel whereCreatedAt($value)
+ * @method static Builder|Hotel whereDescription($value)
+ * @method static Builder|Hotel whereEmail($value)
+ * @method static Builder|Hotel whereHidePhone($value)
+ * @method static Builder|Hotel whereId($value)
+ * @method static Builder|Hotel whereIsPopular($value)
+ * @method static Builder|Hotel whereModerate($value)
+ * @method static Builder|Hotel whereName($value)
+ * @method static Builder|Hotel whereOldModerate($value)
+ * @method static Builder|Hotel wherePhone($value)
+ * @method static Builder|Hotel wherePhone2($value)
+ * @method static Builder|Hotel whereRoute($value)
+ * @method static Builder|Hotel whereRouteTitle($value)
+ * @method static Builder|Hotel whereShow($value)
+ * @method static Builder|Hotel whereSlug($value)
+ * @method static Builder|Hotel whereTypeFond($value)
+ * @method static Builder|Hotel whereTypeId($value)
+ * @method static Builder|Hotel whereUpdatedAt($value)
+ * @method static Builder|Hotel whereUserId($value)
+ * @mixin Eloquent
+ * @property bool $checked_type_fond
+ * @method static Builder|Hotel whereCheckedTypeFond($value)
+ */
 class Hotel extends Model
 {
   use UseImages;
@@ -28,7 +102,12 @@ class Hotel extends Model
   use CreatedAtOrdered;
 
   public const PER_PAGE = 6;
-
+  public const ROOMS_TYPE = 'rooms';
+  public const CATEGORIES_TYPE = 'categories';
+  public const TYPES_FOND = [
+    self::ROOMS_TYPE,
+    self::CATEGORIES_TYPE
+  ];
   protected $fillable = [
     'name',
     'description',
@@ -40,13 +119,16 @@ class Hotel extends Model
     'user_id',
     'hide_phone',
     'email',
-    'type_fond'
+    'type_fond',
+    'save_columns',
+    'old_moderate',
+    'moderate',
+    'show',
+    'checked_type_fond'
   ];
-
   protected $hidden = [
     'email',
   ];
-
   protected $with = [
     'rooms',
     'attrs',
@@ -55,21 +137,14 @@ class Hotel extends Model
     'reviews',
     'metros',
     'images',
-    'costs',
     'image',
     'type'
   ];
-
   protected $casts = [
-    'moderate' => 'boolean'
-  ];
-
-  public const ROOMS_TYPE = 'rooms';
-  public const CATEGORIES_TYPE = 'categories';
-
-  public const TYPES_FOND = [
-    self::ROOMS_TYPE,
-    self::CATEGORIES_TYPE
+    'moderate' => 'boolean',
+    'old_moderate' => 'boolean',
+    'show' => 'boolean',
+    'checked_type_fond' => 'boolean'
   ];
 
   ### SCOPES
@@ -78,6 +153,7 @@ class Hotel extends Model
   {
     parent::boot();
 
+//    TODO: Moderate Scope
 //    static::addGlobalScope('moderation', function (Builder $builder) {
 //      if (auth()->check()) {
 //        if (!auth()->user()->is_admin && !auth()->user()->is_moderate) {
@@ -134,11 +210,6 @@ class Hotel extends Model
     return $query->where('is_popular', true);
   }
 
-  public function rooms(): HasMany
-  {
-    return $this->hasMany(Room::class)->orderBy('created_at');
-  }
-
   public function user(): BelongsTo
   {
     return $this->belongsTo(User::class);
@@ -152,11 +223,6 @@ class Hotel extends Model
   public function categories(): HasMany
   {
     return $this->hasMany(Category::class)->orderBy('created_at');
-  }
-
-  public function costs(): MorphMany
-  {
-    return $this->morphMany(Cost::class, 'model');
   }
 
   public function type(): BelongsTo
@@ -186,14 +252,14 @@ class Hotel extends Model
     }
     return $value;
   }
-  ### END RELATIONS
-
-  ### MUTATORS
 
   public function getMetaDescriptionAttribute(): string
   {
     return @$this->meta->meta_description ?? $this->getDescDefault();
   }
+  ### END RELATIONS
+
+  ### MUTATORS
 
   private function getDescDefault(): string
   {
@@ -215,26 +281,42 @@ class Hotel extends Model
     $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
       $rooms = $this->rooms->pluck('id')->toArray();
       $costs = [];
-      foreach ($this->costs->sortBy('type.sort') as $cost) {
-        $type_id = $cost->type->id;
-        $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
-          return Cost::where('model_type', Room::class)
-              ->whereIn('model_id', $rooms)
-              ->where('type_id', $type_id)
-              ->where('value', '>', 0)
-              ->min('value') ?? '0';
-        });
-        $costs[] = [
-          'name' => $cost->type->name,
-          'id' => $cost->type->id,
-          'description' => $cost->description,
-          'value' => $min_in_rooms,
-        ];
+      $types = [];
+      foreach ($this->costs->sortBy('period.type.sort') as $cost) {
+        $type_id = $cost->period->type->id;
+        if (!in_array($type_id, $types)) {
+          $types[] = $type_id;
+          $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
+            return Cost::whereIn('room_id', $rooms)
+                ->whereHas('period', function ($q) use ($type_id) {
+                  $q->where('cost_type_id', $type_id);
+                })
+                ->where('value', '>', 0)
+                ->min('value') ?? '0';
+          });
+          $costs[] = [
+            'name' => $cost->period->type->name,
+            'id' => $cost->period->type->id,
+            'description' => $cost->description,
+            'info' => $cost->period->info,
+            'value' => $min_in_rooms,
+          ];
+        }
       }
       return $costs;
     });
 
     return (object)$costs;
+  }
+
+  public function getCostsAttribute(): Collection
+  {
+    return $this->rooms()->get()->pluck('costs')->flatten();
+  }
+
+  public function rooms(): HasMany
+  {
+    return $this->hasMany(Room::class)->orderBy('created_at');
   }
 
   public function getMetaKeywordsAttribute()
@@ -327,5 +409,11 @@ class Hotel extends Model
   {
     return 'slug';
   }
+
+  public function getDisabledSaveAttribute(): string
+  {
+    return $this->old_moderate ? 'disabled' : '';
+  }
+
   ### END OVERWRITES
 }
