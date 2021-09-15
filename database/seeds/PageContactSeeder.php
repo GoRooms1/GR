@@ -45,7 +45,7 @@ class PageContactSeeder extends Seeder
         </p>
         </div>
     </div>
-    <div class="col-lg-7 contacts-info">
+    <div class="col-lg-7 contacts-info" style="margin-right: 0; padding-right: 0">
         <div class="contacts-list">
             <iframe 
             src="https://yandex.ru/map-widget/v1/?um=constructor%3A7093c7fe3b67dfb23a76afe92eb5b652bdb2db6520236a5a12300683599fa132&amp;source=constructor" 
@@ -55,7 +55,7 @@ class PageContactSeeder extends Seeder
             ></iframe>        
         </div>
     </div>
-    <form id="contacts-form" class="col-lg-12 form-section" action="/form" method="post">
+    <form id="contacts-form" class="col-lg-12 form-section" action="/form" method="post" style="margin: 0 15px">
     <h2 class="section-title">Обратная связь</h2>
     <div class="row">
     <div class="col-lg-4">
