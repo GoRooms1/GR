@@ -49,15 +49,15 @@ class RoomController extends Controller
   public function booking(int $id, Request $request): RedirectResponse
   {
     $validated = $request->validate([
-      'book-name' => ['required', 'string',],///+
-      'book-tel' => ['required', 'string',],//+
-      'from-date' => ['required', 'date',],//+
-      'from-time' => ['required', 'string',],//+
+      'book-name' => ['required', 'string',],
+      'book-tel' => ['required', 'string',],
+      'from-date' => ['required', 'date',],
+      'from-time' => ['required', 'string',],
       'to-date' => ['required', 'date',],
       'to-time' => ['required', 'string'],
-      'book-comment' => ['nullable'],//+
-      'book_by' => ['string'],//+
-      'order_at' => ['string'],//+
+      'book-comment' => ['nullable'],
+      'book_by' => ['string'],
+      'order_at' => ['string'],
     ]);
 
     //todo form - это то, где раньше хранились заказы (и остаются лежать старый заказы), скорее всего это надо будет удалить

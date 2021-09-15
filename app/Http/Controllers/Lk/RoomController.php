@@ -19,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\LK\RoomRequest;
 
 /**
  * Edit Room in Hotel user
@@ -41,9 +42,13 @@ class RoomController extends Controller
       return view('lk.room.fond', compact('hotel'));
     }
 
-    $rooms = $hotel->rooms()->get();
+    $rooms = $hotel->rooms()->get()->sortBy('order');
     $costTypes = CostType::all();
-    return view('lk.room.edit', compact('hotel', 'rooms', 'costTypes'));
+    if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
+      return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes'));
+    }
+
+    return view('lk.room.edit-categories', compact('hotel', 'rooms', 'costTypes'));
   }
 
   /**
@@ -63,6 +68,7 @@ class RoomController extends Controller
 
     $hotel->type_fond = $request->get('fond');
     $hotel->checked_type_fond = true;
+
     $hotel->save();
 
     return redirect()->route('lk.room.edit')->with('success', 'Тип Фонда обновлён');
@@ -71,38 +77,20 @@ class RoomController extends Controller
   /**
    * @throws Exception
    */
-  public function saveRoom(Request $request): JsonResponse
+  public function saveRoom(RoomRequest $request): JsonResponse
   {
-    $request->validate([
-      'id' => 'sometimes|required|exists:rooms,id'
-    ]);
 
     $hotel = Hotel::whereHas('rooms', function ($q) use($request) {
       $q->where('id', $request->get('id'));
-    })->first();
+    })->firstOrFail();
+    $room = Room::find($request->get('id'));
 
-    if (!$hotel) {
-      throw new Exception('Не найдет отель для комнаты');
+    if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
+      $room = $this->saveDataTypeRoom($request->all(), $room);
     }
 
-    $request->validate([
-      'order' => 'sometimes|required|unique:rooms,order,'. $request->get('id') .',id,hotel_id,' . $hotel->id,
-      'number' => 'sometimes|required',
-      'name' => 'sometimes|required',
-      'category' => 'sometimes|required|exists:categories,id',
-      'types' => 'sometimes|required|array',
-      'types.*.id' =>'required|exists:cost_types,id',
-      'types.*.value' =>'required',
-      'types.*.data' =>'required|exists:periods,id',
-    ]);
-
-    $room = Room::find($request->id);
-    $room->name = $request->get('name');
-    $room->order = $request->get('order');
-    $room->number = $request->get('number');
-    $room->category()->associate($request->get('category'));
     $room->moderate = true;
-
+    $room->category()->associate($request->get('category'));
     $room->costs()->delete();
 
     foreach ($request->get('types') as $type) {
@@ -119,6 +107,24 @@ class RoomController extends Controller
   }
 
   /**
+   * Save data if hotel has type Room
+   *
+   * @param $data
+   * @param Room $room
+   * @return Room
+   */
+  private function saveDataTypeRoom ($data, Room $room): Room
+  {
+    $room->name = $data['name'];
+    $room->order = $data['order'];
+    $room->number = $data['number'];
+
+    return $room;
+  }
+
+  /**
+   * Delete Room
+   *
    * @throws Exception
    */
   public function deleteRoom (int $id): JsonResponse
@@ -129,11 +135,27 @@ class RoomController extends Controller
     return response()->json(['success' => $status]);
   }
 
+  /**
+   * Create empty Room
+   *
+   * @param Request $request
+   * @return JsonResponse
+   */
   public function create (Request $request): JsonResponse
   {
-
+    $hotel = Hotel::find($request->get('hotel_id'));
     $room = new Room();
     $room->hotel()->associate($request->get('hotel_id'));
+
+    if ($hotel->type_fond === Hotel::CATEGORIES_TYPE) {
+      $count = $hotel->rooms()->count();
+      if ($count === 0) {
+        $room->order = 1;
+      } else if ($count > 0) {
+        $room->order = $hotel->rooms()->orderBy('order')->first()->order + 1;
+      }
+    }
+
     $status = $room->save();
 
     return response()->json(['success' => $status, 'room' => $room ]);

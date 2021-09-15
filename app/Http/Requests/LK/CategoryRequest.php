@@ -40,7 +40,13 @@ class CategoryRequest extends FormRequest
         'required',
         'string',
         'max:255',
-        'unique:categories,name,null,null,hotel_id,' . $this->get('hotel_id'),
+        'unique:categories,name,' . $this->get('id') . ',id,hotel_id,' . $this->get('hotel_id'),
+      ],
+      'value' => [
+        'nullable',
+        'sometimes',
+        'integer',
+        'min:0',
       ]
     ];
   }

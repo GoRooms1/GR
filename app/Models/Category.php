@@ -6,6 +6,7 @@ use App\Traits\CreatedAtOrdered;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -19,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Hotel $hotel
+ * @property-read Room $rooms
  * @method static Builder|Category newModelQuery()
  * @method static Builder|Category newQuery()
  * @method static Builder|Category query()
@@ -34,14 +36,34 @@ class Category extends Model
 {
   use CreatedAtOrdered;
 
+  /**
+   * rows
+   *
+   * @var string[]
+   */
   protected $fillable = [
     'name',
     'description',
     'hotel_id'
   ];
 
+  /**
+   * return Hotel
+   *
+   * @return BelongsTo
+   */
   public function hotel(): BelongsTo
   {
     return $this->belongsTo(Hotel::class);
+  }
+
+  /**
+   * return Rooms
+   *
+   * @return HasMany
+   */
+  public function rooms(): HasMany
+  {
+    return $this->hasMany(Room::class);
   }
 }

@@ -27,9 +27,13 @@
 
             @foreach($hotel->categories as $category)
               <li class="categories__item" data-id="{{ $category->id }}">
-                <div class="categories__first categories__first_big">
+                <div class="categories__first">
                   <span class="categories__name categories__hide">{{ $category->name }}</span>
                   <input type="text" class="field field_hidden field_hidden-room" placeholder="Введите категорию">
+                </div>
+                <div class="categories__second">
+                  <span class="categories__quote categories__hide">{{ $category->value }}</span>
+                  <input type="text" class="field field_hidden field_hidden-quote" placeholder="Квота">
                 </div>
 
                 <div class="categories__control">
@@ -45,9 +49,14 @@
             @endforeach
 
             <li class="categories__item">
-              <div class="categories__first categories__first_big">
+              <div class="categories__first">
                 <span class="categories__name categories__hide"></span>
                 <input type="text" class="field field_hidden field_hidden-room" placeholder="Введите категорию">
+              </div>
+
+              <div class="categories__second">
+                <span class="categories__quote categories__hide"></span>
+                <input type="text" class="field field_hidden field_hidden-quote" placeholder="Квота">
               </div>
 
               <div class="categories__control">
@@ -69,21 +78,10 @@
 
   <section class="part category-list">
     <div class="container">
-      <div class="row part__top">
-        <div class="col-12">
-          <div class="d-flex align-items-center rooms-head">
-            <h2 class="title">Список номеров</h2>
-            <button class="room__add">
-              <span>Добавить номер</span>
-              <span class="plus">+</span>
-            </button>
-          </div>
-        </div>
-      </div>
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('lk.room.save') }}">
@@ -91,24 +89,32 @@
                    name="url-delete"
                    value="{{ route('lk.room.deleteRoom', $room->id) }}">
 
-            <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
+            <div class="row row__head {{ !$room->moderate ? 'row__head_blue' : '' }}">
+              <div class="col-6">
+                {{--    Название категории    --}}
+                <p class="head-text head-text_bold"> {{ $room->category->name }}</p>
+              </div>
+
+              <div class="col-3">
+                {{--        Сколько мест --}}
+                <p class="head-text">Квота <span> {{ $room->category->value }} </span></p>
+              </div>
               <div class="col-1">
-                <p class="head-text">#{{ $room->order }}</p>
-              </div>
-              <div class="col-1 offset-sm-1">
-                <p class="head-text">№ {{ $room->number }}</p>
-              </div>
-              <div class="col-2 offset-sm-1">
-                <p class="head-text head-text_bold">{{ $room->name }}</p>
-              </div>
-              <div class="col-3 offset-sm-2">
-                <p class="head-text">{{ $room->category->name ?? '' }}</p>
-              </div>
-              <div class="col-1 text-right">
-                <button class="quote__remove text-white">
-                  <i class="fa fa-trash"></i>
+                <button class="bg-transparent arrow-up border-0 text-white">
+                  <i class="fa fa-arrow-up p-3"></i>
                 </button>
               </div>
+              <div class="col-1">
+                <button class="bg-transparent arrow-down border-0 text-white">
+                  <i class="fa fa-arrow-down p-3"></i>
+                </button>
+              </div>
+{{--              <div class="col-1 text-right">--}}
+{{--                --}}{{--        Удалить комнату --}}
+{{--                <button class="quote__remove">--}}
+{{--                  <i class="fa fa-trash"></i>--}}
+{{--                </button>--}}
+{{--              </div>--}}
             </div>
 
             {{--          Status--}}
@@ -127,65 +133,23 @@
 
             @endif
 
-
-            <div class="row room-details">
-              <div class="col-2">
-
-                <label class="room-text" for="orderRoom-{{ $room->id }}">Ордер</label>
-                <input type="text"
-                       name="order"
-                       class="field field_border"
-                       id="orderRoom-{{ $room->id }}"
-                       placeholder="#1"
-                       value="{{ $room->order }}">
-
-
-              </div>
-              <div class="col-2">
-
-                <label class="room-text" for="numberRoom-{{ $room->id }}m">Номер</label>
-                <input type="text"
-                       name="number"
-                       class="field field_border"
-                       id="numberRoom-{{ $room->id }}"
-                       placeholder="№1"
-                       value="{{ $room->number }}">
-
-
-              </div>
-              <div class="col-4">
-
-                <label class="room-text" for="nameRoom-{{ $room->id }}">Название</label>
-                <input type="text"
-                       name="name"
-                       class="field field_border"
-                       id="nameRoom-{{ $room->id }}"
-                       placeholder="Название"
-                       value="{{ $room->name }}">
-
-
-              </div>
-              <div class="col-4">
-                <p class="room-text">
-                  Категория
-                </p>
-                <div class="select" id="selectRoom">
-                  <input type="hidden" name="category_id" value="{{ $room->category->id ?? '' }}">
-                  <div class="select__top select__top_100">
-                    <span class="select__current">{{ $room->category->name ?? 'Категория' }}</span>
-                    <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+            <div class="row caption-details">
+              <div class="col-12">
+                <div class="d-flex align-items-center">
+                  <div class="select category-select">
+                    <input type="hidden" name="category_id" value="{{ $room->category->id }}">
+                    <div class="select__top">
+                      <span class="select__current">{{ $room->category->name }}</span>
+                    </div>
                   </div>
-                  <ul class="select__hidden category__list">
-                    @foreach($hotel->categories as $category)
-                      <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}"
-                          data-id="{{ $category->id }}">
-                        {{ $category->name }}
-                      </li>
-                    @endforeach
-                  </ul>
+                  <div class="quote-text d-flex align-items-center">
+                    <p class="quote-text__main">Квота</p>
+                    <p class="quote-text__number">{{ $room->category->value }}</p>
+                  </div>
                 </div>
               </div>
             </div>
+
             <div class="row">
               <div class="col-12">
                 <div class="uploud-photo file-dropzone" data-id="{{$room->id}}" id="file-dropzone"></div>
@@ -292,9 +256,9 @@
                   <button class="quote__read quote__read_1">
                     <img src="{{ asset('img/lk/pen.png') }}" alt="">
                   </button>
-                  <button class="quote__remove remove-btn">
-                    <i class="fa fa-trash"></i>
-                  </button>
+{{--                  <button class="quote__remove remove-btn">--}}
+{{--                    <i class="fa fa-trash"></i>--}}
+{{--                  </button>--}}
 
                 </div>
               </div>
@@ -317,78 +281,56 @@
            value="{{ route('lk.room.deleteRoom', '') }}">
 
     <div class="row row__head">
-      <div class="col-1">
-        <p class="head-text"></p>
-      </div>
-      <div class="col-1 offset-sm-1">
-        <p class="head-text"></p>
-      </div>
-      <div class="col-2 offset-sm-1">
+      <div class="col-6">
+{{--    Название категории    --}}
         <p class="head-text head-text_bold"></p>
       </div>
-      <div class="col-3 offset-sm-2">
-        <p class="head-text"></p>
+
+      <div class="col-3">
+{{--        Сколько мест --}}
+        <p class="head-text">Квота <span></span></p>
       </div>
-      <div class="col-1 text-right">
-        <button class="quote__remove" style="color: white;">
-          <i class="fa fa-trash"></i>
+      <div class="col-1">
+        <button class="bg-transparent arrow-up border-0 text-white">
+          <i class="fa fa-arrow-up p-3"></i>
         </button>
       </div>
+      <div class="col-1">
+        <button class="bg-transparent arrow-down border-0 text-white">
+          <i class="fa fa-arrow-down p-3"></i>
+        </button>
+      </div>
+{{--      <div class="col-1 text-right">--}}
+{{--        Удалить комнату --}}
+{{--        <button class="quote__remove">--}}
+{{--          <i class="fa fa-trash"></i>--}}
+{{--        </button>--}}
+{{--      </div>--}}
     </div>
-
+{{-- Статус --}}
     <div class="row row-status">
       <div class="col-12">
         <p class="text quote__status quote__status_red">Проверка модератором</p>
       </div>
     </div>
 
-    <div class="row room-details">
-      <div class="col-2">
-        <label class="room-text" for="orderRoom">Ордер</label>
-        <input type="text"
-               name="order"
-               class="field field_border"
-               id="orderRoom"
-               placeholder="#1"
-               autofocus>
-      </div>
-      <div class="col-2">
-        <label class="room-text" for="numberRoom">Номер</label>
-        <input type="text"
-               name="number"
-               class="field field_border"
-               id="numberRoom"
-               placeholder="№1">
-      </div>
-      <div class="col-4">
-        <label class="room-text" for="nameRoom">Название</label>
-        <input type="text"
-               name="name"
-               class="field field_border"
-               id="nameRoom"
-               placeholder="Блейз">
-      </div>
-      <div class="col-4">
-        <p class="room-text">
-          Категория
-        </p>
-        <div class="select" id="selectRoom">
-          <input type="hidden"  name="category_id">
-          <div class="select__top select__top_100">
-            <span class="select__current">Категория</span>
-            <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="">
+    <div class="row caption-details">
+      <div class="col-12">
+        <div class="d-flex align-items-center">
+          <div class="select category-select">
+            <input type="hidden"  name="category_id">
+            <div class="select__top">
+              <span class="select__current"></span>
+            </div>
           </div>
-          <ul class="select__hidden category__list">
-            @foreach($hotel->categories as $category)
-              <li class="select__item"
-                  data-id="{{ $category->id }}">
-                {{ $category->name }}
-              </li>
-            @endforeach
-          </ul>
+          <div class="quote-text d-flex align-items-center">
+            <p class="quote-text__main">Квота</p>
+            <p class="quote-text__number"></p>
+          </div>
         </div>
       </div>
     </div>
+
     <div class="row">
       <div class="col-12">
         <div class="uploud-photo" id="file-dropzone"></div>
@@ -490,9 +432,9 @@
           <button class="quote__read quote__read_1">
             <img src="{{ asset('img/lk/pen.png') }}" alt="">
           </button>
-          <button class="quote__remove remove-btn">
-            <i class="fa fa-trash"></i>
-          </button>
+{{--          <button class="quote__remove remove-btn">--}}
+{{--            <i class="fa fa-trash"></i>--}}
+{{--          </button>--}}
 
         </div>
       </div>
@@ -503,58 +445,19 @@
 
 @endsection
 
+@section('header-js')
+  <script src="{{ asset('js/lk/room-categories.js') }}" async></script>
+@endsection
+
 @section('js')
-  <script>
 
-    $(document).ready(function () {
-      $('.sortable').sortable({
-        items: '.dz-image-preview',
-      });
-
-      $('.quote__read').each(saveFontDate)
-    });
-
-    Dropzone.autoDiscover = false;
+  <script defer="defer">
     let blockDropZone =  $('.file-dropzone')
     let uploader = []
-    blockDropZone.each(function() {
-      let zone = this
-      // instantiate the uploader
-      if ($(zone).hasClass('dropzone_disabled')) {
-
-      } else {
-        // Dropzone initial
-        uploader[zone.dataset.id] = new Dropzone(this, initialDropZone.call(this) );
-      }
-    })
-
     let mockFile
     let existFile = []
 
-    @foreach($rooms as $room)
-      existFile[{{ $room->id }}] = []
-      @foreach($room->images as $image)
-
-        existFile[{{ $room->id }}].push({
-          id: "{{ $image->id }}",
-          name: "{{ $image->name }}",
-          path: "{{ url($image->path) }}",
-          moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-          moderate: {!! $image->moderate ? 'true' : 'false' !!}
-        })
-
-        mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
-        uploader[{{ $room->id }}].emit("addedfile", mockFile);
-        uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
-        uploader[{{ $room->id }}].emit("complete", mockFile);
-        uploader[{{ $room->id }}].files.push(mockFile)
-
-      @endforeach
-    @endforeach
-
-
-    function initialDropZone ()
-    {
+    function initialDropZone () {
       let zone = this
       return {
         url: "{{ route('lk.room.image.upload') }}",
@@ -673,6 +576,52 @@
         }
       }
     }
+
+    $(document).ready(function () {
+      $('.sortable').sortable({
+        items: '.dz-image-preview',
+      });
+
+
+
+      Dropzone.autoDiscover = false;
+
+      blockDropZone.each(function() {
+        let zone = this
+        // instantiate the uploader
+        if ($(zone).hasClass('dropzone_disabled')) {
+
+        } else {
+          // Dropzone initial
+          uploader[zone.dataset.id] = new Dropzone(this, initialDropZone.call(this) );
+        }
+      })
+
+      @foreach($rooms as $room)
+        existFile[{{ $room->id }}] = []
+      @foreach($room->images as $image)
+
+        existFile[{{ $room->id }}].push({
+        id: "{{ $image->id }}",
+        name: "{{ $image->name }}",
+        path: "{{ url($image->path) }}",
+        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+        moderate: {!! $image->moderate ? 'true' : 'false' !!}
+      })
+
+      mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
+      uploader[{{ $room->id }}].emit("addedfile", mockFile);
+      uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
+      uploader[{{ $room->id }}].emit("complete", mockFile);
+      uploader[{{ $room->id }}].files.push(mockFile)
+
+      @endforeach
+      @endforeach
+
+      $('.quote__read').each(function () {
+        saveFrontData.call(this, true)
+      })
+    });
 
   </script>
 @endsection

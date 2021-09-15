@@ -277,6 +277,13 @@ ul {
 	background: #ff9d45;
 }
 
+.select__item[disable="true"] {
+    background: #6c757d;
+}
+
+.select__item.active[disable="true"] {
+    background: #7e5027;
+}
 
 .select__item:hover {
 	color: white;

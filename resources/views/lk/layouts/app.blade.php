@@ -18,6 +18,12 @@
   <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/css/suggestions.min.css" rel="stylesheet"/>
   <script src="https://cdn.ckeditor.com/ckeditor5/27.0.0/classic/ckeditor.js"></script>
   <script src="https://use.fontawesome.com/2c0868e10d.js"></script>
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+
+  @yield('header-js')
   <meta name="viewport" content="width=1200">
 </head>
 <body>
@@ -73,14 +79,29 @@
       <div class="row">
         <div class="col-12">
           <nav class="menu">
-            <a href="#" class="menu__item">Календарь цен</a>
-            <a href="#" class="menu__item">Маркетинг</a>
+            <a href="#"
+               class="menu__item">
+              Календарь цен
+            </a>
+            <a href="#"
+               class="menu__item">
+              Маркетинг
+            </a>
             <a href="{{ route('lk.object.edit') }}"
-               class="menu__item {{ Route::currentRouteNamed('lk.object.*') ? 'active' : '' }}">Объект</a>
+               class="menu__item {{ Route::currentRouteNamed('lk.object.*') ? 'active' : '' }}"
+            >
+              Объект
+            </a>
             <a href="{{ route('lk.room.edit') }}"
-               class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">Номерной фонд</a>
+               class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">
+              Номерной фонд
+            </a>
             <a href="#" class="menu__item">Сотрудники</a>
-            <a href="#" class="menu__item">Инструкции</a>
+            <a href="{{ route('lk.instruction.index') }}"
+               class="menu__item {{ Route::currentRouteNamed('lk.instruction.*') ? 'active' : '' }}"
+            >
+              Инструкции
+            </a>
           </nav>
         </div>
       </div>
@@ -116,7 +137,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
-<script src="{{ asset('js/lk.js') }}"></script>
+<script defer="defer" src="{{ asset('js/lk/lk.js') }}"></script>
 <script src="{{ asset('js/jquery.maskedinput.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@20.3.0/dist/js/jquery.suggestions.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

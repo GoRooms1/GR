@@ -28,6 +28,7 @@
                    class="field form-control @error('phone') is-invalid @enderror"
                    value="{{ old('phone', $hotel->phone) }}"
                    name="phone_2"
+                   {{ $hotel->disabled_save }}
                    placeholder="Телефон 1 объекта"
                    required
             >
@@ -42,13 +43,14 @@
                    class="field form-control @error('phone_2') is-invalid @enderror"
                    value="{{ old('phone_2', $hotel->phone_2) }}"
                    name="phone_2"
+                   {{ $hotel->disabled_save }}
                    placeholder="Телефон 2 объекта"
             >
             @error('phone_2')
-              <div class="invalid-feedback">
-                {{ $message }}
-              </div>
-           @enderror
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
           </div>
           <div class="col-4">
             <input type="email"
@@ -56,18 +58,19 @@
                    value="{{ old('email', $hotel->email) }}"
                    name="email"
                    placeholder="Email объекта для бронирований"
+                   {{ $hotel->disabled_save }}
                    required
             >
             @error('email')
-              <div class="invalid-feedback">
-                {{ $message }}
-              </div>
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
             @enderror
           </div>
         </div>
         <div class="row part__bottom">
           <div class="col-12">
-            <button class="button save-button" type="submit" id="save1">Сохранить</button>
+            <button class="button save-button" type="submit" {{ $hotel->disabled_save }} id="save1">Сохранить</button>
           </div>
         </div>
       </form>
@@ -111,9 +114,9 @@
                      placeholder="Введите текст">
 
               @error('comment')
-                <div class="invalid-feedback">
-                  {{ $message }}
-                </div>
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
               @enderror
             </div>
           </div>
@@ -139,7 +142,9 @@
       </div>
       <div class="row part__middle">
         <div class="col-11">
-          <p class="caption">Расскажите подробнее о Вашем объекте, его преимущества, местоположение, дополнительный сервис для гостей. Текст должен быть уникальным и содержать не менее 1500 знаков. Заполнив данное поле вы увеличиваете вероятность просмотров
+          <p class="caption">Расскажите подробнее о Вашем объекте, его преимущества, местоположение, дополнительный
+            сервис для гостей. Текст должен быть уникальным и содержать не менее 1500 знаков. Заполнив данное поле вы
+            увеличиваете вероятность просмотров
             Вашего объекта до 20%.</p>
         </div>
       </div>
@@ -181,7 +186,8 @@
       </div>
       <div class="row part__middle">
         <div class="col-12">
-          <p class="caption">Выберите ближайшие станции метро к Вашему объекту размещения и укажите за какое время можно добраться до объекта пешком в минутах.</p>
+          <p class="caption">Выберите ближайшие станции метро к Вашему объекту размещения и укажите за какое время можно
+            добраться до объекта пешком в минутах.</p>
         </div>
       </div>
       <form action="{{ route('lk.object.update') }}" method="POST">
@@ -192,27 +198,53 @@
             <div class="col-12" data-id="{{ $m->id }}">
               <div class="d-flex align-items-center station">
                 <div class="select" style="width: 45%">
-                  <select name="metros[]" class="form-control field metros w-100" required>
+                  <select name="metros[]"
+                          class="form-control field metros w-100"
+                          {{ $hotel->disabled_save }}
+                          required>
                     <option value="{{ $m->name }}">{{ $m->name }}</option>
                   </select>
                 </div>
-                <input type="hidden" name="metros_color[]" value="{{ $m->color }}">
-                <input type="number" min="1" name="metros_time[]" value="{{ $m->distance }}" class="field field_small station-field" required>
+                <input type="hidden"
+                       name="metros_color[]
+                        value="{{ $m->color }}">
+                <input type="number"
+                       {{ $hotel->disabled_save }}
+                       min="1"
+                       name="metros_time[]"
+                       value="{{ $m->distance }}"
+                       class="field field_small station-field form-control"
+                       required>
                 <p class="text">минут пешком до объекта</p>
-                <button onclick="deleteMetro({{ $m->id }})" type="button" class="mx-3 button w-auto px-3">-</button>
+                <button onclick="deleteMetro({{ $m->id }})"
+                        type="button"
+                        class="mx-3 button w-auto px-3"
+                    {{ $hotel->disabled_save }}
+                >
+                  -
+                </button>
               </div>
             </div>
           @empty
             <div class="col-12" data-id="1">
               <div class="d-flex align-items-center station">
                 <div class="select" style="width: 45%">
-                  <select name="metros[]" class="form-control field metros w-100" required>
+                  <select name="metros[]"
+                          {{ $hotel->disabled_save }}
+                          class="form-control field metros w-100"
+                          required>
                   </select>
                 </div>
                 <input type="hidden" name="metros_color[]">
-                <input type="number" min="1" name="metros_time[]" class="field field_small station-field" required>
+                <input type="number" min="1" {{ $hotel->disabled_save }} name="metros_time[]"
+                       class="field field_small station-field" required>
                 <p class="text">минут пешком до объекта</p>
-                <button onclick="deleteMetro(1)" type="button" class="mx-3 button w-auto px-3">-</button>
+                <button onclick="deleteMetro(1)"
+                        {{ $hotel->disabled_save }}
+                        type="button"
+                        class="mx-3 button w-auto px-3">
+                  -
+                </button>
               </div>
             </div>
           @endforelse
@@ -220,7 +252,12 @@
         </div>
         <div class="row part__bottom">
           <div class="col-12">
-            <button onclick="addMetro()" type="button" class="button">Добавить станцию</button>
+            <button onclick="addMetro()"
+                    {{ $hotel->disabled_save }}
+                    type="button" class="button"
+            >
+              Добавить станцию
+            </button>
 
           </div>
         </div>
@@ -231,7 +268,11 @@
         @enderror
         <div class="row part__bottom">
           <div class="col-12">
-            <button class="button" type="submit">Сохранить</button>
+            <button class="button"
+                    {{ $hotel->disabled_save }}
+                    type="submit">
+              Сохранить
+            </button>
           </div>
         </div>
       </form>
@@ -247,15 +288,16 @@
       </div>
       <div class="row part__middle">
         <div class="col-12">
-          <p class="caption">Стоимость и условия проживания в данном разделе, формируются автоматически, как только Вы установите цены в Разделе "Календарь цен",
-            система автоматически выберет самое доступное предложение и укажет его как минимальную цену в Объекте.</p>
+          <p class="caption">Стоимость и условия проживания в данном разделе, формируются автоматически, как только Вы
+            установите цены в Разделе "Календарь цен",система автоматически выберет самое доступное предложение и
+            укажет его как минимальную цену в Объекте.</p>
         </div>
       </div>
 
       <div class="row part__content">
         <div class="col-12">
           <table class="prices">
-{{--            TODO: Выводить стоимость по комнатам, самую минимульную, или рандомную )--}}
+            {{--            TODO: Выводить стоимость по комнатам, самую минимульную, или рандомную )--}}
             @foreach ($hotel->minimals as $min)
               <tr>
                 <td class="prices__main">{{ $min['name'] }} - от {{ $min['value'] }} руб.</td>
@@ -273,53 +315,58 @@
     <form action="{{ route('lk.object.update') }}" method="post">
       @csrf
       <input type="hidden" name="type_update" value="attr">
-    <div class="container">
-      <div class="row part__top">
-        <div class="col-12">
-          <h2 class="title">Детально об отеле</h2>
+      <div class="container">
+        <div class="row part__top">
+          <div class="col-12">
+            <h2 class="title">Детально об отеле</h2>
+          </div>
         </div>
-      </div>
-      <div class="row part__middle">
-        <div class="col-12">
-          <p class="caption">Выберите пункты наиболее точно отражающие преимущества Вашего объекта размещения (минимум 3, максимум 9 пунктов).</p>
+        <div class="row part__middle">
+          <div class="col-12">
+            <p class="caption">Выберите пункты наиболее точно отражающие преимущества Вашего объекта размещения (минимум
+              3, максимум 9 пунктов).</p>
+          </div>
         </div>
-      </div>
 
-      <div class="row part__content">
-        <div class="col-12">
-          <ul class="details">
-            @foreach($attributeCategories as $category)
-              <li class="detail">
-                <p class="text-bold_small details__title">{{ $category->name }}</p>
+        <div class="row part__content">
+          <div class="col-12">
+            <ul class="details">
+              @foreach($attributeCategories as $category)
+                <li class="detail">
+                  <p class="text-bold_small details__title">{{ $category->name }}</p>
 
-                @foreach($category->attributes as $attr)
-                  <div class="choice">
-                    <input type="hidden" id="attr-{{ $attr->id }}-h" name="attr[{{ $attr->id }}]" value="false">
-                    <input type="checkbox"
-                           id="attr-{{ $attr->id }}"
-                           value="true"
-                           name="attr[{{ $attr->id }}]"
-                           {{ $hotel->attrs->contains('id', $attr->id) ? 'checked' : '' }}
-                    >
-                    <div class="check">
-                      <div class="check__flag"></div>
+                  @foreach($category->attributes as $attr)
+                    <div class="choice">
+                      <input type="hidden" id="attr-{{ $attr->id }}-h" name="attr[{{ $attr->id }}]" value="false">
+                      <input type="checkbox"
+                             {{ $hotel->disabled_save }}
+                             id="attr-{{ $attr->id }}"
+                             value="true"
+                             name="attr[{{ $attr->id }}]"
+                          {{ $hotel->attrs->contains('id', $attr->id) ? 'checked' : '' }}
+                      >
+                      <div class="check" {{ $hotel->disabled_save }}>
+                        <div class="check__flag"></div>
+                      </div>
+                      <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
                     </div>
-                    <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
-                  </div>
-                @endforeach
-              </li>
-            @endforeach
-          </ul>
-        </div>
-
-      </div>
-      <div class="row part__bottom">
-        <div class="col-12">
-          <button class="button" type="submit">Сохранить</button>
+                  @endforeach
+                </li>
+              @endforeach
+            </ul>
+          </div>
 
         </div>
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button class="button"
+                    {{ $hotel->disabled_save }}
+                    type="submit">
+              Сохранить
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
     </form>
   </section>
 
@@ -332,7 +379,9 @@
       </div>
       <div class="row part__middle">
         <div class="col-12">
-          <p class="caption">Загрузите фотографии объекта размещения. По этим фотографиям клиент сможет составить общее представление о Вашем объекте и выбрать его. Рекомендуем загрузить самые лучшие фотографии объекта. (минимум 1 фотография, максимум 6)</p>
+          <p class="caption">Загрузите фотографии объекта размещения. По этим фотографиям клиент сможет составить общее
+            представление о Вашем объекте и выбрать его. Рекомендуем загрузить самые лучшие фотографии объекта. (минимум
+            1 фотография, максимум 6)</p>
         </div>
       </div>
 
@@ -348,7 +397,7 @@
             <li>
               <div>
                 <div class="dz-preview dz-file-preview">
-                  <img data-dz-thumbnail />
+                  <img data-dz-thumbnail/>
                   <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
                   <div data-dz-success class="dz-success-mark"><span>Проверка модератором</span></div>
                   <div class="dz-error-mark"><span>✘</span></div>
@@ -368,7 +417,7 @@
 @section('js')
   <script>
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       selectInit()
     });
 
@@ -378,15 +427,15 @@
       metros_ids++;
       $('#metro').append(
         "<div class='col-12' data-id='" + metros_ids + "'>" +
-          "<div class='d-flex align-items-center station'>" +
-            "<div class='select' style='width: 45%'>" +
-              "<select name='metros[]' class='form-control field metros w-100' required></select>" +
-            "</div>" +
-            "<input type='hidden' name='metros_color[]' class='color'>" +
-            "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
-            "<p class='text'>минут пешком до объекта</p>" +
-            "<button onclick='deleteMetro(" + metros_ids +")' class='mx-3 button w-auto px-3'>-</button>" +
-          "</div>" +
+        "<div class='d-flex align-items-center station'>" +
+        "<div class='select' style='width: 45%'>" +
+        "<select name='metros[]' class='form-control field metros w-100' required></select>" +
+        "</div>" +
+        "<input type='hidden' name='metros_color[]' class='color'>" +
+        "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
+        "<p class='text'>минут пешком до объекта</p>" +
+        "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button w-auto px-3'>-</button>" +
+        "</div>" +
         "</div>"
       )
 
@@ -395,7 +444,7 @@
       $('.metros').on("select2:select", takeColor);
     }
 
-    function selectInit () {
+    function selectInit() {
       $('.metros').select2({
         placeholder: "Название станции",
         language: "ru",
@@ -435,7 +484,7 @@
 
     $('.metros').on("select2:select", takeColor);
 
-    function takeColor (e) {
+    function takeColor(e) {
       console.log($(e.currentTarget).parent().parent().children('input[type="hidden"]').get(0).value = e.params.data.color)
       console.log(e.params.data.color);
     }
@@ -452,18 +501,18 @@
     });
     $("input[type='phone']").mask("+7 (999) 999 99-99");
     ClassicEditor
-      .create( document.querySelector( '#editor' ) )
-      .catch( error => {
-        console.error( error );
-      } );
+      .create(document.querySelector('#editor'))
+      .catch(error => {
+        console.error(error);
+      });
 
     ClassicEditor
-      .create( document.querySelector( '#editor2' ) )
-      .catch( error => {
-        console.error( error );
-      } );
+      .create(document.querySelector('#editor2'))
+      .catch(error => {
+        console.error(error);
+      });
 
-    $(document).ready(function(){
+    $(document).ready(function () {
       $('.sortable').sortable({
         items: '.dz-image-preview',
       });
@@ -481,16 +530,16 @@
       thumbnailHeight: 260,
       addRemoveLinks: true,
       previewsContainer: '.visualizacao',
-      previewTemplate : $('.preview').html(),
+      previewTemplate: $('.preview').html(),
       acceptedFiles: "image/*",
       headers: {
         'x-csrf-token': "{{ csrf_token() }}",
       },
-      sending: function(file, xhr, formData) {
+      sending: function (file, xhr, formData) {
         formData.append('model_name', "Hotel")
         formData.append('modelID', "{{$hotel->id}}")
       },
-      init: function() {
+      init: function () {
 
         this.on("complete", function (file) {
 
@@ -501,7 +550,7 @@
           d.innerHTML = f.moderate_text
 
           if (!f.moderate) {
-            d.style.color="#2f64ad"
+            d.style.color = "#2f64ad"
           }
 
           $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
@@ -521,8 +570,8 @@
           })
         });
 
-        this.on("addedfile", function(file) {
-          while (this.files.length  > this.options.maxFiles) {
+        this.on("addedfile", function (file) {
+          while (this.files.length > this.options.maxFiles) {
             this.removeFile(this.files[0]);
             existFile.shift();
             console.log(file, this.files.length, this.options.maxFiles)
@@ -537,10 +586,10 @@
           if (existFile.length === 1) {
             if (file.xhr) {
               let image = JSON.parse(file.xhr.response).payload.images[0]
-              console.log("{{ url('/') }}" + "/"+ image.path)
-              mockFile = { name: file.name, dataURL: "{{ url('/') }}" + "/"+ image.path, size: 0 };
+              console.log("{{ url('/') }}" + "/" + image.path)
+              mockFile = {name: file.name, dataURL: "{{ url('/') }}" + "/" + image.path, size: 0};
             } else {
-              mockFile = { name: file.name, dataURL: file.dataURL, size: 0 };
+              mockFile = {name: file.name, dataURL: file.dataURL, size: 0};
             }
 
             uploader.displayExistingFile(file, mockFile.dataURL)
@@ -549,7 +598,7 @@
 
           let flag = false
           existFile.forEach(f => {
-            if(f.path === file.dataURL) {
+            if (f.path === file.dataURL) {
               flag = true
               let url = "{{ url('lk/object/image/delete/') }}" + '/' + f.id
               axios.post(url)
@@ -563,12 +612,12 @@
                 .catch(error => {
                   alert('Ошибка при удалении')
                 })
-              return;
+
             }
           })
           if (!flag) {
             existFile.forEach(f => {
-              if(f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
+              if (f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
                 flag = true
                 let url = "{{ url('lk/object/image/delete/') }}" + '/' + f.id
                 axios.post(url)
@@ -582,7 +631,7 @@
                   .catch(error => {
                     alert('Ошибка при удалении')
                   })
-                return;
+
               }
             })
           }
@@ -594,19 +643,23 @@
 
     @foreach($hotel->images as $image)
 
-      existFile.push({
-        id: "{{ $image->id }}",
-        name: "{{ $image->name }}",
-        path: "{{ url($image->path) }}",
-        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-        moderate: {!! $image->moderate ? 'true' : 'false' !!}
-      })
+    existFile.push({
+      id: "{{ $image->id }}",
+      name: "{{ $image->name }}",
+      path: "{{ url($image->path) }}",
+      moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+      moderate: {!! $image->moderate ? 'true' : 'false' !!}
+    })
 
-      mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
-      uploader.emit("addedfile", mockFile);
-      uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
-      uploader.emit("complete", mockFile);
-      uploader.files.push(mockFile)
+    mockFile = {
+      name: '{{ $image->name }}',
+      dataURL: '{{ url($image->path) }}',
+      size: {{ File::size($image->getRawOriginal('path')) }}
+    };
+    uploader.emit("addedfile", mockFile);
+    uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
+    uploader.emit("complete", mockFile);
+    uploader.files.push(mockFile)
     @endforeach
   </script>
 @endsection
