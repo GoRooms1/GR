@@ -30,6 +30,7 @@ class ObjectController extends Controller
    */
   public function store(Request $request): RedirectResponse
   {
+//    TODO: Убрать вставку почты и телефона в отель от юзера
     $request->validate([
       'name' => 'required|string|min:0',
       'password' => 'string|min:3',
