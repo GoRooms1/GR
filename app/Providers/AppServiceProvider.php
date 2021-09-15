@@ -2,17 +2,19 @@
 
 namespace App\Providers;
 
-use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Schema;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
   public static function setProp($first, $second, $prop)
   {
-    if ($first == $second)
+    if ($first === $second) {
       return $prop;
+    }
     return '';
   }
 
@@ -21,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
    *
    * @return void
    */
-  public function register()
+  public function register(): void
   {
     if ($this->app->isLocal()) {
       $this->app->register(IdeHelperServiceProvider::class);
@@ -33,8 +35,9 @@ class AppServiceProvider extends ServiceProvider
    *
    * @return void
    */
-  public function boot()
+  public function boot(): void
   {
+    Schema::defaultStringLength(191);
     $this->bootBuilderMacroses();
     $this->makeDirectives();
   }
