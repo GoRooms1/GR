@@ -50,3 +50,5 @@ Route::delete('category/delete/{category}', 'CategoryController@delete')
   ->name('category.delete');
 
 Route::get('instruction', 'InstructionController@index')->name('instruction.index');
+
+Route::get('/staff', 'StaffController@index')->name('staff.index');
