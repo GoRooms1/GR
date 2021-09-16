@@ -18,7 +18,9 @@ class StaffController extends Controller
     $user = User::find(auth()->id());
     $hotel = $user->hotel;
 
-//    $hotel->users()->attach($user->id);
+    if ($hotel->users()->count() === 0) {
+      $hotel->users()->attach($user->id);
+    }
 
     $users = $hotel->users()->withPivot(['hotel_position'])->get();
 //    dd($users);
