@@ -7,6 +7,7 @@
 
 namespace App\Http\Controllers\Lk;
 
+use App\User;
 use App\Http\Controllers\Controller;
 
 class StaffController extends Controller
@@ -14,6 +15,13 @@ class StaffController extends Controller
 
   public function index ()
   {
-    return view('lk.staff.index');
+    $user = User::find(auth()->id());
+    $hotel = $user->hotel;
+
+//    $hotel->users()->attach($user->id);
+
+    $users = $hotel->users()->withPivot(['hotel_position'])->get();
+//    dd($users);
+    return view('lk.staff.index', compact('users'));
   }
 }

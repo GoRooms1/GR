@@ -9,20 +9,25 @@
           <h2 class="title title_black">Сотрудники</h2>
         </div>
       </div>
-      <div class="row part__middle">
-        <div class="col-4">
-          <div class="staff-item staff-item_general">
-            <div class="staff-item__name">General</div>
-            <div class="staff-item__bottom">
-              <p class="staff-item__text">Должность</p>
-              <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
-              <p class="staff-item__text">Полное имя сотрудника</p>
+      <div class="row">
+
+        @foreach($users as $user)
+          <div class="col-4">
+            <div class="staff-item staff-item_general">
+              <div class="staff-item__name">{{ App\User::POSITIONS_LANGUAGE[$user->pivot->hotel_position] }}</div>
+              <div class="staff-item__bottom">
+                <p class="staff-item__text">{{ $user->position }}</p>
+                <p class="staff-item__text">{{ $user->phone }}</p>
+                <p class="staff-item__text">{{ $user->name }}</p>
+              </div>
             </div>
           </div>
+        @endforeach
 
-        </div>
-        <div class="col-4">
-          <div class="staff-item staff-item_general">
+
+
+
+        <div class="staff-item staff-item_general d-none">
             <div class="staff-item__name staff-item__name_blue">General</div>
             <div class="staff-item__bottom">
               <p class="staff-item__text">Директор</p>
@@ -30,72 +35,22 @@
               <p class="staff-item__text">Иван Иванов Иванович</p>
             </div>
           </div>
-        </div>
 
-        <div class="col-4">
-          <div class="staff-item staff-item_general">
-            <div class="staff-item__name staff-item__name_blue">General</div>
-            <div class="staff-item__bottom">
-              <p class="staff-item__text">Директор</p>
-              <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
-              <p class="staff-item__text">Иван Иванов Иванович</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row part__middle">
-        <div class="col-4 text-center">
-          <div class="staff-item staff-item_small staff-item_staff">
+        <div class="staff-item staff-item_small staff-item_staff d-none">
             <div class="staff-item__name">Staff</div>
             <div class="staff-item__bottom">
               <p class="staff-item__text">Должность</p>
               <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
               <p class="staff-item__text">Полное имя сотрудника</p>
             </div>
-          </div>
         </div>
-        <div class="col-4 text-center">
-          <div class="staff-item staff-item_small staff-item_staff">
-            <div class="staff-item__name staff-item__name_orange">Staff</div>
-            <div class="staff-item__bottom">
-              <p class="staff-item__text">Администратор</p>
-              <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
-              <p class="staff-item__text">Иван Иванов Иванович</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-4 text-center">
-          <div class="staff-item staff-item_small staff-item_staff">
-            <div class="staff-item__name staff-item__name_orange">Staff</div>
-            <div class="staff-item__bottom">
-              <p class="staff-item__text">Администратор</p>
-              <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
-              <p class="staff-item__text">Иван Иванов Иванович</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-4 offset-sm-2">
-          <div class="staff-item staff-item_small staff-item_staff">
-            <div class="staff-item__name staff-item__name_orange">Staff</div>
-            <div class="staff-item__bottom">
-              <p class="staff-item__text">Администратор</p>
-              <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
-              <p class="staff-item__text">Иван Иванов Иванович</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="staff-item staff-item_small staff-item_staff">
-            <div class="staff-item__name staff-item__name_orange">Staff</div>
-            <div class="staff-item__bottom">
-              <p class="staff-item__text">Администратор</p>
-              <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
-              <p class="staff-item__text">Иван Иванов Иванович</p>
-            </div>
+        <div class="staff-item staff-item_small staff-item_staff d-none">
+          <div class="staff-item__name staff-item__name_orange">Staff</div>
+          <div class="staff-item__bottom">
+            <p class="staff-item__text">Администратор</p>
+            <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
+            <p class="staff-item__text">Иван Иванов Иванович</p>
           </div>
         </div>
       </div>

@@ -210,9 +210,9 @@ class Hotel extends Model
     return $query->where('is_popular', true);
   }
 
-  public function user(): BelongsTo
+  public function users(): belongsToMany
   {
-    return $this->belongsTo(User::class);
+    return $this->belongsToMany(User::class);
   }
 
   public function attrs(): BelongsToMany
