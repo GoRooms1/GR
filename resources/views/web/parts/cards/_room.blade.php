@@ -27,20 +27,20 @@
                 <a href="{{ route('rooms.show', $room) }}" class="room-card-address-link">
                     <p class="room-card-address">{{ optional($room->hotel->address)->value }}</p>
                     <ul class="room-card-metro">
-                        <li class="metro"><img src="/img/ico-metro-green.svg" alt="">Измайловская - 950 м</li>
+                        <li class="metro"><img src="/img/ico-Fmetro-green.svg" alt="">Измайловская - 950 м</li>
                         <li class="metro"><img src="/img/ico-metro-red.svg" alt="">Измайловская - 950 м</li>
                         <li class="metro"><img src="/img/ico-metro-yellow.svg" alt="">Измайловская - 950 м</li>
                         <li class="metro"><img src="/img/ico-metro-blue.svg" alt="">Измайловская - 950 м</li>
                     </ul>
                 </a>
-            </div>
+            </div>F
             <a href="{{ route('rooms.show', $room) }}">
                 <ul class="room-card-prices">
-                    @foreach($room->costs->sortBy('type.sort') AS $cost)
+                    @foreach($room->costs->sortBy('period.type.sort') AS $cost)
                         <li class="room-card-prices-item">
-                            <p class="room-card-prices-item-title">{{ $cost->type->name }} - от {{ $cost->value }}
+                            <p class="room-card-prices-item-title">{{ $cost->period->type->name }} - от {{ $cost->value }}
                                 руб.</p>
-                            <p class="room-card-prices-item-price">{{ $cost->description }}</p>
+                            <p class="room-card-prices-item-price">{{ $cost->info }}</p>
                         </li>
                     @endforeach
                 </ul>

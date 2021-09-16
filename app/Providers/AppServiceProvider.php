@@ -4,57 +4,64 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Schema;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
+  public static function setProp($first, $second, $prop)
+  {
+    if ($first === $second) {
+      return $prop;
     }
+    return '';
+  }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $this->bootBuilderMacroses();
-        $this->makeDirectives();
+  /**
+   * Register any application services.
+   *
+   * @return void
+   */
+  public function register(): void
+  {
+    if ($this->app->isLocal()) {
+      $this->app->register(IdeHelperServiceProvider::class);
     }
+  }
 
-    private function bootBuilderMacroses()
-    {
-        \Illuminate\Database\Query\Builder::macro('toRawSql', function () {
-            return array_reduce($this->getBindings(), function ($sql, $binding) {
-                return preg_replace('/\?/', is_numeric($binding) ? $binding : "'{$binding}'", $sql, 1);
-            }, $this->toSql());
-        });
+  /**
+   * Bootstrap any application services.
+   *
+   * @return void
+   */
+  public function boot(): void
+  {
+    Schema::defaultStringLength(191);
+    $this->bootBuilderMacroses();
+    $this->makeDirectives();
+  }
 
-        \Illuminate\Database\Eloquent\Builder::macro('toRawSql', function () {
-            return $this->getQuery()->toRawSql();
-        });
-    }
+  private function bootBuilderMacroses()
+  {
+    \Illuminate\Database\Query\Builder::macro('toRawSql', function () {
+      return array_reduce($this->getBindings(), function ($sql, $binding) {
+        return preg_replace('/\?/', is_numeric($binding) ? $binding : "'{$binding}'", $sql, 1);
+      }, $this->toSql());
+    });
 
-    private function makeDirectives()
-    {
-        Blade::directive('selected', function ($expression) {
-            return "<?php echo \App\Providers\AppServiceProvider::setProp($expression, 'selected');?>";
-        });
-        Blade::directive('checked', function ($expression) {
-            return "<?php echo \App\Providers\AppServiceProvider::setProp($expression, 'checked');?>";
-        });
-    }
+    Builder::macro('toRawSql', function () {
+      return $this->getQuery()->toRawSql();
+    });
+  }
 
-    public static function setProp($first, $second, $prop)
-    {
-        if ($first == $second)
-            return $prop;
-        return '';
-    }
+  private function makeDirectives()
+  {
+    Blade::directive('selected', function ($expression) {
+      return "<?php echo \App\Providers\AppServiceProvider::setProp($expression, 'selected');?>";
+    });
+    Blade::directive('checked', function ($expression) {
+      return "<?php echo \App\Providers\AppServiceProvider::setProp($expression, 'checked');?>";
+    });
+  }
 }

@@ -105,8 +105,13 @@
                         @csrf
                         @method('PUT')
                         <div class="col-8">
+
                             <div class="form-group">
-                                <label for="content">{{ $names[$page->option] }}</label>
+                                <h3>{{ $names[$page->option] }}</h3>
+                                <label for="content">H1</label>
+                                <input type="text" class="form-control" name="header"
+                                       value="{{ $page->header }}">
+                                <label for="content">Seo описание</label>
                                 <textarea name="value" id="content" class="form-control editor ">{{ old('content') ?? @$page->value ?? '' }}</textarea>
                                 @error('content')
                                 <div class="invalid-feedback">{{ $message }}</div>

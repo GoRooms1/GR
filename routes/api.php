@@ -42,3 +42,6 @@ Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.m
 Route::get('/address/helper', 'Api\AddressController@helper');
 
 Route::get('/room-info/{id}', [RoomController::class, 'getRoomInfo']);
+
+Route::post('room/order/up/{id}', 'Lk\OrderRoomController@upOrder');
+Route::post('room/order/down/{id}', 'Lk\OrderRoomController@downOrder');

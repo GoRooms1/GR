@@ -14,7 +14,6 @@ return [
   */
 
   'name' => env('APP_NAME', 'Laravel'),
-  'glide_path' => env('IMAGE_PATH_GLIDE', 'storage/app/public'),
 
   /*
   |--------------------------------------------------------------------------
@@ -175,7 +174,7 @@ return [
     // App\Providers\BroadcastServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\RouteServiceProvider::class,
-    App\Providers\ViewProvider::class,
+    App\Providers\ViewProvider::class
 
   ],
 

@@ -3,14 +3,36 @@
 namespace App;
 
 use Cache;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use JsonException;
 
+/**
+ * App\Settings
+ *
+ * @property int $id
+ * @property string $option
+ * @property string $value
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|Settings newModelQuery()
+ * @method static Builder|Settings newQuery()
+ * @method static Builder|Settings query()
+ * @method static Builder|Settings whereCreatedAt($value)
+ * @method static Builder|Settings whereId($value)
+ * @method static Builder|Settings whereOption($value)
+ * @method static Builder|Settings whereUpdatedAt($value)
+ * @method static Builder|Settings whereValue($value)
+ * @mixin Eloquent
+ */
 class Settings extends Model
 {
   protected $fillable = [
     'option',
     'value',
+    'header'
   ];
 
   /**
@@ -54,4 +76,20 @@ class Settings extends Model
 
     return $default;
   }
+
+    public static function header(string $option = null, $default = null)
+    {
+        $setting = Cache::store('file')->rememberForever('setting.' . $option, function () use ($option) {
+            return Settings::where('option', $option)->first();
+        });
+        if ($setting) {
+            try {
+                return json_decode($setting->header, true, 512, JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                return $setting->header;
+            }
+        }
+
+        return $default;
+    }
 }

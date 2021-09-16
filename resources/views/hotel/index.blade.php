@@ -21,7 +21,9 @@
     <div class="section">
         <div class="container">
             <div class="section-header">
-                <h1 class="section-title">{{ $title ?? 'Биржа отелей' }}</h1>
+                <h1 class="section-title">
+                    {!! html_entity_decode(Settings::header('seo_/hotels')) !!}
+                </h1>
 
                     <form id="search-filter" class="search-filter" method="get">
                         <div class="search-filter-item search-filter-sort">

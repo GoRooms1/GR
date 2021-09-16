@@ -2,33 +2,98 @@
 
 namespace App\Models;
 
-use App\Traits\CreatedAtOrdered;
+use Eloquent;
 use App\Traits\UseImages;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 
+/**
+ * App\Models\Room
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $moderate
+ * @property string|null $description
+ * @property int $hotel_id
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $is_hot
+ * @property-read Collection|Attribute[] $attrs
+ * @property-read int|null $attrs_count
+ * @property-read Collection|Cost[] $costs
+ * @property-read int|null $costs_count
+ * @property-read mixed $meta_description
+ * @property-read mixed $meta_keywords
+ * @property-read mixed $meta_title
+ * @property-read Hotel $hotel
+ * @property-read Image $image
+ * @property-read Collection|Image[] $images
+ * @property-read int|null $images_count
+ * @property-read PageDescription $meta
+ * @method static bool|null forceDelete()
+ * @method static Builder|Room hot()
+ * @method static Builder|Room newModelQuery()
+ * @method static Builder|Room newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Room onlyTrashed()
+ * @method static Builder|Room query()
+ * @method static bool|null restore()
+ * @method static Builder|Room whereCreatedAt($value)
+ * @method static Builder|Room whereDeletedAt($value)
+ * @method static Builder|Room whereDescription($value)
+ * @method static Builder|Room whereHotelId($value)
+ * @method static Builder|Room whereId($value)
+ * @method static Builder|Room whereIsHot($value)
+ * @method static Builder|Room whereModerate($value)
+ * @method static Builder|Room whereName($value)
+ * @method static Builder|Room whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Room withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Room withoutTrashed()
+ * @mixin Eloquent
+ * @property int|null $number
+ * @property int|null $order
+ * @property int|null $category_id
+ * @method static Builder|Room whereCategoryId($value)
+ * @method static Builder|Room whereNumber($value)
+ * @method static Builder|Room whereOrder($value)
+ * @property-read Category|null $category
+ */
 class Room extends Model
 {
-    use SoftDeletes;
-    use UseImages;
-    use CreatedAtOrdered;
+  use UseImages;
+  use CreatedAtOrdered;
 
-    const PER_PAGE = 6;
+  public const PER_PAGE = 6;
 
-    public $no_image = 'img/img-room-sm-1.jpg';
+  public string $no_image = 'img/img-room-sm-1.jpg';
 
-    protected $with = [
-        'attrs',
-        'images',
-        'costs',
-    ];
+  protected $fillable = [
+    'name',
+    'number',
+    'order',
+    'moderate',
+    'description',
+    'is_hot'
+  ];
+
+  protected $casts = [
+    'moderate' => 'boolean',
+    'is_hot' => 'boolean'
+  ];
+
+  protected $with = [
+    'attrs',
+    'images',
+    'costs',
+  ];
 
   ### SCOPES
 
@@ -51,72 +116,72 @@ class Room extends Model
 //    });
   }
 
-    public function hotel(): BelongsTo
-    {
-        return $this->belongsTo(Hotel::class);
-    }
+  public function category(): BelongsTo
+  {
+    return $this->belongsTo(Category::class);
+  }
 
-    public function attrs(): BelongsToMany
-    {
-        return $this->belongsToMany(Attribute::class, 'attribute_room', 'room_id', 'attribute_id');
-    }
+  public function hotel(): BelongsTo
+  {
+    return $this->belongsTo(Hotel::class);
+  }
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
+  public function attrs(): BelongsToMany
+  {
+    return $this->belongsToMany(Attribute::class, 'attribute_room', 'room_id', 'attribute_id');
+  }
 
-    public function scopeHot(Builder $query): Builder
-    {
-        return $query->where('is_hot', true);
-    }
+  public function scopeHot(Builder $query): Builder
+  {
+    return $query->where('is_hot', true);
+  }
 
-    public function costs(): MorphMany
-    {
-        return $this->morphMany(Cost::class, 'model');
-    }
+  public function costs(): HasMany
+  {
+    return $this->hasMany(Cost::class, 'room_id', 'id');
+  }
 
-    public function meta(): HasOne
-    {
-        return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
-    }
+  public function attachMeta(Request $request): Room
+  {
+    if (!$request->get('meta_title', false) && !$request->get('meta_description', false) && !$request->get('meta_keywords', false))
+      return $this;
 
-    public function attachMeta(Request $request): Room
-    {
-        if (!$request->get('meta_title', false) && !$request->get('meta_description', false) && !$request->get('meta_keywords', false))
-            return $this;
+    $key = $this->getRouteKeyName();
+    $url = '/rooms/' . $this->$key;
 
-        $key = $this->getRouteKeyName();
-        $url = '/rooms/'.$this->$key;
+    $data = [];
+    $data['title'] = $request->get('meta_title');
+    $data['meta_description'] = $request->get('meta_description');
+    $data['meta_keywords'] = $request->get('meta_keywords');
+    $data['url'] = $url;
+    $data['model_type'] = self::class;
 
-        $data = [];
-        $data['title'] = $request->get('meta_title');
-        $data['meta_description'] = $request->get('meta_description');
-        $data['meta_keywords'] = $request->get('meta_keywords');
-        $data['url'] = $url;
-        $data['model_type'] = self::class;
+    $meta = PageDescription::updateOrCreate(['url' => $url], $data);
+    $meta->model_type = self::class;
+    $meta->save();
 
-        $meta = PageDescription::updateOrCreate(['url' => $url], $data);
-        $meta->model_type = self::class;
-        $meta->save();
+    $this->meta()->save($meta);
 
-        $this->meta()->save($meta);
+    return $this;
+  }
 
-        return $this;
-    }
+  public function meta(): HasOne
+  {
+    return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
+  }
 
-    public function getMetaDescriptionAttribute()
-    {
-        return @$this->meta->meta_description ?? null;
-    }
+  public function getMetaDescriptionAttribute(): ?string
+  {
+    return @$this->meta->meta_description ?? null;
+  }
 
-    public function getMetaKeywordsAttribute()
-    {
-        return @$this->meta->meta_keywords ?? null;
-    }
+  public function getMetaKeywordsAttribute(): ?string
+  {
+    return @$this->meta->meta_keywords ?? null;
+  }
 
-    public function getMetaTitleAttribute()
-    {
-        return @$this->meta->title ?? null;
-    }
+  public function getMetaTitleAttribute(): ?string
+  {
+    return @$this->meta->title ?? null;
+  }
 }

@@ -16,12 +16,13 @@ class BookingController extends Controller
    */
   public static function defineNextBookNumber (): string
   {
-    $last_book_number = Booking::orderby('id', 'desc')->first()->book_number ?? '200100000';
+    $last_book_number = Booking::orderByDesc('id')->first()->book_number ?? '200100000';
+
     $last_year = mb_substr($last_book_number, 0, 4);
-    $last_number = mb_substr($last_book_number, 4, 5);
+    $last_number = mb_substr($last_book_number, 4, 9);
     $year = date("Y");
 
-    if ($last_year !== $year) {
+    if ($last_year == $year) {
       $current_number = (int)$last_number + 1;
     } else {
       $current_number = 1;

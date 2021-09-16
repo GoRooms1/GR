@@ -5,7 +5,9 @@
     {{-- Популярные отели --}}
     <section class="home-section home-section-pt-lg">
         <div class="container">
-            <div class="h2 section-title">Популярные отели</div>
+            <div class="h2 section-title">
+                {!! html_entity_decode(Settings::header('seo_/')) !!}
+            </div>
             <div class="row row-sm">
                 @foreach ($hotels as $hotel)
                     @include('hotel._popular')

@@ -110,11 +110,11 @@
                         @endforeach
                     </ul>
                     <ul class="room-prices">
-                        @foreach($room->costs->sortBy('type.sort') AS $cost)
+                        @foreach($room->costs->sortBy('period.type.sort') AS $cost)
                             <li class="room-prices-item">
-                                <strong class="room-prices-item-price">{{ $cost->type->name }}@if($cost->value !== '0')
+                                <strong class="room-prices-item-price">{{ $cost->period->type->name }}@if($cost->value !== '0')
                                         - от {{ $cost->value }} руб.@endif</strong>
-                                <span class="room-prices-item-info">{{ $cost->value === '0' ? 'не предоставляется' : $cost->description }}</span>
+                                <span class="room-prices-item-info">{{ $cost->value === '0' ? 'не предоставляется' : $cost->info }}</span>
                             </li>
                         @endforeach
                     </ul>

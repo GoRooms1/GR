@@ -88,9 +88,12 @@ class RoomController extends Controller
     BookRoomJob::dispatch($id, $validated);
 
     $room = Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first();
-    $message = "Вы совершили бронирование в номере<br>" . $room->name ?? $room->id;
+
+    $message = "Бронирование № ".$validated['book_number'].'<br><br>';
+    $message .= "Вы совершили бронирование в номере<br>" . $room->name ?? $room->id;
     $message .= $room->category_id ? ' , в категории "' . $room->category->name . '"' : '';
     $message .= '<br>в объекте размещения: "' . $room->hotel->type->single_name . ': ' . $room->hotel->name . '".';
+    $message .= '';
     $message .= '<br>Администратор ' . $room->hotel->name . ' свяжется с Вами в случае необходимости!
                     <br>Ждем Вас и приятного отдыха!';
 
@@ -108,6 +111,10 @@ class RoomController extends Controller
    */
   public function getRoomInfo(int $id): JsonResponse
   {
-    return \response()->json(['room_info' => Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first()]);
+      $room = Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first();
+    return \response()->json([
+        'room_info' => $room,
+        'costs' => $room->costs->pluck('period')
+    ]);
   }
 }
