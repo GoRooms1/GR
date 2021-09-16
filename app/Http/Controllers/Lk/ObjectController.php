@@ -49,7 +49,7 @@ class ObjectController extends Controller
       ]);
       $user = User::find(auth()->id());
       $user->update($request->all());
-      $user->password = Hash::make($request->password);
+//      $user->password = Hash::make($request->password);
       $user->save();
     } else {
       $request->validate([
@@ -64,8 +64,8 @@ class ObjectController extends Controller
 
     $hotel = new Hotel();
     $hotel->name = $request->get('hotel')['name'];
-    $hotel->phone = $request->get('phone');
-    $hotel->email = $request->get('email');
+//    $hotel->phone = $request->get('phone');
+//    $hotel->email = $request->get('email');
 
     $hotel->type()->associate($request->get('hotel')['type']);
     $hotel->user()->associate($user->id);

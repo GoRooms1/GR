@@ -41,10 +41,10 @@ $('.check').bind('click', function() {
 
   if (!$(this).is('[disabled]')) {
     if ($(this).siblings('input[type="checkbox"]').prop('checked')) {
-      $(this).siblings('input[type="checkbox"]').prop('checked', false)
+      $(this).siblings('input[type="checkbox"]').prop('checked', false).trigger('change');
 
     } else {
-      $(this).siblings('input[type="checkbox"]').prop('checked', true)
+      $(this).siblings('input[type="checkbox"]').prop('checked', true).trigger('change');
 
     }
   }
