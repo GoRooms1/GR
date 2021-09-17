@@ -7,13 +7,22 @@
 
 namespace App\Http\Controllers\Lk;
 
-use App\User;
 use App\Http\Controllers\Controller;
+use App\User;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class StaffController extends Controller
 {
 
-  public function index ()
+  /**
+   * @return Application|Factory|View
+   */
+  public function index()
   {
     $user = User::find(auth()->id());
     $hotel = $user->hotel;
@@ -23,7 +32,29 @@ class StaffController extends Controller
     }
 
     $users = $hotel->users()->withPivot(['hotel_position'])->get();
-//    dd($users);
     return view('lk.staff.index', compact('users'));
   }
+
+  public function remove(int $id): RedirectResponse
+  {
+    try {
+      $user = User::findOrFail($id);
+
+      if ($user->id !== auth()->id()) {
+        $status = $user->forceDelete();
+        if ($status) {
+          return back()->with('success', 'Пользователь удалён');
+        }
+        return back()->with('error', 'Пользователь не удалён');
+      }
+
+      return back()->with('error', 'Пользователь не удалён. Так как Вы им являетесь');
+    } catch (ModelNotFoundException $e) {
+      return back()->with('error', 'Не удалось найти пользователя');
+    } catch (Exception $e) {
+      return back()->with('error', 'Не удалось удалить пользователя');
+    }
+
+  }
+
 }

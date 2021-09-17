@@ -13,14 +13,25 @@
 
         @foreach($users as $user)
           <div class="col-4">
-            <div class="staff-item staff-item_general">
-              <div class="staff-item__name">{{ App\User::POSITIONS_LANGUAGE[$user->pivot->hotel_position] }}</div>
-              <div class="staff-item__bottom">
-                <p class="staff-item__text">{{ $user->position }}</p>
-                <p class="staff-item__text">{{ $user->phone }}</p>
-                <p class="staff-item__text">{{ $user->name }}</p>
+            @if ($user->pivot->hotel_position === App\User::POSITION_GENERAL)
+              <div class="staff-item staff-item_general" data-id="{{ $user->id }}">
+                <div class="staff-item__name">{{ App\User::POSITIONS_LANGUAGE[$user->pivot->hotel_position] }}</div>
+                <div class="staff-item__bottom">
+                  <p class="staff-item__text">{{ $user->position }}</p>
+                  <p class="staff-item__text">{{ $user->phone }}</p>
+                  <p class="staff-item__text">{{ $user->name }}</p>
+                </div>
               </div>
-            </div>
+            @else
+              <div class="staff-item staff-item_small staff-item_staff" data-id="{{ $user->id }}">
+              <div class="staff-item__name">Staff</div>
+              <div class="staff-item__bottom">
+                <p class="staff-item__text">Должность</p>
+                <p class="staff-item__text">+7 ( _ _ _ ) _ _  _ _  _ _</p>
+                <p class="staff-item__text">Полное имя сотрудника</p>
+              </div>
+          </div>
+            @endif
           </div>
         @endforeach
 
@@ -60,45 +71,41 @@
 
   <div class="overlay">
   </div>
-  <div class="popup" id="popupGeneral">
-    <img src="img/close.png" alt="" class="close-this">
-    <h2 class="title title_blue popup__title">General</h2>
-    <input type="text" class="field" placeholder="ФИО">
-    <input type="phone" class="field" placeholder="+7 ( _ _ _ ) _ _ _  _ _  _ _">
-    <input type="email" class="field" placeholder="E-mail">
-    <input type="text" class="field" placeholder="Должность">
-    <input type="text" class="field" placeholder="Придумайте пароль">
-    <input type="text" class="field" placeholder="Придумайте кодовое слово">
-    <div class="d-flex align-items-center popup-buttons">
-      <div class="d-flex align-items-center">
-        <button type="button" class="button button_blue">Сохранить</button>
-        <button type="button" class="button button_gray reset">Сбросить пароль</button>
+
+  @foreach($users as $user)
+    <div class="popup" data-id="{{ $user->id }}">
+      <img src="{{ asset('img/lk/close.png') }}" alt="" class="close-this">
+      <h2 class="title title_blue popup__title">{{ App\User::POSITIONS_LANGUAGE[App\User::POSITION_GENERAL] }}</h2>
+      <input type="text" class="field" placeholder="ФИО" value="{{ $user->name }}">
+      <input type="phone" class="field" placeholder="+7 ( _ _ _ ) _ _ _  _ _  _ _" value="{{ $user->phone }}">
+      <input type="email" class="field" placeholder="E-mail" value="{{ $user->email }}">
+      <input type="text" class="field" placeholder="Должность" {{ $user->position }}>
+      <input type="password" class="field" placeholder="Придумайте пароль">
+      <input type="text" class="field" placeholder="Придумайте кодовое слово" value="{{ $user->code }}">
+      <div class="d-flex align-items-center popup-buttons">
+        <div class="d-flex align-items-center">
+          <button type="button" class="button button_blue">Сохранить</button>
+          <button type="button" class="button button_gray reset">Сбросить пароль</button>
+        </div>
+{{--        @if(auth()->id() !== $user->id)--}}
+          <button class="staff-remove"
+                  type="button"
+                  onclick="event.preventDefault(); $('.popup[data-id={{ $user->id }}] form.remove-user').submit()">
+            <img src="{{ asset('img/lk/bin.png') }}" alt="">
+          </button>
+{{--          @endif--}}
       </div>
-
-      <button class="staff-remove">
-        <img src="img/bin.png" alt="">
-      </button>
+      <form action="{{ route('lk.staff.remove', $user->id) }}" method="POST" class="remove-user d-none">
+        @csrf
+      </form>
     </div>
-  </div>
+  @endforeach
 
-  <div class="popup" id="popupStaff">
-    <img src="img/close.png" alt="" class="close-this">
-    <h2 class="title popup__title">Staff</h2>
-    <input type="text" class="field" placeholder="ФИО">
-    <input type="phone" class="field" placeholder="+7 ( _ _ _ ) _ _ _  _ _  _ _">
-    <input type="email" class="field" placeholder="E-mail">
-    <input type="text" class="field" placeholder="Должность">
-    <input type="text" class="field" placeholder="Придумайте пароль">
-    <input type="text" class="field" placeholder="Придумайте кодовое слово">
-    <div class="d-flex align-items-center popup-buttons">
-      <div class="d-flex align-items-center">
-        <button type="button" class="button">Сохранить</button>
-        <button type="button" class="button button_gray reset">Сбросить пароль</button>
-      </div>
+@endsection
 
-      <button class="staff-remove">
-        <img src="img/bin.png" alt="">
-      </button>
-    </div>
-  </div>
+
+@section('js')
+  <script>
+    $("input[type='phone']").mask("+7 (999) 999 99-99");
+  </script>
 @endsection

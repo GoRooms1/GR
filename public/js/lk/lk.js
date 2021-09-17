@@ -71,12 +71,15 @@ $('.overlay').bind('click', function() {
 })
 
 $('.staff-item_staff').bind('click', function() {
-	$('#popupStaff').addClass('open')
+    let id = $(this).attr('data-id')
+	$('.popup[data-id=' + id +']').addClass('open')
 	$('.overlay').addClass('open')
 })
 
 $('.staff-item_general').bind('click', function() {
-	$('#popupGeneral').addClass('open')
+    let id = $(this).attr('data-id')
+
+	$('.popup[data-id=' + id +']').addClass('open')
 	$('.overlay').addClass('open')
 })
 
