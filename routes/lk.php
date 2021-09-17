@@ -54,3 +54,4 @@ Route::get('instruction', 'InstructionController@index')->name('instruction.inde
 Route::get('/staff', 'StaffController@index')->name('staff.index');
 Route::delete('staff/remove/{id}', 'StaffController@remove')->name('staff.remove');
 Route::post('staff/create', 'StaffController@create')->name('staff.create');
+Route::put('staff/update/{id}', 'StaffController@update')->name('staff.update');

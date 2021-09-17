@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ALL */
+
 /*
  * Copyright (c) 2021.
  * This code is the property of the Fulliton developer.
@@ -7,24 +8,27 @@
 
 namespace App\Http\Controllers\Lk;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\LK\StaffRequest;
 use App\User;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\LK\StaffRequest;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StaffController extends Controller
 {
 
   /**
+   * All Users in Hotel
+   *
    * @return Application|Factory|View
+   * @noinspection PhpVariableNamingConventionInspection
    */
-  public function index()
+  public function index ()
   {
     $user = User::find(auth()->id());
     $hotel = $user->hotel;
@@ -33,26 +37,40 @@ class StaffController extends Controller
       $hotel->users()->attach($user->id);
     }
 
-    $userGeneralCount = $hotel->users()
-      ->wherePivot('hotel_position', User::POSITION_GENERAL)
-      ->count();
-    $userStaffCount = $hotel->users()
-      ->wherePivot('hotel_position', User::POSITION_STAFF)
-      ->count();
+    /**
+     * Length general users
+     *
+     * @var int $userGeneralCount
+     */
+    $userGeneralCount = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->count();
 
+    /**
+     * Length staff users
+     *
+     * @var int $userStaffCount
+     */
+    $userStaffCount = $hotel->users()->wherePivot('hotel_position', User::POSITION_STAFF)->count();
+
+    /**
+     * All users in hotel
+     *
+     * @var User[] $users
+     */
     $users = $hotel->users()->withPivot(['hotel_position'])->get();
-    return view('lk.staff.index',
-      compact(
-        'users',
-        'userGeneralCount',
-        'userStaffCount'
-      )
-    );
+    return view('lk.staff.index', compact('users', 'userGeneralCount', 'userStaffCount'));
   }
 
-  public function remove(int $id): RedirectResponse
+  /**
+   * Delete user in system
+   *
+   * @param int $id
+   *
+   * @return RedirectResponse
+   */
+  public function remove (int $id): RedirectResponse
   {
     try {
+//      TODO: Если удаляют юзеров который самый клавный, то меняем главного на первого general
       $user = User::findOrFail($id);
 
       if ($user->id !== auth()->id()) {
@@ -76,9 +94,10 @@ class StaffController extends Controller
    * Create User in Hotel
    *
    * @param StaffRequest $request
+   *
    * @return RedirectResponse
    */
-  public function create(StaffRequest $request): RedirectResponse
+  public function create (StaffRequest $request): RedirectResponse
   {
     $user = new User($request->all());
 
@@ -87,11 +106,42 @@ class StaffController extends Controller
     $user->is_moderate = false;
     $user->save();
 
-    $hotel = auth()->user()->hotel;
+    if (isset(auth()->user()->hotel)) {
+      $hotel = auth()->user()->hotel;
+      $hotel->users()->attach($user->id, ['hotel_position' => $request->get('hotel_position')]);
+    }
 
-    $hotel->users()->attach($user->id, ['hotel_position' => $request->get('hotel_position')]);
 
     return back()->with('success', 'Пользователь успешно создан');
+  }
+
+  /**
+   * Update user info
+   *
+   * @param StaffRequest $request
+   * @param int          $id
+   *
+   * @return RedirectResponse|void
+   */
+  public function update (StaffRequest $request, int $id)
+  {
+    try {
+      $user = User::findOrFail($id);
+
+      $user->update($request->except('password'));
+//      If user writen password, update )
+      if ($request->has('password')) {
+        if ($request->get('password') !== '') {
+          $user->password = Hash::make($request->get('password'));
+        }
+      }
+
+      $user->save();
+
+      return back()->with('success', 'Пользователь обновлён');
+    } catch (ModelNotFoundException $e) {
+      return back()->with('error', 'Не удалось найти пользователя');
+    }
   }
 
 }

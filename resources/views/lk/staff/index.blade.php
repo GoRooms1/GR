@@ -99,35 +99,64 @@
     <div class="popup" data-id="{{ $user->id }}">
       <img src="{{ asset('img/lk/close.png') }}" alt="" class="close-this">
       <h2 class="title title_blue popup__title">{{ App\User::POSITIONS_LANGUAGE[$user->pivot->hotel_position] }}</h2>
-      <input type="text"
-             class="field"
-             placeholder="ФИО"
-             name="name"
-             value="{{ $user->name }}"
-      >
-      <input type="phone"
-             class="field"
-             placeholder="+7 ( _ _ _ ) _ _ _  _ _  _ _"
-             name="name"
-             value="{{ $user->phone }}"
-      >
-      <input type="email" class="field" placeholder="E-mail" value="{{ $user->email }}">
-      <input type="text" class="field" placeholder="Должность" value="{{ $user->position }}">
-      <input type="password" class="field" placeholder="Придумайте пароль">
-      <input type="text" class="field" placeholder="Придумайте кодовое слово" value="{{ $user->code }}">
-      <div class="d-flex align-items-center popup-buttons">
-        <div class="d-flex align-items-center">
-          <button type="button" class="button button_blue">Сохранить</button>
-          <button type="button" class="button button_gray reset">Сбросить пароль</button>
+      <form action="{{ route('lk.staff.update', $user->id) }}" method="post">
+        @csrf
+        @method('PUT')
+        <input type="text"
+               class="field"
+               placeholder="ФИО"
+               name="name"
+               value="{{ $user->name }}"
+               required
+        >
+        <input type="phone"
+               class="field"
+               placeholder="+7 ( _ _ _ ) _ _ _  _ _  _ _"
+               name="phone"
+               value="{{ $user->phone }}"
+               required
+        >
+        <input type="email"
+               class="field"
+               placeholder="E-mail"
+               value="{{ $user->email }}"
+               name="email"
+               required
+        >
+        <input type="text"
+               class="field"
+               placeholder="Должность"
+               value="{{ $user->position }}"
+               name="position"
+               required
+        >
+        <input type="password"
+               class="field"
+               placeholder="Придумайте пароль"
+               name="password"
+        >
+        <input type="text"
+               class="field"
+               placeholder="Придумайте кодовое слово"
+               value="{{ $user->code }}"
+               name="code"
+               required
+        >
+        <div class="d-flex align-items-center popup-buttons">
+          <div class="d-flex align-items-center">
+            <button type="submit" class="button button_blue">Сохранить</button>
+            <button type="button" onclick="" class="button button_gray reset">Сбросить пароль</button>
+          </div>
+          @if(auth()->id() !== $user->id)
+            <button class="staff-remove"
+                    type="button"
+                    onclick="event.preventDefault(); $('.popup[data-id={{ $user->id }}] form.remove-user').submit()">
+              <img src="{{ asset('img/lk/bin.png') }}" alt="">
+            </button>
+          @endif
         </div>
-        @if(auth()->id() !== $user->id)
-          <button class="staff-remove"
-                  type="button"
-                  onclick="event.preventDefault(); $('.popup[data-id={{ $user->id }}] form.remove-user').submit()">
-            <img src="{{ asset('img/lk/bin.png') }}" alt="">
-          </button>
-        @endif
-      </div>
+      </form>
+
       <form action="{{ route('lk.staff.remove', $user->id) }}" method="POST" class="remove-user d-none">
         @method('DELETE')
         @csrf
