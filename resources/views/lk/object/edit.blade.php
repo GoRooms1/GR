@@ -557,7 +557,7 @@
       mockFile = {
         name: '{{ $image->name }}',
         dataURL: '{{ url($image->path) }}',
-        size: {{ File::size($image->getRawOriginal('path')) }}
+        size: {{ File::exists($image->getRawOriginal('path')) ? File::size($image->getRawOriginal('path')) : 0 }}
       };
       uploader.emit("addedfile", mockFile);
       uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
