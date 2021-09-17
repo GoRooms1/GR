@@ -128,4 +128,12 @@ class User extends Authenticatable
   {
     return $this->hasOne(Hotel::class);
   }
+
+  public function getPersonalHotelAttribute ()
+  {
+    $user = $this;
+    return Hotel::whereHas('users', function ($q) use($user) {
+      $q->where('users.id', $user->id);
+    })->first();
+  }
 }

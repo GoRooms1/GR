@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Lk;
 
 use App\User;
 use Exception;
+use App\Models\Hotel;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +32,7 @@ class StaffController extends Controller
   public function index ()
   {
     $user = User::find(auth()->id());
-    $hotel = $user->hotel;
+    $hotel = $user->personal_hotel;
 
     if ($hotel->users()->count() === 0) {
       $hotel->users()->attach($user->id);
@@ -73,19 +74,40 @@ class StaffController extends Controller
 //      TODO: Если удаляют юзеров который самый клавный, то меняем главного на первого general
       $user = User::findOrFail($id);
 
+//    Если у удаляемого юзера прописано что он создатель отеля то...
+
       if ($user->id !== auth()->id()) {
+        if ($user->hotel()->exists()) {
+
+//      Берём его отель
+          $hotel = $user->hotel;
+
+          if(!$this->check_last_general($hotel, $user)) {
+            return back()->with('error', 'Пользователь не удалён. Так как в отеле больше нету Главных');
+          }
+        }
+        else {
+          $hotel = Hotel::whereHas('users', function ($q) use($user) {
+            $q->where('users.id', $user->id);
+          })->first();
+
+          if(!$this->check_last_general($hotel, $user)) {
+            return back()->with('error', 'Пользователь не удалён. Так как в отеле больше нету Главных');
+          }
+        }
         $status = $user->forceDelete();
         if ($status) {
           return back()->with('success', 'Пользователь удалён');
         }
         return back()->with('error', 'Пользователь не удалён');
+      } else {
+        return back()->with('error', 'Пользователь не удалён. Так как Вы им являетесь');
       }
-
       return back()->with('error', 'Пользователь не удалён. Так как Вы им являетесь');
     } catch (ModelNotFoundException $e) {
       return back()->with('error', 'Не удалось найти пользователя');
     } catch (Exception $e) {
-      return back()->with('error', 'Не удалось удалить пользователя');
+      return back()->with('error', $e->getMessage());
     }
 
   }
@@ -106,8 +128,8 @@ class StaffController extends Controller
     $user->is_moderate = false;
     $user->save();
 
-    if (isset(auth()->user()->hotel)) {
-      $hotel = auth()->user()->hotel;
+    if (isset(auth()->user()->personal_hotel)) {
+      $hotel = auth()->user()->personal_hotel;
       $hotel->users()->attach($user->id, ['hotel_position' => $request->get('hotel_position')]);
     }
 
@@ -141,6 +163,33 @@ class StaffController extends Controller
       return back()->with('success', 'Пользователь обновлён');
     } catch (ModelNotFoundException $e) {
       return back()->with('error', 'Не удалось найти пользователя');
+    }
+  }
+
+  /**
+   * @param Hotel $hotel
+   * @param User  $user
+   *
+   * @return bool
+   */
+  private function check_last_general (Hotel $hotel, User $user): bool
+  {
+//  Определяем кол-во главный в отеле
+    $count_general_users_in_hotel = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->count();
+
+//  Если в отеле больше 1 главных то..
+
+    if ($count_general_users_in_hotel > 1) {
+
+//    То берём нового юзера главного из отеля
+      $new_general_user = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->wherePivotNotIn('user_id', [$user->id])->first();
+
+//    И отелю даём нового создателя.
+      $hotel->user_id = $new_general_user->id;
+      $hotel->save();
+      return true;
+    } else {
+      return false;
     }
   }
 

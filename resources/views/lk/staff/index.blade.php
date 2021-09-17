@@ -165,8 +165,8 @@
   @endforeach
 
 {{-- Create users in hotels model with props --}}
-
-  <div class="popup" data-id="createUser">
+  @if($userStaffCount < 5 || $userGeneralCount < 3)
+    <div class="popup" data-id="createUser">
     <img src="{{ asset('img/lk/close.png') }}" alt="" class="close-this">
     <h2 class="title title_blue popup__title">LOL</h2>
     <form action="{{ route('lk.staff.create') }}" method="POST">
@@ -213,7 +213,7 @@
       </div>
     </form>
   </div>
-
+  @endif
 @endsection
 
 

@@ -36,7 +36,7 @@ class RoomController extends Controller
    */
   public function edit(): View
   {
-    $hotel = Auth::user()->hotel;
+    $hotel = Auth::user()->personal_hotel;
 //    If Hotel don`t have type and zero rooms
     if (!$hotel->checked_type_fond && $hotel->rooms()->count() < 1) {
       return view('lk.room.fond', compact('hotel'));
@@ -64,7 +64,7 @@ class RoomController extends Controller
     $request->validate([
       'fond' => 'required|in:' . implode(',', $TYPES_FOND)
     ]);
-    $hotel = Auth::user()->hotel;
+    $hotel = Auth::user()->personal_hotel;
 
     $hotel->type_fond = $request->get('fond');
     $hotel->checked_type_fond = true;

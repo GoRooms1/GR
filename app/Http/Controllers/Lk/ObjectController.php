@@ -58,7 +58,7 @@ class ObjectController extends Controller
 
       $user = new User($request->all());
       $user->password = Hash::make($request->password);
-      $user->hotel_position = User::POSITION_GENERAL;
+//      TODO: Тавить в отеле генерал юзера
       $user->save();
       Auth::loginUsingId($user->id, true);
     }
@@ -80,7 +80,7 @@ class ObjectController extends Controller
    */
   public function edit()
   {
-    $hotel = auth()->user()->hotel;
+    $hotel = auth()->user()->personal_hotel;
     $attributes = Attribute::where('model', Hotel::class)
       ->orWhereNull('model')->get();
     $hotelTypes = HotelType::orderBy('sort')
@@ -106,7 +106,7 @@ class ObjectController extends Controller
   public function update(ObjectUpdateRequest $request): RedirectResponse
   {
 
-    $hotel = Hotel::find(auth()->user()->hotel->id);
+    $hotel = auth()->user()->personal_hotel;
     $type = $request->get('type_update');
 
     if ($hotel) {
