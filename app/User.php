@@ -81,7 +81,7 @@ class User extends Authenticatable
     'phone',
     'position',
     'code',
-    'hotel_position',
+    'position',
     'is_moderate'
   ];
 

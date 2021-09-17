@@ -18,26 +18,26 @@ $('.select__top').bind('click', selectTop)
 $('.select__item').bind('click', selectItem)
 
 $(document).mouseup(function (e) {
-	let container = $(".select");
-	if (container.has(e.target).length === 0){
-		$('.select__hidden').slideUp();
-		$('.select__arrow').removeClass('open')
-	}
+  let container = $(".select");
+  if (container.has(e.target).length === 0) {
+    $('.select__hidden').slideUp();
+    $('.select__arrow').removeClass('open')
+  }
 });
 
 /*
   Действия при клике на чекбокс
  */
-$('.check').bind('click', function() {
+$('.check').bind('click', function () {
   if (!$(this).is('[disabled]'))
-	  $(this).siblings('input[type="radio"]').prop('checked', true)
+    $(this).siblings('input[type="radio"]').prop('checked', true)
 })
 
 let check = true
 /*
   Действия при клике на чекбокс
  */
-$('.check').bind('click', function() {
+$('.check').bind('click', function () {
 
   if (!$(this).is('[disabled]')) {
     if ($(this).siblings('input[type="checkbox"]').prop('checked')) {
@@ -50,52 +50,68 @@ $('.check').bind('click', function() {
   }
 })
 
-$('input[name="fond1"]').bind('change', function() {
-	if ($('#everyRoom').prop('checked')) {
-		$('#fondText1').fadeIn(1)
-		$('#fondText2').fadeOut(1)
-	} else {
-		$('#fondText2').fadeIn(1)
-		$('#fondText1').fadeOut(1)
-	}
+$('input[name="fond1"]').bind('change', function () {
+  if ($('#everyRoom').prop('checked')) {
+    $('#fondText1').fadeIn(1)
+    $('#fondText2').fadeOut(1)
+  } else {
+    $('#fondText2').fadeIn(1)
+    $('#fondText1').fadeOut(1)
+  }
 })
 
-$('.close-this').bind('click', function() {
-	$('.overlay').removeClass('open')
-	$(this).parent('.popup').removeClass('open')
+$('.close-this').bind('click', function () {
+  $('.overlay').removeClass('open')
+  $(this).parent('.popup').removeClass('open')
 })
 
-$('.overlay').bind('click', function() {
-	$('.overlay').removeClass('open')
-	$('.popup').removeClass('open')
+$('.overlay').bind('click', function () {
+  $('.overlay').removeClass('open')
+  $('.popup').removeClass('open')
 })
 
-$('.staff-item_staff').bind('click', function() {
-    let id = $(this).attr('data-id')
-	$('.popup[data-id=' + id +']').addClass('open')
-	$('.overlay').addClass('open')
+$('.staff-item_staff').bind('click', function () {
+  let id = $(this).attr('data-id')
+  let popup = $('.popup[data-id=' + id + ']').get(0);
+  if (id === 'createUser') {
+    let position = $(this).attr('data-position')
+    let positionLanguage = $(this).attr('data-position-language')
+
+    $($(popup).find('h2')).html(positionLanguage)
+    $($(popup).find('input[name="hotel_position"]')).val(position)
+  }
+  $(popup).addClass('open')
+  $('.overlay').addClass('open')
 })
 
-$('.staff-item_general').bind('click', function() {
-    let id = $(this).attr('data-id')
+$('.staff-item_general').bind('click', function () {
+  let id = $(this).attr('data-id')
+  let popup = $('.popup[data-id=' + id + ']').get(0);
 
-	$('.popup[data-id=' + id +']').addClass('open')
-	$('.overlay').addClass('open')
+  if (id === 'createUser') {
+    let position = $(this).attr('data-position')
+    let positionLanguage = $(this).attr('data-position-language')
+
+    $($(popup).find('h2')).html(positionLanguage)
+    $($(popup).find('input[name="hotel_position"]')).val(position)
+  }
+  $(popup).addClass('open')
+  $('.overlay').addClass('open')
 })
 
-$('#adressBtn').bind('click', function() {
-	$('#popupAdress').addClass('open')
-	$('.overlay').addClass('open')
+$('#adressBtn').bind('click', function () {
+  $('#popupAdress').addClass('open')
+  $('.overlay').addClass('open')
 })
 
-$('#objectBtn').bind('click', function() {
-	$('#popupObject').addClass('open')
-	$('.overlay').addClass('open')
+$('#objectBtn').bind('click', function () {
+  $('#popupObject').addClass('open')
+  $('.overlay').addClass('open')
 })
 
-$('#stationBtn').bind('click', function() {
-	$('#popupStation').addClass('open')
-	$('.overlay').addClass('open')
+$('#stationBtn').bind('click', function () {
+  $('#popupStation').addClass('open')
+  $('.overlay').addClass('open')
 })
 
 let change = true
@@ -103,21 +119,21 @@ let change = true
 /*
   Клонирование категории
  */
-$('.category__add').bind('click', function() {
-	$('.categories__item:last-child').clone(true, true).addClass('open').prependTo('.categories')
-	event.preventDefault();
+$('.category__add').bind('click', function () {
+  $('.categories__item:last-child').clone(true, true).addClass('open').prependTo('.categories')
+  event.preventDefault();
 })
 
 /*
   Клик и режим редактирование категории
  */
-$('.category-change').bind('click', function() {
-	let categoryText = $(this).parents('.categories__item').find('.categories__name').text(),
-	categoryQuote = $(this).parents('.categories__item').find('.categories__quote').text()
+$('.category-change').bind('click', function () {
+  let categoryText = $(this).parents('.categories__item').find('.categories__name').text(),
+    categoryQuote = $(this).parents('.categories__item').find('.categories__quote').text()
 
-	$(this).parents('.categories__item').addClass('open')
-	$(this).parents('.categories__item').find('.field_hidden-room').val(categoryText)
-	$(this).parents('.categories__item').find('.field_hidden-quote').val(categoryQuote)
+  $(this).parents('.categories__item').addClass('open')
+  $(this).parents('.categories__item').find('.field_hidden-room').val(categoryText)
+  $(this).parents('.categories__item').find('.field_hidden-quote').val(categoryQuote)
 })
 /*
   Как на создание категории
@@ -129,34 +145,34 @@ $('.category-good').bind('click', createCategory)
  */
 $('.categoryRemove').bind('click', removeCategory)
 
-$('.show-all').bind('click', function() {
-	if ($(this).hasClass('show-all_disabled')) {
-		event.preventDefault();
-	} else {
-		$('#popupDetails').addClass('open')
-		$('.overlay').addClass('open')
-	}
-	
+$('.show-all').bind('click', function () {
+  if ($(this).hasClass('show-all_disabled')) {
+    event.preventDefault();
+  } else {
+    $('#popupDetails').addClass('open')
+    $('.overlay').addClass('open')
+  }
+
 })
 
-$('#orderRoom').bind('click focused bloor', function() {
-	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find('#orderRoomText').slideDown(1)
+$('#orderRoom').bind('click focused bloor', function () {
+  $(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
+  $(this).parents('.shadow').find('#orderRoomText').slideDown(1)
 })
 
-$('#numberRoom').bind('click focused bloor', function() {
-	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find('#numberRoomText').slideDown(1)
+$('#numberRoom').bind('click focused bloor', function () {
+  $(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
+  $(this).parents('.shadow').find('#numberRoomText').slideDown(1)
 })
 
-$('#nameRoom').bind('click focused bloor', function() {
-	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find('#nameRoomText').slideDown(1)
+$('#nameRoom').bind('click focused bloor', function () {
+  $(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
+  $(this).parents('.shadow').find('#nameRoomText').slideDown(1)
 })
 
-$('#selectRoom').bind('click focused bloor', function() {
-	$(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
-	$(this).parents('.shadow').find('#selectRoomText').slideDown(1)
+$('#selectRoom').bind('click focused bloor', function () {
+  $(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
+  $(this).parents('.shadow').find('#selectRoomText').slideDown(1)
 })
 
 /*
@@ -170,85 +186,85 @@ $('.quote__remove').bind('click', removeRoom)
 $('.room__add').on('click', createRoom)
 
 let textChange = true,
-textChange2 = true
+  textChange2 = true
 
 /*
   Клик для сохранения с поля в блок
  */
-$('#howRideBtn').bind('click', function() {
-	let text = $(this).parents('.part').find('.text').text()
+$('#howRideBtn').bind('click', function () {
+  let text = $(this).parents('.part').find('.text').text()
 
-	if (textChange == true) {
-		$(this).parents('.part').find('.ck-editor__main p').text(text)
-		$(this).text('Сохранить')
-		$(this).parents('.part').find('.editor__text').hide()
-		$(this).parents('.part').removeClass('ck-editor_hidden')
-		textChange = false
-	} else if(textChange == false) {
-		let editorText =  $(this).parents('.part').find('.ck-content').html()
+  if (textChange == true) {
+    $(this).parents('.part').find('.ck-editor__main p').text(text)
+    $(this).text('Сохранить')
+    $(this).parents('.part').find('.editor__text').hide()
+    $(this).parents('.part').removeClass('ck-editor_hidden')
+    textChange = false
+  } else if (textChange == false) {
+    let editorText = $(this).parents('.part').find('.ck-content').html()
 
-		
-		if (editorText == "") {
-			textChange = false
-		} else {
-			$(this).parents('.part').find('.editor__text').show()
-			$(this).parents('.part').find('.editor__text').html(editorText)
-			$(this).parents('.part').addClass('ck-editor_hidden')
-			$(this).parents('.part').find('.ck-editor__main i')
-			$(this).text('Редактировать')
-			textChange = true
 
-		}
-		
-	}
+    if (editorText == "") {
+      textChange = false
+    } else {
+      $(this).parents('.part').find('.editor__text').show()
+      $(this).parents('.part').find('.editor__text').html(editorText)
+      $(this).parents('.part').addClass('ck-editor_hidden')
+      $(this).parents('.part').find('.ck-editor__main i')
+      $(this).text('Редактировать')
+      textChange = true
+
+    }
+
+  }
 })
 
 /*
   Клик для сохранения с поля в блок
  */
-$('#howRideBtn2').bind('click', function() {
-	let text = $(this).parents('.part').find('.text').text()
+$('#howRideBtn2').bind('click', function () {
+  let text = $(this).parents('.part').find('.text').text()
 
-	if (textChange2 == true) {
-		$(this).parents('.part').find('.ck-editor__main p').text(text)
-		$(this).text('Сохранить')
-		$(this).parents('.part').find('.editor__text').hide()
-		$(this).parents('.part').removeClass('ck-editor_hidden')
-		textChange2 = false
-	} else if(textChange2 == false) {
-		let editorText =  $(this).parents('.part').find('.ck-content').html()
-		
-		if (editorText == "") {
-			textChange2 = false
-		} else {
-			$(this).parents('.part').find('.editor__text').show()
-			$(this).parents('.part').find('.editor__text').html(editorText)
-			$(this).parents('.part').addClass('ck-editor_hidden')
-			$(this).parents('.part').find('.ck-editor__main i')
-			$(this).parents('.part').find('.ck-content').css('padding', '0')
-			$(this).text('Редактировать')
-			textChange2 = true
+  if (textChange2 == true) {
+    $(this).parents('.part').find('.ck-editor__main p').text(text)
+    $(this).text('Сохранить')
+    $(this).parents('.part').find('.editor__text').hide()
+    $(this).parents('.part').removeClass('ck-editor_hidden')
+    textChange2 = false
+  } else if (textChange2 == false) {
+    let editorText = $(this).parents('.part').find('.ck-content').html()
 
-		}
-	}
+    if (editorText == "") {
+      textChange2 = false
+    } else {
+      $(this).parents('.part').find('.editor__text').show()
+      $(this).parents('.part').find('.editor__text').html(editorText)
+      $(this).parents('.part').addClass('ck-editor_hidden')
+      $(this).parents('.part').find('.ck-editor__main i')
+      $(this).parents('.part').find('.ck-content').css('padding', '0')
+      $(this).text('Редактировать')
+      textChange2 = true
+
+    }
+  }
 })
 
 /*
   Клик на удаление фотографии
  */
-$('.remove-photo').bind('click', function() {
-	$(this).parents('.uploud__item').remove()
+$('.remove-photo').bind('click', function () {
+  $(this).parents('.uploud__item').remove()
 })
 
 /*
   Клик на выбор согласия
  */
-$('.agreement-choice').bind('click', function() {
-	if ($('#agreement').prop('checked')) {
-		$('#registerObject').removeAttr('disabled')
-	} else if (!$('#agreement').prop('checked')) {
-		$('#registerObject').prop('disabled', true)
-	}
+$('.agreement-choice').bind('click', function () {
+  if ($('#agreement').prop('checked')) {
+    $('#registerObject').removeAttr('disabled')
+  } else if (!$('#agreement').prop('checked')) {
+    $('#registerObject').prop('disabled', true)
+  }
 })
 
 /*
@@ -264,31 +280,31 @@ $('.save-room').bind('click', saveRoom)
 /*
   При поднятии клавиши клавиатуры в поле email
  */
-$('input[type="email"]').bind('keyup', function() {
-	var email = $(this).val();
-	if (!validateEmail(email)) {
-		
-		$(this).css('border', '1px solid orange')
-		
-	} else if (validateEmail(email)) {
-		$(this).css('border', '1px solid #2f64ad')
-		
-	}
+$('input[type="email"]').bind('keyup', function () {
+  var email = $(this).val();
+  if (!validateEmail(email)) {
+
+    $(this).css('border', '1px solid orange')
+
+  } else if (validateEmail(email)) {
+    $(this).css('border', '1px solid #2f64ad')
+
+  }
 })
 
 /*
   При поднятии клавиши клавиатуры в поле телдефон
  */
-$('input[type="phone"]').bind('keyup', function() {
-	var phone = $(this).val();
-	if (!validatePhone(phone)) {
-		
-		$(this).css('border', '1px solid orange')
-		
-	} else if (validatePhone(phone)) {
-		$(this).css('border', '1px solid #2f64ad')
-		
-	}
+$('input[type="phone"]').bind('keyup', function () {
+  var phone = $(this).val();
+  if (!validatePhone(phone)) {
+
+    $(this).css('border', '1px solid orange')
+
+  } else if (validatePhone(phone)) {
+    $(this).css('border', '1px solid #2f64ad')
+
+  }
 })
 
 /*
@@ -302,7 +318,7 @@ function validateEmail(email) {
 /*
   Валидация телефона
  */
-function validatePhone(phone){
+function validatePhone(phone) {
   let regex = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
   return regex.test(phone);
 }
@@ -310,7 +326,7 @@ function validatePhone(phone){
 /*
   Нахождение нужного файла из дропзоны
  */
-function findExistImage (file, files) {
+function findExistImage(file, files) {
   return files.filter(x => {
     if (file.xhr) {
       let image = JSON.parse(file.xhr.response).payload.images[0]
@@ -326,7 +342,7 @@ function findExistImage (file, files) {
 /*
   Действия при клике на итем в меню
  */
-function selectItem () {
+function selectItem() {
   if ($(this).attr('disable') !== true) {
     $(this).siblings('.select__item').removeClass('active')
     $(this).addClass('active')
@@ -343,7 +359,7 @@ function selectItem () {
 /*
   Действия при удалении категории
  */
-function removeCategory () {
+function removeCategory() {
 
   let item = $(this).parents('.categories__item').get(0);
 
@@ -360,7 +376,7 @@ function removeCategory () {
           } else {
             $(item).remove()
 
-            $('li.select__item[data-id=' + id +']').remove()
+            $('li.select__item[data-id=' + id + ']').remove()
 
             if (typeof afterRemoveCategory === 'function') {
               afterRemoveCategory(id)
@@ -387,7 +403,7 @@ function removeCategory () {
 /*
   Действия при создании категории
  */
-function createCategory () {
+function createCategory() {
 
   let categoryVal = $(this).parents('.categories__item').find('.field_hidden-room').val()
   let categoryValQuote = $(this).parents('.categories__item').find('.field_hidden-quote').val()
@@ -422,7 +438,7 @@ function createCategory () {
             } else {
 
               let ul = $('.category__list')
-              ul.each(function(i) {
+              ul.each(function (i) {
                 let li = $(this).find('li')
                 li.each(function () {
                   console.log($.trim($(this).text()))
@@ -485,7 +501,7 @@ function createCategory () {
 
               let ul = $('.category__list')
 
-              ul.each(function(i) {
+              ul.each(function (i) {
                 let li = $($(ul).find('li').get(0)).clone()
                 $(li).attr('disable', false)
                 if (li.length === 0) {
@@ -519,7 +535,7 @@ function createCategory () {
 
 }
 
-function selectTop () {
+function selectTop() {
   $('.select__arrow').not($(this).find('.select__arrow')).removeClass('open')
   $(this).find('.select__arrow').toggleClass('open')
   $('.select__hidden').not($(this).siblings('.select__hidden')).slideUp(1)

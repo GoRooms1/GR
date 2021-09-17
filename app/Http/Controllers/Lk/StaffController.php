@@ -8,12 +8,14 @@
 namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LK\StaffRequest;
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class StaffController extends Controller
@@ -31,8 +33,21 @@ class StaffController extends Controller
       $hotel->users()->attach($user->id);
     }
 
+    $userGeneralCount = $hotel->users()
+      ->wherePivot('hotel_position', User::POSITION_GENERAL)
+      ->count();
+    $userStaffCount = $hotel->users()
+      ->wherePivot('hotel_position', User::POSITION_STAFF)
+      ->count();
+
     $users = $hotel->users()->withPivot(['hotel_position'])->get();
-    return view('lk.staff.index', compact('users'));
+    return view('lk.staff.index',
+      compact(
+        'users',
+        'userGeneralCount',
+        'userStaffCount'
+      )
+    );
   }
 
   public function remove(int $id): RedirectResponse
@@ -55,6 +70,28 @@ class StaffController extends Controller
       return back()->with('error', 'Не удалось удалить пользователя');
     }
 
+  }
+
+  /**
+   * Create User in Hotel
+   *
+   * @param StaffRequest $request
+   * @return RedirectResponse
+   */
+  public function create(StaffRequest $request): RedirectResponse
+  {
+    $user = new User($request->all());
+
+    $user->password = Hash::make($request->get('password'));
+    $user->is_admin = false;
+    $user->is_moderate = false;
+    $user->save();
+
+    $hotel = auth()->user()->hotel;
+
+    $hotel->users()->attach($user->id, ['hotel_position' => $request->get('hotel_position')]);
+
+    return back()->with('success', 'Пользователь успешно создан');
   }
 
 }
