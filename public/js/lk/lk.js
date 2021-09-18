@@ -503,12 +503,7 @@ function createCategory() {
               item.dataset.id = category.id
 
               if (typeof afterCreateCategory === 'function') {
-                afterCreateCategory({
-                  name: categoryVal,
-                  value: categoryValQuote,
-                  id,
-                  room_id: response.data.room.id
-                });
+                afterCreateCategory(category, response.data.room.id);
               }
 
               let ul = $('.category__list')

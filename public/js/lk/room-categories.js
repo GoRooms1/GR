@@ -5,7 +5,7 @@
  */
 
 
-/*
+/**
  * Редактирование комнаты по кнопке
  */
 function allowedEditRoom()
@@ -28,15 +28,18 @@ function allowedEditRoom()
   updateArrow()
 }
 
-/*
+/**
  * После создания категории
  * Создать пустую комнату с данной категорией
+ *
+ * @param {Number} room_id
+ * @param {Object} category
  */
-function afterCreateCategory (category)
+function afterCreateCategory (category, room_id)
 {
   console.log(category)
 
-  createFrontData(category.room_id, category)
+  createFrontData(room_id, category)
   if ($('.arrow-up'))
     $('.arrow-up').on('click', upOrderRoom)
 
@@ -45,9 +48,11 @@ function afterCreateCategory (category)
   updateArrow()
 }
 
-/*
+/**
  * После обновления категории
  * Обновить фронт данные у комнаты
+ *
+ * @param {Object} category
  */
 function afterUpdateCategory(category)
 {
@@ -61,10 +66,12 @@ function afterUpdateCategory(category)
   $($(shadow).find('.row__head').find('.head-text').get(1)).find('span').html(category.value)
 }
 
-/*
+/**
  * После удаления категории
  * Удалить комнату фронт
-*/
+ *
+ * @param {Number} id
+ */
 function afterRemoveCategory (id)
 {
   console.log(id)
@@ -78,14 +85,16 @@ function afterRemoveCategory (id)
 }
 
 
-/*
+/**
  * После сохранения комнаты
+ *
+ * @param {Element} room
  */
 function afterSaveRoom (room) {
   console.log(room)
 }
 
-/*
+/**
  * Создание новой комнаты фронт + бек
  */
 function createRoom ()
@@ -97,13 +106,13 @@ function createRoom ()
     .then(response => {
       console.log(response.data)
       if (response.data.success) {
-        createFrontData(response.data.room.id, response.data.room.category)
+        createFrontData(response.data.room.id, response.data.category)
       }
     })
 }
 
-/*
- * Сохранение комнаты, запрос бекенд
+/**
+ * Сохранение комнаты, запрос backend
  */
 function saveRoom ()
 {
@@ -163,8 +172,10 @@ function saveRoom ()
   }
 }
 
-/*
+/**
  * Сохранение комнаты, фронт
+ *
+ * @param {boolean} save
  */
 function saveFrontData (save = false)
 {
@@ -190,7 +201,7 @@ function saveFrontData (save = false)
   }
 }
 
-/*
+/**
  * Удаление комнаты
  */
 function removeRoom ()
@@ -198,16 +209,22 @@ function removeRoom ()
   updateArrow()
 }
 
-/*
+/**
  * Создание фронта комнаты
+ *
+ * @param {Number} room_id
+ * @param {Object} category
  */
 function createFrontData (room_id, category)
 {
+  console.warn(category)
+
   let room = $('#new_room').clone();
   let rooms = $('#rooms')
 
   $(room).removeAttr('id')
   room.attr('data-id', room_id)
+  console.log(category.id)
   room.attr('data-category-id', category.id)
 
   $(room).find('.category-select').find('.select__current').html(category.name)
@@ -226,8 +243,9 @@ function createFrontData (room_id, category)
   }, 0);
   let select_item = $('.select__item')
   let select_top = $('.select__top')
-  select_item.attr("onclick", "").unbind("click")
-  select_top.attr("onclick", "").unbind("click")
+
+  select_item.attr("onclick", "").unbind("click").bind('click', selectItem)
+  select_top.attr("onclick", "").unbind("click").bind('click', selectTop)
 
   $('.sortable').sortable({
     items: '.dz-image-preview',
@@ -242,6 +260,7 @@ function createFrontData (room_id, category)
   let urlVal = $(room).find('input[name=url-delete]').val()
 
   $(room).find('input[name=url-delete]').val(urlVal + '/' + room_id)
+  $(room).find('input[name=category_id]').val(category.id)
   $('#orderRoom').removeAttr('id').attr('id', 'orderRoom-' + room_id)
   $('label[for=orderRoom]').removeAttr('for').attr('for', 'orderRoom-' + room_id)
 
@@ -265,7 +284,7 @@ function createFrontData (room_id, category)
     existFile[room_id] = []
 }
 
-/*
+/**
  * Обновление местоположения
  * всех иконок для Order
  */
@@ -282,6 +301,9 @@ function updateArrow ()
   $(firstRoom).find('.arrow-up').hide()
 }
 
+/**
+ * Переместить комнату выше
+ */
 function upOrderRoom ()
 {
   let room = $(this).parents('.shadow').get(0)
@@ -311,6 +333,9 @@ function upOrderRoom ()
 
 }
 
+/**
+ * Переместить комнату ниже
+ */
 function downOrderRoom ()
 {
   let room = $(this).parents('.shadow').get(0)
