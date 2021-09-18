@@ -25,8 +25,8 @@ $(document).mouseup(function (e) {
   }
 });
 
-/*
-  Действия при клике на чекбокс
+/**
+ * Действия при клике на чекбокс
  */
 $('.check').bind('click', function () {
   if (!$(this).is('[disabled]'))
@@ -34,8 +34,9 @@ $('.check').bind('click', function () {
 })
 
 let check = true
-/*
-  Действия при клике на чекбокс
+
+/**
+ * Действия при клике на чекбокс
  */
 $('.check').bind('click', function () {
 
@@ -116,16 +117,16 @@ $('#stationBtn').bind('click', function () {
 
 let change = true
 
-/*
-  Клонирование категории
+/**
+ * Клонирование категории
  */
 $('.category__add').bind('click', function () {
   $('.categories__item:last-child').clone(true, true).addClass('open').prependTo('.categories')
   event.preventDefault();
 })
 
-/*
-  Клик и режим редактирование категории
+/**
+ * Клик и режим редактирование категории
  */
 $('.category-change').bind('click', function () {
   let categoryText = $(this).parents('.categories__item').find('.categories__name').text(),
@@ -135,18 +136,25 @@ $('.category-change').bind('click', function () {
   $(this).parents('.categories__item').find('.field_hidden-room').val(categoryText)
   $(this).parents('.categories__item').find('.field_hidden-quote').val(categoryQuote)
 })
-/*
-  Как на создание категории
+
+/**
+ * Как на создание категории
  */
 $('.category-good').bind('click', createCategory)
 
-/*
-  Действия на удаление категории
+/**
+ * Действия на удаление категории
  */
 $('.categoryRemove').bind('click', removeCategory)
 
+/**
+ * При клике на кнопку Показать всё
+ */
 $('.show-all').bind('click', openPopupAttributes)
 
+/**
+ * При клике на кнопку Сохранить атрибуты
+ */
 $('.popup__button_attributes').bind('click', savePopupAttributesRoom)
 
 $('#orderRoom').bind('click focused bloor', function () {
@@ -169,36 +177,36 @@ $('#selectRoom').bind('click focused bloor', function () {
   $(this).parents('.shadow').find('#selectRoomText').slideDown(1)
 })
 
-/*
-  Клик для удаления комнаты
+/**
+ * Клик для удаления комнаты
  */
 $('.quote__remove').bind('click', removeRoom)
 
-/*
-  Клик для создания новой комнаты
+/**
+ * Клик для создания новой комнаты
  */
 $('.room__add').on('click', createRoom)
 
 let textChange = true,
   textChange2 = true
 
-/*
-  Клик для сохранения с поля в блок
+/**
+ * Клик для сохранения с поля в блок
  */
 $('#howRideBtn').bind('click', function () {
   let text = $(this).parents('.part').find('.text').text()
 
-  if (textChange == true) {
+  if (textChange === true) {
     $(this).parents('.part').find('.ck-editor__main p').text(text)
     $(this).text('Сохранить')
     $(this).parents('.part').find('.editor__text').hide()
     $(this).parents('.part').removeClass('ck-editor_hidden')
     textChange = false
-  } else if (textChange == false) {
+  } else if (textChange === false) {
     let editorText = $(this).parents('.part').find('.ck-content').html()
 
 
-    if (editorText == "") {
+    if (editorText === "") {
       textChange = false
     } else {
       $(this).parents('.part').find('.editor__text').show()
@@ -213,26 +221,27 @@ $('#howRideBtn').bind('click', function () {
   }
 })
 
-/*
-  Клик для сохранения с поля в блок
+/**
+ * Клик для сохранения с поля в блок
  */
 $('#howRideBtn2').bind('click', function () {
   let text = $(this).parents('.part').find('.text').text()
 
-  if (textChange2 == true) {
+  if (textChange2 === true) {
     $(this).parents('.part').find('.ck-editor__main p').text(text)
     $(this).text('Сохранить')
     $(this).parents('.part').find('.editor__text').hide()
     $(this).parents('.part').removeClass('ck-editor_hidden')
     textChange2 = false
-  } else if (textChange2 == false) {
+  } else if (textChange2 === false) {
     let editorText = $(this).parents('.part').find('.ck-content').html()
 
-    if (editorText == "") {
+    if (editorText === "") {
       textChange2 = false
     } else {
-      $(this).parents('.part').find('.editor__text').show()
-      $(this).parents('.part').find('.editor__text').html(editorText)
+      let editor_text = $(this).parents('.part').find('.editor__text')
+      editor_text.show()
+      editor_text.html(editorText)
       $(this).parents('.part').addClass('ck-editor_hidden')
       $(this).parents('.part').find('.ck-editor__main i')
       $(this).parents('.part').find('.ck-content').css('padding', '0')
@@ -243,39 +252,41 @@ $('#howRideBtn2').bind('click', function () {
   }
 })
 
-/*
-  Клик на удаление фотографии
+/**
+ * Клик на удаление фотографии
  */
 $('.remove-photo').bind('click', function () {
   $(this).parents('.uploud__item').remove()
 })
 
-/*
-  Клик на выбор согласия
+/**
+ * Клик на выбор согласия
  */
 $('.agreement-choice').bind('click', function () {
-  if ($('#agreement').prop('checked')) {
+  let agreement = $('#agreement')
+
+  if (agreement.prop('checked')) {
     $('#registerObject').removeAttr('disabled')
-  } else if (!$('#agreement').prop('checked')) {
+  } else if (!agreement.prop('checked')) {
     $('#registerObject').prop('disabled', true)
   }
 })
 
-/*
-  Клик на редактирование комнаты
+/**
+ * Клик на редактирование комнаты
  */
 $('.quote__read').bind('click', allowedEditRoom)
 
-/*
-  Клик на сохранение комнаты
+/**
+ *Клик на сохранение комнаты
  */
 $('.save-room').bind('click', saveRoom)
 
-/*
-  При поднятии клавиши клавиатуры в поле email
+/**
+ * При поднятии клавиши клавиатуры в поле email
  */
 $('input[type="email"]').bind('keyup', function () {
-  var email = $(this).val();
+  let email = $(this).val();
   if (!validateEmail(email)) {
 
     $(this).css('border', '1px solid orange')
@@ -286,11 +297,11 @@ $('input[type="email"]').bind('keyup', function () {
   }
 })
 
-/*
-  При поднятии клавиши клавиатуры в поле телдефон
+/**
+ * При поднятии клавиши клавиатуры в поле телефон
  */
 $('input[type="phone"]').bind('keyup', function () {
-  var phone = $(this).val();
+  let phone = $(this).val();
   if (!validatePhone(phone)) {
 
     $(this).css('border', '1px solid orange')
@@ -301,24 +312,31 @@ $('input[type="phone"]').bind('keyup', function () {
   }
 })
 
-/*
-  Валидация Email
+/**
+ * Валидация Email
+ *
+ * @param {String} email
  */
 function validateEmail(email) {
-  let emailReg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  let emailReg = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   return emailReg.test(email);
 }
 
-/*
-  Валидация телефона
+/**
+ * Валидация телефона
+ *
+ * @param {String} phone
  */
 function validatePhone(phone) {
   let regex = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
   return regex.test(phone);
 }
 
-/*
-  Нахождение нужного файла из дропзоны
+/**
+ * Нахождение нужного файла из дроп зоны
+ *
+ * @param {File} file
+ * @param {Array} files
  */
 function findExistImage(file, files) {
   return files.filter(x => {
@@ -333,8 +351,8 @@ function findExistImage(file, files) {
   }).pop()
 }
 
-/*
-  Действия при клике на итем в меню
+/**
+ * Действия при клике на итем в меню
  */
 function selectItem() {
   if ($(this).attr('disable') !== true) {
@@ -350,8 +368,8 @@ function selectItem() {
   }
 }
 
-/*
-  Действия при удалении категории
+/**
+ * Действия при удалении категории
  */
 function removeCategory() {
 
@@ -394,8 +412,8 @@ function removeCategory() {
 
 }
 
-/*
-  Действия при создании категории
+/**
+ * Действия при создании категории
  */
 function createCategory() {
 
@@ -529,6 +547,9 @@ function createCategory() {
 
 }
 
+/**
+ * Открывает выпадающие меню списка
+ */
 function selectTop() {
   $('.select__arrow').not($(this).find('.select__arrow')).removeClass('open')
   $(this).find('.select__arrow').toggleClass('open')
@@ -536,6 +557,9 @@ function selectTop() {
   $(this).siblings('.select__hidden').slideToggle()
 }
 
+/**
+ * Открывает модалку с атрибутами от комнаты
+ */
 function openPopupAttributes () {
   if ($(this).hasClass('show-all_disabled')) {
       event.preventDefault();
@@ -580,6 +604,9 @@ function openPopupAttributes () {
 }
 }
 
+/**
+ * Проверяет на выбранные атрибуты в комнатах и сохраняет
+ */
 function savePopupAttributesRoom () {
   let popup = $(this).parents('.popup ').get(0)
 
@@ -603,12 +630,11 @@ function savePopupAttributesRoom () {
     alert('Ошибка в определении выбранной комнаты')
     return 0;
   }
-
-
-
 }
 
 /**
+ * Сохранить данные на уровне сервера
+ *
  * @param {Number} room_id
  * @param {[Number]} ids
  * @param {HTMLElement} popup
@@ -628,11 +654,16 @@ function backEndSaveAttributesRoom (room_id, ids, popup) {
     })
 }
 
-if ($('.arrow-up').length > 0)
-  $('.arrow-up').on('click', upOrderRoom)
+let arrow_up = $('.arrow-up')
+let arrow_down = $('.arrow-down')
 
-if ($('.arrow-down').length > 0)
-  $('.arrow-down').on('click', downOrderRoom)
+if (arrow_up.length > 0) {
+  arrow_up.on('click', upOrderRoom)
+}
+
+if (arrow_down.length > 0) {
+  arrow_down.on('click', downOrderRoom)
+}
 
 if (typeof updateArrow === 'function') {
   updateArrow()
