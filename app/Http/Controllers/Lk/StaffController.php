@@ -12,12 +12,14 @@ use App\User;
 use Exception;
 use App\Models\Hotel;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\LK\StaffRequest;
 use Illuminate\Contracts\View\Factory;
 use App\Notifications\CreateUserInHotel;
+use App\Notifications\UpdateRandomPasswordUser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -173,6 +175,18 @@ class StaffController extends Controller
     } catch (ModelNotFoundException $e) {
       return back()->with('error', 'Не удалось найти пользователя');
     }
+  }
+
+  public function generatePassword (int $id)
+  {
+    $user = User::findOrFail($id);
+    $password = Str::random(8);
+    $user->password = Hash::make($password);
+    $user->save();
+
+    $user->notify(new UpdateRandomPasswordUser($user, $password));
+
+    return back()->with('success', 'Пароль был сброшен и отправлен на почту сотрудника');
   }
 
   /**
