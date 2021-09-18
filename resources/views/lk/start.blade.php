@@ -12,12 +12,13 @@
       <div class="d-flex align-items-center case">
 
         <input type="text"
-               class="field"
+               class="field form-control @error('name') is-invalid @enderror"
                value="{{ auth()->check() ? old('name', auth()->user()->name) : old('name') }}"
                placeholder="ФИО"
                name="name">
+
         <input type="phone"
-               class="field"
+               class="field form-control @error('phone') is-invalid @enderror"
                value="{{ auth()->check() ? old('phone', auth()->user()->phone) : old('phone') }}"
                placeholder="Личный телефон"
                name="phone">
@@ -25,34 +26,35 @@
 
       <div class="d-flex align-items-center case">
         <input type="text"
-               class="field"
+               class="field form-control @error('position') is-invalid @enderror"
                value="{{ auth()->check() ? old('position', auth()->user()->position) : old('position') }}"
                placeholder="Должность"
                name="position">
         <input type="email"
-               class="field"
+               class="field form-control @error('email') is-invalid @enderror"
                value="{{ auth()->check() ? old('email', auth()->user()->email) : old('email') }}"
                placeholder="Личный e-mail"
                name="email">
       </div>
 
       <div class="d-flex align-items-center case">
-        <input type="text" class="field"
+        <input type="text"
+               class="field form-control @error('password') is-invalid @enderror"
                {{ !auth()->check() ? 'required' : '' }}
                placeholder="Придумайте пароль"
                value="{{ old('password') }}"
                name="password"
         >
-        <input type="text" class="field"
+        <input type="text"
+               class="field form-control @error('code') is-invalid @enderror"
                placeholder="Придумайте кодовое слово"
                value="{{ auth()->check() ? old('code', auth()->user()->code) : old('code') }}"
                name="code">
       </div>
 
-
       <div class="d-flex align-items-center case">
         <input type="text"
-               class="field"
+               class="field form-control @error('hotel.name') is-invalid @enderror"
                placeholder="Название объекта размещения"
                value="{{ old("hotel.name") }}"
                name="hotel[name]">
@@ -64,7 +66,7 @@
                  id="hotel_type"
                  required>
 
-          <div class="select__top">
+          <div class="select__top form-control @error('hotel.type') border-danger @enderror">
             <span class="select__current">Тип объекта</span>
             <img class="select__arrow" src="{{ asset('img/lk/arrow.png') }}" alt="arrow">
           </div>
@@ -79,7 +81,7 @@
       <div class="d-flex align-items-start case">
         <div style="width: 49%">
           <input type="text"
-                 class="field w-100"
+                 class="field w-100 form-control @error('address') is-invalid @enderror"
                  id="address"
                  name="address"
                  value="{{ old('address') }}"

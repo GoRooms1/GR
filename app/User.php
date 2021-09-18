@@ -28,6 +28,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  * @property string|null $position
  * @property bool $is_moderate
  * @property string|null $code
+ * @property string|null $hotel_position
  * @property bool $is_admin
  * @property Carbon|null $email_verified_at
  * @property string $password
@@ -80,6 +81,7 @@ class User extends Authenticatable
     'phone',
     'position',
     'code',
+    'position',
     'is_moderate'
   ];
 
@@ -104,6 +106,19 @@ class User extends Authenticatable
     'is_moderate' => 'boolean'
   ];
 
+  public const POSITION_GENERAL ='general';
+  public const POSITION_STAFF = 'staff';
+
+  public const POSITIONS = [
+    self::POSITION_GENERAL,
+    self::POSITION_STAFF
+  ];
+
+  public const POSITIONS_LANGUAGE = [
+    self::POSITION_STAFF => 'STAFF',
+    self::POSITION_GENERAL => 'GENERAL'
+  ];
+
   /**
    * Get personal hotel.
    *
@@ -112,5 +127,13 @@ class User extends Authenticatable
   public function hotel(): HasOne
   {
     return $this->hasOne(Hotel::class);
+  }
+
+  public function getPersonalHotelAttribute ()
+  {
+    $user = $this;
+    return Hotel::whereHas('users', function ($q) use($user) {
+      $q->where('users.id', $user->id);
+    })->first();
   }
 }

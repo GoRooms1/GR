@@ -23,7 +23,7 @@ class Lk
     if (Auth::check()) {
 //    If logged in
       $user = User::find(auth()->id());
-      if ($user->hotel()->exists()) {
+      if ($user->personal_hotel) {
         return $next($request);
       }
       return redirect()->route('lk.start');

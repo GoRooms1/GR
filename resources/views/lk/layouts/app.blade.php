@@ -96,7 +96,7 @@
                class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">
               Номерной фонд
             </a>
-            <a href="#" class="menu__item">Сотрудники</a>
+            <a href="{{ route('lk.staff.index') }}" class="menu__item {{ Route::currentRouteNamed('lk.staff.*') ? 'active' : '' }}">Сотрудники</a>
             <a href="{{ route('lk.instruction.index') }}"
                class="menu__item {{ Route::currentRouteNamed('lk.instruction.*') ? 'active' : '' }}"
             >

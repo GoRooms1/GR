@@ -2,8 +2,8 @@
     "book-name": "ФИО",
     "book-tel": "Телефон",
     "book-email": "email",
-    "from-date": "Дата вьезда",
-    "from-time": "Время вьезда",
+    "from-date": "Дата въезда",
+    "from-time": "Время въезда",
     "to-date": "Дата выезда",
     "to-time": "Время выезда",
     "book-comment": "Комментарий"

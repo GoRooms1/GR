@@ -27,7 +27,7 @@
             <input type="phone"
                    class="field form-control @error('phone') is-invalid @enderror"
                    value="{{ old('phone', $hotel->phone) }}"
-                   name="phone_2"
+                   name="phone"
                    {{ $hotel->disabled_save }}
                    placeholder="Телефон 1 объекта"
                    required
@@ -419,29 +419,179 @@
 
     $(document).ready(function () {
       selectInit()
+
+      //DropzoneJS snippet - js
+      Dropzone.autoDiscover = false;
+      // instantiate the uploader
+
+      const uploader = new Dropzone('#file-dropzone', {
+        paramName: "image",
+        url: "{{ route('lk.object.image.upload') }}",
+        maxFiles: 6,
+        thumbnailWidth: 360,
+        thumbnailHeight: 260,
+        addRemoveLinks: true,
+        previewsContainer: '.visualizacao',
+        previewTemplate: $('.preview').html(),
+        acceptedFiles: "image/*",
+        headers: {
+          'x-csrf-token': "{{ csrf_token() }}",
+        },
+        sending: function (file, xhr, formData) {
+          formData.append('model_name', "Hotel")
+          formData.append('modelID', "{{$hotel->id}}")
+        },
+        init: function () {
+
+          this.on("complete", function (file) {
+
+            let f = findExistImage(file, existFile)
+            console.log(f)
+
+            let d = file.previewElement.querySelector("[data-dz-success]");
+            d.innerHTML = f.moderate_text
+
+            if (!f.moderate) {
+              d.style.color = "#2f64ad"
+            }
+
+            $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
+            $('#file-dropzone').appendTo('.visualizacao')
+          });
+
+          this.on('success', function (file, json) {
+            console.log(json)
+            let image = json.payload.images[0]
+            let word = 'image'
+            existFile.push({
+              id: image.id,
+              path: "{{ url('/') }}" + "/" + image.path,
+              name: image.name,
+              moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
+              moderate: image.moderate
+            })
+          });
+
+          this.on("addedfile", function (file) {
+            while (this.files.length > this.options.maxFiles) {
+              this.removeFile(this.files[0]);
+              existFile.shift();
+              console.log(file, this.files.length, this.options.maxFiles)
+            }
+          });
+          this.on("reset", function (file) {
+            $('#file-dropzone').show()
+
+          });
+          this.on("removedfile", function (file) {
+            console.log(file)
+            if (existFile.length === 1) {
+              if (file.xhr) {
+                let image = JSON.parse(file.xhr.response).payload.images[0]
+                console.log("{{ url('/') }}" + "/" + image.path)
+                mockFile = {name: file.name, dataURL: "{{ url('/') }}" + "/" + image.path, size: 0};
+              } else {
+                mockFile = {name: file.name, dataURL: file.dataURL, size: 0};
+              }
+
+              uploader.displayExistingFile(file, mockFile.dataURL)
+              return false;
+            }
+
+            let flag = false
+            existFile.forEach(f => {
+              if (f.path === file.dataURL) {
+                flag = true
+                let url = "{{ url('lk/object/image/delete/') }}" + '/' + f.id
+                axios.post(url)
+                  .then(response => {
+                    console.log(response)
+                    let index = existFile.indexOf(f)
+                    if (index > -1) {
+                      existFile.splice(index, 1);
+                    }
+                  })
+                  .catch(error => {
+                    alert('Ошибка при удалении')
+                  })
+
+              }
+            })
+            if (!flag) {
+              existFile.forEach(f => {
+                if (f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
+                  flag = true
+                  let url = "{{ url('lk/object/image/delete/') }}" + '/' + f.id
+                  axios.post(url)
+                    .then(response => {
+                      console.log(response)
+                      let index = existFile.indexOf(f)
+                      if (index > -1) {
+                        existFile.splice(index, 1);
+                      }
+                    })
+                    .catch(error => {
+                      alert('Ошибка при удалении')
+                    })
+
+                }
+              })
+            }
+          })
+        }
+      });
+
+      let mockFile
+      let existFile = []
+
+      @foreach($hotel->images as $image)
+
+      existFile.push({
+        id: "{{ $image->id }}",
+        name: "{{ $image->name }}",
+        path: "{{ url($image->path) }}",
+        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+        moderate: {!! $image->moderate ? 'true' : 'false' !!}
+      })
+
+      mockFile = {
+        name: '{{ $image->name }}',
+        dataURL: '{{ url($image->path) }}',
+        size: {{ File::exists($image->getRawOriginal('path')) ? File::size($image->getRawOriginal('path')) : 0 }}
+      };
+      uploader.emit("addedfile", mockFile);
+      uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
+      uploader.emit("complete", mockFile);
+      uploader.files.push(mockFile)
+      @endforeach
     });
 
     let metros_ids = {{ $hotel->metros->pluck('distance')->max() ?? 1 }};
 
+    let count_metros = {{ $hotel->metros()->count() > 0 ? $hotel->metros()->count() : 1 }};
+
     function addMetro() {
-      metros_ids++;
-      $('#metro').append(
-        "<div class='col-12' data-id='" + metros_ids + "'>" +
-        "<div class='d-flex align-items-center station'>" +
-        "<div class='select' style='width: 45%'>" +
-        "<select name='metros[]' class='form-control field metros w-100' required></select>" +
-        "</div>" +
-        "<input type='hidden' name='metros_color[]' class='color'>" +
-        "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
-        "<p class='text'>минут пешком до объекта</p>" +
-        "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button w-auto px-3'>-</button>" +
-        "</div>" +
-        "</div>"
-      )
+      if (count_metros < 3) {
+        metros_ids++;
+        count_metros++;
+        $('#metro').append(
+          "<div class='col-12' data-id='" + metros_ids + "'>" +
+          "<div class='d-flex align-items-center station'>" +
+          "<div class='select' style='width: 45%'>" +
+          "<select name='metros[]' class='form-control field metros w-100' required></select>" +
+          "</div>" +
+          "<input type='hidden' name='metros_color[]' class='color'>" +
+          "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
+          "<p class='text'>минут пешком до объекта</p>" +
+          "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button w-auto px-3'>-</button>" +
+          "</div>" +
+          "</div>"
+        )
 
-      selectInit()
+        selectInit()
 
-      $('.metros').on("select2:select", takeColor);
+        $('.metros').on("select2:select", takeColor);
+      }
     }
 
     function selectInit() {
@@ -490,6 +640,7 @@
     }
 
     function deleteMetro(id) {
+      count_metros--;
       let str = '[data-id=' + id + ']'
       console.log($(str).remove())
     }
@@ -499,7 +650,9 @@
       token: "a35c9ab8625a02df0c3cab85b0bc2e9c0ea27ba4",
       type: "ADDRESS",
     });
+
     $("input[type='phone']").mask("+7 (999) 999 99-99");
+
     ClassicEditor
       .create(document.querySelector('#editor'))
       .catch(error => {
@@ -519,147 +672,15 @@
 
     });
 
-    //DropzoneJS snippet - js
-    Dropzone.autoDiscover = false;
-    // instantiate the uploader
-    const uploader = new Dropzone('#file-dropzone', {
-      paramName: "image",
-      url: "{{ route('lk.object.image.upload') }}",
-      maxFiles: 6,
-      thumbnailWidth: 360,
-      thumbnailHeight: 260,
-      addRemoveLinks: true,
-      previewsContainer: '.visualizacao',
-      previewTemplate: $('.preview').html(),
-      acceptedFiles: "image/*",
-      headers: {
-        'x-csrf-token': "{{ csrf_token() }}",
-      },
-      sending: function (file, xhr, formData) {
-        formData.append('model_name', "Hotel")
-        formData.append('modelID', "{{$hotel->id}}")
-      },
-      init: function () {
 
-        this.on("complete", function (file) {
-
-          let f = findExistImage(file, existFile)
-          console.log(f)
-
-          let d = file.previewElement.querySelector("[data-dz-success]");
-          d.innerHTML = f.moderate_text
-
-          if (!f.moderate) {
-            d.style.color = "#2f64ad"
-          }
-
-          $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
-          $('#file-dropzone').appendTo('.visualizacao')
-        });
-
-        this.on('success', function (file, json) {
-          console.log(json)
-          let image = json.payload.images[0]
-          let word = 'image'
-          existFile.push({
-            id: image.id,
-            path: "{{ url('/') }}" + "/" + image.path,
-            name: image.name,
-            moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
-            moderate: image.moderate
-          })
-        });
-
-        this.on("addedfile", function (file) {
-          while (this.files.length > this.options.maxFiles) {
-            this.removeFile(this.files[0]);
-            existFile.shift();
-            console.log(file, this.files.length, this.options.maxFiles)
-          }
-        });
-        this.on("reset", function (file) {
-          $('#file-dropzone').show()
-
-        });
-        this.on("removedfile", function (file) {
-          console.log(file)
-          if (existFile.length === 1) {
-            if (file.xhr) {
-              let image = JSON.parse(file.xhr.response).payload.images[0]
-              console.log("{{ url('/') }}" + "/" + image.path)
-              mockFile = {name: file.name, dataURL: "{{ url('/') }}" + "/" + image.path, size: 0};
-            } else {
-              mockFile = {name: file.name, dataURL: file.dataURL, size: 0};
-            }
-
-            uploader.displayExistingFile(file, mockFile.dataURL)
-            return false;
-          }
-
-          let flag = false
-          existFile.forEach(f => {
-            if (f.path === file.dataURL) {
-              flag = true
-              let url = "{{ url('lk/object/image/delete/') }}" + '/' + f.id
-              axios.post(url)
-                .then(response => {
-                  console.log(response)
-                  let index = existFile.indexOf(f)
-                  if (index > -1) {
-                    existFile.splice(index, 1);
-                  }
-                })
-                .catch(error => {
-                  alert('Ошибка при удалении')
-                })
-
-            }
-          })
-          if (!flag) {
-            existFile.forEach(f => {
-              if (f.id === JSON.parse(file.xhr.response).payload.images[0].id) {
-                flag = true
-                let url = "{{ url('lk/object/image/delete/') }}" + '/' + f.id
-                axios.post(url)
-                  .then(response => {
-                    console.log(response)
-                    let index = existFile.indexOf(f)
-                    if (index > -1) {
-                      existFile.splice(index, 1);
-                    }
-                  })
-                  .catch(error => {
-                    alert('Ошибка при удалении')
-                  })
-
-              }
-            })
-          }
-        })
+    $("input[name*='attr'][type='checkbox']").on( "change", function() {
+      console.log(2);
+      if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
+      {
+        this.checked=false;
+      } else if ($("input[name*='attr'][type='checkbox']:checked").length < 3) {
+        this.checked = true;
       }
     });
-    let mockFile
-    let existFile = []
-
-    @foreach($hotel->images as $image)
-
-    existFile.push({
-      id: "{{ $image->id }}",
-      name: "{{ $image->name }}",
-      path: "{{ url($image->path) }}",
-      moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-      moderate: {!! $image->moderate ? 'true' : 'false' !!}
-    })
-
-    mockFile = {
-      name: '{{ $image->name }}',
-      dataURL: '{{ url($image->path) }}',
-      size: {{ File::size($image->getRawOriginal('path')) }}
-    };
-    uploader.emit("addedfile", mockFile);
-    uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
-    uploader.emit("complete", mockFile);
-    uploader.files.push(mockFile)
-    @endforeach
   </script>
 @endsection

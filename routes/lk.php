@@ -42,6 +42,9 @@ Route::post('room/image/upload', 'RoomController@uploadFor')
 Route::post('room/image/delete/{image}', 'RoomController@delete')
   ->name('room.image.delete');
 
+Route::get('room/attrs/{id}', 'RoomController@getAttributes')->name('room.attr.get');
+Route::put('room/attrs/{id}', 'RoomController@putAttributes')->name('room.attr.put');
+
 Route::put('category/update', 'CategoryController@update')
   ->name('category.update');
 Route::post('category/create', 'CategoryController@create')
@@ -50,3 +53,8 @@ Route::delete('category/delete/{category}', 'CategoryController@delete')
   ->name('category.delete');
 
 Route::get('instruction', 'InstructionController@index')->name('instruction.index');
+
+Route::get('/staff', 'StaffController@index')->name('staff.index');
+Route::delete('staff/remove/{id}', 'StaffController@remove')->name('staff.remove');
+Route::post('staff/create', 'StaffController@create')->name('staff.create');
+Route::put('staff/update/{id}', 'StaffController@update')->name('staff.update');
