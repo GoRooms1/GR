@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\LK\StaffRequest;
 use Illuminate\Contracts\View\Factory;
+use App\Notifications\CreateUserInHotel;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -132,6 +133,14 @@ class StaffController extends Controller
       $hotel = auth()->user()->personal_hotel;
       $hotel->users()->attach($user->id, ['hotel_position' => $request->get('hotel_position')]);
     }
+
+    $user->notify(
+      new CreateUserInHotel(
+        $user,
+        $request->get('password'),
+        auth()->user()->personal_hotel
+      )
+    );
 
 
     return back()->with('success', 'Пользователь успешно создан');
