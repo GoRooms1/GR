@@ -531,10 +531,11 @@ input[type="radio"]:checked + label {
 	z-index: -1;
 }
 
-
-
-
 .popup {
+
+	max-height: 86vh;
+	overflow-x: auto;
+
 	background: #f5f5f5;
 	width: 570px;
 	top: 50%;
