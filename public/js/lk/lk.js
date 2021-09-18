@@ -149,8 +149,39 @@ $('.show-all').bind('click', function () {
   if ($(this).hasClass('show-all_disabled')) {
     event.preventDefault();
   } else {
-    $('#popupDetails').addClass('open')
-    $('.overlay').addClass('open')
+
+    $("input[name*='attr'][type='checkbox']").prop('checked', false)
+
+    $("input[name*='attr'][type='checkbox']").on( "change", function() {
+      console.log(2);
+      if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
+      {
+        this.checked=false;
+      } else if ($("input[name*='attr'][type='checkbox']:checked").length < 3) {
+        this.checked = true;
+      }
+    });
+
+    let room_id = $(this).attr('data-room-id')
+
+    axios.get('/lk/room/attrs/' + room_id)
+          .then(response => {
+            let attrs = response.data.attrs
+
+            attrs.forEach(attr => {
+              $('#attr-' + attr.id).prop('checked', true);
+            })
+
+
+            $('#popupDetails').addClass('open')
+            $('.overlay').addClass('open')
+          })
+          .catch(e => {
+            alert('Ошибка отображения атрибутов')
+          })
+
+
+
   }
 
 })

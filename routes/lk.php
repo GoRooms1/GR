@@ -42,6 +42,8 @@ Route::post('room/image/upload', 'RoomController@uploadFor')
 Route::post('room/image/delete/{image}', 'RoomController@delete')
   ->name('room.image.delete');
 
+Route::get('room/attrs/{id}', 'RoomController@getAttributes')->name('room.attr.get');
+
 Route::put('category/update', 'CategoryController@update')
   ->name('category.update');
 Route::post('category/create', 'CategoryController@create')
