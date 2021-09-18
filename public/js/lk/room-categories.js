@@ -216,6 +216,9 @@ function createFrontData (room_id, category)
   $($(room).find('.row__head').find('.head-text').get(0)).html(category.name)
   $($(room).find('.row__head').find('.head-text').get(1)).find('span').html(category.value)
 
+  let show_all = $(room).find('.show-all')
+  $(show_all).attr('data-room-id', room_id)
+  $(show_all).unbind('click').bind('click', openPopupAttributes)
   rooms.append(room)
   room.removeClass('d-none')
   $('html, body').animate({

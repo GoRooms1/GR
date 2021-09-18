@@ -246,7 +246,7 @@
 
             <div class="row">
               <div class="col-12">
-                <a class="show-all show-all_orange">Показать все</a>
+                <a class="show-all show-all_orange" data-room-id="{{ $room->id }}">Показать все</a>
               </div>
             </div>
             <div class="row row__bottom">
@@ -441,6 +441,8 @@
     </div>
 
   </div>
+
+  @include('lk.room.__popup_attributes', [$attribute_categories])
 
 
 @endsection

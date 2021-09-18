@@ -145,46 +145,9 @@ $('.category-good').bind('click', createCategory)
  */
 $('.categoryRemove').bind('click', removeCategory)
 
-$('.show-all').bind('click', function () {
-  if ($(this).hasClass('show-all_disabled')) {
-    event.preventDefault();
-  } else {
+$('.show-all').bind('click', openPopupAttributes)
 
-    $("input[name*='attr'][type='checkbox']").prop('checked', false)
-
-    $("input[name*='attr'][type='checkbox']").on( "change", function() {
-      console.log(2);
-      if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
-      {
-        this.checked=false;
-      } else if ($("input[name*='attr'][type='checkbox']:checked").length < 3) {
-        this.checked = true;
-      }
-    });
-
-    let room_id = $(this).attr('data-room-id')
-
-    axios.get('/lk/room/attrs/' + room_id)
-          .then(response => {
-            let attrs = response.data.attrs
-
-            attrs.forEach(attr => {
-              $('#attr-' + attr.id).prop('checked', true);
-            })
-
-
-            $('#popupDetails').addClass('open')
-            $('.overlay').addClass('open')
-          })
-          .catch(e => {
-            alert('Ошибка отображения атрибутов')
-          })
-
-
-
-  }
-
-})
+$('.popup__button_attributes').bind('click', savePopupAttributesRoom)
 
 $('#orderRoom').bind('click focused bloor', function () {
   $(this).parents('.shadow').find('.caption-block .caption').slideUp(1)
@@ -571,6 +534,98 @@ function selectTop() {
   $(this).find('.select__arrow').toggleClass('open')
   $('.select__hidden').not($(this).siblings('.select__hidden')).slideUp(1)
   $(this).siblings('.select__hidden').slideToggle()
+}
+
+function openPopupAttributes () {
+  if ($(this).hasClass('show-all_disabled')) {
+      event.preventDefault();
+    }
+  else {
+
+      $(`input[name*='attr'][type='checkbox']`).prop('checked', false)
+
+      $("input[name*='attr'][type='checkbox']").on( "change", function() {
+        console.log(2);
+        if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
+        {
+          this.checked=false;
+        } else if ($("input[name*='attr'][type='checkbox']:checked").length < 3) {
+          this.checked = true;
+        }
+      });
+
+      let room_id = $(this).attr('data-room-id')
+
+      if (room_id) {
+        axios.get('/lk/room/attrs/' + room_id)
+          .then(response => {
+            let attrs = response.data.attrs
+            let popup = $('#popupDetails');
+
+            let input = popup.find('input[name="room_id"]')
+
+            $(input).val(room_id)
+            attrs.forEach(attr => {
+              $('#attr-' + attr.id).prop('checked', true);
+            })
+
+
+            popup.addClass('open')
+            $('.overlay').addClass('open')
+          })
+          .catch(e => {
+            alert('Ошибка отображения атрибутов')
+          })
+      }
+}
+}
+
+function savePopupAttributesRoom () {
+  let popup = $(this).parents('.popup ').get(0)
+
+  let room_id = $(popup).find('input[name="room_id"]').val()
+
+  if (room_id) {
+    let attributes = $(popup).find('input[name*="attr"][type="checkbox"]:checked')
+    let ids = [];
+    attributes.each(function () {
+      console.log($(this).val())
+      ids.push($(this).val())
+    })
+
+    if (ids.length < 3 || ids.length > 9) {
+      alert('Выбрано количество не удовлетворяет требованиям')
+      return 0;
+    }
+
+    backEndSaveAttributesRoom(room_id, ids, popup)
+  } else {
+    alert('Ошибка в определении выбранной комнаты')
+    return 0;
+  }
+
+
+
+}
+
+/**
+ * @param {Number} room_id
+ * @param {[Number]} ids
+ * @param {HTMLElement} popup
+ */
+function backEndSaveAttributesRoom (room_id, ids, popup) {
+  axios
+    .put('/lk/room/attrs/' + room_id, {
+      ids
+    })
+    .then(r => {
+      if (r.data.success) {
+        $(popup).find('.close-this').click()
+      }
+    })
+    .catch(e => {
+      alert('Ошибка в сохранении атрибутов')
+    })
 }
 
 if ($('.arrow-up').length > 0)

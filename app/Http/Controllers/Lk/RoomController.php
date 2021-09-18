@@ -169,11 +169,40 @@ class RoomController extends Controller
     return response()->json(['success' => $status, 'room' => $room ]);
   }
 
+  /**
+   * Return all attributes in room
+   *
+   * @param int $id
+   *
+   * @return JsonResponse
+   */
   public function getAttributes (int $id)
   {
 
     $room = Room::findOrFail($id);
 
     return response()->json(['attrs' => $room->attrs]);
+  }
+
+  /**
+   * Save checked attributes in room
+   *
+   * @param int $id
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function putAttributes (int $id, Request $request): JsonResponse
+  {
+    $request->validate([
+      'ids' => 'required|array',
+      'ids.*' => 'required|exists:attributes,id'
+    ]);
+
+    $room = Room::findOrFail($id);
+
+    $room->attrs()->sync($request->get('ids'));
+    $room->save();
+
+    return response()->json(['success' => true]);
   }
 }

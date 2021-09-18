@@ -200,6 +200,11 @@ function createRoom () {
         $(room).find('#file-dropzone').addClass('file-dropzone').attr('data-id', roomId)
         $(room).find('.visualizacao').addClass('visualizacao-' + roomId)
 
+        let show_all = $(room).find('.show-all')
+        $(show_all).attr('data-room-id', roomId)
+
+        $(show_all).unbind('click').bind('click', openPopupAttributes)
+
         $(room).find('li.hour').each(function () {
           $(this).find('input#value').removeAttr('id').attr('id', 'value-' + roomId + '-' + this.dataset.id)
         })
