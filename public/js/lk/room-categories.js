@@ -5,7 +5,7 @@
  */
 
 
-/*
+/**
  * Редактирование комнаты по кнопке
  */
 function allowedEditRoom()
@@ -28,7 +28,7 @@ function allowedEditRoom()
   updateArrow()
 }
 
-/*
+/**
  * После создания категории
  * Создать пустую комнату с данной категорией
  */
@@ -45,7 +45,7 @@ function afterCreateCategory (category)
   updateArrow()
 }
 
-/*
+/**
  * После обновления категории
  * Обновить фронт данные у комнаты
  */
@@ -61,10 +61,10 @@ function afterUpdateCategory(category)
   $($(shadow).find('.row__head').find('.head-text').get(1)).find('span').html(category.value)
 }
 
-/*
+/**
  * После удаления категории
  * Удалить комнату фронт
-*/
+ */
 function afterRemoveCategory (id)
 {
   console.log(id)
@@ -78,14 +78,16 @@ function afterRemoveCategory (id)
 }
 
 
-/*
+/**
  * После сохранения комнаты
+ *
+ * @param {Element} room
  */
 function afterSaveRoom (room) {
   console.log(room)
 }
 
-/*
+/**
  * Создание новой комнаты фронт + бек
  */
 function createRoom ()
@@ -102,8 +104,8 @@ function createRoom ()
     })
 }
 
-/*
- * Сохранение комнаты, запрос бекенд
+/**
+ * Сохранение комнаты, запрос backend
  */
 function saveRoom ()
 {
@@ -163,8 +165,10 @@ function saveRoom ()
   }
 }
 
-/*
+/**
  * Сохранение комнаты, фронт
+ *
+ * @param {boolean} save
  */
 function saveFrontData (save = false)
 {
@@ -190,7 +194,7 @@ function saveFrontData (save = false)
   }
 }
 
-/*
+/**
  * Удаление комнаты
  */
 function removeRoom ()
@@ -198,8 +202,11 @@ function removeRoom ()
   updateArrow()
 }
 
-/*
+/**
  * Создание фронта комнаты
+ *
+ * @param {Number} room_id
+ * @param {Object} category
  */
 function createFrontData (room_id, category)
 {
@@ -265,7 +272,7 @@ function createFrontData (room_id, category)
     existFile[room_id] = []
 }
 
-/*
+/**
  * Обновление местоположения
  * всех иконок для Order
  */
@@ -282,6 +289,9 @@ function updateArrow ()
   $(firstRoom).find('.arrow-up').hide()
 }
 
+/**
+ * Переместить комнату выше
+ */
 function upOrderRoom ()
 {
   let room = $(this).parents('.shadow').get(0)
@@ -311,6 +321,9 @@ function upOrderRoom ()
 
 }
 
+/**
+ * Переместить комнату ниже
+ */
 function downOrderRoom ()
 {
   let room = $(this).parents('.shadow').get(0)
