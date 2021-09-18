@@ -13,9 +13,12 @@ use App\Models\Cost;
 use App\Models\Hotel;
 use App\Models\CostType;
 use Illuminate\View\View;
+use App\Models\Attribute;
+use App\Models\HotelType;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Models\AttributeCategory;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -44,11 +47,16 @@ class RoomController extends Controller
 
     $rooms = $hotel->rooms()->get()->sortBy('order');
     $costTypes = CostType::all();
+    $attribute_categories = AttributeCategory::with(['attributes' => function ($q) {
+      $q->whereModel(Room::class)->get();
+    }])
+      ->get();
     if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
-      return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes'));
+      return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes', 'attribute_categories'));
     }
 
-    return view('lk.room.edit-categories', compact('hotel', 'rooms', 'costTypes'));
+
+    return view('lk.room.edit-categories', compact('hotel', 'rooms', 'costTypes', 'attribute_categories'));
   }
 
   /**
@@ -159,5 +167,13 @@ class RoomController extends Controller
     $status = $room->save();
 
     return response()->json(['success' => $status, 'room' => $room ]);
+  }
+
+  public function getAttributes (int $id)
+  {
+
+    $room = Room::findOrFail($id);
+
+    return response()->json(['attrs' => $room->attrs]);
   }
 }
