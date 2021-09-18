@@ -145,7 +145,12 @@
         <div class="d-flex align-items-center popup-buttons">
           <div class="d-flex align-items-center">
             <button type="submit" class="button button_blue">Сохранить</button>
-            <button type="button" onclick="" class="button button_gray reset">Сбросить пароль</button>
+            <button type="button"
+                    onclick="event.preventDefault(); $('.popup[data-id={{ $user->id }}] form.generate-password-user').submit()"
+                    class="button button_gray reset"
+            >
+              Сбросить пароль
+            </button>
           </div>
           @if(auth()->id() !== $user->id)
             <button class="staff-remove"
@@ -159,6 +164,10 @@
 
       <form action="{{ route('lk.staff.remove', $user->id) }}" method="POST" class="remove-user d-none">
         @method('DELETE')
+        @csrf
+      </form>
+
+      <form action="{{ route('lk.staff.update.password', $user->id) }}" method="post" class="generate-password-user d-none">
         @csrf
       </form>
     </div>
