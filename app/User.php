@@ -11,6 +11,7 @@ use Eloquent;
 use App\Models\Hotel;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -71,12 +72,27 @@ class User extends Authenticatable
   use Notifiable;
   use SoftDeletes;
 
+  /**
+   * General permission, for db
+   * @var string
+   */
   public const POSITION_GENERAL = 'general';
 
+  /**
+   * Staff permission, for db
+   * @var string
+   */
   public const POSITION_STAFF = 'staff';
 
+  /**
+   * Array permission for forEach in blade
+   * @var array
+   */
   public const POSITIONS = [self::POSITION_GENERAL, self::POSITION_STAFF];
 
+  /**
+   * Russian (Translate) permission, for blade
+   */
   public const POSITIONS_LANGUAGE = [self::POSITION_STAFF => 'STAFF', self::POSITION_GENERAL => 'GENERAL'];
 
   /**
@@ -100,6 +116,8 @@ class User extends Authenticatable
    */
   protected $casts = ['email_verified_at' => 'datetime', 'is_admin' => 'boolean', 'is_moderate' => 'boolean'];
 
+  private string $info = '';
+
   /**
    * Get personal hotel.
    *
@@ -110,7 +128,12 @@ class User extends Authenticatable
     return $this->hasOne(Hotel::class);
   }
 
-  public function getPersonalHotelAttribute ()
+  /**
+   * return Hotel where staff or general
+   *
+   * @return Hotel|null
+   */
+  public function getPersonalHotelAttribute (): ?Hotel
   {
     $user = $this;
 

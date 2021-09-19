@@ -8,8 +8,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
+/**
+ * Notify user when created general User-Hotel
+ */
 class CreateUserInHotel extends Notification
 {
+
   use Queueable;
 
   /**
@@ -31,9 +35,10 @@ class CreateUserInHotel extends Notification
   /**
    * Create a new notification instance.
    *
-   * @param User $user
+   * @param User   $user
    * @param string $password
-   * @param Hotel $hotel
+   * @param Hotel  $hotel
+   *
    * @return void
    */
   public function __construct (User $user, string $password, Hotel $hotel)
@@ -64,13 +69,7 @@ class CreateUserInHotel extends Notification
    */
   public function toMail ($notifiable): MailMessage
   {
-    return (new MailMessage)
-      ->greeting('Привет!')
-      ->subject('Для вас был создан аккаунт')
-      ->line('Для вас был создан аккаунт в сервисе Gorooms')
-      ->line('Логин: ' . $this->user->email)
-      ->line('Пароль: ' . $this->password)
-      ->line('Вы были привязаны к отелю "' . $this->hotel->name . '"');
+    return (new MailMessage)->greeting('Привет!')->subject('Для вас был создан аккаунт')->line('Для вас был создан аккаунт в сервисе Gorooms')->line('Логин: ' . $this->user->email)->line('Пароль: ' . $this->password)->line('Вы были привязаны к отелю "' . $this->hotel->name . '"');
   }
 
   /**
@@ -82,7 +81,6 @@ class CreateUserInHotel extends Notification
    */
   public function toArray ($notifiable): array
   {
-    return [
-    ];
+    return [];
   }
 }
