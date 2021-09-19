@@ -72,6 +72,9 @@ class ObjectController extends Controller
     $hotel->type()->associate($request->get('hotel')['type']);
     $hotel->user()->associate($user->id);
     $hotel->save();
+
+    $hotel->users()->attach($user->id, ['hotel_position' => User::POSITION_GENERAL]);
+
     $hotel->saveAddress($request->get('address', ''));
     return redirect()->route('lk.object.edit');
   }
