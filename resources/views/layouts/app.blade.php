@@ -500,10 +500,11 @@
             }
             if (this.currentPosition === 'byNight') {
               let from = new Date(this.dateTime.fromDate.value);
-              from.setHours(this.costs.byNight.start_at);
-              from.setMinutes(0)
+              from.setHours(this.costs.byNight.start_at.substr(0,1));
+              from.setMinutes(this.costs.byNight.start_at.substr(3,5))
               let to = new Date(from.getTime());
-              to.setHours(this.costs.byNight.end_at);
+              to.setHours(this.costs.byNight.end_at.substr(0,1));
+              to.setMinutes(this.costs.byNight.end_at.substr(3,5));
               to.setDate(to.getDate()+1)
               this.setDate(from, to)
             }
@@ -591,6 +592,7 @@
             let dateOut = `${to.getFullYear()}-${('0' + (to.getMonth()+1)).slice(-2)}-${('0' + (to.getDate())).slice(-2)}`;
             let timeIn = `${('0' + (from.getHours())%24).slice(-2)}:${('0' + from.getMinutes()).slice(-2)}`;
             let timeOut = `${('0' + (to.getHours())%24).slice(-2)}:${('0' + to.getMinutes()).slice(-2)}`;
+
             if (!ignoreDate) {
               this.dateTime.fromDate.value = dateIn;
               this.dateTime.toDate.value = dateOut;
@@ -600,7 +602,6 @@
             this.dateTime.toTime.value = timeOut;
           },
           setForm(value) {
-            //this.setToday();
             if (value === 'hour') {
               this.showBookOn = true;
               this.dateTime.fromDate.disabled = false;
@@ -621,10 +622,11 @@
               this.currentPosition = 'byNight';
 
               let from = new Date();
-              from.setHours(this.costs.byNight.start_at);
-              from.setMinutes(0)
+              from.setHours(this.costs.byNight.start_at.substr(0,1));
+              from.setMinutes(this.costs.byNight.start_at.substr(3,5));
               let to = new Date(from.getTime());
-              to.setHours(this.costs.byNight.end_at);
+              to.setHours(this.costs.byNight.end_at.substr(0,1));
+              to.setMinutes(this.costs.byNight.end_at.substr(3,5));
               to.setDate(to.getDate()+1)
               this.setDate(from, to)
             }
@@ -638,10 +640,11 @@
               this.currentPosition = 'byDay';
 
               let from = new Date();
-              from.setHours(this.costs.byDay.start_at);
-              from.setMinutes(0)
+              from.setHours(this.costs.byDay.start_at.substr(0,1));
+              from.setMinutes(this.costs.byDay.start_at.substr(3,4))
               let to = new Date(from.getTime());
-              to.setHours(this.costs.byDay.end_at);
+              to.setHours(this.costs.byDay.end_at.substr(0,1));
+              to.setMinutes(this.costs.byDay.end_at.substr(3,4));
               to.setDate(to.getDate()+1)
               this.setDate(from, to)
             }
