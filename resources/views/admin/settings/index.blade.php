@@ -229,6 +229,127 @@
 
                     @endforeach
                 </form>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="dropdown-divider"></div>
+                        <div class="h3 text-center">Реестр времени</div>
+                    </div>
+                </div>
+                <form action="{{ route('admin.periods.update.json') }}" id="vue-datetime-register" method="post" @submit="submit">
+                    @csrf
+                    <input type="text" name="result_json" v-model="out.value" v-show="out.show">
+                    <h3>На час</h3>
+                    <input class="form-control inline time-form" type="number" v-model="data.type_1.start_at" max="24" min="0" placeholder="3">
+                    <input class="btn btn-info" type="button" value="Добавить" @click="add('1')">
+                    <br><br>
+                    <ul>
+                        <li v-for="(el, i) in type_1">
+                            <input class="form-control inline time-form" type="number" v-model="el.start_at" max="24" min="0" placeholder="0">
+                            <svg @click="del('1', i)" width="20px" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </li>
+                    </ul>
+                    <h3>На ночь</h3>
+                    <input class="form-control inline time-form" type="time" v-model="data.type_2.start_at">
+                    -
+                    <input class="form-control inline time-form" type="time" v-model="data.type_2.end_at">
+                    <input class="btn btn-info" type="button" value="Добавить" @click="add('2')">
+                    <br><br>
+                    <ul>
+                        <li v-for="(el, i) in type_2">
+                            <input class="form-control inline time-form" type="time" v-model="el.start_at" >
+                            -
+                            <input class="form-control inline time-form" type="time" v-model="el.end_at" max="24">
+                            <svg @click="del('2', i)" width="20px" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </li>
+                    </ul>
+                    <h3>На сутки</h3>
+                    <input class="form-control inline time-form" type="time" v-model="data.type_3.start_at" >
+                    -
+                    <input class="form-control inline time-form" type="time" v-model="data.type_3.end_at" >
+                    <input class="btn btn-info" type="button" value="Добавить" @click="add('3')">
+                    <br><br>
+                    <ul>
+                        <li v-for="(el, i) in type_3">
+                            <input class="form-control inline time-form" type="time" v-model="el.start_at" >
+                            -
+                            <input class="form-control inline time-form" type="time" v-model="el.end_at" max="24">
+                            <svg @click="del('3', i)" width="20px" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </li>
+                    </ul>
+                    <input type="submit" class="btn btn-success" value="Обновить">
+                </form>
+                <script>
+                  const DatatimeRegister = new Vue({
+                    el: '#vue-datetime-register',
+                    data() {
+                      return {
+                        startJson: '',
+                        type_1: [],
+                        type_2: [],
+                        type_3: [],
+                        out: {
+                          show: false,
+                          value: '',
+                        },
+                        data: {
+                          type_1: {
+                            start_at: '',
+                          },
+                          type_2: {
+                            start_at: '',
+                            end_at: '',
+                          },
+                          type_3: {
+                            start_at: '',
+                            end_at: '',
+                          }
+                        },
+                        for_delete: [],
+                      }
+                    },
+                    mounted() {
+                      this.startJson = JSON.parse('{!! json_encode($periods) !!}');
+                      this.type_1 = this.startJson.filter(el => el.cost_type_id === 1);
+                      this.type_2 = this.startJson.filter(el => el.cost_type_id === 2);
+                      this.type_3 = this.startJson.filter(el => el.cost_type_id === 3);
+                    },
+                    methods: {
+                      submit() {
+                        let obj = {
+                          for_delete: this.for_delete,
+                          data: [].concat(this.type_1, this.type_2, this.type_3),
+                        };
+                        this.out.value = JSON.stringify(obj);
+                        this.out.show = true;
+                      },
+                      add(type_number) {
+                        if (this.data['type_'+type_number].start_at === '') return;
+
+                        let obj = {
+                          cost_type_id: type_number,
+                          start_at: this.data['type_'+type_number].start_at,
+                          end_at: this.data['type_'+type_number].end_at ?? null,
+                        }
+                        this['type_'+type_number].push(obj)
+                      },
+                      del(type_number, i) {
+                        if (this['type_'+type_number][i].id) {
+                          this.for_delete.push(this['type_'+type_number][i].id);
+                        }
+                        this['type_'+type_number].splice(i,1);
+                        console.log('На удалении: ', this.for_delete)
+                      }
+                    }
+                  })
+                </script>
+                <style>
+                    .inline {
+                        display: inline-block !important;
+                    }
+                    .time-form {
+                        width: 100px;
+                    }
+                </style>
             </div>
         </div>
     </div>

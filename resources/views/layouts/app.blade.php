@@ -75,6 +75,12 @@
           type="text/javascript">
   </script>
   @stack('header')
+
+  @if(config('app.debug'))
+    <script src="{{ asset('js/vue-dev.js') }}"></script>
+  @else
+    <script src="{{ asset('js/vue@2.js') }}"></script>
+  @endif
 </head>
 
 <body>
@@ -427,11 +433,6 @@
       </form>
 
     </div>
-    @if(config('app.debug'))
-      <script src="{{ asset('js/vue-dev.js') }}"></script>
-    @else
-      <script src="{{ asset('js/vue@2.js') }}"></script>
-    @endif
     <script>
       const Booking = new Vue({
         el: '#vue-booking',
