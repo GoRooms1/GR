@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\Moderator;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EncryptCookies;
@@ -93,6 +94,7 @@ class Kernel extends HttpKernel
     'verified' => EnsureEmailIsVerified::class,
     'noDebugbar' => noDebugbar::class,
     'admin' => Admin::class,
-    'lk' => Lk::class
+    'lk' => Lk::class,
+    'moderator' => Moderator::class
   ];
 }
