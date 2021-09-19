@@ -22,6 +22,7 @@ use App\Notifications\CreateUserInHotel;
 use App\Notifications\UpdateRandomPasswordUser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Swift_TransportException;
 
 class StaffController extends Controller
 {
@@ -136,13 +137,17 @@ class StaffController extends Controller
       $hotel->users()->attach($user->id, ['hotel_position' => $request->get('hotel_position')]);
     }
 
-    $user->notify(
-      new CreateUserInHotel(
-        $user,
-        $request->get('password'),
-        auth()->user()->personal_hotel
-      )
-    );
+    try {
+      $user->notify(
+        new CreateUserInHotel(
+          $user,
+          $request->get('password'),
+          auth()->user()->personal_hotel
+        )
+      );
+    } catch (Swift_TransportException $e) {
+      return back()->with('success', 'Пользователь успешно создан')->with('error', 'Сообщение небыло отправлено');
+    }
 
 
     return back()->with('success', 'Пользователь успешно создан');
@@ -177,6 +182,13 @@ class StaffController extends Controller
     }
   }
 
+  /**
+   * Save random passworn in user and notify on mail
+   *
+   * @param int $id
+   *
+   * @return RedirectResponse
+   */
   public function generatePassword (int $id)
   {
     $user = User::findOrFail($id);
@@ -184,12 +196,20 @@ class StaffController extends Controller
     $user->password = Hash::make($password);
     $user->save();
 
-    $user->notify(new UpdateRandomPasswordUser($user, $password));
+    try {
+      $user->notify(new UpdateRandomPasswordUser($user, $password));
+    }  catch (Swift_TransportException $e) {
+      return back()->with('success', 'Пароль был сброшен и отправлен на почту сотрудника')->with('error', 'Сообщение небыло отправлено');
+    }
 
     return back()->with('success', 'Пароль был сброшен и отправлен на почту сотрудника');
   }
 
   /**
+   * Check exist general users in hotel.
+   * If exist general, and delete own general, Hotes set new user_id
+   * If not exist, not delete user
+   *
    * @param Hotel $hotel
    * @param User  $user
    *

@@ -7,11 +7,26 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
+/**
+ * Notify by user the new random password
+ */
 class UpdateRandomPasswordUser extends Notification
 {
+
   use Queueable;
 
+  /**
+   * Some user
+   *
+   * @var User
+   */
   private User $user;
+
+  /**
+   * User password
+   *
+   * @var string
+   */
   private string $password;
 
   /**
@@ -46,13 +61,7 @@ class UpdateRandomPasswordUser extends Notification
    */
   public function toMail ($notifiable): MailMessage
   {
-    return (new MailMessage)
-      ->greeting('Привет!')
-      ->subject('Сброс пароля на сайте Gorooms')
-      ->line('Для вас был сгенерирован новый пароль')
-      ->line('Логин: ' . $this->user->email)
-      ->line('Пароль: ' . $this->password)
-      ->line('В личном кабинете сотрудников отеля Вы можете его изменить');
+    return (new MailMessage)->greeting('Привет!')->subject('Сброс пароля на сайте Gorooms')->line('Для вас был сгенерирован новый пароль')->line('Логин: ' . $this->user->email)->line('Пароль: ' . $this->password)->line('В личном кабинете сотрудников отеля Вы можете его изменить');
   }
 
   /**

@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 7.30.4 on 2021-08-25 12:39:30.
+ * Generated for Laravel 7.30.4 on 2021-09-19 06:15:26.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -15479,8 +15479,22 @@ namespace Illuminate\Support {
 namespace App { 
 
     /**
-     * 
+     * App\Settings
      *
+     * @property int $id
+     * @property string $option
+     * @property string $value
+     * @property Carbon|null $created_at
+     * @property Carbon|null $updated_at
+     * @method static Builder|Settings newModelQuery()
+     * @method static Builder|Settings newQuery()
+     * @method static Builder|Settings query()
+     * @method static Builder|Settings whereCreatedAt($value)
+     * @method static Builder|Settings whereId($value)
+     * @method static Builder|Settings whereOption($value)
+     * @method static Builder|Settings whereUpdatedAt($value)
+     * @method static Builder|Settings whereValue($value)
+     * @mixin Eloquent
      */ 
     class Settings {
          
