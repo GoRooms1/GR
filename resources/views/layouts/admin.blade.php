@@ -18,6 +18,12 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @if(config('app.debug'))
+        <script src="{{ asset('js/vue-dev.js') }}"></script>
+    @else
+        <script src="{{ asset('js/vue@2.js') }}"></script>
+    @endif
 </head>
 <body>
 <div id="app">
