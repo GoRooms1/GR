@@ -239,6 +239,11 @@ class Hotel extends Model
     return $this->belongsToMany(User::class);
   }
 
+  public function user ()
+  {
+    return $this->belongsTo(User::class);
+  }
+
   public function attrs (): BelongsToMany
   {
     return $this->belongsToMany(Attribute::class, 'attribute_hotel', 'hotel_id', 'attribute_id');
