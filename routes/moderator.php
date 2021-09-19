@@ -8,3 +8,6 @@
 Route::get('/hotel/{id}', 'ObjectController@edit')->name('object.edit');
 Route::post('/hotel/{id}', 'ObjectController@update')->name('object.update');
 
+Route::delete('/image/{image}', 'ImageController@delete')->name('image.delete');
+Route::post('/image/moderate/{image}', 'ImageController@moderate')->name('image.moderate');
+
