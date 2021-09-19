@@ -114,7 +114,7 @@
                             <li class="room-prices-item">
                                 <strong class="room-prices-item-price">{{ $cost->period->type->name }}@if($cost->value !== '0')
                                         - от {{ $cost->value }} руб.@endif</strong>
-                                <span class="room-prices-item-info">{{ $cost->value === '0' ? 'не предоставляется' : $cost->info }}</span>
+                                <span class="room-prices-item-info">{{ $cost->value === '0' ? 'не предоставляется' : $cost->period->info }}</span>
                             </li>
                         @endforeach
                     </ul>

@@ -40,7 +40,7 @@
                         <li class="room-card-prices-item">
                             <p class="room-card-prices-item-title">{{ $cost->period->type->name }} - от {{ $cost->value }}
                                 руб.</p>
-                            <p class="room-card-prices-item-price">{{ $cost->info }}</p>
+                            <p class="room-card-prices-item-price">{{ $cost->period->info }}</p>
                         </li>
                     @endforeach
                 </ul>

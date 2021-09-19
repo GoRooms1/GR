@@ -123,7 +123,7 @@
                 <p class="room-card-prices-item-price">@if($cost->value !== '0'){{ $cost->value }}
                   руб.@endif</p>
               </div>
-              <p class="room-card-prices-item-time">{{ $cost->value === '0' ? 'не предоставляется' : $cost->info }}</p>
+              <p class="room-card-prices-item-time">{{ $cost->value === '0' ? 'не предоставляется' : $cost->period->info }}</p>
             </li>
           @endforeach
         </ul>
