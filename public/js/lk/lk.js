@@ -259,11 +259,60 @@ $('#howRideBtn2').bind('click', function () {
   }
 })
 
+$('.moderate').bind('click', function () {
+  let item = $(this).parents('.uploud__item').get(0)
+  if (item) {
+    let url = $(item).attr('data-image-moderate')
+    let id = $(item).attr('data-image-id')
+    console.log(id, url)
+    if (id && url) {
+      axios.post(url + '/' + id)
+        .then(r => {
+          if (r.data.success) {
+            let status = $(item).find('.uploud__status')
+            status.text('Опубликовано')
+            status.addClass('uploud__status_good')
+            $(this).remove()
+          }
+        })
+    } else {
+      console.log(2)
+      alert('Ошибка удаления фоток')
+    }
+  } else {
+    console.log(1)
+    alert('Ошибка удаления фоток')
+  }
+})
+
 /**
  * Клик на удаление фотографии
  */
 $('.remove-photo').bind('click', function () {
-  $(this).parents('.uploud__item').remove()
+  let item = $(this).parents('.uploud__item').get(0)
+  if (item) {
+    let url = $(item).attr('data-image-delete')
+    let id = $(item).attr('data-image-id')
+    console.log(id, url)
+    if (id && url) {
+      axios.delete(url + '/' + id)
+        .then(r => {
+          if (r.data.success) {
+            $(item).remove()
+          } else {
+            alert('Ошибка удаления фоток')
+          }
+        })
+        .catch(e => { alert(e.response.data) })
+    } else {
+      console.log(2)
+      alert('Ошибка удаления фоток')
+    }
+  } else {
+    console.log(1)
+    alert('Ошибка удаления фоток')
+  }
+
 })
 
 /**

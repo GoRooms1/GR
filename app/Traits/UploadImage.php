@@ -39,6 +39,13 @@ trait UploadImage
     }
   }
 
+  /**
+   * Delete Image
+   *
+   * @param Image $image
+   *
+   * @return JsonResponse
+   */
   public function delete(Image $image): JsonResponse
   {
     try {

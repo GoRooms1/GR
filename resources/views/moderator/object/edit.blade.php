@@ -345,6 +345,55 @@
     </form>
   </section>
 
+  <section class="part">
+    <div class="container">
+      <div class="row part__top">
+        <div class="col-12">
+          <h2 class="title title_blue">Фото объекта</h2>
+        </div>
+      </div>
+      <div class="row part__middle">
+        <div class="col-12">
+          <p class="caption">Загрузите фотографии объекта размещения. По этим фотографиям клиент сможет составить общее представление о Вашем объекте и выбрать его. Рекомендуем загрузить самые лучшие фотографии объекта. (минимум 1 фотография, максимум 6)</p>
+        </div>
+      </div>
+
+      <div class="row part__content">
+        <div class="col-12">
+          <ul class="uploud all-slides">
+
+            @foreach($hotel->images as $image)
+              <li class="uploud__item"
+                  data-image-id="{{ $image->id }}"
+                  data-image-delete="{{ route('moderator.image.delete', '') }}"
+                  data-image-moderate="{{ route('moderator.image.moderate', '') }}"
+              >
+                <div class="uploud__thumb uploud__thumb_admin"
+                     style="background-image: url('{{ url($image->path) }}'); background-size: cover;"
+                     id="upload{{$image->id}}">
+                  <span class="upload_number">№ {{ $loop->index + 1 }}</span>
+                  @if($image->moderate)
+                    <div class="moderate">
+                      <img src="{{ asset('img/lk/arrow-top.png') }}" alt="">
+                    </div>
+                  @endif
+                  <div class="remove-photo">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </div>
+                </div>
+                <p class="uploud__status {{ !$image->moderate ? 'uploud__status_good' : '' }}">
+                  {{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}
+                </p>
+              </li>
+            @endforeach
+
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
 
 
   <div class="overlay"></div>
