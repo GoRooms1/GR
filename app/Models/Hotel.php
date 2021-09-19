@@ -293,7 +293,7 @@ class Hotel extends Model
    */
   public function getPhoneAttribute ($value): ?string
   {
-    if (!$this->hide_phone && !\Request::is('admin/*') && !\Request::is('lk/*')) {
+    if (!$this->hide_phone && !\Request::is('admin/*') && !\Request::is('lk/*') && !\Request::is('moderator/*')) {
       $value = null;
     }
 
@@ -490,7 +490,10 @@ class Hotel extends Model
    */
   public function getDisabledSaveAttribute (): string
   {
-    return $this->old_moderate ? 'disabled' : '';
+    if (auth()->user()->is_moderate || !$this->old_moderate) {
+      return '';
+    }
+    return 'disabled';
   }
 
 }
