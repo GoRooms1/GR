@@ -31,6 +31,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Category whereName($value)
  * @method static Builder|Category whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property int|null $value
+ * @property-read int|null $rooms_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereValue($value)
  */
 class Category extends Model
 {

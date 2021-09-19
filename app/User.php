@@ -21,24 +21,26 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 /**
  * User Table
  *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string|null $phone
- * @property string|null $position
- * @property bool $is_moderate
- * @property string|null $code
- * @property string|null $hotel_position
- * @property bool $is_admin
- * @property Carbon|null $email_verified_at
- * @property string $password
- * @property string|null $remember_token
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
- * @property-read Hotel $hotel
+ * @property int                                                        $id
+ * @property string                                                     $name
+ * @property string                                                     $email
+ * @property string|null                                                $phone
+ * @property string|null                                                $position
+ * @property bool                                                       $is_moderate
+ * @property string|null                                                $code
+ * @property string|null                                                $hotel_position
+ * @property bool                                                       $is_admin
+ * @property Carbon|null                                                $email_verified_at
+ * @property string                                                     $password
+ * @property string|null                                                $remember_token
+ * @property Carbon|null                                                $created_at
+ * @property Carbon|null                                                $updated_at
+ * @property Carbon|null                                                $deleted_at
+ * @property-read Hotel                                                 $hotel
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
+ * @property-read int|null                                              $notifications_count
+ * @property-read mixed                                                 $personal_hotel
+ *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -65,66 +67,45 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  */
 class User extends Authenticatable
 {
+
   use Notifiable;
   use SoftDeletes;
+
+  public const POSITION_GENERAL = 'general';
+
+  public const POSITION_STAFF = 'staff';
+
+  public const POSITIONS = [self::POSITION_GENERAL, self::POSITION_STAFF];
+
+  public const POSITIONS_LANGUAGE = [self::POSITION_STAFF => 'STAFF', self::POSITION_GENERAL => 'GENERAL'];
 
   /**
    * The attributes that are mass assignable.
    *
    * @var array
    */
-  protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'is_admin',
-    'phone',
-    'position',
-    'code',
-    'position',
-    'is_moderate'
-  ];
+  protected $fillable = ['name', 'email', 'password', 'is_admin', 'phone', 'position', 'code', 'position', 'is_moderate'];
 
   /**
    * The attributes that should be hidden for arrays.
    *
    * @var array
    */
-  protected $hidden = [
-    'password',
-    'remember_token',
-  ];
+  protected $hidden = ['password', 'remember_token',];
 
   /**
    * The attributes that should be cast to native types.
    *
    * @var array
    */
-  protected $casts = [
-    'email_verified_at' => 'datetime',
-    'is_admin' => 'boolean',
-    'is_moderate' => 'boolean'
-  ];
-
-  public const POSITION_GENERAL ='general';
-  public const POSITION_STAFF = 'staff';
-
-  public const POSITIONS = [
-    self::POSITION_GENERAL,
-    self::POSITION_STAFF
-  ];
-
-  public const POSITIONS_LANGUAGE = [
-    self::POSITION_STAFF => 'STAFF',
-    self::POSITION_GENERAL => 'GENERAL'
-  ];
+  protected $casts = ['email_verified_at' => 'datetime', 'is_admin' => 'boolean', 'is_moderate' => 'boolean'];
 
   /**
    * Get personal hotel.
    *
    * @return HasOne
    */
-  public function hotel(): HasOne
+  public function hotel (): HasOne
   {
     return $this->hasOne(Hotel::class);
   }
@@ -132,7 +113,8 @@ class User extends Authenticatable
   public function getPersonalHotelAttribute ()
   {
     $user = $this;
-    return Hotel::whereHas('users', function ($q) use($user) {
+
+    return Hotel::whereHas('users', function ($q) use ($user) {
       $q->where('users.id', $user->id);
     })->first();
   }

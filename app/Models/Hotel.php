@@ -94,6 +94,9 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @mixin Eloquent
  * @property bool $checked_type_fond
  * @method static Builder|Hotel whereCheckedTypeFond($value)
+ * @property-read mixed $disabled_save
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @property-read int|null $users_count
  */
 class Hotel extends Model
 {
