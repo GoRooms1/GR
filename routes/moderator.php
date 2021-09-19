@@ -5,5 +5,6 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-Route::get('/hotel/{id}', 'ObjectController@show')->name('object.show');
+Route::get('/hotel/{id}', 'ObjectController@edit')->name('object.edit');
+Route::post('/hotel/{id}', 'ObjectController@update')->name('object.update');
 

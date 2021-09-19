@@ -180,15 +180,19 @@ $('#selectRoom').bind('click focused bloor', function () {
 /**
  * Клик для удаления комнаты
  */
-$('.quote__remove').bind('click', removeRoom)
+if (typeof removeRoom === 'function') {
+  $('.quote__remove').bind('click', removeRoom)
+}
 
 /**
  * Клик для создания новой комнаты
  */
-$('.room__add').on('click', createRoom)
+if (typeof createRoom === 'function') {
+  $('.room__add').on('click', createRoom)
+}
 
-let textChange = true,
-  textChange2 = true
+window.textChange = true
+window.textChange2 = true
 
 /**
  * Клик для сохранения с поля в блок
@@ -196,25 +200,25 @@ let textChange = true,
 $('#howRideBtn').bind('click', function () {
   let text = $(this).parents('.part').find('.text').text()
 
-  if (textChange === true) {
+  if (window.textChange === true) {
     $(this).parents('.part').find('.ck-editor__main p').text(text)
     $(this).text('Сохранить')
     $(this).parents('.part').find('.editor__text').hide()
     $(this).parents('.part').removeClass('ck-editor_hidden')
-    textChange = false
+    window.textChange = false
   } else if (textChange === false) {
     let editorText = $(this).parents('.part').find('.ck-content').html()
 
 
     if (editorText === "") {
-      textChange = false
+      window.textChange = false
     } else {
       $(this).parents('.part').find('.editor__text').show()
       $(this).parents('.part').find('.editor__text').html(editorText)
       $(this).parents('.part').addClass('ck-editor_hidden')
       $(this).parents('.part').find('.ck-editor__main i')
       $(this).text('Редактировать')
-      textChange = true
+      window.textChange = true
 
     }
 
@@ -225,20 +229,23 @@ $('#howRideBtn').bind('click', function () {
  * Клик для сохранения с поля в блок
  */
 $('#howRideBtn2').bind('click', function () {
-  let text = $(this).parents('.part').find('.text').text()
+  // let text = $(this).parents('.part').find('.text').text()
 
-  if (textChange2 === true) {
-    $(this).parents('.part').find('.ck-editor__main p').text(text)
+  if (window.textChange2 === true) {
+    // $(this).parents('.part').find('.ck-editor__main p').text(text)
     $(this).text('Сохранить')
+    setTimeout(() => {
+      $(this).attr('type', 'submit')
+    }, 500)
     $(this).parents('.part').find('.editor__text').hide()
     $(this).parents('.part').removeClass('ck-editor_hidden')
-    textChange2 = false
-  } else if (textChange2 === false) {
+    window.textChange2 = false
+  } else if (window.textChange2 === false) {
     let editorText = $(this).parents('.part').find('.ck-content').html()
 
-    if (editorText === "") {
-      textChange2 = false
-    } else {
+    // if (editorText === "") {
+    //   textChange2 = false
+    // } else {
       let editor_text = $(this).parents('.part').find('.editor__text')
       editor_text.show()
       editor_text.html(editorText)
@@ -246,9 +253,9 @@ $('#howRideBtn2').bind('click', function () {
       $(this).parents('.part').find('.ck-editor__main i')
       $(this).parents('.part').find('.ck-content').css('padding', '0')
       $(this).text('Редактировать')
-      textChange2 = true
+      window.textChange2 = true
 
-    }
+    // }
   }
 })
 
@@ -275,12 +282,16 @@ $('.agreement-choice').bind('click', function () {
 /**
  * Клик на редактирование комнаты
  */
-$('.quote__read').bind('click', allowedEditRoom)
+if (typeof allowedEditRoom === 'function') {
+  $('.quote__read').bind('click', allowedEditRoom)
+}
 
 /**
  *Клик на сохранение комнаты
  */
-$('.save-room').bind('click', saveRoom)
+if (typeof saveRoom === 'function') {
+  $('.save-room').bind('click', saveRoom)
+}
 
 /**
  * При поднятии клавиши клавиатуры в поле email
