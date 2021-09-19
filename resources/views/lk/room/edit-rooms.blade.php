@@ -282,7 +282,7 @@
 
             <div class="row">
               <div class="col-12">
-                <a class="show-all show-all_orange">Показать все</a>
+                <a class="show-all show-all_orange" data-room-id="{{ $room->id }}">Показать все</a>
               </div>
             </div>
             <div class="row row__bottom">
@@ -501,6 +501,9 @@
   </div>
 
 
+  @include('lk.room.__popup_attributes', [$attribute_categories])
+
+
 @endsection
 
 @section('header-js')
@@ -535,23 +538,23 @@
 
       @foreach($rooms as $room)
         existFile[{{ $room->id }}] = []
-      @foreach($room->images as $image)
+        @foreach($room->images as $image)
 
-        existFile[{{ $room->id }}].push({
-        id: "{{ $image->id }}",
-        name: "{{ $image->name }}",
-        path: "{{ url($image->path) }}",
-        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-        moderate: {!! $image->moderate ? 'true' : 'false' !!}
-      })
+          existFile[{{ $room->id }}].push({
+          id: "{{ $image->id }}",
+          name: "{{ $image->name }}",
+          path: "{{ url($image->path) }}",
+          moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+          moderate: {!! $image->moderate ? 'true' : 'false' !!}
+        })
 
-      mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}' , size: {{ File::size($image->getRawOriginal('path')) }} };
-      uploader[{{ $room->id }}].emit("addedfile", mockFile);
-      uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
-      uploader[{{ $room->id }}].emit("complete", mockFile);
-      uploader[{{ $room->id }}].files.push(mockFile)
+        mockFile = { name: '{{ $image->name }}', dataURL: '{{ url($image->path) }}', size: {{ File::exists($image->getRawOriginal('path')) ? File::size($image->getRawOriginal('path')) : 0 }} };
+        uploader[{{ $room->id }}].emit("addedfile", mockFile);
+        uploader[{{ $room->id }}].emit("thumbnail", mockFile, '{{ url($image->path) }}');
+        uploader[{{ $room->id }}].emit("complete", mockFile);
+        uploader[{{ $room->id }}].files.push(mockFile)
 
-      @endforeach
+        @endforeach
       @endforeach
 
 

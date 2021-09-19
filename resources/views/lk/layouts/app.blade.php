@@ -27,25 +27,28 @@
   <meta name="viewport" content="width=1200">
 </head>
 <body>
-@if(session()->has('success'))
-  <div class="alert alert-success alert-dismissible position-fixed w-auto fade show"
-       style="top: 50px; z-index: 1000; right: 20px" role="alert">
-    <strong>Успешно</strong> {{ session()->get('success') }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-@endif
 
-@if(session()->has('error'))
-  <div class="alert alert-danger alert-dismissible position-fixed w-auto fade show"
-       style="top: 50px; z-index: 1000; right: 20px" role="alert">
-    <strong>Ошибка</strong> {{ session()->get('error') }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-@endif
+<div class="position-fixed" style="top: 50px; z-index: 1000; right: 20px">
+  @if(session()->has('success'))
+    <div class="alert alert-success alert-dismissible w-auto fade show mt-3"
+         role="alert">
+      <strong>Успешно</strong> {{ session()->get('success') }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  @endif
+
+  @if(session()->has('error'))
+    <div class="alert alert-danger alert-dismissible w-auto mt-3 fade show"
+         role="alert">
+      <strong>Ошибка</strong> {{ session()->get('error') }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  @endif
+</div>
 
 <header class="header">
   <div class="header__top">
@@ -96,7 +99,7 @@
                class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">
               Номерной фонд
             </a>
-            <a href="#" class="menu__item">Сотрудники</a>
+            <a href="{{ route('lk.staff.index') }}" class="menu__item {{ Route::currentRouteNamed('lk.staff.*') ? 'active' : '' }}">Сотрудники</a>
             <a href="{{ route('lk.instruction.index') }}"
                class="menu__item {{ Route::currentRouteNamed('lk.instruction.*') ? 'active' : '' }}"
             >

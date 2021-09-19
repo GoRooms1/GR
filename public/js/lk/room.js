@@ -4,7 +4,7 @@
  *  Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-/*
+/**
  * Редактирование комнаты по кнопке
  */
 function allowedEditRoom ()  {
@@ -24,8 +24,8 @@ function allowedEditRoom ()  {
   $(this).hide()
 }
 
-/*
-  Сохранение комнаты, запрос бекенд
+/**
+ * Сохранение комнаты, запрос backend
  */
 function saveRoom () {
   if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
@@ -80,8 +80,8 @@ function saveRoom () {
   }
 }
 
-/*
-  Сохранение комнаты, фронт
+/**
+ * Сохранение комнаты, фронт
  */
 function saveFrontData () {
   if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
@@ -120,8 +120,8 @@ function saveFrontData () {
   }
 }
 
-/*
-  Удаление комнаты фронт + бек
+/**
+ * Удаление комнаты фронт + бек
  */
 function removeRoom () {
   let shadow = $(this).parents('.shadow').get(0)
@@ -147,8 +147,8 @@ function removeRoom () {
     })
 }
 
-/*
-  Создание новой комнаты фронт + бек
+/**
+ * Создание новой комнаты фронт + бек
  */
 function createRoom () {
   let hotel_id = $('input[name=hotel_id]').val()
@@ -199,6 +199,11 @@ function createRoom () {
 
         $(room).find('#file-dropzone').addClass('file-dropzone').attr('data-id', roomId)
         $(room).find('.visualizacao').addClass('visualizacao-' + roomId)
+
+        let show_all = $(room).find('.show-all')
+        $(show_all).attr('data-room-id', roomId)
+
+        $(show_all).unbind('click').bind('click', openPopupAttributes)
 
         $(room).find('li.hour').each(function () {
           $(this).find('input#value').removeAttr('id').attr('id', 'value-' + roomId + '-' + this.dataset.id)

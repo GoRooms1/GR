@@ -13,9 +13,12 @@ use App\Models\Cost;
 use App\Models\Hotel;
 use App\Models\CostType;
 use Illuminate\View\View;
+use App\Models\Attribute;
+use App\Models\HotelType;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Models\AttributeCategory;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -36,7 +39,7 @@ class RoomController extends Controller
    */
   public function edit(): View
   {
-    $hotel = Auth::user()->hotel;
+    $hotel = Auth::user()->personal_hotel;
 //    If Hotel don`t have type and zero rooms
     if (!$hotel->checked_type_fond && $hotel->rooms()->count() < 1) {
       return view('lk.room.fond', compact('hotel'));
@@ -44,11 +47,16 @@ class RoomController extends Controller
 
     $rooms = $hotel->rooms()->get()->sortBy('order');
     $costTypes = CostType::all();
+    $attribute_categories = AttributeCategory::with(['attributes' => function ($q) {
+      $q->whereModel(Room::class)->get();
+    }])
+      ->get();
     if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
-      return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes'));
+      return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes', 'attribute_categories'));
     }
 
-    return view('lk.room.edit-categories', compact('hotel', 'rooms', 'costTypes'));
+
+    return view('lk.room.edit-categories', compact('hotel', 'rooms', 'costTypes', 'attribute_categories'));
   }
 
   /**
@@ -64,7 +72,7 @@ class RoomController extends Controller
     $request->validate([
       'fond' => 'required|in:' . implode(',', $TYPES_FOND)
     ]);
-    $hotel = Auth::user()->hotel;
+    $hotel = Auth::user()->personal_hotel;
 
     $hotel->type_fond = $request->get('fond');
     $hotel->checked_type_fond = true;
@@ -159,5 +167,42 @@ class RoomController extends Controller
     $status = $room->save();
 
     return response()->json(['success' => $status, 'room' => $room ]);
+  }
+
+  /**
+   * Return all attributes in room
+   *
+   * @param int $id
+   *
+   * @return JsonResponse
+   */
+  public function getAttributes (int $id)
+  {
+
+    $room = Room::findOrFail($id);
+
+    return response()->json(['attrs' => $room->attrs]);
+  }
+
+  /**
+   * Save checked attributes in room
+   *
+   * @param int $id
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function putAttributes (int $id, Request $request): JsonResponse
+  {
+    $request->validate([
+      'ids' => 'required|array',
+      'ids.*' => 'required|exists:attributes,id'
+    ]);
+
+    $room = Room::findOrFail($id);
+
+    $room->attrs()->sync($request->get('ids'));
+    $room->save();
+
+    return response()->json(['success' => true]);
   }
 }

@@ -26,48 +26,52 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 /**
  * App\Models\Hotel
  *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property string $phone
- * @property string|null $phone_2
- * @property string $type_fond
- * @property int $user_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property int $is_popular
- * @property int|null $type_id
- * @property string|null $route
- * @property bool $old_moderate
- * @property bool $show
- * @property bool $moderate
- * @property string $route_title
- * @property string|null $slug
- * @property int $hide_phone
- * @property string|null $email
- * @property-read Address $address
+ * @property int                                                       $id
+ * @property string                                                    $name
+ * @property string|null                                               $description
+ * @property string                                                    $phone
+ * @property string|null                                               $phone_2
+ * @property string                                                    $type_fond
+ * @property int                                                       $user_id
+ * @property Carbon|null                                               $created_at
+ * @property Carbon|null                                               $updated_at
+ * @property int                                                       $is_popular
+ * @property int|null                                                  $type_id
+ * @property string|null                                               $route
+ * @property bool                                                      $old_moderate
+ * @property bool                                                      $show
+ * @property bool                                                      $moderate
+ * @property string                                                    $route_title
+ * @property string|null                                               $slug
+ * @property int                                                       $hide_phone
+ * @property string|null                                               $email
+ * @property-read Address                                              $address
  * @property-read \Illuminate\Database\Eloquent\Collection|Attribute[] $attrs
- * @property-read int|null $attrs_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $categories
- * @property-read int|null $categories_count
- * @property-read mixed $costs
- * @property-read mixed $meta_description
- * @property-read mixed $meta_keywords
- * @property-read mixed $meta_title
- * @property-read Image $image
- * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $images
- * @property-read int|null $images_count
- * @property-read PageDescription $meta
- * @property-read \Illuminate\Database\Eloquent\Collection|Metro[] $metros
- * @property-read int|null $metros_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Rating[] $ratings
- * @property-read int|null $ratings_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Review[] $reviews
- * @property-read int|null $reviews_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Room[] $rooms
- * @property-read int|null $rooms_count
- * @property-read HotelType|null $type
- * @property-read User $user
+ * @property-read int|null                                             $attrs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Category[]  $categories
+ * @property-read int|null                                             $categories_count
+ * @property-read mixed                                                $costs
+ * @property-read mixed                                                $meta_description
+ * @property-read mixed                                                $meta_keywords
+ * @property-read mixed                                                $meta_title
+ * @property-read Image                                                $image
+ * @property-read \Illuminate\Database\Eloquent\Collection|Image[]     $images
+ * @property-read int|null                                             $images_count
+ * @property-read PageDescription                                      $meta
+ * @property-read \Illuminate\Database\Eloquent\Collection|Metro[]     $metros
+ * @property-read int|null                                             $metros_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Rating[]    $ratings
+ * @property-read int|null                                             $ratings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Review[]    $reviews
+ * @property-read int|null                                             $reviews_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Room[]      $rooms
+ * @property-read int|null                                             $rooms_count
+ * @property-read HotelType|null                                       $type
+ * @property-read User                                                 $user
+ * @property-read mixed                                                $disabled_save
+ * @property-read \Illuminate\Database\Eloquent\Collection|User[]      $users
+ * @property-read int|null                                             $users_count
+ * @property bool                                                      $checked_type_fond
  * @method static Builder|Hotel newModelQuery()
  * @method static Builder|Hotel newQuery()
  * @method static Builder|Hotel popular()
@@ -92,77 +96,92 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @method static Builder|Hotel whereUpdatedAt($value)
  * @method static Builder|Hotel whereUserId($value)
  * @mixin Eloquent
- * @property bool $checked_type_fond
  * @method static Builder|Hotel whereCheckedTypeFond($value)
  */
 class Hotel extends Model
 {
+
   use UseImages;
   use ClearValidated;
   use CreatedAtOrdered;
 
+  /**
+   * Page
+   *
+   * @var int
+   */
   public const PER_PAGE = 6;
+
+  /**
+   * Many rooms have one category
+   *
+   * @var string
+   */
   public const ROOMS_TYPE = 'rooms';
+
+  /**
+   * Room has one category in hotel
+   *
+   * @var string
+   */
   public const CATEGORIES_TYPE = 'categories';
-  public const TYPES_FOND = [
-    self::ROOMS_TYPE,
-    self::CATEGORIES_TYPE
-  ];
-  protected $fillable = [
-    'name',
-    'description',
-    'phone',
-    'phone_2',
-    'route_title',
-    'route',
-    'is_popular',
-    'user_id',
-    'hide_phone',
-    'email',
-    'type_fond',
-    'save_columns',
-    'old_moderate',
-    'moderate',
-    'show',
-    'checked_type_fond'
-  ];
-  protected $hidden = [
-    'email',
-  ];
-  protected $with = [
-    'rooms',
-    'attrs',
-    'address',
-    'ratings',
-    'reviews',
-    'metros',
-    'images',
-    'image',
-    'type'
-  ];
-  protected $casts = [
-    'moderate' => 'boolean',
-    'old_moderate' => 'boolean',
-    'show' => 'boolean',
-    'checked_type_fond' => 'boolean'
-  ];
+
+  /**
+   * Types Rooms in Hotel
+   *
+   * @var array
+   */
+  public const TYPES_FOND = [self::ROOMS_TYPE, self::CATEGORIES_TYPE];
+
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
+  protected $fillable = ['name', 'description', 'phone', 'phone_2', 'route_title', 'route', 'is_popular', 'user_id', 'hide_phone', 'email', 'type_fond', 'save_columns', 'old_moderate', 'moderate', 'show', 'checked_type_fond'];
+
+  /**
+   * The attributes that should be hidden for serialization.
+   *
+   * @var array
+   */
+  protected $hidden = ['email',];
+
+  /**
+   * The relations to eager load on every query.
+   *
+   * @var array
+   */
+  protected $with = ['rooms', 'attrs', 'address', 'ratings', 'reviews', 'metros', 'images', 'image', 'type'];
+
+  /**
+   * The attributes that should be cast.
+   *
+   * @var array
+   */
+  protected $casts = ['moderate' => 'boolean', 'old_moderate' => 'boolean', 'show' => 'boolean', 'checked_type_fond' => 'boolean'];
 
   ### SCOPES
 
-  protected static function boot()
+  /**
+   * Bootstrap the model and its traits.
+   *
+   * @return void
+   */
+  protected static function boot (): void
   {
     parent::boot();
 
-//    TODO: Moderate Scope
-//    static::addGlobalScope('moderation', function (Builder $builder) {
-//      if (auth()->check()) {
-//        if (!auth()->user()->is_admin && !auth()->user()->is_moderate) {
-//          $builder->where('moderate', '=', false);
-//        }
-//      } else {
-//        $builder->where('moderate', '=', false);
-//      }
-//    });
+    //    TODO: Moderate Scope
+    //    static::addGlobalScope('moderation', function (Builder $builder) {
+    //      if (auth()->check()) {
+    //        if (!auth()->user()->is_admin && !auth()->user()->is_moderate) {
+    //          $builder->where('moderate', '=', false);
+    //        }
+    //      } else {
+    //        $builder->where('moderate', '=', false);
+    //      }
+    //    });
 
     self::creating(function (Hotel $hotel) {
       $hotel->slug = $hotel->slug ?? Str::slug($hotel->name);
@@ -205,55 +224,88 @@ class Hotel extends Model
 
   ### RELATIONS
 
-  public function scopePopular(Builder $query): Builder
+  public function scopePopular (Builder $query): Builder
   {
     return $query->where('is_popular', true);
   }
 
-  public function user(): BelongsTo
+  /**
+   * Hotel has user (staff, general)
+   *
+   * @return BelongsToMany
+   */
+  public function users (): belongsToMany
   {
-    return $this->belongsTo(User::class);
+    return $this->belongsToMany(User::class);
   }
 
-  public function attrs(): BelongsToMany
+  public function attrs (): BelongsToMany
   {
     return $this->belongsToMany(Attribute::class, 'attribute_hotel', 'hotel_id', 'attribute_id');
   }
 
-  public function categories(): HasMany
+  /**
+   * Categories in Hotel
+   *
+   * @return HasMany
+   */
+  public function categories (): HasMany
   {
     return $this->hasMany(Category::class)->orderBy('created_at');
   }
 
-  public function type(): BelongsTo
+  /**
+   * Hotel Type
+   *
+   * @return BelongsTo
+   */
+  public function type (): BelongsTo
   {
     return $this->belongsTo(HotelType::class);
   }
 
-  public function reviews(): HasMany
+  public function reviews (): HasMany
   {
     return $this->hasMany(Review::class)->with('ratings');
   }
 
-  public function ratings(): HasManyThrough
+  public function ratings (): HasManyThrough
   {
     return $this->hasManyThrough(Rating::class, Review::class);
   }
 
-  public function metros(): HasMany
+  /**
+   * Metro in Hotel
+   *
+   * @return HasMany
+   */
+  public function metros (): HasMany
   {
     return $this->hasMany(Metro::class);
   }
 
-  public function getPhoneAttribute($value)
+  /**
+   * If admin or moderator view phone
+   *
+   * @param $value
+   *
+   * @return string|null
+   */
+  public function getPhoneAttribute ($value): ?string
   {
     if (!$this->hide_phone && !\Request::is('admin/*') && !\Request::is('lk/*')) {
       $value = null;
     }
+
     return $value;
   }
 
-  public function getMetaDescriptionAttribute(): string
+  /**
+   * Description
+   *
+   * @return string
+   */
+  public function getMetaDescriptionAttribute (): string
   {
     return @$this->meta->meta_description ?? $this->getDescDefault();
   }
@@ -261,10 +313,10 @@ class Hotel extends Model
 
   ### MUTATORS
 
-  private function getDescDefault(): string
+  private function getDescDefault (): string
   {
     $desc = "%s %s %sв г. %s: большая база почасовых отелей с описанием номеров. Сортировка по районам, метро, округам и стоимости и скидки на проживание!";
-    $costs = (array)$this->getMinCosts();
+    $costs = (array) $this->getMinCosts();
 
     if (current($costs)) {
       $cost = current($costs);
@@ -276,7 +328,12 @@ class Hotel extends Model
     return sprintf($desc, $this->name, optional($this->address)->street, $cost, optional($this->address)->city ?? 'Москва');
   }
 
-  public function getMinCosts()
+  /**
+   * Minimal costs in type for all rooms
+   *
+   * @return object
+   */
+  public function getMinCosts (): object
   {
     $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
       $rooms = $this->rooms->pluck('id')->toArray();
@@ -287,39 +344,41 @@ class Hotel extends Model
         if (!in_array($type_id, $types)) {
           $types[] = $type_id;
           $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
-            return Cost::whereIn('room_id', $rooms)
-                ->whereHas('period', function ($q) use ($type_id) {
-                  $q->where('cost_type_id', $type_id);
-                })
-                ->where('value', '>', 0)
-                ->min('value') ?? '0';
+            return Cost::whereIn('room_id', $rooms)->whereHas('period', function ($q) use ($type_id) {
+                $q->where('cost_type_id', $type_id);
+              })->where('value', '>', 0)->min('value') ?? '0';
           });
-          $costs[] = [
-            'name' => $cost->period->type->name,
-            'id' => $cost->period->type->id,
-            'description' => $cost->description,
-            'info' => $cost->period->info,
-            'value' => $min_in_rooms,
-          ];
+          $costs[] = ['name' => $cost->period->type->name, 'id' => $cost->period->type->id, 'description' => $cost->description, 'info' => $cost->period->info, 'value' => $min_in_rooms,];
         }
       }
+
       return $costs;
     });
 
-    return (object)$costs;
+    return (object) $costs;
   }
 
-  public function getCostsAttribute(): Collection
+  /**
+   * All costs in all rooms
+   *
+   * @return Collection
+   */
+  public function getCostsAttribute (): Collection
   {
     return $this->rooms()->get()->pluck('costs')->flatten();
   }
 
-  public function rooms(): HasMany
+  /**
+   * Room in Hotel
+   *
+   * @return HasMany
+   */
+  public function rooms (): HasMany
   {
     return $this->hasMany(Room::class)->orderBy('created_at');
   }
 
-  public function getMetaKeywordsAttribute()
+  public function getMetaKeywordsAttribute ()
   {
     return @$this->meta->meta_keywords ?? null;
   }
@@ -328,20 +387,21 @@ class Hotel extends Model
 
   ### FUNCTIONS
 
-  public function getMetaTitleAttribute()
+  public function getMetaTitleAttribute ()
   {
     return @$this->meta->title ?? $this->getTitleDefault();
   }
 
-  private function getTitleDefault()
+  private function getTitleDefault ()
   {
     $street = optional($this->address)->street;
     $area_short = optional($this->address)->city_area_short;
     $metro = optional(optional($this->metros)->first())->name;
+
     return "Отель {$this->name}, {$street}, в {$area_short}, у метро {$metro}";
   }
 
-  public function saveAddress(string $address_raw, $comment = null): void
+  public function saveAddress (string $address_raw, $comment = null): void
   {
     $address = $this->getAddressInfo($address_raw);
     $address['comment'] = empty($comment) ? null : $comment;
@@ -350,22 +410,27 @@ class Hotel extends Model
     $this->save();
   }
 
-  public function getAddressInfo(string $address): array
+  public function getAddressInfo (string $address): array
   {
     $suggest = DadataSuggest::suggest('address', ['query' => $address, 'count' => 1]);
     $suggest['data']['value'] = $suggest['value'];
+
     return Address::getFillableData($suggest['data']);
   }
 
-  public function address(): HasOne
+  /**
+   * Address
+   *
+   * @return HasOne
+   */
+  public function address (): HasOne
   {
     return $this->hasOne(Address::class);
   }
 
-  public function attachMeta(Request $request): Hotel
+  public function attachMeta (Request $request): Hotel
   {
-    if (!$request->get('meta_title', false) && !$request->get('meta_description', false) && !$request->get('meta_keywords', false))
-      return $this;
+    if (!$request->get('meta_title', false) && !$request->get('meta_description', false) && !$request->get('meta_keywords', false)) return $this;
 
     $url = '/hotels/' . $this->slug;
 
@@ -393,27 +458,39 @@ class Hotel extends Model
 
   ### OVERWRITES
 
-  public function meta(): HasOne
+  public function meta (): HasOne
   {
     return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
   }
 
-  public function __get($key)
+  /**
+   * Dynamically retrieve attributes on the model.
+   *
+   * @param string $key
+   *
+   * @return mixed
+   */
+  public function __get ($key)
   {
-    if ($key === 'minimals')
-      return $this->getMinCosts();
+    if ($key === 'minimals') return $this->getMinCosts();
+
     return parent::__get($key); // TODO: Change the autogenerated stub
   }
 
-  public function getRouteKeyName()
+  public function getRouteKeyName ()
   {
     return 'slug';
   }
 
-  public function getDisabledSaveAttribute(): string
+  /**
+   * if lk user, create room, always disable button in form save.
+   * Not admin and moderator
+   *
+   * @return string
+   */
+  public function getDisabledSaveAttribute (): string
   {
     return $this->old_moderate ? 'disabled' : '';
   }
 
-  ### END OVERWRITES
 }
