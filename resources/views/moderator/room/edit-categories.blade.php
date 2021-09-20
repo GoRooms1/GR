@@ -81,7 +81,7 @@
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id }}">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id ?? 'null' }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('lk.room.save') }}">
@@ -92,12 +92,12 @@
             <div class="row row__head {{ !$room->moderate ? 'row__head_blue' : '' }}">
               <div class="col-6">
                 {{--    Название категории    --}}
-                <p class="head-text head-text_bold"> {{ $room->category->name }}</p>
+                <p class="head-text head-text_bold"> {{ $room->category->name ?? 'Категория' }}</p>
               </div>
 
               <div class="col-3">
                 {{--        Сколько мест --}}
-                <p class="head-text">Квота <span> {{ $room->category->value }} </span></p>
+                <p class="head-text">Квота <span> {{ $room->category->value ?? 0 }} </span></p>
               </div>
               <div class="col-1">
                 <button class="bg-transparent arrow-up border-0 text-white">
@@ -137,14 +137,14 @@
               <div class="col-12">
                 <div class="d-flex align-items-center">
                   <div class="select category-select">
-                    <input type="hidden" name="category_id" value="{{ $room->category->id }}">
+                    <input type="hidden" name="category_id" value="{{ $room->category->id ?? '' }}">
                     <div class="select__top">
-                      <span class="select__current">{{ $room->category->name }}</span>
+                      <span class="select__current">{{ $room->category->name ?? 'Категория' }}</span>
                     </div>
                   </div>
                   <div class="quote-text d-flex align-items-center">
                     <p class="quote-text__main">Квота</p>
-                    <p class="quote-text__number">{{ $room->category->value }}</p>
+                    <p class="quote-text__number">{{ $room->category->value ?? '0' }}</p>
                   </div>
                 </div>
               </div>
