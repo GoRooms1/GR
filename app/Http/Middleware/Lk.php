@@ -28,9 +28,6 @@ class Lk
 //    If logged in
       try {
         $user = User::findOrFail(auth()->id());
-        if ($user->is_moderate) {
-          return redirect()->route('index')->with('error', 'Модератор не может иметь отель');
-        }
         if ($user->personal_hotel) {
           return $next($request);
         }
