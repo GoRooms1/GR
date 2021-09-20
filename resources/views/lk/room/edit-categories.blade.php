@@ -91,10 +91,10 @@
 
             <input type="hidden"
                    name="attributes-get"
-                   value="{{ route('moderator.room.attr.get', $room->id) }}">
+                   value="{{ route('lk.room.attr.get', $room->id) }}">
             <input type="hidden"
                    name="attributes-put"
-                   value="{{ route('moderator.room.attr.put', $room->id) }}">
+                   value="{{ route('lk.room.attr.put', $room->id) }}">
 
             <div class="row row__head {{ !$room->moderate ? 'row__head_blue' : '' }}">
               <div class="col-6">

@@ -25,5 +25,6 @@ Route::delete('category/delete/{category}', 'CategoryController@delete')
 
 Route::get('room/attrs/{id}', 'RoomController@getAttributes')->name('room.attr.get');
 Route::put('room/attrs/{id}', 'RoomController@putAttributes')->name('room.attr.put');
+Route::post('room/published/{id}', 'RoomController@published')->name('room.published');
 
 Route::get('instruction/{id}', 'InstructionController@index')->name('instruction.index');
