@@ -29,8 +29,8 @@ Route::post('room/published/{id}', 'RoomController@published')->name('room.publi
 
 Route::get('instruction/{id}', 'InstructionController@index')->name('instruction.index');
 
+Route::post('staff/create-user/{id}', 'StaffController@create')->name('staff.create');
 Route::get('hotel/{id}/staff', 'StaffController@index')->name('staff.index');
-Route::delete('hotel/{id}/staff/remove/{staff_id}', 'StaffController@remove')->name('staff.remove');
-Route::post('hotel/{id}/staff/create', 'StaffController@create')->name('staff.create');
-Route::put('hotel/{id}/staff/update/{staff_id}', 'StaffController@update')->name('staff.update');
-Route::post('hotel/{id}/staff/update/{staff_id}/password', 'StaffController@generatePassword')->name('staff.update.password');
+Route::delete('staff/remove/{staff_id}', 'StaffController@remove')->name('staff.remove');
+Route::put('staff/update/{staff_id}', 'StaffController@update')->name('staff.update');
+Route::post('staff/update/{staff_id}/password', 'StaffController@generatePassword')->name('staff.update.password');

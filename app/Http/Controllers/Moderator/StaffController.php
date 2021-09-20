@@ -13,6 +13,7 @@ use Exception;
 use App\Models\Hotel;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
+use Swift_TransportException;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +23,6 @@ use App\Notifications\CreateUserInHotel;
 use App\Notifications\UpdateRandomPasswordUser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Swift_TransportException;
 
 class StaffController extends Controller
 {
@@ -33,7 +33,7 @@ class StaffController extends Controller
    * @return Application|Factory|View
    * @noinspection PhpVariableNamingConventionInspection
    */
-  public function index (idt $id)
+  public function index (int $id)
   {
     $hotel = Hotel::findOrFail($id);
 
@@ -57,17 +57,18 @@ class StaffController extends Controller
      * @var User[] $users
      */
     $users = $hotel->users()->withPivot(['hotel_position'])->get();
-    return view('lk.staff.index', compact('users', 'userGeneralCount', 'userStaffCount'));
+
+    return view('moderator.staff.index', compact('users', 'userGeneralCount', 'userStaffCount', 'hotel'));
   }
 
   /**
    * Delete user in system
    *
-   * @param int $id
+   * @param int $staff_id
    *
    * @return RedirectResponse
    */
-  public function remove (int $id, int $staff_id): RedirectResponse
+  public function remove (int $staff_id): RedirectResponse
   {
     try {
       //      TODO: Если удаляют юзеров который самый клавный, то меняем главного на первого general
@@ -81,16 +82,15 @@ class StaffController extends Controller
           //      Берём его отель
           $hotel = $user->hotel;
 
-          if(!$this->check_last_general($hotel, $user)) {
+          if (!$this->check_last_general($hotel, $user)) {
             return back()->with('error', 'Пользователь не удалён. Так как в отеле больше нету Главных');
           }
-        }
-        else {
-          $hotel = Hotel::whereHas('users', function ($q) use($user) {
+        } else {
+          $hotel = Hotel::whereHas('users', function ($q) use ($user) {
             $q->where('users.id', $user->id);
           })->first();
 
-          if(!$this->check_last_general($hotel, $user)) {
+          if (!$this->check_last_general($hotel, $user)) {
             return back()->with('error', 'Пользователь не удалён. Так как в отеле больше нету Главных');
           }
         }
@@ -98,10 +98,12 @@ class StaffController extends Controller
         if ($status) {
           return back()->with('success', 'Пользователь удалён');
         }
+
         return back()->with('error', 'Пользователь не удалён');
       } else {
         return back()->with('error', 'Пользователь не удалён. Так как Вы им являетесь');
       }
+
       return back()->with('error', 'Пользователь не удалён. Так как Вы им являетесь');
     } catch (ModelNotFoundException $e) {
       return back()->with('error', 'Не удалось найти пользователя');
@@ -112,14 +114,48 @@ class StaffController extends Controller
   }
 
   /**
+   * Check exist general users in hotel.
+   * If exist general, and delete own general, Hotes set new user_id
+   * If not exist, not delete user
+   *
+   * @param Hotel $hotel
+   * @param User  $user
+   *
+   * @return bool
+   */
+  private function check_last_general (Hotel $hotel, User $user): bool
+  {
+    //  Определяем кол-во главный в отеле
+    $count_general_users_in_hotel = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->count();
+
+    //  Если в отеле больше 1 главных то..
+
+    if ($count_general_users_in_hotel > 1) {
+
+      //    То берём нового юзера главного из отеля
+      $new_general_user = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->wherePivotNotIn('user_id', [$user->id])->first();
+
+      //    И отелю даём нового создателя.
+      $hotel->user_id = $new_general_user->id;
+      $hotel->save();
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Create User in Hotel
    *
    * @param StaffRequest $request
    *
    * @return RedirectResponse
    */
-  public function create (StaffRequest $request, int $id): RedirectResponse
+  public function create (int $id, StaffRequest $request): RedirectResponse
   {
+    $hotel = Hotel::findOrFail($id);
+
     $user = new User($request->all());
 
     $user->password = Hash::make($request->get('password'));
@@ -127,17 +163,17 @@ class StaffController extends Controller
     $user->is_moderate = false;
     $user->save();
 
-    $hotel = Hotel::findOrFail($id);
+
+
+    if ($hotel->users()->count() === 0 && $request->get('hotel_position') === User::POSITION_GENERAL) {
+      $hotel->user()->associate($user->id);
+    }
+
+
     $hotel->users()->attach($user->id, ['hotel_position' => $request->get('hotel_position')]);
 
     try {
-      $user->notify(
-        new CreateUserInHotel(
-          $user,
-          $request->get('password'),
-          auth()->user()->personal_hotel
-        )
-      );
+      $user->notify(new CreateUserInHotel($user, $request->get('password'), $hotel));
     } catch (Swift_TransportException $e) {
       return back()->with('success', 'Пользователь успешно создан')->with('error', 'Сообщение небыло отправлено');
     }
@@ -150,11 +186,11 @@ class StaffController extends Controller
    * Update user info
    *
    * @param StaffRequest $request
-   * @param int          $id
+   * @param int          $staff_id
    *
    * @return RedirectResponse|void
    */
-  public function update (StaffRequest $request, int $id, int $staff_id)
+  public function update (StaffRequest $request, int $staff_id)
   {
     try {
       $user = User::findOrFail($staff_id);
@@ -191,42 +227,11 @@ class StaffController extends Controller
 
     try {
       $user->notify(new UpdateRandomPasswordUser($user, $password));
-    }  catch (Swift_TransportException $e) {
+    } catch (Swift_TransportException $e) {
       return back()->with('success', 'Пароль был сброшен и отправлен на почту сотрудника')->with('error', 'Сообщение небыло отправлено');
     }
 
     return back()->with('success', 'Пароль был сброшен и отправлен на почту сотрудника');
-  }
-
-  /**
-   * Check exist general users in hotel.
-   * If exist general, and delete own general, Hotes set new user_id
-   * If not exist, not delete user
-   *
-   * @param Hotel $hotel
-   * @param User  $user
-   *
-   * @return bool
-   */
-  private function check_last_general (Hotel $hotel, User $user): bool
-  {
-    //  Определяем кол-во главный в отеле
-    $count_general_users_in_hotel = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->count();
-
-    //  Если в отеле больше 1 главных то..
-
-    if ($count_general_users_in_hotel > 1) {
-
-      //    То берём нового юзера главного из отеля
-      $new_general_user = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->wherePivotNotIn('user_id', [$user->id])->first();
-
-      //    И отелю даём нового создателя.
-      $hotel->user_id = $new_general_user->id;
-      $hotel->save();
-      return true;
-    } else {
-      return false;
-    }
   }
 
 }

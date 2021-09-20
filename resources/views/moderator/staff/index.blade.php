@@ -178,7 +178,7 @@
     <div class="popup" data-id="createUser">
     <img src="{{ asset('img/lk/close.png') }}" alt="" class="close-this">
     <h2 class="title title_blue popup__title">LOL</h2>
-    <form action="{{ route('moderator.staff.create') }}" method="POST">
+    <form action="{{ route('moderator.staff.create', $hotel->id) }}" method="POST">
       @csrf
       <input type="hidden" name="hotel_position">
       <input type="text"

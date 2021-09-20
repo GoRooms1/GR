@@ -40,7 +40,7 @@ class StaffRequest extends FormRequest
         'code' => ['required', 'string', 'max:255']
       ];
 
-      if ($this->routeIs('lk.staff.create')) {
+      if ($this->routeIs('*.staff.create')) {
         $create_array =[
           'hotel_position' => ['required', 'string', 'in:' . implode(',', User::POSITIONS)],
           'email' => ['required', 'string', 'unique:users,email'],
@@ -50,7 +50,7 @@ class StaffRequest extends FormRequest
         return array_merge($array, $create_array);
       }
 
-      if ($this->routeIs('lk.staff.update')) {
+      if ($this->routeIs('*.staff.update')) {
         $update_array =[
           'email' => ['required', 'string', 'unique:users,email,' . $this->id],
           'password' => ['nullable', 'string'],
