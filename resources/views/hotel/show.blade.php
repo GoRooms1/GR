@@ -150,8 +150,8 @@ use App\Models\Hotel;
                   @endif
                 </ul>
               </div>
-
             </div>
+
             <ul class="room-prices block-desktop">
               @foreach($hotel->minimals AS $minimal)
                 <li class="room-prices-item" itemprop="priceRange">
@@ -327,6 +327,11 @@ use App\Models\Hotel;
         <li class="hotel-tabs-item">
           <a href="#reviews" data-toggle="tab">Отзывы</a>
         </li>
+        @moderator
+          <li class="hotel-tabs-item">
+            <a href="{{ route('moderator.object.edit', $hotel->id) }}">Редактировать</a>
+          </li>
+        @endmoderator
       </ul>
       <div class="tab-content hotel-tab-content">
         <div id="rooms" class="tab-pane fade in active">

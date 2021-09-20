@@ -81,29 +81,29 @@
       <div class="row">
         <div class="col-12">
           <nav class="menu justify-content-center">
-{{--            <a href="#"--}}
-{{--               class="menu__item">--}}
-{{--              Календарь цен--}}
-{{--            </a>--}}
-{{--            <a href="#"--}}
-{{--               class="menu__item">--}}
-{{--              Маркетинг--}}
-{{--            </a>--}}
+            <a href="#"
+               class="menu__item mr-3">
+              Календарь цен
+            </a>
+            <a href="#"
+               class="menu__item mr-3">
+              Маркетинг
+            </a>
             <a href="{{ route('moderator.object.edit', $hotel->id) }}"
-               class="menu__item mr-2 {{ Route::currentRouteNamed('moderator.object.*') ? 'active' : '' }}"
+               class="menu__item mr-3 {{ Route::currentRouteNamed('moderator.object.*') ? 'active' : '' }}"
             >
               Объект
             </a>
-            <a href=""
-               class="menu__item {{ Route::currentRouteNamed('lk.room.*') ? 'active' : '' }}">
+            <a href="{{ route('moderator.room.edit', $hotel->id) }}"
+               class="menu__item mr-3 {{ Route::currentRouteNamed('moderator.room.*') ? 'active' : '' }}">
               Номерной фонд
             </a>
 {{--            <a href="{{ route('lk.staff.index') }}" class="menu__item {{ Route::currentRouteNamed('lk.staff.*') ? 'active' : '' }}">Сотрудники</a>--}}
-{{--            <a href="{{ route('lk.instruction.index') }}"--}}
-{{--               class="menu__item {{ Route::currentRouteNamed('lk.instruction.*') ? 'active' : '' }}"--}}
-{{--            >--}}
-{{--              Инструкции--}}
-{{--            </a>--}}
+            <a href="{{ route('moderator.instruction.index', $hotel->id) }}"
+               class="menu__item {{ Route::currentRouteNamed('moderator.instruction.*') ? 'active' : '' }}"
+            >
+              Инструкции
+            </a>
           </nav>
         </div>
       </div>

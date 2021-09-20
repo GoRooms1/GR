@@ -153,6 +153,10 @@ use App\Models\Room;
         <a href="" class="btn btn-orange btn-block" data-href="#book-popup" data-toggle="modal"
            data-target="#book-popup" data-action="{{ route('booking.room', $room->id) }}"
            onclick="showFormBookRoom('{{$room->id}}')">Забронировать</a>
+
+        @moderator
+          <a href="{{ route('moderator.room.edit', $hotel->id) }}" class="btn btn-orange btn-block btn-moderator-edit">Редактировать</a>
+        @endmoderator
       </div>
     </div>
   </div>

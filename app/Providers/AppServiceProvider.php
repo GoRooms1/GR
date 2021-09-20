@@ -63,5 +63,16 @@ class AppServiceProvider extends ServiceProvider
     Blade::directive('checked', function ($expression) {
       return "<?php echo \App\Providers\AppServiceProvider::setProp($expression, 'checked');?>";
     });
+
+
+
+    Blade::directive('moderator', function () {
+      return "<?php if (auth()->check()) {
+        if (auth()->user()->is_moderate) { ?>";
+    });
+
+    Blade::directive('endmoderator', function () {
+      return "<?php } } ?>";
+    });
   }
 }

@@ -2631,6 +2631,11 @@ select.form-control {
 .room-card-btns > .btn {
   width: 50%;
 }
+
+.room-card-btns .btn-moderator-edit {
+  margin-left: 10px;
+}
+
 .room-card-btns > .btn:only-child {
   width: 100%;
 }
@@ -5263,6 +5268,10 @@ button.modal-close:focus {
   .room-card-btns .show-tel-wrapper,
   .room-card-btns > .btn {
     width: 100%;
+  }
+  .room-card-btns .btn-moderator-edit {
+    margin-left: 0;
+    margin-top: 5px;
   }
   /*=HOTEL-PAGE=*/
   .review-form {

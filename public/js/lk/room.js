@@ -28,7 +28,7 @@ function allowedEditRoom ()  {
  * Сохранение комнаты, запрос backend
  */
 function saveRoom () {
-  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
+  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0 || $(this).parents('.shadow').attr('data-moderate') === 'moderate') {
     let shadow = $(this).parents('.shadow').get(0)
 
     let number = $(shadow).find('input[name=number]').val()
@@ -84,7 +84,7 @@ function saveRoom () {
  * Сохранение комнаты, фронт
  */
 function saveFrontData () {
-  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
+  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0 || $(this).parents('.shadow').attr('data-moderate') === 'moderate') {
     let shadow = $(this).parents('.shadow')
     $(shadow).find('.remove-btn').hide()
     $(this).hide()
@@ -133,8 +133,12 @@ function removeRoom () {
     .then(response => {
       if (response.data.success) {
         shadow.remove()
-        delete existFile[id]
-        delete uploader[id]
+        if (typeof existFile !== 'undefined') {
+          delete existFile[id]
+        }
+        if (typeof uploader !== 'undefined') {
+          delete uploader[id]
+        }
 
         if ($('#rooms').find('.shadow').length === 0) {
           document.location.reload();
@@ -185,9 +189,16 @@ function createRoom () {
 
         $('.quote__remove').unbind("click").bind('click', removeRoom)
 
-        let urlVal = $(room).find('input[name=url-delete]').val()
+        let urlDelete = $(room).find('input[name=url-delete]').val()
 
-        $(room).find('input[name=url-delete]').val(urlVal + '/' + roomId)
+        $(room).find('input[name=url-delete]').val(urlDelete + '/' + roomId)
+
+        let urlAttrGet = $(room).find('input[name=attributes-get]').val()
+        $(room).find('input[name=attributes-get]').val(urlAttrGet + '/' + roomId)
+
+        let urlAttrPut = $(room).find('input[name=attributes-put]').val()
+        $(room).find('input[name=attributes-put]').val(urlAttrPut + '/' + roomId)
+
         $('#orderRoom').removeAttr('id').attr('id', 'orderRoom-' + roomId)
         $('label[for=orderRoom]').removeAttr('for').attr('for', 'orderRoom-' + roomId)
 

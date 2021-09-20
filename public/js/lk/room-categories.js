@@ -258,8 +258,14 @@ function createFrontData (room_id, category)
   $('.quote__remove').unbind("click").bind('click', removeRoom)
 
   let urlVal = $(room).find('input[name=url-delete]').val()
-
   $(room).find('input[name=url-delete]').val(urlVal + '/' + room_id)
+
+  let urlAttrGet = $(room).find('input[name=attributes-get]').val()
+  $(room).find('input[name=attributes-get]').val(urlAttrGet + '/' + room_id)
+
+  let urlAttrPut = $(room).find('input[name=attributes-put]').val()
+  $(room).find('input[name=attributes-put]').val(urlAttrPut + '/' + room_id)
+
   $(room).find('input[name=category_id]').val(category.id)
   $('#orderRoom').removeAttr('id').attr('id', 'orderRoom-' + room_id)
   $('label[for=orderRoom]').removeAttr('for').attr('for', 'orderRoom-' + room_id)

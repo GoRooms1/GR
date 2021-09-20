@@ -634,9 +634,11 @@ function openPopupAttributes () {
       });
 
       let room_id = $(this).attr('data-room-id')
+      let room = $(this).parents('.shadow')
 
+      let urlAttrGet = $(room).find('input[name=attributes-get]').val()
       if (room_id) {
-        axios.get('/lk/room/attrs/' + room_id)
+        axios.get(urlAttrGet)
           .then(response => {
             let attrs = response.data.attrs
             let popup = $('#popupDetails');
@@ -695,8 +697,12 @@ function savePopupAttributesRoom () {
  * @param {HTMLElement} popup
  */
 function backEndSaveAttributesRoom (room_id, ids, popup) {
+  let room = $('.shadow[data-id=' + room_id + ']')
+
+  let urlAttrPut = $(room).find('input[name=attributes-put]').val()
+
   axios
-    .put('/lk/room/attrs/' + room_id, {
+    .put(urlAttrPut, {
       ids
     })
     .then(r => {

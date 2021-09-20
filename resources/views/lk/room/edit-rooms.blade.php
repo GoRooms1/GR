@@ -91,6 +91,13 @@
                    name="url-delete"
                    value="{{ route('lk.room.deleteRoom', $room->id) }}">
 
+            <input type="hidden"
+                   name="attributes-get"
+                   value="{{ route('moderator.room.attr.get', $room->id) }}">
+            <input type="hidden"
+                   name="attributes-put"
+                   value="{{ route('moderator.room.attr.put', $room->id) }}">
+
             <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
               <div class="col-1">
                 <p class="head-text">#{{ $room->order }}</p>
@@ -315,6 +322,13 @@
     <input type="hidden"
            name="url-delete"
            value="{{ route('lk.room.deleteRoom', '') }}">
+
+    <input type="hidden"
+           name="attributes-get"
+           value="{{ route('moderator.room.attr.get', '') }}">
+    <input type="hidden"
+           name="attributes-put"
+           value="{{ route('moderator.room.attr.put', '') }}">
 
     <div class="row row__head">
       <div class="col-1">

@@ -100,10 +100,12 @@
         @auth
           {{--                TODO: Добавить ссылку на личный кабинет    --}}
           @if(!auth()->user()->hotel()->exists())
-            <a href="{{ route('lk.start') }}"
-               class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
-              Зарегистрировать свой объект
-            </a>
+            @if (!auth()->user()->is_moderate)
+              <a href="{{ route('lk.start') }}"
+                 class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
+                Зарегистрировать свой объект
+              </a>
+            @endif
           @else
             <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный кабинет</a>
           @endif
@@ -126,7 +128,7 @@
             Зарегистрировать свой объект
           </a>
           <a href="{{ route('login') }}" class="header-top-btn header-top-btn-signin btn btn-sm btn-light">Войти</a>
-          <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>
+{{--          <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>--}}
         @endauth
       </div>
       <button id="js-menu-btn" class="header-menu-btn" type="button">
@@ -158,13 +160,15 @@
 
         @auth
           {{--                TODO: Добавить ссылку на личный кабинет    --}}
-          @if(!auth()->user()->hotel()->exists())
-            <li class="header-menu-item header-menu-item-mobile">
-              <a href="{{ route('lk.start') }}"
-                 class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
-                Зарегистрировать свой объект
-              </a>
-            </li>
+          @if(!auth()->user()->hotel()->exists() && !auth()->user()->is_moderate)
+            @if (!auth()->user()->is_moderate)
+              <li class="header-menu-item header-menu-item-mobile">
+                <a href="{{ route('lk.start') }}"
+                   class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
+                  Зарегистрировать свой объект
+                </a>
+              </li>
+            @endif
           @else
             <li class="header-menu-item header-menu-item-mobile">
               <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный кабинет</a>
@@ -194,7 +198,7 @@
             <a href="{{ route('login') }}" class="header-top-btn header-top-btn-signin btn btn-sm btn-light">Войти</a>
           </li>
           <li class="header-menu-item header-menu-item-mobile">
-            <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>
+{{--            <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>--}}
           </li>
         @endauth
       </ul>
