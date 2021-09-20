@@ -75,7 +75,7 @@ class Period extends Model
       return 'С ' . $this->start_at . ' до ' . $this->end_at;
     }
 
-    return 'От ' . $this->start_at . $this->theEnding($this->start_at) . ' часов';
+    return 'От ' . $this->start_at . $this->theEnding($this->start_at);
   }
 
   /**
@@ -88,15 +88,15 @@ class Period extends Model
   {
     $value = (int)$value;
     if ($value < 2) {
-      return '-го';
+      return '-го часа';
     }
 
     if ($value < 5) {
-      return '-x';
+      return '-x часов';
     }
 
     if ($value < 20) {
-      return '-и';
+      return '-и часов';
     }
 
     return '';

@@ -160,7 +160,7 @@ use App\Models\Hotel;
                     от {{ $minimal->value ?? $minimal['value'] ?? '' }} руб.@endif</strong>
                   <span class="room-prices-item-info">@if(@$minimal['value'] === '0' || @$minimal->value === '0')
                       не
-                      предоставляется @else{{ $minimal->description ?? $minimal['description'] ?? '' }}@endif</span>
+                      предоставляется @else{{ $minimal->info ?? $minimal['info'] ?? '' }}@endif</span>
                 </li>
               @endforeach
             </ul>
@@ -260,7 +260,7 @@ use App\Models\Hotel;
                 от {{ $minimal->value ?? $minimal['value'] ?? '' }} руб.@endif</strong>
               <span class="room-prices-item-info">@if(@$minimal['value'] === '0' || @$minimal->value === '0')
                   не
-                  предоставляется @else{{ $minimal->description ?? $minimal['description'] ?? '' }}@endif</span>
+                  предоставляется @else{{ $minimal->info ?? $minimal['info'] ?? '' }}@endif</span>
             </li>
           @endforeach
         </ul>
