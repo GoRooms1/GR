@@ -34,7 +34,7 @@ class HomeController extends Controller
    */
   public function start()
   {
-    if (auth()->check() && auth()->user()->hotel()->exists()) {
+    if (auth()->check() && auth()->user()->personal_hotel) {
       return redirect()->route('lk.index');
     }
 

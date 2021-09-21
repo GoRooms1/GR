@@ -68,3 +68,5 @@ Route::match(['GET', 'POST'], '/upload_for/', 'ImageController@uploadFor');
 Route::get('/clear-cache', 'SettingsController@clearCache')->name('clear-cache');
 
 Route::post('/periods/updateByJson', [\App\Http\Controllers\PeriodController::class, 'updateByJson'])->name('periods.update.json');
+
+Route::resource('moderators', 'ModeratorController');

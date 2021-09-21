@@ -8,6 +8,9 @@
 Route::get('/hotel/{id}', 'ObjectController@edit')->name('object.edit');
 Route::post('/hotel/{id}', 'ObjectController@update')->name('object.update');
 
+Route::post('/hotel/{id}/upload', 'ObjectController@upload')->name('object.upload');
+Route::post('/hotel/{id}/unupload', 'ObjectController@unupload')->name('object.unupload');
+
 Route::delete('/image/{image}', 'ImageController@delete')->name('image.delete');
 Route::post('/image/moderate/{image}', 'ImageController@moderate')->name('image.moderate');
 
@@ -25,5 +28,12 @@ Route::delete('category/delete/{category}', 'CategoryController@delete')
 
 Route::get('room/attrs/{id}', 'RoomController@getAttributes')->name('room.attr.get');
 Route::put('room/attrs/{id}', 'RoomController@putAttributes')->name('room.attr.put');
+Route::post('room/published/{id}', 'RoomController@published')->name('room.published');
 
 Route::get('instruction/{id}', 'InstructionController@index')->name('instruction.index');
+
+Route::post('staff/create-user/{id}', 'StaffController@create')->name('staff.create');
+Route::get('hotel/{id}/staff', 'StaffController@index')->name('staff.index');
+Route::delete('staff/remove/{staff_id}', 'StaffController@remove')->name('staff.remove');
+Route::put('staff/update/{staff_id}', 'StaffController@update')->name('staff.update');
+Route::post('staff/update/{staff_id}/password', 'StaffController@generatePassword')->name('staff.update.password');

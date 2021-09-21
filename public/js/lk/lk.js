@@ -259,6 +259,25 @@ $('#howRideBtn2').bind('click', function () {
   }
 })
 
+$('.room-upload').bind('click', function () {
+  let room = $(this).parents('.shadow').get(0)
+
+  let url = $(room).find('input[name=room-published]').val()
+  if (url) {
+    axios.post(url)
+      .then(r => {
+        if (r.data.success) {
+          $(room).find('.text.quote__status').text('Опубликовано').removeClass('quote__status_red')
+          $(room).find('.row__head').addClass('row__head_blue')
+          $(this).remove()
+        }
+      })
+      .catch(e => {
+        alert('Ошибка на стороне сервера')
+      })
+  }
+})
+
 $('.moderate').bind('click', function () {
   let item = $(this).parents('.uploud__item').get(0)
   if (item) {
@@ -718,13 +737,16 @@ function backEndSaveAttributesRoom (room_id, ids, popup) {
 let arrow_up = $('.arrow-up')
 let arrow_down = $('.arrow-down')
 
-if (arrow_up.length > 0) {
-  arrow_up.on('click', upOrderRoom)
-}
+setTimeout( () => {
+  if (arrow_up.length > 0) {
+    arrow_up.on('click', upOrderRoom)
+  }
+  if (arrow_down.length > 0) {
+    arrow_down.on('click', downOrderRoom)
+  }
 
-if (arrow_down.length > 0) {
-  arrow_down.on('click', downOrderRoom)
-}
+}, 400)
+
 
 if (typeof updateArrow === 'function') {
   updateArrow()

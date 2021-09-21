@@ -11,6 +11,7 @@ use Exception;
 use App\Models\Room;
 use App\Models\Cost;
 use App\Models\Hotel;
+use App\Helpers\Json;
 use App\Models\CostType;
 use Illuminate\View\View;
 use App\Models\Attribute;
@@ -97,7 +98,6 @@ class RoomController extends Controller
       $room = $this->saveDataTypeRoom($request->all(), $room);
     }
 
-    $room->moderate = true;
     $room->category()->associate($request->get('category'));
     $room->costs()->delete();
 
@@ -176,7 +176,7 @@ class RoomController extends Controller
    *
    * @return JsonResponse
    */
-  public function getAttributes (int $id)
+  public function getAttributes (int $id): JsonResponse
   {
 
     $room = Room::findOrFail($id);

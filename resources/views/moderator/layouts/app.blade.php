@@ -80,7 +80,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <nav class="menu justify-content-center">
+          <nav class="menu ">
             <a href="#"
                class="menu__item mr-3">
               Календарь цен
@@ -98,7 +98,7 @@
                class="menu__item mr-3 {{ Route::currentRouteNamed('moderator.room.*') ? 'active' : '' }}">
               Номерной фонд
             </a>
-{{--            <a href="{{ route('lk.staff.index') }}" class="menu__item {{ Route::currentRouteNamed('lk.staff.*') ? 'active' : '' }}">Сотрудники</a>--}}
+            <a href="{{ route('moderator.staff.index', $hotel->id) }}" class="menu__item {{ Route::currentRouteNamed('moderator.staff.*') ? 'active' : '' }}">Сотрудники</a>
             <a href="{{ route('moderator.instruction.index', $hotel->id) }}"
                class="menu__item {{ Route::currentRouteNamed('moderator.instruction.*') ? 'active' : '' }}"
             >

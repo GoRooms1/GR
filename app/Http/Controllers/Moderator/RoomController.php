@@ -11,6 +11,7 @@ use Exception;
 use App\Models\Room;
 use App\Models\Cost;
 use App\Models\Hotel;
+use App\Helpers\Json;
 use App\Models\CostType;
 use Illuminate\Http\Request;
 use App\Models\AttributeCategory;
@@ -141,6 +142,19 @@ class RoomController extends Controller
     $room->save();
 
     return response()->json(['success' => true]);
+  }
+
+  /**
+   * @param int $id
+   *
+   * @return JsonResponse
+   */
+  public function published (int $id): JsonResponse
+  {
+    $room = Room::find($id);
+    $room->update(['moderate' => false]);
+
+    return Json::good(['moderate' => false]);
   }
 
 }

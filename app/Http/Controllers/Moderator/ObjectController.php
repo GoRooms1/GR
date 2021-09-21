@@ -7,6 +7,7 @@
 
 namespace App\Http\Controllers\Moderator;
 
+use App\User;
 use App\Models\Hotel;
 use App\Models\Metro;
 use Illuminate\View\View;
@@ -18,7 +19,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use App\Http\Requests\LK\ObjectUpdateRequest;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Foundation\Application;
+use App\Notifications\NotificationPublishedHotel;
+use App\Notifications\NotificationUnPublishedHotel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -101,6 +105,33 @@ class ObjectController extends Controller
     }
 
     return redirect()->back()->with('success', 'Данные отеля обновились');
+  }
+
+  public function upload (int $id): RedirectResponse
+  {
+    $hotel = Hotel::findOrFail($id);
+    $hotel->moderate = false;
+    $hotel->show = true;
+
+    $hotel->save();
+
+    $users = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->get();
+
+    Notification::send($users, new NotificationPublishedHotel($hotel));
+
+    return redirect()->back()->with('success', 'Отель опубликован');
+  }
+
+  public function unupload (int $id): RedirectResponse
+  {
+    $hotel = Hotel::findOrFail($id);
+    $hotel->moderate = false;
+    $hotel->save();
+    $users = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->get();
+
+    Notification::send($users, new NotificationUnPublishedHotel($hotel));
+
+    return redirect()->back()->with('success', 'Уведомления отправлено на почтовый ящик пользователей');
   }
 
 }

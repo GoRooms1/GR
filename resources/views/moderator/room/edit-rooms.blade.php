@@ -6,6 +6,7 @@
   <input type="hidden" name="category.delete" value="{{ route('moderator.category.delete', '') }}">
 
   <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
+
   <section class="part">
     <div class="container">
       <div class="row demonstration">
@@ -97,11 +98,16 @@
                    name="attributes-put"
                    value="{{ route('moderator.room.attr.put', $room->id) }}">
 
+            <input type="hidden"
+                   name="room-published"
+                   value="{{ route('moderator.room.published', $room->id) }}">
+
+
             <div class="row row__head {{ $room->moderate ? '' : 'row__head_blue' }}">
               <div class="col-1">
                 <p class="head-text">#{{ $room->order }}</p>
               </div>
-              <div class="col-1 offset-sm-1">
+              <div class="col-1">
                 <p class="head-text">№ {{ $room->number }}</p>
               </div>
               <div class="col-2 offset-sm-1">
@@ -109,6 +115,13 @@
               </div>
               <div class="col-3 offset-sm-2">
                 <p class="head-text">{{ $room->category->name ?? '' }}</p>
+              </div>
+              <div class="col-1 text-right">
+                @if($room->moderate)
+                  <button style="font-size: 30px" class="room-upload text-white">
+                    <i class="fa fa-upload"></i>
+                  </button>
+                @endif
               </div>
               <div class="col-1 text-right">
                 <button class="quote__remove text-white">

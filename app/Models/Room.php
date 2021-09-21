@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Route;
 use Eloquent;
 use App\Traits\UseImages;
 use Illuminate\Http\Request;
@@ -101,19 +102,24 @@ class Room extends Model
   {
     parent::boot();
 
-//    static::addGlobalScope('moderation', function (Builder $builder) {
-//      if (auth()->check()) {
-//        if (!auth()->user()->is_admin && !auth()->user()->is_moderate) {
-//          $builder->whereHas('hotel', function ($q) {
-//            $q->where('moderate', '=', false);
-//          })->where('moderate', '=', false);
-//        }
-//      } else {
-//         $builder->whereHas('hotel', function ($q) {
-//            $q->where('moderate', '=', false);
-//          })->where('moderate', '=', false);
-//      }
-//    });
+    static::addGlobalScope('moderation', function (Builder $builder) {
+      if (auth()->check()) {
+        if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
+          !Route::currentRouteNamed('lk.*') &&
+          !Route::currentRouteNamed('moderator.*') &&
+          !Route::currentRouteNamed('api.*') &&
+          !Route::currentRouteNamed('admin.*')
+        ) {
+          $builder->whereHas('hotel', function ($q) {
+            $q->where('moderate', false)->where('show', true);
+          })->where('moderate', false);
+        }
+      } else {
+        $builder->whereHas('hotel', function ($q) {
+          $q->where('moderate', false)->where('show', true);
+        })->where('moderate', false);
+      }
+    });
   }
 
   public function category(): BelongsTo
