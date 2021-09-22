@@ -57,8 +57,9 @@
           @foreach ($hotel->metros as $metro)
             @break($loop->index == 2)
             <li class="metro">
-              <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ \Str::slug($metro->name) }}">
-                <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>{{ $metro->name }} - {{ $metro->distance }}
+              <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ Str::slug($metro->name) }}">
+                <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>{{ $metro->name }}
+                - {{ $metro->distance }}
               </a>
             </li>
           @endforeach
@@ -100,11 +101,15 @@
       <ul class="hotel-card-prices">
         @foreach($hotel->minimals AS $minimal)
           <li class="hotel-card-prices-item">
-            <p class="hotel-card-prices-item-title">{{ $minimal->name ?? $minimal['name'] ?? '' }}@if($minimal['value'] !== '0')
-                - от {{ $minimal->value ?? $minimal['value'] ?? '' }}
-                руб.@endif</p>
-            <p class="hotel-card-prices-item-info">@if($minimal['value'] === '0') не
-              предоставляется @else{{ $minimal->info ?? $minimal['info'] ?? '' }}@endif</p>
+            @if($minimal->value === 0)
+              <p class="hotel-card-prices-item-title">{{ $minimal->name ?? '' }}
+                - {{ $minimal->info ?? '' }}</p>
+            @else
+              <p class="hotel-card-prices-item-title">{{ $minimal->name ?? '' }}
+                - от {{ $minimal->value ?? '' }}
+                руб.</p>
+              <p class="hotel-card-prices-item-info">{{ $minimal->info ?? '' }}</p>
+            @endif
           </li>
           @break($loop->iteration > 2)
         @endforeach

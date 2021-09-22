@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Route;
+use Cache;
 use Eloquent;
 use App\Traits\UseImages;
 use Illuminate\Http\Request;
@@ -145,6 +146,33 @@ class Room extends Model
   public function costs(): HasMany
   {
     return $this->hasMany(Cost::class, 'room_id', 'id');
+  }
+
+  public function getAllCostsAttribute()
+  {
+    $costs = $this->costs()->with('period.type')->get()->sortBy('type.sort');
+
+    $types = Cache::remember('types', 60*60*24*12, function () {
+      return CostType::orderBy('sort')->get();
+    });
+
+    $collection = new Collection();
+
+    foreach ($types as $type) {
+      $check = $costs->contains('period.type.id', $type->id);
+      if (!$check) {
+        $cost = (object) [
+          'type' => $type,
+          'value' => 'Не предоставляется'
+        ];
+        $collection->add($cost);
+      } else {
+        $collection->add($costs->firstWhere('period.type.id', '=', $type->id));
+      }
+
+    }
+
+    return $collection;
   }
 
   public function attachMeta(Request $request): Room

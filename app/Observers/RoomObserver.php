@@ -7,6 +7,7 @@
 
 namespace App\Observers;
 
+use Cache;
 use App\Models\Room;
 use App\Models\Hotel;
 
@@ -27,7 +28,7 @@ class RoomObserver
   public function created(Room $room): void
   {
     if (auth()->check()) {
-
+      Cache::flush();
       $hotel = $room->hotel;
 
       if (!auth()->user()->is_moderate && !auth()->user()->is_admin ) {
@@ -69,6 +70,7 @@ class RoomObserver
   public function updated(Room $room): void
   {
     if (auth()->check()) {
+      Cache::flush();
 
       $hotel = $room->hotel;
 
@@ -84,6 +86,7 @@ class RoomObserver
    */
   public function deleted(Room $room): void
   {
+    Cache::flush();
     $hotel = $room->hotel;
     if ($hotel->rooms()->count() === 0) {
       $hotel->type_fond = null;

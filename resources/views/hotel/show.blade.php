@@ -155,12 +155,15 @@ use App\Models\Hotel;
             <ul class="room-prices block-desktop">
               @foreach($hotel->minimals AS $minimal)
                 <li class="room-prices-item" itemprop="priceRange">
-                  <strong class="room-prices-item-price">{{ $minimal->name ?? $minimal['name'] ?? '' }}
-                    @if(@$minimal['value'] !== '0') -
-                    от {{ $minimal->value ?? $minimal['value'] ?? '' }} руб.@endif</strong>
-                  <span class="room-prices-item-info">@if(@$minimal['value'] === '0' || @$minimal->value === '0')
-                      не
-                      предоставляется @else{{ $minimal->info ?? $minimal['info'] ?? '' }}@endif</span>
+                  @if($minimal->value !== 0)
+                    <strong class="room-prices-item-price">{{ $minimal->name ?? '' }}
+                       -
+                      от {{ $minimal->value ?? '' }} руб.</strong>
+                    <span class="room-prices-item-info">{{ $minimal->info ?? '' }}</span>
+                  @else
+                    <strong class="room-prices-item-price">{{ $minimal->name ?? '' }}
+                      - {{ $minimal->info ?? '' }}</strong>
+                  @endif
                 </li>
               @endforeach
             </ul>
@@ -254,13 +257,15 @@ use App\Models\Hotel;
         <ul class="room-prices">
           @foreach($hotel->minimals AS $minimal)
             <li class="room-prices-item">
-              <strong
-                  class="room-prices-item-price">{{ $minimal->name ?? $minimal['name'] ?? '' }}
-                @if(@$minimal['value'] !== '0') -
-                от {{ $minimal->value ?? $minimal['value'] ?? '' }} руб.@endif</strong>
-              <span class="room-prices-item-info">@if(@$minimal['value'] === '0' || @$minimal->value === '0')
-                  не
-                  предоставляется @else{{ $minimal->info ?? $minimal['info'] ?? '' }}@endif</span>
+              @if($minimal->value !== 0)
+                <strong class="room-prices-item-price">{{ $minimal->name ?? '' }}
+                  -
+                  от {{ $minimal->value ?? '' }} руб.</strong>
+                <span class="room-prices-item-info">{{ $minimal->info ?? '' }}</span>
+              @else
+                <strong class="room-prices-item-price">{{ $minimal->name ?? '' }}
+                  - {{ $minimal->info ?? '' }}</strong>
+              @endif
             </li>
           @endforeach
         </ul>

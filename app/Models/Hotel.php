@@ -348,25 +348,44 @@ class Hotel extends Model
    */
   public function getMinCosts (): object
   {
+    Cache::flush();
     $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
       $rooms = $this->rooms->pluck('id')->toArray();
-      $costs = [];
+      $items = new Collection();
       $types = [];
       foreach ($this->costs->sortBy('period.type.sort') as $cost) {
         $type_id = $cost->period->type->id;
-        if (!in_array($type_id, $types)) {
+        if (!in_array($type_id, $types, true)) {
           $types[] = $type_id;
           $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
             return Cost::whereIn('room_id', $rooms)->whereHas('period', function ($q) use ($type_id) {
                 $q->where('cost_type_id', $type_id);
               })->where('value', '>', 0)->min('value') ?? '0';
           });
-          $costs[] = ['name' => $cost->period->type->name, 'id' => $cost->period->type->id, 'description' => $cost->description, 'info' => $cost->period->info, 'value' => $min_in_rooms,];
+          $item = (object) ['name' => $cost->period->type->name, 'id' => $cost->period->type->id, 'description' => $cost->description, 'info' => $cost->period->info, 'value' => $min_in_rooms,];
+          $items->add($item);
+        }
+      }
+
+      $types = CostType::orderBy('sort')->get();
+      $costs = new Collection();
+      foreach ($types as $type) {
+        $check = $items->contains('id', $type->id);
+        if (!$check) {
+          $costs->add((object) [
+            'name' => $type->name,
+            'info' => 'Не предоставляется',
+            'value' => 0
+          ]);
+        } else {
+          $costs->add($items->firstWhere('id', '=', $type->id));
         }
       }
 
       return $costs;
     });
+    debug(1);
+    debug($costs);
 
     return (object) $costs;
   }

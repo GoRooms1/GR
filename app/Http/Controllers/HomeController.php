@@ -18,12 +18,13 @@ class HomeController extends Controller
     {
 
         $city = session('city', 'null');
-        $hotels = Cache::remember('hotels_city.'.$city, 60*60*24*12, function () use ($city) {
+        $auth = auth()->check() ? auth()->id() : 'user';
+        $hotels = Cache::remember('hotels_city.' . $auth . '.' . $city, 60*60*24*12, function () use ($city) {
             return Hotel::popular()->whereHas('address', function (Builder $builder) use($city) {
                 $builder->where('city', $city);
             })->get();
         });
-        $rooms = Cache::remember('rooms_city.'.$city, 60*60*24*12, function () use ($city) {
+        $rooms = Cache::remember('rooms_city.' . $auth . '.' . $city, 60*60*24*12, function () use ($city) {
             return Room::with('hotel.ratings')->hot()->whereHas('hotel.address', function (Builder $builder) use($city) {
                 $builder->where('city', $city);
             })->get();

@@ -276,10 +276,13 @@
         <div class="col-12">
           <table class="prices">
             @foreach ($hotel->minimals as $min)
-              <tr>
-                <td class="prices__main">{{ $min['name'] }} - от {{ $min['value'] }} руб.</td>
-                <td class="text">{{ $min['info'] }}</td>
-              </tr>
+              @if ($min->value !== 0)
+                <td class="prices__main">{{ $min->name }} - от {{ $min->value }} руб.</td>
+                <td class="text">{{ $min->info }}</td>
+              @else
+                <td class="prices__main">{{ $min->name }}</td>
+                <td class="text">{{ $min->info }}</td>
+              @endif
             @endforeach
 
           </table>

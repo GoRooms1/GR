@@ -300,8 +300,13 @@
             {{--            TODO: Выводить стоимость по комнатам, самую минимульную, или рандомную )--}}
             @foreach ($hotel->minimals as $min)
               <tr>
-                <td class="prices__main">{{ $min['name'] }} - от {{ $min['value'] }} руб.</td>
-                <td class="text">{{ $min['info'] }}</td>
+                @if ($min->value !== 0)
+                  <td class="prices__main">{{ $min->name }} - от {{ $min->value }} руб.</td>
+                  <td class="text">{{ $min->info }}</td>
+                @else
+                  <td class="prices__main">{{ $min->name }}</td>
+                  <td class="text">{{ $min->info }}</td>
+                @endif
               </tr>
             @endforeach
 

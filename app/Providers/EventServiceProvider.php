@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Hotel;
 use App\Events\FormSend;
 use App\Models\Category;
+use App\Observers\HotelObserver;
 use App\Observers\CategoryObserver;
 use App\Listeners\FormSendMailEvent;
 use App\Models\Image;
@@ -41,6 +43,6 @@ class EventServiceProvider extends ServiceProvider
     Image::observe(ImageObserver::class);
     Room::observe(RoomObserver::class);
     Category::observe(CategoryObserver::class);
-
+    Hotel::observe(HotelObserver::class);
   }
 }
