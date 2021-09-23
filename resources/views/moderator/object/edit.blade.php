@@ -395,7 +395,7 @@
       </div>
 
       <div class="row part__content">
-        @if ($hotel->moderate)
+        @if ($hotel->moderate || !$hotel->show)
           <div class="col-auto">
             <form action="{{ route('moderator.object.upload', $hotel->id) }}" method="post">
               @csrf
