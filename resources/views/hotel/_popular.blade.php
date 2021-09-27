@@ -59,7 +59,7 @@
             <li class="metro">
               <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ Str::slug($metro->name) }}">
                 <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>{{ $metro->name }}
-                - {{ $metro->distance }}
+                - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt="">
               </a>
             </li>
           @endforeach
@@ -102,8 +102,8 @@
         @foreach($hotel->minimals AS $minimal)
           <li class="hotel-card-prices-item">
             @if($minimal->value === 0)
-              <p class="hotel-card-prices-item-title">{{ $minimal->name ?? '' }}
-                - {{ $minimal->info ?? '' }}</p>
+                  <p class="hotel-card-prices-item-title">{{ $minimal->name ?? '' }}</p>
+                <p class="hotel-card-prices-item-info">{{ $minimal->info ?? '' }}</p> </p>
             @else
               <p class="hotel-card-prices-item-title">{{ $minimal->name ?? '' }}
                 - от {{ $minimal->value ?? '' }}

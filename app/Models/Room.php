@@ -103,7 +103,7 @@ class Room extends Model
   {
     parent::boot();
 
-    static::addGlobalScope('moderation', function (Builder $builder) {
+    /*static::addGlobalScope('moderation', function (Builder $builder) {
       if (auth()->check()) {
         if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
           !Route::currentRouteNamed('lk.*') &&
@@ -120,7 +120,7 @@ class Room extends Model
           $q->where('moderate', false)->where('show', true);
         })->where('moderate', false);
       }
-    });
+    });*/
   }
 
   public function category(): BelongsTo

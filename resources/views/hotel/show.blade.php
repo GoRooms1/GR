@@ -142,7 +142,7 @@ use App\Models\Hotel;
                       <li class="metro">
                         <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ Str::slug($metro->name) }}">
                           <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>
-                          {{ $metro->name }} - {{ $metro->distance }}
+                          {{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt="">
                         </a>
                       </li>
                     @endforeach
@@ -247,7 +247,7 @@ use App\Models\Hotel;
               <li class="metro">
                 <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ Str::slug($metro->name) }}">
                   <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>
-                  {{ $metro->name }} - {{ $metro->distance }}
+                  {{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt="">
                 </a>
               </li>
             @endforeach

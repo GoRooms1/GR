@@ -5545,3 +5545,7 @@ button.modal-close:focus {
         display: none;
     }
 }
+
+.svg-walk {
+  max-height: 15px;
+}

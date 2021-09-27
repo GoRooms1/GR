@@ -101,7 +101,7 @@
               <li class="metro">
                 <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ Str::slug($metro->name) }}">
                   <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>
-                  {{ $metro->name }} - {{ $metro->distance }}
+                  {{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt="">
                 </a>
               </li>
             @endforeach
@@ -123,6 +123,9 @@
                 <p class="room-card-prices-item-title">{{ $cost->period->type->name }}</p>
                 <p class="room-card-prices-item-price">@if($cost->value !== '0'){{ $cost->value }}
                   руб.@endif</p>
+                @if(isset($cost->period->info))
+                  {{$cost->period->info}}
+                @endif
               </div>
               @else
                 <div>

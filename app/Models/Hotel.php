@@ -174,7 +174,7 @@ class Hotel extends Model
     parent::boot();
 
     //    TODO: Moderate Scope
-        static::addGlobalScope('moderation', function (Builder $builder) {
+        /*static::addGlobalScope('moderation', function (Builder $builder) {
 
           if (auth()->check()) {
             if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
@@ -188,7 +188,7 @@ class Hotel extends Model
           } else {
             $builder->where('moderate', false)->where('show', true);
           }
-        });
+        });*/
 
 
     self::creating(function (Hotel $hotel) {

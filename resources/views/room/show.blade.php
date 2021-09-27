@@ -105,7 +105,7 @@
                             <li class="metro">
                                 <a href="/address/{{ \Str::slug($hotel->address->city) }}/metro-{{ \Str::slug($metro->name) }}"><img
                                         src="{{ asset('/img/ico-metro-'.$metro->color.'.svg') }}"
-                                        alt="">{{ $metro->name }} - {{ $metro->distance }}</a>
+                                        alt="">{{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt=""></a>
                             </li>
                         @endforeach
                     </ul>
