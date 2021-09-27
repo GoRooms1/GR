@@ -5547,5 +5547,6 @@ button.modal-close:focus {
 }
 
 .svg-walk {
-  max-height: 15px;
+  max-height: 12px;
+  margin-bottom: 3px;
 }
