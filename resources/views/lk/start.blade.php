@@ -133,6 +133,7 @@
     $("#address").suggestions({
       token: "a35c9ab8625a02df0c3cab85b0bc2e9c0ea27ba4",
       type: "ADDRESS",
+      count: 20,
     });
 
     $(document).ready(function () {
