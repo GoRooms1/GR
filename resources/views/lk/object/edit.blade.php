@@ -462,6 +462,10 @@
 
             $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
             $('#file-dropzone').appendTo('.visualizacao')
+            console.log(existFile.length)
+            if (existFile.length >= 6) {
+              $('#file-dropzone').hide()
+            }
           });
 
           this.on('success', function (file, json) {
@@ -542,6 +546,13 @@
                 }
               })
             }
+
+            setTimeout(() => {
+              console.log(existFile.length)
+              if (existFile.length < 6) {
+                $('#file-dropzone').show()
+              }
+            }, 300)
           })
         }
       });
