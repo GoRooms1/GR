@@ -173,22 +173,21 @@ class Hotel extends Model
   {
     parent::boot();
 
-    //    TODO: Moderate Scope
-        /*static::addGlobalScope('moderation', function (Builder $builder) {
+    static::addGlobalScope('moderation', function (Builder $builder) {
 
-          if (auth()->check()) {
-            if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
-              !Route::currentRouteNamed('lk.*') &&
-              !Route::currentRouteNamed('moderator.*') &&
-              !Route::currentRouteNamed('api.*') &&
-              !Route::currentRouteNamed('admin.*')
-            ) {
-              $builder->where('moderate', false)->where('show', true);
-            }
-          } else {
-            $builder->where('moderate', false)->where('show', true);
-          }
-        });*/
+      if (auth()->check()) {
+        if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
+          !Route::currentRouteNamed('lk.*') &&
+          !Route::currentRouteNamed('moderator.*') &&
+          !Route::currentRouteNamed('api.*') &&
+          !Route::currentRouteNamed('admin.*')
+        ) {
+          $builder->where('moderate', false)->where('show', true);
+        }
+      } else {
+        $builder->where('moderate', false)->where('show', true);
+      }
+    });
 
 
     self::creating(function (Hotel $hotel) {
