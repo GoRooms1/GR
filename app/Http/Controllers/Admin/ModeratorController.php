@@ -116,7 +116,7 @@ class ModeratorController extends Controller
   public function destroy (int $id): RedirectResponse
   {
     $user = User::findOrFail($id);
-    $user->delete();
+    $user->forceDelete();
 
     return redirect()->route('admin.moderators.index');
   }
