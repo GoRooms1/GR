@@ -444,7 +444,7 @@
 
       <div class="d-flex align-items-center case_2">
         <input type="phone" class="field" name="phone" value="{{ $hotel->phone }}" required placeholder="Телефон 1 объекта">
-        <input type="phone" class="field" name="phone_2" value="{{ $hotel->phone_2 }}" required placeholder="Телефон 2 объекта">
+        <input type="phone" class="field" name="phone_2" value="{{ $hotel->phone_2 }}" placeholder="Телефон 2 объекта">
         <input type="text" class="field" name="email" value="{{ $hotel->email }}" required placeholder="E-mail">
       </div>
 

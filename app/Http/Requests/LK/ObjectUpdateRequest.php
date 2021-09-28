@@ -32,7 +32,7 @@ class ObjectUpdateRequest extends FormRequest
     return [
       'type_update' => ['required', 'string'],
       'phone' => ['sometimes', 'required', 'string'],
-      'phone_2' => ['sometimes', 'required', 'string'],
+      'phone_2' => ['sometimes', 'nullable', 'string'],
       'description' => ['sometimes', 'nullable', 'string'],
       'attr' => ['sometimes', 'array'],
       'attr.*' => ['sometimes', 'required'],
