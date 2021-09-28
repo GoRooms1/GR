@@ -206,7 +206,7 @@
                   </select>
                 </div>
                 <input type="hidden"
-                       name="metros_color[]
+                       name="metros_color[]"
                         value="{{ $m->color }}">
                 <input type="number"
                        {{ $hotel->disabled_save }}
