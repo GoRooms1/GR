@@ -51,7 +51,7 @@ $('.check').bind('click', function () {
   }
 })
 
-$('input[name="fond1"]').bind('change', function () {
+$('input[name="fond"]').bind('change', function () {
   if ($('#everyRoom').prop('checked')) {
     $('#fondText1').fadeIn(1)
     $('#fondText2').fadeOut(1)
