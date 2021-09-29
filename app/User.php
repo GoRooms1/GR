@@ -131,13 +131,13 @@ class User extends Authenticatable
   /**
    * return Hotel where staff or general
    *
-   * @return Hotel|null
+   * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
    */
-  public function getPersonalHotelAttribute (): ?Hotel
+  public function getPersonalHotelAttribute ()
   {
     $user = $this;
 
-    return Hotel::whereHas('users', function ($q) use ($user) {
+    return Hotel::withoutGlobalScopes()->whereHas('users', function ($q) use ($user) {
       $q->where('users.id', $user->id);
     })->first();
   }
