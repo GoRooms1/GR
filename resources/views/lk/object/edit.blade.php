@@ -252,7 +252,7 @@
         </div>
         <div class="row part__bottom">
           <div class="col-12">
-            <button onclick="addMetro()"
+            <button id="addMetroButton" onclick="addMetro()"
                     {{ $hotel->disabled_save }}
                     type="button" class="button"
             >
@@ -586,10 +586,17 @@
 
     let count_metros = {{ $hotel->metros()->count() > 0 ? $hotel->metros()->count() : 1 }};
 
+    if (count_metros === 3) {
+      $()
+    }
+
     function addMetro() {
       if (count_metros < 3) {
         metros_ids++;
         count_metros++;
+        if (count_metros >= 3) {
+          $('#addMetroButton').hide()
+        }
         $('#metro').append(
           "<div class='col-12' data-id='" + metros_ids + "'>" +
           "<div class='d-flex align-items-center station'>" +
@@ -658,6 +665,9 @@
     function deleteMetro(id) {
       count_metros--;
       let str = '[data-id=' + id + ']'
+      if (count_metros < 3) {
+        $('#addMetroButton').show()
+      }
       console.log($(str).remove())
     }
 
