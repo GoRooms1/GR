@@ -406,7 +406,7 @@ class Hotel extends Model
    */
   public function rooms (): HasMany
   {
-    return $this->hasMany(Room::class)->orderBy('created_at');
+    return $this->hasMany(Room::class)->orderBy('order', 'ASC');
   }
 
   public function getMetaKeywordsAttribute ()
