@@ -39,26 +39,58 @@ class RoomRequest extends FormRequest
 
     if ($hotel->type_fond === Hotel::CATEGORIES_TYPE) {
       return [
-        'id' => 'required', 'exists:room,id',
-        'category' => 'required', 'exists:categories,id',
-        'types' => 'required', 'array',
-        'types.*.id' =>'required', 'exists:cost_types,id',
-        'types.*.value' =>'required',
-        'types.*.data' =>'required', 'exists:periods,id',
+        'id' => ['required', 'exists:room,id'],
+        'category' => ['required', 'exists:categories,id'],
+        'types' => ['required', 'array'],
+        'types.*.id' => ['required', 'exists:cost_types,id'],
+        'types.*.value' => ['required'],
+        'types.*.data' => ['required', 'exists:periods,id'],
       ];
     }
 
+    $arr = [
+      'order' => ['required', 'unique:rooms,order,'. $id .',id,hotel_id,' . $hotel_id],
+      //      'number' => 'required',
+      //      'name' => 'required',
 
-    return [
-      'order' => 'required', 'unique:rooms,order,'. $id .',id,hotel_id,' . $hotel_id,
-      'number' => 'required',
-      'name' => 'required',
-      'category' => 'required', 'exists:categories,id',
-      'types' => 'required', 'array',
-      'types.*.id' => 'required', 'exists:cost_types,id',
-      'types.*.value' => 'required',
-      'types.*.data' =>'required', 'exists:periods,id',
+      'types' => ['required', 'array'],
+      'types.*.id' => ['required', 'exists:cost_types,id'],
+      'types.*.value' => ['required'],
+      'types.*.data' => ['required', 'exists:periods,id'],
     ];
+
+    $name = $this->get('name', '');
+    $number = $this->get('number', '');
+
+    $arrAdd = [];
+
+    if ($name === '' || $name === null) {
+      $arrAdd = [
+        'number' => ['required', 'string', 'min:1']
+      ];
+
+    } else if ($number === '' || $number === null) {
+      $arrAdd = [
+        'name' => ['required', 'string', 'min:3']
+      ];
+    }
+    $category = $this->get('category', '');
+    if ($category !== '' && $category !== null) {
+      $arr = array_merge($arr, ['category' => ['sometimes', 'exists:categories,id']]);
+    }
+
+    return array_merge($arr, $arrAdd);
+
+//    return [
+//      'order' => 'required', 'unique:rooms,order,'. $id .',id,hotel_id,' . $hotel_id,
+////      'number' => 'required',
+////      'name' => 'required',
+//      'category' => 'sometimes', 'exists:categories,id',
+//      'types' => 'required', 'array',
+//      'types.*.id' => 'required', 'exists:cost_types,id',
+//      'types.*.value' => 'required',
+//      'types.*.data' =>'required', 'exists:periods,id',
+//    ];
   }
 
   public function messages (): array
