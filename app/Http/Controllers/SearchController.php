@@ -18,9 +18,7 @@ class SearchController extends Controller
 
   public function __invoke(Request $request)
   {
-    //        dd($request->all());
     $query = $request->get('query', '');
-
     $attributes = $request->get('attributes', ['hotel' => [], 'room' => []]);
     $city = '';
     if (!$request->is('api/*'))
@@ -40,6 +38,9 @@ class SearchController extends Controller
 
     if (!$is_room) {
       $hotels = Hotel::with(['rooms', 'address', 'attrs']);
+      if ($request->has('hotel_moderate')) {
+        $hotels->where('moderate', 1)->orWhere('show', 0);
+      }
       foreach ($query_args as $arg) {
         $hotels->where('name', 'LIKE', $arg)->orWhereHas('address', function (Builder $builder) use ($arg) {
           $builder->where('value', 'LIKE', $arg);
@@ -74,18 +75,32 @@ class SearchController extends Controller
         $hotels = $hotels->filter(function (Hotel $hotel, int $index) use ($cost, &$costs) {
           $costs = $hotel->getMinCosts();
           foreach ($costs as $item) {
-            if ($item['id'] != $cost['type']) continue;
-            if ($cost['condition'] === 'BETWEEN') {
-              return $item['value'] >= $cost['value'][0] && $item['value'] <= $cost['value'][1];
-            } else if ($cost['condition'] == '>') {
-              return $item['value'] > $cost['value'][0];
-            } else if ($cost['condition'] == '>=') {
-              return $item['value'] >= $cost['value'][0];
-            } else if ($cost['condition'] == '<') {
-              return $item['value'] < $cost['value'][0];
-            } else if ($cost['condition'] == '<=') {
-              return $item['value'] <= $cost['value'][0];
+
+            if (isset($item->id)) {
+              if ($item->id !== $cost['type']) {
+                continue;
+              }
+              if ($cost['condition'] === 'BETWEEN') {
+                return $item->value >= $cost['value'][0] && $item->value <= $cost['value'][1];
+              }
+
+              if ($cost['condition'] === '>') {
+                return $item->value > $cost['value'][0];
+              }
+
+              if ($cost['condition'] === '>=') {
+                return $item->value >= $cost['value'][0];
+              }
+
+              if ($cost['condition'] === '<') {
+                return $item->value < $cost['value'][0];
+              }
+
+              if ($cost['condition'] === '<=') {
+                return $item->value <= $cost['value'][0];
+              }
             }
+
             return false;
           }
         })->all();
@@ -93,7 +108,9 @@ class SearchController extends Controller
       }
     } else {
       $rooms = Room::with(['hotel', 'hotel.address']);
-
+      if ($request->has('room_moderate')) {
+        $rooms->where('moderate', 1);
+      }
       foreach ($query_args as $arg) {
         $rooms->where('name', 'LIKE', $arg)->orWhereHas('hotel.address', function (Builder $builder) use ($arg) {
           $builder->where('value', 'LIKE', $arg);
@@ -118,11 +135,14 @@ class SearchController extends Controller
         });
       if ($cost = $this->getCost($request)) {
         $rooms->whereHas('costs', function (Builder $builder) use ($cost) {
-          $builder->where('type_id', $cost['type'])->where('value', '>', 0);
-          if ($cost['condition'] === 'BETWEEN')
+          $builder->whereHas('period', function (Builder  $b) use ($cost) {
+            $b->where('cost_type_id', $cost['type']);
+          })->where('value', '>', 0);
+          if ($cost['condition'] === 'BETWEEN') {
             $builder->whereBetween('value', $cost['value']);
-          else
+          } else {
             $builder->where('value', $cost['condition'], $cost['value']);
+          }
         });
       }
       $rooms = $rooms->get();
