@@ -297,7 +297,6 @@
       <div class="row part__content">
         <div class="col-12">
           <table class="prices">
-            {{--            TODO: Выводить стоимость по комнатам, самую минимульную, или рандомную )--}}
             @foreach ($hotel->minimals as $min)
               <tr>
                 @if ($min->value !== 0)
@@ -309,7 +308,6 @@
                 @endif
               </tr>
             @endforeach
-
           </table>
         </div>
       </div>

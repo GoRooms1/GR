@@ -276,15 +276,16 @@
         <div class="col-12">
           <table class="prices">
             @foreach ($hotel->minimals as $min)
-              @if ($min->value !== 0)
-                <td class="prices__main">{{ $min->name }} - от {{ $min->value }} руб.</td>
-                <td class="text">{{ $min->info }}</td>
-              @else
-                <td class="prices__main">{{ $min->name }}</td>
-                <td class="text">{{ $min->info }}</td>
-              @endif
+              <tr>
+                @if ($min->value !== 0)
+                  <td class="prices__main">{{ $min->name }} - от {{ $min->value }} руб.</td>
+                  <td class="text">{{ $min->info }}</td>
+                @else
+                  <td class="prices__main">{{ $min->name }}</td>
+                  <td class="text">{{ $min->info }}</td>
+                @endif
+              </tr>F
             @endforeach
-
           </table>
         </div>
       </div>
@@ -395,11 +396,11 @@
       </div>
 
       <div class="row part__content">
-        @if ($hotel->moderate || !$hotel->show)
+        @if($hotel->moderate || !$hotel->show)
           <div class="col-auto">
             <form action="{{ route('moderator.object.upload', $hotel->id) }}" method="post">
               @csrf
-              <button type="submit" class="button button_blue">Опубликовать <i class="fa fa-upload d-block ml-3"></i></button>
+              <button type="submit" class="button button_blue" {{ $hotel->rooms()->count() <= 0 ? 'disabled' : '' }}>Опубликовать <i class="fa fa-upload d-block ml-3"></i></button>
             </form>
           </div>
           <div class="col-auto">
