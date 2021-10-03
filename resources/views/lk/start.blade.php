@@ -113,17 +113,12 @@
         $('#registerObject').prop('disabled', true)
       }
     })
-    // let el = document.getElementsByClassName('select__item_blue')
-    // for(let i =0; i < el.length; i++) {
-    //   el[i].onclick = function () {
-    //     console.log(this.dataset.value)
-    //     document.getElementById('hotel_type').value = this.dataset.value
-    //   };
-    // }
 
     document.getElementById('close').onclick = function () {
+      $(this).parents('.popup').toggleClass('open')
       window.location.href = '{{ route('index') }}'
     }
+
     $("input[type='phone']").mask("+7 (999) 999 99-99");
     $('.check').bind('click', function() {
 
@@ -138,7 +133,12 @@
     $("#address").suggestions({
       token: "a35c9ab8625a02df0c3cab85b0bc2e9c0ea27ba4",
       type: "ADDRESS",
+      count: 20,
     });
+
+    $(document).ready(function () {
+      $('.overlay.open').unbind('click')
+    })
 
 
   </script>

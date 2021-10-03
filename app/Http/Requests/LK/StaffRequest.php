@@ -51,11 +51,11 @@ class StaffRequest extends FormRequest
       }
 
       if ($this->routeIs('*.staff.update')) {
+        $id = $this->route()->parameters['staff_id'];
         $update_array =[
-          'email' => ['required', 'string', 'unique:users,email,' . $this->id],
+          'email' => ['required', 'string', 'unique:users,email,' . $id],
           'password' => ['nullable', 'string'],
         ];
-
         return array_merge($array, $update_array);
       }
 

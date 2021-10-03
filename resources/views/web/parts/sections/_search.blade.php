@@ -183,6 +183,16 @@
                                            class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
                                 </li>
                             @endforeach
+
+                            @moderator
+                            <li class="advanced-search-details-item">
+                                <input id="advanced-search-hotel-moderate" type="checkbox"
+                                       @if(isset($request) && optional($request)->has('hotel_moderate')) checked @endif
+                                       name="hotel_moderate" class="checkbox">
+                                <label for="advanced-search-hotel-moderate"
+                                       class="checkbox-label checkbox-label-light">На модерации</label>
+                            </li>
+                            @endmoderator
                         </ul>
                     </div>
                 </div>
@@ -204,6 +214,16 @@
                                            class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
                                 </li>
                             @endforeach
+
+                            @moderator
+                                <li class="advanced-search-details-item">
+                                    <input id="advanced-search-rooms-moderate" type="checkbox"
+                                           @if(isset($request) && optional($request)->has('room_moderate')) checked @endif
+                                           name="room_moderate" class="checkbox">
+                                    <label for="advanced-search-rooms-moderate"
+                                           class="checkbox-label checkbox-label-light">На модерации</label>
+                                </li>
+                            @endmoderator
                         </ul>
                     </div>
                 </div>

@@ -31,23 +31,37 @@
       </div>
     </div>
     <div class="hotel-card-slider swiper-container js-hotel-card-slider">
-      <div class="swiper-wrapper">
-        @foreach($hotel->images AS $image)
-          <a href="{{ route('hotels.show', $hotel) }}" class="swiper-slide" target="_blank">
-            <img class="swiper-lazy" data-src="{{ asset($image->path) }}?w=385&h230&fit=crop&fm=webp&q=85"
-                 src="{{ asset('img/pr385x230.jpg') }}" alt="">
+      @if($hotel->moderate || !$hotel->show)
+        <div class="swiper-wrapper">
+          <a href="#!" class="swiper-slide">
+            <img src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
           </a>
-        @endforeach
-      </div>
-      <div class="swiper-button swiper-button-next"></div>
-      <div class="swiper-button swiper-button-prev"></div>
+        </div>
+      @else
+        <div class="swiper-wrapper">
+          @foreach($hotel->images AS $image)
+            <a href="{{ route('hotels.show', $hotel) }}" class="swiper-slide" target="_blank">
+              <img class="swiper-lazy" data-src="{{ asset($image->path) }}?w=385&h230&fit=crop&fm=webp&q=85"
+                   src="{{ asset('img/pr385x230.jpg') }}" alt="">
+            </a>
+          @endforeach
+        </div>
+        <div class="swiper-button swiper-button-next"></div>
+        <div class="swiper-button swiper-button-prev"></div>
+      @endif
     </div>
-    @if ($hotel->phone)
+    @if($hotel->moderate || !$hotel->show)
       <p class="show-tel-wrapper">
-        <button class="btn btn-blue btn-block js-show-tel-btn" type="button">Показать телефон</button>
-        <a href="tel:{{ $hotel->phone }}"
-           class="btn btn-blue btn-block tel-link js-tel-link">{{ $hotel->phone }}</a>
+        <a class="btn btn-blue btn-block" href="{{ route('moderator.object.edit', $hotel->id) }}">Перейти в ЛК</a>
       </p>
+    @else
+      @if ($hotel->phone)
+        <p class="show-tel-wrapper">
+          <button class="btn btn-blue btn-block js-show-tel-btn" type="button">Показать телефон</button>
+          <a href="tel:{{ $hotel->phone }}"
+             class="btn btn-blue btn-block tel-link js-tel-link">{{ $hotel->phone }}</a>
+        </p>
+      @endif
     @endif
 
     <div class="hotel-card-content">

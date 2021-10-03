@@ -1397,3 +1397,8 @@ main {
     object-fit: cover;
     object-position: center;
 }
+
+.suggestions-suggestions {
+	height: 100px;
+	overflow-x: auto;
+}

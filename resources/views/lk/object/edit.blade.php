@@ -206,7 +206,7 @@
                   </select>
                 </div>
                 <input type="hidden"
-                       name="metros_color[]
+                       name="metros_color[]"
                         value="{{ $m->color }}">
                 <input type="number"
                        {{ $hotel->disabled_save }}
@@ -252,7 +252,7 @@
         </div>
         <div class="row part__bottom">
           <div class="col-12">
-            <button onclick="addMetro()"
+            <button id="addMetroButton" onclick="addMetro()"
                     {{ $hotel->disabled_save }}
                     type="button" class="button"
             >
@@ -297,7 +297,6 @@
       <div class="row part__content">
         <div class="col-12">
           <table class="prices">
-            {{--            TODO: Выводить стоимость по комнатам, самую минимульную, или рандомную )--}}
             @foreach ($hotel->minimals as $min)
               <tr>
                 @if ($min->value !== 0)
@@ -309,7 +308,6 @@
                 @endif
               </tr>
             @endforeach
-
           </table>
         </div>
       </div>
@@ -462,6 +460,10 @@
 
             $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
             $('#file-dropzone').appendTo('.visualizacao')
+            console.log(existFile.length)
+            if (existFile.length >= 6) {
+              $('#file-dropzone').hide()
+            }
           });
 
           this.on('success', function (file, json) {
@@ -542,6 +544,13 @@
                 }
               })
             }
+
+            setTimeout(() => {
+              console.log(existFile.length)
+              if (existFile.length < 6) {
+                $('#file-dropzone').show()
+              }
+            }, 300)
           })
         }
       });
@@ -575,10 +584,17 @@
 
     let count_metros = {{ $hotel->metros()->count() > 0 ? $hotel->metros()->count() : 1 }};
 
+    if (count_metros === 3) {
+      $()
+    }
+
     function addMetro() {
       if (count_metros < 3) {
         metros_ids++;
         count_metros++;
+        if (count_metros >= 3) {
+          $('#addMetroButton').hide()
+        }
         $('#metro').append(
           "<div class='col-12' data-id='" + metros_ids + "'>" +
           "<div class='d-flex align-items-center station'>" +
@@ -647,6 +663,9 @@
     function deleteMetro(id) {
       count_metros--;
       let str = '[data-id=' + id + ']'
+      if (count_metros < 3) {
+        $('#addMetroButton').show()
+      }
       console.log($(str).remove())
     }
 
