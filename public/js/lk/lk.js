@@ -198,29 +198,33 @@ window.textChange2 = true
  * Клик для сохранения с поля в блок
  */
 $('#howRideBtn').bind('click', function () {
-  let text = $(this).parents('.part').find('.text').text()
+  // let text = $(this).parents('.part').find('.text').text()
 
   if (window.textChange === true) {
-    $(this).parents('.part').find('.ck-editor__main p').text(text)
+    // $(this).parents('.part').find('.ck-editor__main p').text(text)
     $(this).text('Сохранить')
+    setTimeout(() => {
+      $(this).attr('type', 'submit')
+    }, 500)
     $(this).parents('.part').find('.editor__text').hide()
     $(this).parents('.part').removeClass('ck-editor_hidden')
     window.textChange = false
   } else if (textChange === false) {
     let editorText = $(this).parents('.part').find('.ck-content').html()
 
+    // if (editorText === "") {
+    //   textChange2 = false
+    // } else {
+    let editor_text = $(this).parents('.part').find('.editor__text')
+    editor_text.show()
+    editor_text.html(editorText)
+    $(this).parents('.part').addClass('ck-editor_hidden')
+    $(this).parents('.part').find('.ck-editor__main i')
+    $(this).parents('.part').find('.ck-content').css('padding', '0')
+    $(this).text('Редактировать')
+    window.textChange = true
 
-    if (editorText === "") {
-      window.textChange = false
-    } else {
-      $(this).parents('.part').find('.editor__text').show()
-      $(this).parents('.part').find('.editor__text').html(editorText)
-      $(this).parents('.part').addClass('ck-editor_hidden')
-      $(this).parents('.part').find('.ck-editor__main i')
-      $(this).text('Редактировать')
-      window.textChange = true
-
-    }
+    //}
 
   }
 })

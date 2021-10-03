@@ -126,33 +126,35 @@
 </section>
 
   {{-- Как добраться --}}
-  <section class="part ck-editor_hidden ck-editor__show d-none">
+  <section class="part ck-editor_hidden ck-editor__show">
     <div class="container">
       <div class="row part__top">
         <div class="col-12">
           <h2 class="title title_blue">Как добраться</h2>
         </div>
       </div>
-      <div class="row part__middle">
-        <div class="col-11">
-          <p class="caption">Расскажите Вашим клиентам как удобнее всего добраться до Вашего объекта (выход из метро, номер автобуса, основные ориентиры).</p>
-        </div>
-      </div>
 
-      <div class="row part__content">
-        <div class="col-12">
-          <p class="text editor__text">
-            С учётом сложившейся международной обстановки, перспективное планирование говорит о возможностях соответствующих условий активизации. Внезапно, предприниматели в сети интернет функционально разнесены на независимые элементы! Приятно, граждане, наблюдать, как непосредственные участники технического прогресса, инициированные исключительно синтетически, объективно рассмотрены соответствующими инстанциями. С учётом сложившейся международной обстановки, перспективное планирование говорит о возможностях соответствующих условий активизации.
-          </p>
-          <textarea id="editor" placeholder="Введите текст"></textarea>
+      <form action="{{ route('moderator.object.update', $hotel->id) }}" method="post">
+        @csrf
+        <input type="hidden" value="phone" name="type_update">
+        <div class="row part__content">
+          <div class="col-12">
+            <div class="text editor__text">
+              {!! $hotel->route !!}
+            </div>
+            <textarea id="editor" class="h-auto" name="route" placeholder="Введите текст">
+              {!! $hotel->route !!}
+            </textarea>
+          </div>
         </div>
-      </div>
-      <div class="row part__bottom">
-        <div class="col-12">
-          <button class="button button_blue" id="howRideBtn">Редактировать</button>
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button class="button button_blue" type="button" id="howRideBtn">Редактировать</button>
 
+          </div>
         </div>
-      </div>
+
+      </form>
     </div>
   </section>
 
@@ -275,6 +277,7 @@
       <div class="row part__content">
         <div class="col-12">
           <table class="prices">
+            <tbody>
             @foreach ($hotel->minimals as $min)
               <tr>
                 @if ($min->value !== 0)
@@ -286,6 +289,7 @@
                 @endif
               </tr>F
             @endforeach
+            </tbody>
           </table>
         </div>
       </div>
