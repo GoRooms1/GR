@@ -177,6 +177,42 @@
     </div>
   </section>
 
+  <section class="part">
+    <div class="container">
+      <div class="row part__top">
+        <div class="col-12">
+          <h2 class="title">Как добраться</h2>
+        </div>
+      </div>
+
+      <form action="{{ route('lk.object.update') }}" method="POST">
+        @csrf
+        <input type="hidden" value="description" name="type_update">
+        <div class="row part__content">
+          <div class="col-10">
+            <textarea placeholder="Введите текст"
+                      name="route"
+                      id="editor2"
+                      class="field form-control @error('route') is-invalid @enderror">
+              {!! old('route', $hotel->route) !!}
+            </textarea>
+            @error('route')
+            <div class="invalid-feedback">
+              {{ $message }}
+            </div>
+            @enderror
+          </div>
+        </div>
+        <div class="row part__bottom">
+          <div class="col-12">
+            <button class="button" type="submit">Сохранить</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
   <section class="part gray">
     <div class="container">
       <div class="row part__top">

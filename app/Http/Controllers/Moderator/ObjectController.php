@@ -75,7 +75,6 @@ class ObjectController extends Controller
           $hotel->type()->associate($request->get('type'));
           $hotel->save();
         }
-
         $hotel->update($request->all());
       } else if ($type === 'address') {
         $hotel->saveAddress($request->get('value'), $request->get('comment'));
