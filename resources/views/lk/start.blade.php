@@ -90,7 +90,7 @@
 
         <div class="choice choice_half align-items-start agreement-choice">
           <input type="checkbox" id="agreement" name="agreement">
-          <div class="check">
+          <div class="check agreement_check">
             <div class="check__flag check__flag_blue"></div>
           </div>
           <label for="agreement">Нажимая "Зарегистрировать" Вы даете согласие на обработку персональных данных и соглашаетесь c пользовательским соглашением и политикой конфиденциальности.</label>

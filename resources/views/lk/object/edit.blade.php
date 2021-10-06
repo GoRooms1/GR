@@ -234,7 +234,7 @@
             <div class="col-12" data-id="{{ $m->id }}">
               <div class="d-flex align-items-center station">
                 <div class="select" style="width: 45%">
-                  <select name="metros[]"
+                  <select name="metros[]" 
                           class="form-control field metros w-100"
                           {{ $hotel->disabled_save }}
                           required>
@@ -654,6 +654,8 @@
     function selectInit() {
       $('.metros').select2({
         placeholder: "Название станции",
+        // multiple: true,
+        // maximumSelectionLength: 1,
         language: "ru",
         ajax: {
           delay: 250,
@@ -688,6 +690,10 @@
         }
       });
     }
+
+     $('.metros').on("select2:open", function() {
+      $(".select2-search__field").eq(0).get(0).focus();
+    });
 
     $('.metros').on("select2:select", takeColor);
 
