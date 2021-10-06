@@ -118,14 +118,19 @@ input[type="phone"], input[type="email"] {
 	font-size: 18px;
 }
 
+.details label {
+	color: #333;
+}
+
 .button:hover {
 	background: hsla(28, 100%, 54%, 1);
 	color: white;
 }
 
 .caption {
-	color: #acacac;
+	color: #333;
 	font-size: 15px;
+	font-style: italic;
 }
 
 .text {

@@ -33,6 +33,11 @@ $('.check').bind('click', function () {
     $(this).siblings('input[type="radio"]').prop('checked', true)
 })
 
+$("body").on("click", ".agreement_check", function () {
+  $(this).next("label").trigger("click");
+  $(".agreement-choice").trigger("click");
+});
+
 let check = true
 
 /**
@@ -141,6 +146,11 @@ $('.category-change').bind('click', function () {
  * Как на создание категории
  */
 $('.category-good').bind('click', createCategory)
+$("body").bind("keyup", "ul.categories .field", function (e) {
+  if (e.keyCode == 13) {
+    $(".category-good").trigger("click");
+  };
+});
 
 /**
  * Действия на удаление категории
