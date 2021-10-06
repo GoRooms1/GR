@@ -173,21 +173,18 @@ use App\Models\Hotel;
           <div class="product-slider-wrapper hotel-product-slider-wrapper">
             <div class="swiper-container product-slider-big">
               <div class="swiper-wrapper">
-                @foreach ($hotel->images as $image)
-                  <a href="{{ asset($image->path) }}" data-fancybox="gallery"
-                     class="swiper-slide product-slide-big">
-                    <img itemprop="photo" class="swiper-lazy"
-                         data-src="{{ asset($image->path) }}?w=640&h=300&fit=crop&fm=webp"
-                         src="{{ asset('img/pr600x300.jpg') }}" alt="">
-                  </a>
-                @endforeach
+                <div class="swiper-slide product-slide-big">
+                  <img itemprop="photo" class="swiper-lazy"
+                       data-src="{{ asset($hotel->images{0}->path) }}?w=640&h=300&fit=crop&fm=webp"
+                       src="{{ $hotel->images{0}->path }}" alt="">
+                </div>
               </div>
             </div>
             <div class="product-slider-small-wrapper">
               <div class="swiper-container product-slider-small">
                 <div class="swiper-wrapper">
                   @foreach ($hotel->images as $image)
-                    <div class="swiper-slide product-slide-small">
+                    <div class="swiper-slide product-slide-small" data-full="{{ asset($image->path) }}?w=640&h=300&fit=crop&fm=webp">
                       <img itemprop="photo" class="swiper-lazy"
                            data-src="{{ asset($image->path) }}?w=125&h=85&fit=crop&fm=webp"
                            src="{{ asset('img/pr125x85.jpg') }}" alt="">
@@ -378,7 +375,7 @@ use App\Models\Hotel;
             </div>
             <div class="col-lg-5 order-lg-1 text-section">
               <div class="h2 section-title">{{ $hotel->route_title }}</div>
-              {!! html_entity_decode($hotel->route) !!}
+              {!! strip_tags(html_entity_decode($hotel->route)) !!}
             </div>
           </div>
         </div>

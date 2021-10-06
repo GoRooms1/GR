@@ -29,12 +29,11 @@
                     <div class="product-slider-wrapper">
                         <div class="swiper-container product-slider-big">
                             <div class="swiper-wrapper">
-                                @foreach($room->images AS $image)
-                                    <a href="{{ asset($image->path) }}" data-fancybox="gallery"
-                                       class="swiper-slide product-slide-big">
-                                        <img class="swiper-lazy" data-src="{{ asset($image->path) }}" src="{{ asset('img/pr600x400.jpg') }}" alt="">
-                                    </a>
-                                @endforeach
+                                <div class="swiper-slide product-slide-big">
+                                    <img itemprop="photo" class="swiper-lazy"
+                                        data-src="{{ asset($hotel->images{0}->path) }}?w=640&h=300&fit=crop&fm=webp"
+                                        src="{{ $hotel->images{0}->path }}" alt="">
+                                </div>
                             </div>
                         </div>
                         <div class="product-slider-small-wrapper">
