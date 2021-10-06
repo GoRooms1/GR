@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <div class="product-slider-small-wrapper">
-                            <div class="swiper-container product-slider-small">
+                            <div class="swiper-container product-slider-small" data-full="{{ asset($image->path) }}?w=640&h=300&fit=crop&fm=webp">
                                 <div class="swiper-wrapper">
                                     @foreach($room->images AS $image)
                                         <div class="swiper-slide product-slide-small">
