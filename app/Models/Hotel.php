@@ -332,7 +332,10 @@ class Hotel extends Model
 
     if (current($costs)) {
       $cost = current($costs);
-      $cost = "по цене " . $cost['value'] . " руб. на час ";
+      if (isset($cost["value"]))
+    	$cost = "по цене " . $cost['value'] . " руб. на час ";
+      else
+        $cost = "";
     } else {
       $cost = "";
     }

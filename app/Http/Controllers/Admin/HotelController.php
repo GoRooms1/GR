@@ -70,10 +70,7 @@ class HotelController extends Controller
                 
             $hotel->attachMeta($request);
     
-            foreach ($validated['cost'] as $cost) {
-                $cost['user_id'] = Auth::user()->id;
-                $hotel->costs()->updateOrCreate(['type_id' => $cost['type_id']], $cost);
-            }
+            
             $hotel->metros()->delete();
             foreach ($request->get('metros', []) AS $metros) {
                 if (empty($metros['name'])) continue;

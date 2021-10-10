@@ -113,11 +113,10 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="">Название и дистанция</span>
                 </div>
-                <select name="metros[{{ $i }}][color]" id="">
-                    @foreach (\App\Models\Metro::COLORS as $color => $title)
-                        <option value="{{ $color }}">{{ $title }}</option>
-                    @endforeach
-                </select>
+                
+                <input type="text" id="metro_{{ $i }}_color" class="form-control" name="metros[{{ $i }}][color]"
+                       value="{{ old('metros.'.$i.'.color') }}" placeholder="Цвет">
+                       
                 <input type="text" id="metro_{{ $i }}_name" class="form-control" name="metros[{{ $i }}][name]"
                        value="{{ old('metros.'.$i.'.name') }}" placeholder="Название">
                 <input type="text" id="metro_{{ $i }}_distance" class="form-control" name="metros[{{ $i }}][distance]"
@@ -135,11 +134,10 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="">Название и дистанция</span>
                 </div>
-                <select name="metros[{{ $loop->index }}][color]" id="">
-                    @foreach (\App\Models\Metro::COLORS as $color => $title)
-                        <option value="{{ $color }}" @if($metro->color == $color) selected @endif >{{ $title }}</option>
-                    @endforeach
-                </select>
+                
+                <input type="text" id="metro_{{ $loop->index }}_color" class="form-control" name="metros[{{ $loop->index }}][color]"
+                       value="{{ old('metros.'.$loop->index.'.color', $metro->color) }}" placeholder="Цвет">
+                       
                 <input type="text" id="metro_{{ $loop->index }}_name" class="form-control"
                        name="metros[{{ $loop->index }}][name]"
                        value="{{ old('metros.'.$loop->index.'.name', $metro->name) }}" placeholder="Название">
@@ -157,11 +155,9 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="">Название и дистанция</span>
                 </div>
-                <select name="metros[{{ $i }}][color]" id="">
-                    @foreach (\App\Models\Metro::COLORS as $color => $title)
-                        <option value="{{ $color }}">{{ $title }}</option>
-                    @endforeach
-                </select>
+                 <input type="text" id="" class="form-control" name="metros[{{ $i }}][color]"
+                       value="{{ old('metros.'.$i.'.name') }}" placeholder="Название">
+                       
                 <input type="text" id="metro_{{ $i }}_name" class="form-control" name="metros[{{ $i }}][name]"
                        value="{{ old('metros.'.$i.'.name') }}" placeholder="Название">
                 <input type="text" id="metro_{{ $i }}_distance" class="form-control" name="metros[{{ $i }}][distance]"
@@ -172,12 +168,20 @@
 @endif
 <div class="dropdown-divider"></div>
 <div class="h4">Описание цен</div>
-@foreach ($costTypes as $costType)
-
-    <div class="form-group col-12 col-md-6">
-        <label for="cost_{{$costType->id}}">Описание для цены "{{ $costType->name }}"</label>
-        <input type="text" class="form-control" name="cost[{{ $costType->id }}][description]"
-               value="{{ old('cost.'.$costType->id.'.description') ?? (isset($hotel) ? @$hotel->costs()->where('type_id', $costType->id)->first()->description : '') ?? '' }}">
-        <input type="hidden" name="cost[{{ $costType->id }}][type_id]" value="{{$costType->id}}">
-    </div>
-@endforeach
+<div class="col-12">
+	<table class="table">
+            <tbody>
+            @foreach ($hotel->minimals as $min)
+              <tr>
+                @if ($min->value !== 0)
+                  <td class="prices__main">{{ $min->name }} - от {{ $min->value }} руб.</td>
+                  <td class="text">{{ $min->info }}</td>
+                @else
+                  <td class="prices__main">{{ $min->name }}</td>
+                  <td class="text">{{ $min->info }}</td>
+                @endif
+              </tr>
+            @endforeach
+            </tbody>
+          </table>
+</div>

@@ -287,7 +287,7 @@
                   <td class="prices__main">{{ $min->name }}</td>
                   <td class="text">{{ $min->info }}</td>
                 @endif
-              </tr>F
+              </tr>
             @endforeach
             </tbody>
           </table>

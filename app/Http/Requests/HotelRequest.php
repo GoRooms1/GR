@@ -41,7 +41,7 @@ class HotelRequest extends FormRequest
             'route' => ['string'],
             'route_title' => ['string'],
             'metros' => ['array'],
-            'metros.*.color' => ['nullable', 'in:'.implode(',', array_keys(Metro::COLORS))],
+            'metros.*.color' => ['nullable'],
             'metros.*.name' => ['nullable', 'string'],
             'metros.*.distance' => ['nullable', 'string'],
             'address' => ['required', 'string'],
