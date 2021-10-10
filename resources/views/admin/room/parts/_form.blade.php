@@ -66,16 +66,27 @@
 <div class="dropdown-divider"></div>
 <div class="h4">Цены</div>
 @foreach ($costTypes as $costType)
+	@if(isset($room))
+		@php
+		    $id = $costType->id;
+		    $costRoom = $room->costs()->whereHas('period', function ($q) use($id) {
+		      $q->where('cost_type_id', $id);
+		    })->first();
+	    @endphp
+    @endif
     <div class="form-row">
         <div class="form-group col-12 col-md-6">
             <label for="cost_{{$costType->id}}">Цена "{{ $costType->name }}"</label>
             <input type="number" step="0.01" class="form-control @error('cost.'.$costType->id.'.value') is-invalid @enderror" name="cost[{{ $costType->id }}][value]"
-                   value="{{ old('cost.'.$costType->id.'.value') ?? (isset($room) ? @$room->costs()->where('type_id', $costType->id)->first()->value : '') ?? '' }}">
+                   value="{{ old('cost.'.$costType->id.'.value') ?? (isset($room) ? $costRoom->value ?? '' : '') ?? '' }}">
         </div>
         <div class="form-group col-12 col-md-6">
-            <label for="cost_{{$costType->id}}">Описание для цены "{{ $costType->name }}"</label>
-            <input type="text" class="form-control @error('cost.'.$costType->id.'.description') is-invalid @enderror" name="cost[{{ $costType->id }}][description]"
-                   value="{{ old('cost.'.$costType->id.'.description') ?? (isset($room) ? @$room->costs()->where('type_id', $costType->id)->first()->description : '') ?? '' }}">
+        	<label for="cost_{{$costType->id}}">Период</label>
+        	<select class="form-control" name="cost[{{ $costType->id }}][period]">
+        		@foreach($costType->periods as $period)
+                    <option value="{{ $period->id }}" {{ $costRoom ? $costRoom->period->id === $period->id ? 'selected' : '' : ''  }}>{{ $period->info }}</option>
+                 @endforeach
+        	</select>
         </div>
         <input type="hidden" name="cost[{{ $costType->id }}][type_id]" value="{{$costType->id}}">
     </div>

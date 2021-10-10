@@ -43,8 +43,8 @@ class RoomRequest extends FormRequest
             'attributes.*' => ['exists:attributes,id', 'nullable'],
             'cost.*' => ['array'],
             'cost.'.$cost_first_key.'.value' => ['numeric', 'required'],
-            'cost.'.$cost_first_key.'.description' => ['string', 'required'],
-            'cost.*.description' => ['string', 'nullable'],
+            'cost.'.$cost_first_key.'.period' => ['numeric', 'required'],
+            'cost.*.period' => ['numeric', 'nullable'],
             'cost.*.value' => ['numeric', 'nullable'],
             'cost.*.type_id' => ['numeric', 'exists:cost_types,id', 'nullable'],
         ];

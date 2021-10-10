@@ -12,6 +12,7 @@ use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\Cost;
 
 class RoomController extends Controller
 {
@@ -43,12 +44,14 @@ class RoomController extends Controller
             $room->category()->associate($validated['category_id']);
         if ($request->has('attributes'))
             $room->attrs()->sync($validated['attributes']);
-
+		$room->costs()->delete();
         foreach ($validated['cost'] as $cost) {
-            $cost['user_id'] = Auth::user()->id;
-            $room->costs()->updateOrCreate(['type_id' => $cost['type_id']], $cost);
+        	$c = new Cost();
+		    $c->value = $cost['value'];
+		    $c->period()->associate($cost['period']);
+		    $c->room()->associate($room->id);
+		    $c->save();
         }
-
         Image::upload($request, $room);
         $room->save();
     }
