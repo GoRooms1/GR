@@ -109,6 +109,12 @@ class ObjectController extends Controller
   public function upload (int $id): RedirectResponse
   {
     $hotel = Hotel::findOrFail($id);
+
+    $roomsCount = $hotel->rooms()->where('moderate' , false)->count();
+    if ($roomsCount <=0) {
+      return redirect()->back()->with('error', 'У отеля нет опубликованных комнат');
+    }
+
     $hotel->moderate = false;
     $hotel->show = true;
 
