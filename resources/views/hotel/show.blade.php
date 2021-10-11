@@ -174,9 +174,11 @@ use App\Models\Hotel;
             <div class="swiper-container product-slider-big">
               <div class="swiper-wrapper">
                 <div class="swiper-slide product-slide-big">
+                  @if($hotel->images()->count() > 0)
                   <img itemprop="photo" class="swiper-lazy"
-                       data-src="{{ asset($hotel->images{0}->path) }}?w=640&h=300&fit=crop&fm=webp"
-                       src="{{ $hotel->images{0}->path }}" alt="">
+                       data-src="{{ asset($hotel->images[0]->path) }}?w=640&h=300&fit=crop&fm=webp"
+                       src="{{ $hotel->images[0]->path }}" alt="">
+                    @endif
                 </div>
               </div>
             </div>
