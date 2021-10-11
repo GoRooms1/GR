@@ -223,9 +223,8 @@ class SearchController extends Controller
       }
     }
 
-    if ($request->is('api/*')) {
-      return Json::good(['count' => $count]);
-    }
+    if ($request->is('api/*'))
+      return Json::good(['count' => $count, "is_room" => $is_room]);
 
     /* START SEO */
 
