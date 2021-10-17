@@ -1404,7 +1404,8 @@ main {
 }
 
 .suggestions-suggestions {
-	height: 100px;
+	height: 250px;
+	bottom: 52px;
 	overflow-x: auto;
 }
 
@@ -1432,4 +1433,9 @@ textarea.form-control {
 .select2-container--open .select2-dropdown--below {
 	margin-top: -49px!important;
 	border-radius: 5px;
+}
+
+.field[readonly] {
+	background-color: white!important;
+	opacity: 1;
 }
