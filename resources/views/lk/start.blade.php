@@ -103,6 +103,7 @@
         <div style="width: 49%">
           <input type="text"
                  readonly
+                 autocorrect="off" autocapitalize="off"
                  autocomplete="nope"
                  onfocus="this.removeAttribute('readonly')"
                  class="field w-100 form-control @error('address') is-invalid @enderror"
@@ -162,6 +163,12 @@
 
     $(document).ready(function () {
       $('.overlay.open').unbind('click')
+
+      setInterval(() => {
+        $("#address").autocomplete({
+          disabled: true
+        });
+      }, 300)
     })
 
 
