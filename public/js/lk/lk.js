@@ -378,32 +378,32 @@ if (typeof saveRoom === 'function') {
 /**
  * При поднятии клавиши клавиатуры в поле email
  */
-$('input[type="email"]').bind('keyup', function () {
-  let email = $(this).val();
-  if (!validateEmail(email)) {
-
-    $(this).css('border', '1px solid orange')
-
-  } else if (validateEmail(email)) {
-    $(this).css('border', '1px solid #2f64ad')
-
-  }
-})
+// $('input[type="email"]').bind('keyup', function () {
+//   let email = $(this).val();
+//   if (!validateEmail(email)) {
+//
+//     $(this).css('border', '1px solid orange')
+//
+//   } else if (validateEmail(email)) {
+//     $(this).css('border', '1px solid #2f64ad')
+//
+//   }
+// })
 
 /**
  * При поднятии клавиши клавиатуры в поле телефон
  */
-$('input[type="phone"]').bind('keyup', function () {
-  let phone = $(this).val();
-  if (!validatePhone(phone)) {
-
-    $(this).css('border', '1px solid orange')
-
-  } else if (validatePhone(phone)) {
-    $(this).css('border', '1px solid #2f64ad')
-
-  }
-})
+// $('input[type="phone"]').bind('keyup', function () {
+//   let phone = $(this).val();
+//   if (!validatePhone(phone)) {
+//
+//     $(this).css('border', '1px solid orange')
+//
+//   } else if (validatePhone(phone)) {
+//     $(this).css('border', '1px solid #2f64ad')
+//
+//   }
+// })
 
 /**
  * Валидация Email
