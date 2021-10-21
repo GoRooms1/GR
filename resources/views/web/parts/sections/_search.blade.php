@@ -100,17 +100,17 @@
                                     <p class="advanced-search-prices-in-label">Период размещения:</p>
                                     <ul class="advanced-search-prices-list">
                                         <li class="advanced-search-prices-item ">
-                                            <input id="advanced-search-prices-1" type="radio" class="checkbox" name="search-price" value="hour" @checked('hour', request('search-price'))>
+                                            <input id="advanced-search-prices-1" type="checkbox" class="checkbox" name="search-price" value="hour" @checked('hour', request('search-price'))>
                                             <label for="advanced-search-prices-1" class="checkbox-label checkbox-label-orange">На
                                                 час</label>
                                         </li>
                                         <li class="advanced-search-prices-item">
-                                            <input id="advanced-search-prices-2" type="radio" class="checkbox" name="search-price" value="night" @checked('night', request('search-price'))>
+                                            <input id="advanced-search-prices-2" type="checkbox" class="checkbox" name="search-price" value="night" @checked('night', request('search-price'))>
                                             <label for="advanced-search-prices-2" class="checkbox-label checkbox-label-orange">На
                                                 ночь</label>
                                         </li>
                                         <li class="advanced-search-prices-item">
-                                            <input id="advanced-search-prices-3" type="radio" class="checkbox" name="search-price" value="day" @checked('day', request('search-price'))>
+                                            <input id="advanced-search-prices-3" type="checkbox" class="checkbox" name="search-price" value="day" @checked('day', request('search-price'))>
                                             <label for="advanced-search-prices-3" class="checkbox-label checkbox-label-orange">На
                                                 сутки</label>
                                         </li>
