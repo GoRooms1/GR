@@ -446,12 +446,13 @@
             <div class="d-flex align-items-center">
               <input type="number"
                      min="0"
+                     value="0"
                      class="field hours__field"
                      id="value"
                      placeholder="0000">
 
               <div class="hours__hidden">
-                <span class="hours__money">0000</span>
+                <span class="hours__money">0</span>
                 <span class="hours__rub">руб.</span>
               </div>
 
@@ -461,10 +462,10 @@
                 <input type="hidden"
                        name="type[]"
                        data-id="{{$type->id}}"
-                       value="">
+                       value="{{$type->periods()->first()->id}}">
 
                 <div class="select__top">
-                  <span class="select__current">Период</span>
+                  <span class="select__current">{{ $type->periods()->first()->info }}</span>
                   <img class="select__arrow"
                        src="{{ asset('img/lk/arrow.png') }}" alt="">
                 </div>
@@ -475,7 +476,7 @@
                 </ul>
               </div>
               <span class="hours__after">
-                      От 2-х часов
+                      {{ $type->periods()->first()->info }}
                     </span>
             </div>
           </li>
