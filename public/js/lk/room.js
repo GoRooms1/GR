@@ -179,6 +179,9 @@ function createRoom () {
         select_item.bind('click', selectItem)
         select_top.bind('click', selectTop)
 
+        $('input.has-validate-error').keyup(validateErrorBootstrap)
+        $('input.has-validate-error').unbind('onclick').click(validateErrorBootstrap)
+
         $('.sortable').sortable({
           items: '.dz-image-preview',
         });
