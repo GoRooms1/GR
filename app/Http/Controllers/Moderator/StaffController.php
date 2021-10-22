@@ -17,7 +17,7 @@ use Swift_TransportException;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\LK\StaffRequest;
+use App\Http\Requests\Moderate\StaffRequest;
 use Illuminate\Contracts\View\Factory;
 use App\Notifications\CreateUserInHotel;
 use App\Notifications\UpdateRandomPasswordUser;
