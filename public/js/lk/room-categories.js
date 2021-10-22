@@ -257,6 +257,9 @@ function createFrontData (room_id, category)
 
   $('.quote__remove').unbind("click").bind('click', removeRoom)
 
+  $('input.has-validate-error').keyup(validateErrorBootstrap)
+  $('input.has-validate-error').unbind('onclick').click(validateErrorBootstrap)
+
   let urlVal = $(room).find('input[name=url-delete]').val()
   $(room).find('input[name=url-delete]').val(urlVal + '/' + room_id)
 

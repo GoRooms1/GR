@@ -451,7 +451,7 @@ class SearchController extends Controller
     }
 
     /* END SEO */
-    // return dd('end');
+//     return dd('end');
 
     return view('web.search', compact('hotels', 'query', 'rooms', 'with_map', 'title', 'attributes', 'address', 'request', 'pageDescription'));
   }

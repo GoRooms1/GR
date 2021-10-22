@@ -220,19 +220,19 @@
                     <div class="d-flex align-items-center">
                       <input type="number"
                              min="0"
-                             class="field hours__field"
+                             class="field hours__field has-validate-error"
                              id="value-{{ $room->id }}-{{$type->id}}"
-                             placeholder="{{ $costRoom->value ?? '0000' }}"
+                             placeholder="{{ $costRoom->value ?? '0' }}"
                              value="{{ $costRoom->value ?? '' }}">
 
                       <div class="hours__hidden">
-                        <span class="hours__money">{{ $costRoom->value ?? '0000' }}</span>
+                        <span class="hours__money">{{ $costRoom->value ?? '0' }}</span>
                         <span class="hours__rub">руб.</span>
                       </div>
 
                       <span class="rub">руб.</span>
 
-                      <div class="select hours__select">
+                      <div class="select hours__select has-validate-error-select">
                         <input type="hidden"
                                name="type[]"
                                data-id="{{$type->id}}"
@@ -259,11 +259,16 @@
             </div>
             <div class="row more-details">
               <div class="col-12">
-                <p class="text">Детально о номере</p>
+                <p class="text {{ $room->attrs()->count() === 0 ? 'is-invalid form-control' : '' }}">Детально о номере</p>
                 <p class="caption caption_mt">
                   Выберите пункты наиболее точно отражающие преимущества данного номера
                   / группы номеров. (минимум 3, максимум 9 пунктов)
                 </p>
+                <div class="mt-2 attributes-list">
+                  @foreach($room->attrs as $a)
+                    <span>{{ $a->name . (!$loop->last ? ',' : '') }}</span>
+                  @endforeach
+                </div>
               </div>
 
             </div>
@@ -301,7 +306,7 @@
 @endsection
 
 @section('header-js')
-  <script src="{{ asset('js/lk/room-categories.js') }}" async></script>
+  <script src="{{ asset('js/lk/room-categories.js') }}"></script>
 @endsection
 
 @section('js')

@@ -378,32 +378,32 @@ if (typeof saveRoom === 'function') {
 /**
  * При поднятии клавиши клавиатуры в поле email
  */
-$('input[type="email"]').bind('keyup', function () {
-  let email = $(this).val();
-  if (!validateEmail(email)) {
-
-    $(this).css('border', '1px solid orange')
-
-  } else if (validateEmail(email)) {
-    $(this).css('border', '1px solid #2f64ad')
-
-  }
-})
+// $('input[type="email"]').bind('keyup', function () {
+//   let email = $(this).val();
+//   if (!validateEmail(email)) {
+//
+//     $(this).css('border', '1px solid orange')
+//
+//   } else if (validateEmail(email)) {
+//     $(this).css('border', '1px solid #2f64ad')
+//
+//   }
+// })
 
 /**
  * При поднятии клавиши клавиатуры в поле телефон
  */
-$('input[type="phone"]').bind('keyup', function () {
-  let phone = $(this).val();
-  if (!validatePhone(phone)) {
-
-    $(this).css('border', '1px solid orange')
-
-  } else if (validatePhone(phone)) {
-    $(this).css('border', '1px solid #2f64ad')
-
-  }
-})
+// $('input[type="phone"]').bind('keyup', function () {
+//   let phone = $(this).val();
+//   if (!validatePhone(phone)) {
+//
+//     $(this).css('border', '1px solid orange')
+//
+//   } else if (validatePhone(phone)) {
+//     $(this).css('border', '1px solid #2f64ad')
+//
+//   }
+// })
 
 /**
  * Валидация Email
@@ -458,6 +458,12 @@ function selectItem() {
     $(this).parent('.select__hidden').slideUp()
     $(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
     $(this).parent('.select__hidden').siblings('.select__top').find('.select__arrow').removeClass('open')
+  }
+
+  console.log($(this).parents('.select').first().hasClass('has-validate-error-select'), $(this).parents('.select'))
+
+  if ($(this).parents('.select').first().hasClass('has-validate-error-select')) {
+    $(this).parents('.select').first().find('.select__top').removeClass('is-invalid form-control')
   }
 }
 
@@ -705,8 +711,10 @@ function savePopupAttributesRoom () {
   if (room_id) {
     let attributes = $(popup).find('input[name*="attr"][type="checkbox"]:checked')
     let ids = [];
+    let names = [];
     attributes.each(function () {
       console.log($(this).val())
+      names.push($(this).first().attr('data-placeholder'))
       ids.push($(this).val())
     })
 
@@ -715,7 +723,7 @@ function savePopupAttributesRoom () {
       return 0;
     }
 
-    backEndSaveAttributesRoom(room_id, ids, popup)
+    backEndSaveAttributesRoom(room_id, ids, popup, names)
   } else {
     alert('Ошибка в определении выбранной комнаты')
     return 0;
@@ -728,8 +736,9 @@ function savePopupAttributesRoom () {
  * @param {Number} room_id
  * @param {[Number]} ids
  * @param {HTMLElement} popup
+ * @param {[String]} names
  */
-function backEndSaveAttributesRoom (room_id, ids, popup) {
+function backEndSaveAttributesRoom (room_id, ids, popup, names) {
   let room = $('.shadow[data-id=' + room_id + ']')
 
   let urlAttrPut = $(room).find('input[name=attributes-put]').val()
@@ -740,12 +749,34 @@ function backEndSaveAttributesRoom (room_id, ids, popup) {
     })
     .then(r => {
       if (r.data.success) {
+        let list = $('.shadow[data-id=' + room_id + ']').find('.attributes-list')
+        list = $(list)
+        list.empty()
+        names.forEach((name, index) => {
+          if (names.length !== index + 1) {
+            list.append('<span>' + name + ', </span>')
+          } else {
+          list.append('<span>' + name + '</span>')
+          }
+        })
+
+        $('.shadow[data-id=' + room_id + ']').find('.more-details').find('p.text').removeClass('is-invalid form-control')
+
         $(popup).find('.close-this').click()
       }
     })
     .catch(e => {
       alert('Ошибка в сохранении атрибутов')
     })
+}
+
+function validateErrorBootstrap() {
+  let el = $(this)
+  if (el.val().trim() === '') {
+    el.addClass('is-invalid form-control')
+  } else {
+    el.removeClass('is-invalid form-control')
+  }
 }
 
 let arrow_up = $('.arrow-up')
@@ -765,3 +796,25 @@ setTimeout( () => {
 if (typeof updateArrow === 'function') {
   updateArrow()
 }
+
+$('input.has-validate-error').keyup(validateErrorBootstrap)
+
+$('input.has-validate-error').click(function () {
+  $(this).keyup()
+})
+
+$('input.has-validate-error').each(validateErrorBootstrap)
+
+$('div.has-validate-error-select').each(function () {
+  let input = $(this).find('input')
+  input = $(input)
+
+  if (input.val() === '') {
+    $(this).find('.select__top').addClass('form-control is-invalid')
+  } else {
+    $(this).find('.select__top').removeClass('form-control is-invalid')
+  }
+})
+
+
+

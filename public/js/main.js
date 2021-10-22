@@ -176,12 +176,15 @@ $(document).ready(function () {
     }
     let flagCost = true;
     function selectPricesColumns(elem) {
+
         let qArr = queryData().query;
 
-        $(elem).removeClass('disabled');
-        elem.querySelectorAll('input').forEach(input => {
-            $(input).attr("disabled", false);
-        });
+        if (typeof elem !== 'boolean') {
+            $(elem).removeClass('disabled');
+            elem.querySelectorAll('input').forEach(input => {
+                $(input).attr("disabled", false);
+            });
+        }
         advancedSearchPrices.forEach(item => {
             if (item !== elem) {
                 $(item).addClass('disabled');
@@ -217,8 +220,13 @@ $(document).ready(function () {
 
         controls.forEach((control, index) => {
             $(control).click(function () {
-                index = (index === 3) ? 2 : index;
-                selectPricesColumns(advancedSearchPrices[index]);
+                if ($(control).find('input').is(":checked")) {
+                    index = (index === 3) ? 2 : index;
+                    selectPricesColumns(advancedSearchPrices[index]);
+                } else {
+                    selectPricesColumns(false);
+                }
+
             });
         });
         advancedSearchPricesInputs.forEach(function (item) {
@@ -239,10 +247,14 @@ $(document).ready(function () {
             return index
         }
 
-        const indexCol = check(advancedSearchPricesInputs) || 0;
+        const indexCol = check(advancedSearchPricesInputs) || false;
 
-        $(controls[indexCol].querySelector('input')).attr('checked', true);
-        selectPricesColumns(advancedSearchPrices[indexCol]);
+        if (indexCol === false) {
+            selectPricesColumns(false);
+        } else {
+            $(controls[indexCol].querySelector('input')).attr('checked', true);
+            selectPricesColumns(advancedSearchPrices[indexCol]);
+        }
 
     }
 
