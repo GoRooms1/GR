@@ -524,7 +524,7 @@ class Hotel extends Model
    */
   public function getDisabledSaveAttribute (): string
   {
-    if (auth()->user()->is_moderate || !$this->old_moderate) {
+    if (!$this->old_moderate) {
       return '';
     }
     return 'disabled';

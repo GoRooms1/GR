@@ -9,9 +9,12 @@
           <h2 class="title">Объект</h2>
         </div>
       </div>
-      <div class="row part__middle">
-        <div class="col-12">
+      <div class="row part__middle justify-content-between">
+        <div class="col-auto">
           <p class="heading">{{ $hotel->name }}</p>
+        </div>
+        <div class="col-auto">
+          <p class="{{ $hotel->moderate ? 'text-danger' : 'text-success' }}">{{ $hotel->moderate ? 'На проверке' : 'Проверен' }}</p>
         </div>
       </div>
       <div class="row">
@@ -110,6 +113,7 @@
               <p class="text-bold adress">Комментарий к адресу: </p>
               <input class="bordered form-control field @error('comment') is-invalid @enderror"
                      name="comment"
+                     {{ $hotel->disabled_save }}
                      value="{{ old('comment', $hotel->address->comment) }}"
                      placeholder="Введите текст">
 
@@ -125,7 +129,7 @@
 
         <div class="row part__bottom">
           <div class="col-12">
-            <button class="button" type="submit">Сохранить</button>
+            <button class="button" {{ $hotel->disabled_save }} type="submit">Сохранить</button>
 
           </div>
         </div>
@@ -157,6 +161,7 @@
             <textarea placeholder="Введите текст"
                       name="description"
                       id="editor"
+                      {{ $hotel->disabled_save }}
                       class="field form-control @error('description') is-invalid @enderror">
               {!! old('description', $hotel->description) !!}
             </textarea>
@@ -169,7 +174,7 @@
         </div>
         <div class="row part__bottom">
           <div class="col-12">
-            <button class="button" type="submit">Сохранить</button>
+            <button class="button" {{ $hotel->disabled_save }} type="submit">Сохранить</button>
 
           </div>
         </div>
@@ -192,6 +197,7 @@
           <div class="col-10">
             <textarea placeholder="Введите текст"
                       name="route"
+                      {{ $hotel->disabled_save }}
                       id="editor2"
                       class="field form-control @error('route') is-invalid @enderror">
               {!! old('route', $hotel->route) !!}
@@ -205,7 +211,7 @@
         </div>
         <div class="row part__bottom">
           <div class="col-12">
-            <button class="button" type="submit">Сохранить</button>
+            <button class="button" {{ $hotel->disabled_save }} type="submit">Сохранить</button>
 
           </div>
         </div>
