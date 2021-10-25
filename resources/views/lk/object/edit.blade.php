@@ -295,6 +295,7 @@
         <div class="row part__bottom">
           <div class="col-12">
             <button id="addMetroButton" onclick="addMetro()"
+                    {!! $hotel->metros()->count() >= 3 ? 'style="display: none"' : '' !!}
                     {{ $hotel->disabled_save }}
                     type="button" class="button"
             >
