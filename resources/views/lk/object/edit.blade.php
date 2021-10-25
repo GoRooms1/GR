@@ -463,6 +463,8 @@
 @section('js')
   <script>
 
+    let existFile = []
+
     $(document).ready(function () {
       selectInit()
 
@@ -508,7 +510,6 @@
               $('#file-dropzone').hide()
             }
           });
-
           this.on('success', function (file, json) {
             console.log(json)
             let image = json.payload.images[0]
@@ -521,13 +522,20 @@
               moderate: image.moderate
             })
           });
-
           this.on("addedfile", function (file) {
-            while (this.files.length > this.options.maxFiles) {
-              this.removeFile(this.files[0]);
-              existFile.shift();
+            // if (this.files.length > this.options.maxFiles) {
+            //   removeFile.call(this, file)
+            // }
+            if (this.files[6]!=null){
+              this.removeFile(this.files[6]);
+              existFile.pop();
               console.log(file, this.files.length, this.options.maxFiles)
             }
+            // while (this.files.length > this.options.maxFiles) {
+            //   this.removeFile(this.files[0]);
+            //   existFile.shift();
+            //   console.log(file, this.files.length, this.options.maxFiles)
+            // }
           });
           this.on("reset", function (file) {
             $('#file-dropzone').show()
@@ -593,13 +601,12 @@
               if (existFile.length < 6) {
                 $('#file-dropzone').show()
               }
-            }, 300)
+            }, 600)
           })
         }
       });
 
       let mockFile
-      let existFile = []
 
       @foreach($hotel->images as $image)
 
@@ -707,6 +714,16 @@
     function takeColor(e) {
       console.log($(e.currentTarget).parent().parent().children('input[type="hidden"]').get(0).value = e.params.data.color)
       console.log(e.params.data.color);
+    }
+
+    function removeFile (file) {
+      if (this.files.length > this.options.maxFiles) {
+        this.removeFile(this.files[0]);
+        existFile.shift();
+        console.log(file, this.files.length, this.options.maxFiles)
+      } else {
+        removeFile.call(this, file)
+      }
     }
 
     function deleteMetro(id) {
