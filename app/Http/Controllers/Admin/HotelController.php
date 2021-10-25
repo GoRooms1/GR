@@ -152,12 +152,16 @@ class HotelController extends Controller
    */
   public function destroy(Hotel $hotel): RedirectResponse
   {
-//    TODO: Проверить на удаление
-    $hotel->users()->forceDelete();
-    if ($hotel->user) {
-      $hotel->user()->forceDelete();
-    }
+    $users = $hotel->users;
+
+//    $hotel->users()->forceDelete();
+//    if ($hotel->user) {
+//      $hotel->user()->forceDelete();
+//    }
     $hotel->delete();
+    foreach ($users as $user) {
+      $user->forceDelete();
+    }
     return redirect()->route('admin.hotels.index');
   }
 }
