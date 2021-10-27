@@ -141,7 +141,7 @@ class RoomController extends Controller
     $room->attrs()->sync($request->get('ids'));
     $room->save();
 
-    return response()->json(['success' => true]);
+    return response()->json(['success' => true, 'room' => $room]);
   }
 
   /**

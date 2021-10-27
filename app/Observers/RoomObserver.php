@@ -32,18 +32,18 @@ class RoomObserver
       Cache::flush();
       $hotel = $room->hotel;
 
-      if (!auth()->user()->is_moderate && !auth()->user()->is_admin ) {
-
-        $roomsModeration = Room::where('moderate', true)
-          ->whereHas('hotel', function ($q) use($hotel) {
-            $q->where('id', $hotel->id);
-          })->count();
-
-        // Если все комнаты на модерацию упали, то отель на модерацию
-        if ($hotel->rooms()->count() === $roomsModeration ) {
-          $hotel->moderate = true;
-        }
-      }
+//      if (!auth()->user()->is_moderate && !auth()->user()->is_admin ) {
+//
+//        $roomsModeration = Room::where('moderate', true)
+//          ->whereHas('hotel', function ($q) use($hotel) {
+//            $q->where('id', $hotel->id);
+//          })->count();
+//
+//        // Если все комнаты на модерацию упали, то отель на модерацию
+//        if ($hotel->rooms()->count() === $roomsModeration ) {
+//          $hotel->moderate = true;
+//        }
+//      }
 
       // При создании одной комнаты запрет отельеру редактировать поля (Один раз после самой первой созданной комнаты)
       if ($hotel->old_moderate === false) {
@@ -75,7 +75,7 @@ class RoomObserver
 
       $hotel = $room->hotel;
 
-      $this->moderate_hotel($hotel);
+//      $this->moderate_hotel($hotel);
     }
   }
 
@@ -93,18 +93,18 @@ class RoomObserver
       $hotel->type_fond = null;
       $hotel->checked_type_fond = false;
 
-      if (!auth()->user()->is_moderate && !auth()->user()->is_admin) {
-        $hotel->moderate = true;
-      }
+//      if (!auth()->user()->is_moderate && !auth()->user()->is_admin) {
+//        $hotel->moderate = true;
+//      }
 
       $hotel->categories()->delete();
       $hotel->save();
     }
 
-    if (auth()->check()) {
-
-      $this->moderate_hotel($hotel);
-    }
+//    if (auth()->check()) {
+//
+//      $this->moderate_hotel($hotel);
+//    }
   }
 
   /**
@@ -129,23 +129,23 @@ class RoomObserver
     //
   }
 
-  /**
-   * @param Hotel $hotel
-   */
-  private function moderate_hotel (Hotel $hotel): void
-  {
-    if (!auth()->user()->is_moderate && !auth()->user()->is_admin) {
-
-      $roomsModeration = Room::where('moderate', true)->whereHas('hotel', function ($q) use ($hotel) {
-          $q->where('id', $hotel->id);
-        })->count();
-
-      // Если все комнаты на модерацию упали, то отель на модерацию
-      if ($hotel->rooms()->count() === $roomsModeration) {
-        $hotel->moderate = true;
-      }
-    }
-
-    $hotel->save();
-  }
+//  /**
+//   * @param Hotel $hotel
+//   */
+//  private function moderate_hotel (Hotel $hotel): void
+//  {
+//    if (!auth()->user()->is_moderate && !auth()->user()->is_admin) {
+//
+//      $roomsModeration = Room::where('moderate', true)->whereHas('hotel', function ($q) use ($hotel) {
+//          $q->where('id', $hotel->id);
+//        })->count();
+//
+//      // Если все комнаты на модерацию упали, то отель на модерацию
+//      if ($hotel->rooms()->count() === $roomsModeration) {
+//        $hotel->moderate = true;
+//      }
+//    }
+//
+//    $hotel->save();
+//  }
 }

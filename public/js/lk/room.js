@@ -52,7 +52,7 @@ function saveRoom () {
       .then(response => {
         if (response.data.success) {
           saveFrontData.call(this)
-          if (!response.data.room.moderate) {
+          if (response.data.room.moderate) {
             $(shadow).find('.row__head')
               .removeClass('row__head_blue')
             $(shadow).find('.quote__status')

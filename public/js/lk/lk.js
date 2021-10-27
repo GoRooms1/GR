@@ -762,6 +762,16 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
 
         $('.shadow[data-id=' + room_id + ']').find('.more-details').find('p.text').removeClass('is-invalid form-control')
 
+        if (r.data.room.moderate) {
+          $(room).find('.row__head')
+            .removeClass('row__head_blue')
+          $(room).find('.quote__status')
+            .text('Проверка модератором')
+          $(room).find('.quote__status')
+            .removeClass('quote__status_blue')
+            .addClass('quote__status_red')
+        }
+
         $(popup).find('.close-this').click()
       }
     })
