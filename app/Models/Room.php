@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Route;
-use Cache;
 use App\Traits\UseImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -61,6 +61,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|Room whereNumber($value)
  * @method static Builder|Room whereOrder($value)
  * @method static Builder|Room whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Room extends Model
 {
@@ -137,7 +138,7 @@ class Room extends Model
     return $query->where('is_hot', true);
   }
 
-  public function getAllCostsAttribute()
+  public function getAllCostsAttribute(): Collection
   {
     $costs = $this->costs()->with('period.type')->get()->sortBy('type.sort');
 

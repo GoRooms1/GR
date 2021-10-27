@@ -7,7 +7,7 @@
 
 namespace App\Observers;
 
-use Cache;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Room;
 use App\Models\Hotel;
 
