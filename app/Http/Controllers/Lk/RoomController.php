@@ -86,11 +86,6 @@ class RoomController extends Controller
   public function saveRoom(RoomRequest $request): JsonResponse
   {
 
-//    5.2. Когда меняют стоимость и промежутки времени, то комната на модерацию не падает.
-//  5.3. На модерация ставится только тогда, когда: Меняет категорию на другую, Фотография и название
-//5.4. Изменяет атрибуты, становится на модерацию.
-
-
     $hotel = Hotel::whereHas('rooms', function ($q) use ($request) {
       $q->where('id', $request->get('id'));
     })->firstOrFail();
@@ -200,8 +195,10 @@ class RoomController extends Controller
    *
    * @param int     $id
    * @param Request $request
+   *
+   * @return JsonResponse
    */
-  public function putAttributes(int $id, Request $request)
+  public function putAttributes(int $id, Request $request): JsonResponse
   {
     $request->validate([
       'ids' => 'required|array',
