@@ -158,7 +158,12 @@
     $("#address").suggestions({
       token: "a35c9ab8625a02df0c3cab85b0bc2e9c0ea27ba4",
       type: "ADDRESS",
-      count: 20
+      count: 20,
+      onSelect : function (suggestion) {
+        console.log(suggestion)
+        if (suggestion.data.house === null)
+          $("#address").suggestions().update()
+      }
     });
 
     $(document).ready(function () {
