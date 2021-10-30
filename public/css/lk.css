@@ -1439,3 +1439,19 @@ textarea.form-control {
 	background-color: white!important;
 	opacity: 1;
 }
+
+.tiny-content img {
+	float: left!important;
+	margin: 10px 20px 10px 0px!important;
+}
+
+.tiny-content iframe {
+	width: 70% !important;
+	display: block;;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.tiny-content p {
+	font-size: 14px!important;
+}
