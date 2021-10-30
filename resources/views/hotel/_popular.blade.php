@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="hotel-card-slider swiper-container js-hotel-card-slider">
-      @if($hotel->moderate || !$hotel->show)
+      @if($hotel->moderate)
         <div class="swiper-wrapper">
           <a href="#!" class="swiper-slide">
             <img src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
