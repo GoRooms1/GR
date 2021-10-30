@@ -182,16 +182,31 @@ class Hotel extends Model
           !Route::currentRouteNamed('api.*') &&
           !Route::currentRouteNamed('admin.*')
         ) {
-          $builder->where('moderate', false)->where('show', true);
+//          Если залогинен значит выводим только проверенные отели в которых есть комнаты
+          $builder->withCount('rooms')
+            ->having('rooms_count', '>', 0)
+            ->where('moderate', false)
+            ->where('old_moderate', true)
+            ->where('show', true);
         } else if (
-          auth()->user()->is_moderate &&
+          (auth()->user()->is_moderate || auth()->user()->is_admin) &&
           !Route::currentRouteNamed('admin.*') &&
           !Route::currentRouteNamed('moderator.*')
         ) {
-          $builder->where('show', true);
+//          Если модератор то показываем отели только те которые уже заполнили и создавали ранее комнату
+          $builder
+            ->where('old_moderate', true);
         }
+//        Если залогинен н админ то выводим просто всё
       } else {
-        $builder->where('moderate', false)->where('show', true);
+//        Если не залогинен значит выводим только проверенные отели в которых есть комнаты
+        $builder->withCount(['rooms' => function ($query) {
+          $query->withoutGlobalScope('moderation')->where('moderate', false);
+        }])
+          ->where('moderate', false)
+          ->where('show', true)
+          ->where('old_moderate', true)
+          ->having('rooms_count', '>', 0);
       }
     });
 
