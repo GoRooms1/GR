@@ -183,6 +183,12 @@ class Hotel extends Model
           !Route::currentRouteNamed('admin.*')
         ) {
           $builder->where('moderate', false)->where('show', true);
+        } else if (
+          auth()->user()->is_moderate &&
+          !Route::currentRouteNamed('admin.*') &&
+          !Route::currentRouteNamed('moderator.*')
+        ) {
+          $builder->where('show', true);
         }
       } else {
         $builder->where('moderate', false)->where('show', true);
