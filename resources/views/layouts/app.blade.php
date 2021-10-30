@@ -98,7 +98,6 @@
       @endif
       <div class="header-top-btns">
         @auth
-          {{--                TODO: Добавить ссылку на личный кабинет    --}}
           @if(!auth()->user()->hotel()->exists())
             @if (!auth()->user()->is_moderate)
               <a href="{{ route('lk.start') }}"
@@ -159,7 +158,6 @@
         </li>
 
         @auth
-          {{--                TODO: Добавить ссылку на личный кабинет    --}}
           @if(!auth()->user()->hotel()->exists() && !auth()->user()->is_moderate)
             @if (!auth()->user()->is_moderate)
               <li class="header-menu-item header-menu-item-mobile">

@@ -71,7 +71,6 @@ class StaffController extends Controller
   public function remove (int $staff_id): RedirectResponse
   {
     try {
-      //      TODO: Если удаляют юзеров который самый клавный, то меняем главного на первого general
       $user = User::findOrFail($staff_id);
 
       //    Если у удаляемого юзера прописано что он создатель отеля то...

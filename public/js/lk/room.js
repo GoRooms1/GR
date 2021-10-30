@@ -126,7 +126,6 @@ function saveFrontData () {
 function removeRoom () {
   let shadow = $(this).parents('.shadow').get(0)
 //  axios
-//  TODO: delete variable uploader and existFile
   let url = $(shadow).find('input[name=url-delete]').val()
   let id = shadow.dataset.id
   axios.delete(url)
