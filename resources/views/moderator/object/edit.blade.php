@@ -9,9 +9,12 @@
           <h2 class="title title_blue">Объект</h2>
         </div>
       </div>
-      <div class="row part__middle">
-        <div class="col-12">
+      <div class="row part__middle justify-content-between">
+        <div class="col-auto">
           <p class="heading">Название: {{ $hotel->name }}</p>
+        </div>
+        <div class="col-auto">
+          <p class="{{ $hotel->moderate ? 'text-danger' : 'text-success' }}">{{ $hotel->moderate ? 'На проверке' : 'Проверен' }}</p>
         </div>
       </div>
       <div class="row">
@@ -109,7 +112,7 @@
           <div class="text editor__text">
             {!! $hotel->description !!}
           </div>
-          <textarea id="editor2" class="h-auto" name="description" placeholder="Введите текст">
+          <textarea id="editor2" class="h-auto field form-control" name="description" placeholder="Введите текст">
           {!! $hotel->description !!}
         </textarea>
         </div>
@@ -126,7 +129,7 @@
 </section>
 
   {{-- Как добраться --}}
-  <section class="part ck-editor_hidden ck-editor__show">
+  <section class="part ck-editor_hidden">
     <div class="container">
       <div class="row part__top">
         <div class="col-12">
@@ -142,7 +145,7 @@
             <div class="text editor__text">
               {!! $hotel->route !!}
             </div>
-            <textarea id="editor" class="h-auto" name="route" placeholder="Введите текст">
+            <textarea id="editor" class="h-auto field form-control" name="route" placeholder="Введите текст">
               {!! $hotel->route !!}
             </textarea>
           </div>
@@ -451,7 +454,7 @@
       <div class="d-flex align-items-center case_2">
         <input type="phone" class="field" name="phone" value="{{ $hotel->phone }}" required placeholder="Телефон 1 объекта">
         <input type="phone" class="field" name="phone_2" value="{{ $hotel->phone_2 }}" placeholder="Телефон 2 объекта">
-        <input type="text" class="field" name="email" value="{{ $hotel->email }}" required placeholder="E-mail">
+        <input type="email" class="field" name="email" value="{{ $hotel->email }}" required placeholder="E-mail">
       </div>
 
       <button type="submit" class="button button_blue">Сохранить</button>
@@ -570,7 +573,7 @@
     let metros_ids = {{ $hotel->metros->pluck('distance')->max() ?? 1 }};
 
     let count_metros = {{ $hotel->metros()->count() > 0 ? $hotel->metros()->count() : 1 }};
-
+    $("input[type='phone']").mask("+7 (999) 999 99-99");
     $("input[name*='attr'][type='checkbox']").on( "change", function() {
       console.log(2);
       if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
