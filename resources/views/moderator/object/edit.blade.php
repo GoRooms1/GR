@@ -192,7 +192,6 @@
                        name="metros_color[]"
                        value="{{ $m->color }}">
                 <input type="number"
-                       {{ $hotel->disabled_save }}
                        min="1"
                        name="metros_time[]"
                        value="{{ $m->distance }}"
@@ -202,7 +201,6 @@
                 <button onclick="deleteMetro({{ $m->id }})"
                         type="button"
                         class="mx-3 button button_blue w-auto px-3"
-                    {{ $hotel->disabled_save }}
                 >
                   -
                 </button>
@@ -213,17 +211,15 @@
               <div class="d-flex align-items-center station">
                 <div class="select" style="width: 45%">
                   <select name="metros[]"
-                          {{ $hotel->disabled_save }}
                           class="form-control field metros w-100"
                           required>
                   </select>
                 </div>
                 <input type="hidden" name="metros_color[]">
-                <input type="number" min="1" {{ $hotel->disabled_save }} name="metros_time[]"
+                <input type="number" min="1" name="metros_time[]"
                        class="field field_small station-field" required>
                 <p class="text">минут пешком до объекта</p>
                 <button onclick="deleteMetro(1)"
-                        {{ $hotel->disabled_save }}
                         type="button"
                         class="mx-3 button button_blue w-auto px-3">
                   -
@@ -237,7 +233,6 @@
           <div class="col-12">
             <button onclick="addMetro()"
                     {!! $hotel->metros()->count() >= 3 ? 'style="display: none"' : '' !!}
-                    {{ $hotel->disabled_save }}
                     type="button" class="button button_blue"
             >
               Добавить станцию
@@ -253,7 +248,6 @@
         <div class="row part__bottom">
           <div class="col-12">
             <button class="button button_blue"
-                    {{ $hotel->disabled_save }}
                     type="submit">
               Сохранить
             </button>
@@ -333,7 +327,7 @@
                              name="attr[{{ $attr->id }}]"
                           {{ $hotel->attrs->contains('id', $attr->id) ? 'checked' : '' }}
                       >
-                      <div class="check" {{ $hotel->disabled_save }}>
+                      <div class="check">
                         <div class="check__flag check__flag_blue"></div>
                       </div>
                       <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
