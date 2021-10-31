@@ -2592,6 +2592,8 @@ select.form-control {
 .room-card-prices-item-price {
   font-weight: bold;
   font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .room-card-prices-item-price-old {
   position: relative;
