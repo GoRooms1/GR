@@ -183,16 +183,6 @@
                                            class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
                                 </li>
                             @endforeach
-
-                            @moderator
-                            <li class="advanced-search-details-item">
-                                <input id="advanced-search-hotel-moderate" type="checkbox"
-                                       @if(isset($request) && optional($request)->has('hotel_moderate')) checked @endif
-                                       name="hotel_moderate" class="checkbox">
-                                <label for="advanced-search-hotel-moderate"
-                                       class="checkbox-label checkbox-label-light">На модерации</label>
-                            </li>
-                            @endmoderator
                         </ul>
                     </div>
                 </div>
@@ -200,7 +190,7 @@
                     <p class="advanced-search-title">Детально о номерах <button class="js-search-btn-collapse search-btn-collapse" type="button"></button></p>
                     <div class="filter-collapse js-search-collapse">
                         <ul class="advanced-search-details-list">
-    @php($rooms_attributes = \Illuminate\Support\Facades\Cache::remember('rooms_attributes', 60*60*24*12, function () {
+                            @php($rooms_attributes = \Illuminate\Support\Facades\Cache::remember('rooms_attributes', 60*60*24*12, function () {
         return \App\Models\Attribute::forRooms()->filtered()->get();
     }))
                             @foreach ($rooms_attributes as $attribute)
@@ -214,16 +204,23 @@
                                            class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
                                 </li>
                             @endforeach
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-12 advanced-search-details-col">
+                    <p class="advanced-search-title">Модерация</p>
+                    <div class="filter-collapse js-search-collapse">
+                        <ul class="advanced-search-details-list">
 
-                            @moderator
-                                <li class="advanced-search-details-item">
-                                    <input id="advanced-search-rooms-moderate" type="checkbox"
-                                           @if(isset($request) && optional($request)->has('room_moderate')) checked @endif
-                                           name="room_moderate" class="checkbox">
-                                    <label for="advanced-search-rooms-moderate"
-                                           class="checkbox-label checkbox-label-light">На модерации</label>
-                                </li>
-                            @endmoderator
+                            <li class="advanced-search-details-item">
+                                <input id="advanced-search-moderate" type="checkbox"
+                                       @if(isset($moderate))
+                                        {{ $moderate ? 'checked' : '' }}
+                                       @endif
+                                       name="moderate" value="true" class="checkbox">
+                                <label for="advanced-search-moderate"
+                                       class="checkbox-label checkbox-label-light">На модерации</label>
+                            </li>
                         </ul>
                     </div>
                 </div>
