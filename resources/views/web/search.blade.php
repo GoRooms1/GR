@@ -72,7 +72,28 @@
   </section>
 
   <section class="section section-pt-none">
-    @if($rooms)
+    @if($moderate)
+      <div class="container">
+          @foreach ($hotels as $hotel)
+          <div class="row row-sm position-relative">
+            <div class="col-sm-6 col-lg-3 col-xxl-2" style="position: relative">
+              <div class="position-sticky" style="top: 20px; margin-bottom: 20px;position: sticky;">
+                @include('hotel._popular', ['moderate' => true])
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-9 col-xxl-10">
+              <div class="row">
+                @foreach ($hotel->rooms()->where('moderate', true)->get() as $room)
+                 <div class="col-12">
+                   @include('room._hot')
+                 </div>
+                @endforeach
+              </div>
+            </div>
+          </div>
+          @endforeach
+      </div>
+    @elseif($rooms)
       <div class="container">
         <div class="h2 section-title orange">Номера</div>
         <div class="items-container">
@@ -93,6 +114,16 @@
             @continue(is_null($hotel) || ($with_map && !$hotel->is_popular))
             @include('hotel._popular')
           @endforeach
+        </div>
+      </div>
+    @endif
+
+    @if($moderate)
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            {{ $hotels->links() }}
+          </div>
         </div>
       </div>
     @endif
