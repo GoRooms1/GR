@@ -3,7 +3,11 @@
       return RatingCategory::orderBy('sort')->get();
   })
 @endphp
+@if ($moderate ?? false)
+  <div class="col-p-sm col-12 card-wrapper">
+@else
 <div class="col-p-sm col-sm-6 col-lg-3 col-xxl-2 card-wrapper">
+@endif
   <div class="hotel-card">
     <a href="{{ route('hotels.show', $hotel) }}" class="hotel-card-title-top" target="_blank">{{ $hotel->name }}</a>
     <div class="rating">
@@ -30,13 +34,13 @@
         </div>
       </div>
     </div>
-    <div class="hotel-card-slider swiper-container js-hotel-card-slider">
+    <div class="hotel-card-slider swiper-container {{$hotel->moderate ? '' : 'js-hotel-card-slider'}}">
       @if($hotel->moderate)
-        <div class="swiper-wrapper">
+{{--        <div class="swiper-wrapper">--}}
           <a href="#!" class="swiper-slide">
             <img src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
           </a>
-        </div>
+{{--        </div>--}}
       @else
         <div class="swiper-wrapper">
           @foreach($hotel->images AS $image)
