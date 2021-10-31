@@ -31,25 +31,29 @@
         </div>
       </div>
     </div>
-    <div class="room-card-slider swiper-container js-hotel-card-slider">
-      <div class="swiper-wrapper">
+    <div class="room-card-slider swiper-container {{$room->moderate ? '' : 'js-hotel-card-slider'}}">
+{{--      <div class="swiper-wrapper">--}}
         @if($room->moderate)
+{{--          <div class="swiper-wrapper">--}}
           <div class="swiper-slide">
-            <img class="swiper-lazy" data-src="{{ asset('img/hotel-moderate.jpg') }}"
+            <img class="swiper-lazy"
                  src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
           </div>
+{{--          </div>--}}
         @else
-          @foreach($room->images AS $key => $image)
-            <<div class="swiper-slide">
-              <img class="swiper-lazy" data-src="{{ asset($image->path) }}" alt="{{ $room->name }}"
-                   src="{{ asset('img/pr578x340.jpg') }}"
-                   title="{{ $room->name . ' | GoRooms.ru' . ($loop->iteration > 1 ? ' - фото ' . $loop->iteration : '') }}">
-            </div>
-          @endforeach
+          <div class="swiper-wrapper">
+            @foreach($room->images AS $key => $image)
+              <<div class="swiper-slide">
+                <img class="swiper-lazy" data-src="{{ asset($image->path) }}" alt="{{ $room->name }}"
+                     src="{{ asset('img/pr578x340.jpg') }}"
+                     title="{{ $room->name . ' | GoRooms.ru' . ($loop->iteration > 1 ? ' - фото ' . $loop->iteration : '') }}">
+              </div>
+            @endforeach
+          </div>
+        <div class="swiper-button swiper-button-next"></div>
+        <div class="swiper-button swiper-button-prev"></div>
         @endif
-      </div>
-      <div class="swiper-button swiper-button-next"></div>
-      <div class="swiper-button swiper-button-prev"></div>
+{{--      </div>--}}
     </div>
 
     <div class="room-card-in">
@@ -135,7 +139,7 @@
           @foreach($room->all_costs AS $cost)
             <li class="room-card-prices-item">
               @if(isset($cost->period))
-                <div>
+                <div style="width: 100%">
                   <p class="room-card-prices-item-title">{{ $cost->period->type->name }}</p>
                   <p class="room-card-prices-item-price">
                     @if((int) $cost->value === 0)
@@ -149,7 +153,7 @@
                   @endif
                 </div>
               @else
-                <div>
+                <div style="width: 100%">
                   <p class="room-card-prices-item-title">{{ $cost->type->name }}</p>
                   <p class="room-card-prices-item-price">{{ $cost->value }}</p>
                 </div>
