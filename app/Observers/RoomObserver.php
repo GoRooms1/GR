@@ -28,7 +28,7 @@ class RoomObserver
   public function created(Room $room): void
   {
     Cache::flush();
-    $hotel = $room->hotel;
+    $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
 
     // При создании одной комнаты запрет отельеру редактировать поля (Один раз после самой первой созданной комнаты)
     if ($hotel->old_moderate === false) {
@@ -55,7 +55,7 @@ class RoomObserver
   public function updated(Room $room): void
   {
     Cache::flush();
-    $hotel = $room->hotel;
+    $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
 //    if (Route::currentRouteNamed('lk.*')) {
     if ($hotel) {
       $this->moderate_hotel($hotel);
@@ -72,7 +72,7 @@ class RoomObserver
   public function deleted(Room $room): void
   {
     Cache::flush();
-    $hotel = $room->hotel;
+    $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
     if ($hotel->rooms()->count() === 0) {
       $hotel->type_fond = null;
       $hotel->checked_type_fond = false;
