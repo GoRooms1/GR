@@ -32,28 +32,24 @@
       </div>
     </div>
     <div class="room-card-slider swiper-container {{$room->moderate ? '' : 'js-hotel-card-slider'}}">
-{{--      <div class="swiper-wrapper">--}}
-        @if($room->moderate)
-{{--          <div class="swiper-wrapper">--}}
-          <div class="swiper-slide">
-            <img class="swiper-lazy"
-                 src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
-          </div>
-{{--          </div>--}}
-        @else
-          <div class="swiper-wrapper">
-            @foreach($room->images AS $key => $image)
-              <<div class="swiper-slide">
-                <img class="swiper-lazy" data-src="{{ asset($image->path) }}" alt="{{ $room->name }}"
-                     src="{{ asset('img/pr578x340.jpg') }}"
-                     title="{{ $room->name . ' | GoRooms.ru' . ($loop->iteration > 1 ? ' - фото ' . $loop->iteration : '') }}">
-              </div>
-            @endforeach
-          </div>
+      @if($room->moderate)
+        <div class="swiper-slide">
+          <img class="swiper-lazy"
+               src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
+        </div>
+      @else
+        <div class="swiper-wrapper">
+          @foreach($room->images AS $key => $image)
+            <div class="swiper-slide">
+              <img class="swiper-lazy" data-src="{{ asset($image->path) }}" alt="{{ $room->name }}"
+                   src="{{ asset('img/pr578x340.jpg') }}"
+                   title="{{ $room->name . ' | GoRooms.ru' . ($loop->iteration > 1 ? ' - фото ' . $loop->iteration : '') }}">
+            </div>
+          @endforeach
+        </div>
         <div class="swiper-button swiper-button-next"></div>
         <div class="swiper-button swiper-button-prev"></div>
-        @endif
-{{--      </div>--}}
+      @endif
     </div>
 
     <div class="room-card-in">
@@ -163,12 +159,13 @@
         </ul>
       </a>
       <div class="room-card-btns">
+        @if(!$room->moderate)
         <a href="" class="btn btn-orange btn-block" data-href="#book-popup" data-toggle="modal"
            data-target="#book-popup" data-action="{{ route('booking.room', $room->id) }}"
            onclick="showFormBookRoom('{{$room->id}}')">Забронировать</a>
-
+        @endif
         @moderator
-          <a href="{{ route('moderator.room.edit', $hotel->id) }}" class="btn btn-orange btn-block btn-moderator-edit">Редактировать</a>
+          <a href="{{ route('moderator.room.edit', $hotel->id) }}" class="btn btn-orange btn-block {{ !$room->moderate ? 'btn-moderator-edit' : '' }}">Редактировать</a>
         @endmoderator
       </div>
     </div>
