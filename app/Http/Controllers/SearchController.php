@@ -44,7 +44,7 @@ class SearchController extends Controller
           $q->where('moderate', true);
         })
         ->orderBy('id')
-        ->paginate(15);
+        ->paginate(5);
       $hotels->appends(['moderate' => true]);
       $is_room = false;
 //      $hotels = $hotels->get();
@@ -120,7 +120,8 @@ class SearchController extends Controller
           })->all();
           $hotels = collect($hotels);
         }
-      } else {
+      }
+      else {
         $rooms = Room::with(['hotel', 'hotel.address']);
         if ($request->has('room_moderate')) {
           $rooms->where('moderate', 1);
@@ -201,8 +202,14 @@ class SearchController extends Controller
 
 
     }
-
-    $count = $is_room ? $rooms->count() : $hotels->count();
+    if ($moderate) {
+      $count = Hotel::withoutGlobalScope('moderation')
+        ->where('moderate', true)
+        ->where('old_moderate', true)
+        ->count();
+    } else {
+      $count = $is_room ? $rooms->count() : $hotels->count();
+    }
     $title = $with_map ? 'Поиск по карте' : "Результаты поиска <span class=\"count\">($count)</span>";
 
     try {
