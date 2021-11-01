@@ -72,7 +72,7 @@
   </section>
 
   <section class="section section-pt-none">
-    @if($moderate)
+    @if($moderate ?? false)
       <div class="container">
           @foreach ($hotels as $hotel)
           <div class="row row-sm position-relative">
@@ -118,7 +118,7 @@
       </div>
     @endif
 
-    @if($moderate)
+    @if($moderate ?? false)
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-auto">
