@@ -488,7 +488,7 @@ function js_hotel_card_slider_init(){
 
 let loading = false;
 
-async function loadMore(e, url) {
+async function loadMore(e, url, callback = null) {
     if (loading) {
         return;
     }
@@ -502,6 +502,8 @@ async function loadMore(e, url) {
         updateCounter(html);
     }
     loading = false;
+    js_hotel_card_slider_init()
+
 }
 
 function updateCounter(html) {

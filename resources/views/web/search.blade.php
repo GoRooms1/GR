@@ -143,7 +143,6 @@
       $('#rooms-address-load-more').click(async function (e) {
         roomPageCount++
         await loadMore(e, `{{Request::url()}}?page=${roomPageCount}`);
-        js_hotel_card_slider_init();
       });
     });
   </script>
