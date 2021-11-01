@@ -57,7 +57,9 @@ class RoomObserver
     Cache::flush();
     $hotel = $room->hotel;
 //    if (Route::currentRouteNamed('lk.*')) {
+    if ($hotel) {
       $this->moderate_hotel($hotel);
+    }
 //    }
   }
 
