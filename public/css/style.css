@@ -2216,6 +2216,37 @@ select.form-control {
 .hotel-card-metro .metro {
   margin-bottom: 10px;
 }
+
+.hotel-card-metro .metro a {
+  display: flex;
+  width: 100%;
+}
+.hotel-card-metro .metro a i {
+  display: flex;
+  width: 9%;
+}
+
+.hotel-card-metro .metro a span.name-metro {
+  max-width: 58%;
+  display:flex;
+  white-space: normal;
+  width: auto;
+  height: 20px;
+}
+.hotel-card-metro .metro a span.name-metro span {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hotel-card-metro .metro a span.time-metro {
+  display: flex;
+  width: auto;
+  align-items: center;
+  margin-left: 5px;
+}
+
 .hotel-card-metro .metro:last-child {
   margin-bottom: 0;
 }

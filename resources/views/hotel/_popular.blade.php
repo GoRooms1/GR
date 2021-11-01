@@ -76,8 +76,16 @@
             @break($loop->index == 2)
             <li class="metro">
               <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ Str::slug($metro->name) }}">
-                <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>{{ $metro->name }}
-                - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt="">
+                <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>
+                <span class="name-metro">
+                  <span>
+                    {{ $metro->name }}
+                  </span>
+                </span>
+                <span class="time-metro">
+                  - {{ $metro->distance }} мин
+                  <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt="">
+                </span>
               </a>
             </li>
           @endforeach
