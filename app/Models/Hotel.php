@@ -388,6 +388,10 @@ class Hotel extends Model
                 $q->where('cost_type_id', $type_id);
               })->where('value', '>', 0)->min('value') ?? '0';
           });
+
+          $costPeriod = $this->costs->where('value', $min_in_rooms)->where('period.cost_type_id', $type_id)->first();
+          $cost = $costPeriod ?? $cost;
+
           $item = (object)['name' => $cost->period->type->name, 'id' => $cost->period->type->id, 'description' => $cost->description, 'info' => $cost->period->info, 'value' => $min_in_rooms,];
           $items->add($item);
         }
@@ -410,8 +414,6 @@ class Hotel extends Model
 
       return $costs;
     });
-    debug(1);
-    debug($costs);
 
     return (object)$costs;
   }
@@ -423,7 +425,7 @@ class Hotel extends Model
    */
   public function getCostsAttribute(): Collection
   {
-    return $this->rooms()->get()->pluck('costs')->flatten();
+    return $this->rooms()->with('costs.period')->get()->pluck('costs')->flatten();
   }
 
   /**
