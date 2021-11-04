@@ -495,7 +495,6 @@
         thumbnailWidth: 352,
         thumbnailHeight: 260,
         addRemoveLinks: true,
-        uploadMultiple: false,
         previewsContainer: '.visualizacao-' + zone.dataset.id,
         previewTemplate: $(zone).siblings('.preview').html(),
         acceptedFiles: "image/*",
@@ -514,6 +513,7 @@
 
             let d = file.previewElement.querySelector("[data-dz-success]");
             d.innerHTML = f.moderate_text
+
             if (!f.moderate) {
               d.style.color = "#2f64ad"
             }
@@ -521,6 +521,10 @@
             $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
             let str = $('ul.visualizacao-' + zone.dataset.id).get(0)
             $(zone).appendTo(str)
+
+            if (existFile[zone.dataset.id].length >= 6) {
+              $(zone).hide()
+            }
           });
           this.on('success', function (file, json) {
             console.log(json)
@@ -535,18 +539,18 @@
             })
           });
           this.on("addedfile", function (file) {
-            while (this.files.length > this.options.maxFiles) {
-              this.removeFile(this.files[0]);
-              existFile[zone.dataset.id].shift();
+            if (this.files[6] != null){
+              this.removeFile(this.files[6], existFile[zone.dataset.id]);
+              existFile[zone.dataset.id].pop();
               console.log(file, this.files.length, this.options.maxFiles)
             }
           });
           this.on("reset", function (file) {
             $(zone).show()
           });
-          this.on('queuecomplete', function (file) {
-            $(this).parents(".shadow").find('.uploud__min').hide()
-          });
+          // this.on('queuecomplete', function (file) {
+          //   $(this).parents(".shadow").find('.uploud__min').hide()
+          // });
           this.on("removedfile", function (file) {
             console.log(file)
             if (existFile[zone.dataset.id].length === 1) {
@@ -578,7 +582,6 @@
                   .catch(error => {
                     alert('Ошибка при удалении')
                   })
-
               }
             })
             if (!flag) {
@@ -597,10 +600,17 @@
                     .catch(error => {
                       alert('Ошибка при удалении')
                     })
-
                 }
               })
             }
+
+            setTimeout(() => {
+              console.log(existFile[zone.dataset.id].length)
+              if (existFile[zone.dataset.id].length < 6) {
+                console.log(existFile[zone.dataset.id].length)
+                $(zone).show()
+              }
+            }, 1000)
           })
         }
       }
@@ -653,6 +663,16 @@
       $('.quote__read').each(function () {
         saveFrontData.call(this, true)
       })
+
+      function removeFile (file, existFile) {
+        if (this.files.length > this.options.maxFiles) {
+          this.removeFile(this.files[0]);
+          existFile.shift();
+          console.log(file, this.files.length, this.options.maxFiles)
+        } else {
+          removeFile.call(this, file)
+        }
+      }
     });
 
   </script>
