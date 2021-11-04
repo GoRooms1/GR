@@ -285,17 +285,18 @@
                   Выберите пункты наиболее точно отражающие преимущества данного номера
                   / группы номеров. (минимум 3, максимум 9 пунктов)
                 </p>
+              </div>
 
+            </div>
+
+            <div class="row">
+              <div class="col-12">
                 <div class="mt-2 attributes-list">
                   @foreach($room->attrs as $a)
                     <span>{{ $a->name . (!$loop->last ? ',' : '') }}</span>
                   @endforeach
                 </div>
               </div>
-
-            </div>
-
-            <div class="row">
               <div class="col-12">
                 <a class="show-all show-all_orange" data-room-id="{{ $room->id }}">Показать все</a>
               </div>
@@ -500,15 +501,16 @@
         <p class="caption caption_mt">
           Выберите пункты наиболее точно отражающие преимущества данного номера / группы номеров. (минимум 3, максимум 9 пунктов)
         </p>
-
-        <div class="mt-2 attributes-list">
-
-        </div>
       </div>
 
     </div>
 
     <div class="row">
+      <div class="col-12">
+        <div class="mt-2 attributes-list">
+
+        </div>
+      </div>
       <div class="col-12">
         <a class="show-all show-all_orange">Показать все</a>
       </div>
