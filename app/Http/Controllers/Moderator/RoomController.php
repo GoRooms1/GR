@@ -59,7 +59,6 @@ class RoomController extends Controller
       $room = $this->saveDataTypeRoom($request->all(), $room);
     }
 
-    $room->moderate = true;
     $room->category()->associate($request->get('category'));
     $room->costs()->delete();
 
