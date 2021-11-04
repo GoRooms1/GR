@@ -12,6 +12,7 @@ use App\Models\HotelType;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use App\Http\Requests\HotelRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -154,11 +155,10 @@ class HotelController extends Controller
   {
     $users = $hotel->users;
 
-//    $hotel->users()->forceDelete();
-//    if ($hotel->user) {
-//      $hotel->user()->forceDelete();
-//    }
+    $hotel->users()->detach();
+
     $hotel->delete();
+
     foreach ($users as $user) {
       $user->forceDelete();
     }
