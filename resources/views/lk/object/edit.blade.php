@@ -505,7 +505,7 @@
 
             $(".dz-remove").html("<span class='upload__remove'><i class='fa fa-trash' aria-hidden='true'></i></span>");
             $('#file-dropzone').appendTo('.visualizacao')
-            console.log(existFile.length)
+
             if (existFile.length >= 6) {
               $('#file-dropzone').hide()
             }
@@ -523,19 +523,11 @@
             })
           });
           this.on("addedfile", function (file) {
-            // if (this.files.length > this.options.maxFiles) {
-            //   removeFile.call(this, file)
-            // }
-            if (this.files[6]!=null){
+            if (this.files[6] != null){
               this.removeFile(this.files[6]);
               existFile.pop();
               console.log(file, this.files.length, this.options.maxFiles)
             }
-            // while (this.files.length > this.options.maxFiles) {
-            //   this.removeFile(this.files[0]);
-            //   existFile.shift();
-            //   console.log(file, this.files.length, this.options.maxFiles)
-            // }
           });
           this.on("reset", function (file) {
             $('#file-dropzone').show()
@@ -610,33 +602,29 @@
 
       @foreach($hotel->images as $image)
 
-      existFile.push({
-        id: "{{ $image->id }}",
-        name: "{{ $image->name }}",
-        path: "{{ url($image->path) }}",
-        moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-        moderate: {!! $image->moderate ? 'true' : 'false' !!}
-      })
+        existFile.push({
+          id: "{{ $image->id }}",
+          name: "{{ $image->name }}",
+          path: "{{ url($image->path) }}",
+          moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
+          moderate: {!! $image->moderate ? 'true' : 'false' !!}
+        })
 
-      mockFile = {
-        name: '{{ $image->name }}',
-        dataURL: '{{ url($image->path) }}',
-        size: {{ File::exists($image->getRawOriginal('path')) ? File::size($image->getRawOriginal('path')) : 0 }}
-      };
-      uploader.emit("addedfile", mockFile);
-      uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
-      uploader.emit("complete", mockFile);
-      uploader.files.push(mockFile)
+        mockFile = {
+          name: '{{ $image->name }}',
+          dataURL: '{{ url($image->path) }}',
+          size: {{ File::exists($image->getRawOriginal('path')) ? File::size($image->getRawOriginal('path')) : 0 }}
+        };
+        uploader.emit("addedfile", mockFile);
+        uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
+        uploader.emit("complete", mockFile);
+        uploader.files.push(mockFile)
       @endforeach
     });
 
     let metros_ids = {{ $hotel->metros->pluck('distance')->max() ?? 1 }};
 
     let count_metros = {{ $hotel->metros()->count() > 0 ? $hotel->metros()->count() : 1 }};
-
-    if (count_metros === 3) {
-      $()
-    }
 
     function addMetro() {
       if (count_metros < 3) {
