@@ -6,7 +6,7 @@ use App\Traits\UseImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
