@@ -183,7 +183,10 @@ class Hotel extends Model
           !Route::currentRouteNamed('admin.*')
         ) {
 //          Если залогинен значит выводим только проверенные отели в которых есть комнаты
-          $builder->withCount('rooms')
+          $builder
+            ->withCount(['rooms' => function ($query) {
+              $query->withoutGlobalScope('moderation')->where('moderate', false);
+            }])
             ->having('rooms_count', '>', 0)
             ->where('moderate', false)
             ->where('old_moderate', true)
