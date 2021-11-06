@@ -161,6 +161,7 @@
             <textarea placeholder="Введите текст"
                       name="description"
                       id="editor"
+                      rows="8"
                       {{ $hotel->disabled_save }}
                       class="field form-control @error('description') is-invalid @enderror">
               {!! old('description', $hotel->description) !!}
@@ -199,6 +200,7 @@
                       name="route"
                       {{ $hotel->disabled_save }}
                       id="editor2"
+                      rows="8"
                       class="field form-control @error('route') is-invalid @enderror">
               {!! old('route', $hotel->route) !!}
             </textarea>

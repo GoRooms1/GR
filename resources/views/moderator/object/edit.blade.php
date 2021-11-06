@@ -112,9 +112,9 @@
           <div class="text editor__text">
             {!! $hotel->description !!}
           </div>
-          <textarea id="editor2" class="h-auto field form-control" name="description" placeholder="Введите текст">
-          {!! $hotel->description !!}
-        </textarea>
+          <textarea id="editor2" rows="8" class="h-auto field form-control" name="description" placeholder="Введите текст">
+            {{ $hotel->description }}
+          </textarea>
         </div>
       </div>
       <div class="row part__bottom">
@@ -145,8 +145,8 @@
             <div class="text editor__text">
               {!! $hotel->route !!}
             </div>
-            <textarea id="editor" class="h-auto field form-control" name="route" placeholder="Введите текст">
-              {!! $hotel->route !!}
+            <textarea id="editor" rows="8" class="h-auto field form-control" name="route" placeholder="Введите текст">
+              {{ $hotel->route }}
             </textarea>
           </div>
         </div>
