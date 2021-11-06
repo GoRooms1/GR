@@ -25,6 +25,9 @@ function allowedEditRoom()
   $(this).parents('.shadow').find('.save-room').show()
   $(this).hide()
 
+  let shadow = $(this).parents('.shadow')
+  showPeriodsInShadow(shadow)
+
   updateArrow()
 }
 
@@ -198,6 +201,8 @@ function saveFrontData (save = false)
     $(shadow).find('.upload__remove').hide()
     $(shadow).find('.sortable').sortable('disable');
     $(shadow).find('.uploud-photo').hide()
+
+    hidePeriodsInShadow(shadow);
   }
 }
 

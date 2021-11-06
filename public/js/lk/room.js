@@ -21,6 +21,10 @@ function allowedEditRoom ()  {
   $(this).parents('.shadow').find('.sortable').sortable('enable');
   $(this).parents('.shadow').find('.uploud-photo').show()
   $(this).parents('.shadow').find('.save-room').show()
+
+  let shadow = $(this).parents('.shadow')
+  showPeriodsInShadow(shadow)
+
   $(this).hide()
 }
 
@@ -112,6 +116,8 @@ function saveFrontData () {
       .find('.select__current')
       .text()
     category = category === 'Категория' ? '' : category
+
+    hidePeriodsInShadow(shadow);
 
     $($(shadow).find('.head-text').get(0)).html('#' + order)
     $($(shadow).find('.head-text').get(1)).html('№' + number)
