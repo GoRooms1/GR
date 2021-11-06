@@ -1439,7 +1439,9 @@ textarea.form-control {
 	background-color: white!important;
 	opacity: 1;
 }
-
+.tiny-content {
+	color: #000000 !important;
+}
 .tiny-content img {
 	float: left!important;
 	margin: 10px 20px 10px 0px!important;
