@@ -263,13 +263,14 @@
                     <div class="d-flex align-items-center">
                       <input type="number"
                              min="0"
-                             class="field hours__field"
+                             name="costRoomPeriod"
+                             class="field hours__field has-validate-error"
                              id="value-{{ $room->id }}-{{$type->id}}"
-                             placeholder="{{ $costRoom->value ?? '0' }}"
-                             value="{{ $costRoom->value ?? '' }}">
+                             placeholder="{{ $costRoom->value ?? '' }}"
+                             value="{{ $costRoom->value ?? null }}">
 
                       <div class="hours__hidden">
-                        <span class="hours__money">{{ $costRoom->value ?? '0' }}</span>
+                        <span class="hours__money">{{ $costRoom->value ?? '' }}</span>
                         <span class="hours__rub">руб.</span>
                       </div>
 
@@ -279,7 +280,7 @@
                         <input type="hidden"
                                name="type[]"
                                data-id="{{$type->id}}"
-                               value="{{ $costRoom->period->id ?? '' }}">
+                               value="{{ $costRoom->period->id ?? null }}">
 
                         <div class="select__top">
                           <span class="select__current">{{ $costRoom->period->info ?? 'Период' }}</span>
@@ -293,8 +294,8 @@
                         </ul>
                       </div>
                       <span class="hours__after">
-                      От 2-х часов
-                    </span>
+                        {{ $costRoom->period->info ?? 'Период' }}
+                      </span>
                     </div>
                   </li>
                 @endforeach

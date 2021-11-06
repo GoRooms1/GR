@@ -205,11 +205,11 @@
                              min="0"
                              class="field hours__field has-validate-error"
                              id="value-{{ $room->id }}-{{$type->id}}"
-                             placeholder="{{ $costRoom->value ?? '0' }}"
-                             value="{{ $costRoom->value ?? '' }}">
+                             placeholder=""
+                             value="{{ $costRoom->value ?? null }}">
 
                       <div class="hours__hidden">
-                        <span class="hours__money">{{ $costRoom->value ?? '0' }}</span>
+                        <span class="hours__money">{{ $costRoom->value ?? '' }}</span>
                         <span class="hours__rub">руб.</span>
                       </div>
 
@@ -219,7 +219,7 @@
                         <input type="hidden"
                                name="type[]"
                                data-id="{{$type->id}}"
-                               value="{{ $costRoom->period->id ?? '' }}">
+                               value="{{ $costRoom->period->id ?? null }}">
 
                         <div class="select__top">
                           <span class="select__current">{{ $costRoom->period->info ?? 'Период' }}</span>
@@ -233,8 +233,8 @@
                         </ul>
                       </div>
                       <span class="hours__after">
-                      От 2-х часов
-                    </span>
+                        {{ $costRoom->period->info ?? 'Период' }}
+                      </span>
                     </div>
                   </li>
                 @endforeach
@@ -270,9 +270,6 @@
                   <button class="quote__read quote__read_1">
                     <img src="{{ asset('img/lk/pen.png') }}" alt="">
                   </button>
-                  {{--                  <button class="quote__remove remove-btn">--}}
-                  {{--                    <i class="fa fa-trash"></i>--}}
-                  {{--                  </button>--}}
 
                 </div>
               </div>
@@ -321,12 +318,7 @@
           <i class="fa fa-arrow-down p-3"></i>
         </button>
       </div>
-      {{--      <div class="col-1 text-right">--}}
-      {{--        Удалить комнату --}}
-      {{--        <button class="quote__remove">--}}
-      {{--          <i class="fa fa-trash"></i>--}}
-      {{--        </button>--}}
-      {{--      </div>--}}
+
     </div>
     {{-- Статус --}}
     <div class="row row-status">
@@ -395,13 +387,13 @@
             <div class="d-flex align-items-center">
               <input type="number"
                      min="0"
-                     value="0"
+                     value=""
                      class="field hours__field has-validate-error"
                      id="value"
-                     placeholder="0">
+                     placeholder="">
 
               <div class="hours__hidden">
-                <span class="hours__money">0</span>
+                <span class="hours__money"></span>
                 <span class="hours__rub">руб.</span>
               </div>
 
@@ -411,10 +403,10 @@
                 <input type="hidden"
                        name="type[]"
                        data-id="{{$type->id}}"
-                       value="{{$type->periods()->first()->id}}">
+                       value="">
 
                 <div class="select__top">
-                  <span class="select__current">{{ $type->periods()->first()->info }}</span>
+                  <span class="select__current">Период</span>
                   <img class="select__arrow"
                        src="{{ asset('img/lk/arrow.png') }}" alt="">
                 </div>
@@ -425,7 +417,7 @@
                 </ul>
               </div>
               <span class="hours__after">
-                {{ $type->periods()->first()->info }}
+                Период
               </span>
             </div>
           </li>
@@ -459,9 +451,6 @@
           <button class="quote__read quote__read_1">
             <img src="{{ asset('img/lk/pen.png') }}" alt="">
           </button>
-          {{--          <button class="quote__remove remove-btn">--}}
-          {{--            <i class="fa fa-trash"></i>--}}
-          {{--          </button>--}}
 
         </div>
       </div>
