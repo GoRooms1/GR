@@ -25,6 +25,11 @@ function allowedEditRoom ()  {
   let shadow = $(this).parents('.shadow')
   showPeriodsInShadow(shadow)
 
+
+  blockSaveRoom(shadow)
+
+  $(shadow).find('input').change(blockSaveRoom.bind(null, shadow))
+
   $(this).hide()
 }
 
@@ -87,8 +92,12 @@ function saveRoom () {
 /**
  * Сохранение комнаты, фронт
  */
-function saveFrontData () {
-  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0 || $(this).parents('.shadow').attr('data-moderate') === 'moderate') {
+function saveFrontData (save = false) {
+  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0 ||
+    $(this).parents('.shadow').attr('data-moderate') === 'moderate' ||
+    save
+  ) {
+
     let shadow = $(this).parents('.shadow')
     $(shadow).find('.remove-btn').hide()
     $(this).hide()

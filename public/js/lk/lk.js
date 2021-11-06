@@ -333,10 +333,10 @@ $('.remove-photo').bind('click', function () {
           if (r.data.success) {
             $(item).remove()
           } else {
-            alert('Ошибка удаления фоток')
+            alert(r.data.payload.error)
           }
         })
-        .catch(e => { alert(e.response.data) })
+        .catch(e => { $(item).remove(); alert('Ошибка удаления фотографии') })
     } else {
       console.log(2)
       alert('Ошибка удаления фоток')
@@ -344,6 +344,13 @@ $('.remove-photo').bind('click', function () {
   } else {
     console.log(1)
     alert('Ошибка удаления фоток')
+  }
+
+  if ($(item).parents('.shadow').length > 0) {
+    let shadow = $(item).parents('.shadow');
+    setTimeout(() => {
+      blockSaveRoom(shadow)
+    }, 1000)
   }
 
 })
@@ -454,6 +461,7 @@ function selectItem() {
     let input = $(this).parent('.select__hidden').siblings('input[type="hidden"]')
 
     $(input).val(this.dataset.id)
+    $(input).change();
 
     $(this).parent('.select__hidden').slideUp()
     $(this).parent('.select__hidden').siblings('.select__top').find('.select__current').text($(this).text())
@@ -817,6 +825,26 @@ function hidePeriodsInShadow(shadow) {
 function showPeriodsInShadow(shadow) {
   $(shadow).find('.hours__after').hide();
   $(shadow).find('.hours__select').show();
+}
+
+function blockSaveRoom (shadow) {
+  let flag = true;
+  console.log(shadow)
+  $(shadow).find('input').each( function () {
+    if ($(this).val().trim() === '') {
+      flag = false
+    }
+  })
+
+  if( $(shadow).find('.visualizacao').find('li').length < 1) {
+    flag = false
+  }
+
+  if (flag) {
+    $(shadow).find('#saveRoom').removeAttr('disabled');
+  } else {
+    $(shadow).find('#saveRoom').prop("disabled", true);
+  }
 }
 
 let arrow_up = $('.arrow-up')

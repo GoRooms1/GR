@@ -168,7 +168,7 @@
 
             <div class="row">
               <div class="col-12 mt-3">
-                <ul class="uploud all-slides">
+                <ul class="uploud visualizacao all-slides">
                   @foreach($room->images as $image)
                     <li class="uploud__item"
                         data-image-id="{{ $image->id }}"

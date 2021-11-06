@@ -391,7 +391,7 @@
                name="name"
                class="field field_border has-validate-error"
                id="nameRoom"
-               placeholder="Блейз">
+               placeholder="Название">
       </div>
       <div class="col-4">
         <p class="room-text">
@@ -555,7 +555,9 @@
         items: '.dz-image-preview',
       });
 
-      $('.quote__read').each(saveFrontData)
+      $('.quote__read').each(function () {
+        saveFrontData.call(this, true)
+      })
 
       blockDropZone.each(function() {
         let zone = this

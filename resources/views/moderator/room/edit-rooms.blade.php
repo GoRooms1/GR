@@ -209,7 +209,7 @@
             </div>
             <div class="row">
               <div class="col-12 mt-2">
-                <ul class="uploud all-slides">
+                <ul class="uploud visualizacao all-slides">
 
                   @foreach($room->images as $image)
                     <li class="uploud__item"

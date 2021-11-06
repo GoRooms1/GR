@@ -26,7 +26,12 @@ function allowedEditRoom()
   $(this).hide()
 
   let shadow = $(this).parents('.shadow')
+
   showPeriodsInShadow(shadow)
+
+  blockSaveRoom(shadow)
+
+  $(shadow).find('input').change(blockSaveRoom.bind(null, shadow))
 
   updateArrow()
 }

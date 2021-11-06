@@ -11,6 +11,7 @@ use App\Helpers\Json;
 use App\Models\Image;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use function Illuminate\Events\queueable;
 
 trait UploadImage
 {
@@ -49,6 +50,10 @@ trait UploadImage
   public function delete(Image $image): JsonResponse
   {
     try {
+      if ($this->checkLastImage($image)) {
+        return Json::answer(['error' => 'Нельзя удалить последнюю фотографию'], false, 200);
+      }
+
       $image->delete();
       return Json::good(['deleted' => true]);
     } catch (\Exception $exception) {
@@ -70,5 +75,13 @@ trait UploadImage
     } catch (\Exception $exception) {
       return Json::bad(['error' => $exception->getMessage()]);
     }
+  }
+
+  private function checkLastImage (Image $image): bool
+  {
+    $model = $image->model_type;
+    $object = $model::find($image->model_id);
+
+    return $object->images()->count() === 1;
   }
 }
