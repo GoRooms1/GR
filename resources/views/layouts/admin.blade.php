@@ -41,7 +41,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 @auth
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto d-flex align-items-center">
                     <li class="nav-item">
                         <a href="{{ route('admin.hotels.index') }}" class="nav-link">Список отелей</a>
                     </li>
@@ -80,6 +80,9 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.descriptions.index') }}" class="nav-link">Описания</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.instructions.index') }}" class="nav-link">Инструкции</a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.settings.index') }}" class="nav-link">Настройки</a>
