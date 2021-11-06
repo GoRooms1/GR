@@ -780,6 +780,10 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
     })
 }
 
+/**
+ * Валидация полей
+ *
+ */
 function validateErrorBootstrap() {
   let el = $(this)
   if (el.val().trim() === '') {
@@ -787,6 +791,32 @@ function validateErrorBootstrap() {
   } else {
     el.removeClass('is-invalid form-control')
   }
+}
+
+/**
+ * Прячет периоды при сохранении
+ *
+ * @param {HTMLElement} shadow
+ */
+function hidePeriodsInShadow(shadow) {
+  $(shadow).find('.hours__select').hide();
+  let i = 0;
+  $(shadow).find('.hours__select').each(function () {
+    let text = $(this).find('.select__current').text()
+    $($(shadow).find('.hours__after').get(i)).text(text)
+    i++;
+  })
+  $(shadow).find('.hours__after').show();
+}
+
+/**
+ * Показывает время периодов
+ *
+ * @param {HTMLElement} shadow
+ */
+function showPeriodsInShadow(shadow) {
+  $(shadow).find('.hours__after').hide();
+  $(shadow).find('.hours__select').show();
 }
 
 let arrow_up = $('.arrow-up')
