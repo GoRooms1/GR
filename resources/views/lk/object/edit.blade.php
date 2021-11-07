@@ -498,9 +498,10 @@
             let f = findExistImage(file, existFile)
             console.log(f)
 
-            let d = file.previewElement.querySelector("[data-dz-success]");
-            console.log(file.previewElement.dataset.id = f.id)
+            let d = file.previewElement.querySelector("[data-dz-success]")
             d.innerHTML = f.moderate_text
+
+            file.previewElement.dataset.id = f.id
 
             if (!f.moderate) {
               d.style.color = "#2f64ad"

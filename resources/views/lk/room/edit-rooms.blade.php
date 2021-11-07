@@ -553,6 +553,22 @@
     $(document).ready(function () {
       $('.sortable').sortable({
         items: '.dz-image-preview',
+        update: function (event, ui) {
+          let ids = [];
+          $(".sortable li").each(function(i) {
+            ids.push($(this).attr('data-id'))
+          });
+          console.log(ids)
+
+          axios.post('/api/images/ordered', {
+            ids
+          })
+            .catch(e => {
+              if (e.response.data.message) {
+                alert(e.response.data.message)
+              }
+            })
+        }
       });
 
       $('.quote__read').each(function () {
@@ -621,6 +637,8 @@
 
             let d = file.previewElement.querySelector("[data-dz-success]");
             d.innerHTML = f.moderate_text
+
+            file.previewElement.dataset.id = f.id
 
             if (!f.moderate) {
               d.style.color="#2f64ad"
