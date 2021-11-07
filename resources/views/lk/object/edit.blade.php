@@ -537,7 +537,7 @@
 
           });
           this.on("removedfile", function (file) {
-            console.log(file)
+            console.log(this)
             if (existFile.length === 1) {
               if (file.xhr) {
                 let image = JSON.parse(file.xhr.response).payload.images[0]
@@ -593,7 +593,7 @@
 
             setTimeout(() => {
               console.log(existFile.length)
-              if (existFile.length < 6) {
+              if (this.files.length < 6) {
                 $('#file-dropzone').show()
               }
             }, 600)
