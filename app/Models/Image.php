@@ -57,10 +57,11 @@ class Image extends Model
   protected $fillable = [
     'name',
     'path',
-    'default',
-    'moderate'
+    'moderate',
+    'order'
   ];
 
+//  TODO: Переписать алгоритм загузки фотки что бы order становился автоматом последний
   public static function upload($request, &$uploadTo, $attr_name = 'image'): array
   {
     if ($request->hasFile($attr_name)) {
@@ -70,7 +71,7 @@ class Image extends Model
       }
       $images = [];
       $is_default = true;
-      if ($uploadTo->image()->count() !== 0) {
+      if ($uploadTo->image()->last !== 0) {
         $is_default = false;
       }
       foreach ($files as $file) {
@@ -142,12 +143,12 @@ class Image extends Model
 
   public static function beforeSave(Image $image): void
   {
-    if ($image->default) {
-      $model_id = $image->model_id;
-      $model_type = $image->model_type;
+//    if ($image->default) {
+//      $model_id = $image->model_id;
+//      $model_type = $image->model_type;
 
-      self::where('model_id', $model_id)->where('model_type', $model_type)->update(['default' => false]);
-    }
+//      self::where('model_id', $model_id)->where('model_type', $model_type)->update(['default' => false]);
+//    }
   }
 
   /**

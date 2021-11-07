@@ -3,6 +3,7 @@
 use App\Http\Controllers\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +46,5 @@ Route::get('/room-info/{id}', [RoomController::class, 'getRoomInfo']);
 
 Route::post('room/order/up/{id}', 'Lk\OrderRoomController@upOrder');
 Route::post('room/order/down/{id}', 'Lk\OrderRoomController@downOrder');
+
+Route::post('images/ordered', [ImageController::class, 'ordered']);

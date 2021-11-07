@@ -499,6 +499,7 @@
             console.log(f)
 
             let d = file.previewElement.querySelector("[data-dz-success]");
+            console.log(file.previewElement.dataset.id = f.id)
             d.innerHTML = f.moderate_text
 
             if (!f.moderate) {
@@ -736,6 +737,23 @@
     $(document).ready(function () {
       $('.sortable').sortable({
         items: '.dz-image-preview',
+        update: function (event, ui) {
+          let ids = [];
+          $(".sortable li").each(function(i) {
+            ids.push($(this).attr('data-id'))
+          });
+          console.log(ids)
+
+          axios.post('/api/images/ordered', {
+            ids
+          })
+          // POST to server using $.post or $.ajax
+          // $.ajax({
+          //   data: data,
+          //   type: 'POST',
+          //   url: '/your/url/here'
+          // });
+        }
       });
 
     });
