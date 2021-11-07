@@ -73,7 +73,7 @@ class Image extends Model
       if ($uploadTo->images()->count() === 0) {
         $order = 1;
       } else {
-        $order = $uploadTo->images()->latest('order')->first()->order + 1;
+        $order = $uploadTo->images->last()->order + 1;
       }
       foreach ($files as $file) {
         $path = $file->store(date('Y/m/d'));
