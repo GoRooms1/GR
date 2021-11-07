@@ -594,12 +594,10 @@
             }
 
             setTimeout(() => {
-              console.log(existFile[zone.dataset.id].length)
-              if (existFile[zone.dataset.id].length < 6) {
-                console.log(existFile[zone.dataset.id].length)
+              if (this.files.length < 6) {
                 $(zone).show()
               }
-            }, 1000)
+            }, 600)
           })
         }
       }
