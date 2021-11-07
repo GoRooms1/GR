@@ -608,18 +608,18 @@
         existFile.push({
           id: "{{ $image->id }}",
           name: "{{ $image->name }}",
-          path: "{{ url($image->path) }}",
+          path: "{{ url($image->path) }}?w=578&h=340&q=85",
           moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
           moderate: {!! $image->moderate ? 'true' : 'false' !!}
         })
 
         mockFile = {
           name: '{{ $image->name }}',
-          dataURL: '{{ url($image->path) }}',
+          dataURL: '{{ url($image->path) }}?w=578&h=340&q=85',
           size: {{ File::exists($image->getRawOriginal('path')) ? File::size($image->getRawOriginal('path')) : 0 }}
         };
         uploader.emit("addedfile", mockFile);
-        uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
+        uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}?w=578&h=340&q=85');
         uploader.emit("complete", mockFile);
         uploader.files.push(mockFile)
       @endforeach
