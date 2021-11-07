@@ -70,21 +70,22 @@ class Image extends Model
         $files = [$files];
       }
       $images = [];
-      $is_default = true;
-      if ($uploadTo->image()->last !== 0) {
-        $is_default = false;
+      if ($uploadTo->images()->count() === 0) {
+        $order = 1;
+      } else {
+        $order = $uploadTo->images()->latest('order')->first()->order + 1;
       }
       foreach ($files as $file) {
         $path = $file->store(date('Y/m/d'));
         $image = new Image();
         $image->name = $file->getClientOriginalName();
         $image->path = 'storage/' . $path;
-        $image->default = $is_default;
         $image->moderate = !(Auth::user()->is_moderate || Auth::user()->is_admin);
+        $image->order = $order;
         $image->save();
         $images[] = $image;
         // self::watermark($uploadTo, $image);
-        $is_default = false;
+        $order++;
       }
       $uploadTo->images()->saveMany($images);
       $uploadTo->save();
