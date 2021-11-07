@@ -28,18 +28,6 @@ trait UploadImage
     return abort(500);
   }
 
-  public function setDefault(Image $image): JsonResponse
-  {
-    try {
-      $image->default = true;
-      $image->save();
-
-      return Json::good(['image' => $image]);
-    } catch (\Exception $exception) {
-      return Json::bad(['error' => $exception->getMessage()]);
-    }
-  }
-
   /**
    * Delete Image
    *

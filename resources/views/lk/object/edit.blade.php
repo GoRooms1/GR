@@ -747,12 +747,11 @@
           axios.post('/api/images/ordered', {
             ids
           })
-          // POST to server using $.post or $.ajax
-          // $.ajax({
-          //   data: data,
-          //   type: 'POST',
-          //   url: '/your/url/here'
-          // });
+          .catch(e => {
+            if (e.response.data.message) {
+              alert(e.response.data.message)
+            }
+          })
         }
       });
 

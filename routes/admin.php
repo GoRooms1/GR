@@ -60,7 +60,6 @@ Route::resource('descriptions', 'PageDescriptionController', [
 ]);
 
 Route::group(['prefix' => 'api'], function () {
-  Route::get('/image/{image}/set_default', 'ImageController@setDefault')->name('api.image.set_default');
   Route::delete('/image/{image}', 'ImageController@delete')->name('api.image.delete');
 });
 

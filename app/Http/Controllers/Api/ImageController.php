@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 class ImageController extends Controller
 {
 
-  public function ordered(Request $request)
+  public function ordered(Request $request): JsonResponse
   {
     $request->validate([
       'ids' => 'required|array',
