@@ -332,6 +332,11 @@ $('.remove-photo').bind('click', function () {
         .then(r => {
           if (r.data.success) {
             $(item).remove()
+
+
+            if (typeof updateOrderPhotos === 'function') {
+              updateOrderPhotos();
+            }
           } else {
             alert(r.data.payload.error)
           }

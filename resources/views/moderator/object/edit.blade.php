@@ -476,6 +476,11 @@
   <script>
     $(document).ready(function () {
       selectInit()
+
+      $('.uploud').sortable({
+        items: '.uploud__item',
+        update: updateOrderPhotos
+      });
     })
 
     $("#address").suggestions({
@@ -556,6 +561,23 @@
 
         $('.metros').on("select2:select", takeColor);
       }
+    }
+
+    function updateOrderPhotos () {
+      let ids = [];
+      $(".uploud li").each(function(i) {
+        ids.push($(this).attr('data-image-id'))
+      });
+      console.log(ids)
+
+      axios.post('/api/images/ordered', {
+        ids
+      })
+      .catch(e => {
+        if (e.response.data.message) {
+          alert(e.response.data.message)
+        }
+      })
     }
 
     let metros_ids = {{ $hotel->metros->pluck('distance')->max() ?? 1 }};
