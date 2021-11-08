@@ -1,7 +1,7 @@
 @php
   use App\Models\RatingCategory;use Illuminate\Support\Facades\Cache;$rating_categories = Cache::remember('rating_category', 60*60*24*12, function () {
       return RatingCategory::orderBy('sort')->get();
-  })
+  });
 @endphp
 <div class="card-wrapper">
   <div class="room-card room-card-horizontal">
