@@ -315,8 +315,9 @@
 
   <script defer="defer">
     $(document).ready(function () {
-      $('.sortable').sortable({
-        items: '.dz-image-preview',
+      $('.uploud').sortable({
+        items: '.uploud__item',
+        update: updateOrderPhotos
       });
 
       $('.quote__read').each(function () {

@@ -890,4 +890,23 @@ $('div.has-validate-error-select').each(function () {
 })
 
 
+/**
+ * Обновление порядка фотографий для модераторов
+ *
+ */
+function updateOrderPhotos () {
+  let ids = [];
+  $(".uploud li").each(function(i) {
+    ids.push($(this).attr('data-image-id'))
+  });
+  console.log(ids)
 
+  axios.post('/api/images/ordered', {
+    ids
+  })
+    .catch(e => {
+      if (e.response.data.message) {
+        alert(e.response.data.message)
+      }
+    })
+}
