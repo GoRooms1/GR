@@ -2227,12 +2227,43 @@ select.form-control {
 }
 
 .hotel-card-metro .metro a span.name-metro {
-  max-width: 58%;
+  max-width: 65%;
   display:flex;
   white-space: normal;
   width: auto;
   height: 20px;
 }
+
+@media screen and (min-width: 576px) {
+  .hotel-card-metro .metro a span.name-metro {
+    max-width: 60%;
+    display:flex;
+    white-space: normal;
+    width: auto;
+    height: 20px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .hotel-card-metro .metro a span.name-metro {
+    max-width: 58%;
+    display:flex;
+    white-space: normal;
+    width: auto;
+    height: 20px;
+  }
+}
+
+@media screen and (min-width: 1455px) {
+  .hotel-card-metro .metro a span.name-metro {
+    max-width: 47%;
+    display: flex;
+    white-space: normal;
+    width: auto;
+    height: 20px;
+  }
+}
+
 .hotel-card-metro .metro a span.name-metro span {
   width: 100%;
   overflow: hidden;
