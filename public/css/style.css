@@ -2184,7 +2184,7 @@ select.form-control {
 .hotel-card-content {
   display: block;
   padding: 10px;
-  margin-bottom: 110px;
+  /*margin-bottom: 110px;*/
 }
 .hotel-card-content:hover,
 .hotel-card-content:active {
@@ -2235,6 +2235,13 @@ select.form-control {
 }
 
 @media screen and (min-width: 576px) {
+  .position-sticky .hotel-card-metro .metro a span.name-metro {
+    max-width: 58%;
+    display:flex;
+    white-space: normal;
+    width: auto;
+    height: 20px;
+  }
   .hotel-card-metro .metro a span.name-metro {
     max-width: 60%;
     display:flex;
@@ -2245,6 +2252,14 @@ select.form-control {
 }
 
 @media screen and (min-width: 992px) {
+  .position-sticky .hotel-card-metro .metro a span.name-metro {
+    max-width: 51%;
+    display:flex;
+    white-space: normal;
+    width: auto;
+    height: 20px;
+  }
+
   .hotel-card-metro .metro a span.name-metro {
     max-width: 58%;
     display:flex;
@@ -2255,6 +2270,14 @@ select.form-control {
 }
 
 @media screen and (min-width: 1455px) {
+  .position-sticky .hotel-card-metro .metro a span.name-metro {
+    max-width: 40%;
+    display:flex;
+    white-space: normal;
+    width: auto;
+    height: 20px;
+  }
+
   .hotel-card-metro .metro a span.name-metro {
     max-width: 47%;
     display: flex;
@@ -2282,7 +2305,7 @@ select.form-control {
   margin-bottom: 0;
 }
 .hotel-card-prices {
-  position: absolute;
+  /*position: absolute;*/
   bottom: 10px;
 }
 .hotel-card-prices-item {
