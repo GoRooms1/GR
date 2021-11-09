@@ -99,7 +99,7 @@
             <div class="row row__head {{ !$room->moderate ? 'row__head_blue' : '' }}">
               <div class="col-6">
                 {{--    Название категории    --}}
-                <p class="head-text head-text_bold"> {{ $room->category->name }}</p>
+                <p class="head-text head-text_bold"> {{ $room->category->name ?? '' }}</p>
               </div>
 
               <div class="col-3">
@@ -146,7 +146,7 @@
                   <div class="select category-select">
                     <input type="hidden" name="category_id" value="{{ $room->category->id }}">
                     <div class="select__top">
-                      <span class="select__current">{{ $room->category->name }}</span>
+                      <span class="select__current">{{ $room->category->name ?? '' }}</span>
                     </div>
                   </div>
                   <div class="quote-text d-flex align-items-center">
