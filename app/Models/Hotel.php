@@ -202,7 +202,7 @@ class Hotel extends Model
 
       if (auth()->check()) {
         if (Route::currentRouteNamed('lk.*')) {
-          continue;
+          // Some stop if
         } else if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
           !Route::currentRouteNamed('lk.*') &&
           !Route::currentRouteNamed('moderator.*') &&
