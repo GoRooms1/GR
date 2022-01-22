@@ -118,6 +118,17 @@
       </div>
     @endif
 
+    @if($rooms)
+      <div class="container">
+        <div class="show-more">
+          <p class="show-more-counter">Загружено: {{ $rooms->count() }} ({{ $rooms->total()}})</p>
+          @if($rooms->total() > $rooms->count())
+            <button id="rooms-load-more" class="show-more-btn" type="button">Загрузить еще</button>
+          @endif
+        </div>
+      </div>
+    @endif
+
     @if($moderate ?? false)
       <div class="container">
         <div class="row justify-content-center">
