@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $model
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $in_filter
+ * @property boolean $in_filter
  * @property int $attribute_category_id
  * @property-read mixed $category
  * @property-read mixed $model_name
@@ -52,24 +52,23 @@ class Attribute extends Model
     'in_filter'
   ];
 
-  public function scopeForHotels(Builder $builder)
+  protected $casts = [
+    'in_filter' => 'boolean'
+  ];
+
+  public function scopeForHotels(Builder $builder): Builder
   {
-    return $builder->where('model', '=', Hotel::class);
+    return $builder->where('model', Hotel::class);
   }
 
-  public function scopeForRooms(Builder $builder)
+  public function scopeForRooms(Builder $builder): Builder
   {
-    return $builder->where('model', '=', Room::class);
+    return $builder->where('model', Room::class);
   }
 
-  public function scopeFiltered(Builder $builder)
+  public function scopeFiltered(Builder $builder): Builder
   {
-    return $builder->where('in_filter', '=', true);
-  }
-
-  public function getModelAttribute($value)
-  {
-    return self::MODELS[$value];
+    return $builder->where('in_filter', true);
   }
 
   public function getCategoryAttribute()
