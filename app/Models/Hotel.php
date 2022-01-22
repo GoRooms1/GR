@@ -132,21 +132,41 @@ class Hotel extends Model
    *
    * @var array
    */
-  public const TYPES_FOND = [self::ROOMS_TYPE, self::CATEGORIES_TYPE];
+  public const TYPES_FOND = [
+    self::ROOMS_TYPE,
+    self::CATEGORIES_TYPE
+  ];
 
   /**
    * The attributes that are mass assignable.
    *
    * @var array
    */
-  protected $fillable = ['name', 'description', 'phone', 'phone_2', 'route_title', 'route', 'is_popular', 'user_id', 'hide_phone', 'email', 'type_fond', 'save_columns', 'old_moderate', 'moderate', 'show', 'checked_type_fond'];
+  protected $fillable = [
+    'name',
+    'description',
+    'phone',
+    'phone_2',
+    'route_title',
+    'route',
+    'is_popular',
+    'user_id',
+    'hide_phone',
+    'email',
+    'type_fond',
+    'save_columns',
+    'old_moderate',
+    'moderate',
+    'show',
+    'checked_type_fond'
+  ];
 
   /**
    * The attributes that should be hidden for serialization.
    *
    * @var array
    */
-  protected $hidden = ['email',];
+  protected $hidden = ['email'];
 
   /**
    * The relations to eager load on every query.
@@ -160,7 +180,12 @@ class Hotel extends Model
    *
    * @var array
    */
-  protected $casts = ['moderate' => 'boolean', 'old_moderate' => 'boolean', 'show' => 'boolean', 'checked_type_fond' => 'boolean'];
+  protected $casts = [
+    'moderate' => 'boolean',
+    'old_moderate' => 'boolean',
+    'show' => 'boolean',
+    'checked_type_fond' => 'boolean'
+  ];
 
   ### SCOPES
 
@@ -176,7 +201,9 @@ class Hotel extends Model
     static::addGlobalScope('moderation', function (Builder $builder) {
 
       if (auth()->check()) {
-        if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
+        if (Route::currentRouteNamed('lk.*')) {
+          continue;
+        } else if ((!auth()->user()->is_admin && !auth()->user()->is_moderate) &&
           !Route::currentRouteNamed('lk.*') &&
           !Route::currentRouteNamed('moderator.*') &&
           !Route::currentRouteNamed('api.*') &&
