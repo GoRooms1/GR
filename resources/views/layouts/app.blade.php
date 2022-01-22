@@ -99,7 +99,7 @@
       @endif
       <div class="header-top-btns">
         @auth
-          @if(!auth()->user()->hotel()->exists())
+          @if(!auth()->user()->personal_hotel)
             @if (!auth()->user()->is_moderate)
               <a href="{{ route('lk.start') }}"
                  class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">
