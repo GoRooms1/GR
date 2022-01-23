@@ -986,6 +986,15 @@ input[type="radio"]:checked + label {
 	text-align: center;
 }
 
+input[type=number].hours__field::-webkit-outer-spin-button,
+input[type=number].hours__field::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type=number].hours__field {
+	-moz-appearance: textfield;
+}
+
 .hours__hidden {
 	width: 160px;
 	background: white;
