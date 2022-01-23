@@ -1160,9 +1160,10 @@ input[type=number].hours__field {
 	background: #f1f1f1;
 }
 
-.shadow-complete .more-details {
-	display: none;
-}
+/* Удалено с целью что бы заказчик увидел тоже самое что и при редактировании */
+/*.shadow-complete .more-details {*/
+/*	display: none;*/
+/*}*/
 
 .row_white {
 	background: white;

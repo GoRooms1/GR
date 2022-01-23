@@ -17,7 +17,7 @@ function allowedEditRoom()
   $(this).parents('.shadow').find('.row__head').hide()
   $(this).parents('.shadow').find('.caption-block').show();
   $(this).parents('.shadow').find('.caption-details').show();
-  $(this).parents('.shadow').find('.more-details').show();
+  // $(this).parents('.shadow').find('.more-details').show();
   $(this).parents('.shadow').find('.hours__field').prop('disabled', false)
   $(this).parents('.shadow').find('.upload__remove').show()
   $(this).parents('.shadow').find('.sortable').sortable('enable');
@@ -198,7 +198,7 @@ function saveFrontData (save = false)
     $(shadow).find('.row__head').css('display', 'flex');
     $(shadow).find('.caption-block').hide();
     $(shadow).find('.caption-details').hide();
-    $(shadow).find('.more-details').hide();
+    // $(shadow).find('.more-details').hide();
     $(this).parents('.shadow-complete')
       .find('.hours__field')
       .prop('disabled', true)
