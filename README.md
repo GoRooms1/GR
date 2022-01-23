@@ -3,12 +3,20 @@
 This project was issued for revision of the administrative panel and personal account.
 
 # Новые ветки для работы
-1. `Production` - Ветка предназначенная только для принятый комитов. Принимать `Pull Request` имеет право только `Fulliton`.
-2. `Development` - Ветка для тестирования нового кода. Разработчик обязан создать свою ветку и работать в ней. После работы обязательно проверить свой код на наличие ошибок. В случае удовлетворительной работы, создать `Pull Request` для `merge` в даннуя (`Development`) ветку. Если ваш код выдаёт ошибки, то все изменения будут `Rever` для последний стабильный комит (Связано с тем, что паралельно работают множество разработчиков, и администратору необходимо принимать новый код на заранее рабочем сайта, ибо множество ошибок могут положить другой функционал сайта)
+
+1. `Production` - Ветка предназначенная только для принятый комитов. Принимать `Pull Request` имеет право
+   только `Fulliton`.
+2. `Development` - Ветка для тестирования нового кода. Разработчик обязан создать свою ветку и работать в ней. После
+   работы обязательно проверить свой код на наличие ошибок. В случае удовлетворительной работы, создать `Pull Request`
+   для `merge` в даннуя (`Development`) ветку. Если ваш код выдаёт ошибки, то все изменения будут `Rever` для последний
+   стабильный комит
+   (Связано с тем, что паралельно работают множество разработчиков, и администратору необходимо принимать новый код на
+   заранее рабочем сайта, ибо множество ошибок могут положить другой функционал сайта)
 3. `main_old` - Никто и никогда не должен трогать даннуя ветку. Наказание.
 4. `fix-admin` - Данная ветка предоставляет резервный стабильно рабочий код. Всем запрещено её изменять.
 
 Для принятия `Pull Request` необходимо написать лично главному разработчику в Telegram `@Fulliton`
+
 ## Installation
 
 Use the package manager [composer](https://getcomposer.org) and [npm](https://nodejs.org/en/) to install projects.
@@ -31,8 +39,7 @@ npm install
 
 ## Storage
 
-All photos are stored in `storage/app/public`. The data is divided into folders formed by dates.
-Use
+All photos are stored in `storage/app/public`. The data is divided into folders formed by dates. Use
 
 **`php artisan storage:link`**
 
@@ -47,7 +54,9 @@ php artisan users:create --email=admin@admin.com --password=123456 --name=Admin 
 ## Hotels (Moderation)
 
 At the moment, the administrator and moderator sees all the hotels and rooms. Regular users see only accepted hotels.
-The property `moderate` is responsible for the availability of the hotel vision, and the role of the administrator is` is_admin`, and the moderator is `is_moderate`
+The property `moderate` is responsible for the availability of the hotel vision, and the role of the administrator
+is` is_admin`, and the moderator is `is_moderate`
+
 ```php
 php artisan users:create --email=user@email.com --password=123456 --name=User --is_moderate=1
 ```
@@ -77,9 +86,11 @@ $hotel->categories
 ```
 
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
