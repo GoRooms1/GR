@@ -8,7 +8,7 @@
  * Редактирование комнаты по кнопке
  */
 function allowedEditRoom ()  {
-  $(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled')
+  $(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled').removeClass('d-none')
   $(this).parents('.shadow').find('.quote__read').show()
   $(this).parents('.shadow').find('.quote__status').hide()
   $(this).parents('.shadow').removeClass('shadow-complete')
@@ -101,7 +101,7 @@ function saveFrontData (save = false) {
     let shadow = $(this).parents('.shadow')
     $(shadow).find('.remove-btn').hide()
     $(this).hide()
-    $(shadow).find(".show-all").addClass('show-all_disabled')
+    $(shadow).find(".show-all").addClass('show-all_disabled').addClass('d-none')
     $(shadow).find('.quote__read').show()
     $(shadow).find('.row-status').show()
     $(shadow).addClass('shadow-complete')
