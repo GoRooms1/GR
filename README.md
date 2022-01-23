@@ -15,7 +15,7 @@ This project was issued for revision of the administrative panel and personal ac
 3. `main_old` - Никто и никогда не должен трогать даннуя ветку. Наказание.
 4. `fix-admin` - Данная ветка предоставляет резервный стабильно рабочий код. Всем запрещено её изменять.
 
-Для принятия `Pull Request` необходимо написать лично главному разработчику в Telegram `@Fulliton`
+Для принятия `Pull Request` необходимо написать лично главному разработчику в Telegram `@Fulliton`.
 
 ## Installation
 
