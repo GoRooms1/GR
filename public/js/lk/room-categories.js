@@ -10,14 +10,14 @@
  */
 function allowedEditRoom()
 {
-  $(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled')
+  $(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled').removeClass('d-none')
   $(this).parents('.shadow').find('.quote__read').show()
   $(this).parents('.shadow').find('.quote__status').hide()
   $(this).parents('.shadow').removeClass('shadow-complete')
   $(this).parents('.shadow').find('.row__head').hide()
   $(this).parents('.shadow').find('.caption-block').show();
   $(this).parents('.shadow').find('.caption-details').show();
-  $(this).parents('.shadow').find('.more-details').show();
+  // $(this).parents('.shadow').find('.more-details').show();
   $(this).parents('.shadow').find('.hours__field').prop('disabled', false)
   $(this).parents('.shadow').find('.upload__remove').show()
   $(this).parents('.shadow').find('.sortable').sortable('enable');
@@ -191,14 +191,14 @@ function saveFrontData (save = false)
     let shadow = $(this).parents('.shadow')
     $(shadow).find('.remove-btn').hide()
     $(this).hide()
-    $(shadow).find(".show-all").addClass('show-all_disabled')
+    $(shadow).find(".show-all").addClass('show-all_disabled').addClass('d-none')
     $(shadow).find('.quote__read').show()
     $(shadow).find('.row-status').show()
     $(shadow).addClass('shadow-complete')
     $(shadow).find('.row__head').css('display', 'flex');
     $(shadow).find('.caption-block').hide();
     $(shadow).find('.caption-details').hide();
-    $(shadow).find('.more-details').hide();
+    // $(shadow).find('.more-details').hide();
     $(this).parents('.shadow-complete')
       .find('.hours__field')
       .prop('disabled', true)

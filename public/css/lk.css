@@ -982,8 +982,17 @@ input[type="radio"]:checked + label {
 .hours__field {
 	width: 74px;
 	font-size: 16px;
-	padding: 0 10px;
+	padding: 0 6px;
 	text-align: center;
+}
+
+input[type=number].hours__field::-webkit-outer-spin-button,
+input[type=number].hours__field::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type=number].hours__field {
+	-moz-appearance: textfield;
 }
 
 .hours__hidden {
@@ -1151,9 +1160,10 @@ input[type="radio"]:checked + label {
 	background: #f1f1f1;
 }
 
-.shadow-complete .more-details {
-	display: none;
-}
+/* Удалено с целью что бы заказчик увидел тоже самое что и при редактировании */
+/*.shadow-complete .more-details {*/
+/*	display: none;*/
+/*}*/
 
 .row_white {
 	background: white;
