@@ -84,6 +84,11 @@ class Metro extends Model
     'name',
     'distance',
     'hotel_id',
+    'custom',
+  ];
+
+  protected $casts = [
+    'custom' => 'boolean',
   ];
 
   protected static function boot()
