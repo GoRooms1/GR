@@ -688,12 +688,23 @@ input[type="radio"]:checked + label {
 	color: black !important;
 }
 
-
 .uploud {
 	display: grid;
 	grid-template-columns: repeat(3, 360px);
 	position: relative;
 	grid-gap: 25px;
+}
+
+.shadow .uploud {
+	grid-template-columns: repeat(3, 360px);
+	grid-column-gap: 25px;
+
+	transition: all 1s;
+}
+
+.shadow.shadow-complete .uploud {
+	grid-template-columns: repeat(6, 120px);
+	grid-column-gap: 13px;
 }
 
 .uploud__thumb {
@@ -705,6 +716,11 @@ input[type="radio"]:checked + label {
 	position: relative;
 	cursor: pointer;
     background: #f5f5f5 url('/public/img/lk/upload.png') no-repeat center center;
+	transition: all 1s;
+}
+
+.shadow.shadow-complete .uploud__thumb {
+	height: 120px;
 }
 
 .upload__remove {
@@ -1131,17 +1147,14 @@ input[type=number].hours__field {
 	color: gray;
 }
 
-
-
-
 .shadow .sortable {
-    grid-template-columns: repeat(3, 352px);
-    grid-column-gap: 30px;
     margin-top: 33px;
     margin-bottom: 60px;
 }
 
 .shadow .uploud-photo {
+	grid-template-columns: repeat(3, 352px);
+	grid-column-gap: 30px;
 	margin-top: 33px;
 }
 
