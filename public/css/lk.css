@@ -688,7 +688,6 @@ input[type="radio"]:checked + label {
 	color: black !important;
 }
 
-
 .uploud {
 	display: grid;
 	grid-template-columns: repeat(3, 360px);
