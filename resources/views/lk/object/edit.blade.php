@@ -22,7 +22,7 @@
           <p class="heading">Тип: {{ $hotel->type->name }}</p>
         </div>
       </div>
-      <form action="{{ route('lk.object.update') }}" method="POST">
+      <form action="{{ route('lk.object.update') }}" method="POST" id="form1">
         @csrf
         <input type="hidden" value="phone" name="type_update">
         <div class="row part__content">
@@ -104,7 +104,7 @@
         </div>
 
       </div>
-      <form action="{{ route('lk.object.update') }}" method="POST">
+      <form action="{{ route('lk.object.update') }}" id="form2" method="POST">
         @csrf
         <input type="hidden" value="address" name="type_update">
         <div class="row">
@@ -153,7 +153,7 @@
         </div>
       </div>
 
-      <form action="{{ route('lk.object.update') }}" method="POST">
+      <form action="{{ route('lk.object.update') }}" id="form3" method="POST">
         @csrf
         <input type="hidden" value="description" name="type_update">
         <div class="row part__content">
@@ -191,7 +191,7 @@
         </div>
       </div>
 
-      <form action="{{ route('lk.object.update') }}" method="POST">
+      <form action="{{ route('lk.object.update') }}" id="form4" method="POST">
         @csrf
         <input type="hidden" value="description" name="type_update">
         <div class="row part__content">
@@ -234,7 +234,7 @@
             добраться до объекта пешком в минутах.</p>
         </div>
       </div>
-      <form action="{{ route('lk.object.update') }}" method="POST">
+      <form action="{{ route('lk.object.update') }}" id="form5" method="POST">
         @csrf
         <input type="hidden" value="metros" name="type_update">
         <div id="metro" class="row part__content">
@@ -262,7 +262,7 @@
                 <p class="text">минут пешком до объекта</p>
                 <button onclick="deleteMetro({{ $m->id }})"
                         type="button"
-                        class="mx-3 button w-auto px-3"
+                        class="mx-3 button w-auto px-3 metros-delete"
                     {{ $hotel->disabled_save }}
                 >
                   -
@@ -360,7 +360,7 @@
   </section>
 
   <section class="part gray">
-    <form action="{{ route('lk.object.update') }}" method="post">
+    <form action="{{ route('lk.object.update') }}" id="form6" method="post">
       @csrf
       <input type="hidden" name="type_update" value="attr">
       <div class="container">
@@ -385,11 +385,9 @@
 
                   @foreach($category->attributes as $attr)
                     <div class="choice">
-                      <input type="hidden" id="attr-{{ $attr->id }}-h" name="attr[{{ $attr->id }}]" value="false">
                       <input type="checkbox"
                              {{ $hotel->disabled_save }}
                              id="attr-{{ $attr->id }}"
-                             value="true"
                              name="attr[{{ $attr->id }}]"
                           {{ $hotel->attrs->contains('id', $attr->id) ? 'checked' : '' }}
                       >
@@ -463,6 +461,11 @@
 @endsection
 
 @section('js')
+  <script>
+    let moderate = {!! (int)$hotel->disabled_save !!}
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{{ asset('js/lk/axios-object.js') }}" defer></script>
   <script>
 
     let existFile = []
@@ -724,6 +727,7 @@
       if (count_metros < 3) {
         $('#addMetroButton').show()
       }
+      disabledMetrosButtons()
       console.log($(str).remove())
     }
 
