@@ -80,15 +80,22 @@ class ObjectController extends Controller
         $hotel->saveAddress($request->get('value'), $request->get('comment'));
       } else if ($type === 'metros') {
         $hotel->metros()->delete();
+        $custom = $request->get('metros_custom');
         $distance = $request->get('metros_time');
         $color = $request->get('metros_color');
         foreach ($request->get('metros', []) as $index => $metro) {
+          if ($custom[$index] === "1") {
+            $c = substr($color[$index], 1);
+          } else {
+            $c = $color[$index];
+          }
           $metros = [
             'name'     => $metro,
             'hotel_id' => $hotel->id,
             'distance' => $distance[$index],
-            'color'    => $color[$index]
-          ];
+            'color'    => $c,
+            'custom'   => $custom[$index]
+           ];
           Metro::create($metros);
         }
       } else if ($type === 'attr') {
