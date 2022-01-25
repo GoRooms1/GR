@@ -703,8 +703,8 @@ input[type="radio"]:checked + label {
 }
 
 .shadow.shadow-complete .uploud {
-	grid-template-columns: repeat(6, 120px);
-	grid-column-gap: 13px;
+	grid-template-columns: repeat(6, 140px);
+	grid-column-gap: 20px;
 }
 
 .uploud__thumb {
@@ -720,7 +720,7 @@ input[type="radio"]:checked + label {
 }
 
 .shadow.shadow-complete .uploud__thumb {
-	height: 120px;
+	height: 150px;
 }
 
 .upload__remove {
