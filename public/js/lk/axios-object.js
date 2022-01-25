@@ -152,10 +152,27 @@ $(document).ready(function () {
     form5.submit(function (event) {
       event.preventDefault();
       let data = {}
+      console.log()
       data.type_update = $("input[name='type_update']", this).val() ? $("input[name='type_update']", this).val() : [] ;
-      data.metros = $("select[name='metros[]']", this).val() ? $("select[name='metros[]']", this).val() : []
-      data.metros_colors = $("input[name='metros_colors[]']", this).val() ? $("input[name='metros_colors[]']", this).val() : []
-      data.metros_time = $("input[name='metros_time[]']", this).val() ? $("input[name='metros_time[]']", this).val() : []
+      if ($("select[name='metros[]']", this).length > 0) {
+        data.metros = $("select[name='metros[]']", this).map(function () { return this.value}).get()
+      } else {
+        data.metros = []
+      }
+      // data.metros = $("select[name='metros[]']", this).length > 0 ? $("select[name='metros[]']", this).map(function () { return this.value}) : []
+      if ($("input[name='metros_color[]']", this).length > 0) {
+        data.metros_color = $("input[name='metros_color[]']", this).map(function () { return this.value}).get()
+      } else {
+        data.metros_color = []
+      }
+      // data.metros_colors = $("input[name='metros_color[]']", this).length > 0 ? $("input[name='metros_color[]']", this).map(function () { return this.value}) : []
+      if ($("input[name='metros_time[]']", this).length > 0) {
+        data.metros_time = $("input[name='metros_time[]']", this).map(function () { return this.value}).get()
+      } else {
+        data.metros_time = []
+      }
+      // data.metros_time = $("input[name='metros_time[]']", this).length > 0 ? $("input[name='metros_time[]']", this).map(function () { return this.value}) : []
+
       console.log(data)
       axios.post('/lk/object/update', {
         ...data
@@ -169,6 +186,7 @@ $(document).ready(function () {
           }
         })
         .catch(e => {
+          console.log(e)
           errorMessage()
         })
     })
