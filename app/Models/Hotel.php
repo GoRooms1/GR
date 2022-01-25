@@ -134,7 +134,7 @@ class Hotel extends Model
    */
   public const TYPES_FOND = [
     self::ROOMS_TYPE,
-    self::CATEGORIES_TYPE
+    self::CATEGORIES_TYPE,
   ];
 
   /**
@@ -158,7 +158,7 @@ class Hotel extends Model
     'old_moderate',
     'moderate',
     'show',
-    'checked_type_fond'
+    'checked_type_fond',
   ];
 
   /**
@@ -184,7 +184,7 @@ class Hotel extends Model
     'moderate' => 'boolean',
     'old_moderate' => 'boolean',
     'show' => 'boolean',
-    'checked_type_fond' => 'boolean'
+    'checked_type_fond' => 'boolean',
   ];
 
   ### SCOPES
@@ -242,7 +242,7 @@ class Hotel extends Model
 
 
     self::creating(function (Hotel $hotel) {
-      $hotel->slug = $hotel->slug ?? Str::slug($hotel->name);
+      $hotel->slug = $hotel->slug ?? Str::slug($hotel->name) . '-' . Carbon::now()->timestamp;
       Cache::forget('sitemap.2g');
     });
 
