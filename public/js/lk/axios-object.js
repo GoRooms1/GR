@@ -9,13 +9,16 @@ $(document).ready(function () {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').content;
 
     // Form 1
-    let form1 = $('#form1')
-    form1.find('input').keypress(() => {
+    function form1Edit () {
       if (allDisabledButton) {
         allDisabledButton = false
         form1.find('button[type=submit]').prop("disabled", false)
       }
-    })
+    }
+    let form1 = $('#form1')
+
+    form1.find('input').keypress(form1Edit)
+    form1.find('input').onChange(form1Edit)
     form1.submit(function (event) {
       event.preventDefault();
       let data = {}
@@ -41,13 +44,15 @@ $(document).ready(function () {
     })
 
     // Form 2
-    let form2 = $('#form2')
-    form2.find('input').keypress(() => {
+    function form2Edit() {
       if (allDisabledButton) {
         allDisabledButton = false
         form2.find('button[type=submit]').prop("disabled", false)
       }
-    })
+    }
+    let form2 = $('#form2')
+    form2.find('input').keypress(form2Edit)
+    form2.find('input').change(form2Edit)
     form2.submit(function (event) {
       event.preventDefault();
       let data = {}
@@ -71,13 +76,15 @@ $(document).ready(function () {
     })
 
     // Form 3
-    let form3 = $('#form3')
-    form3.find('textarea').keypress(() => {
+    function form3Edit () {
       if (allDisabledButton) {
         allDisabledButton = false
         form3.find('button[type=submit]').prop("disabled", false)
       }
-    })
+    }
+    let form3 = $('#form3')
+    form3.find('textarea').keypress(form3Edit)
+    form3.find('textarea').change(form3Edit)
     form3.submit(function (event) {
       event.preventDefault();
       let data = {}
@@ -101,13 +108,15 @@ $(document).ready(function () {
     })
 
     // Form 4
-    let form4 = $('#form4')
-    form4.find('textarea').keypress(() => {
+    function form4Edit () {
       if (allDisabledButton) {
         allDisabledButton = false
         form4.find('button[type=submit]').prop("disabled", false)
       }
-    })
+    }
+    let form4 = $('#form4')
+    form4.find('textarea').keypress(form4Edit)
+    form3.find('textarea').change(form4Edit)
     form4.submit(function (event) {
       event.preventDefault();
       let data = {}
@@ -131,19 +140,15 @@ $(document).ready(function () {
     })
 
     // Form 5
+    function form5Edit () {
+      if (allDisabledButton) {
+        allDisabledButton = false
+        form5.find('button[type=submit]').prop("disabled", false)
+      }
+    }
     let form5 = $('#form5')
-    form5.find('input').keypress(() => {
-      if (allDisabledButton) {
-        allDisabledButton = false
-        form5.find('button[type=submit]').prop("disabled", false)
-      }
-    })
-    form5.find('input').change(() => {
-      if (allDisabledButton) {
-        allDisabledButton = false
-        form5.find('button[type=submit]').prop("disabled", false)
-      }
-    })
+    form5.find('input').keypress(form5Edit)
+    form5.find('input').change(form5Edit)
     form5.submit(function (event) {
       event.preventDefault();
       let data = {}
@@ -169,13 +174,15 @@ $(document).ready(function () {
     })
 
     // Form 6
-    let form6 = $('#form6')
-    form6.find('input').change(() => {
+    function form6Edit () {
       if (allDisabledButton) {
         allDisabledButton = false
         form6.find('button[type=submit]').prop("disabled", false)
       }
-    })
+    }
+    let form6 = $('#form6')
+    form6.find('input').keypress(form6Edit)
+    form6.find('input').change(form6Edit)
     form6.submit(function (event) {
       event.preventDefault();
       let data = {}

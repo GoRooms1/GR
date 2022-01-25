@@ -22,12 +22,13 @@
           <p class="heading">Тип: {{ $hotel->type->name }}</p>
         </div>
       </div>
-      <form action="{{ route('lk.object.update') }}" method="POST" id="form1">
+      <form action="{{ route('lk.object.update') }}" autocomplete="off" method="POST" id="form1">
         @csrf
         <input type="hidden" value="phone" name="type_update">
         <div class="row part__content">
           <div class="col-4">
             <input type="phone"
+                   autocomplete="none"
                    class="field form-control @error('phone') is-invalid @enderror"
                    value="{{ old('phone', $hotel->phone) }}"
                    name="phone"
@@ -43,6 +44,7 @@
           </div>
           <div class="col-4">
             <input type="phone"
+                   autocomplete="none"
                    class="field form-control @error('phone_2') is-invalid @enderror"
                    value="{{ old('phone_2', $hotel->phone_2) }}"
                    name="phone_2"
@@ -57,6 +59,7 @@
           </div>
           <div class="col-4">
             <input type="email"
+                   autocomplete="none"
                    class="field form-control @error('email') is-invalid @enderror"
                    value="{{ old('email', $hotel->email) }}"
                    name="email"
@@ -104,7 +107,7 @@
         </div>
 
       </div>
-      <form action="{{ route('lk.object.update') }}" id="form2" method="POST">
+      <form action="{{ route('lk.object.update') }}" autocomplete="off" id="form2" method="POST">
         @csrf
         <input type="hidden" value="address" name="type_update">
         <div class="row">
@@ -113,6 +116,7 @@
               <p class="text-bold adress">Комментарий к адресу: </p>
               <input class="bordered form-control field @error('comment') is-invalid @enderror"
                      name="comment"
+                     autocomplete="none"
                      {{ $hotel->disabled_save }}
                      value="{{ old('comment', $hotel->address->comment) }}"
                      placeholder="Введите текст">
@@ -153,7 +157,7 @@
         </div>
       </div>
 
-      <form action="{{ route('lk.object.update') }}" id="form3" method="POST">
+      <form action="{{ route('lk.object.update') }}" autocomplete="off" id="form3" method="POST">
         @csrf
         <input type="hidden" value="description" name="type_update">
         <div class="row part__content">
@@ -161,6 +165,7 @@
             <textarea placeholder="Введите текст"
                       name="description"
                       id="editor"
+                      autocomplete="none"
                       rows="8"
                       {{ $hotel->disabled_save }}
                       class="field form-control @error('description') is-invalid @enderror">
@@ -191,13 +196,14 @@
         </div>
       </div>
 
-      <form action="{{ route('lk.object.update') }}" id="form4" method="POST">
+      <form action="{{ route('lk.object.update') }}" autocomplete="off" id="form4" method="POST">
         @csrf
         <input type="hidden" value="description" name="type_update">
         <div class="row part__content">
           <div class="col-10">
             <textarea placeholder="Введите текст"
                       name="route"
+                      autocomplete="none"
                       {{ $hotel->disabled_save }}
                       id="editor2"
                       rows="8"
@@ -234,7 +240,7 @@
             добраться до объекта пешком в минутах.</p>
         </div>
       </div>
-      <form action="{{ route('lk.object.update') }}" id="form5" method="POST">
+      <form action="{{ route('lk.object.update') }}" autocomplete="off" id="form5" method="POST">
         @csrf
         <input type="hidden" value="metros" name="type_update">
         <div id="metro" class="row part__content">
@@ -242,7 +248,8 @@
             <div class="col-12" data-id="{{ $m->id }}">
               <div class="d-flex align-items-center station">
                 <div class="select" style="width: 45%">
-                  <select name="metros[]" 
+                  <select name="metros[]"
+                          autocomplete="none"
                           class="form-control field metros w-100"
                           {{ $hotel->disabled_save }}
                           required>
@@ -253,6 +260,7 @@
                        name="metros_color[]"
                         value="{{ $m->color }}">
                 <input type="number"
+                       autocomplete="none"
                        {{ $hotel->disabled_save }}
                        min="1"
                        name="metros_time[]"
@@ -262,7 +270,7 @@
                 <p class="text">минут пешком до объекта</p>
                 <button onclick="deleteMetro({{ $m->id }})"
                         type="button"
-                        class="mx-3 button w-auto px-3 metros-delete"
+                        class="mx-3 button button_blue w-auto px-3 metros-delete"
                     {{ $hotel->disabled_save }}
                 >
                   -
@@ -280,13 +288,13 @@
                   </select>
                 </div>
                 <input type="hidden" name="metros_color[]">
-                <input type="number" min="1" {{ $hotel->disabled_save }} name="metros_time[]"
+                <input type="number" min="1" {{ $hotel->disabled_save }} autocomplete="none" name="metros_time[]"
                        class="field field_small station-field" required>
                 <p class="text">минут пешком до объекта</p>
                 <button onclick="deleteMetro(1)"
                         {{ $hotel->disabled_save }}
                         type="button"
-                        class="mx-3 button w-auto px-3">
+                        class="mx-3 button button_blue w-auto px-3">
                   -
                 </button>
               </div>
@@ -299,7 +307,7 @@
             <button id="addMetroButton" onclick="addMetro()"
                     {!! $hotel->metros()->count() >= 3 ? 'style="display: none"' : '' !!}
                     {{ $hotel->disabled_save }}
-                    type="button" class="button"
+                    type="button" class="button button_blue"
             >
               Добавить станцию
             </button>
@@ -360,7 +368,7 @@
   </section>
 
   <section class="part gray">
-    <form action="{{ route('lk.object.update') }}" id="form6" method="post">
+    <form action="{{ route('lk.object.update') }}" autocomplete="off" id="form6" method="post">
       @csrf
       <input type="hidden" name="type_update" value="attr">
       <div class="container">
@@ -649,7 +657,7 @@
           "<input type='hidden' name='metros_color[]' class='color'>" +
           "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
           "<p class='text'>минут пешком до объекта</p>" +
-          "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button w-auto px-3'>-</button>" +
+          "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button button_blue w-auto px-3'>-</button>" +
           "</div>" +
           "</div>"
         )

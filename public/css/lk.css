@@ -699,12 +699,12 @@ input[type="radio"]:checked + label {
 	grid-template-columns: repeat(3, 360px);
 	grid-column-gap: 25px;
 
-	transition: all 1s;
+	transition: all .5s;
 }
 
 .shadow.shadow-complete .uploud {
-	grid-template-columns: repeat(6, 120px);
-	grid-column-gap: 13px;
+	grid-template-columns: repeat(6, 140px);
+	grid-column-gap: 20px;
 }
 
 .uploud__thumb {
@@ -720,7 +720,7 @@ input[type="radio"]:checked + label {
 }
 
 .shadow.shadow-complete .uploud__thumb {
-	height: 120px;
+	height: 150px;
 }
 
 .upload__remove {
@@ -975,7 +975,7 @@ input[type="radio"]:checked + label {
 .hours {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	/*justify-content: space-between;*/
 	width: 100%;
 	padding: 0 15px;
 }
@@ -983,9 +983,18 @@ input[type="radio"]:checked + label {
 .hour {
 	background: #f5f5f5;
 	padding: 9px;
-	width: 352px;
+	width: 320px;
 	border-radius: 4px;
 	color: #3f3f3f;
+	margin-right: 10px;
+}
+
+.hour .hours__select {
+	font-size: 14px;
+}
+
+.hour .select__top {
+	padding: 0 10px;
 }
 
 .hours__heading {
@@ -1048,7 +1057,7 @@ input[type=number].hours__field {
 }
 
 .hours {
-	margin-top: 40px;
+	margin-top: 15px;
 }
 
 .caption_mt {
