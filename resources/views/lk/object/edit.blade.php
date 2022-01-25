@@ -262,7 +262,7 @@
                 <p class="text">минут пешком до объекта</p>
                 <button onclick="deleteMetro({{ $m->id }})"
                         type="button"
-                        class="mx-3 button w-auto px-3 metros-delete"
+                        class="mx-3 button button_blue w-auto px-3 metros-delete"
                     {{ $hotel->disabled_save }}
                 >
                   -
@@ -286,7 +286,7 @@
                 <button onclick="deleteMetro(1)"
                         {{ $hotel->disabled_save }}
                         type="button"
-                        class="mx-3 button w-auto px-3">
+                        class="mx-3 button button_blue w-auto px-3">
                   -
                 </button>
               </div>
@@ -299,7 +299,7 @@
             <button id="addMetroButton" onclick="addMetro()"
                     {!! $hotel->metros()->count() >= 3 ? 'style="display: none"' : '' !!}
                     {{ $hotel->disabled_save }}
-                    type="button" class="button"
+                    type="button" class="button button_blue"
             >
               Добавить станцию
             </button>
@@ -649,7 +649,7 @@
           "<input type='hidden' name='metros_color[]' class='color'>" +
           "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
           "<p class='text'>минут пешком до объекта</p>" +
-          "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button w-auto px-3'>-</button>" +
+          "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button button_blue w-auto px-3'>-</button>" +
           "</div>" +
           "</div>"
         )
