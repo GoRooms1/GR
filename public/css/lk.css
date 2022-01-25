@@ -699,7 +699,7 @@ input[type="radio"]:checked + label {
 	grid-template-columns: repeat(3, 360px);
 	grid-column-gap: 25px;
 
-	transition: all 1s;
+	transition: all .5s;
 }
 
 .shadow.shadow-complete .uploud {
