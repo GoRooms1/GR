@@ -703,8 +703,12 @@ input[type="radio"]:checked + label {
 }
 
 .shadow.shadow-complete .uploud {
-	grid-template-columns: repeat(6, 140px);
+	grid-template-columns: repeat(6, 170px);
 	grid-column-gap: 20px;
+}
+
+.shadow.shadow-complete .uploud  .uploud__status {
+	font-size: 12px;
 }
 
 .shadow .sortable {
@@ -715,7 +719,7 @@ input[type="radio"]:checked + label {
 }
 
 .shadow.shadow-complete .sortable {
-	grid-template-columns: repeat(6, 140px);
+	grid-template-columns: repeat(6, 170px);
 	grid-column-gap: 20px;
 }
 
@@ -737,6 +741,9 @@ input[type="radio"]:checked + label {
 
 .shadow.shadow-complete .sortable li {
 	height: 140px !important;
+}
+.shadow.shadow-complete .sortable li .dz-success-mark {
+	font-size: 12px;
 }
 
 .upload__remove {
