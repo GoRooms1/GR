@@ -35,12 +35,12 @@ class ObjectUpdateRequest extends FormRequest
       'phone_2' => ['sometimes', 'nullable', 'string'],
       'description' => ['sometimes', 'nullable', 'string'],
       'attr' => ['sometimes', 'array'],
-      'attr.*' => ['sometimes', 'required'],
+      'attr.*' => ['sometimes', 'required', 'exists:attributes,id'],
       'comment' => ['sometimes', 'nullable', 'string'],
       'email' => ['sometimes', 'nullable', 'email'],
-      'metros' => ['sometimes', 'required', 'array'],
-      'metros_time' => ['sometimes', 'required', 'array'],
-      'metros_color' => ['sometimes', 'required', 'array'],
+      'metros' => ['sometimes', 'min:0', 'array'],
+      'metros_time' => ['sometimes', 'min:0', 'array'],
+      'metros_color' => ['sometimes', 'min:0', 'array'],
       'route' => ['sometimes', 'required', 'string'],
     ];
   }

@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Lk;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\LK\ObjectUpdateRequest;
-use App\Models\Attribute;
-use App\Models\AttributeCategory;
-use App\Models\Hotel;
-use App\Models\HotelType;
-use App\Models\Metro;
-use App\Traits\UploadImage;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Hotel;
+use App\Models\Metro;
+use App\Models\Attribute;
+use App\Models\HotelType;
+use Illuminate\View\View;
+use App\Traits\UploadImage;
 use Illuminate\Http\Request;
+use App\Models\AttributeCategory;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Requests\LK\ObjectUpdateRequest;
+use Illuminate\Contracts\Foundation\Application;
 
 /**
  * edit Hotel
@@ -25,10 +26,12 @@ use Illuminate\View\View;
 class ObjectController extends Controller
 {
   use UploadImage;
+
   /**
    * Store a newly created resource in storage.
    *
    * @param Request $request
+   *
    * @return RedirectResponse
    */
   public function store(Request $request): RedirectResponse
@@ -43,7 +46,7 @@ class ObjectController extends Controller
       'hotel' => 'required|array',
       'hotel.name' => 'required|string',
       'hotel.type' => 'required|exists:hotel_types,id',
-      'address' => 'required|string'
+      'address' => 'required|string',
     ]);
     if (auth()->check()) {
       $request->validate([
@@ -55,7 +58,7 @@ class ObjectController extends Controller
       $user->save();
     } else {
       $request->validate([
-        'email' => 'unique:users,email'
+        'email' => 'unique:users,email',
       ]);
 
       $user = new User($request->all());
@@ -89,8 +92,8 @@ class ObjectController extends Controller
     $hotelTypes = HotelType::orderBy('sort')
       ->get();
     $attributeCategories = AttributeCategory::with(['attributes' => function ($q) {
-        $q->whereModel(Hotel::class)->get();
-      }])
+      $q->whereModel(Hotel::class)->get();
+    }])
       ->get();
     return view('lk.object.edit',
       compact('hotel',
@@ -104,9 +107,10 @@ class ObjectController extends Controller
    * Update the specified resource in storage.
    *
    * @param ObjectUpdateRequest $request
-   * @return RedirectResponse
+   *
+   * @return JsonResponse
    */
-  public function update(ObjectUpdateRequest $request): RedirectResponse
+  public function update(ObjectUpdateRequest $request): JsonResponse
   {
 
     $hotel = auth()->user()->personal_hotel;
@@ -114,12 +118,7 @@ class ObjectController extends Controller
 
     if ($hotel) {
       if ($type === 'attr') {
-        $attr = [];
-        foreach ($request->get('attr') as $item => $value) {
-          if ($value === 'true') {
-            $attr[] = $item;
-          }
-        }
+        $attr = $request->get('attr');
 
         $hotel->attrs()->sync($attr);
       } else if ($type === 'phone' || $type === 'description') {
@@ -134,17 +133,22 @@ class ObjectController extends Controller
         $color = $request->get('metros_color');
         foreach ($request->get('metros', []) as $index => $metro) {
           $metros = [
-            'name'     => $metro,
+            'name' => $metro,
             'hotel_id' => $hotel->id,
             'distance' => $distance[$index],
-            'color'    => $color[$index]
+            'color' => $color[$index],
           ];
           Metro::create($metros);
         }
       } else {
-        return redirect()->back()->with('error', 'Не верные данные');
+        return response()->json([
+          'status' => 'error',
+          'text' => 'Не верно указаны данные',
+        ], 400);
       }
     }
-    return redirect()->back()->with('success', 'Данные сохранены');
+    return response()->json([
+      'status' => 'success',
+    ]);
   }
 }

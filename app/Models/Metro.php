@@ -3,23 +3,23 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Metro
  *
- * @property int $id
- * @property string $color
- * @property string $name
- * @property int $distance
- * @property int $hotel_id
+ * @property int         $id
+ * @property string      $color
+ * @property string      $name
+ * @property int         $distance
+ * @property int         $hotel_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Hotel $hotel
+ * @property-read Hotel  $hotel
  * @method static Builder|Metro newModelQuery()
  * @method static Builder|Metro newQuery()
  * @method static Builder|Metro query()
@@ -61,7 +61,7 @@ class Metro extends Model
     'grey',
     'lime',
     'teal',
-    'blue-gray'
+    'blue-gray',
   ];
 
   public const COLORS_HEX = [
@@ -76,7 +76,7 @@ class Metro extends Model
     'grey' => '808080',
     'lime' => '7fff00',
     'teal' => '30d5c8',
-    'blue-gray' => '77a1b5'
+    'blue-gray' => '77a1b5',
   ];
 
   protected $fillable = [
@@ -84,6 +84,11 @@ class Metro extends Model
     'name',
     'distance',
     'hotel_id',
+    'custom',
+  ];
+
+  protected $casts = [
+    'custom' => 'boolean',
   ];
 
   protected static function boot()

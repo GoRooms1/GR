@@ -181,7 +181,7 @@
           @forelse($hotel->metros as $index => $m)
             <div class="col-12" data-id="{{ $m->id }}">
               <div class="d-flex align-items-center station">
-                <div class="select" style="width: 45%">
+                <div class="select" style="width: {{ $m->custom ? '35%' : '45%' }}">
                   <select name="metros[]"
                           class="form-control field metros w-100"
                           required>
@@ -189,8 +189,25 @@
                   </select>
                 </div>
                 <input type="hidden"
-                       name="metros_color[]"
-                       value="{{ $m->color }}">
+                       name="metros_custom[]"
+                       class="metro_custom_flag"
+                       value="{{ $m->custom ? '1' : '0' }}"
+                >
+                @if($m->custom)
+                  <input type='color'
+                         class='field metro_custom_color'
+                         style='width: 10%'
+                         name='metros_color[]'
+                         value='#{{ $m->color }}'
+                  >
+                @else
+                  <input type="hidden"
+                         name="metros_color[]"
+                         class="metro_hidden_color color"
+                         value="{{ $m->color }}"
+                  >
+                @endif
+
                 <input type="number"
                        min="1"
                        name="metros_time[]"
@@ -215,13 +232,26 @@
                           required>
                   </select>
                 </div>
-                <input type="hidden" name="metros_color[]">
-                <input type="number" min="1" name="metros_time[]"
-                       class="field field_small station-field" required>
+                <input type="hidden"
+                       name="metros_custom[]"
+                       class="metro_custom_flag"
+                       value="0"
+                >
+                <input type="hidden"
+                       class="metro_hidden_color"
+                       name="metros_color[]"
+                >
+                <input type="number"
+                       min="1"
+                       name="metros_time[]"
+                       class="field field_small station-field"
+                       required
+                >
                 <p class="text">минут пешком до объекта</p>
                 <button onclick="deleteMetro(1)"
                         type="button"
-                        class="mx-3 button button_blue w-auto px-3">
+                        class="mx-3 button button_blue w-auto px-3"
+                >
                   -
                 </button>
               </div>
@@ -232,8 +262,10 @@
         <div class="row part__bottom">
           <div class="col-12">
             <button onclick="addMetro()"
+                    id="addMetroButton"
                     {!! $hotel->metros()->count() >= 3 ? 'style="display: none"' : '' !!}
-                    type="button" class="button button_blue"
+                    type="button"
+                    class="button button_blue"
             >
               Добавить станцию
             </button>
@@ -492,6 +524,7 @@
       $('.metros').select2({
         placeholder: "Название станции",
         language: "ru",
+        tags: true,
         ajax: {
           delay: 250,
           type: "POST",
@@ -529,27 +562,61 @@
     $('.metros').on("select2:select", takeColor);
 
     function takeColor(e) {
-      console.log($(e.currentTarget).parent().parent().children('input[type="hidden"]').get(0).value = e.params.data.color)
-      console.log(e.params.data.color);
+      try {
+        $(e.currentTarget).parent().parent().children('.metro_hidden_color').get(0).remove()
+      } catch (e) {
+        console.log('Нет цвета')
+      }
+      try {
+        $(e.currentTarget).parent().parent().children('.metro_custom_color').get(0).remove()
+      } catch (e) {
+        console.log('Нет кастом цвета')
+      }
+      if (typeof e.params.data.color === 'undefined') {
+        $(e.currentTarget).parent().parent().find('div.select').width('35%')
+        $(e.currentTarget).parent().parent().find('input.metro_custom_flag').val(1)
+        $(e.currentTarget).parent().parent().find('div.select').find('span.select2').width('100%')
+        $(e.currentTarget).parent().parent().find('div.select').after(
+          "<input type='color' class='field metro_custom_color' style='width: 10%' name='metros_color[]' value='#000000'>"
+        )
+        console.log($(e.currentTarget).parent().parent())
+      } else {
+        $(e.currentTarget).parent().parent().find('input.metro_custom_flag').val(0)
+        $(e.currentTarget).parent().parent().find('div.select').width('45%')
+        $(e.currentTarget).parent().parent().find('div.select').find('span.select2').width('100%')
+        $(e.currentTarget).parent().parent().find('div.select').after(
+          "<input type='hidden' class='color metro_hidden_color' name='metros_color[]'>"
+        )
+        console.log($(e.currentTarget).parent().parent().children('input.metro_hidden_color').get(0).value = e.params.data.color)
+        console.log(e.params.data.color);
+      }
     }
 
     function deleteMetro(id) {
       count_metros--;
       let str = '[data-id=' + id + ']'
       console.log($(str).remove())
+      console.log(count_metros)
+      if (count_metros < 3) {
+        $('#addMetroButton').show()
+      }
     }
 
     function addMetro() {
       if (count_metros < 3) {
         metros_ids++;
         count_metros++;
+        if (count_metros >= 3) {
+          $('#addMetroButton').hide()
+        }
         $('#metro').append(
           "<div class='col-12' data-id='" + metros_ids + "'>" +
           "<div class='d-flex align-items-center station'>" +
           "<div class='select' style='width: 45%'>" +
           "<select name='metros[]' class='form-control field metros w-100' required></select>" +
           "</div>" +
-          "<input type='hidden' name='metros_color[]' class='color'>" +
+          "<input type='hidden' name='metros_custom[]' class='metro_custom_flag' value='0'>" +
+          "<input type='hidden' name='metros_color[]' class='color metro_hidden_color'>" +
           "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
           "<p class='text'>минут пешком до объекта</p>" +
           "<button onclick='deleteMetro(" + metros_ids + ")' class='mx-3 button button_blue w-auto px-3'>-</button>" +
