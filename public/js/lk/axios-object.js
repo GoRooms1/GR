@@ -18,7 +18,7 @@ $(document).ready(function () {
     let form1 = $('#form1')
 
     form1.find('input').keypress(form1Edit)
-    form1.find('input').сhange(form1Edit)
+    form1.find('input').change(form1Edit)
     form1.submit(function (event) {
       event.preventDefault();
       let data = {}
