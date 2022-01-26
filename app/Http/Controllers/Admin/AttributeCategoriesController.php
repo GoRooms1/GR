@@ -29,13 +29,12 @@ class AttributeCategoriesController extends Controller
   /**
    * Show the form for creating a new resource.
    *
-   * @return Response
+   * @return Application|Factory|View
    */
   public function create()
   {
     $model_translate = Attribute::MODELS_TRANSLATE;
-
-    
+    return view('admin.attribute_categories.create', compact('model_translate'));
   }
 
   /**
@@ -43,11 +42,20 @@ class AttributeCategoriesController extends Controller
    *
    * @param Request $request
    *
-   * @return Response
+   * @return RedirectResponse
    */
-  public function store(Request $request)
+  public function store(Request $request): RedirectResponse
   {
-    //
+    $request->validate([
+      'name' => 'required|string|min:3|unique:attribute_categories',
+      'description' => 'sometimes|nullable|string|max:255',
+    ]);
+
+    $c = AttributeCategory::create($request->all());
+    $c->save();
+
+    return redirect()->route('admin.attribute_categories.index')->with('success', 'Категория атрибутов успешно создана');
+
   }
 
   /**
@@ -67,11 +75,16 @@ class AttributeCategoriesController extends Controller
    *
    * @param int $id
    *
-   * @return Response
+   * @return Application|Factory|View|RedirectResponse
    */
-  public function edit($id)
+  public function edit(int $id)
   {
-    //
+    try {
+      $c = AttributeCategory::findOrFail($id);
+      return view('admin.attribute_categories.edit', compact('c'));
+    } catch (NotFoundException $e) {
+      return redirect()->back()->withErrors('Категория не была найдена');
+    }
   }
 
   /**
@@ -80,11 +93,24 @@ class AttributeCategoriesController extends Controller
    * @param Request $request
    * @param int     $id
    *
-   * @return Response
+   * @return RedirectResponse
    */
-  public function update(Request $request, $id)
+  public function update(Request $request, int $id): RedirectResponse
   {
-    //
+    $request->validate([
+      'name' => 'required|string|min:3|unique:attribute_categories,name,' . $id,
+      'description' => 'sometimes|nullable|string|max:255',
+    ]);
+
+    try {
+      $c = AttributeCategory::findOrFail($id);
+      $c->update($request->all());
+
+      return redirect()->route('admin.attribute_categories.index')->with('success', 'Категория атрибутов успешно изменена');
+    } catch (NotFoundException $e) {
+      return redirect()->back()->withErrors('Категория не была найдена');
+    }
+
   }
 
   /**

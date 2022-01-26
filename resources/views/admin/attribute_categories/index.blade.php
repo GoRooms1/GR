@@ -16,7 +16,8 @@
             <tr>
               <th>#</th>
               <th>Наименование</th>
-              <th>Кол-во атрибутов</th>
+              <th>Кол-во атрибутов для Комнат</th>
+              <th>Кол-во атрибутов для Отелей</th>
               <th>Действия</th>
             </tr>
             </thead>
@@ -25,7 +26,8 @@
               <tr>
                 <td>{{ $c->id }}</td>
                 <td>{{ $c->name }}</td>
-                <td>{{ $c->attributes()->count() }}</td>
+                <td>{{ $c->attr_room->count() }}</td>
+                <td>{{ $c->attr_hotel->count() }}</td>
                 <td>
                   <div class="btn-group btn-group-sm">
                     <a href="{{ route('admin.attribute_categories.edit', $c) }}" class="btn btn-success">Изменить</a>
