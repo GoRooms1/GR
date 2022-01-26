@@ -63,11 +63,24 @@ class AttributeCategoriesController extends Controller
    *
    * @param int $id
    *
-   * @return Response
+   * @return Application|Factory|RedirectResponse|View
    */
-  public function show($id)
+  public function show(int $id, Request $request)
   {
-    //
+    try {
+      $c = AttributeCategory::findOrFail($id);
+      if ($request->get('hotel', null)) {
+        $attributes = $c->attributes()->forHotels()->get();
+      } else if ($request->get('room', null)) {
+        $attributes = $c->attributes()->forRooms()->get();
+      } else {
+        $attributes = $c->attributes;
+      }
+
+      return view('admin.attribute_categories.show', compact('c', 'attributes'));
+    } catch (NotFoundException $e) {
+      return redirect()->route('admin.attribute_categories.index')->withErrors('Категория не была найдена');
+    }
   }
 
   /**

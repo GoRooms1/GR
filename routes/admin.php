@@ -24,6 +24,9 @@ Route::get('/rooms/create/{hotel}', 'RoomController@create')->name('rooms.create
 //]);
 
 Route::resource('attribute_categories', 'AttributeCategoriesController')->except(['show']);
+Route::resource('attributes', 'AttributeController')->except(['show']);
+
+Route::resource('attribute_categories', 'AttributeCategoriesController');
 
 Route::resource('hotels/{hotel?}/categories', 'CategoryController', [
   'except' => ['index'],

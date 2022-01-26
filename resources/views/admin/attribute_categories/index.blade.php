@@ -25,7 +25,7 @@
             @foreach($c_attrs AS $c)
               <tr>
                 <td>{{ $c->id }}</td>
-                <td>{{ $c->name }}</td>
+                <td><a href="{{ route('admin.attribute_categories.show', $c) }}">{{ $c->name }}</a></td>
                 <td>{{ $c->attr_room->count() }}</td>
                 <td>{{ $c->attr_hotel->count() }}</td>
                 <td>
