@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\AttributeCategory;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
+use Intervention\Image\Exception\NotFoundException;
 
-class AttributeCategories extends Controller
+class AttributeCategoriesController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -30,7 +33,9 @@ class AttributeCategories extends Controller
    */
   public function create()
   {
-    //
+    $model_translate = Attribute::MODELS_TRANSLATE;
+
+    
   }
 
   /**
@@ -87,10 +92,23 @@ class AttributeCategories extends Controller
    *
    * @param int $id
    *
-   * @return Response
+   * @return RedirectResponse
    */
-  public function destroy($id)
+  public function destroy(int $id): RedirectResponse
   {
-    //
+    try {
+      $category_attr = AttributeCategory::findOrFail($id);
+
+      if ($category_attr->attributes()->count() > 0) {
+        return redirect()->back()->withErrors('В данной категории имеются атрибуты');
+      }
+
+      $category_attr->delete();
+
+      return redirect()->back()->with('success', 'Категория была удалена');
+    } catch (NotFoundException $e) {
+      return redirect()->back()->withErrors('Категория не была найдена');
+    }
+
   }
 }
