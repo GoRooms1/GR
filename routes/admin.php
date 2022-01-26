@@ -16,14 +16,6 @@ Route::resource('rooms', 'RoomController', [
 ]);
 Route::get('/rooms/create/{hotel}', 'RoomController@create')->name('rooms.create');
 
-//Route::get('/attributes/{category}', 'AttributeController@index')
-//  ->name('attributes.index')
-//  ->where('category', '(room|hotel)');
-//Route::resource('attributes', 'AttributeController', [
-//  'except' => ['index'],
-//]);
-
-Route::resource('attribute_categories', 'AttributeCategoriesController')->except(['show']);
 Route::resource('attributes', 'AttributeController')->except(['show']);
 
 Route::resource('attribute_categories', 'AttributeCategoriesController');
