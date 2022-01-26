@@ -152,30 +152,16 @@
                 </div>
             </div>
             <div class="advanced-search-filter">
-                <div class="left">
-                    <div class="advanced-search-filter-item">
-                        <p for="advanced-search-filter-profitably" class="search-filter-label search-filter-label-profitably">Выгодно</p>
-                    </div>
-                    <div class="advanced-search-filter-item">
-                        <input type="checkbox" id="advanced-search-filter-fire" class="checkbox" name="hot" value="1"
-                               @if(isset($request) && optional($request)->has('hot')) checked @endif
-                        />
-                        <label for="advanced-search-filter-fire"
-                           class="search-filter-label search-filter-label-fire checkbox-label checkbox-label-light">Горящие
-                            предложения</label>
-                    </div>
+                <div class="advanced-search-filter-item">
+                    <p for="advanced-search-filter-profitably" class="search-filter-label search-filter-label-profitably">Выгодно</p>
                 </div>
-                <div class="right">
-                    <div class="advanced-search-filter-item rating">
-                        <p class="search-filter-label search-filter-label-profitably">Рейтинг отелей:</p>
-                        <div class="rating-block">
-                            <a href="#">Любой</a>
-                            <a href="#">6+</a>
-                            <a href="#">7+</a>
-                            <a href="#">8+</a>
-                            <a href="#">9+</a>
-                        </div>
-                    </div>
+                <div class="advanced-search-filter-item">
+                    <input type="checkbox" id="advanced-search-filter-fire" class="checkbox" name="hot" value="1"
+                           @if(isset($request) && optional($request)->has('hot')) checked @endif
+                    />
+                    <label for="advanced-search-filter-fire"
+                           class="search-filter-label search-filter-label-fire checkbox-label checkbox-label-light">Горящие
+                        предложения</label>
                 </div>
             </div>
             <div class="row advanced-search-details">
@@ -248,7 +234,7 @@
             <button class="advanced-search-ico-btn advanced-search-ico-btn-favorite" type="button"></button>
             <a href="{{ route('search.map') }}" class="advanced-search-ico-btn advanced-search-ico-btn-map"
                type="button"></a>
-            <button  onclick="event.preventDefault();search_reset();" class="advanced-search-reset-btn">Очистить поиск</button>
+            <button type="reset" class="advanced-search-reset-btn">Очистить поиск</button>
             <button class="btn btn-blue" type="submit">Показать</button>
         </div>
         <button id="js-advanced-search-close-btn" type="button"
