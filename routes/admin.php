@@ -16,16 +16,14 @@ Route::resource('rooms', 'RoomController', [
 ]);
 Route::get('/rooms/create/{hotel}', 'RoomController@create')->name('rooms.create');
 
-Route::get('/attributes/{category}', 'AttributeController@index')
-  ->name('attributes.index')
-  ->where('category', '(room|hotel)');
-Route::resource('attributes', 'AttributeController', [
-  'except' => ['index'],
-]);
+//Route::get('/attributes/{category}', 'AttributeController@index')
+//  ->name('attributes.index')
+//  ->where('category', '(room|hotel)');
+//Route::resource('attributes', 'AttributeController', [
+//  'except' => ['index'],
+//]);
 
-Route::resource('attribute_categories', 'AttributeCategories', [
-  'except' => ['show']
-]);
+Route::resource('attribute_categories', 'AttributeCategoriesController')->except(['show']);
 
 Route::resource('hotels/{hotel?}/categories', 'CategoryController', [
   'except' => ['index'],
