@@ -13,7 +13,7 @@
     <label for="model">Категория</label>
     <select name="model" id="model" class="form-control">
         <option value="">Выберите категорию</option>
-        @foreach(\App\Models\Attribute::MODELS AS $model => $title)
+        @foreach(\App\Models\Attribute::MODELS_TRANSLATE AS $model => $title)
             <option value="{{ $model }}" @if(isset($attribute) && $attribute->model_name === $model) selected @endif>{{ $title }}</option>
         @endforeach
     </select>

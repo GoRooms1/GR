@@ -41,10 +41,11 @@ class Attribute extends Model
 {
   use CreatedAtOrdered;
 
-  public const MODELS = [
+  public const MODELS_TRANSLATE = [
     Hotel::class => 'Отели',
     Room::class => 'Номера',
   ];
+
   protected $fillable = [
     'name',
     'description',
