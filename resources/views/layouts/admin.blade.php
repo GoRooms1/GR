@@ -46,21 +46,24 @@
               <a href="{{ route('admin.hotels.index') }}" class="nav-link">Список отелей</a>
             </li>
 
-{{--            <li class="nav-item dropdown">--}}
-{{--              <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"--}}
-{{--                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
-{{--                Атрибуты <span class="caret"></span>--}}
-{{--              </a>--}}
+            <li class="nav-item dropdown">
+              <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                Атрибуты <span class="caret"></span>
+              </a>
 
-{{--              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">--}}
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 {{--                <a class="dropdown-item" href="{{ route('admin.attributes.index', 'room') }}">--}}
 {{--                  Номера--}}
 {{--                </a>--}}
 {{--                <a class="dropdown-item" href="{{ route('admin.attributes.index', 'hotel') }}">--}}
 {{--                  Отели--}}
 {{--                </a>--}}
-{{--              </div>--}}
-{{--            </li>--}}
+                <a class="dropdown-item" href="{{ route('admin.attribute_categories.index') }}">
+                  Категории
+                </a>
+              </div>
+            </li>
 
             <li class="nav-item">
               <a href="{{ route('admin.moderators.index') }}" class="nav-link">Модераторы</a>
