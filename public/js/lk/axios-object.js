@@ -159,19 +159,16 @@ $(document).ready(function () {
       } else {
         data.metros = []
       }
-      // data.metros = $("select[name='metros[]']", this).length > 0 ? $("select[name='metros[]']", this).map(function () { return this.value}) : []
       if ($("input[name='metros_color[]']", this).length > 0) {
         data.metros_color = $("input[name='metros_color[]']", this).map(function () { return this.value}).get()
       } else {
         data.metros_color = []
       }
-      // data.metros_colors = $("input[name='metros_color[]']", this).length > 0 ? $("input[name='metros_color[]']", this).map(function () { return this.value}) : []
       if ($("input[name='metros_time[]']", this).length > 0) {
         data.metros_time = $("input[name='metros_time[]']", this).map(function () { return this.value}).get()
       } else {
         data.metros_time = []
       }
-      // data.metros_time = $("input[name='metros_time[]']", this).length > 0 ? $("input[name='metros_time[]']", this).map(function () { return this.value}) : []
 
       console.log(data)
       axios.post('/lk/object/update', {
