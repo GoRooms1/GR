@@ -90,7 +90,7 @@
               <a href="{{ route('admin.settings.index') }}" class="nav-link">Настройки</a>
             </li>
           </ul>
-      @endauth
+        @endauth
       <!-- Right Side Of Navbar -->
         <ul class="navbar-nav ml-auto">
           <!-- Authentication Links -->
@@ -135,7 +135,7 @@
       <div class="container">
         <div class="row">
           @foreach ($errors->all() as $error)
-            <div class="col-md-12">
+            <div class="col-md-12 my-2">
               <div class="alert alert-danger alert-dismissible">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>{{ $error }}</strong>
@@ -146,6 +146,22 @@
       </div>
     @endif
   </section>
+
+  <section class="errors">
+    @if(session('success'))
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 my-2">
+            <div class="alert alert-success alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>{{session('success')}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
+  </section>
+
   <main class="py-4">
     @yield('content')
   </main>
