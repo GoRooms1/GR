@@ -13,6 +13,7 @@ use App\Models\Cost;
 use App\Models\Hotel;
 use App\Helpers\Json;
 use App\Models\CostType;
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 use App\Models\AttributeCategory;
 use Illuminate\Http\JsonResponse;
@@ -22,15 +23,21 @@ use App\Http\Requests\LK\RoomRequest;
 class RoomController extends Controller
 {
 
-  public function edit (int $id)
+  public function edit(int $id)
   {
     $hotel = Hotel::findOrFail($id);
     $rooms = $hotel->rooms;
 
     $costTypes = CostType::all();
+    $attributes_id = Attribute::where('model', Room::class)
+      ->orWhereNull('model')->pluck('id');
     $attribute_categories = AttributeCategory::with(['attributes' => function ($q) {
       $q->whereModel(Room::class)->get();
-    }])->get();
+    }])
+      ->whereHas('attributes', function ($q) use ($attributes_id) {
+        $q->whereIn('id', $attributes_id);
+      })
+      ->get();
 
     if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
       return view('moderator.room.edit-rooms', compact('rooms', 'hotel', 'costTypes', 'attribute_categories'));
@@ -47,7 +54,7 @@ class RoomController extends Controller
     return redirect()->route('index');
   }
 
-  public function update (RoomRequest $request): JsonResponse
+  public function update(RoomRequest $request): JsonResponse
   {
 
     $hotel = Hotel::whereHas('rooms', function ($q) use ($request) {
@@ -83,7 +90,7 @@ class RoomController extends Controller
    *
    * @return Room
    */
-  private function saveDataTypeRoom ($data, Room $room): Room
+  private function saveDataTypeRoom($data, Room $room): Room
   {
     $room->name = $data['name'];
     $room->order = $data['order'];
@@ -97,7 +104,7 @@ class RoomController extends Controller
    *
    * @throws Exception
    */
-  public function delete (int $id): JsonResponse
+  public function delete(int $id): JsonResponse
   {
     $room = Room::findOrFail($id);
     $status = $room->delete();
@@ -113,7 +120,7 @@ class RoomController extends Controller
    *
    * @return JsonResponse
    */
-  public function getAttributes (int $id): JsonResponse
+  public function getAttributes(int $id): JsonResponse
   {
 
     $room = Room::findOrFail($id);
@@ -124,15 +131,16 @@ class RoomController extends Controller
   /**
    * Save checked attributes in room
    *
-   * @param int $id
+   * @param int     $id
    * @param Request $request
+   *
    * @return JsonResponse
    */
-  public function putAttributes (int $id, Request $request): JsonResponse
+  public function putAttributes(int $id, Request $request): JsonResponse
   {
     $request->validate([
       'ids' => 'required|array',
-      'ids.*' => 'required|exists:attributes,id'
+      'ids.*' => 'required|exists:attributes,id',
     ]);
 
     $room = Room::findOrFail($id);
@@ -148,7 +156,7 @@ class RoomController extends Controller
    *
    * @return JsonResponse
    */
-  public function published (int $id): JsonResponse
+  public function published(int $id): JsonResponse
   {
     $room = Room::find($id);
     $room->update(['moderate' => false]);

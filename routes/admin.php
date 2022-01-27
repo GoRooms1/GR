@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PeriodController;
-use App\Http\Controllers\Admin\InstructionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +16,10 @@ Route::resource('rooms', 'RoomController', [
 ]);
 Route::get('/rooms/create/{hotel}', 'RoomController@create')->name('rooms.create');
 
-Route::get('/attributes/{category}', 'AttributeController@index')
-  ->name('attributes.index')
-  ->where('category', '(room|hotel)');
-Route::resource('attributes', 'AttributeController', [
-  'except' => ['index'],
-]);
+Route::resource('attributes', 'AttributeController')->except(['show']);
+
+Route::resource('attribute_categories', 'AttributeCategoriesController');
+
 Route::resource('hotels/{hotel?}/categories', 'CategoryController', [
   'except' => ['index'],
 ]);
