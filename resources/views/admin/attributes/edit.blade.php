@@ -9,7 +9,7 @@
             <div class="col-8">
                 @include('admin.attributes.parts._form')
                 <button class="btn btn-success">Сохранить</button>
-                <a href="{{ route('admin.hotels.index') }}" class="btn btn-warning">Отмена</a>
+                <a href="{{ route('admin.attributes.index') }}" class="btn btn-warning">Отмена</a>
             </div>
             <div class="col-4">
             </div>

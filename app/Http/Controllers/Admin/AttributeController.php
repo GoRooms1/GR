@@ -6,6 +6,7 @@ use App\Models\Attribute;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\AttributeCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\AttributeRequest;
@@ -17,34 +18,54 @@ class AttributeController extends Controller
    *
    * @return View
    */
-  public function index(): View
+  public function index(Request $request): View
   {
-    $attributes = Attribute::all();
-    return view('admin.attributes.index', compact('attributes'));
+
+    $attributes = Attribute::query();
+
+    if ($request->get('hotel', null)) {
+      $attributes = $attributes->forHotels();
+    }else if ($request->get('room', null)) {
+      $attributes = $attributes->forRooms();
+    }
+
+    if ($request->get('category', null)) {
+      $attributes = $attributes->whereHas('relationCategory', function ($q) use ($request) {
+        $q->where('id', $request->get('category'));
+      });
+    }
+
+    $attributes = $attributes->get();
+
+    $categories = AttributeCategory::all();
+    return view('admin.attributes.index', compact('attributes', 'categories'));
   }
 
   /**
    * Show the form for creating a new resource.
    *
-   * @return Response
+   * @return View
    */
   public function create(): View
   {
-    return view('admin.attributes.create');
+    $categories = AttributeCategory::all();
+    return view('admin.attributes.create', compact('categories'));
   }
 
   /**
    * Store a newly created resource in storage.
    *
-   * @param Request $request
+   * @param AttributeRequest $request
    *
-   * @return Response
+   * @return RedirectResponse
    */
   public function store(AttributeRequest $request): RedirectResponse
   {
-    $validated = $request->validated();
-    $attribute = Attribute::create($validated);
-    return redirect()->route('admin.attributes.index', $attribute->category)->with('success', true);
+//    dd($request->all());
+    $attribute = new Attribute($request->all());
+    $attribute->relationCategory()->associate($request->get('category'));
+    $attribute->save();
+    return redirect()->route('admin.attributes.index')->with('success', 'Атрибут "' . $attribute->name . '" успешно создан');
   }
 
   /**
@@ -64,27 +85,28 @@ class AttributeController extends Controller
    *
    * @param Attribute $attribute
    *
-   * @return Response
+   * @return View
    */
   public function edit(Attribute $attribute): View
   {
-    return view('admin.attributes.edit', compact('attribute'));
+    $categories = AttributeCategory::all();
+    return view('admin.attributes.edit', compact('attribute', 'categories'));
   }
 
   /**
    * Update the specified resource in storage.
    *
-   * @param Request   $request
-   * @param Attribute $attribute
+   * @param AttributeRequest $request
+   * @param Attribute        $attribute
    *
-   * @return Response
+   * @return RedirectResponse
    */
   public function update(AttributeRequest $request, Attribute $attribute): RedirectResponse
   {
-    $validated = $request->validated();
-    $attribute->fill($validated);
+    $attribute->update($request->all());
+    $attribute->relationCategory()->associate($request->get('category'));
     $attribute->save();
-    return redirect()->route('admin.attributes.index', $attribute->category);
+    return redirect()->route('admin.attributes.index')->with('success', 'Атрибут "' . $attribute->name . '" успешно обновлён');
   }
 
   /**
@@ -92,12 +114,11 @@ class AttributeController extends Controller
    *
    * @param Attribute $attribute
    *
-   * @return Response
+   * @return RedirectResponse
    */
   public function destroy(Attribute $attribute): RedirectResponse
   {
-    $category = $attribute->category;
     $attribute->delete();
-    return redirect()->route('admin.attributes.index', $category);
+    return redirect()->back()->with('success', 'Утрибут успешно удалён');
   }
 }

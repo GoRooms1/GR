@@ -62,6 +62,9 @@
                 <a class="dropdown-item" href="{{ route('admin.attribute_categories.index') }}">
                   Категории
                 </a>
+                <a class="dropdown-item" href="{{ route('admin.attributes.index') }}">
+                  Атрибуты
+                </a>
               </div>
             </li>
 

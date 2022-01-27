@@ -42,6 +42,8 @@ class AttributeCategory extends Model
     'description',
   ];
 
+  protected $table = 'attribute_categories';
+
   /**
    * Attributed for Hotel
    */
