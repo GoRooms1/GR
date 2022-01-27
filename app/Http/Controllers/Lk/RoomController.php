@@ -13,6 +13,7 @@ use App\Models\Cost;
 use App\Models\Hotel;
 use App\Models\CostType;
 use Illuminate\View\View;
+use App\Models\Attribute;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -45,9 +46,14 @@ class RoomController extends Controller
 
     $rooms = $hotel->rooms()->get()->sortBy('order');
     $costTypes = CostType::all();
+    $attributes_id = Attribute::where('model', Room::class)
+      ->orWhereNull('model')->pluck('id');
     $attribute_categories = AttributeCategory::with(['attributes' => function ($q) {
       $q->whereModel(Room::class)->get();
     }])
+      ->whereHas('attributes', function ($q) use ($attributes_id) {
+        $q->whereIn('id', $attributes_id);
+      })
       ->get();
     if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
       return view('lk.room.edit-rooms', compact('hotel', 'rooms', 'costTypes', 'attribute_categories'));
