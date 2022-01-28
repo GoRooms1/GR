@@ -206,6 +206,10 @@ $(document).ready(function () {
         allDisabledButton = false
         form6.find('button[type=submit]').prop("disabled", false)
       }
+
+      if (typeof changeCheckboxCallback === 'function') {
+        changeCheckboxCallback.call(this)
+      }
     }
     form6.find('input').keypress(form6Edit)
     form6.find('input').change(form6Edit)
