@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+    @php($created = true)
     <div class="container">
         <div class="h2">Создание атрибута</div>
         <form class="row" action="{{ route('admin.attributes.store') }}" method="POST" enctype="multipart/form-data">

@@ -71,7 +71,6 @@ class ObjectController extends Controller
   {
     $hotel = Hotel::findOrFail($id);
     $type = $request->get('type_update');
-
     if ($hotel) {
       if ($type === 'phone' || $type === 'description') {
 

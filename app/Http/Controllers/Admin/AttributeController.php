@@ -25,7 +25,7 @@ class AttributeController extends Controller
 
     if ($request->get('hotel', null)) {
       $attributes = $attributes->forHotels();
-    }else if ($request->get('room', null)) {
+    } else if ($request->get('room', null)) {
       $attributes = $attributes->forRooms();
     }
 
