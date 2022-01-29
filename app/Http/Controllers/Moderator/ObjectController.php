@@ -18,7 +18,7 @@ use App\Models\AttributeCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
-use App\Http\Requests\LK\ObjectUpdateRequest;
+use App\Http\Requests\Moderate\ObjectUpdateRequest;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Foundation\Application;
 use App\Notifications\NotificationPublishedHotel;
