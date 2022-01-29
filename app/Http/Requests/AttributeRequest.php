@@ -22,15 +22,20 @@ class AttributeRequest extends FormRequest
    *
    * @return array
    */
-  public function rules()
+  public function rules(): array
   {
-    $id = $this->get('id', false);
-    return [
+    $array = [
       'name' => ['required', 'string', 'max:255'],
       'description' => ['nullable', 'string'],
       'in_filter' => ['required', 'boolean'],
-      'model' => ['required', 'in:' . implode(',', array_keys(Attribute::MODELS_TRANSLATE))],
-      'category' => ['required', 'exists:attribute_categories,id']
+      'category' => ['required', 'exists:attribute_categories,id'],
     ];
+
+    if ($this->method() === 'PUT') {
+      return $array;
+    }
+
+    $array['model'] = ['required', 'in:' . implode(',', array_keys(Attribute::MODELS_TRANSLATE))];
+    return $array;
   }
 }
