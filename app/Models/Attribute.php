@@ -41,10 +41,11 @@ class Attribute extends Model
 {
   use CreatedAtOrdered;
 
-  public const MODELS = [
+  public const MODELS_TRANSLATE = [
     Hotel::class => 'Отели',
     Room::class => 'Номера',
   ];
+
   protected $fillable = [
     'name',
     'description',
@@ -82,5 +83,10 @@ class Attribute extends Model
   public function getModelNameAttribute()
   {
     return $this->getAttributes()['model'];
+  }
+
+  public function relationCategory ()
+  {
+    return $this->belongsTo(AttributeCategory::class, 'attribute_category_id', 'id');
   }
 }

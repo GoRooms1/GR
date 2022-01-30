@@ -5,7 +5,7 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-namespace App\Http\Requests\LK;
+namespace App\Http\Requests\Moderate;
 
 use App\Models\Metro;
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,6 +22,15 @@ class ObjectUpdateRequest extends FormRequest
     return true;
   }
 
+  protected function prepareForValidation(): void
+  {
+    if ($this->exists('attr')) {
+      $this->merge([
+        'attrs_id' => array_keys($this->get('attr'))
+      ]);
+    }
+  }
+
 
   /**
    * Get the validation rules that apply to the request.
@@ -36,7 +45,7 @@ class ObjectUpdateRequest extends FormRequest
       'phone_2' => ['sometimes', 'nullable', 'string'],
       'description' => ['sometimes', 'nullable', 'string'],
       'attr' => ['sometimes', 'array'],
-      'attr.*' => ['sometimes', 'required', 'exists:attributes,id'],
+      'attrs_id' => ['sometimes', 'required', 'exists:attributes,id'],
       'comment' => ['sometimes', 'nullable', 'string'],
       'email' => ['sometimes', 'nullable', 'email'],
       'metros' => ['sometimes', 'min:0', 'array'],

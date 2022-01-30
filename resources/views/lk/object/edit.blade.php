@@ -770,15 +770,14 @@
 
     });
 
-
-    $("input[name*='attr'][type='checkbox']").on( "change", function() {
-      console.log(2);
-      if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
+    function changeCheckboxCallback() {
+      console.log($("input[name*='attr'][type='checkbox']:checked").length);
+      if ($("input[name*='attr'][type='checkbox']:checked").length > 9)
       {
         this.checked=false;
       } else if ($("input[name*='attr'][type='checkbox']:checked").length < 3) {
         this.checked = true;
       }
-    });
+    }
   </script>
 @endsection

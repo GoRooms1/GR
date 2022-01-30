@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Hotel;
 use App\Events\FormSend;
 use App\Models\Category;
+use App\Models\Attribute;
 use App\Observers\HotelObserver;
 use App\Observers\CategoryObserver;
 use App\Listeners\FormSendMailEvent;
@@ -12,6 +13,7 @@ use App\Models\Image;
 use App\Models\Room;
 use App\Observers\ImageObserver;
 use App\Observers\RoomObserver;
+use App\Observers\AttributeObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -44,5 +46,6 @@ class EventServiceProvider extends ServiceProvider
     Room::observe(RoomObserver::class);
     Category::observe(CategoryObserver::class);
     Hotel::observe(HotelObserver::class);
+    Attribute::observe(AttributeObserver::class);
   }
 }

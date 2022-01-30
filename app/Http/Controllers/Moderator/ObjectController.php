@@ -18,7 +18,7 @@ use App\Models\AttributeCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
-use App\Http\Requests\LK\ObjectUpdateRequest;
+use App\Http\Requests\Moderate\ObjectUpdateRequest;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Foundation\Application;
 use App\Notifications\NotificationPublishedHotel;
@@ -44,11 +44,15 @@ class ObjectController extends Controller
 
       $attributes = Attribute::where('model', Hotel::class)
         ->orWhereNull('model')->get();
+      $attributes_id = Attribute::where('model', Hotel::class)
+        ->orWhereNull('model')->pluck('id');
       $hotelTypes = HotelType::orderBy('sort')
         ->get();
       $attributeCategories = AttributeCategory::with(['attributes' => function ($q) {
         $q->whereModel(Hotel::class)->get();
-      }])
+      }])->whereHas('attributes', function ($q) use ($attributes_id) {
+        $q->whereIn('id', $attributes_id);
+      })
         ->get();
 
       return view('moderator.object.edit', compact('hotel', 'attributes', 'attributeCategories', 'hotelTypes'));
@@ -67,7 +71,6 @@ class ObjectController extends Controller
   {
     $hotel = Hotel::findOrFail($id);
     $type = $request->get('type_update');
-
     if ($hotel) {
       if ($type === 'phone' || $type === 'description') {
 
