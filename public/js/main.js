@@ -219,6 +219,7 @@ $(document).ready(function () {
         })
 
         controls.forEach((control, index) => {
+            console.log(control)
             $(control).click(function () {
                 if ($(control).find('input').is(":checked")) {
                     index = (index === 3) ? 2 : index;
@@ -465,6 +466,7 @@ $(document).ready(function () {
         noResultsText: '',
         minLength: 0
     })
+
 
 });
 
@@ -780,4 +782,27 @@ function changeForm() {
     } else {
         element.fireEvent("onchange");
     }
+}
+
+function search_reset() {
+    $("#js-advanced-search textarea, #js-advanced-search input[type='text']").val("");
+    $("#js-advanced-search input, #js-advanced-search textarea").trigger("refresh");
+
+    $(".advanced-search-details input[type='checkbox']").prop("checked", false);
+    // $(".advanced-search-prices input[type='checkbox']").trigger("refresh");
+
+    let first_inputs = $('.advanced-search-prices-list').first()
+    let checkedPeriod = $(first_inputs).find('input[type="checkbox"]:checked').first()
+    let advanced_search = $(checkedPeriod).parent('.advanced-search-prices-item').get()
+    $(advanced_search).find('label').click()
+    $(advanced_search).click()
+    // $(".advanced-search-prices input[type='checkbox']").prop("checked", false);
+
+    // advanced-search-prices-item
+    // $(first_inputs).find('label[for="' + $(checkedPeriod).attr('id') +'"]').first().trigger('click')
+
+    $("#js-advanced-search select").prop("selectedIndex", 0);
+    $("#js-advanced-search select").trigger("refresh");
+
+    // $("label[for='advanced-search-prices-1']").trigger("click");
 }
