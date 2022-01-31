@@ -714,12 +714,22 @@
         .then(response => response.json())
         .then(response => {
           if (response.success) {
-            form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать (' + response.payload.count + ')';
+            form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать (' + response.payload.count + ') ' +
+              (response.payload.is_room === true ? num_word(response.payload.count, ['номер', 'номера', 'номеров']) : num_word(response.payload.count, ['отель', 'отеля', 'отелей']));
           }
         });
     });
   }
   let options = document.getElementById('advanced-search-location-type');
+
+  function num_word(value, words){
+    value = Math.abs(value) % 100;
+    var num = value % 10;
+    if(value > 10 && value < 20) return words[2];
+    if(num > 1 && num < 5) return words[1];
+    if(num == 1) return words[0];
+    return words[2];
+  }
 </script>
 @if (config('app.env') === 'production')
   <!-- Yandex.Metrika counter -->
@@ -756,18 +766,20 @@
 @endif
 <script>
   $("input:checkbox.checkbox").on('click', function() {
-    // in the handler, 'this' refers to the box clicked on
-    var $box = $(this);
-    if ($box.is(":checked")) {
-      // the name of the box is retrieved using the .attr() method
-      // as it is assumed and expected to be immutable
-      var group = "input:checkbox[name='" + $box.attr("name") + "']";
-      // the checked state of the group/box on the other hand will change
-      // and the current value is retrieved using .prop() method
-      $(group).prop("checked", false);
-      $box.prop("checked", true);
-    } else {
-      $box.prop("checked", false);
+    if($(this).closest(".advanced-search-details").length == 0) {
+      // in the handler, 'this' refers to the box clicked on
+      var $box = $(this);
+      if ($box.is(":checked")) {
+        // the name of the box is retrieved using the .attr() method
+        // as it is assumed and expected to be immutable
+        var group = "input:checkbox[name='" + $box.attr("name") + "']";
+        // the checked state of the group/box on the other hand will change
+        // and the current value is retrieved using .prop() method
+        $(group).prop("checked", false);
+        $box.prop("checked", true);
+      } else {
+        $box.prop("checked", false);
+      }
     }
   });
 </script>
