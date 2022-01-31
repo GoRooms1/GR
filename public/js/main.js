@@ -804,5 +804,8 @@ function search_reset() {
     $("#js-advanced-search select").prop("selectedIndex", 0);
     $("#js-advanced-search select").trigger("refresh");
 
+    let form = document.getElementById('js-advanced-search');
+    form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать'
+
     // $("label[for='advanced-search-prices-1']").trigger("click");
 }
