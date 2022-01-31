@@ -714,12 +714,22 @@
         .then(response => response.json())
         .then(response => {
           if (response.success) {
-            form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать (' + response.payload.count + ') ' + (response.payload.is_room == true ? 'номеров' : 'отелей');
+            form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать (' + response.payload.count + ') ' +
+              (response.payload.is_room === true ? num_word(response.payload.count, ['номер', 'номера', 'номеров']) : num_word(response.payload.count, ['отель', 'отеля', 'отелей']));
           }
         });
     });
   }
   let options = document.getElementById('advanced-search-location-type');
+
+  function num_word(value, words){
+    value = Math.abs(value) % 100;
+    var num = value % 10;
+    if(value > 10 && value < 20) return words[2];
+    if(num > 1 && num < 5) return words[1];
+    if(num == 1) return words[0];
+    return words[2];
+  }
 </script>
 @if (config('app.env') === 'production')
   <!-- Yandex.Metrika counter -->
