@@ -15,6 +15,8 @@
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
   <link rel="canonical" href="{{ url(Request::url()) }}"/>
   <link rel="stylesheet" href="{{ asset('css/metro.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ asset('css/filter-select.css') }}">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -670,6 +672,7 @@
     </div>
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js" integrity="sha512-/Q6t3CASm04EliI1QyIDAA/nDo9R8FQ/BULoUFyN4n/BDdyIxeH7u++Z+eobdmr11gG5D/6nPFyDlnisDwhpYA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="{{ asset('js/bootstrap-modal-tabs-collapse-transition.min.js') }}" defer></script>
 <script src="{{ asset('js/jquery.formstyler.min.js') }}" defer></script>
@@ -731,6 +734,10 @@
     return words[2];
   }
 </script>
+{{--<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>--}}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ru.js"></script>
+<script src="{{ asset('js/user/filter-select.js') }}"></script>
 @if (config('app.env') === 'production')
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">

@@ -152,28 +152,6 @@ $(document).ready(function () {
         return {query:q, urlArray:urlArr};
     }
 
-    const changeSelect = function () {
-        $('#advanced-search-location-district, #advanced-search-location-region, #advanced-search-location-type, #advanced-search-location-metro').on('change', changeForm)
-    }
-
-
-    if ($('#advanced-search-location-city').length > 0) {
-        const url = decodeURI(window.location.href);
-        let qArr = queryData().query;
-        let urlArr = queryData().urlArray;
-        const searchFilters = new SearchFilters();
-        searchFilters.init(qArr, changeSelect);
-
-        $('#js-advanced-search').on('reset', function () {
-            searchFilters.reset();
-            $('#search-form').trigger('reset');
-            if(urlArr.length > 0) {
-                window.location = urlArr[0] + '?';
-            } else {
-                window.location = url;
-            }
-        });
-    }
     let flagCost = true;
     function selectPricesColumns(elem) {
 
@@ -557,222 +535,6 @@ async function request(url, method, spinner) {
     }
 }
 
-function SearchFilters() {
-    this.loading = true;
-    this.parent = $('.advanced-search-location-wrapper');
-    this.containers = {
-        city: {
-            input: $('#advanced-search-location-city'),
-            dataList: $('#advanced-search-location-city-list')
-        },
-        area: {
-            select: $('#advanced-search-location-district')
-        },
-        district: {
-            select: $('#advanced-search-location-region'),
-        },
-        metro: {
-            select: $('#advanced-search-location-metro'),
-        },
-        type: {
-            select: $('#advanced-search-location-type'),
-        }
-    };
-
-    this.init = async function (dataUrl=[], fn) {
-        this.clearDataLists();
-        this.removeSelectArrow(this.containers.area.select);
-        this.containers['city'].input.attr('disabled', this.loading);
-        const result = await this.loadCities();
-        if (result) {
-            this.loading = false;
-            this.containers['city'].input.attr('disabled', this.loading);
-        }
-        const initValue = this.containers.city.input.val();
-        if (initValue) {
-            await this.loadDataForCity(initValue,dataUrl);
-
-            const selectMetro = this.containers.metro.select;
-            const selectArea = this.containers.area.select;
-            const selectType = this.containers.type.select;
-            const selectDistrict = this.containers.district.select;
-            let area = '';
-            let district = '';
-            let metro = '';
-            let type = '';
-            if(dataUrl.length > 0) {
-                for(const item of dataUrl) {
-                    if(item['name'] === 'address[city_area]') {
-                        area = item['value'].replace('+', ' ');
-                    }
-                    if(item['name'] === 'address[city_district]') {
-                        district = item['value'].replace('+', ' ');
-                    }
-                    if(item['name'] === 'metro') {
-                        metro = item['value'].replace('+', ' ');
-                    }
-                    if(item['name'] === 'hotel_type') {
-                        type = item['value'].replace('+', ' ');
-                    }
-                }
-
-                await selectMetro.find(`option[value="${metro}"]`).prop("selected", true).trigger('change').trigger('refresh');
-                await selectType.find(`option[value="${type}"]`).prop("selected", true).trigger('change').trigger('refresh');
-                await selectArea.find(`option[value="${area}"]`).prop("selected", true).trigger('change').trigger('refresh');
-                const districtInit = () => {
-                    if(selectDistrict.find(`option[value="${district}"]`)) {
-                        selectDistrict.find(`option[value="${district}"]`).prop("selected", true).trigger('change').trigger('refresh');
-                    }
-                }
-                await districtInit();
-                await changeForm();
-                await fn();
-            } else {
-                fn()
-            }
-        }
-    };
-
-    this.reset = function () {
-        const selectArea = this.containers.area.select;
-        const selectDistrict = this.containers.district.select;
-        const selectMetro = this.containers.metro.select;
-        const selectType = this.containers.type.select;
-
-        this.resetSelect(selectArea);
-        this.resetSelect(selectDistrict);
-        this.resetSelect(selectMetro);
-        this.resetSelect(selectType);
-    }
-
-    this.loadDataFrom = async function (url) {
-        const spinner = createSpinner(this.parent);
-        const response = await request(url, 'GET', spinner);
-        if (!response) return false;
-        const result = await response.json();
-        return result || false;
-    }
-
-    this.loadCities = async function () {
-        const data = await this.loadDataFrom('/api/address/helper');
-        if (!data) return;
-        const uniqueCities = new Set(data.payload.addresses.map(address => address.city))
-        const cities = Array.from(uniqueCities);
-        cities.forEach(city => this.addItemToDataList(this.containers.city.dataList, city));
-        this.containers.city.input.on('change', async () => {
-            const value = this.containers.city.input.val();
-            await this.loadDataForCity(value);
-        });
-        return true;
-    }
-
-    this.loadDataForCity = async function (value) {
-        const data = await this.loadDataFrom(`/api/address/helper?city=${value}`);
-        if (!data) return;
-        this.loadArea(data);
-        this.loadMetro(data.payload.metros || []);
-    }
-
-    this.loadArea = async function (data) {
-        const select = this.containers.area.select;
-        this.clearSelect(select);
-        let uniqueArea = new Set(
-            data.payload.addresses
-                .filter(address => address.city_area)
-                .map(address => address.city_area)
-        );
-        const areas = Array.from(uniqueArea)
-            .map(area => {
-                const shortName = (data.payload.addresses.find(address => address.city_area === area)).city_area_short
-                return {longName: area, shortName}
-            });
-        this.fillSelect(areas, select, 'Округ');
-        this.changeArea(select, data);
-    }
-
-    this.changeArea = function (select,data) {
-        select.on('change', async () => {
-            const value = select.val();
-            const selectDistrict = this.containers.district.select
-            selectDistrict.empty();
-            selectDistrict.append(`<option value=""></option>`);
-            this.loadDistrict(data, value);
-            if (value == '') {
-                selectDistrict.closest('.form-group').slideUp('500')
-            } else {
-                selectDistrict.closest('.form-group').slideDown('500')
-            }
-
-        });
-    }
-
-    this.loadDistrict = async function (data, area) {
-        const select = this.containers.district.select;
-
-        const uniqueDistrict = new Set(
-            data.payload.addresses
-                .filter(address => address.city_district && address.city_area === area)
-                .map(address => address.city_district)
-        );
-        const districts = Array.from(uniqueDistrict);
-        districts.forEach(district => {
-            this.addOptionToSelect(select, district);
-        });
-        select.trigger('refresh');
-    }
-
-    this.loadMetro = function (metros) {
-        const select = this.containers.metro.select;
-        metros.forEach(station => this.addOptionToSelect(select, station));
-        select.trigger('refresh');
-    }
-
-    this.addItemToDataList = function (dataList, item) {
-        dataList.append(`<option value="${item}">`);
-    }
-
-    this.addItemToSelect = function (select, item) {
-        select.append(`<option value="${item.longName}">${item.shortName}</option>`);
-    }
-
-    this.addOptionToSelect = function (select, item) {
-        select.append(`<option value="${item}">${item}</option>`);
-    }
-
-    this.clearDataLists = function (dataLists) {
-        Object.keys(this.containers)
-            .filter(key => this.containers[key].dataList)
-            .filter(key => !dataLists ? key : dataLists.includes(key))
-            .forEach(key => this.containers[key].dataList.empty());
-    }
-
-    this.clearSelect = function (select) {
-        select.styler('destroy');
-        select.empty();
-    }
-
-    this.resetSelect = function (select) {
-        select.prop('selectedIndex',0)
-        select.trigger('refresh');
-    }
-
-    this.fillSelect = function (data, select, placeholder) {
-        if (!data.length) {
-            this.addItemToSelect(select, {shortName: '', longName: ''});
-            this.removeSelectArrow(select);
-            return;
-        }
-        this.addItemToSelect(select, {shortName: placeholder, longName: ''});
-        data.forEach(area => this.addItemToSelect(select, area));
-        select.styler();
-    }
-
-    this.removeSelectArrow = function (select) {
-        select.styler();
-        select.parent().find('.jq-selectbox__trigger-arrow').remove();
-    }
-}
-
 function changeForm() {
     const element = document.getElementById('js-advanced-search');
     if ("createEvent" in document) {
@@ -791,15 +553,12 @@ function search_reset() {
     $(".advanced-search-details input[type='checkbox']").prop("checked", false);
     // $(".advanced-search-prices input[type='checkbox']").trigger("refresh");
 
+    // Сброс данных цены
     let first_inputs = $('.advanced-search-prices-list').first()
     let checkedPeriod = $(first_inputs).find('input[type="checkbox"]:checked').first()
     let advanced_search = $(checkedPeriod).parent('.advanced-search-prices-item').get()
     $(advanced_search).find('label').click()
     $(advanced_search).click()
-    // $(".advanced-search-prices input[type='checkbox']").prop("checked", false);
-
-    // advanced-search-prices-item
-    // $(first_inputs).find('label[for="' + $(checkedPeriod).attr('id') +'"]').first().trigger('click')
 
     $("#js-advanced-search select").prop("selectedIndex", 0);
     $("#js-advanced-search select").trigger("refresh");

@@ -31,6 +31,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|AttributeCategory whereName($value)
  * @method static Builder|AttributeCategory whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property string|null $description
+ * @property-read mixed $attr_hotel
+ * @property-read mixed $attr_room
+ * @method static Builder|AttributeCategory whereDescription($value)
  */
 class AttributeCategory extends Model
 {

@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Metro whereName($value)
  * @method static Builder|Metro whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property bool $custom
+ * @method static Builder|Metro whereCustom($value)
  */
 class Metro extends Model
 {

@@ -28,3 +28,11 @@ Route::post('room/order/up/{id}', 'Lk\OrderRoomController@upOrder');
 Route::post('room/order/down/{id}', 'Lk\OrderRoomController@downOrder');
 
 Route::post('images/ordered', [ImageController::class, 'ordered']);
+
+Route::prefix('/filter')->name('filter.')->group(function () {
+  Route::get('cities', 'Api\FilterController@cities')->name('cities');
+  Route::get('city-area', 'Api\FilterController@city_area')->name('city_area');
+  Route::get('count-city-area', 'Api\FilterController@count_city_area')->name('count_city_area');
+  Route::get('district', 'Api\FilterController@district')->name('district');
+  Route::get('metro', 'Api\FilterController@metro')->name('metro');
+});
