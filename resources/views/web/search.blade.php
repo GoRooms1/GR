@@ -21,17 +21,18 @@
 {{--    </div>--}}
 {{--  @endif--}}
 
-{{--  <section class="section">--}}
-{{--    <div class="container">--}}
+  <section class="section">
+    <div class="container">
 {{--      @if ($with_map)--}}
 {{--        <h1 class="section-title">{{ @$pageDescription->title ?? $title }}</h1>--}}
 {{--        <div class="map-search-wrapper">--}}
 {{--          <div id="map" style="width: 100%; height: 600px;"></div>--}}
 {{--        </div>--}}
 {{--      @else--}}
-{{--        <div class="section-header">--}}
+        <div class="section-header">
 {{--          <h1 class="section-title">{!! @$pageDescription->title ?? $title !!}</h1>--}}
-{{--          --}}{{--<form id="search-filter" class="search-filter">--}}
+          <h1 class="section-title">Lorem ipsum dolor sit.</h1>
+{{--          <form id="search-filter" class="search-filter">--}}
 {{--              <div class="search-filter-item search-filter-sort">--}}
 {{--                  <button class="search-filter-price-btn" type="button"></button>--}}
 {{--                  <button class="search-filter-price-btn" type="button"></button>--}}
@@ -67,11 +68,74 @@
 {{--                      <label for="hotel-rating-9" class="hotel-rating-label">9+</label>--}}
 {{--                  </div>--}}
 {{--              </div>--}}
-{{--          </form>--}}{{----}}
-{{--        </div>--}}
+{{--          </form>--}}
+        </div>
 {{--      @endif--}}
-{{--    </div>--}}
-{{--  </section>--}}
+    </div>
+  </section>
+
+  <section class="section section-pt-none">
+    @if($moderate ?? false)
+      <div class="container">
+        @foreach ($hotels as $hotel)
+          <div class="row row-sm position-relative">
+            <div class="col-sm-6 col-lg-3 col-xxl-2" style="position: relative">
+              <div class="position-sticky" style="top: 20px; margin-bottom: 20px;position: sticky;">
+                @include('hotel._popular', ['moderate' => true])
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-9 col-xxl-10">
+              <div class="row">
+                @foreach ($hotel->rooms()->where('moderate', true)->get() as $room)
+                 <div class="col-12">
+                   @include('room._hot')
+                 </div>
+                @endforeach
+              </div>
+            </div>
+          </div>
+        @endforeach
+      </div>
+    @elseif($rooms)
+      <div class="container">
+        <div class="h2 section-title orange">Номера</div>
+        <div class="items-container">
+          @foreach ($rooms as $room)
+            @include('room._hot')
+          @endforeach
+        </div>
+      </div>
+    @else
+      <div class="container">
+{{--        @if($with_map)--}}
+{{--          <div class="h2 section-title orange">Популярные отели</div>--}}
+{{--        @endif--}}
+        <div class="row row-sm items-container">
+          @foreach ($hotels as $hotel)
+{{--            @continue(is_null($hotel) || ($with_map && !$hotel->is_popular))--}}
+            @include('hotel._popular')
+          @endforeach
+        </div>
+      </div>
+    @endif
+
+    @if ($hotels)
+      <div class="show-more">
+        <p class="show-more-counter">Загружено: {{ $hotels->count() }} ({{ $hotels->total() }})</p>
+        @if($hotels->total() > $hotels->count())
+          <button id="rooms-address-load-more" class="show-more-btn" type="button">Загрузить еще</button>
+        @endif
+      </div>
+    @else
+      <div class="show-more">
+        <p class="show-more-counter">Загружено: {{ $rooms->count() }} ({{ $rooms->total()}})</p>
+        @if($rooms->total() > $rooms->count())
+          <button id="rooms-address-load-more" class="show-more-btn" type="button">Загрузить еще</button>
+        @endif
+      </div>
+    @endif
+
+  </section>
 
 {{--  <section class="section section-pt-none">--}}
 {{--    @if($moderate ?? false)--}}
@@ -142,10 +206,10 @@
 @section('scripts')
   <script>
     $(function () {
-      let roomPageCount = 1;
+      let roomPageCount = {{ Request::get('page', 1) }};
       $('#rooms-address-load-more').click(async function (e) {
         roomPageCount++
-        await loadMore(e, `{{Request::url()}}?page=${roomPageCount}`);
+        await loadMore(e, `{{URL::full()}}&page=${roomPageCount}&api=1`, 16);
       });
     });
   </script>

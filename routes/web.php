@@ -27,9 +27,15 @@ Route::get('/rooms/{room}', 'RoomController@show')->name('rooms.show');
 Route::get('/blog', 'ArticleController@index')->name('articles.index');
 Route::get('/blog/{article}', 'ArticleController@show')->name('articles.show');
 Route::post('/form', 'FormController@store')->name('forms.store');
-Route::get('/search', 'SearchController@index')->name('search');
-Route::get('/search_map', 'SearchController')->name('search.map');
+
+Route::get('/search', 'SearchController_V2@index')->name('search');
+
+Route::get('/search_map_old', 'SearchController')->name('search.map1');
+
+Route::get('/search_map', 'SearchController_V2@map')->name('search.map');
+
 Route::get('/address/{city}/{area?}/{district?}/{street?}', 'SearchController@address')->name('search.address');
+
 Route::get('/image/{path}', 'ImageController@show')->where('path', '.*');
 Route::middleware('noDebugbar')->get('sitemap.xml', 'SiteMapController@index');
 Route::get('/contacts', 'PageController@show')->name('pages.show');

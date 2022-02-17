@@ -468,7 +468,7 @@ function js_hotel_card_slider_init(){
 
 let loading = false;
 
-async function loadMore(e, url, callback = null) {
+async function loadMore(e, url, length = null, callback = null) {
     if (loading) {
         return;
     }
@@ -479,18 +479,23 @@ async function loadMore(e, url, callback = null) {
     if (result) {
         const html = await result.text();
         $('.items-container').append(html);
-        updateCounter(html);
+        updateCounter(html, length);
     }
     loading = false;
     js_hotel_card_slider_init()
 
 }
 
-function updateCounter(html) {
+function updateCounter(html, length = null) {
     const counter = $('.show-more-counter');
     const countTotal = Number(counter.html().match(/\((.*)\)/).pop())
     if (!counter) return;
-    const requestCount = +getRequestItemsCount(html);
+    let requestCount;
+    if (length) {
+        requestCount = length
+    } else {
+        requestCount = +getRequestItemsCount(html);
+    }
     const currCount = +counter.html().match(/(\d+)/i)[0].trim();
     const currNum = Number(currCount + requestCount)
 
@@ -507,6 +512,7 @@ function getRequestItemsCount(html) {
     $(data).append(html);
     const length = data.children.length;
     data.remove();
+    console.log(length)
     return length;
 }
 

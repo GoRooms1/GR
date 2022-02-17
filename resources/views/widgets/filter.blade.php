@@ -1,4 +1,13 @@
-<form action="{{ route('search') }}" id="js-advanced-search" class="advanced-search" method="GET">
+@php
+  $name = Request::route()->getName();
+  if ($name !== 'search.map' && $name !== 'search') {
+    $route = route('search');
+  } else {
+    $route = URL::current();
+  }
+@endphp
+
+<form action="{{ $route }}" id="js-advanced-search" class="advanced-search" method="GET">
   <div id="js-advanced-search-in" class="advanced-search-in">
     <div class="container">
       <div class="search-form-group">

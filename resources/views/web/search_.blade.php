@@ -1,3 +1,11 @@
-@foreach ($rooms as $room)
+@if ($rooms)
+  @foreach ($rooms as $room)
     @include('room._hot')
-@endforeach
+  @endforeach
+@endif
+
+@if ($hotels)
+  @foreach ($hotels as $hotel)
+    @include('hotel._popular')
+  @endforeach
+@endif
