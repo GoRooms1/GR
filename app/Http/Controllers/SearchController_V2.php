@@ -21,7 +21,6 @@ class SearchController_V2 extends Controller
     $cost = $request->get('cost');
     $search_price = $request->get('search-price');
     $hot = $request->boolean('hot');
-    $with_map = false;
     $data = $this->filter($search,
       $attributes,
       $city,
@@ -32,12 +31,11 @@ class SearchController_V2 extends Controller
       $hot,
       $search_price,
       $cost,
-      $with_map
+      false
     );
 
     $hotels = $data->hotels;
     $rooms = $data->rooms;
-    $is_room = $data->is_room;
 
     if ($api = $request->boolean('api')) {
       return view('web.search_', compact('rooms', 'hotels'));
