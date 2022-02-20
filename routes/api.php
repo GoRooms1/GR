@@ -24,9 +24,11 @@ Route::get('/address/helper', 'Api\AddressController@helper');
 
 Route::get('/room-info/{id}', [RoomController::class, 'getRoomInfo']);
 
+// Для изменения порядка показа комнат в отеле
 Route::post('room/order/up/{id}', 'Lk\OrderRoomController@upOrder');
 Route::post('room/order/down/{id}', 'Lk\OrderRoomController@downOrder');
 
+// Для изменения порядка фотографий в комнате и отеле, ЛК
 Route::post('images/ordered', [ImageController::class, 'ordered']);
 
 Route::prefix('/filter')->name('filter.')->group(function () {
