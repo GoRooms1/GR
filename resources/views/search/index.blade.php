@@ -77,7 +77,11 @@
       let roomPageCount = {{ Request::get('page', 1) }};
       $('#rooms-address-load-more').click(async function (e) {
         roomPageCount++
-        await loadMore(e, `{{URL::full()}}&page=${roomPageCount}&api=1`, 16);
+        @if(Request::routeIs('search.address'))
+          await loadMore(e, `{{URL::full()}}?page=${roomPageCount}&api=1`, 16);
+        @else
+          await loadMore(e, `{{URL::full()}}&page=${roomPageCount}&api=1`, 16);
+        @endif
       });
     });
   </script>
