@@ -128,6 +128,8 @@ trait Filter
       } else {
         $hotels = $hotels->paginate(16);
       }
+
+//      dd($hotels);
     }
     else {
       $rooms = Room::query();

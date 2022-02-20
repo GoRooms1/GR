@@ -386,21 +386,36 @@ $(document).ready(function () {
     let hotelPageNumber = 1;
     $('#hotel-page-load-more').click(async function (e) {
         const hotelId = window.location.pathname.split('/')[2];
-        hotelPageNumber++
-        await loadMore(e, `/public/render/hotels/${hotelId}?page=${hotelPageNumber}`);
+        try {
+            hotelPageNumber++
+            await loadMore(e, `/public/render/hotels/${hotelId}?page=${hotelPageNumber}`);
+        } catch (e) {
+            hotelPageNumber--;
+            throw new Error(e);
+        }
     });
 
     let roomPageCount = 1;
     $('#rooms-load-more').click(async function (e) {
-        roomPageCount++
-        await loadMore(e, `/public/render/rooms?page=${roomPageCount}`);
+        try {
+            roomPageCount++
+            await loadMore(e, `/public/render/rooms?page=${roomPageCount}`);
+        } catch (e) {
+            roomPageCount--;
+            throw new Error(e);
+        }
     });
 
 
     let hotelPageCount = 1;
     $('#hotels-load-more').click(async function (e) {
-        hotelPageCount++
-        await loadMore(e, `/public/render/hotels?page=${hotelPageCount}`);
+        try {
+            hotelPageCount++
+            await loadMore(e, `/public/render/hotels?page=${hotelPageCount}`);
+        } catch (e) {
+            hotelPageNumber--
+            throw new Error(e)
+        }
     });
 
 
@@ -468,34 +483,34 @@ function js_hotel_card_slider_init(){
 
 let loading = false;
 
-async function loadMore(e, url, length = null, callback = null) {
+async function loadMore(e, url, callback = null) {
     if (loading) {
-        return;
+        throw new Error('Нет загрузки')
     }
     loading = true;
     const parent = e.target.closest('.show-more');
     const spinner = parent ? createSpinner(parent) : null;
-    const result = await request(url, 'GET', spinner);
-    if (result) {
-        const html = await result.text();
-        $('.items-container').append(html);
-        updateCounter(html, length);
+    try {
+        const result = await request(url, 'GET', spinner);
+        if (result) {
+            const html = await result.text();
+            $('.items-container').append(html);
+            updateCounter(html);
+        }
+        loading = false;
+        js_hotel_card_slider_init()
+    } catch (e) {
+        loading = false
+        throw new Error(e);
     }
-    loading = false;
-    js_hotel_card_slider_init()
-
 }
 
-function updateCounter(html, length = null) {
+function updateCounter(html) {
     const counter = $('.show-more-counter');
     const countTotal = Number(counter.html().match(/\((.*)\)/).pop())
     if (!counter) return;
-    let requestCount;
-    if (length) {
-        requestCount = length
-    } else {
-        requestCount = +getRequestItemsCount(html);
-    }
+    let requestCount = 0;
+    requestCount = +getRequestItemsCount(html);
     const currCount = +counter.html().match(/(\d+)/i)[0].trim();
     const currNum = Number(currCount + requestCount)
 
@@ -510,7 +525,10 @@ function updateCounter(html, length = null) {
 function getRequestItemsCount(html) {
     const data = document.createElement('div');
     $(data).append(html);
-    const length = data.children.length;
+    console.log(data);
+    const length = $(data).find('.card-wrapper').length
+    // const length = 0;
+    console.log('ТУТ ДЛИнА', length)
     data.remove();
     console.log(length)
     return length;
@@ -534,8 +552,7 @@ async function request(url, method, spinner) {
         }
         return response;
     } catch (err) {
-        
-        return false;
+        throw new Error('Ошибка загрузки')
     } finally {
         spinner ? spinner.remove() : null;
     }

@@ -74,14 +74,20 @@
 @section('scripts')
   <script>
     $(function () {
-      let roomPageCount = {{ Request::get('page', 1) }};
+      let roomPageCount = {{ Request::get('page', 1) + 1 }};
       $('#rooms-address-load-more').click(async function (e) {
-        roomPageCount++
-        @if(Request::routeIs('search.address'))
-          await loadMore(e, `{{URL::full()}}?page=${roomPageCount}&api=1`, 16);
-        @else
-          await loadMore(e, `{{URL::full()}}&page=${roomPageCount}&api=1`, 16);
-        @endif
+
+        try {
+          @if(Request::routeIs('search.address'))
+            await loadMore(e, `{{URL::full()}}?page=${roomPageCount}&api=1`, 16);
+          @else
+            await loadMore(e, "{!! Request::fullUrl() !!}" + "&page=" + roomPageCount + "&api=1", 16);
+          @endif
+
+          roomPageCount++
+        } catch (e) {
+          console.log('Error Vasya', e)
+        }
       });
     });
   </script>
