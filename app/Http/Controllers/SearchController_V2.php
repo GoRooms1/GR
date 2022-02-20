@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Traits\Filter;
 use Illuminate\Http\Request;
+use App\Traits\UrlDecodeFilter;
 
 class SearchController_V2 extends Controller
 {
   use Filter;
+  use UrlDecodeFilter;
 
   public function index (Request $request)
   {
@@ -78,6 +80,50 @@ class SearchController_V2 extends Controller
 
 
     return view('search.map', compact('hotels', 'hotels_popular'));
+  }
+
+  public function address (Request $request)
+  {
+    $url = $request->url();
+
+    $data = $this->decodeUrl($url);
+
+    $city = $data['city'];
+    $metro = $data['metro'];
+    $area = $data['area'];
+    $district = $data['district'];
+    $street = $data['street'];
+    $search_price = null;
+    $hot = false;
+    $cost = null;
+    $attributes = ['hotel' => [], 'room' => []];
+    $hotel_type = null;
+    $search = null;
+
+    $data = $this->filter($search,
+      $attributes,
+      $city,
+      $area,
+      $district,
+      $hotel_type,
+      $metro,
+      $hot,
+      $search_price,
+      $cost,
+      false
+    );
+
+    $hotels = $data->hotels;
+    $rooms = $data->rooms;
+
+    if ($api = $request->boolean('api')) {
+      return view('web.search_', compact('rooms', 'hotels'));
+    }
+
+    return view('search.index', compact(
+      'rooms',
+      'hotels'
+    ));
   }
 
 }

@@ -34,7 +34,7 @@ Route::get('/search_map_old', 'SearchController')->name('search.map1');
 
 Route::get('/search_map', 'SearchController_V2@map')->name('search.map');
 
-Route::get('/address/{city}/{area?}/{district?}/{street?}', 'SearchController@address')->name('search.address');
+Route::get('/address/{city}/{area?}/{district?}/{street?}', 'SearchController_V2@address')->name('search.address');
 
 Route::get('/image/{path}', 'ImageController@show')->where('path', '.*');
 Route::middleware('noDebugbar')->get('sitemap.xml', 'SiteMapController@index');
