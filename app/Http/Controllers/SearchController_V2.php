@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Filter;
+use App\Models\Attribute;
+use App\Models\HotelType;
 use Illuminate\Http\Request;
 use App\Traits\UrlDecodeFilter;
 
@@ -42,9 +44,30 @@ class SearchController_V2 extends Controller
     if ($api = $request->boolean('api')) {
       return view('web.search_', compact('rooms', 'hotels'));
     }
+
+    $count = 0;
+    if ($rooms === null) {
+      $count = $hotels->total();
+    } else {
+      $count = $rooms->total();
+    }
+
+    $pageDescription = $this->seo(
+      $city,
+      $district,
+      $city_area,
+      null,
+      $metro,
+      $attributes,
+      $rooms !== null,
+      null,
+      $count
+    );
+
     return view('search.index', compact(
       'rooms',
-      'hotels'
+      'hotels',
+      'pageDescription'
     ));
   }
 
@@ -78,8 +101,21 @@ class SearchController_V2 extends Controller
     $hotels = $data->hotels;
     $hotels_popular = $data->hotels_popular;
 
+    $count = $hotels->count();
 
-    return view('search.map', compact('hotels', 'hotels_popular'));
+    $pageDescription = $this->seo(
+      $city,
+      $district,
+      $city_area,
+      null,
+      $metro,
+      $attributes,
+      false,
+      null,
+      $count
+    );
+
+    return view('search.map', compact('hotels', 'hotels_popular', 'pageDescription'));
   }
 
   public function address (Request $request)
@@ -94,36 +130,290 @@ class SearchController_V2 extends Controller
     $district = $data['district'];
     $street = $data['street'];
     $search_price = null;
-    $hot = false;
     $cost = null;
     $attributes = ['hotel' => [], 'room' => []];
     $hotel_type = null;
     $search = null;
 
-    $data = $this->filter($search,
+    $dataCollectionDB = $this->filter($search,
       $attributes,
       $city,
       $area,
       $district,
       $hotel_type,
       $metro,
-      $hot,
+      false,
       $search_price,
       $cost,
       false
     );
 
-    $hotels = $data->hotels;
-    $rooms = $data->rooms;
-
+    $hotels = $dataCollectionDB->hotels;
+    $rooms = $dataCollectionDB->rooms;
+    $count = 0;
+    if ($rooms === null) {
+      $count = $hotels->total();
+    } else {
+      $count = $rooms->total();
+    }
     if ($api = $request->boolean('api')) {
       return view('web.search_', compact('rooms', 'hotels'));
     }
 
+//    $pageDescription = $this->seo(
+//      $city,
+//      $district,
+//      $area,
+//      $street,
+//      $metro,
+//      $attributes,
+//      $rooms !== null,
+//      null,
+//      $count
+//    );
+
+    // pageDesription генерируется в ViewProvider
+    $slugs = [
+      'city' => $city,
+      'area' => $area,
+      'district' => $district,
+      'street' => $street,
+      'metro' => $metro
+    ];
+    $title = 'Отели города ';
+    if (isset($slugs['city'])) {
+      $title .= $slugs['city']
+        . (isset($slugs['area']) ? ', ' . $slugs['area'] . ' округ ' : '')
+        . (isset($slugs['district']) ? ', ' . $slugs['district'] . ' район ' : '')
+        . (isset($slugs['street']) ? ', ул. ' . $slugs['street'] : '')
+        . (isset($slugs['metro']) ? ', метро "' . $slugs['metro'] . '"' : '');
+
+    }
+
+
     return view('search.index', compact(
       'rooms',
-      'hotels'
+      'hotels',
+      'title',
     ));
+  }
+
+  private function seo ($city, $district, $area, $street, $metro, $attr, $is_room, $hotel_type, $count): object
+  {
+    /* START SEO */
+
+
+    //pageAbout
+    $pageDescription = new class {};
+
+    // Удобства в виде человекочитаемого списка
+    $attr = array_merge(@$attr['hotel'] ?: [], @$attr['room'] ?: []);
+
+    $attr = Attribute::whereIn('id', $attr)->pluck('name')->toArray();
+
+    $pageDescription->h1 = ", " . implode(", ", $attr);
+
+    $attr = empty($attr) ? null : implode(', ', $attr);
+
+    // Переменная для передачи в представление
+    $slugs = [
+      'city' => $city,
+      'area' => $area,
+      'district' => $district,
+      'street' => $street,
+      'metro' => $metro
+    ];
+
+    if ((!empty($slugs['city'])) && (!empty($slugs['area'])) && (empty($slugs['district'])) && (empty($slugs['street'])) && (empty($slugs['metro']))) {
+
+      if (!is_null($attr)) {
+        $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" с выбранными условиями ' . $attr;
+        $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиничные номера на час (сутки) с ' . $attr . ' в "' . $slugs['area'] . '" Москвы ▶Описание номеров с фото  ▶ Звоните!';
+
+      } else {
+        $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '"';
+        $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиничные номера на час (сутки) с ' . $attr . ' в "' . $slugs['area'] . '" Москвы ▶Описание номеров с фото  ▶ Звоните!';
+
+      }
+
+
+    }
+
+    if (!empty($slugs['street'])) {
+
+      if (!empty($slugs['metro'])) {
+
+        if ($attr) {
+
+          // Улица + метро + страница фильтрации по удобству
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",около метро "' . $slugs['metro'] . '" на улице "' . $slugs['street'] . '" с выбранными условиями ' . $attr;
+          //$pageDescription->title = 'Выгодные цены на отели с '.$attr.' на "'.$slugs['street'].'" рядом с метро "'.$slugs['metro'].'"';
+          $pageDescription->meta_description = 'Выбирайте и бронируйте почасовую гостиницу с ' . $attr . ' на "' . $slugs['street'] . '" рядом с метро "' . $slugs['metro'] . '" ▶ Актуальные цены ▶Обслуживание 24/7  ▶ Звоните!';
+        } else {
+
+          // метро + улица
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",около метро "' . $slugs['metro'] . '" на улице "' . $slugs['street'] . '" ';
+          // $pageDescription->title = 'Бронь отелей на "'.$slugs['street'].'" рядом с метро "'.$slugs['metro'].'" онлайн';
+          $pageDescription->meta_description = 'Компания Gorooms предлагает отели рядом с метро "' . $slugs['metro'] . '" по улице "' . $slugs['street'] . '" в Москве ▶Описание номеров с фото ▶ Доступные цены ▶ Бронируйте уже сейчас!';
+        }
+
+      } else {
+
+        if ($attr) {
+
+          // Улица + страница фильтрации по удобству
+          $pageDescription->title = 'Гостницы с ' . $attr . ' на "' . $slugs['street'] . '" улице - бронь онлайн';
+          $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиничные номера на час (сутки) с ' . $attr . ' на "' . $slugs['street'] . '" улице  Москвы ▶Свободные номера с актуальными ценами ▶ Звоните!';
+        } else {
+
+          // Улицы
+          $pageDescription->title = 'Бронь отелей на "' . $slugs['street'] . '" улице Москвы недорого';
+          $pageDescription->meta_description = 'Выбирайте и бронируйте гостиницу с номерами на час (сутки) на "' . $slugs['street'] . '" улице в Москве ▶Описание номеров с фото и контактами ▶ Доступные цены ▶ Звоните!';
+        }
+
+      }
+    } else if (!empty($slugs['district'])) {
+
+      if (!empty($slugs['metro'])) {
+
+        if ($attr) {
+
+          // Район + метро + страница фильтрации по удобству
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" в районе "' . $slugs['district'] . '" около метро  "' . $slugs['metro'] . '" с выбранными условиями ' . $attr . '';
+          //  $pageDescription->title = 'Отели с '.$attr.' в "'.$slugs['district'].'" районе рядом с м. "'.$slugs['metro'].'" - бронь онлайн';
+          $pageDescription->meta_description = 'Компания Gorooms предлагает отели с ' . $attr . ' в "' . $slugs['district'] . '" районе рядом с м. "' . $slugs['metro'] . '" Москвы ▶Просторные номера▶ Доступные цены ▶ Бронируйте уже сейчас!';
+        } else {
+
+          // Метро+район
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" в районе "' . $slugs['district'] . '" около метро  "' . $slugs['metro'] . '"';
+          // $pageDescription->title = 'Отели у метро "'.$slugs['metro'].'" в "'.$slugs['district'].'" районе Москвы -бронь, цены';
+          $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиницу с почасовыми номерами рядом с метро "' . $slugs['metro'] . '" в "' . $slugs['district'] . '" районе Москвы ▶Описание номеров с фото  ▶ Звоните!';
+        }
+
+      } else {
+
+        if ($attr) {
+
+          // Район + страница фильтрации по удобству
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '", в районе "' . $slugs['district'] . '" с выбранными условиями ' . $attr . '';
+          // $pageDescription->title = 'Отели в городе "'.$slugs['district'].'" с выбранными условиями '.$attr.'';
+          //$pageDescription->title = '111Гостиницы с '.$attr.' в "'.$slugs['district'].'" - бронь онлайн';
+          $pageDescription->meta_description = 'Компания Gorooms предлагает отели с "' . $attr . '" в "' . $slugs['district'] . '" районе Москвы ▶Просторные номера▶ Доступные цены ▶ Бронируйте уже сейчас!';
+        } else {
+
+          // Районы
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '", в районе "' . $slugs['district'] . '" ';
+          // $pageDescription->title = 'Гостиницы в "'.$slugs['district'].'" районе  Москвы - цены, фото, бронирование';
+          $pageDescription->meta_description = 'Ищете отель? С Gorooms Вы сможете быстро подобрать отель на час (сутки) в "' . $slugs['district'] . '" районе Москвы ▶ Подробное описание номеров с фото ▶ Бронируйте уже сейчас!';
+        }
+
+      }
+    } else if (!empty($slugs['metro'])) {
+
+      if (!empty($slugs['area'])) {
+
+        if ($attr) {
+
+          // Округ + метро + страница фильтрации по удобству
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"с выбранными условиями ' . $attr;
+          //  $pageDescription->title = 'Бронь отелей с '.$attr.' в "'.$slugs['area'].'" Москвы рядом с метро "'.$slugs['metro'].'" ';
+          $pageDescription->meta_description = 'Забронируйте гостиницу на час с ' . $attr . ' в "' . $slugs['area'] . '" Москвы рядом с метро "' . $slugs['metro'] . '"▶ Свободные номера и актуальные цены ▶ Заказывайте уже сейчас!';
+        } else {
+
+          // метро + округ
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"';
+          //  $pageDescription->title = 'Отели рядом с метро "'.$slugs['metro'].'" в "'.$slugs['area'].'" Москвы - бронь онлайн';
+          $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиницу с почасовыми номерами рядом с метро "' . $slugs['metro'] . '" в "' . $slugs['area'] . '" районе Москвы ▶Описание номеров с фото  ▶ Звоните!';
+        }
+
+      } else {
+
+        if ($attr) {
+
+          // Метро + страница фильтрации по удобству
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"с выбранными условиями ' . $attr;
+          //$pageDescription->title = 'Отели с '.$attr.' рядом с "'.$slugs['metro'].'" метро - бронь, цены';
+          $pageDescription->meta_description = 'Бронируйте уютные гостиничные номера с ' . $attr . ' рядом с метро "' . $slugs['metro'] . '" по приятным ценам в Москве ▶Описание номеров с фото  ▶ Звоните!';
+        } else {
+
+          // Станции метро
+          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"';
+          // $pageDescription->title = 'Отели у метро "'.$slugs['metro'].'"  - выгодные цены в Москве';
+          $pageDescription->meta_description = 'Бронирование отелей рядом с метро "' . $slugs['metro'] . '" по минимальным ценам  ▶ Подробное описание номеров с фото и контактами ▶ Уютные номера с удобствами  ▶ Звоните!';
+        }
+
+      }
+
+    } else if ($attr) {
+
+      if (!empty($slugs['area'])) {
+        // Округ + страница фильтрации по удобству
+        $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" с выбранными условиями ' . $attr;
+        $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиничные номера на час (сутки) с ' . $attr . ' в "' . $slugs['area'] . '" Москвы ▶Описание номеров с фото  ▶ Звоните!';
+      } else {
+
+        // Просто страница фильтрации по удобству (все варианты удобств)
+        $pageDescription->title = 'Отели в Москве со всеми удобствами в номере - бронь номеров онлайн';
+        $pageDescription->meta_description = 'Выбирайте и бронируйте комфортабельные гостиничные номера на час (сутки) со всеми удобствами в компании Gorooms ▶Выгодные цены ▶Качественный сервис ▶ Звоните!';
+      }
+    }
+
+
+    $title = '';
+    if (isset($slugs['city'])) {
+      $title = ($is_room ? 'Номера города ' : 'Отели города ')
+        . $slugs['city']
+        . (isset($slugs['area']) ? ', ' . $slugs['area'] . ' округ ' : '')
+        . (isset($slugs['district']) ? ', ' . $slugs['district'] . ' район ' : '')
+        . (isset($slugs['street']) ? ', ул. ' . $slugs['street'] : '')
+        . (isset($slugs['metro']) ? ', метро "' . $slugs['metro'] . '"' : '');
+
+    }
+    if (empty($title)) {
+      $title = "Результаты поиска";
+    }
+    $title .= "<span class=\"count\">($count)</span>";
+
+    if (is_null($hotel_type)) {
+      $desc_city_name = 'Отели ';
+    } else {
+      $desc_city_name = HotelType::find($hotel_type)->name;
+    }
+
+
+    if ($city) {
+      $desc_city = $desc_city_name . " в городе " . $city;
+    } else {
+      $desc_city = '';
+    }
+    if ($area) {
+      $desc_area = " в " . $area;
+    } else {
+      $desc_area = '';
+    }
+    if ($district) {
+      $desc_district = " в районе " . $district;
+    } else {
+      $desc_district = '';
+    }
+    if ($street) {
+      $desc_street = " на улице " . $street;
+    } else {
+      $desc_street = '';
+    }
+    if ($metro) {
+      $desc_metro = " около метро " . $metro;
+    } else {
+      $desc_metro = '';
+    }
+    if ($attr) {
+      $desc_attr = " с выбранными условиями " . $attr;
+    } else {
+      $desc_attr = '';
+    }
+    $pageDescription->title = $desc_city . $desc_area . $desc_district . $desc_street . $desc_metro . $desc_attr;
+
+    return $pageDescription;
   }
 
 }

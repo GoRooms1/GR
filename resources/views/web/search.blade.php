@@ -119,21 +119,21 @@
       </div>
     @endif
 
-    @if ($hotels)
-      <div class="show-more">
-        <p class="show-more-counter">Загружено: {{ $hotels->count() }} ({{ $hotels->total() }})</p>
-        @if($hotels->total() > $hotels->count())
-          <button id="rooms-address-load-more" class="show-more-btn" type="button">Загрузить еще</button>
-        @endif
-      </div>
-    @else
-      <div class="show-more">
-        <p class="show-more-counter">Загружено: {{ $rooms->count() }} ({{ $rooms->total()}})</p>
-        @if($rooms->total() > $rooms->count())
-          <button id="rooms-address-load-more" class="show-more-btn" type="button">Загрузить еще</button>
-        @endif
-      </div>
-    @endif
+{{--    @if ($hotels)--}}
+{{--      <div class="show-more">--}}
+{{--        <p class="show-more-counter">Загружено: {{ $hotels->count() }} ({{ $hotels->total() }})</p>--}}
+{{--        @if($hotels->total() > $hotels->count())--}}
+{{--          <button id="rooms-address-load-more" class="show-more-btn" type="button">Загрузить еще</button>--}}
+{{--        @endif--}}
+{{--      </div>--}}
+{{--    @else--}}
+{{--      <div class="show-more">--}}
+{{--        <p class="show-more-counter">Загружено: {{ $rooms->count() }} ({{ $rooms->total()}})</p>--}}
+{{--        @if($rooms->total() > $rooms->count())--}}
+{{--          <button id="rooms-address-load-more" class="show-more-btn" type="button">Загрузить еще</button>--}}
+{{--        @endif--}}
+{{--      </div>--}}
+{{--    @endif--}}
 
   </section>
 

@@ -6,7 +6,7 @@
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h1 class="section-title">Lorem ipsum dolor sit.</h1>
+        <h1 class="section-title">{{ $pageDescription->title ?? $title }}</h1>
       </div>
     </div>
   </section>
@@ -68,6 +68,14 @@
       </div>
     @endif
 
+
+    @if(!is_null($pageDescription))
+      @if(isset($pageDescription->description))
+        <div class="container" style="margin-top: 20px;">
+          {!! html_entity_decode($pageDescription->description) !!}
+        </div>
+      @endif
+    @endif
   </section>
 @endsection
 
