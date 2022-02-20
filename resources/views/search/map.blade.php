@@ -31,10 +31,12 @@
     <div class="container">
       <div class="h2 section-title orange">Популярные отели</div>
       <div class="row row-sm">
-{{--        @foreach ($hotels as $hotel)--}}
-{{--          @continue(is_null($hotel) || !$hotel->is_popular)--}}
-{{--          @include('hotel._popular')--}}
-{{--        @endforeach--}}
+        @forelse ($hotels_popular as $hotel)
+          @include('hotel._popular')
+
+        @empty
+          <h4 style="margin-left: 25px">Нет популярных отелей из списка</h4>
+        @endforelse
       </div>
     </div>
 

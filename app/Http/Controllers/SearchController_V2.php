@@ -50,7 +50,6 @@ class SearchController_V2 extends Controller
 
   public function map (Request $request)
   {
-    $with_map = true;
 
     $search = $request->get('query');
     $attributes = $request->get('attributes', ['hotel' => [], 'room' => []]);
@@ -73,13 +72,14 @@ class SearchController_V2 extends Controller
       $hot,
       $search_price,
       $cost,
-      $with_map
+      true,
+      true
     );
-
     $hotels = $data->hotels;
+    $hotels_popular = $data->hotels_popular;
 
 
-    return view('search.map', compact('hotels'));
+    return view('search.map', compact('hotels', 'hotels_popular'));
   }
 
 }
