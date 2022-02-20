@@ -252,9 +252,10 @@
   <div id="js-search" class="search">
     <div class="container">
       <form action="{{ route('search') }}" id="search-form" class="search-form" method="GET">
+        <input type="hidden" name="city" value="{{ $city }}">
         <div class="search-form-group">
           <input type="search"
-                 id="search"
+                 id="search-mini"
                  name="query"
                  class="search-input"
                  value="{{ old('query', $query) }}"

@@ -681,6 +681,7 @@
 <script src="{{ asset('js/jquery.maskedinput.js') }}" defer></script>
 <script src="{{ asset('js/jquery.flexdatalist.min.js') }}" defer></script>
 <script src="{{ asset('js/main.js') }}" defer></script>
+<script src="{{ asset('js/user/search-advanced.js') }}"></script>
 @yield('scripts')
 @if(Session::get('showSuccessModal'))
   @php(Session::forget('showSuccessModal'))
