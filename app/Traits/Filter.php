@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\Room;
 use App\Models\Hotel;
 use App\Models\CostType;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 
 trait Filter
@@ -20,7 +21,8 @@ trait Filter
     bool $hot,
     ?string $search_price,
     ?string $cost,
-    bool $with_map
+    bool $with_map,
+    bool $popular = false
   ): object
   {
     $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot;
@@ -29,6 +31,9 @@ trait Filter
     }
     $hotels = null;
     $rooms = null;
+
+    $hotels_popular = Collection::empty();
+
     // Если отели
     if (!$is_room) {
       $hotels = Hotel::query();
@@ -111,6 +116,11 @@ trait Filter
             }
           });
         });
+      }
+
+      if ($popular) {
+        $hotels_popular = clone $hotels;
+        $hotels_popular = $hotels_popular->where('is_popular', true)->get();
       }
 
       if ($with_map) {
@@ -227,7 +237,8 @@ trait Filter
     return (object) [
       'rooms'  => $rooms,
       'hotels' => $hotels,
-      'is_room' => $is_room
+      'is_room' => $is_room,
+      'hotels_popular' => $hotels_popular
     ];
   }
 
