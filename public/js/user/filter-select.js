@@ -143,6 +143,18 @@ $(function () {
     $(metro).trigger('change.select2');
     $(district).trigger('change.select2');
   });
+
+  $(city_area).on('select2:select', function (e) {
+    let data = e.params.data;
+    district.val(null)
+    metro.val(null)
+    $(metro).trigger('change.select2');
+    $(district).trigger('change.select2');
+  });
+  $(district).on('select2:select', function (e) {
+    metro.val(null)
+    $(metro).trigger('change.select2');
+  });
 });
 
 // Скрывает поле Округ если нет округов в городе
