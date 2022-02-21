@@ -19,13 +19,17 @@ class FilterController extends Controller
   public function cities(Request $request): JsonResponse
   {
     $request->validate([
-      'search' => 'required|string',
+      'search' => 'nullable|string',
     ]);
     $search = $request->get('search');
-
-    $cities = Address::where('city', 'like', '%' . $search . '%')
-      ->pluck('city')
-      ->unique();
+    if ($search) {
+      $cities = Address::where('city', 'like', '%' . $search . '%')
+        ->pluck('city')
+        ->unique();
+    } else {
+      $cities = Address::pluck('city')
+        ->unique()->take(5);
+    }
 
     return Json::good(['cities' => $cities]);
   }
