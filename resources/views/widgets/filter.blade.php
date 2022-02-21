@@ -214,23 +214,23 @@
           </div>
         </div>
         @moderator
-        <div class="col-lg-12 advanced-search-details-col">
-          <p class="advanced-search-title">Модерация</p>
-          <div class="filter-collapse js-search-collapse">
-            <ul class="advanced-search-details-list">
+          <div class="col-lg-12 advanced-search-details-col">
+            <p class="advanced-search-title">Модерация</p>
+            <div class="filter-collapse js-search-collapse">
+              <ul class="advanced-search-details-list">
 
-              <li class="advanced-search-details-item">
-                <input id="advanced-search-moderate" type="checkbox"
-                       @if(isset($moderate))
-                       {{ $moderate ? 'checked' : '' }}
-                       @endif
-                       name="moderate" value="true" class="checkbox">
-                <label for="advanced-search-moderate"
-                       class="checkbox-label checkbox-label-light">На модерации</label>
-              </li>
-            </ul>
+                <li class="advanced-search-details-item">
+                  <input id="advanced-search-moderate" type="checkbox"
+                         @if(isset($moderate))
+                         {{ $moderate ? 'checked' : '' }}
+                         @endif
+                         name="moderate" value="true" class="checkbox">
+                  <label for="advanced-search-moderate"
+                         class="checkbox-label checkbox-label-light">На модерации</label>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
         @endmoderator
       </div>
     </div>

@@ -6,14 +6,14 @@
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h1 class="section-title">{{ $pageDescription->title ?? $title }}</h1>
+        <h1 class="section-title">{!! $pageDescription->title ?? $title !!}</h1>
       </div>
     </div>
   </section>
 
   <section class="section section-pt-none">
     @if($moderate ?? false)
-      <div class="container">
+      <div class="container items-container">
         @foreach ($hotels as $hotel)
           <div class="row row-sm position-relative">
             <div class="col-sm-6 col-lg-3 col-xxl-2" style="position: relative">

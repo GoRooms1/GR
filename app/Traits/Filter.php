@@ -22,10 +22,14 @@ trait Filter
     ?string $search_price,
     ?string $cost,
     bool $with_map,
-    bool $popular = false
+    bool $popular = false,
+    bool $moderate = false
   ): object
   {
     $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot;
+    if ($moderate) {
+      $is_room = false;
+    }
     if ($with_map) {
       $is_room = false;
     }
@@ -38,6 +42,11 @@ trait Filter
     if (!$is_room) {
       $hotels = Hotel::query();
       $hotels = $hotels->with(['address', 'attrs']);
+
+      if ($moderate) {
+        $hotels = $hotels->where('moderate', true)
+          ->where('old_moderate', true);
+      }
 
       if ($search) {
         $hotels = $hotels->where('name', 'like', '%' . $search . '%')

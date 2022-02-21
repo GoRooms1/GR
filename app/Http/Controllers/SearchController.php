@@ -466,7 +466,7 @@ class SearchController extends Controller
 
     if ($moderate) {
       $title = 'На модерации' . "<span class=\"count\">($count)</span>";
-      $pageDescription->title = 'На модерации' . "<span class=\"count\">($count)</span>";
+      $pageDescription->title = 'На модерации' . " <span class=\"count\">($count)</span>";
     }
 
     // 'city' => @$queryAddress['city'],

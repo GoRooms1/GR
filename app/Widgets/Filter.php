@@ -39,6 +39,7 @@ class Filter extends AbstractWidget
   protected Collection $rooms_attributes;
   protected ?string $hotel_type = '';
   protected Object $data;
+  protected bool $moderate;
 
   /**
    * Treat this method as a controller action.
@@ -115,6 +116,8 @@ class Filter extends AbstractWidget
       return Attribute::forRooms()->filtered()->get();
     });
 
+    $this->moderate = Request::boolean('moderate');
+
 
     return view('widgets.filter', [
       'request'           => $this->request,
@@ -128,6 +131,7 @@ class Filter extends AbstractWidget
       'hotels_attributes' => $this->hotels_attributes,
       'rooms_attributes'  => $this->rooms_attributes,
       'hotel_type'        => $this->hotel_type,
+      'moderate'          => $this->moderate
     ]);
   }
 

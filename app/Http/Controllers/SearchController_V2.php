@@ -25,6 +25,8 @@ class SearchController_V2 extends Controller
     $cost = $request->get('cost');
     $search_price = $request->get('search-price');
     $hot = $request->boolean('hot');
+    $moderate = $request->boolean('moderate');
+
     $data = $this->filter($search,
       $attributes,
       $city,
@@ -35,14 +37,16 @@ class SearchController_V2 extends Controller
       $hot,
       $search_price,
       $cost,
-      false
+      false,
+      false,
+      $moderate
     );
 
     $hotels = $data->hotels;
     $rooms = $data->rooms;
 
     if ($api = $request->boolean('api')) {
-      return view('web.search_', compact('rooms', 'hotels'));
+      return view('web.search_', compact('rooms', 'hotels', 'moderate'));
     }
 
     $count = 0;
@@ -64,10 +68,13 @@ class SearchController_V2 extends Controller
       $count
     );
 
+    $pageDescription->title = 'На модерации' . "<span class=\"count\">($count)</span>";
+
     return view('search.index', compact(
       'rooms',
       'hotels',
-      'pageDescription'
+      'pageDescription',
+      'moderate'
     ));
   }
 
@@ -84,7 +91,7 @@ class SearchController_V2 extends Controller
     $cost = $request->get('cost');
     $search_price = $request->get('search-price');
     $hot = $request->boolean('hot');
-
+    $moderate = $request->boolean('moderate', false);
     $data = $this->filter($search,
       $attributes,
       $city,
@@ -96,7 +103,8 @@ class SearchController_V2 extends Controller
       $search_price,
       $cost,
       true,
-      true
+      true,
+      $moderate
     );
     $hotels = $data->hotels;
     $hotels_popular = $data->hotels_popular;
@@ -114,6 +122,11 @@ class SearchController_V2 extends Controller
       null,
       $count
     );
+
+    if ($request->boolean('moderate')) {
+      $title = 'На модерации' . "<span class=\"count\">($count)</span>";
+      $pageDescription->title = 'На модерации' . "<span class=\"count\">($count)</span>";
+    }
 
     return view('search.map', compact('hotels', 'hotels_popular', 'pageDescription'));
   }
@@ -145,6 +158,8 @@ class SearchController_V2 extends Controller
       false,
       $search_price,
       $cost,
+      false,
+      false,
       false
     );
 
@@ -189,7 +204,6 @@ class SearchController_V2 extends Controller
         . (isset($slugs['metro']) ? ', метро "' . $slugs['metro'] . '"' : '');
 
     }
-
 
     return view('search.index', compact(
       'rooms',
