@@ -17,8 +17,10 @@ use App\Http\Controllers\Api\ImageController;
 */
 
 
-Route::match(['GET', 'POST'], '/search', 'SearchController')->name('search');
-Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.map');
+//Route::match(['GET', 'POST'], '/search', 'SearchController')->name('search');
+//Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.map');
+Route::post('search', 'Api\SearchController@index')->name('search.index');
+Route::post( '/search_map', 'Api\SearchController@map')->name('search.map');
 
 Route::get('/address/helper', 'Api\AddressController@helper');
 
