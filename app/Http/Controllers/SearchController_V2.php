@@ -25,7 +25,7 @@ class SearchController_V2 extends Controller
     $cost = $request->get('cost');
     $search_price = $request->get('search-price');
     $hot = $request->boolean('hot');
-    $moderate = $request->boolean('moderate');
+    $moderate = $request->boolean('moderate', false);
 
     $data = $this->filter($search,
       $attributes,
@@ -55,7 +55,6 @@ class SearchController_V2 extends Controller
     } else {
       $count = $rooms->total();
     }
-
     $pageDescription = $this->seo(
       $city,
       $district,
@@ -68,7 +67,9 @@ class SearchController_V2 extends Controller
       $count
     );
 
-    $pageDescription->title = 'На модерации' . "<span class=\"count\">($count)</span>";
+    if ($moderate) {
+      $pageDescription->title = 'На модерации' . "<span class=\"count\">($count)</span>";
+    }
 
     return view('search.index', compact(
       'rooms',
