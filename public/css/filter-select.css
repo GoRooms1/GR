@@ -34,3 +34,17 @@
     height: 32px !important;
     margin-right: 40px !important;
 }
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable  {
+    background: transparent;
+    color: #ff9d45;
+}
+
+.select2-results__options {
+    font-weight: bold;
+}
+
+.select2-container--default .select2-results__option--selected {
+    background: transparent;
+    color: #ff9d45;
+}
