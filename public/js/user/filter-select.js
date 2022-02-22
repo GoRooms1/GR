@@ -147,9 +147,7 @@ $(function () {
     $(district).trigger('change.select2');
     form.dispatchEvent(event);
   });
-
   $(city_area).on('select2:select', function (e) {
-    let data = e.params.data;
     district.val(null)
     metro.val(null)
     $(metro).trigger('change.select2');
@@ -163,6 +161,21 @@ $(function () {
   });
   $(metro).on('select2:select', function (e) {
     form.dispatchEvent(event);
+  })
+
+  $(city).on('select2:clearing', function (e) {
+    $(city).val(null).trigger('select2:select')
+  })
+
+  $(city_area).on('select2:clearing', function (e) {
+    $(city_area).val(null).trigger('select2:select')
+  })
+
+  $(district).on('select2:clearing', function (e) {
+    $(district).val(null).trigger('select2:select')
+  })
+  $(metro).on('select2:clearing', function (e) {
+    $(metro).val(null).trigger('select2:select')
   })
 });
 
