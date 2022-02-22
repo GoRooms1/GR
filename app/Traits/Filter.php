@@ -103,6 +103,14 @@ trait Filter
         });
       }
 
+      if (count($attributes['room']) > 0) {
+        $hotels = $hotels->whereHas('rooms', function (Builder $q_rooms) use ($attributes) {
+          $q_rooms->whereHas('attrs', function (Builder $q) use ($attributes) {
+            $q->whereIn('id', $attributes['room']);
+          });
+        });
+      }
+
       if ($type_price = $search_price) {
 //        Ищем сами стоимости из запроса
         $prices = explode('.', $cost);
