@@ -129,6 +129,9 @@ $(function () {
     })
   }
 
+  let event = new Event('change');
+  let form = document.getElementById('js-advanced-search')
+
   // Обновляет (показать или спрятать) Округ если в короде нет округов
   getCountCityArea(city_area, $(city).val())
 
@@ -142,6 +145,7 @@ $(function () {
     metro.val(null)
     $(metro).trigger('change.select2');
     $(district).trigger('change.select2');
+    form.dispatchEvent(event);
   });
 
   $(city_area).on('select2:select', function (e) {
@@ -150,11 +154,16 @@ $(function () {
     metro.val(null)
     $(metro).trigger('change.select2');
     $(district).trigger('change.select2');
+    form.dispatchEvent(event);
   });
   $(district).on('select2:select', function (e) {
     metro.val(null)
     $(metro).trigger('change.select2');
+    form.dispatchEvent(event);
   });
+  $(metro).on('select2:select', function (e) {
+    form.dispatchEvent(event);
+  })
 });
 
 // Скрывает поле Округ если нет округов в городе

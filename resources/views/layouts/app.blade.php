@@ -710,6 +710,7 @@
   let form = document.getElementById('js-advanced-search');
   if (form) {
     form.addEventListener('change', event => {
+      console.log(new FormData(form))
       let url = form.action.replace('https', '').replace('http', '').replace('://' + extractHostname(form.action), '')
       fetch('/api' + url, {
         method: 'POST',
