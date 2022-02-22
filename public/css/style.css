@@ -1636,14 +1636,22 @@ select.form-control {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
+  overflow-y: scroll;
   overflow-x: hidden;
   margin-bottom: 70px;
   padding-top: 20px;
-  height: 100%;
-  max-height: -webkit-calc(-102vh);
-  max-height: calc(var(--vh, 1vh) * 100 - 70px - 132px);
+  /*height: 100%;*/
+  /*max-height: -webkit-calc(-102vh);*/
+  /*max-height: calc(var(--vh, 1vh) * 100 - 70px - 132px);*/
+  max-height: calc(100vh - 70px - 132px);
 }
+
+.advanced-search-in > .container {
+  height: 100%;
+  overflow: hidden;
+}
+
 .advanced-search-in::-webkit-scrollbar {
   width: 4px;
   background-color: rgba(0, 0, 0, 0.2);
