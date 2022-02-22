@@ -586,6 +586,9 @@ function search_reset() {
     $("#js-advanced-search select").prop("selectedIndex", 0);
     $("#js-advanced-search select").trigger("refresh");
 
+    // filter-select.js
+    filter_select_clear()
+
     let form = document.getElementById('js-advanced-search');
     form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать'
 

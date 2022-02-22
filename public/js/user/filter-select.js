@@ -218,3 +218,17 @@ function getCountCityArea (city_area, city) {
       hiddenCityArea(city_area);
     })
 }
+
+function filter_select_clear () {
+  // Поиск по Округам в выбранном городе
+  let city_area = $('#advanced-search-location-city_area')
+  // Поиск районов по выбранному городу и округу города
+  let district = $('#advanced-search-location-district')
+  let metro = $('#advanced-search-location-metro')
+
+  $(metro).val(null).trigger('change').trigger('select2:select')
+  $(district).val(null).trigger('change').trigger('select2:select')
+  $(city_area).val(null).trigger('change').trigger('select2:select')
+
+
+}
