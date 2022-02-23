@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 class FilterController extends Controller
 {
   /**
+   * Поиск города
+   *
    * @param Request $request
    *
    * @return JsonResponse
@@ -23,7 +25,7 @@ class FilterController extends Controller
     ]);
     $search = $request->get('search');
     if ($search) {
-      $cities = Address::where('city', 'like', '%' . $search . '%')
+      $cities = Address::where('city', 'like', $search . '%')
         ->pluck('city')
         ->unique();
     } else {
@@ -34,6 +36,13 @@ class FilterController extends Controller
     return Json::good(['cities' => $cities]);
   }
 
+  /**
+   * Поиск округов в городе
+   *
+   * @param Request $request
+   *
+   * @return JsonResponse
+   */
   public function city_area(Request $request): JsonResponse
   {
     $request->validate([
@@ -46,13 +55,20 @@ class FilterController extends Controller
     $city = $request->get('city');
 
     $city_areas = Address::whereCity($city)
-      ->where('city_area', 'like', '%' . $search . '%')
+      ->where('city_area', 'like', $search . '%')
       ->pluck('city_area')
       ->unique();
 
     return Json::good(['city_areas' => $city_areas]);
   }
 
+  /**
+   * Поиск кол-ва окгругов в городе
+   *
+   * @param Request $request
+   *
+   * @return JsonResponse
+   */
   public function count_city_area (Request $request): JsonResponse
   {
     $request->validate([
@@ -68,6 +84,13 @@ class FilterController extends Controller
     return Json::good(['count' => $count]);
   }
 
+  /**
+   * Поиск районов в городе и округе
+   *
+   * @param Request $request
+   *
+   * @return JsonResponse
+   */
   public function district (Request $request): JsonResponse
   {
     $request->validate([
@@ -88,13 +111,20 @@ class FilterController extends Controller
     if ($city_area !== '') {
       $districts = $districts->where('city_area', $city_area);
     }
-    $districts = $districts->where('city_district', 'like', '%' . $search . '%')
+    $districts = $districts->where('city_district', 'like', $search . '%')
       ->pluck('city_district')
       ->unique();
 
     return Json::good(['districts' => $districts]);
   }
 
+  /**
+   * Поиск метро в городе округе районе
+   *
+   * @param Request $request
+   *
+   * @return JsonResponse
+   */
   public function metro (Request $request): JsonResponse
   {
     $request->validate([
@@ -121,7 +151,7 @@ class FilterController extends Controller
 
     $metros = Metro::query()->whereIn('hotel_id', $hotels_id);
     if ($search = $request->get('search')) {
-      $metros = $metros->where('name', 'like', '%' . $search . '%');
+      $metros = $metros->where('name', 'like', $search . '%');
     }
     $metros = $metros->orderBy('name')->pluck('name')
       ->unique();
