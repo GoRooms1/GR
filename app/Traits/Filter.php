@@ -52,7 +52,7 @@ trait Filter
       $hotels = $hotels->with(['address', 'attrs']);
 
       if ($moderate) {
-        $hotels = $hotels->where('moderate', true)
+        $hotels = $hotels->withoutGlobalScopes(['moderation'])->where('moderate', true)
           ->where('old_moderate', true);
       }
 
@@ -98,17 +98,21 @@ trait Filter
       }
 
       if (count($attributes['hotel']) > 0) {
-        $hotels = $hotels->whereHas('attrs', function (Builder $q) use ($attributes) {
-          $q->whereIn('id', $attributes['hotel']);
-        });
+        foreach ($attributes['hotel'] as $id) {
+          $hotels = $hotels->whereHas('attrs', function (Builder $q_attrs) use ($id) {
+            $q_attrs->where('id', $id);
+          });
+        }
       }
 
       if (count($attributes['room']) > 0) {
-        $hotels = $hotels->whereHas('rooms', function (Builder $q_rooms) use ($attributes) {
-          $q_rooms->whereHas('attrs', function (Builder $q) use ($attributes) {
-            $q->whereIn('id', $attributes['room']);
+        foreach ($attributes['hotel'] as $id) {
+          $hotels = $hotels->whereHas('rooms', function (Builder $q_hotel) use ($id) {
+            $q_hotel->whereHas('attrs', function (Builder $q_attrs) use ($id) {
+              $q_attrs->where('id', $id);
+            });
           });
-        });
+        }
       }
 
       if ($type_price = $search_price) {
@@ -153,8 +157,6 @@ trait Filter
       } else {
         $hotels = $hotels->paginate(16);
       }
-
-//      dd($hotels);
     }
     else {
       $rooms = Room::query();
@@ -213,18 +215,22 @@ trait Filter
       }
 
       if (count($attributes['room']) > 0) {
-        $rooms = $rooms->whereHas('attrs', function (Builder $q_attrs) use ($attributes) {
-          $q_attrs->whereIn('id', $attributes['room']);
-        });
+        foreach ($attributes['room'] as $id) {
+          $rooms = $rooms->whereHas('attrs', function (Builder $q_attrs) use ($id) {
+            $q_attrs->where('id', $id);
+         });
+        }
       }
 
       if (isset($attributes['hotel'])) {
         if (count($attributes['hotel']) > 0) {
-          $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($attributes) {
-            $q_hotel->whereHas('attrs', function (Builder $q_attrs) use ($attributes) {
-              $q_attrs->whereIn('id', $attributes['hotel']);
+          foreach ($attributes['hotel'] as $id) {
+            $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($id) {
+              $q_hotel->whereHas('attrs', function (Builder $q_attrs) use ($id) {
+                $q_attrs->where('id', $id);
+              });
             });
-          });
+          }
         }
       }
 

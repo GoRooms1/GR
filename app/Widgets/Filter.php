@@ -65,35 +65,35 @@ class Filter extends AbstractWidget
     } else {
 
       if ($metro_req = Request::get('metro')) {
-        $metro = Metro::where('name', 'like', '%' . $metro_req . '%')->first();
+        $metro = Metro::where('name', $metro_req)->first();
         if ($metro) {
           $this->metro = $metro->name;
         }
       }
 
       if ($city_req = Request::get('city', $this->defaultLocation())) {
-        $adr = Address::where('city', 'like', '%' . $city_req . '%')->first();
+        $adr = Address::where('city', $city_req)->first();
         if ($adr) {
           $this->city = $adr->city;
         }
       }
 
       if ($district_req = Request::get('district')) {
-        $adr = Address::where('city_district', 'like', '%' . $district_req . '%')->first();
+        $adr = Address::where('city_district', $district_req)->first();
         if ($adr) {
           $this->district = $adr->city_district;
         }
       }
 
       if ($area_req = Request::get('city_area')) {
-        $adr = Address::where('city_area', 'like', '%' . $area_req . '%')->first();
+        $adr = Address::where('city_area', $area_req)->first();
         if ($adr) {
           $this->area = $adr->city_area;
         }
       }
 
       if ($street_req = Request::get('street')) {
-        $adr = Address::where('street', 'like', '%' . $street_req . '%')->first();
+        $adr = Address::where('street', $street_req)->first();
         if ($adr) {
           $this->street = $adr->street;
         }

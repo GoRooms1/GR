@@ -119,8 +119,11 @@ class FilterController extends Controller
 
     $hotels_id = $hotels_id->pluck('hotel_id')->unique();
 
-    $metros = Metro::whereIn('hotel_id', $hotels_id)
-      ->pluck('name')
+    $metros = Metro::query()->whereIn('hotel_id', $hotels_id);
+    if ($search = $request->get('search')) {
+      $metros = $metros->where('name', 'like', '%' . $search . '%');
+    }
+    $metros = $metros->orderBy('name')->pluck('name')
       ->unique();
 
     return Json::good(['metros' => $metros]);
