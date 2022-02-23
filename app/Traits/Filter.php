@@ -143,6 +143,8 @@ trait Filter
             } else {
               $q_cost->where('value', $type_interval === 'lte' ? '<=' : '>=', $first_price);
             }
+
+            $q_cost->where('value', '>', 0);
           });
         });
       }
@@ -261,6 +263,8 @@ trait Filter
           } else {
             $q_cost->where('value', $type_interval === 'lte' ? '<=' : '>=', $first_price);
           }
+
+          $q_cost->where('value', '>', 0);
         });
       }
 
