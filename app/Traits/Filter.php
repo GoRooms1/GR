@@ -163,7 +163,7 @@ trait Filter
 
       if ($search) {
         $rooms = $rooms->where('name', 'like', '%' . $search . '%')
-          ->orWhereHas('rooms', function ($q) use ($search) {
+          ->orWhereHas('hotel', function ($q) use ($search) {
             $q->where('name', 'like', '%' . $search . '%');
           })
           ->orWhereHas('hotel', function (Builder $q_hotel) use ($search) {

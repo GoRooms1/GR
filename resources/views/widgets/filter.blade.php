@@ -184,7 +184,7 @@
               @foreach ($hotels_attributes as $attribute)
                 <li class="advanced-search-details-item">
                   <input id="advanced-search-hotel-{{ $loop->index }}" type="checkbox"
-                         @if(in_array($attribute->id, (isset($attributes['hotel']) ? $attributes['hotel'] : [])))
+                         @if(in_array($attribute->id, $attributes['hotel'], false))
                          checked
                          @endif
                          name="attributes[hotel][]" value="{{ $attribute->id }}" class="checkbox">
@@ -202,8 +202,8 @@
               @foreach ($rooms_attributes as $attribute)
                 <li class="advanced-search-details-item">
                   <input id="advanced-search-rooms-{{ $loop->index }}" type="checkbox"
-                         @if(in_array($attribute->id, (isset($attributes['room']) ? $attributes['room'] : [])))
-                         checked
+                         @if(in_array($attribute->id, $attributes['room'], false))
+                          checked
                          @endif
                          name="attributes[room][]" value="{{ $attribute->id }}" class="checkbox">
                   <label for="advanced-search-rooms-{{ $loop->index }}"

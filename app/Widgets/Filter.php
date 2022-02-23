@@ -40,6 +40,7 @@ class Filter extends AbstractWidget
   protected ?string $hotel_type = '';
   protected Object $data;
   protected bool $moderate;
+  protected array $attributes;
 
   /**
    * Treat this method as a controller action.
@@ -116,6 +117,10 @@ class Filter extends AbstractWidget
       return Attribute::forRooms()->filtered()->get();
     });
 
+    $this->attributes = $this->normalizeAttrs();
+
+//    Normalize attrs
+
     $this->moderate = Request::boolean('moderate');
 
 
@@ -131,12 +136,32 @@ class Filter extends AbstractWidget
       'hotels_attributes' => $this->hotels_attributes,
       'rooms_attributes'  => $this->rooms_attributes,
       'hotel_type'        => $this->hotel_type,
-      'moderate'          => $this->moderate
+      'moderate'          => $this->moderate,
+      'attributes'        => $this->attributes
     ]);
   }
 
   private function defaultLocation(): string
   {
     return Cookie::get('city', 'Москва');
+  }
+
+  private function normalizeAttrs(): array
+  {
+    $attributes = Request::get('attributes', [
+        'hotel' => [],
+        'room' => []
+      ]
+    );
+
+    if (!isset($attributes['hotel'])) {
+      $attributes['hotel'] = [];
+    }
+
+    if (!isset($attributes['room'])) {
+      $attributes['room'] = [];
+    }
+
+    return $attributes;
   }
 }
