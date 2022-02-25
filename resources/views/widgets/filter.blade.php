@@ -254,13 +254,28 @@
       <form action="{{ route('search') }}" id="search-form" class="search-form" method="GET">
         <input type="hidden" name="city" value="{{ $city }}">
         <div class="search-form-group">
-          <input type="search"
-                 id="search-mini"
-                 name="query"
-                 class="search-input"
-                 value="{{ old('query', $query) }}"
-                 placeholder="Название отеля, округ, район город, метро">
+          <div class="relative-input-search">
+            <input type="search"
+                   id="search-mini"
+                   name="query"
+                   class="search-input"
+                   value="{{ old('query', $query) }}"
+                   placeholder="Название отеля, округ, район город, метро">
+
+            <div class="list-group">
+              <p class="list-group-item list-group-item-action item-action-title">Отели</p>
+              <a href="#" class="list-group-item list-group-item-action">A second link item</a>
+              <a href="#" class="list-group-item list-group-item-action">A third link item</a>
+              <p class="list-group-item list-group-item-action item-action-title">Метро</p>
+              <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+              <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+              <p class="list-group-item list-group-item-action item-action-title">Районы</p>
+              <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+              <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+            </div>
+          </div>
           <button class="btn btn-orange search-btn">Найти</button>
+
         </div>
         <div class="search-tags"></div>
         <div class="search-bottom">
