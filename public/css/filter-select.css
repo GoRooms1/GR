@@ -1,0 +1,50 @@
+.advanced-search .select2-container--default .select2-selection__arrow b {
+    width: 12px !important;
+    height: 8px !important;
+    background-image: url("../img/ico-arrow-down-blue-sm.svg") !important;
+    background-color: transparent !important;
+    border-width: 0 !important;
+    margin-left: -13px !important;
+    margin-top: -3px !important;
+
+    transform: rotate(0);
+    transition: .5s transform;
+}
+
+.advanced-search .select2-container--default .select2-selection__rendered {
+    line-height: 32px;
+}
+
+.advanced-search .select2-container--default .select2-selection--single {
+    height: 32px;
+    border-radius: 0;
+    border: none;
+}
+
+.advanced-search .select2-container--default.select2-container--open .select2-selection--single {
+    border: 1px solid #aaa;
+}
+
+.advanced-search .select2-container--default.select2-container--open .select2-selection__arrow b {
+    transform: rotate(180deg);
+    transition: .5s transform;
+}
+
+.advanced-search .select2-container--default .select2-selection--single .select2-selection__clear {
+    height: 32px !important;
+    margin-right: 40px !important;
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable  {
+    background: transparent;
+    color: #ff9d45;
+}
+
+.select2-results__options {
+    font-weight: bold;
+}
+
+.select2-container--default .select2-results__option--selected {
+    background: transparent;
+    color: #ff9d45;
+}

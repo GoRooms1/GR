@@ -2,264 +2,242 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use App\Traits\Filter;
-use App\Settings;
-use App\Models\Room;
-use App\Helpers\Json;
-use App\Models\Hotel;
-use App\Models\Search;
-use App\Models\CostType;
 use App\Models\Attribute;
+use App\Models\HotelType;
 use Illuminate\Http\Request;
-use App\Http\Middleware\SetCityCoords;
-use Illuminate\Database\Eloquent\Builder;
+use App\Traits\UrlDecodeFilter;
 
-class SearchController extends Controller
+class SearchController_V2 extends Controller
 {
+  use Filter;
+  use UrlDecodeFilter;
 
-  public function __invoke(Request $request)
+  public function index (Request $request)
   {
-    $query = $request->get('query', '');
+    $search = $request->get('query');
     $attributes = $request->get('attributes', ['hotel' => [], 'room' => []]);
-    $city = '';
-    if (!$request->is('api/*'))
-      $city = $request->session()->get('city', Settings::option('city_default', false));
-    $address = $request->get('address', ['city' => $city, 'city_district' => '', 'region' => '']);
-    $hotel_type = $request->get('hotel_type', false);
-    $metro = $request->get('metro', false);
-    $hot = $request->has('hot');
-    $with_map = \Request::route()->getName() == 'search.map' || $request->is('/search_map/*');
+    $city = $request->get('city');
+    $city_area = $request->get('city_area');
+    $district = $request->get('district');
+    $hotel_type = $request->get('hotel_type');
+    $metro = $request->get('metro');
+    $cost = $request->get('cost');
+    $search_price = $request->get('search-price');
+    $hot = $request->boolean('hot');
+    $moderate = $request->boolean('moderate', false);
 
-    $search = Search::makeSearchBuilder();
+    $data = $this->filter($search,
+      $attributes,
+      $city,
+      $city_area,
+      $district,
+      $hotel_type,
+      $metro,
+      $hot,
+      $search_price,
+      $cost,
+      false,
+      false,
+      $moderate
+    );
 
-    $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot;
+    $hotels = $data->hotels;
+    $rooms = $data->rooms;
 
-    $rooms = false;
-    $query_args = $search->createQueryArray($query);
-    $moderate = $request->has('moderate');
-    if ($moderate) {
-      $hotels = Hotel::withoutGlobalScope('moderation')
-        ->where('moderate', true)
-        ->where('old_moderate', true)
-        ->orWhereHas('rooms', function ($q) {
-          $q->where('moderate', true);
-        })
-        ->orderBy('id')
-        ->paginate(5);
-      $hotels->appends(['moderate' => true]);
-      $is_room = false;
-//      $hotels = $hotels->get();
+    if ($api = $request->boolean('api')) {
+      return view('web.search_', compact('rooms', 'hotels', 'moderate'));
+    }
+
+    $count = 0;
+    if ($rooms === null) {
+      $count = $hotels->total();
     } else {
-
-      if (!$is_room) {
-        $hotels = Hotel::with(['rooms', 'address', 'attrs']);
-        if ($request->has('hotel_moderate')) {
-          $hotels->where('moderate', 1)->orWhere('show', 0);
-        }
-        foreach ($query_args as $arg) {
-          $hotels->where('name', 'LIKE', $arg)->orWhereHas('address', function (Builder $builder) use ($arg) {
-            $builder->where('value', 'LIKE', $arg);
-          });
-        }
-
-        foreach ($address as $key => $value) {
-          if (empty($value))
-            continue;
-          $hotels->whereHas('address', function (Builder $builder) use ($key, $value) {
-            $builder->where($key, $value);
-          });
-        }
-        if ($hotel_type)
-          $hotels->where('type_id', $hotel_type);
-        if ($metro)
-          $hotels->whereHas('metros', function (Builder $builder) use ($metro) {
-            $builder->whereRaw('LOWER(name) = LOWER(?)', [$metro]);
-          });
-        $hotels = $hotels->get();
-        if (count($attributes['hotel'])) {
-          $hotels = $hotels->map(function ($hotel) use ($attributes) {
-            $diffs = array_intersect($hotel->attrs()->pluck('id')->toArray(), $attributes['hotel']);
-            if (count($diffs) === count($attributes['hotel']))
-              return $hotel;
-            return null;
-          })->whereNotNull();
-        }
-        if ($cost = $this->getCost($request)) {
-          $before = $hotels->count();
-          $costs = [];
-          $hotels = $hotels->filter(function (Hotel $hotel, int $index) use ($cost, &$costs) {
-            $costs = $hotel->getMinCosts();
-            foreach ($costs as $item) {
-
-              if (isset($item->id)) {
-                if ($item->id !== $cost['type']) {
-                  continue;
-                }
-                if ($cost['condition'] === 'BETWEEN') {
-                  return $item->value >= $cost['value'][0] && $item->value <= $cost['value'][1];
-                }
-
-                if ($cost['condition'] === '>') {
-                  return $item->value > $cost['value'][0];
-                }
-
-                if ($cost['condition'] === '>=') {
-                  return $item->value >= $cost['value'][0];
-                }
-
-                if ($cost['condition'] === '<') {
-                  return $item->value < $cost['value'][0];
-                }
-
-                if ($cost['condition'] === '<=') {
-                  return $item->value <= $cost['value'][0];
-                }
-              }
-
-              return false;
-            }
-          })->all();
-          $hotels = collect($hotels);
-        }
-      }
-      else {
-        $rooms = Room::with(['hotel', 'hotel.address']);
-        if ($request->has('room_moderate')) {
-          $rooms->where('moderate', 1);
-        }
-        foreach ($query_args as $arg) {
-          $rooms->where('name', 'LIKE', $arg)->orWhereHas('hotel.address', function (Builder $builder) use ($arg) {
-            $builder->where('value', 'LIKE', $arg);
-          });
-        }
-
-        foreach ($address as $key => $value) {
-          if (empty($value) || is_null($value))
-            continue;
-          $rooms->whereHas('hotel.address', function (Builder $builder) use ($key, $value) {
-            $builder->where($key, '=', $value);
-          });
-        }
-
-        if ($hotel_type)
-          $rooms->whereHas('hotel', function (Builder $builder) use ($hotel_type) {
-            $builder->where('type_id', $hotel_type);
-          });
-        if ($metro)
-          $rooms->whereHas('hotel.metros', function (Builder $builder) use ($metro) {
-            $builder->whereRaw('LOWER(name) = LOWER(?)', [$metro]);
-          });
-        if ($cost = $this->getCost($request)) {
-          $rooms->whereHas('costs', function (Builder $builder) use ($cost) {
-            $builder->whereHas('period', function (Builder  $b) use ($cost) {
-              $b->where('cost_type_id', $cost['type']);
-            })->where('value', '>', 0);
-            if ($cost['condition'] === 'BETWEEN') {
-              $builder->whereBetween('value', $cost['value']);
-            } else {
-              $builder->where('value', $cost['condition'], $cost['value']);
-            }
-          });
-        }
-        $rooms = $rooms->get();
-        if (count($attributes['room'])) {
-          $rooms = $rooms->map(function ($room) use ($attributes) {
-            $diffs = array_intersect($room->attrs()->pluck('id')->toArray(), $attributes['room']);
-            if (count($diffs) === count($attributes['room']))
-              return $room;
-            return null;
-          })->whereNotNull();
-        }
-        if (isset($attributes['hotel']) && count($attributes['hotel'])) {
-          $rooms = $rooms->map(function ($room) use ($attributes) {
-            $diffs = array_intersect($room->hotel->attrs()->pluck('id')->toArray(), $attributes['hotel']);
-            if (count($diffs) === count($attributes['hotel']))
-              return $room;
-            return null;
-          })->whereNotNull();
-        }
-        if ($hot)
-          $rooms->where('is_hot', '=', true);
-        $hotels = Hotel::whereIn('id', $rooms->pluck('hotel.id')->toArray());
-
-        $hotels = $hotels->get();
-      }
-
+      $count = $rooms->total();
     }
-    if ($hotel_id = $request->get('hotel', false)) {
-      $rooms = $is_room ? $rooms->where('hotel_id', $hotel_id) : $hotels->where('id', $hotel_id)->first()->rooms;
-    }
+    $pageDescription = $this->seo(
+      $city,
+      $district,
+      $city_area,
+      null,
+      $metro,
+      $attributes,
+      $rooms !== null,
+      null,
+      $count
+    );
 
-    if ($request->is('render/*')) {
-      $page = $request->get('page', 1);
-      if ($is_room) {
-        $per_page = Room::PER_PAGE;
-        $rooms->forPage($page, $per_page);
-        return view('render.room.index', compact('rooms'));
-      }
-      $per_page = Hotel::PER_PAGE;
-      $hotels = $hotels->forPage($page, $per_page);
-      return view('render.hotel.index', compact('hotels'));
-
-
-    }
     if ($moderate) {
-      $count = Hotel::withoutGlobalScope('moderation')
-        ->where('moderate', true)
-        ->where('old_moderate', true)
-        ->count();
+      $pageDescription->title = 'На модерации' . "<span class=\"count\">($count)</span>";
+    }
+
+    return view('search.index', compact(
+      'rooms',
+      'hotels',
+      'pageDescription',
+      'moderate'
+    ));
+  }
+
+  public function map (Request $request)
+  {
+
+    $search = $request->get('query');
+    $attributes = $request->get('attributes', ['hotel' => [], 'room' => []]);
+    $city = $request->get('city', 'Москва');
+    $city_area = $request->get('city_area');
+    $district = $request->get('district');
+    $hotel_type = $request->get('hotel_type');
+    $metro = $request->get('metro');
+    $cost = $request->get('cost');
+    $search_price = $request->get('search-price');
+    $hot = $request->boolean('hot');
+    $moderate = $request->boolean('moderate', false);
+    $data = $this->filter($search,
+      $attributes,
+      $city,
+      $city_area,
+      $district,
+      $hotel_type,
+      $metro,
+      $hot,
+      $search_price,
+      $cost,
+      true,
+      true,
+      $moderate
+    );
+    $hotels = $data->hotels;
+    $hotels_popular = $data->hotels_popular;
+
+    $count = $hotels->count();
+
+    $pageDescription = $this->seo(
+      $city,
+      $district,
+      $city_area,
+      null,
+      $metro,
+      $attributes,
+      false,
+      null,
+      $count
+    );
+
+    if ($request->boolean('moderate')) {
+      $title = 'На модерации' . "<span class=\"count\">($count)</span>";
+      $pageDescription->title = 'На модерации' . "<span class=\"count\">($count)</span>";
+    }
+
+    return view('search.map', compact('hotels', 'hotels_popular', 'pageDescription'));
+  }
+
+  public function address (Request $request)
+  {
+    $url = $request->url();
+
+    $data = $this->decodeUrl($url);
+
+    $city = $data['city'];
+    $metro = $data['metro'];
+    $area = $data['area'];
+    $district = $data['district'];
+    $street = $data['street'];
+    $search_price = null;
+    $cost = null;
+    $attributes = ['hotel' => [], 'room' => []];
+    $hotel_type = null;
+    $search = null;
+
+    $dataCollectionDB = $this->filter($search,
+      $attributes,
+      $city,
+      $area,
+      $district,
+      $hotel_type,
+      $metro,
+      false,
+      $search_price,
+      $cost,
+      false,
+      false,
+      false
+    );
+
+    $hotels = $dataCollectionDB->hotels;
+    $rooms = $dataCollectionDB->rooms;
+    $count = 0;
+    if ($rooms === null) {
+      $count = $hotels->total();
     } else {
-      $count = $is_room ? $rooms->count() : $hotels->count();
+      $count = $rooms->total();
     }
-    $title = $with_map ? 'Поиск по карте' : "Результаты поиска <span class=\"count\">($count)</span>";
-
-    try {
-      if ($address['city'] && !$request->is('api/*')) {
-        @$request->session()->put('city', $address['city']);
-        @SetCityCoords::set($request);
-      }
-    } catch (Exception $exception) {
-      if ($request->is('api/*')) {
-        return Json::bad(['error' => $exception->getMessage()]);
-      }
+    if ($api = $request->boolean('api')) {
+      return view('web.search_', compact('rooms', 'hotels'));
     }
 
-    if ($request->is('api/*'))
-      return Json::good(['count' => $count, "is_room" => $is_room]);
+//    $pageDescription = $this->seo(
+//      $city,
+//      $district,
+//      $area,
+//      $street,
+//      $metro,
+//      $attributes,
+//      $rooms !== null,
+//      null,
+//      $count
+//    );
 
+    // pageDesription генерируется в ViewProvider
+    $slugs = [
+      'city' => $city,
+      'area' => $area,
+      'district' => $district,
+      'street' => $street,
+      'metro' => $metro
+    ];
+    $title = 'Отели города ';
+    if (isset($slugs['city'])) {
+      $title .= $slugs['city']
+        . (isset($slugs['area']) ? ', ' . $slugs['area'] . ' округ ' : '')
+        . (isset($slugs['district']) ? ', ' . $slugs['district'] . ' район ' : '')
+        . (isset($slugs['street']) ? ', ул. ' . $slugs['street'] : '')
+        . (isset($slugs['metro']) ? ', метро "' . $slugs['metro'] . '"' : '');
+
+    }
+
+    return view('search.index', compact(
+      'rooms',
+      'hotels',
+      'title',
+    ));
+  }
+
+  private function seo ($city, $district, $area, $street, $metro, $attr, $is_room, $hotel_type, $count): object
+  {
     /* START SEO */
 
 
     //pageAbout
-    $pageDescription = new class {
-    };
+    $pageDescription = new class {};
 
     // Удобства в виде человекочитаемого списка
-    $attr = $request->get('attributes');
     $attr = array_merge(@$attr['hotel'] ?: [], @$attr['room'] ?: []);
+
     $attr = Attribute::whereIn('id', $attr)->pluck('name')->toArray();
+
     $pageDescription->h1 = ", " . implode(", ", $attr);
-    foreach ($attr as &$a) {
-      // $a = "\"$a\"";
 
-
-    }
     $attr = empty($attr) ? null : implode(', ', $attr);
 
     // Переменная для передачи в представление
-    if ($queryAddress = $request->get('address')) {
-      if (@$queryAddress['city']) {
-        $slugs = [
-          'city' => @$queryAddress['city'],
-          'area' => @$queryAddress['city_area'],
-          'district' => @$queryAddress['city_district'],
-          'street' => @$queryAddress['city_street'],
-          'metro' => @$request->get('metro')
-        ];
-
-      }
-    }
+    $slugs = [
+      'city' => $city,
+      'area' => $area,
+      'district' => $district,
+      'street' => $street,
+      'metro' => $metro
+    ];
 
     if ((!empty($slugs['city'])) && (!empty($slugs['area'])) && (empty($slugs['district'])) && (empty($slugs['street'])) && (empty($slugs['metro']))) {
 
@@ -414,46 +392,32 @@ class SearchController extends Controller
     if (is_null($hotel_type)) {
       $desc_city_name = 'Отели ';
     } else {
-      switch ($hotel_type) {
-        case 1:
-          $desc_city_name = 'Отели ';
-          break;
-        case 2:
-          $desc_city_name = 'Аппартаменты ';
-          break;
-        case 3:
-          $desc_city_name = 'Гостевые дома ';
-          break;
-        case 4:
-          $desc_city_name = 'Сауны ';
-          break;
-      }
+      $desc_city_name = HotelType::find($hotel_type)->name;
     }
 
 
-    if (!empty(@$queryAddress['city'])) {
-      $desc_city = $desc_city_name . " в городе " . @$queryAddress['city'];
+    if ($city) {
+      $desc_city = $desc_city_name . " в городе " . $city;
     } else {
       $desc_city = '';
     }
-    if (!empty(@$queryAddress['city_area'])) {
-      $desc_area = " в " . @$queryAddress['city_area'];
+    if ($area) {
+      $desc_area = " в " . $area;
     } else {
       $desc_area = '';
     }
-    if (!empty(@$queryAddress['city_district'])) {
-      $desc_district = " в районе " . @$queryAddress['city_district'];
+    if ($district) {
+      $desc_district = " в районе " . $district;
     } else {
       $desc_district = '';
     }
-    if (!empty(@$queryAddress['city_street'])) {
-      $desc_street = " на улице " . @$queryAddress['city_street'];
+    if ($street) {
+      $desc_street = " на улице " . $street;
     } else {
       $desc_street = '';
     }
-    // return dd(@$request->get('metro'));
-    if (@$request->get('metro')) {
-      $desc_metro = " около метро " . @$request->get('metro');
+    if ($metro) {
+      $desc_metro = " около метро " . $metro;
     } else {
       $desc_metro = '';
     }
@@ -464,114 +428,7 @@ class SearchController extends Controller
     }
     $pageDescription->title = $desc_city . $desc_area . $desc_district . $desc_street . $desc_metro . $desc_attr;
 
-    if ($moderate) {
-      $title = 'На модерации' . "<span class=\"count\">($count)</span>";
-      $pageDescription->title = 'На модерации' . " <span class=\"count\">($count)</span>";
-    }
-
-    // 'city' => @$queryAddress['city'],
-    // 'area' => @$queryAddress['city_area'],
-    // 'district' => @$queryAddress['city_district'],
-    // 'street' => @$queryAddress['city_street'],
-    // 'metro' => @$request->get('metro')
-
-
-    if (!@$pageDescription->title or !@$pageDescription->meta_description) {
-      $pageDescription = null;
-    }
-
-    /* END SEO */
-
-    return view('web.search', compact('hotels', 'moderate', 'query', 'rooms', 'with_map', 'title', 'attributes', 'address', 'request', 'pageDescription'));
+    return $pageDescription;
   }
-
-  private function getCost(Request $request)
-  {
-
-    $cost_raw = $request->get('cost', false);
-
-    if (!$cost_raw)
-      return false;
-    $conditions = [
-      'gt' => '>',
-      'lt' => '<',
-      'gte' => '>=',
-      'lte' => '<=',
-      'between' => 'BETWEEN'
-    ];
-
-    $types = [
-      'hour' => Settings::option('hour_cost_name'),
-      'night' => Settings::option('night_cost_name'),
-      'day' => Settings::option('day_cost_name'),
-      '23hour' => Settings::option('day_cost_name'),
-    ];
-
-    [$type, $condition, $value] = explode('.', $cost_raw);
-    $value = explode('-', $value);
-    $condition = $conditions[$condition];
-    $type = $types[$type];
-    return compact('type', 'value', 'condition');
-  }
-
-  public function address(Request $request, $city, $param1 = null, $param2 = null, $param3 = null, $param4 = null)
-  {
-
-    $slugs = [];
-
-    $findParam = function ($param) use ($param1, $param2, $param3, $param4) {
-      switch (true) {
-        case substr($param1 ?: '', 0, strlen($param)) === $param:
-          return $param1;
-        case substr($param2 ?: '', 0, strlen($param)) === $param:
-          return $param2;
-        case substr($param3 ?: '', 0, strlen($param)) === $param:
-          return $param3;
-        case substr($param4 ?: '', 0, strlen($param)) === $param:
-          return $param4;
-      }
-      return null;
-    };
-
-    $addresses = [
-      'city' => 'city-' . $city,
-      'area' => $findParam('area-'),
-      'district' => $findParam('district-'),
-      'street' => $findParam('street-'),
-      'metro' => $findParam('metro-')
-    ];
-
-    foreach ($addresses as $type => $value) {
-      if (empty($value)) continue;
-      $data = explode('-', $value);
-      $slug = $data[0];
-      $content = implode('-', array_slice($data, 1));
-      $slugs[$slug] = $content;
-    }
-    $hotels = Search::getBySlug($slugs);
-    $query = '';
-    // $rooms = Room::whereIn('hotel_id', $hotels->pluck('id')->toArray())->get();
-    $rooms = Room::whereIn('hotel_id', $hotels->pluck('id')->toArray())->paginate(20);
-    $with_map = false;
-    $title = 'Отели города ';
-    if (isset($slugs['city'])) {
-      $title .= $slugs['city']
-        . (isset($slugs['area']) ? ', ' . $slugs['area'] . ' округ ' : '')
-        . (isset($slugs['district']) ? ', ' . $slugs['district'] . ' район ' : '')
-        . (isset($slugs['street']) ? ', ул. ' . $slugs['street'] : '')
-        . (isset($slugs['metro']) ? ', метро "' . $slugs['metro'] . '"' : '');
-
-    }
-//        $title .= '"';
-    // dd($title);
-    $attributes = [
-      'hotel' => [],
-      'room' => [],
-    ];
-    $address = ['city' => '', 'area' => '', 'region' => ''];
-    return view(isset($request["page"]) ? 'web.search_' : 'web.search', compact('hotels', 'query', 'rooms', 'with_map', 'title', 'attributes', 'address', 'request'));
-  }
-
 
 }
-
