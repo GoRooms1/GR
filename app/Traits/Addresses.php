@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: walft
- * Date: 01.08.2020
- * Time: 0:00
- */
 
 namespace App\Traits;
 

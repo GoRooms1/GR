@@ -329,7 +329,6 @@
   <section class="part gray">
     <form action="{{ route('moderator.object.update', $hotel->id) }}" method="POST">
       @csrf
-{{--      {{ dd($errors) }}--}}
       <input type="hidden" name="type_update" value="attr">
       <div class="container">
         <div class="row part__top">

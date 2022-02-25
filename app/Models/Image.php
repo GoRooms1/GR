@@ -43,6 +43,8 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Image whereTitle($value)
  * @method static Builder|Image whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property int|null $order
+ * @method static Builder|Image whereOrder($value)
  */
 class Image extends Model
 {

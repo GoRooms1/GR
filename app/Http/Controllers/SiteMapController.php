@@ -52,12 +52,14 @@ class SiteMapController extends Controller
                     'district' => 'district-'.Str::slug($address->city_district),
                 ];
                 $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
-                foreach ($address->hotel->metros AS $metro) {
+                if ($address->hotel) {
+                  foreach ($address->hotel->metros AS $metro) {
                     $params = [
-                        'city' => Str::slug($address->city),
-                        'area' => 'metro-'.Str::slug($metro->name),
+                      'city' => Str::slug($address->city),
+                      'area' => 'metro-'.Str::slug($metro->name),
                     ];
                     $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->hotel->updated_at->format('Y-m-d'));
+                  }
                 }
             }
             return array_filter($links, function ($item) {

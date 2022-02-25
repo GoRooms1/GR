@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Attribute whereName($value)
  * @method static Builder|Attribute whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property-read \App\Models\AttributeCategory $relationCategory
  */
 class Attribute extends Model
 {

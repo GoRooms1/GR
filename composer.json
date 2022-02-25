@@ -10,6 +10,7 @@
   "require": {
     "php": ">=7.4",
     "ext-json": "*",
+    "arrilot/laravel-widgets": "^3.13",
     "fideloper/proxy": "^4.2",
     "fomvasss/laravel-dadata": "^2.2",
     "fruitcake/laravel-cors": "^1.0",
