@@ -262,7 +262,7 @@
                    value="{{ old('query', $query) }}"
                    placeholder="Название отеля, округ, район город, метро">
 
-            <div class="list-group">
+            <div class="list-group" style="display: none" id="mini-list-group">
               <p class="list-group-item list-group-item-action item-action-title">Отели</p>
               <a href="#" class="list-group-item list-group-item-action">A second link item</a>
               <a href="#" class="list-group-item list-group-item-action">A third link item</a>

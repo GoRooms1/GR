@@ -2,7 +2,9 @@
 
 
 $(function () {
-  $('#search-mini').change(function () {
+  let mini_search = $('input#search-mini')
+
+  $(mini_search).keyup(function () {
     let val = $(this).val()
 
     $('form#js-advanced-search input#advanced-search').val(val)
