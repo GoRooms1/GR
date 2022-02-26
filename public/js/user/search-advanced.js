@@ -16,9 +16,9 @@ $(function () {
     $('#search-mini').val(val)
   })
 
-  $('form#search-form').submit(function (e) {
-    e.preventDefault();
-
-    $('form#js-advanced-search').submit();
-  })
+  // $('form#search-form').submit(function (e) {
+  //   e.preventDefault();
+  //
+  //   $('form#js-advanced-search').submit();
+  // })
 })

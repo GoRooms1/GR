@@ -11,9 +11,22 @@
   <div id="js-advanced-search-in" class="advanced-search-in">
     <div class="container">
       <div class="search-form-group">
-        <input type="text" id="advanced-search" name="query" class="search-input"
-               placeholder="Название отеля, округ, район город, метро"
-               value="{{ old('query', $query) }}">
+        <div class="relative-input-search">
+          <input type="text" id="advanced-search" name="query" class="search-input"
+                 placeholder="Название отеля, адрес, метро, округ, район, город"
+                 value="{{ old('query', $query) }}">
+          <div class="list-group" style="display: none;" id="big-list-group">
+            <p class="list-group-item list-group-item-action item-action-title">Отели</p>
+            <a href="#" class="list-group-item list-group-item-action">A second link item</a>
+            <a href="#" class="list-group-item list-group-item-action">A third link item</a>
+            <p class="list-group-item list-group-item-action item-action-title">Метро</p>
+            <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+            <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+            <p class="list-group-item list-group-item-action item-action-title">Районы</p>
+            <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+            <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+          </div>
+        </div>
         <button class="btn btn-orange search-btn">Найти</button>
       </div>
       <div class="search-tags"></div>
@@ -260,7 +273,7 @@
                    name="query"
                    class="search-input"
                    value="{{ old('query', $query) }}"
-                   placeholder="Название отеля, округ, район город, метро">
+                   placeholder="Название отеля, адрес, метро, округ, район, город">
 
             <div class="list-group" style="display: none" id="mini-list-group">
               <p class="list-group-item list-group-item-action item-action-title">Отели</p>
