@@ -53,7 +53,7 @@
 /* Выпадающее меню подсказок */
 .relative-input-search {
     position: relative;
-    width: 76.5%;
+    width: 100%;
 }
 .relative-input-search input {
     width: 100%;
@@ -61,7 +61,7 @@
 }
 
 #js-search-wrapper .list-group, #js-advanced-search-in .list-group {
-    z-index: 100;
+    z-index: 101;
     margin-top: 16px;
     position: absolute;
     width: 100%;
@@ -108,4 +108,8 @@
     font-weight: bolder;
     padding: 5px 15px;
     border: 1px solid transparent;
+}
+
+.font-weight-bold {
+    font-weight: bold;
 }

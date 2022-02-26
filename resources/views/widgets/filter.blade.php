@@ -12,9 +12,9 @@
     <div class="container">
       <div class="search-form-group">
         <div class="relative-input-search">
-          <input type="text" id="advanced-search" name="query" class="search-input"
+          <input type="text" id="advanced-search" name="" class="search-input"
                  placeholder="Название отеля, адрес, метро, округ, район, город"
-                 value="{{ old('query', $query) }}">
+                 value="">
           <div class="list-group" style="display: none;" id="big-list-group">
             <p class="list-group-item list-group-item-action item-action-title">Отели</p>
             <a href="#" class="list-group-item list-group-item-action">A second link item</a>
@@ -27,7 +27,7 @@
             <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
           </div>
         </div>
-        <button class="btn btn-orange search-btn">Найти</button>
+{{--        <button class="btn btn-orange search-btn">Найти</button>--}}
       </div>
       <div class="search-tags"></div>
       <div class="search-dates">
@@ -270,9 +270,9 @@
           <div class="relative-input-search">
             <input type="search"
                    id="search-mini"
-                   name="query"
+                   name=""
                    class="search-input"
-                   value="{{ old('query', $query) }}"
+                   value=""
                    placeholder="Название отеля, адрес, метро, округ, район, город">
 
             <div class="list-group" style="display: none" id="mini-list-group">
@@ -287,7 +287,7 @@
               <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
             </div>
           </div>
-          <button class="btn btn-orange search-btn">Найти</button>
+{{--          <button class="btn btn-orange search-btn">Найти</button>--}}
 
         </div>
         <div class="search-tags"></div>

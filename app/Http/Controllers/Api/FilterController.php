@@ -165,11 +165,10 @@ class FilterController extends Controller
   {
     $q = $request->get('q');
 
-    $metros = Metro::query();
+    $metros = new Collection();
     $hotels = Hotel::query()->without([
       'rooms',
       'attrs',
-      'address',
       'metros',
       'image',
       'images',
@@ -182,10 +181,35 @@ class FilterController extends Controller
     $count = 0;
 
     if ($q) {
-      $metros = $metros->where('name', 'like', '%' . $q . '%')
-        ->get()
-        ->unique('name')
-        ->take(4);
+//      $metros = $metros->where('name', 'like', '%' . $q . '%')
+//        ->get();
+
+
+      $hotelM = Hotel::query();
+
+      $hotelM = $hotelM->whereHas('metros', function ($q_metros) use ($q) {
+        $q_metros->where('name', 'like', '%' . $q . '%');
+      });
+
+      $hotelM->each(function ($item) use ($metros, $q) {
+        $m = $item->metros()->where('name', 'like', '%' . $q . '%')->get();
+        $m->map(function($m_item) use ($item) {
+          $m_item->address = $item->address;
+        });
+        $metros = $metros->add($m);
+      });
+      $metros = $metros->flatten(1);
+
+      $metros = $metros->unique(function ($item) {
+        return $item['address']['city'] . $item['name'];
+      })->take(4);
+
+      $metros = $metros->values();
+
+      $metros = $metros->all();
+//
+//      dd($metros);
+
 
       $hotels = $hotels->where('name', 'like', '%' . $q . '%')
         ->get()
@@ -201,7 +225,7 @@ class FilterController extends Controller
         ->unique('city')
         ->take(4);
 
-      $area = $area->where('area', 'like', '%' . $q . '%')
+      $area = $area->where('city_area', 'like', '%' . $q . '%')
         ->get()
         ->unique('area')
         ->take(4);
@@ -218,9 +242,17 @@ class FilterController extends Controller
         count($area) +
         count($district);
 
-      $street->map(function ($item) {
-        $item->name = $item->street;
-      });
+      $streetTemp = new Collection();
+      foreach ($street as $item) {
+        $streetTemp->add([
+          'name' => $item->street,
+          'city' => $item->city,
+          'area' => $item->city_area,
+          'district' => $item->city_district,
+          'id' => $item->id
+        ]);
+      }
+      $street = $streetTemp;
 
       $cityTemp = new Collection();
       foreach ($city as $item) {
@@ -235,6 +267,8 @@ class FilterController extends Controller
       foreach ($district as $item) {
         $districtTemp->add([
           'name' => $item->city_district,
+          'city' => $item->city,
+          'area' => $item->city_area,
           'id' => $item->id
         ]);
       }
@@ -243,7 +277,8 @@ class FilterController extends Controller
       $areaTemp = new Collection();
       foreach ($area as $item) {
         $areaTemp->add([
-          'name' => $item->area,
+          'name' => $item->city_area,
+          'city' =>  $item->city,
           'id' => $item->id
         ]);
       }
