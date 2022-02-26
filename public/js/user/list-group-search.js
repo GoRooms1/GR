@@ -21,6 +21,8 @@ $(function () {
   $(mini_search).focusin(function () {
     let val = $(this).val()
     if (val !== '') {
+      updateDataListHelperBigSearch()
+      updateDataListHelper()
       $(mini_list).fadeIn()
       $(big_list).fadeIn()
     } else {
@@ -32,8 +34,11 @@ $(function () {
   $(big_search).focusin(function () {
     let val = $(this).val()
     if (val !== '') {
+      updateDataListHelperBigSearch()
+      updateDataListHelper()
       $(big_list).fadeIn()
     } else {
+      $(mini_list).fadeOut()
       $(big_list).fadeOut()
     }
   })
@@ -98,6 +103,7 @@ function updateDataListHelper () {
   let div = document.createElement("div")
   let div2 = document.createElement("div")
   div.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
+  div2.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
   big_list.append(div)
   mini_list.append(div2)
   createSpinner(div)
@@ -182,6 +188,7 @@ function updateDataListHelperBigSearch () {
   let div = document.createElement("div")
   let div2 = document.createElement("div")
   div.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
+  div2.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
   big_list.append(div)
   mini_list.append(div2)
   createSpinner(div)
