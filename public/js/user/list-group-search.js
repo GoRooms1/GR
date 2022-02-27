@@ -203,12 +203,12 @@ function updateDataListHelper (url, search) {
     .catch(() => {
       big_list.empty()
       big_list.append(
-        '<p class="list-group-item list-group-item-action item-action-title">Ошибка при загрузки данных</p>'
+        '<p class="list-group-item list-group-item-action item-action-title">Ошибка при загрузке данных</p>'
       )
 
       mini_list.empty()
       mini_list.append(
-        '<p class="list-group-item list-group-item-action item-action-title">Ошибка при загрузки данных</p>'
+        '<p class="list-group-item list-group-item-action item-action-title">Ошибка при загрузке данных</p>'
       )
     })
 }
