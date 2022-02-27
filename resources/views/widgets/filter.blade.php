@@ -14,7 +14,10 @@
         <div class="relative-input-search">
           <input type="text" id="advanced-search" name="" class="search-input"
                  placeholder="Название отеля, адрес, метро, округ, район, город"
-                 value="">
+                 value=""
+                 onfocus="this.removeAttribute('readonly')"
+                 readonly
+          >
           <div class="list-group" style="display: none;" id="big-list-group">
             <p class="list-group-item list-group-item-action item-action-title">Отели</p>
             <a href="#" class="list-group-item list-group-item-action">A second link item</a>
@@ -265,7 +268,7 @@
   <div id="js-search" class="search">
     <div class="container">
       <form action="{{ route('search') }}" id="search-form" class="search-form" method="GET">
-        <input type="hidden" name="city" value="{{ $city }}">
+        <input type="hidden" name="city" value="{{ $city }}" onfocus="this.removeAttribute('readonly')" readonly>
         <div class="search-form-group">
           <div class="relative-input-search">
             <input type="search"
