@@ -1,4 +1,6 @@
 $(function () {
+
+  let Timeout;
   let mini_list = $('#mini-list-group')
   let big_list = $('#big-list-group')
   let mini_search = $('input#search-mini')
@@ -45,25 +47,63 @@ $(function () {
   })
 
   $(mini_search).on('input propertychange', function () {
-    let val = $(this).val()
-    console.log(val)
-    if (val !== '') {
-      updateDataListHelper(url, mini_search)
-      $(mini_list).fadeIn()
-    } else {
-      $(mini_list).fadeOut();
+    clearTimeout(Timeout)
+    Timeout = null;
+
+    if ($(mini_list).find('.spinner-wrapper').length < 1) {
+      big_list.empty()
+      mini_list.empty()
+
+      let div = document.createElement("div")
+      let div2 = document.createElement("div")
+      div.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
+      div2.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
+      big_list.append(div)
+      mini_list.append(div2)
+      createSpinner(div)
+      createSpinner(div2)
     }
+
+    Timeout = setTimeout(() => {
+      let val = $(this).val()
+      console.log(val)
+      if (val !== '') {
+        updateDataListHelper(url, mini_search)
+        $(mini_list).fadeIn()
+      } else {
+        $(mini_list).fadeOut();
+      }
+    }, 500)
   })
 
   $(big_search).on('input propertychange', function () {
-    let val = $(this).val()
-    console.log(val)
-    if (val !== '') {
-      updateDataListHelper(url, big_search)
-      $(big_list).fadeIn()
-    } else {
-      $(big_list).fadeOut();
+    clearTimeout(Timeout)
+    Timeout = null;
+
+    if ($(big_list).find('.spinner-wrapper').length < 1) {
+      big_list.empty()
+      mini_list.empty()
+
+      let div = document.createElement("div")
+      let div2 = document.createElement("div")
+      div.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
+      div2.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
+      big_list.append(div)
+      mini_list.append(div2)
+      createSpinner(div)
+      createSpinner(div2)
     }
+
+    Timeout = setTimeout(() => {
+      let val = $(this).val()
+      console.log(val)
+      if (val !== '') {
+        updateDataListHelper(url, big_search)
+        $(big_list).fadeIn()
+      } else {
+        $(big_list).fadeOut();
+      }
+    }, 500)
   })
 
   addListenerClickListGroupItemAdd()
@@ -101,17 +141,6 @@ function updateDataListHelper (url, search) {
   let mini_list = $('#mini-list-group')
   let big_list = $('#big-list-group')
 
-  big_list.empty()
-  mini_list.empty()
-
-  let div = document.createElement("div")
-  let div2 = document.createElement("div")
-  div.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
-  div2.style.cssText = 'background: #fff; padding-top: 20px; padding-bottom: 20px';
-  big_list.append(div)
-  mini_list.append(div2)
-  createSpinner(div)
-  createSpinner(div2)
   axios.get('/api/filter/all', {
     params: {
       q: search.val()
