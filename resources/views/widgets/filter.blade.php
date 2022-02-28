@@ -7,7 +7,7 @@
   }
 @endphp
 
-<form action="{{ $route }}" id="js-advanced-search" class="advanced-search" method="GET">
+<form action="{{ $route }}" autocomplete="off" id="js-advanced-search" class="advanced-search" method="GET">
   <div id="js-advanced-search-in" class="advanced-search-in">
     <div class="container">
       <div class="search-form-group">
@@ -15,6 +15,7 @@
           <input type="text" id="advanced-search" name="" class="search-input"
                  placeholder="Название отеля, адрес, метро, округ, район, город"
                  value=""
+                 autocomplete="off"
                  onfocus="this.removeAttribute('readonly')"
                  readonly
           >
@@ -267,8 +268,8 @@
 <div id="js-search-wrapper" class="search-wrapper">
   <div id="js-search" class="search">
     <div class="container">
-      <form action="{{ route('search') }}" id="search-form" class="search-form" method="GET">
-        <input type="hidden" name="city" value="{{ $city }}" onfocus="this.removeAttribute('readonly')" readonly>
+      <form action="{{ route('search') }}" autocomplete="off" id="search-form" class="search-form" method="GET">
+        <input type="hidden" name="city" autocomplete="off" value="{{ $city }}" onfocus="this.removeAttribute('readonly')" readonly>
         <div class="search-form-group">
           <div class="relative-input-search">
             <input type="search"
@@ -276,6 +277,9 @@
                    name=""
                    class="search-input"
                    value=""
+                   autocomplete="off"
+                   onfocus="this.removeAttribute('readonly')"
+                   readonly
                    placeholder="Название отеля, адрес, метро, округ, район, город">
 
             <div class="list-group" style="display: none" id="mini-list-group">
