@@ -40,7 +40,7 @@ class Filter extends AbstractWidget
   protected ?string $hotel_type = '';
   protected Object $data;
   protected bool $moderate;
-  protected array $attributes;
+  protected Collection $attributes;
 
   /**
    * Treat this method as a controller action.
@@ -117,7 +117,13 @@ class Filter extends AbstractWidget
       return Attribute::forRooms()->filtered()->get();
     });
 
-    $this->attributes = $this->normalizeAttrs();
+    $attributes = $this->normalizeAttrs();
+
+    if (count($attributes['room']) > 0 || count($attributes['hotel']) > 0) {
+      $this->attributes = Attribute::findMany(array_merge($attributes['room'], $attributes['hotel']));
+    } else {
+      $this->attributes = new Collection();
+    }
 
 //    Normalize attrs
 

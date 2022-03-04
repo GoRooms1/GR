@@ -33,7 +33,23 @@
         </div>
 {{--        <button class="btn btn-orange search-btn">Найти</button>--}}
       </div>
-      <div class="search-tags"></div>
+      <div class="search-tags">
+        @if ($city)
+          <span class="d-flex">г.{{ $city }}</span>
+        @endif
+        @if ($area)
+          <span class="d-flex">округ {{ $area }} <i class="fa-solid fa-xmark"></i></span>
+        @endif
+        @if ($district)
+          <span class="d-flex">р-н {{ $district }} <i class="fa-solid fa-xmark"></i></span>
+        @endif
+        @if ($metro)
+          <span class="d-flex">станция {{ $metro }} <i class="fa-solid fa-xmark"></i></span>
+        @endif
+        @foreach($attributes as $attr)
+          <span class="d-flex">{{ $attr->name }} <i class="fa-solid fa-xmark"></i></span>
+        @endforeach
+      </div>
       <div class="search-dates">
       </div>
       <div class="row">
@@ -201,7 +217,8 @@
               @foreach ($hotels_attributes as $attribute)
                 <li class="advanced-search-details-item">
                   <input id="advanced-search-hotel-{{ $loop->index }}" type="checkbox"
-                         @if(in_array($attribute->id, $attributes['hotel'], false))
+{{--                         @if(in_array($attribute->id, $attributes, false))--}}
+                         @if($attributes->contains('id', $attribute->id))
                          checked
                          @endif
                          name="attributes[hotel][]" value="{{ $attribute->id }}" class="checkbox">
@@ -219,7 +236,8 @@
               @foreach ($rooms_attributes as $attribute)
                 <li class="advanced-search-details-item">
                   <input id="advanced-search-rooms-{{ $loop->index }}" type="checkbox"
-                         @if(in_array($attribute->id, $attributes['room'], false))
+{{--                         @if(in_array($attribute->id, $attributes['room'], false))--}}
+                         @if($attributes->contains('id', $attribute->id))
                           checked
                          @endif
                          name="attributes[room][]" value="{{ $attribute->id }}" class="checkbox">
@@ -297,7 +315,23 @@
 {{--          <button class="btn btn-orange search-btn">Найти</button>--}}
 
         </div>
-        <div class="search-tags"></div>
+        <div class="search-tags">
+          @if ($city)
+            <span class="d-flex">г.{{ $city }}</span>
+          @endif
+          @if ($area)
+            <span class="d-flex">округ {{ $area }} <i class="fa-solid fa-xmark"></i></span>
+          @endif
+          @if ($district)
+            <span class="d-flex">р-н {{ $district }} <i class="fa-solid fa-xmark"></i></span>
+          @endif
+          @if ($metro)
+            <span class="d-flex">станция {{ $metro }} <i class="fa-solid fa-xmark"></i></span>
+          @endif
+          @foreach($attributes as $attr)
+            <span class="d-flex">{{ $attr->name }} <i class="fa-solid fa-xmark"></i></span>
+          @endforeach
+        </div>
         <div class="search-bottom">
           <button id="js-advanced-search-open-btn" class="advanced-search-btn advanced-search-btn-open">
             Расширеный поиск
