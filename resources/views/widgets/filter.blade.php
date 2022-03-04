@@ -7,14 +7,31 @@
   }
 @endphp
 
-<form action="{{ $route }}" id="js-advanced-search" class="advanced-search" method="GET">
+<form action="{{ $route }}" autocomplete="off" id="js-advanced-search" class="advanced-search" method="GET">
   <div id="js-advanced-search-in" class="advanced-search-in">
     <div class="container">
       <div class="search-form-group">
-        <input type="text" id="advanced-search" name="query" class="search-input"
-               placeholder="Название отеля, округ, район город, метро"
-               value="{{ old('query', $query) }}">
-        <button class="btn btn-orange search-btn">Найти</button>
+        <div class="relative-input-search">
+          <input type="text" id="advanced-search" name="" class="search-input"
+                 placeholder="Название отеля, адрес, метро, округ, район, город"
+                 value=""
+                 autocomplete="off"
+                 onfocus="this.removeAttribute('readonly')"
+                 readonly
+          >
+          <div class="list-group" style="display: none;" id="big-list-group">
+            <p class="list-group-item list-group-item-action item-action-title">Отели</p>
+            <a href="#" class="list-group-item list-group-item-action">A second link item</a>
+            <a href="#" class="list-group-item list-group-item-action">A third link item</a>
+            <p class="list-group-item list-group-item-action item-action-title">Метро</p>
+            <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+            <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+            <p class="list-group-item list-group-item-action item-action-title">Районы</p>
+            <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+            <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+          </div>
+        </div>
+{{--        <button class="btn btn-orange search-btn">Найти</button>--}}
       </div>
       <div class="search-tags"></div>
       <div class="search-dates">
@@ -251,16 +268,34 @@
 <div id="js-search-wrapper" class="search-wrapper">
   <div id="js-search" class="search">
     <div class="container">
-      <form action="{{ route('search') }}" id="search-form" class="search-form" method="GET">
-        <input type="hidden" name="city" value="{{ $city }}">
+      <form action="{{ route('search') }}" autocomplete="off" id="search-form" class="search-form" method="GET">
+        <input type="hidden" name="city" autocomplete="off" value="{{ $city }}" onfocus="this.removeAttribute('readonly')" readonly>
         <div class="search-form-group">
-          <input type="search"
-                 id="search-mini"
-                 name="query"
-                 class="search-input"
-                 value="{{ old('query', $query) }}"
-                 placeholder="Название отеля, округ, район город, метро">
-          <button class="btn btn-orange search-btn">Найти</button>
+          <div class="relative-input-search">
+            <input type="search"
+                   id="search-mini"
+                   name=""
+                   class="search-input"
+                   value=""
+                   autocomplete="off"
+                   onfocus="this.removeAttribute('readonly')"
+                   readonly
+                   placeholder="Название отеля, адрес, метро, округ, район, город">
+
+            <div class="list-group" style="display: none" id="mini-list-group">
+              <p class="list-group-item list-group-item-action item-action-title">Отели</p>
+              <a href="#" class="list-group-item list-group-item-action">A second link item</a>
+              <a href="#" class="list-group-item list-group-item-action">A third link item</a>
+              <p class="list-group-item list-group-item-action item-action-title">Метро</p>
+              <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+              <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+              <p class="list-group-item list-group-item-action item-action-title">Районы</p>
+              <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+              <a href="#" class="list-group-item list-group-item-action">A disabled link item</a>
+            </div>
+          </div>
+{{--          <button class="btn btn-orange search-btn">Найти</button>--}}
+
         </div>
         <div class="search-tags"></div>
         <div class="search-bottom">

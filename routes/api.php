@@ -39,4 +39,6 @@ Route::prefix('/filter')->name('filter.')->group(function () {
   Route::get('count-city-area', 'Api\FilterController@count_city_area')->name('count_city_area');
   Route::get('district', 'Api\FilterController@district')->name('district');
   Route::get('metro', 'Api\FilterController@metro')->name('metro');
+
+  Route::get('all', 'Api\FilterController@all')->name('all');
 });
