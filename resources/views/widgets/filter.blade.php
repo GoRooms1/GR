@@ -320,16 +320,19 @@
             <span class="d-flex">г.{{ $city }}</span>
           @endif
           @if ($area)
-            <span class="d-flex">округ {{ $area }} <i class="fa-solid fa-xmark"></i></span>
+            <span class="d-flex">округ {{ $area }} <a href="{{ \App\Widgets\Filter::remove_key('city_area') }}"><i class="fa-solid fa-xmark"></i></a></span>
           @endif
           @if ($district)
-            <span class="d-flex">р-н {{ $district }} <i class="fa-solid fa-xmark"></i></span>
+            <span class="d-flex">р-н {{ $district }} <a href="{{ \App\Widgets\Filter::remove_key('district') }}"><i class="fa-solid fa-xmark"></i></a></span>
           @endif
           @if ($metro)
-            <span class="d-flex">станция {{ $metro }} <i class="fa-solid fa-xmark"></i></span>
+            <span class="d-flex">метро {{ $metro }} <a href="{{ \App\Widgets\Filter::remove_key('metro') }}"><i class="fa-solid fa-xmark"></i></a></span>
+          @endif
+          @if ($hot)
+              <span class="d-flex">Горящие предложения <a href="{{ \App\Widgets\Filter::remove_key('hot') }}"><i class="fa-solid fa-xmark"></i></a></span>
           @endif
           @foreach($attributes as $attr)
-            <span class="d-flex">{{ $attr->name }} <i class="fa-solid fa-xmark"></i></span>
+            <span class="d-flex">{{ $attr->name }} <a href="{{ \App\Widgets\Filter::remove_attr($attr->model === \App\Models\Room::class ? 'room' : 'hotel', $attr->id) }}"><i class="fa-solid fa-xmark"></i></a></span>
           @endforeach
         </div>
         <div class="search-bottom">

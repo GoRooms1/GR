@@ -13,6 +13,11 @@
   margin-right: 20px;
 }
 
+.search-tags span i {
+  display: flex;
+  cursor: pointer;
+}
+
 .search-tags span:last-child {
   margin-right: 0;
 }
