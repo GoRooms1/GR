@@ -4805,7 +4805,7 @@ button.modal-close:focus {
     padding: 10px;
   }
   .search-tags {
-    display: none;
+    /*display: none;*/
     padding: 5px 0;
   }
   .search-tag {
