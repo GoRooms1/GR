@@ -4864,7 +4864,7 @@ button.modal-close:focus {
     width: 100%;
   }
   .advanced-search .search-tags {
-    display: block;
+    display: flex;
     padding: 5px 0;
   }
   .advanced-search .search-filter-label + .hotel-rating {
