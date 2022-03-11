@@ -25,3 +25,7 @@
 .search-tags span i {
   margin-left: 4px;
 }
+
+.search-tags .d-none {
+  display: none;
+}

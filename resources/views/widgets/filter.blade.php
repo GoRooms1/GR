@@ -43,9 +43,21 @@
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
+        @else
+            <span class="d-none" data-type-tag="area">
+              <a href="#">
+                <i class="fa-solid fa-xmark"></i>
+              </a>
+            </span>
         @endif
         @if ($district)
           <span class="d-flex" data-type-tag="district" data-info="{{ $district }}">р-н {{ $district }}
+              <a href="#">
+                <i class="fa-solid fa-xmark"></i>
+              </a>
+            </span>
+        @else
+            <span class="d-none" data-type-tag="district">
               <a href="#">
                 <i class="fa-solid fa-xmark"></i>
               </a>
@@ -57,6 +69,12 @@
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
+        @else
+            <span class="d-none" data-type-tag="metro">
+              <a href="#">
+                <i class="fa-solid fa-xmark"></i>
+              </a>
+            </span>
         @endif
         @if ($hot)
           <span class="d-flex" data-type-tag="hot" data-info="{{ $hot }}">Горящие предложения
@@ -64,14 +82,27 @@
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
-        @endif
-        @foreach($attributes as $attr)
-          <span class="d-flex" data-type-tag="attributes" data-info="{{ $attr->id }}">{{ $attr->name }}
+        @else
+            <span class="d-flex" style="display: none" data-type-tag="hot" data-info="{{ $hot }}">Горящие предложения
               <a href="#">
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
+        @endif
+        @foreach($attributes as $attr)
+          <span class="d-flex" data-type-tag="attributes" data-info="{{ $attr->id }}">{{ $attr->name }}
+            <a href="#">
+              <i class="fa-solid fa-xmark"></i>
+            </a>
+          </span>
         @endforeach
+
+        <span class="d-none copy-attr">
+          <a href="#">
+            <i class="fa-solid fa-xmark"></i>
+          </a>
+        </span>
+
       </div>
       <div class="search-dates">
       </div>
