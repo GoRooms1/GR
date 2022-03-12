@@ -174,7 +174,7 @@ function updateDataListHelper (url, search) {
               if (item === 'hotels') {
                 block = `<a href="/hotels/${list_item.slug}" class="list-group-item list-group-item-action"><span class="font-weight-bold">${list_item.name}</span> г.${list_item.address.city}</a>`
               } else if (item === 'metros') {
-                block = `<a href="${url}?metro=${list_item.name}&city=${list_item.address.city}&city_area=${list_item.address.city_area}&district=${list_item.address.city_district}" class="list-group-item list-group-item-action"><span class="font-weight-bold">${list_item.name}</span> г.${list_item.address.city}</a>`
+                block = `<a href="${url}?metro=${list_item.name}&city=${list_item.address.city}" class="list-group-item list-group-item-action"><span class="font-weight-bold">${list_item.name}</span> г.${list_item.address.city}</a>`
               } else if (item === 'city') {
                 block = `<a href="${url}?city=${list_item.name}" class="list-group-item list-group-item-action"><span class="font-weight-bold">${list_item.name}</span></a>`
               } else if (item === 'area') {
