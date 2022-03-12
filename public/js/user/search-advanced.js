@@ -66,7 +66,7 @@ $(function () {
       span.unbind('click')
       span = $('#js-advanced-search .search-tags span')
       span.find('a').click(removeTag)
-      span.css('display', 'flex');
+      attrDiv.css('display', 'flex');
     }
     else {
       let span = $('#js-advanced-search .search-tags span[data-type-tag="attributes"][data-info="' + $(this).val() + '"]')
