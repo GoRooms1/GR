@@ -2,6 +2,16 @@
 
 
 $(function () {
+
+  let dataSearch = {
+    attributes: [],
+    city: null,
+    area: null,
+    district: null,
+    metro: null,
+    hot: false
+  }
+
   let mini_search = $('input#search-mini')
 
   $(mini_search).keyup(function () {
@@ -10,6 +20,24 @@ $(function () {
     $('form#js-advanced-search input#advanced-search').val(val)
   })
 
+  // нахождение стандартных значений, что бы при закрытии фильтра их востанавливать
+  $('form#js-advanced-search .advanced-search-details-item input[type="checkbox"]').each(function () {
+    if ($(this).prop('checked')) {
+      console.log($(this))
+      dataSearch.attributes.push({
+        id: $(this).val(),
+        name: $(this).parent('li').find('label').text()
+      })
+    }
+  })
+
+  dataSearch.city = $('form#js-advanced-search #advanced-search-location-city').val()
+  dataSearch.area = $('form#js-advanced-search #advanced-search-location-city_area').val()
+  dataSearch.district = $('form#js-advanced-search #advanced-search-location-district').val()
+  dataSearch.metro = $('form#js-advanced-search #advanced-search-location-metro').val()
+  dataSearch.hot = $('#advanced-search-filter-fire').prop('checked')
+
+
   $('form#js-advanced-search input#advanced-search').change(function () {
     let val = $(this).val()
 
@@ -17,8 +45,8 @@ $(function () {
 
   })
 
+  // Обновление тегов по выбранным данным
   let span = $('#js-advanced-search .search-tags span')
-
   span.find('a').click(removeTag)
 
   $('.advanced-search-details-item input[type="checkbox"]').change(function () {
@@ -38,6 +66,7 @@ $(function () {
       span.unbind('click')
       span = $('#js-advanced-search .search-tags span')
       span.find('a').click(removeTag)
+      span.css('display', 'flex');
     }
     else {
       let span = $('#js-advanced-search .search-tags span[data-type-tag="attributes"][data-info="' + $(this).val() + '"]')
@@ -66,6 +95,7 @@ $(function () {
         '</a>')
       spanEl.attr('data-info', $(this).text())
       spanEl.show()
+      spanEl.css('display', 'flex');
     } else {
       spanEl.hide()
     }
@@ -83,6 +113,7 @@ $(function () {
         '</a>')
       spanEl.attr('data-info', $(this).text())
       spanEl.show()
+      spanEl.css('display', 'flex');
     } else {
       spanEl.hide()
     }
@@ -101,6 +132,7 @@ $(function () {
         '</a>')
       spanEl.attr('data-info', $(this).text())
       spanEl.show()
+      spanEl.css('display', 'flex');
     } else {
       spanEl.hide()
     }
@@ -118,6 +150,7 @@ $(function () {
         '</a>')
       spanEl.attr('data-info', $(this).text())
       spanEl.show()
+      spanEl.css('display', 'flex');
     } else {
       spanEl.hide()
     }
@@ -137,6 +170,7 @@ $(function () {
         '</a>')
       spanEl.attr('data-info', $(this).text())
       spanEl.show()
+      spanEl.css('display', 'flex');
     } else {
       spanEl.hide()
     }
@@ -154,6 +188,7 @@ $(function () {
         '</a>')
       spanEl.attr('data-info', $(this).text())
       spanEl.show()
+      spanEl.css('display', 'flex');
     } else {
       spanEl.hide()
     }
@@ -171,9 +206,108 @@ $(function () {
       span.unbind('click')
       span = $('#js-advanced-search .search-tags span')
       span.find('a').click(removeTag)
+      spanEl.css('display', 'flex');
     } else {
       spanEl.hide()
     }
+  })
+
+
+//  Возврат значений обратно при свораяивании поиска
+  $('form#js-advanced-search #js-advanced-search-close-btn').click(function () {
+
+
+    search_reset()
+
+    $('form#js-advanced-search .advanced-search-details-item input[type="checkbox"]').each(function () {
+      if (dataSearch.attributes.map(el => el.id).includes($(this).val())) {
+
+        let attr = dataSearch.attributes.find(el => el.id === $(this).val())
+
+        $(this).prop('checked', true)
+        let attrDiv = $('.copy-attr').clone()
+        $(attrDiv).removeClass('copy-attr')
+          .removeClass('d-none')
+          .addClass('d-flex')
+          .attr('data-type-tag', 'attributes')
+          .attr('data-info', attr.id)
+          .prepend(attr.name)
+
+        $('#js-advanced-search .search-tags').append(attrDiv)
+        span.unbind('click')
+        span = $('#js-advanced-search .search-tags span')
+        span.find('a').click(removeTag)
+      }
+    })
+
+    if ($('#advanced-search-location-city').val() !== dataSearch.city) {
+      let spanEl = $('#js-advanced-search .search-tags span[data-type-tag="city"]')
+      spanEl.text('г.' + dataSearch.city)
+      spanEl.attr('data-info', dataSearch.city)
+      span.unbind('click')
+      span = $('#js-advanced-search .search-tags span')
+      span.find('a').click(removeTag)
+      $('#advanced-search-location-city').val(dataSearch.city).trigger('change.select2')
+    }
+
+    if ($('#advanced-search-location-city_area').val() !== dataSearch.area) {
+      let spanEl = $('#js-advanced-search .search-tags span[data-type-tag="area"]')
+      $('#advanced-search-location-city_area').val(dataSearch.area).trigger('change.select2')
+      if (dataSearch.area === null) {
+        spanEl.hide()
+      } else {
+        spanEl.html('округ ' + dataSearch.area + '<a href="#">' +
+          '<i class="fa-solid fa-xmark"></i>' +
+          '</a>')
+        spanEl.attr('data-info', dataSearch.area)
+        span.unbind('click')
+        span = $('#js-advanced-search .search-tags span')
+        span.find('a').click(removeTag)
+        spanEl.show()
+        spanEl.css('display', 'flex');
+      }
+    }
+
+    if ($('#advanced-search-location-district').val() !== dataSearch.district) {
+      let spanEl = $('#js-advanced-search .search-tags span[data-type-tag="district"]')
+      $('#advanced-search-location-district').val(dataSearch.district).trigger('change.select2')
+      if (dataSearch.district === null) {
+        spanEl.hide()
+      } else {
+        spanEl.html('р-н ' + dataSearch.district + '<a href="#">' +
+          '<i class="fa-solid fa-xmark"></i>' +
+          '</a>')
+        spanEl.attr('data-info', dataSearch.district)
+        span.unbind('click')
+        span = $('#js-advanced-search .search-tags span')
+        span.find('a').click(removeTag)
+        spanEl.show()
+        spanEl.css('display', 'flex');
+      }
+    }
+
+    if ($('#advanced-search-location-metro').val() !== dataSearch.metro) {
+      let spanEl = $('#js-advanced-search .search-tags span[data-type-tag="metro"]')
+      $('#advanced-search-location-metro').val(dataSearch.metro).trigger('change.select2')
+      if (dataSearch.metro == null) {
+        spanEl.hide()
+      } else {
+        spanEl.html('метро ' + dataSearch.metro + '<a href="#">' +
+          '<i class="fa-solid fa-xmark"></i>' +
+          '</a>')
+        spanEl.attr('data-info', dataSearch.metro)
+        span.unbind('click')
+        span = $('#js-advanced-search .search-tags span')
+        span.find('a').click(removeTag)
+        spanEl.show()
+        spanEl.css('display', 'flex');
+      }
+    }
+
+
+    setTimeout(() => {
+      $('form#js-advanced-search button[type=submit]').text('Показать')
+    }, 1000)
   })
 
 })
