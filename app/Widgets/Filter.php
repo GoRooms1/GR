@@ -2,6 +2,7 @@
 
 namespace App\Widgets;
 
+use Log;
 use Cookie;
 use App\Models\Metro;
 use App\Models\Address;
@@ -32,6 +33,7 @@ class Filter extends AbstractWidget
   protected ?string $district = null;
   protected ?string $area = null;
   protected ?string $street = null;
+  protected bool $hot = false;
   protected $request;
   protected ?string $query = null;
   protected Collection $hotels_type;
@@ -40,7 +42,7 @@ class Filter extends AbstractWidget
   protected ?string $hotel_type = '';
   protected Object $data;
   protected bool $moderate;
-  protected array $attributes;
+  protected Collection $attributes;
 
   /**
    * Treat this method as a controller action.
@@ -117,9 +119,17 @@ class Filter extends AbstractWidget
       return Attribute::forRooms()->filtered()->get();
     });
 
-    $this->attributes = $this->normalizeAttrs();
+    $attributes = $this->normalizeAttrs();
+
+    if (count($attributes['room']) > 0 || count($attributes['hotel']) > 0) {
+      $this->attributes = Attribute::findMany(array_merge($attributes['room'], $attributes['hotel']));
+    } else {
+      $this->attributes = new Collection();
+    }
 
 //    Normalize attrs
+
+    $this->hot = Request::boolean('hot');
 
     $this->moderate = Request::boolean('moderate');
 
@@ -137,7 +147,8 @@ class Filter extends AbstractWidget
       'rooms_attributes'  => $this->rooms_attributes,
       'hotel_type'        => $this->hotel_type,
       'moderate'          => $this->moderate,
-      'attributes'        => $this->attributes
+      'attributes'        => $this->attributes,
+      'hot'               => $this->hot
     ]);
   }
 
@@ -163,5 +174,27 @@ class Filter extends AbstractWidget
     }
 
     return $attributes;
+  }
+
+  public static function remove_key($key): string
+  {
+    parse_str($_SERVER['QUERY_STRING'], $vars);
+    Log::alert($vars);
+    return strtok($_SERVER['REQUEST_URI'], '?') . '?' . http_build_query(array_diff_key($vars,array($key=>"")));
+  }
+
+  public static function remove_attr($type, $id): string
+  {
+    parse_str($_SERVER['QUERY_STRING'], $vars);
+    Log::alert($vars);
+    $attrs_of_type = $vars['attributes'][$type];
+    foreach ($attrs_of_type as $i => $item) {
+      if ((string)$item === (string)$id) {
+        $attrs_of_type = array_diff_key($attrs_of_type,array($i=>""));
+      }
+    }
+    $vars['attributes'][$type] = $attrs_of_type;
+
+    return strtok($_SERVER['REQUEST_URI'], '?') . '?' . http_build_query($vars);
   }
 }

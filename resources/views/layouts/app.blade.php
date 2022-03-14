@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{{ asset('css/metro.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('css/filter-select.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/tags.css') }}">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -65,6 +66,7 @@
   <link rel="stylesheet" href="{{ asset('css/swiper.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/jquery.flexdatalist.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
       .ml-0 {
           margin-left: 0 !important;
@@ -681,6 +683,7 @@
 <script src="{{ asset('js/jquery.maskedinput.js') }}" defer></script>
 <script src="{{ asset('js/jquery.flexdatalist.min.js') }}" defer></script>
 <script src="{{ asset('js/main.js') }}" defer></script>
+<script src="{{ asset('js/user/list-group-search.js') }}"></script>
 <script src="{{ asset('js/user/search-advanced.js') }}"></script>
 @yield('scripts')
 @if(Session::get('showSuccessModal'))

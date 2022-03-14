@@ -86,7 +86,7 @@ class Attribute extends Model
     return $this->getAttributes()['model'];
   }
 
-  public function relationCategory ()
+  public function relationCategory (): \Illuminate\Database\Eloquent\Relations\BelongsTo
   {
     return $this->belongsTo(AttributeCategory::class, 'attribute_category_id', 'id');
   }

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Json;
 use App\Models\Metro;
+use App\Models\Hotel;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Collection;
 
 class FilterController extends Controller
 {
@@ -157,5 +159,141 @@ class FilterController extends Controller
       ->unique();
 
     return Json::good(['metros' => $metros]);
+  }
+
+  public function all (Request $request)
+  {
+    $q = $request->get('q');
+
+    $metros = new Collection();
+    $hotels = Hotel::query()->without([
+      'rooms',
+      'attrs',
+      'metros',
+      'image',
+      'images',
+      'type'
+    ]);
+    $city = Address::query();
+    $area = Address::query();
+    $district = Address::query();
+    $street = Address::query();
+    $count = 0;
+
+    if ($q) {
+//      $metros = $metros->where('name', 'like', '%' . $q . '%')
+//        ->get();
+
+
+      $hotelM = Hotel::query();
+
+      $hotelM = $hotelM->whereHas('metros', function ($q_metros) use ($q) {
+        $q_metros->where('name', 'like', '%' . $q . '%');
+      });
+
+      $hotelM->each(function ($item) use ($metros, $q) {
+        $m = $item->metros()->where('name', 'like', '%' . $q . '%')->get();
+        $m->map(function($m_item) use ($item) {
+          $m_item->address = $item->address;
+        });
+        $metros = $metros->add($m);
+      });
+      $metros = $metros->flatten(1);
+
+      $metros = $metros->unique(function ($item) {
+        return $item['address']['city'] . $item['name'];
+      })->take(4);
+
+      $metros = $metros->values();
+
+      $metros = $metros->all();
+//
+//      dd($metros);
+
+
+      $hotels = $hotels->where('name', 'like', '%' . $q . '%')
+        ->get()
+        ->take(4);
+
+      $street = $street->where('street', 'like', '%' . $q . '%')
+        ->get()
+        ->unique('street')
+        ->take(4);
+
+      $city = $city->where('city', 'like', '%' . $q . '%')
+        ->get()
+        ->unique('city')
+        ->take(4);
+
+      $area = $area->where('city_area', 'like', '%' . $q . '%')
+        ->get()
+        ->unique('area')
+        ->take(4);
+
+      $district = $district->where('city_district', 'like', '%' . $q . '%')
+        ->get()
+        ->unique('city_district')
+        ->take(4);
+
+      $count += count($hotels) +
+        count($metros) +
+        count($street) +
+        count($city) +
+        count($area) +
+        count($district);
+
+      $streetTemp = new Collection();
+      foreach ($street as $item) {
+        $streetTemp->add([
+          'name' => $item->street,
+          'city' => $item->city,
+          'area' => $item->city_area,
+          'district' => $item->city_district,
+          'id' => $item->id
+        ]);
+      }
+      $street = $streetTemp;
+
+      $cityTemp = new Collection();
+      foreach ($city as $item) {
+        $cityTemp->add([
+          'name' => $item->city,
+          'id' => $item->id
+        ]);
+      }
+      $city = $cityTemp;
+
+      $districtTemp = new Collection();
+      foreach ($district as $item) {
+        $districtTemp->add([
+          'name' => $item->city_district,
+          'city' => $item->city,
+          'area' => $item->city_area,
+          'id' => $item->id
+        ]);
+      }
+      $district = $districtTemp;
+
+      $areaTemp = new Collection();
+      foreach ($area as $item) {
+        $areaTemp->add([
+          'name' => $item->city_area,
+          'city' =>  $item->city,
+          'id' => $item->id
+        ]);
+      }
+      $area = $areaTemp;
+
+    }
+
+    return Json::good([
+      'hotels' => $hotels,
+      'metros' => $metros,
+      'street' => $street,
+      'district' => $district,
+      'area' => $area,
+      'city' => $city,
+      'count' => $count
+    ]);
   }
 }

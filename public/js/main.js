@@ -573,7 +573,7 @@ function search_reset() {
     $("#js-advanced-search textarea, #js-advanced-search input[type='text']").val("");
     $("#js-advanced-search input, #js-advanced-search textarea").trigger("refresh");
 
-    $(".advanced-search-details input[type='checkbox']").prop("checked", false);
+    $(".advanced-search-details input[type='checkbox']").prop("checked", false).trigger('change');
     // $(".advanced-search-prices input[type='checkbox']").trigger("refresh");
 
     // Сброс данных цены

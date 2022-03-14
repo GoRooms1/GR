@@ -1,0 +1,31 @@
+.search-tags {
+  align-items: center;
+  color: white;
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+.advanced-search .search-tags {
+  color: #2f64ad;
+}
+.search-tags span {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.search-tags span i {
+  display: flex;
+  cursor: pointer;
+}
+
+.search-tags span:last-child {
+  margin-right: 0;
+}
+
+.search-tags span i {
+  margin-left: 4px;
+}
+
+.search-tags .d-none {
+  display: none;
+}

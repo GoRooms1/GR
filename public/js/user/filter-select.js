@@ -138,7 +138,7 @@ $(function () {
   // Если город изменился то обновить кол-во округов и отчистить все поля
   $(city).on('select2:select', function (e) {
     let data = e.params.data;
-
+    $(city_area).val(null).trigger('change.select2')
     getCountCityArea(city_area, data.text)
     console.log('city: ', data.text);
     district.val(null)
