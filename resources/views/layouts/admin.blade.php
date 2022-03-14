@@ -93,11 +93,34 @@
             <li class="nav-item">
               <a href="{{ route('admin.articles.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.articles.*') ? 'active' : '' }}">Статьи</a>
             </li>
+
             <li class="nav-item">
-              <a href="{{ route('admin.pages.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.pages.*') ? 'active' : '' }}">Страницы</a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('admin.descriptions.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.descriptions.*') ? 'active' : '' }}">Страницы локаций</a>
+              <a id="hasSubItems2"
+                 class="nav-link nav-link-collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') ? 'active nav-link-show' : '' }}"
+                 href="#"
+                 data-toggle="collapse"
+                 data-target="#collapseSubItems3"
+                 aria-controls="collapseSubItems3"
+                 aria-expanded="true"
+              >
+                SEO Контент
+              </a>
+
+              <ul class="nav-second-level collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') ? 'show' : '' }}"
+                  id="collapseSubItems3"
+                  data-parent="#navAccordion"
+              >
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.pages.*') ? 'active' : '' }}" href="{{ route('admin.pages.index') }}">
+                    <span class="nav-link-text">Страницы</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.descriptions.*') ? 'active' : '' }}" href="{{ route('admin.descriptions.index') }}">
+                    <span class="nav-link-text">Страницы локаций</span>
+                  </a>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
               <a href="{{ route('admin.instructions.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.instructions.*') ? 'active' : '' }}">Инструкции</a>
