@@ -29,7 +29,7 @@
                                          style="max-width: 100px">
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.hotels.show', $hotel) }}" class="">{{ $hotel->name }}</a>
+                                    <a href="{{ route('admin.hotels.show', $hotel) }}" class="{{ $hotel->description === null ? 'text-danger' : '' }}">{{ $hotel->name }}</a>
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
