@@ -97,7 +97,7 @@
               <a href="{{ route('admin.pages.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.pages.*') ? 'active' : '' }}">Страницы</a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.descriptions.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.description.*') ? 'active' : '' }}">Страницы локаций</a>
+              <a href="{{ route('admin.descriptions.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.descriptions.*') ? 'active' : '' }}">Страницы локаций</a>
             </li>
             <li class="nav-item">
               <a href="{{ route('admin.instructions.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.instructions.*') ? 'active' : '' }}">Инструкции</a>
