@@ -53,3 +53,8 @@ Route::post('lk/object/store', 'Lk\ObjectController@store')->name('lk.object.sto
 //    return redirect()->to('{page}');
 //})->where('any', '.*');
 
+
+Route::get('/test', function () {
+  $a = \App\Models\Address::first();
+  (new App\Helpers\CreateSeoUrls)->createUrlFromAddress($a);
+});
