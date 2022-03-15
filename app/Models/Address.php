@@ -91,38 +91,24 @@ class Address extends Model
     'comment',
   ];
 
-  public static function boot()
+
+  public static function setAddressesSlug($model): void
   {
-    parent::boot();
-
-    self::creating(function ($model) {
-      self::setAddressesSlug($model);
-    });
-
-    self::updating(function ($model) {
-      self::setAddressesSlug($model);
-    });
-    self::deleting(function (self $address) {
-      Cache::forget('sitemap.2g');
-    });
-  }
-
-  public static function setAddressesSlug($model)
-  {
-    $slugs = Address::getSlugFromAddress($model);
+    $slugs = self::getSlugFromAddress($model);
     Cache::forget('sitemap.2g');
-    foreach ($slugs as $slug)
+    foreach ($slugs as $slug) {
       DB::table('address_slug')->updateOrInsert(['address' => $slug['address']], $slug);
+    }
   }
 
-  public static function getSlugFromAddress(Address $address)
+  public static function getSlugFromAddress(Address $address): array
   {
     $columns = ['region', 'area', 'city', 'city_district', 'street', 'city_area'];
 
     $slugs = [];
     foreach ($columns as $column) {
       $attribute = $address->getAttribute($column);
-      if (!is_null($attribute) && !empty($attribute)) {
+      if (!empty($attribute)) {
         $slugs[] = [
           'address' => $attribute,
           'slug' => Str::slug($attribute),
@@ -142,9 +128,9 @@ class Address extends Model
   {
     $areas = explode('-', $this->city_area);
     $area = '';
-    foreach ($areas as $area_prefix)
+    foreach ($areas as $area_prefix) {
       $area .= mb_substr($area_prefix, 0, 1);
-    $area = mb_strtoupper($area) . 'АО';
-    return $area;
+    }
+    return mb_strtoupper($area) . 'АО';
   }
 }
