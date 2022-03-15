@@ -66,8 +66,9 @@ class CreateSeoUrls
           'url' => $seoData->url,
           'title' => $seoData->title,
           'meta_description' => $seoData->description,
-
+          'h1' => $seoData->h1
         ]);
+        $pageDescription->save();
 
       } else {
         $seo[$key] = null;
