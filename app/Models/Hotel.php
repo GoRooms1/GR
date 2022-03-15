@@ -198,7 +198,7 @@ class Hotel extends Model
   {
     parent::boot();
 
-    static::addGlobalScope('moderation', function (Builder $builder) {
+    static::addGlobalScope('moderation', static function (Builder $builder) {
 
       if (auth()->check()) {
         if (Route::currentRouteNamed('lk.*')) {
@@ -241,11 +241,12 @@ class Hotel extends Model
     });
 
 
-    self::creating(function (Hotel $hotel) {
+    self::creating(static function (Hotel $hotel) {
       $hotel->slug = $hotel->slug ?? Str::slug($hotel->name) . '-' . Carbon::now()->timestamp;
       Cache::forget('sitemap.2g');
     });
 
+//    TODO: Убарть, адреса ненерируют
     self::created(function (Hotel $hotel) {
       try {
         if (!PageDescription::where('url', '/address/' . Str::slug($hotel->address->city))->exists()) {
@@ -259,6 +260,7 @@ class Hotel extends Model
       }
     });
 
+    //    TODO: Убарть, адреса ненерируют
     self::updated(function (Hotel $hotel) {
       try {
         if (!PageDescription::where('url', '/address/' . Str::slug($hotel->address->city))->exists()) {
@@ -270,12 +272,6 @@ class Hotel extends Model
       } catch (Exception $exception) {
         Log::error($exception);
       }
-    });
-    self::updating(function (self $hotel) {
-      Cache::forget('sitemap.2g');
-    });
-    self::deleting(function (self $hotel) {
-      Cache::forget('sitemap.2g');
     });
   }
   ### END SCOPES
