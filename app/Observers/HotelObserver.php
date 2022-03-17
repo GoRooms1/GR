@@ -28,7 +28,11 @@ class HotelObserver
     $hotel->moderate = true;
     $hotel->old_moderate = false;
     $hotel->show = false;
+
+    $hotel->slug = $hotel->generateSlug();
     $hotel->save();
+    Cache::forget('sitemap.2g');
+
   }
 
   /**

@@ -240,39 +240,7 @@ class Hotel extends Model
       }
     });
 
-
-    self::creating(static function (Hotel $hotel) {
-      $hotel->slug = $hotel->slug ?? Str::slug($hotel->name) . '-' . Carbon::now()->timestamp;
-      Cache::forget('sitemap.2g');
-    });
-
-//    TODO: Убарть, адреса ненерируют
-    self::created(function (Hotel $hotel) {
-      try {
-        if (!PageDescription::where('url', '/address/' . Str::slug($hotel->address->city))->exists()) {
-          $pageDesc = new PageDescription();
-          $pageDesc->url = '/address/' . Str::slug($hotel->address->city);
-          $pageDesc->title = 'Отели города "' . $hotel->address->city . '"';
-          $pageDesc->save();
-        }
-      } catch (Exception $exception) {
-        Log::error($exception);
-      }
-    });
-
-    //    TODO: Убарть, адреса ненерируют
-    self::updated(function (Hotel $hotel) {
-      try {
-        if (!PageDescription::where('url', '/address/' . Str::slug($hotel->address->city))->exists()) {
-          $pageDesc = new PageDescription();
-          $pageDesc->url = '/address/' . Str::slug($hotel->address->city);
-          $pageDesc->title = 'Отели города "' . $hotel->address->city . '"';
-          $pageDesc->save();
-        }
-      } catch (Exception $exception) {
-        Log::error($exception);
-      }
-    });
+    
   }
   ### END SCOPES
 
@@ -579,4 +547,19 @@ class Hotel extends Model
     return 'disabled';
   }
 
+  /**
+   * Generate Unique slug
+   *
+   * @return string
+   */
+  public function generateSlug(): string
+  {
+    $i = 0;
+    do {
+      $slug = Str::slug($this->name) . ($i > 0 ? '-' . $i : '');
+      $i++;
+    } while (self::withoutGlobalScope('moderation')->whereSlug($slug)->exists());
+
+    return $slug;
+  }
 }
