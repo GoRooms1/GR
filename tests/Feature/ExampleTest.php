@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Hotel;
+use App\Models\PageDescription;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ExampleTest extends TestCase
 {
@@ -12,10 +15,21 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testHotelGenerateSlug(): void
     {
-        $response = $this->get('/');
+        $hotel = Factory::factoryForModel(Hotel::class)->create();
+        $this->assertModelExists($hotel);
+    }
 
-        $response->assertStatus(200);
+    public function testGenerateSeoForAddress(): void
+    {
+      $hotel = Hotel::orderBy('id', 'asc')->first();
+      $countOldPageDescription = PageDescription::count();
+      $hotel->saveAddress('г Красноярск, ул Горького, д 24 кв 25');
+      $hotel->save();
+
+      $countNewPageDescription = PageDescription::count();
+
+      $this->assertNotEquals($countOldPageDescription, $countNewPageDescription);
     }
 }
