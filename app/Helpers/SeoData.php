@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Str;
+use App\Models\Hotel;
 use App\Models\Address;
 
 class SeoData
@@ -13,6 +14,7 @@ class SeoData
   public string $description;
   public ?string $metro = null;
   public string $lastOfType = '';
+  public ?Hotel $hotel;
   public Address $address;
 
   public function __construct(Address $address, $url = null)
@@ -24,6 +26,25 @@ class SeoData
 
   public function generate(): bool
   {
+    if ($this->lastOfType === 'hotel' && $this->hotel) {
+      $this->h1 = $this->hotel->type->name . ': ' . $this->hotel->name . ' на улице ' . $this->address->street;
+      $this->title = $this->hotel->name . ' ' . Str::lower($this->hotel->type->name) . ' с Номерами на Час Ночь Сутки ';
+      if ($this->hotel->metros()->count() > 0) {
+        $this->title .= 'у метро ' . $this->hotel->metros()->first()->name;
+      } else {
+        $this->title .= 'в' .  $this->address->city;
+      }
+
+      $this->description = $this->hotel->type->name . ' ' . $this->hotel->name;
+      foreach ($this->hotel->minimals as $minimal) {
+        if ($minimal->name === 'На час' && $minimal->value > 0) {
+          $this->description .= 'с номерами от ' . $minimal->value . 'рублей в час';
+        }
+      }
+      $this->description .= ', забронировать онлайн без комиссий. Описание и фотографии номеров, отзывы и фильтры с удобной сортировкой.';
+
+      return true;
+    }
     if ($this->url && $this->metro !== '') {
 
       if ($this->lastOfType === 'metro') {
