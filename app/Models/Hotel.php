@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\User;
 use Eloquent;
-use Exception;
 use App\Traits\UseImages;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,7 +11,6 @@ use App\Traits\ClearValidated;
 use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
@@ -240,7 +238,6 @@ class Hotel extends Model
       }
     });
 
-    
   }
   ### END SCOPES
 
