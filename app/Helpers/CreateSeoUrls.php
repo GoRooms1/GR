@@ -76,8 +76,5 @@ class CreateSeoUrls
     }
 
     $seo = array_filter($seo, static fn($item): bool => $item !== null);
-
-    dd($seo);
-
   }
 }
