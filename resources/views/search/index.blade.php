@@ -2,11 +2,11 @@
 
 @section('content')
   @widget('Filter')
-
+  {{ dd($pageDescription) }}
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h1 class="section-title">{!! $pageDescription->title ?? $title !!}</h1>
+        <h1 class="section-title">{!! $pageDescription->h1 ?? $pageDescription->title ?? $title !!}</h1>
       </div>
     </div>
   </section>
