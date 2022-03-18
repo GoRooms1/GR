@@ -160,6 +160,7 @@ class Hotel extends Model
     'moderate',
     'show',
     'checked_type_fond',
+    'slug'
   ];
 
   /**
