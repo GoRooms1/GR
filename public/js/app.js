@@ -37613,47 +37613,50 @@ window.deleteImage = function (image) {
 };
 
 var image_field = document.getElementsByClassName('js-autoload')[0];
-image_field.addEventListener('change', function (event) {
-  var form_data = new FormData();
 
-  for (var _i = 0; _i < event.target.files.length; _i++) {
-    form_data.append('image[]', event.target.files[_i]);
-  }
+if (image_field) {
+  image_field.addEventListener('change', function (event) {
+    var form_data = new FormData();
 
-  form_data.append('model_name', event.target.dataset.model);
-  form_data.append('modelID', event.target.dataset.model_id);
-  event.target.value = "";
-  var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  fetch('/admin/upload_for', {
-    method: 'post',
-    headers: {
-      "X-CSRF-Token": token
-    },
-    body: form_data
-  }).then(function (response) {
-    return response.json();
-  }).then(function (response) {
-    if (response.success) {
-      var container = document.querySelector('.images');
-
-      for (var _i2 = 0; _i2 < response.payload.images.length; _i2++) {
-        var image = response.payload.images[_i2],
-            col = document.createElement('div'),
-            img = document.createElement('img'),
-            btn_group = document.createElement('div');
-        col.classList.add('col-12', 'col-md-4', 'mb-3');
-        col.id = 'image_' + image.id;
-        img.src = '\\' + image.path;
-        img.classList.add('img-fluid', 'img-thumbnail');
-        btn_group.classList.add('btn-group', 'btn-group-sm', 'w-100', 'mt-1');
-        btn_group.innerHTML = "\n                    <button type=\"button\" class=\"btn btn-danger\" onclick=\"window.deleteImage(".concat(image.id, ")\">\n                        <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                    </button>");
-        col.appendChild(img);
-        col.appendChild(btn_group);
-        container.prepend(col);
-      }
+    for (var _i = 0; _i < event.target.files.length; _i++) {
+      form_data.append('image[]', event.target.files[_i]);
     }
+
+    form_data.append('model_name', event.target.dataset.model);
+    form_data.append('modelID', event.target.dataset.model_id);
+    event.target.value = "";
+    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    fetch('/admin/upload_for', {
+      method: 'post',
+      headers: {
+        "X-CSRF-Token": token
+      },
+      body: form_data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (response) {
+      if (response.success) {
+        var container = document.querySelector('.images');
+
+        for (var _i2 = 0; _i2 < response.payload.images.length; _i2++) {
+          var image = response.payload.images[_i2],
+              col = document.createElement('div'),
+              img = document.createElement('img'),
+              btn_group = document.createElement('div');
+          col.classList.add('col-12', 'col-md-4', 'mb-3');
+          col.id = 'image_' + image.id;
+          img.src = '\\' + image.path;
+          img.classList.add('img-fluid', 'img-thumbnail');
+          btn_group.classList.add('btn-group', 'btn-group-sm', 'w-100', 'mt-1');
+          btn_group.innerHTML = "\n                    <button type=\"button\" class=\"btn btn-danger\" onclick=\"window.deleteImage(".concat(image.id, ")\">\n                        <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                    </button>");
+          col.appendChild(img);
+          col.appendChild(btn_group);
+          container.prepend(col);
+        }
+      }
+    });
   });
-});
+}
 
 /***/ }),
 
