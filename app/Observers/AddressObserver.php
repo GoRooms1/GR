@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Cache;
 
 class AddressObserver
 {
+  public CreateSeoUrls $createSeoUrls;
+
+  public function __construct()
+  {
+    $this->createSeoUrls = new CreateSeoUrls();
+  }
+
   /**
    * Handle the Address "created" event.
    *
@@ -17,11 +24,9 @@ class AddressObserver
    */
   public function created(Address $address): void
   {
-
     Address::setAddressesSlug($address);
-
-    $createSeoUrls = new CreateSeoUrls();
-    $createSeoUrls->createUrlFromAddress($address);
+    $this->createSeoUrls->createUrlFromAddress($address);
+    Cache::forget('sitemap.2g');
   }
 
   /**
@@ -34,9 +39,8 @@ class AddressObserver
   public function updated(Address $address): void
   {
     Address::setAddressesSlug($address);
-
-    $createSeoUrls = new CreateSeoUrls();
-    $createSeoUrls->createUrlFromAddress($address);
+    $this->createSeoUrls->createUrlFromAddress($address);
+    Cache::forget('sitemap.2g');
   }
 
   /**
@@ -48,6 +52,7 @@ class AddressObserver
    */
   public function deleted(Address $address): void
   {
+    $this->createSeoUrls->deleteSeoFromAddress($address);
     Cache::forget('sitemap.2g');
   }
 
@@ -72,6 +77,7 @@ class AddressObserver
    */
   public function forceDeleted(Address $address): void
   {
+    $this->createSeoUrls->deleteSeoFromAddress($address);
     Cache::forget('sitemap.2g');
   }
 }
