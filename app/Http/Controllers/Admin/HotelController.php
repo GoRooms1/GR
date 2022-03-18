@@ -12,7 +12,6 @@ use App\Models\HotelType;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 use App\Http\Requests\HotelRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +25,7 @@ class HotelController extends Controller
    */
   public function index(): View
   {
-    $hotels = Hotel::all();
+    $hotels = Hotel::paginate(15);
     return view('admin.hotel.index', compact('hotels'));
   }
 
@@ -133,7 +132,7 @@ class HotelController extends Controller
    * Update the specified resource in storage.
    *
    * @param Request $request
-   * @param Hotel                    $hotel
+   * @param Hotel   $hotel
    *
    * @return Response
    */

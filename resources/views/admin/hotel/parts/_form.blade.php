@@ -35,6 +35,10 @@
     <label for="meta_title">Тайтл</label>
     <input type="text" name="meta_title" id="meta_title" value="{{ old('meta_title') ?? @$hotel->meta_title ?? '' }}" class="form-control "/>
 </div>
+<div class="form-group required">
+    <label for="h1">H1</label>
+    <input type="text" name="h1" id="h1" value="{{ old('h1') ?? @$hotel->meta_h1 ?? '' }}" class="form-control" required/>
+</div>
 <div class="form-group">
     <label for="meta_description">Мета описание</label>
     <textarea name="meta_description" id="meta_description"

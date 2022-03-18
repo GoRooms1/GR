@@ -443,12 +443,11 @@ class Hotel extends Model
 
     $data = [];
 
-    $title = $this->getTitleDefault();
-    $meta_desc = $this->getDescDefault();
+    $data['title'] = $request->get('meta_title', $this->meta_title);
+    $data['meta_description'] = $request->get('meta_description', $this->meta_description);
 
-    $data['title'] = $request->get('meta_title', $title);
-    $data['meta_description'] = $request->get('meta_description', $meta_desc);
     $data['meta_keywords'] = $request->get('meta_keywords');
+    $data['h1'] = $request->get('h1', $this->meta_h1);
     $data['url'] = $url;
     $data['model_type'] = self::class;
 

@@ -63,6 +63,7 @@ class PageDescriptionController extends Controller
     $data = $request->validate([
       'url' => ['required', 'string', 'unique:page_descriptions,url' . ($description->id ? ',' . $description->id : '')],
       'title' => ['required', 'string'],
+      'h1' => ['required', 'string'],
       'meta_description' => ['nullable', 'string'],
       'meta_keywords' => ['nullable', 'string'],
       'description' => ['nullable', 'string'],
@@ -83,6 +84,6 @@ class PageDescriptionController extends Controller
   public function destroy(PageDescription $description): RedirectResponse
   {
     $description->delete();
-    return redirect()->route('admin.descriptions.index');
+    return redirect()->back();
   }
 }

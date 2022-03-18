@@ -83,7 +83,7 @@
               <tr>
                 <td>{{ $page->id }}</td>
                 <td>
-                  {{ $page->title }}
+                  <span class="{{ $page->meta_description === null ? 'text-danger' : '' }}">{{ $page->title }}</span>
                 </td>
                 <td>
                   {{ $page->url }}
@@ -109,7 +109,9 @@
             'district' => Request::get('district')
           ];
         @endphp
-        {{ $descriptions->appends($filter)->links() }}
+        <div class="row justify-content-center">
+          {{ $descriptions->appends($filter)->links() }}
+        </div>
       </div>
     </div>
   </div>

@@ -46,9 +46,6 @@
         <!-- Left Side Of Navbar -->
         @auth
           <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
-            <li class="nav-item">
-              <a href="{{ route('admin.hotels.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.hotels.*') ? 'active' : '' }}">Страницы отелей</a>
-            </li>
 
             <li class="nav-item">
               <a id="hasSubItems"
@@ -62,7 +59,7 @@
                 Атрибуты
               </a>
 
-              <ul class="nav-second-level collapse {{ Route::currentRouteNamed('admin.attributes.*') || Route::currentRouteNamed('admin.attribute_categories.*') ? 'show' : '' }}"
+              <ul class="nav-second-level list-unstyled collapse {{ Route::currentRouteNamed('admin.attributes.*') || Route::currentRouteNamed('admin.attribute_categories.*') ? 'show' : '' }}"
                   id="collapseSubItems2"
                   data-parent="#navAccordion"
               >
@@ -107,10 +104,16 @@
                 SEO Контент
               </a>
 
-              <ul class="nav-second-level collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') ? 'show' : '' }}"
+              <ul class="nav-second-level list-unstyled collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') || Route::currentRouteNamed('admin.hotels.*') ? 'show' : '' }}"
                   id="collapseSubItems3"
                   data-parent="#navAccordion"
               >
+                <li class="nav-item">
+                  <a href="{{ route('admin.hotels.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.hotels.*') ? 'active' : '' }}">
+                    <span class="nav-link-text">Страницы отелей</span>
+                  </a>
+                </li>
+
                 <li class="nav-item">
                   <a class="nav-link {{ Route::currentRouteNamed('admin.pages.*') ? 'active' : '' }}" href="{{ route('admin.pages.index') }}">
                     <span class="nav-link-text">Страницы</span>

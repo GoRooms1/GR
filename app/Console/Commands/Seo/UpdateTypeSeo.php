@@ -36,6 +36,15 @@ class UpdateTypeSeo extends Command
       }
 
       $url = $pageDescription->url;
+
+      if(Str::match('/(metro-)/', $url)) {
+        $this->info(Str::match('/(metro-)/', $url));
+        $this->info($url);
+        $pageDescription->type = 'metro';
+        $pageDescription->save();
+        continue;
+      }
+
       if(Str::match('/(street-)/', $url)) {
         $this->info(Str::match('/(street-)/', $url));
         $this->info($url);
