@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\User;
 use Eloquent;
+use App\Helpers\SeoData;
 use App\Traits\UseImages;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -44,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string|null                                               $slug
  * @property int                                                       $hide_phone
  * @property string|null                                               $email
+ * @property bool                                                      $checked_type_fond
  * @property-read Address                                              $address
  * @property-read \Illuminate\Database\Eloquent\Collection|Attribute[] $attrs
  * @property-read int|null                                             $attrs_count
@@ -70,7 +72,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property-read mixed                                                $disabled_save
  * @property-read \Illuminate\Database\Eloquent\Collection|User[]      $users
  * @property-read int|null                                             $users_count
- * @property bool                                                      $checked_type_fond
+ * @property-read string|null                                          $meta_h1
+ * @property-read SeoData                                              $seo_data
  * @method static Builder|Hotel newModelQuery()
  * @method static Builder|Hotel newQuery()
  * @method static Builder|Hotel popular()
@@ -94,8 +97,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @method static Builder|Hotel whereTypeId($value)
  * @method static Builder|Hotel whereUpdatedAt($value)
  * @method static Builder|Hotel whereUserId($value)
- * @mixin Eloquent
  * @method static Builder|Hotel whereCheckedTypeFond($value)
+ * @mixin Eloquent
  */
 class Hotel extends Model
 {
@@ -185,8 +188,6 @@ class Hotel extends Model
     'checked_type_fond' => 'boolean',
   ];
 
-  ### SCOPES
-
   /**
    * Bootstrap the model and its traits.
    *
@@ -239,9 +240,7 @@ class Hotel extends Model
     });
 
   }
-  ### END SCOPES
 
-  ### RELATIONS
 
   public function scopePopular(Builder $query): Builder
   {
@@ -265,7 +264,12 @@ class Hotel extends Model
 
   public function attrs(): BelongsToMany
   {
-    return $this->belongsToMany(Attribute::class, 'attribute_hotel', 'hotel_id', 'attribute_id');
+    return $this->belongsToMany(
+      Attribute::class,
+      'attribute_hotel',
+      'hotel_id',
+      'attribute_id'
+    );
   }
 
   /**
@@ -275,7 +279,9 @@ class Hotel extends Model
    */
   public function categories(): HasMany
   {
-    return $this->hasMany(Category::class)->orderBy('created_at');
+    return $this
+      ->hasMany(Category::class)
+      ->orderBy('created_at');
   }
 
   /**
@@ -290,7 +296,9 @@ class Hotel extends Model
 
   public function reviews(): HasMany
   {
-    return $this->hasMany(Review::class)->with('ratings');
+    return $this
+      ->hasMany(Review::class)
+      ->with('ratings');
   }
 
   public function ratings(): HasManyThrough
@@ -325,85 +333,59 @@ class Hotel extends Model
   }
 
   /**
-   * Description
+   * Meta_Description
    *
    * @return string
    */
   public function getMetaDescriptionAttribute(): string
   {
-    return @$this->meta->meta_description ?? $this->getDescDefault();
-  }
-  ### END RELATIONS
-
-  ### MUTATORS
-
-  private function getDescDefault(): string
-  {
-    $desc = "%s %s %sв г. %s: большая база почасовых отелей с описанием номеров. Сортировка по районам, метро, округам и стоимости и скидки на проживание!";
-    $costs = (array)$this->getMinCosts();
-
-    if (current($costs)) {
-      $cost = current($costs);
-      if (isset($cost["value"]))
-        $cost = "по цене " . $cost['value'] . " руб. на час ";
-      else
-        $cost = "";
-    } else {
-      $cost = "";
-    }
-
-    return sprintf($desc, $this->name, optional($this->address)->street, $cost, optional($this->address)->city ?? 'Москва');
+    return $this->meta->meta_description ?? $this->seo_data->description;
   }
 
   /**
-   * Minimal costs in type for all rooms
+   * Meta_Keywords
    *
-   * @return object
+   * @return string|null
    */
-  public function getMinCosts(): object
+  public function getMetaKeywordsAttribute(): ?string
   {
-    Cache::flush();
-    $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
-      $rooms = $this->rooms->pluck('id')->toArray();
-      $items = new Collection();
-      $types = [];
-      foreach ($this->costs->sortBy('period.type.sort') as $cost) {
-        $type_id = $cost->period->type->id;
-        if (!in_array($type_id, $types, true)) {
-          $types[] = $type_id;
-          $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
-            return Cost::whereIn('room_id', $rooms)->whereHas('period', function ($q) use ($type_id) {
-                $q->where('cost_type_id', $type_id);
-              })->where('value', '>', 0)->min('value') ?? '0';
-          });
+    return $this->meta->meta_keywords ?? null;
+  }
 
-          $costPeriod = $this->costs->where('value', $min_in_rooms)->where('period.cost_type_id', $type_id)->first();
-          $cost = $costPeriod ?? $cost;
+  /**
+   * Meta_Title
+   *
+   * @return string|null
+   */
+  public function getMetaTitleAttribute(): ?string
+  {
+    return $this->meta->title ?? $this->seo_data->title;
+  }
 
-          $item = (object)['name' => $cost->period->type->name, 'id' => $cost->period->type->id, 'description' => $cost->description, 'info' => $cost->period->info, 'value' => $min_in_rooms,];
-          $items->add($item);
-        }
-      }
+  /**
+   * Meta_H1
+   *
+   * @return string|null
+   */
+  public function getMetaH1Attribute(): ?string
+  {
+    return $this->meta->h1 ?? $this->seo_data->h1;
+  }
 
-      $types = CostType::orderBy('sort')->get();
-      $costs = new Collection();
-      foreach ($types as $type) {
-        $check = $items->contains('id', $type->id);
-        if (!$check) {
-          $costs->add((object)[
-            'name' => $type->name,
-            'info' => 'Не предоставляется',
-            'value' => 0,
-          ]);
-        } else {
-          $costs->add($items->firstWhere('id', '=', $type->id));
-        }
-      }
+  /**
+   * Generate seo data if PageDescription of Null
+   *
+   * @return SeoData
+   */
+  public function getSeoDataAttribute(): SeoData
+  {
+    $url = '/hotels/' . $this->slug;
+    $seoData = new SeoData($this->address, $url);
+    $seoData->lastOfType = 'hotel';
+    $seoData->hotel = $this;
+    $seoData->generate();
 
-      return $costs;
-    });
-
-    return (object)$costs;
+    return $seoData;
   }
 
   /**
@@ -424,29 +406,6 @@ class Hotel extends Model
   public function rooms(): HasMany
   {
     return $this->hasMany(Room::class)->orderBy('order', 'ASC');
-  }
-
-  public function getMetaKeywordsAttribute()
-  {
-    return @$this->meta->meta_keywords ?? null;
-  }
-
-  ### END MUTATORS
-
-  ### FUNCTIONS
-
-  public function getMetaTitleAttribute()
-  {
-    return @$this->meta->title ?? $this->getTitleDefault();
-  }
-
-  private function getTitleDefault()
-  {
-    $street = optional($this->address)->street;
-    $area_short = optional($this->address)->city_area_short;
-    $metro = optional(optional($this->metros)->first())->name;
-
-    return "Отель {$this->name}, {$street}, в {$area_short}, у метро {$metro}";
   }
 
   public function saveAddress(string $address_raw, $comment = null): void
@@ -502,13 +461,16 @@ class Hotel extends Model
     return $this;
   }
 
-  ### END FUNCTIONS
-
-  ### OVERWRITES
-
+  /**
+   * PageDescription | SEO
+   *
+   * @return HasOne
+   */
   public function meta(): HasOne
   {
-    return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
+    return $this
+      ->hasOne(PageDescription::class, 'model_id')
+      ->where('model_type', self::class);
   }
 
   /**
@@ -520,9 +482,62 @@ class Hotel extends Model
    */
   public function __get($key)
   {
-    if ($key === 'minimals') return $this->getMinCosts();
+    if ($key === 'minimals') {
+      return $this->getMinCosts();
+    }
 
     return parent::__get($key);
+  }
+
+  /**
+   * Minimal costs in type for all rooms
+   *
+   * @return object
+   */
+  public function getMinCosts(): object
+  {
+    Cache::flush();
+    $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
+      $rooms = $this->rooms->pluck('id')->toArray();
+      $items = new Collection();
+      $types = [];
+      foreach ($this->costs->sortBy('period.type.sort') as $cost) {
+        $type_id = $cost->period->type->id;
+        if (!in_array($type_id, $types, true)) {
+          $types[] = $type_id;
+          $min_in_rooms = Cache::remember('rooms.costs.' . $type_id . '.' . implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
+            return Cost::whereIn('room_id', $rooms)->whereHas('period', function ($q) use ($type_id) {
+                $q->where('cost_type_id', $type_id);
+              })->where('value', '>', 0)->min('value') ?? '0';
+          });
+
+          $costPeriod = $this->costs->where('value', $min_in_rooms)->where('period.cost_type_id', $type_id)->first();
+          $cost = $costPeriod ?? $cost;
+
+          $item = (object)['name' => $cost->period->type->name, 'id' => $cost->period->type->id, 'description' => $cost->description, 'info' => $cost->period->info, 'value' => $min_in_rooms,];
+          $items->add($item);
+        }
+      }
+
+      $types = CostType::orderBy('sort')->get();
+      $costs = new Collection();
+      foreach ($types as $type) {
+        $check = $items->contains('id', $type->id);
+        if (!$check) {
+          $costs->add((object)[
+            'name' => $type->name,
+            'info' => 'Не предоставляется',
+            'value' => 0,
+          ]);
+        } else {
+          $costs->add($items->firstWhere('id', '=', $type->id));
+        }
+      }
+
+      return $costs;
+    });
+
+    return (object)$costs;
   }
 
   public function getRouteKeyName()
