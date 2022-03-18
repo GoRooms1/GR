@@ -226,7 +226,7 @@ class SearchController_V2 extends Controller
 
     $attr = Attribute::whereIn('id', $attr)->pluck('name')->toArray();
 
-    $pageDescription->h1 = ", " . implode(", ", $attr);
+//    $pageDescription->h1 = ", " . implode(", ", $attr);
 
     $attr = empty($attr) ? null : implode(', ', $attr);
 
