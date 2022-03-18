@@ -9,8 +9,7 @@ use App\Models\PageDescription;
 
 class CreateSeoUrls
 {
-
-  public function createUrlFromAddress (Address $address, bool $override = false): void
+  private function getURlSeoFromAddress($address): array
   {
     $seo = [];
 
@@ -24,8 +23,6 @@ class CreateSeoUrls
         $i++;
       }
     }
-
-    $address->city_area = null;
 
     if ($address->city_area) {
       $i = 0;
@@ -49,80 +46,132 @@ class CreateSeoUrls
       $seo[0] = null;
     }
 
-    if ($address->hotel()->withoutGlobalScope('moderation')->first()->metros()->count() > 0) {
-      $metros_name = $address->hotel()->withoutGlobalScope('moderation')->first()->metros()->pluck('name');
-      foreach ($metros_name as $j => $name) {
-        $seo[$j + 3] = new SeoData($address);
-        $seo[$j + 3]->url = '/address/' . Str::slug($address->city) . '/metro-' . Str::slug($name);
-        $seo[$j + 3]->metro = $name;
-        $seo[$j + 3]->lastOfType = 'metro';
-      }
+    return $seo;
+  }
+
+  public function createUrlFromAddress (Address $address, bool $override = false): CreateSeoUrls
+  {
+    $seo = $this->getURlSeoFromAddress($address);
+
+    if ($hotel = $address->hotel()->withoutGlobalScope('moderation')->first()) {
+      if ($hotel->metros()->count() > 0) {
+        $metros_name = $hotel->metros()->pluck('name');
+        foreach ($metros_name as $j => $name) {
+          $seo[$j + 3] = new SeoData($address);
+          $seo[$j + 3]->url = '/address/' . Str::slug($address->city) . '/metro-' . Str::slug($name);
+          $seo[$j + 3]->metro = $name;
+          $seo[$j + 3]->lastOfType = 'metro';
+        }
+      } 
     }
 
     $seo = array_filter($seo, static fn($item): bool => $item !== null);
 
     foreach ($seo as $key => $seoData) {
-      if ($override) {
+      if ($override && $seoData) {
         $seoData->generate();
-        $pg = PageDescription::where('url', $seoData->url)->first();
-        $description = optional($pg)->description;
-        $meta_keywords = optional($pg)->meta_keywords;
+        $pageDescription = PageDescription::updateOrCreate(['url' => $seoData->url], [
+          'url' => $seoData->url,
+          'title' => $seoData->title,
+          'meta_description' => $seoData->description,
+          'h1' => $seoData->h1,
+          'type' => $seoData->lastOfType
+        ]);
+        $pageDescription->save();
+      } else if (!PageDescription::where('url', $seoData->url)->exists() && $seoData) {
+        $seoData->generate();
         $pageDescription = new PageDescription([
           'url' => $seoData->url,
           'title' => $seoData->title,
           'meta_description' => $seoData->description,
           'h1' => $seoData->h1,
-          'description' => $description,
-          'meta_keywords' => $meta_keywords
+          'type' => $seoData->lastOfType
         ]);
-        if ($pg) {
-          $pg->delete();
-        }
         $pageDescription->save();
+
       } else {
-        if (!PageDescription::where('url', $seoData->url)->exists()) {
-
-
-          $pageDescription = new PageDescription([
-            'url' => $seoData->url,
-            'title' => $seoData->title,
-            'meta_description' => $seoData->description,
-            'h1' => $seoData->h1
-          ]);
-          $pageDescription->save();
-
-        } else {
-          $seo[$key] = null;
-        }
+        $seo[$key] = null;
       }
     }
 
-    $seo = array_filter($seo, static fn($item): bool => $item !== null);
+    return $this;
   }
 
-  public function createUrlFromHotel (Hotel $hotel): void
+  public function createUrlFromHotel (Hotel $hotel): CreateSeoUrls
   {
     $url = '/hotels/' . $hotel->slug;
     $seoData = new SeoData($hotel->address, $url);
     $seoData->lastOfType = 'hotel';
     $seoData->hotel = $hotel;
     $seoData->generate();
-    $description = null;
-    if ($hotel->meta) {
-      $description = $hotel->meta->description;
-      $hotel->meta->delete();
-    }
+    $description = $hotel->meta->description ?? null;
 
-    $pageDescription =  new PageDescription([
+    $pageDescription =  PageDescription::updateOrCreate(['url' => $url], [
       'url' => $seoData->url,
       'title' => $seoData->title,
       'meta_description' => $seoData->description,
       'h1' => $seoData->h1,
-      'description' => $description
+      'description' => $description,
+      'type' => 'hotel'
     ]);
     $pageDescription->model_type = Hotel::class;
     $pageDescription->save();
     $hotel->meta()->save($pageDescription);
+
+    return $this;
+  }
+
+  public function deleteSeoFromHotel(Hotel $hotel): CreateSeoUrls
+  {
+    PageDescription::where('model_id', $hotel->id)
+      ->where('model_type', Hotel::class)
+      ->delete();
+    
+    return $this;
+  }
+
+  public function deleteSeoFromAddress(Address $address): CreateSeoUrls
+  {
+
+    if (Address::where('city', $address->city)->count() <= 1) {
+      PageDescription::where('url', '/address/' . Str::slug($address->city))->delete();
+    }
+
+
+    if ($address->city_area) {
+      $count = Address::where('city', $address->city)
+        ->where('city_area', $address->city_area)
+        ->count();
+      if ($count <= 1) {
+        $url = '/address/' . Str::slug($address->city) . '/area-' . Str::slug($address->city_area);
+        PageDescription::where('url', $url)->delete();
+      }
+    }
+
+    if ($address->city_district) {
+      if ($address->city_area) {
+        $count = Address::where('city', $address->city)
+          ->where('city_area', $address->city_area)
+          ->where('city_district', $address->city_district)
+          ->count();
+        if ($count <= 1) {
+          $url = '/address/' . Str::slug($address->city)
+            . '/area-' . Str::slug($address->city_area)
+            . '/district-' . Str::slug($address->city_district);
+          PageDescription::where('url', $url)->delete();
+        }
+      } else {
+        $count = Address::where('city', $address->city)
+          ->where('city_district', $address->city_district)
+          ->count();
+        if ($count <= 1) {
+          $url = '/address/' . Str::slug($address->city) . '/district-' . Str::slug($address->city_district);
+          PageDescription::where('url', $url)->delete();
+        }
+      }
+    }
+
+    return $this;
 
   }
 }
