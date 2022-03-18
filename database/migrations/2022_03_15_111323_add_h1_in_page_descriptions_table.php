@@ -14,7 +14,7 @@ class AddH1InPageDescriptionsTable extends Migration
   public function up(): void
   {
     Schema::table('page_descriptions', static function (Blueprint $table) {
-      $table->text('h1')->nullable();
+      $table->text('h1')->after('title')->nullable();
     });
 
     Schema::table('page_descriptions', static function (Blueprint $table) {
