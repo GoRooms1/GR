@@ -2,7 +2,6 @@
 
 @section('content')
   @widget('Filter')
-  {{ dd($pageDescription) }}
   <section class="section">
     <div class="container">
       <div class="section-header">

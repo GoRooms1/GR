@@ -562,8 +562,7 @@ class SearchController extends Controller
         . (isset($slugs['metro']) ? ', метро "' . $slugs['metro'] . '"' : '');
 
     }
-//        $title .= '"';
-    // dd($title);
+
     $attributes = [
       'hotel' => [],
       'room' => [],
