@@ -124,7 +124,7 @@ class Address extends Model
     return $this->belongsTo(Hotel::class);
   }
 
-  public function getCityAreaShortAttribute()
+  public function getCityAreaShortAttribute(): string
   {
     $areas = explode('-', $this->city_area);
     $area = '';

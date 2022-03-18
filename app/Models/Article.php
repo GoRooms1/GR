@@ -2,35 +2,35 @@
 
 namespace App\Models;
 
-use App\Traits\ClearValidated;
-use App\Traits\CreatedAtOrdered;
-use App\Traits\RusMonth;
-use App\Traits\UseImages;
 use App\User;
 use Eloquent;
+use App\Traits\RusMonth;
+use App\Traits\UseImages;
+use App\Traits\ClearValidated;
+use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Models\Article
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $notice
- * @property string $content
- * @property int|null $user_id
- * @property string|null $deleted_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Image $image
+ * @property int                     $id
+ * @property string                  $title
+ * @property string                  $slug
+ * @property string                  $notice
+ * @property string                  $content
+ * @property int|null                $user_id
+ * @property string|null             $deleted_at
+ * @property Carbon|null             $created_at
+ * @property Carbon|null             $updated_at
+ * @property-read Image              $image
  * @property-read Collection|Image[] $images
- * @property-read int|null $images_count
- * @property-read User|null $user
+ * @property-read int|null           $images_count
+ * @property-read User|null          $user
  * @method static Builder|Article newModelQuery()
  * @method static Builder|Article newQuery()
  * @method static Builder|Article query()
@@ -57,7 +57,7 @@ class Article extends Model
     'notice',
     'content',
     'slug',
-    'user_id'
+    'user_id',
   ];
 
   protected $with = [

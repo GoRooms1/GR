@@ -8,22 +8,22 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Стоимость комнат п периодам
  *
- * @property int $id
- * @property float|null $value
- * @property int $room_id
- * @property int $period_id
+ * @property int         $id
+ * @property float|null  $value
+ * @property int         $room_id
+ * @property int         $period_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Period $period
- * @property-read Room $room
+ * @property-read Room   $room
  * @method static Builder|Cost minValues($rooms)
  * @method static Builder|Cost newModelQuery()
  * @method static Builder|Cost newQuery()
@@ -46,7 +46,7 @@ class Cost extends Model
   protected $fillable = [
     'value',
     'room_id',
-    'period_id'
+    'period_id',
   ];
 
   public function room(): BelongsTo
@@ -61,8 +61,11 @@ class Cost extends Model
 
   public function scopeMinValues(Builder $query, array $rooms)
   {
-    return $query->whereIn('room_id', $rooms)->min('value')->with(['period.type' => function ($query) {
-      $query->groupBy('id');
-    }]);
+    return $query
+      ->whereIn('room_id', $rooms)->min('value')
+      ->with(['period.type' => function ($query) {
+        $query->groupBy('id');
+      },
+      ]);
   }
 }

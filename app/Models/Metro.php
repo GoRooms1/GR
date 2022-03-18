@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string      $name
  * @property int         $distance
  * @property int         $hotel_id
+ * @property bool        $custom
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Hotel  $hotel
@@ -30,25 +31,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Metro whereId($value)
  * @method static Builder|Metro whereName($value)
  * @method static Builder|Metro whereUpdatedAt($value)
- * @mixin Eloquent
- * @property bool $custom
  * @method static Builder|Metro whereCustom($value)
+ * @mixin Eloquent
  */
 class Metro extends Model
 {
   public const COLORS = [
-    'green' => 'Зелёный',
-    'red' => 'Красный',
-    'yellow' => 'Жёлтый',
-    'blue' => 'Синий',
-    'light-blue' => 'Голубой',
-    'brown' => 'Коричневый',
-    'orange' => 'Оранжевая',
-    'purple' => 'Фиолетовая',
-    'grey' => 'Серая',
-    'lime' => 'Салатовая',
-    'teal' => 'Бирюзовая',
-    'blue-gray' => 'Серо-голубая',
+    'green'       => 'Зелёный',
+    'red'         => 'Красный',
+    'yellow'      => 'Жёлтый',
+    'blue'        => 'Синий',
+    'light-blue'  => 'Голубой',
+    'brown'       => 'Коричневый',
+    'orange'      => 'Оранжевая',
+    'purple'      => 'Фиолетовая',
+    'grey'        => 'Серая',
+    'lime'        => 'Салатовая',
+    'teal'        => 'Бирюзовая',
+    'blue-gray'   => 'Серо-голубая',
   ];
 
   public const ARRAY_COLORS = [
@@ -67,18 +67,18 @@ class Metro extends Model
   ];
 
   public const COLORS_HEX = [
-    'green' => '00FF00',
-    'red' => 'FF0000',
-    'yellow' => 'FFFF00',
-    'blue' => '0000FF',
-    'light-blue' => '80A6FF',
-    'brown' => '964b00',
-    'orange' => 'ffa500',
-    'purple' => '8b00ff',
-    'grey' => '808080',
-    'lime' => '7fff00',
-    'teal' => '30d5c8',
-    'blue-gray' => '77a1b5',
+    'green'       => '00FF00',
+    'red'         => 'FF0000',
+    'yellow'      => 'FFFF00',
+    'blue'        => '0000FF',
+    'light-blue'  => '80A6FF',
+    'brown'       => '964b00',
+    'orange'      => 'ffa500',
+    'purple'      => '8b00ff',
+    'grey'        => '808080',
+    'lime'        => '7fff00',
+    'teal'        => '30d5c8',
+    'blue-gray'   => '77a1b5',
   ];
 
   protected $fillable = [

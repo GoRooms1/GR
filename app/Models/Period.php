@@ -3,22 +3,22 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Period
  *
- * @property int $id
- * @property string $start_at
- * @property string|null $end_at
- * @property int $cost_type_id
- * @property string|null $description
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read string $info
+ * @property int           $id
+ * @property string        $start_at
+ * @property string|null   $end_at
+ * @property int           $cost_type_id
+ * @property string|null   $description
+ * @property Carbon|null   $created_at
+ * @property Carbon|null   $updated_at
+ * @property-read string   $info
  * @property-read CostType $type
  * @method static Builder|Period newModelQuery()
  * @method static Builder|Period newQuery()
@@ -47,11 +47,11 @@ class Period extends Model
    * @var string[]
    */
   protected $with = [
-    'type'
+    'type',
   ];
 
   protected $appends = [
-    'info'
+    'info',
   ];
 
   /**
@@ -82,6 +82,7 @@ class Period extends Model
    * Русское окончание при сокращениие цифрами до 20 часов
    *
    * @param $value
+   *
    * @return string
    */
   public function theEnding($value): string
@@ -104,7 +105,7 @@ class Period extends Model
 
   public function __toString()
   {
-    return "$this->info" . PHP_EOL .
+    return (string)$this->info . PHP_EOL .
       "Тип: {$this->type->name}";
   }
 }
