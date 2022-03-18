@@ -451,7 +451,6 @@ class SearchController extends Controller
     } else {
       $desc_street = '';
     }
-    // return dd(@$request->get('metro'));
     if (@$request->get('metro')) {
       $desc_metro = " около метро " . @$request->get('metro');
     } else {
@@ -468,12 +467,6 @@ class SearchController extends Controller
       $title = 'На модерации' . "<span class=\"count\">($count)</span>";
       $pageDescription->title = 'На модерации' . " <span class=\"count\">($count)</span>";
     }
-
-    // 'city' => @$queryAddress['city'],
-    // 'area' => @$queryAddress['city_area'],
-    // 'district' => @$queryAddress['city_district'],
-    // 'street' => @$queryAddress['city_street'],
-    // 'metro' => @$request->get('metro')
 
 
     if (!@$pageDescription->title or !@$pageDescription->meta_description) {
