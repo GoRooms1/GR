@@ -9,12 +9,21 @@ namespace App\Observers;
 
 use Cache;
 use App\Models\Hotel;
+use App\Helpers\CreateSeoUrls;
 
 /**
  *
  */
 class HotelObserver
 {
+
+  public CreateSeoUrls $csu;
+
+  public function __construct()
+  {
+    $this->csu = new CreateSeoUrls();
+  }
+
   /**
    * Handle the Category "created" event.
    *
@@ -32,9 +41,11 @@ class HotelObserver
 
     $hotel->slug = $hotel->generateSlug();
     $hotel->save();
-    Cache::forget('sitemap.2g');
 
-    //    TODO: генерируем данные отеля под новый вид
+    if ($hotel->address) {
+      $this->csu->createUrlFromHotel($hotel);
+    }
+    Cache::forget('sitemap.2g');
   }
 
   /**
@@ -46,9 +57,10 @@ class HotelObserver
    */
   public function updated(Hotel $hotel): void
   {
+    if ($hotel->address) {
+      $this->csu->createUrlFromHotel($hotel);
+    }
     Cache::flush();
-
-//    TODO: генерируем данные отеля под новый вид
   }
 
   /**
@@ -74,7 +86,7 @@ class HotelObserver
   {
     Cache::flush();
 
-    //    TODO: Удалить сео данные для ссылки данного отеля
+    $this->csu->deleteSeoFromHotel($hotel);
   }
 
   /**
@@ -98,6 +110,6 @@ class HotelObserver
    */
   public function forceDeleted(Hotel $hotel): void
   {
-    //    TODO: Удалить сео данные для ссылки данного отеля
+    $this->csu->deleteSeoFromHotel($hotel);
   }
 }
