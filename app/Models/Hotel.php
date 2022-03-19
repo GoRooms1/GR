@@ -495,8 +495,7 @@ class Hotel extends Model
    * @return object
    */
   public function getMinCosts(): object
-  {
-    Cache::flush();
+  {;
     $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
       $rooms = $this->rooms->pluck('id')->toArray();
       $items = new Collection();
