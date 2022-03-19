@@ -37,7 +37,7 @@ trait Breadcrumbs {
                 switch ($url)
                 {
                     case 'hotels' :
-                             array_push($return_url_with_desc, ['url'=>$url, 'text' =>'Биржа отелей']);
+                             array_push($return_url_with_desc, ['url'=>$url, 'text' =>'Отели']);
                         break;
                    
                 }

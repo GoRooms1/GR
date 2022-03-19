@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Arrilot\Widgets\AbstractWidget;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 
 class Filter extends AbstractWidget
@@ -133,6 +134,28 @@ class Filter extends AbstractWidget
 
     $this->moderate = Request::boolean('moderate');
 
+    $data = [
+      [
+        'key' => 'city',
+        'value' => $this->city
+      ],
+      [
+        'key' => 'metro',
+        'value' => $this->metro
+      ],
+      [
+        'key' => 'district',
+        'value' => $this->district
+      ],
+      [
+        'key' => 'city_area',
+        'value' => $this->area
+      ],
+      [
+        'key' => 'hot',
+        'value' => $this->hot
+      ]
+    ];
 
     return view('widgets.filter', [
       'request'           => $this->request,
@@ -148,7 +171,8 @@ class Filter extends AbstractWidget
       'hotel_type'        => $this->hotel_type,
       'moderate'          => $this->moderate,
       'attributes'        => $this->attributes,
-      'hot'               => $this->hot
+      'hot'               => $this->hot,
+      'data'              => $data
     ]);
   }
 
@@ -176,8 +200,18 @@ class Filter extends AbstractWidget
     return $attributes;
   }
 
-  public static function remove_key($key): string
+  public static function remove_key($data, $key): string
   {
+    if (Route::currentRouteName() === 'search.address') {
+      $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/search?';
+      foreach ($data as $d) {
+        if ($d['key'] !== $key) {
+          $url .= $d['key'] . '=' . $d['value'] . '&';
+        }
+      }
+
+      return $url;
+    }
     parse_str($_SERVER['QUERY_STRING'], $vars);
     Log::alert($vars);
     return strtok($_SERVER['REQUEST_URI'], '?') . '?' . http_build_query(array_diff_key($vars,array($key=>"")));

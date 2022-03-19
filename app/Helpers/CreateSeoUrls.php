@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use Str;
 use App\Models\Hotel;
+use App\Models\Metro;
 use App\Models\Address;
 use App\Models\PageDescription;
 
@@ -169,6 +170,31 @@ class CreateSeoUrls
           PageDescription::where('url', $url)->delete();
         }
       }
+    }
+
+    return $this;
+
+  }
+
+  public function createSeoFromMetro(Metro $metro): CreateSeoUrls
+  {
+    $hotel = $metro->hotel()->withoutGlobalScope('moderation')->first();
+    if ($hotel) {
+      $address = $hotel->address;
+      $seo = new SeoData($address);
+      $seo->url = '/address/' . Str::slug($address->city) . '/metro-' . Str::slug($metro->name);
+      $seo->metro = $metro->name;
+      $seo->lastOfType = 'metro';
+
+      $seo->generate();
+      $pageDescription = PageDescription::updateOrCreate(['url' => $seo->url], [
+        'url' => $seo->url,
+        'title' => $seo->title,
+        'meta_description' => $seo->description,
+        'h1' => $seo->h1,
+        'type' => $seo->lastOfType
+      ]);
+      $pageDescription->save();
     }
 
     return $this;

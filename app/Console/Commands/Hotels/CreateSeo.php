@@ -17,12 +17,12 @@ class CreateSeo extends Command
       $createSeo->createUrlFromAddress($a, true);
     }
 
-    $hotels = Hotel::withoutGlobalScope('moderation')->get();
-    foreach ($hotels as $a) {
-      if ($a->address) {
-        $createSeo->createUrlFromHotel($a);
-      }
-    }
+//    $hotels = Hotel::withoutGlobalScope('moderation')->get();
+//    foreach ($hotels as $a) {
+//      if ($a->address) {
+//        $createSeo->createUrlFromHotel($a);
+//      }
+//    }
     return 0;
   }
 }

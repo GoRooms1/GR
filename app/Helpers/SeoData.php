@@ -27,15 +27,22 @@ class SeoData
   public function generate(): bool
   {
     if ($this->lastOfType === 'hotel' && $this->hotel) {
-      $this->h1 = $this->hotel->type->name . ': ' . $this->hotel->name . ' на улице ' . $this->address->street;
-      $this->title = $this->hotel->name . ' ' . Str::lower($this->hotel->type->name) . ' с Номерами на Час Ночь Сутки ';
+      $i = $this->hotel->type->name;
+      if ($i === 'Отели') {
+        $type = 'Отель';
+      } else {
+        $type = $this->hotel->type->name;
+      }
+
+      $this->h1 = $type . ': ' . $this->hotel->name . ' на улице ' . $this->address->street;
+      $this->title = $this->hotel->name . ' ' . Str::lower($type) . ' с Номерами на Час Ночь Сутки ';
       if ($this->hotel->metros()->count() > 0) {
         $this->title .= 'у метро ' . $this->hotel->metros()->first()->name;
       } else {
-        $this->title .= 'в' .  $this->address->city;
+        $this->title .= 'в ' .  $this->address->city;
       }
 
-      $this->description = $this->hotel->type->name . ' ' . $this->hotel->name;
+      $this->description = $type . ' ' . $this->hotel->name;
       foreach ($this->hotel->minimals as $minimal) {
         if ($minimal->name === 'На час' && $minimal->value > 0) {
           $this->description .= 'с номерами от ' . $minimal->value . 'рублей в час';

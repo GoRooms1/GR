@@ -398,28 +398,28 @@
           @endif
           @if ($area)
             <span class="d-flex">округ {{ $area }}
-              <a href="{{ \App\Widgets\Filter::remove_key('city_area') }}">
+              <a href="{{ \App\Widgets\Filter::remove_key($data, 'city_area') }}">
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
           @endif
           @if ($district)
             <span class="d-flex">р-н {{ $district }}
-              <a href="{{ \App\Widgets\Filter::remove_key('district') }}">
+              <a href="{{ \App\Widgets\Filter::remove_key($data, 'district') }}">
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
           @endif
           @if ($metro)
             <span class="d-flex">метро {{ $metro }}
-              <a href="{{ \App\Widgets\Filter::remove_key('metro') }}">
+              <a href="{{ \App\Widgets\Filter::remove_key($data, 'metro') }}">
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
           @endif
           @if ($hot)
             <span class="d-flex">Горящие предложения
-              <a href="{{ \App\Widgets\Filter::remove_key('hot') }}">
+              <a href="{{ \App\Widgets\Filter::remove_key($data, 'hot') }}">
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
