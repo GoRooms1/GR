@@ -70,7 +70,7 @@ class SeoData
       } else if ($this->lastOfType === 'area') {
         $this->title = 'Отель на час|ночь|сутки ' . $this->address->city_area . ' округ - ' . $this->address->city . ' | Лучшие Цены';
         $this->h1 = 'Гостиницы и отели на час, ночь, сутки ' . $this->address->city_area . ' округ - ' . $this->address->city;
-        $this->description = Str::ucfirst($this->address->city_area) . 'округ снять номер на Час Ночь или Сутки, бронирование без комиссий, только актуальные фотографии и цены, самая большая база почасовых отелей.';
+        $this->description = Str::ucfirst($this->address->city_area) . ' округ снять номер на Час Ночь или Сутки, бронирование без комиссий, только актуальные фотографии и цены, самая большая база почасовых отелей.';
       } else if ($this->lastOfType === 'city') {
         $this->title = 'Отели на Чаc Ночь Сутки | Почасовые Гостиницы г. ' . $this->address->city;
         $this->h1 = 'Все почасовые отели города ' . $this->address->city;

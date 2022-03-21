@@ -7,6 +7,7 @@ use App\Models\Attribute;
 use App\Models\HotelType;
 use Illuminate\Http\Request;
 use App\Traits\UrlDecodeFilter;
+use App\Models\PageDescription;
 
 class SearchController_V2 extends Controller
 {
@@ -135,6 +136,10 @@ class SearchController_V2 extends Controller
   public function address (Request $request)
   {
     $url = $request->url();
+    $path = $request->getPathInfo();
+    if (!PageDescription::where('url', $path)->exists()) {
+      abort(404);
+    }
 
     $data = $this->decodeUrl($url);
 

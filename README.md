@@ -91,6 +91,13 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
+# New Seo Slug url create
+
+1. `php artisan migrate`
+2. `php artisan seo:reset-address-slug`
+3. `php artisan seo:update-type-seo`
+4. `php artisan seo:reset-seo`
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)

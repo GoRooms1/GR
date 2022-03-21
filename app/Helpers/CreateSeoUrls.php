@@ -50,7 +50,7 @@ class CreateSeoUrls
     return $seo;
   }
 
-  public function createUrlFromAddress (Address $address, bool $override = false): CreateSeoUrls
+  public function createUrlFromAddress (Address $address, bool $override = false, $date = null): CreateSeoUrls
   {
     $seo = $this->getURlSeoFromAddress($address);
 
@@ -71,23 +71,33 @@ class CreateSeoUrls
     foreach ($seo as $key => $seoData) {
       if ($override && $seoData) {
         $seoData->generate();
-        $pageDescription = PageDescription::updateOrCreate(['url' => $seoData->url], [
+        $data = [
           'url' => $seoData->url,
           'title' => $seoData->title,
           'meta_description' => $seoData->description,
           'h1' => $seoData->h1,
-          'type' => $seoData->lastOfType
-        ]);
+          'type' => $seoData->lastOfType,
+        ];
+
+        if ($date) {
+          $data['updated_at'] = $date;
+        }
+
+        $pageDescription = PageDescription::updateOrCreate(['url' => $seoData->url], $data);
         $pageDescription->save();
       } else if (!PageDescription::where('url', $seoData->url)->exists() && $seoData) {
         $seoData->generate();
-        $pageDescription = new PageDescription([
+        $data = [
           'url' => $seoData->url,
           'title' => $seoData->title,
           'meta_description' => $seoData->description,
           'h1' => $seoData->h1,
           'type' => $seoData->lastOfType
-        ]);
+        ];
+        if ($date) {
+          $data['updated_at'] = $date;
+        }
+        $pageDescription = new PageDescription($data);
         $pageDescription->save();
 
       } else {
@@ -98,7 +108,7 @@ class CreateSeoUrls
     return $this;
   }
 
-  public function createUrlFromHotel (Hotel $hotel): CreateSeoUrls
+  public function createUrlFromHotel (Hotel $hotel, $date = null): CreateSeoUrls
   {
     $url = '/hotels/' . $hotel->slug;
     $seoData = new SeoData($hotel->address, $url);
@@ -107,14 +117,18 @@ class CreateSeoUrls
     $seoData->generate();
     $description = $hotel->meta->description ?? null;
 
-    $pageDescription =  PageDescription::updateOrCreate(['url' => $url], [
+    $data = [
       'url' => $seoData->url,
       'title' => $seoData->title,
       'meta_description' => $seoData->description,
       'h1' => $seoData->h1,
       'description' => $description,
       'type' => 'hotel'
-    ]);
+    ];
+    if ($date) {
+      $data['updated_at'] = $date;
+    }
+    $pageDescription =  PageDescription::updateOrCreate(['url' => $url], $data);
     $pageDescription->model_type = Hotel::class;
     $pageDescription->save();
     $hotel->meta()->save($pageDescription);

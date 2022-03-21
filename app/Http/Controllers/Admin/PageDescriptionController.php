@@ -36,6 +36,10 @@ class PageDescriptionController extends Controller
       $descriptions = $descriptions->where('url','like','%/street-' . Str::slug($street) . '%');
     }
 
+    if ($metro = $request->get('metro')) {
+      $descriptions = $descriptions->where('url','like','%/metro-' . Str::slug($metro) . '%');
+    }
+
     $descriptions = $descriptions->paginate(15);
     $cities = Address::pluck('city')->unique();
 

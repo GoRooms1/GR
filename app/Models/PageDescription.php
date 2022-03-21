@@ -64,6 +64,11 @@ class PageDescription extends Model
     'description',
     'h1',
     'type',
+    'updated_at'
+  ];
+
+  protected $casts = [
+    'updated_at' => 'datetime'
   ];
 
   protected static function boot(): void

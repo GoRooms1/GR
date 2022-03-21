@@ -62,6 +62,18 @@
               </div>
             </div>
 
+            <div class="col-md-3 col-lg-2">
+              <div class="form-group">
+                <label for="metro">Метро</label>
+                <select name="metro" class="form-control" id="metro">
+                  <option value="">-</option>
+                  @if (Request::get('metro', '') !== '')
+                    <option value="{{ Request::get('metro') }}" selected>{{ Request::get('metro') }}</option>
+                  @endif
+                </select>
+              </div>
+            </div>
+
             <div class="col-auto ml-auto mr-3">
               <button type="submit" class="btn btn-primary">Поиск</button>
             </div>
@@ -123,10 +135,12 @@
       let city = $('#city');
       let area = $('#area')
       let district = $('#district')
+      let metro = $('#metro')
 
       let cityVal = city.val()
       let areaVal = area.val()
       let districtVal = district.val()
+      let metroVal = metro.val();
 
       city.change(function () {
         if (city.val() !== '') {
@@ -157,6 +171,19 @@
                 }
               }
             })
+
+          axios.get('/api/filter/metro', { params: { city: city.val(), search: ''}})
+            .then(r => {
+              if (r.data.success) {
+                setOptionsMetro(metro, r.data.payload.metros)
+
+                if (metroVal) {
+                  metro.val(metroVal).trigger('change')
+                }
+              }
+            })
+
+
         } else {
           let a = area[0]
           area.find('option')
@@ -226,5 +253,23 @@
         city.trigger('change')
       }
     })
+
+    function setOptionsMetro (metro, list) {
+      metro.find('option')
+      .remove()
+      .end()
+      let m = metro[0]
+
+      m.add(new Option('-', ''));
+
+      if (list.length > 0 || Object.keys(list).length > 0) {
+        for(let item in list) {
+          let el = list[item]
+          m.add(new Option(el, el));
+        }
+      } else {
+        metro.val(null).trigger('change')
+      }
+    }
   </script>
 @endsection
