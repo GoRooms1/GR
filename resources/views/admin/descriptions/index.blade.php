@@ -83,7 +83,7 @@
               <tr>
                 <td>{{ $page->id }}</td>
                 <td>
-                  <span class="{{ $page->meta_description === null ? 'text-danger' : '' }}">{{ $page->title }}</span>
+                  <span class="{{ $page->description === null ? 'text-danger' : '' }}">{{ $page->title }}</span>
                 </td>
                 <td>
                   {{ $page->url }}

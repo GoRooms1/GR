@@ -39,13 +39,13 @@ class SeoData
       if ($this->hotel->metros()->count() > 0) {
         $this->title .= 'у метро ' . $this->hotel->metros()->first()->name;
       } else {
-        $this->title .= 'в ' .  $this->address->city;
+        $this->title .= 'в г. ' .  $this->address->city;
       }
 
       $this->description = $type . ' ' . $this->hotel->name;
       foreach ($this->hotel->minimals as $minimal) {
         if ($minimal->name === 'На час' && $minimal->value > 0) {
-          $this->description .= 'с номерами от ' . $minimal->value . 'рублей в час';
+          $this->description .= 'с номерами от ' . $minimal->value . ' рублей в час';
         }
       }
       $this->description .= ', забронировать онлайн без комиссий. Описание и фотографии номеров, отзывы и фильтры с удобной сортировкой.';
@@ -62,19 +62,19 @@ class SeoData
       } else if ($this->lastOfType === 'district') {
         $this->title = 'Номера на Час Ночь | Почасовые отели ' . $this->address->city_district . ' район - ' . $this->address->city;
         if ($this->address->city_area) {
-          $this->h1 = 'Отели и номера в ' . $this->address->city_area . ' в ' . $this->address->city_district . ' районе - ' . $this->address->city;
+          $this->h1 = 'Отели и номера округ ' . $this->address->city_area . ' район ' . $this->address->city_district . ' - ' . $this->address->city;
         } else {
-          $this->h1 = 'Отели и номера в ' . $this->address->city_district . ' районе - ' . $this->address->city;
+          $this->h1 = 'Отели и номера район ' . $this->address->city_district . ' - ' . $this->address->city;
         }
-        $this->description = Str::ucfirst($this->address->city_district) .' район, выбирайте и бронируйте гостиницу с почасовой оплатой номера в компании GoRooms ▶ Фото Номеров ▶Удобный поиск ▶ Подробное описание';
+        $this->description = 'Район ' . $this->address->city_district . ', выбирайте и бронируйте гостиницу с почасовой оплатой номера в компании GoRooms ▶ Фото Номеров ▶Удобный поиск ▶ Подробное описание';
       } else if ($this->lastOfType === 'area') {
-        $this->title = 'Отель на час|ночь|сутки в ' . $this->address->city_area . ' ' . $this->address->city . ' | Лучшие Цены';
-        $this->h1 = 'Гостиницы и отели на час, ночь, сутки в ' . $this->address->city_area . ' ' . $this->address->city;
-        $this->description = 'Снять номер на Час Ночь или Сутки в ' . $this->address->city_area . ', бронирование без комиссий, только актуальные фотографии и цены, самая большая база почасовых отелей в ' . $this->address->city_area . '.';
+        $this->title = 'Отель на час|ночь|сутки ' . $this->address->city_area . ' округ - ' . $this->address->city . ' | Лучшие Цены';
+        $this->h1 = 'Гостиницы и отели на час, ночь, сутки ' . $this->address->city_area . ' округ - ' . $this->address->city;
+        $this->description = Str::ucfirst($this->address->city_area) . 'округ снять номер на Час Ночь или Сутки, бронирование без комиссий, только актуальные фотографии и цены, самая большая база почасовых отелей.';
       } else if ($this->lastOfType === 'city') {
-        $this->title = 'Отели на Чаc Ночь Сутки | Почасовые Гостиницы в ' . $this->address->city;
+        $this->title = 'Отели на Чаc Ночь Сутки | Почасовые Гостиницы г. ' . $this->address->city;
         $this->h1 = 'Все почасовые отели города ' . $this->address->city;
-        $this->description = 'Ищете гостиницу в ' . $this->address->city . '? Компания Gorooms поможет подобрать номер в отеле на час ночь или  сутки недорого ▶ Без комиссий и посредников ▶ Низкие цены ▶ Бронируйте уже сейчас!';
+        $this->description = 'Ищете гостиницу в г. ' . $this->address->city . '? Компания Gorooms поможет подобрать номер в отеле на час ночь или  сутки недорого ▶ Без комиссий и посредников ▶ Низкие цены ▶ Бронируйте уже сейчас!';
       }
 
         return true;
