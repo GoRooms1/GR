@@ -60,7 +60,7 @@ class SeoData
         $this->description = 'Забронируйте номер на Час | Ночь | Сутки около метро ' . $this->metro . ' ▶Без комиссий и посредников ▶Фотографии и описание номеров ▶Удобный поиск отелей!';
 
       } else if ($this->lastOfType === 'district') {
-        $this->title = 'Номера на Час Ночь | Почасовые отели ' . $this->address->city_district . ' район - ' . $this->address->city;
+        $this->title = 'Номера на Час Ночь | Почасовые отели | район ' . $this->address->city_district . ' - ' . $this->address->city;
         if ($this->address->city_area) {
           $this->h1 = 'Отели и номера округ ' . $this->address->city_area . ' район ' . $this->address->city_district . ' - ' . $this->address->city;
         } else {
