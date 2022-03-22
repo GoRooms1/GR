@@ -18,19 +18,23 @@
 
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
   @if(config('app.debug'))
     <script src="{{ asset('js/vue-dev.js') }}"></script>
   @else
     <script src="{{ asset('js/vue@2.js') }}"></script>
   @endif
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+
 </head>
 <body>
 <div id="app">
-  <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-    <div class="container">
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
       <a class="navbar-brand" href="{{ url('/') }}">
-        {{ config('app.name', 'Laravel') }}
+        {{ config('app.name', 'Gorooms.ru') }}
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -41,59 +45,92 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left Side Of Navbar -->
         @auth
-          <ul class="navbar-nav mr-auto d-flex align-items-center">
-            <li class="nav-item">
-              <a href="{{ route('admin.hotels.index') }}" class="nav-link">Список отелей</a>
-            </li>
+          <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
 
-            <li class="nav-item dropdown">
-              <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                Атрибуты <span class="caret"></span>
+            <li class="nav-item">
+              <a id="hasSubItems"
+                 class="nav-link nav-link-collapse {{ Route::currentRouteNamed('admin.attributes.*') || Route::currentRouteNamed('admin.attribute_categories.*') ? 'active nav-link-show' : '' }}"
+                 href="#"
+                 data-toggle="collapse"
+                 data-target="#collapseSubItems2"
+                 aria-controls="collapseSubItems2"
+                 aria-expanded="true"
+              >
+                Атрибуты
               </a>
 
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-{{--                <a class="dropdown-item" href="{{ route('admin.attributes.index', 'room') }}">--}}
-{{--                  Номера--}}
-{{--                </a>--}}
-{{--                <a class="dropdown-item" href="{{ route('admin.attributes.index', 'hotel') }}">--}}
-{{--                  Отели--}}
-{{--                </a>--}}
-                <a class="dropdown-item" href="{{ route('admin.attribute_categories.index') }}">
-                  Категории
-                </a>
-                <a class="dropdown-item" href="{{ route('admin.attributes.index') }}">
-                  Атрибуты
-                </a>
-              </div>
+              <ul class="nav-second-level list-unstyled collapse {{ Route::currentRouteNamed('admin.attributes.*') || Route::currentRouteNamed('admin.attribute_categories.*') ? 'show' : '' }}"
+                  id="collapseSubItems2"
+                  data-parent="#navAccordion"
+              >
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.attribute_categories.*') ? 'active' : '' }}" href="{{ route('admin.attribute_categories.index') }}">
+                    <span class="nav-link-text">Категории</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.attributes.*') ? 'active' : '' }}" href="{{ route('admin.attributes.index') }}">
+                    <span class="nav-link-text">Атрибуты</span>
+                  </a>
+                </li>
+              </ul>
             </li>
 
             <li class="nav-item">
-              <a href="{{ route('admin.moderators.index') }}" class="nav-link">Модераторы</a>
+              <a href="{{ route('admin.moderators.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.moderators.*') ? 'active' : '' }}">Модераторы</a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.cost_types.index') }}" class="nav-link">Типы цен</a>
+              <a href="{{ route('admin.cost_types.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.cost_types.*') ? 'active' : '' }}">Типы цен</a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.hotel_types.index') }}" class="nav-link">Типы размещений</a>
+              <a href="{{ route('admin.hotel_types.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.hotel_types.*') ? 'active' : '' }}">Типы размещений</a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.ratings.index') }}" class="nav-link">Категории рейтинга</a>
+              <a href="{{ route('admin.ratings.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.ratings.*') ? 'active' : '' }}">Категории рейтинга</a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.articles.index') }}" class="nav-link">Статьи</a>
+              <a href="{{ route('admin.articles.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.articles.*') ? 'active' : '' }}">Статьи</a>
+            </li>
+
+            <li class="nav-item">
+              <a id="hasSubItems2"
+                 class="nav-link nav-link-collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') ? 'active nav-link-show' : '' }}"
+                 href="#"
+                 data-toggle="collapse"
+                 data-target="#collapseSubItems3"
+                 aria-controls="collapseSubItems3"
+                 aria-expanded="true"
+              >
+                SEO Контент
+              </a>
+
+              <ul class="nav-second-level list-unstyled collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') || Route::currentRouteNamed('admin.hotels.*') ? 'show' : '' }}"
+                  id="collapseSubItems3"
+                  data-parent="#navAccordion"
+              >
+                <li class="nav-item">
+                  <a href="{{ route('admin.hotels.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.hotels.*') ? 'active' : '' }}">
+                    <span class="nav-link-text">Страницы отелей</span>
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.pages.*') ? 'active' : '' }}" href="{{ route('admin.pages.index') }}">
+                    <span class="nav-link-text">Страницы</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.descriptions.*') ? 'active' : '' }}" href="{{ route('admin.descriptions.index') }}">
+                    <span class="nav-link-text">Страницы локаций</span>
+                  </a>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.pages.index') }}" class="nav-link">Страницы</a>
+              <a href="{{ route('admin.instructions.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.instructions.*') ? 'active' : '' }}">Инструкции</a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.descriptions.index') }}" class="nav-link">Описания</a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('admin.instructions.index') }}" class="nav-link">Инструкции</a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('admin.settings.index') }}" class="nav-link">Настройки</a>
+              <a href="{{ route('admin.settings.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.settings.*') ? 'active' : '' }}">Настройки</a>
             </li>
           </ul>
         @endauth
@@ -168,13 +205,14 @@
     @endif
   </section>
 
-  <main class="py-4">
+  <main class="py-4 content-wrapper">
     @yield('content')
   </main>
 </div>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js"
         integrity="sha512-sR3EKGp4SG8zs7B0MEUxDeq8rw9wsuGVYNfbbO/GLCJ59LBE4baEfQBVsP2Y/h2n8M19YV1mujFANO1yA3ko7Q=="
         crossorigin="anonymous"></script>
@@ -184,6 +222,7 @@
         referrerpolicy="origin"></script>
 <script src="https://cdn.tiny.cloud/1/z826n1n5ayf774zeqdphsta5v2rflavdm2kvy7xtmczyokv3/tinymce/5/tinymce.min.js"
         referrerpolicy="origin"></script>
+
 
 <script>
   $("#address").suggestions({
@@ -228,6 +267,16 @@
   });
 
 </script>
+
+<script>
+  $(document).ready(function() {
+    $('.nav-link-collapse').on('click', function() {
+      $('.nav-link-collapse').not(this).removeClass('nav-link-show');
+      $(this).toggleClass('nav-link-show');
+    });
+  });
+</script>
+
 @yield('js')
 </body>
 </html>

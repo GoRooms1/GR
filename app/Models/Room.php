@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use App\Traits\UseImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -61,7 +62,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|Room whereNumber($value)
  * @method static Builder|Room whereOrder($value)
  * @method static Builder|Room whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Room extends Model
 {
@@ -196,21 +197,23 @@ class Room extends Model
 
   public function meta(): HasOne
   {
-    return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
+    return $this
+      ->hasOne(PageDescription::class, 'model_id')
+      ->where('model_type', self::class);
   }
 
   public function getMetaDescriptionAttribute(): ?string
   {
-    return @$this->meta->meta_description ?? null;
+    return $this->meta->meta_description ?? null;
   }
 
   public function getMetaKeywordsAttribute(): ?string
   {
-    return @$this->meta->meta_keywords ?? null;
+    return $this->meta->meta_keywords ?? null;
   }
 
   public function getMetaTitleAttribute(): ?string
   {
-    return @$this->meta->title ?? null;
+    return $this->meta->title ?? null;
   }
 }

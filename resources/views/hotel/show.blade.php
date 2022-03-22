@@ -94,7 +94,7 @@ use App\Models\Hotel;
         <div class="col-lg-5 col-xxl-6">
           <div class="hotel-content">
             <div class="hotel-content-header">
-              <h1 class="section-title" itemprop="name">{{ $hotel->type->single_name }}: {{ $hotel->name }}</h1>
+              <h1 class="section-title" itemprop="name">{{ $hotel->meta_h1 }}</h1>
               <p class="room-address" itemprop="address">
                 <button type="button" class="room-address-link js-room-address-link"></button>
                 @php

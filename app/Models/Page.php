@@ -2,41 +2,41 @@
 
 namespace App\Models;
 
-use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use App\User;
 use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder;
+use App\Traits\UseImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Page
  *
- * @property int $id
- * @property string $title
- * @property string $slug
- * @property string $content
- * @property int|null $user_id
- * @property Carbon|null $deleted_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $header
- * @property string|null $footer
- * @property-read mixed $meta_description
- * @property-read mixed $meta_keywords
- * @property-read mixed $meta_title
- * @property-read Image $image
+ * @property int                     $id
+ * @property string                  $title
+ * @property string                  $slug
+ * @property string                  $content
+ * @property int|null                $user_id
+ * @property Carbon|null             $deleted_at
+ * @property Carbon|null             $created_at
+ * @property Carbon|null             $updated_at
+ * @property string|null             $header
+ * @property string|null             $footer
+ * @property-read mixed              $meta_description
+ * @property-read mixed              $meta_keywords
+ * @property-read mixed              $meta_title
+ * @property-read Image              $image
  * @property-read Collection|Image[] $images
- * @property-read int|null $images_count
- * @property-read PageDescription $meta
- * @property-read User|null $user
+ * @property-read int|null           $images_count
+ * @property-read PageDescription    $meta
+ * @property-read User|null          $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|Page newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Page newQuery()
@@ -122,20 +122,22 @@ class Page extends Model
 
   public function meta(): HasOne
   {
-    return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
+    return $this
+      ->hasOne(PageDescription::class, 'model_id')
+      ->where('model_type', self::class);
   }
 
-  public function getMetaDescriptionAttribute()
+  public function getMetaDescriptionAttribute(): ?string
   {
     return @$this->meta->meta_description ?? null;
   }
 
-  public function getMetaKeywordsAttribute()
+  public function getMetaKeywordsAttribute(): ?string
   {
     return @$this->meta->meta_keywords ?? null;
   }
 
-  public function getMetaTitleAttribute()
+  public function getMetaTitleAttribute(): ?string
   {
     return @$this->meta->title ?? null;
   }

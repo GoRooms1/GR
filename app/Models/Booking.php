@@ -8,22 +8,22 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Booking
  *
- * @property int $id
- * @property string $book_number
- * @property string $client_fio
- * @property string $client_phone
- * @property string $book_type
+ * @property int         $id
+ * @property string      $book_number
+ * @property string      $client_fio
+ * @property string      $client_phone
+ * @property string      $book_type
  * @property string|null $book_comment
- * @property string $from-date
+ * @property string      $from-date
  * @property string|null $to-date
- * @property int|null $hours_count
+ * @property int|null    $hours_count
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|Booking newModelQuery()

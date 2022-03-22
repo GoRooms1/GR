@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\User;
 use Eloquent;
-use Exception;
+use App\Helpers\SeoData;
 use App\Traits\UseImages;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,7 +12,6 @@ use App\Traits\ClearValidated;
 use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
@@ -46,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string|null                                               $slug
  * @property int                                                       $hide_phone
  * @property string|null                                               $email
+ * @property bool                                                      $checked_type_fond
  * @property-read Address                                              $address
  * @property-read \Illuminate\Database\Eloquent\Collection|Attribute[] $attrs
  * @property-read int|null                                             $attrs_count
@@ -72,7 +72,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property-read mixed                                                $disabled_save
  * @property-read \Illuminate\Database\Eloquent\Collection|User[]      $users
  * @property-read int|null                                             $users_count
- * @property bool                                                      $checked_type_fond
+ * @property-read string|null                                          $meta_h1
+ * @property-read SeoData                                              $seo_data
  * @method static Builder|Hotel newModelQuery()
  * @method static Builder|Hotel newQuery()
  * @method static Builder|Hotel popular()
@@ -96,8 +97,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @method static Builder|Hotel whereTypeId($value)
  * @method static Builder|Hotel whereUpdatedAt($value)
  * @method static Builder|Hotel whereUserId($value)
- * @mixin Eloquent
  * @method static Builder|Hotel whereCheckedTypeFond($value)
+ * @mixin Eloquent
  */
 class Hotel extends Model
 {
@@ -159,6 +160,7 @@ class Hotel extends Model
     'moderate',
     'show',
     'checked_type_fond',
+    'slug'
   ];
 
   /**
@@ -187,8 +189,6 @@ class Hotel extends Model
     'checked_type_fond' => 'boolean',
   ];
 
-  ### SCOPES
-
   /**
    * Bootstrap the model and its traits.
    *
@@ -198,7 +198,7 @@ class Hotel extends Model
   {
     parent::boot();
 
-    static::addGlobalScope('moderation', function (Builder $builder) {
+    static::addGlobalScope('moderation', static function (Builder $builder) {
 
       if (auth()->check()) {
         if (Route::currentRouteNamed('lk.*')) {
@@ -240,47 +240,8 @@ class Hotel extends Model
       }
     });
 
-
-    self::creating(function (Hotel $hotel) {
-      $hotel->slug = $hotel->slug ?? Str::slug($hotel->name) . '-' . Carbon::now()->timestamp;
-      Cache::forget('sitemap.2g');
-    });
-
-    self::created(function (Hotel $hotel) {
-      try {
-        if (!PageDescription::where('url', '/address/' . Str::slug($hotel->address->city))->exists()) {
-          $pageDesc = new PageDescription();
-          $pageDesc->url = '/address/' . Str::slug($hotel->address->city);
-          $pageDesc->title = 'Отели города "' . $hotel->address->city . '"';
-          $pageDesc->save();
-        }
-      } catch (Exception $exception) {
-        Log::error($exception);
-      }
-    });
-
-    self::updated(function (Hotel $hotel) {
-      try {
-        if (!PageDescription::where('url', '/address/' . Str::slug($hotel->address->city))->exists()) {
-          $pageDesc = new PageDescription();
-          $pageDesc->url = '/address/' . Str::slug($hotel->address->city);
-          $pageDesc->title = 'Отели города "' . $hotel->address->city . '"';
-          $pageDesc->save();
-        }
-      } catch (Exception $exception) {
-        Log::error($exception);
-      }
-    });
-    self::updating(function (self $hotel) {
-      Cache::forget('sitemap.2g');
-    });
-    self::deleting(function (self $hotel) {
-      Cache::forget('sitemap.2g');
-    });
   }
-  ### END SCOPES
 
-  ### RELATIONS
 
   public function scopePopular(Builder $query): Builder
   {
@@ -304,7 +265,12 @@ class Hotel extends Model
 
   public function attrs(): BelongsToMany
   {
-    return $this->belongsToMany(Attribute::class, 'attribute_hotel', 'hotel_id', 'attribute_id');
+    return $this->belongsToMany(
+      Attribute::class,
+      'attribute_hotel',
+      'hotel_id',
+      'attribute_id'
+    );
   }
 
   /**
@@ -314,7 +280,9 @@ class Hotel extends Model
    */
   public function categories(): HasMany
   {
-    return $this->hasMany(Category::class)->orderBy('created_at');
+    return $this
+      ->hasMany(Category::class)
+      ->orderBy('created_at');
   }
 
   /**
@@ -329,7 +297,9 @@ class Hotel extends Model
 
   public function reviews(): HasMany
   {
-    return $this->hasMany(Review::class)->with('ratings');
+    return $this
+      ->hasMany(Review::class)
+      ->with('ratings');
   }
 
   public function ratings(): HasManyThrough
@@ -364,34 +334,159 @@ class Hotel extends Model
   }
 
   /**
-   * Description
+   * Meta_Description
    *
    * @return string
    */
   public function getMetaDescriptionAttribute(): string
   {
-    return @$this->meta->meta_description ?? $this->getDescDefault();
+    return $this->meta->meta_description ?? $this->seo_data->description;
   }
-  ### END RELATIONS
 
-  ### MUTATORS
-
-  private function getDescDefault(): string
+  /**
+   * Meta_Keywords
+   *
+   * @return string|null
+   */
+  public function getMetaKeywordsAttribute(): ?string
   {
-    $desc = "%s %s %sв г. %s: большая база почасовых отелей с описанием номеров. Сортировка по районам, метро, округам и стоимости и скидки на проживание!";
-    $costs = (array)$this->getMinCosts();
+    return $this->meta->meta_keywords ?? null;
+  }
 
-    if (current($costs)) {
-      $cost = current($costs);
-      if (isset($cost["value"]))
-        $cost = "по цене " . $cost['value'] . " руб. на час ";
-      else
-        $cost = "";
-    } else {
-      $cost = "";
+  /**
+   * Meta_Title
+   *
+   * @return string|null
+   */
+  public function getMetaTitleAttribute(): ?string
+  {
+    return $this->meta->title ?? $this->seo_data->title;
+  }
+
+  /**
+   * Meta_H1
+   *
+   * @return string|null
+   */
+  public function getMetaH1Attribute(): ?string
+  {
+    return $this->meta->h1 ?? $this->seo_data->h1;
+  }
+
+  /**
+   * Generate seo data if PageDescription of Null
+   *
+   * @return SeoData
+   */
+  public function getSeoDataAttribute(): SeoData
+  {
+    $url = '/hotels/' . $this->slug;
+    $seoData = new SeoData($this->address, $url);
+    $seoData->lastOfType = 'hotel';
+    $seoData->hotel = $this;
+    $seoData->generate();
+
+    return $seoData;
+  }
+
+  /**
+   * All costs in all rooms
+   *
+   * @return Collection
+   */
+  public function getCostsAttribute(): Collection
+  {
+    return $this->rooms()->with('costs.period')->get()->pluck('costs')->flatten();
+  }
+
+  /**
+   * Room in Hotel
+   *
+   * @return HasMany
+   */
+  public function rooms(): HasMany
+  {
+    return $this->hasMany(Room::class)->orderBy('order', 'ASC');
+  }
+
+  public function saveAddress(string $address_raw, $comment = null): void
+  {
+    $address = $this->getAddressInfo($address_raw);
+    $address['comment'] = empty($comment) ? null : $comment;
+    $this->address()->delete();
+    $this->address()->create($address)->save();
+    $this->save();
+  }
+
+  public function getAddressInfo(string $address): array
+  {
+    $suggest = DadataSuggest::suggest('address', ['query' => $address, 'count' => 1]);
+    $suggest['data']['value'] = $suggest['value'];
+
+    return Address::getFillableData($suggest['data']);
+  }
+
+  /**
+   * Address
+   *
+   * @return HasOne
+   */
+  public function address(): HasOne
+  {
+    return $this->hasOne(Address::class);
+  }
+
+  public function attachMeta(Request $request): Hotel
+  {
+    if (!$request->get('meta_title', false) && !$request->get('meta_description', false) && !$request->get('meta_keywords', false)) return $this;
+
+    $url = '/hotels/' . $this->slug;
+
+    $data = [];
+
+    $data['title'] = $request->get('meta_title', $this->meta_title);
+    $data['meta_description'] = $request->get('meta_description', $this->meta_description);
+
+    $data['meta_keywords'] = $request->get('meta_keywords');
+    $data['h1'] = $request->get('h1', $this->meta_h1);
+    $data['url'] = $url;
+    $data['model_type'] = self::class;
+
+    $meta = PageDescription::updateOrCreate(['url' => $url], $data);
+    $meta->model_type = self::class;
+    $meta->save();
+
+    $this->meta()->save($meta);
+
+    return $this;
+  }
+
+  /**
+   * PageDescription | SEO
+   *
+   * @return HasOne
+   */
+  public function meta(): HasOne
+  {
+    return $this
+      ->hasOne(PageDescription::class, 'model_id')
+      ->where('model_type', self::class);
+  }
+
+  /**
+   * Dynamically retrieve attributes on the model.
+   *
+   * @param string $key
+   *
+   * @return mixed
+   */
+  public function __get($key)
+  {
+    if ($key === 'minimals') {
+      return $this->getMinCosts();
     }
 
-    return sprintf($desc, $this->name, optional($this->address)->street, $cost, optional($this->address)->city ?? 'Москва');
+    return parent::__get($key);
   }
 
   /**
@@ -400,8 +495,7 @@ class Hotel extends Model
    * @return object
    */
   public function getMinCosts(): object
-  {
-    Cache::flush();
+  {;
     $costs = Cache::remember('hotel.' . $this->id . '.costs', 60 * 60 * 24 * 12, function () {
       $rooms = $this->rooms->pluck('id')->toArray();
       $items = new Collection();
@@ -445,125 +539,6 @@ class Hotel extends Model
     return (object)$costs;
   }
 
-  /**
-   * All costs in all rooms
-   *
-   * @return Collection
-   */
-  public function getCostsAttribute(): Collection
-  {
-    return $this->rooms()->with('costs.period')->get()->pluck('costs')->flatten();
-  }
-
-  /**
-   * Room in Hotel
-   *
-   * @return HasMany
-   */
-  public function rooms(): HasMany
-  {
-    return $this->hasMany(Room::class)->orderBy('order', 'ASC');
-  }
-
-  public function getMetaKeywordsAttribute()
-  {
-    return @$this->meta->meta_keywords ?? null;
-  }
-
-  ### END MUTATORS
-
-  ### FUNCTIONS
-
-  public function getMetaTitleAttribute()
-  {
-    return @$this->meta->title ?? $this->getTitleDefault();
-  }
-
-  private function getTitleDefault()
-  {
-    $street = optional($this->address)->street;
-    $area_short = optional($this->address)->city_area_short;
-    $metro = optional(optional($this->metros)->first())->name;
-
-    return "Отель {$this->name}, {$street}, в {$area_short}, у метро {$metro}";
-  }
-
-  public function saveAddress(string $address_raw, $comment = null): void
-  {
-    $address = $this->getAddressInfo($address_raw);
-    $address['comment'] = empty($comment) ? null : $comment;
-    $this->address()->delete();
-    $this->address()->create($address)->save();
-    $this->save();
-  }
-
-  public function getAddressInfo(string $address): array
-  {
-    $suggest = DadataSuggest::suggest('address', ['query' => $address, 'count' => 1]);
-    $suggest['data']['value'] = $suggest['value'];
-
-    return Address::getFillableData($suggest['data']);
-  }
-
-  /**
-   * Address
-   *
-   * @return HasOne
-   */
-  public function address(): HasOne
-  {
-    return $this->hasOne(Address::class);
-  }
-
-  public function attachMeta(Request $request): Hotel
-  {
-    if (!$request->get('meta_title', false) && !$request->get('meta_description', false) && !$request->get('meta_keywords', false)) return $this;
-
-    $url = '/hotels/' . $this->slug;
-
-    $data = [];
-
-    $title = $this->getTitleDefault();
-    $meta_desc = $this->getDescDefault();
-
-    $data['title'] = $request->get('meta_title', $title);
-    $data['meta_description'] = $request->get('meta_description', $meta_desc);
-    $data['meta_keywords'] = $request->get('meta_keywords');
-    $data['url'] = $url;
-    $data['model_type'] = self::class;
-
-    $meta = PageDescription::updateOrCreate(['url' => $url], $data);
-    $meta->model_type = self::class;
-    $meta->save();
-
-    $this->meta()->save($meta);
-
-    return $this;
-  }
-
-  ### END FUNCTIONS
-
-  ### OVERWRITES
-
-  public function meta(): HasOne
-  {
-    return $this->hasOne(PageDescription::class, 'model_id')->where('model_type', self::class);
-  }
-
-  /**
-   * Dynamically retrieve attributes on the model.
-   *
-   * @param string $key
-   *
-   * @return mixed
-   */
-  public function __get($key)
-  {
-    if ($key === 'minimals') return $this->getMinCosts();
-
-    return parent::__get($key);
-  }
-
   public function getRouteKeyName()
   {
     return 'slug';
@@ -583,4 +558,19 @@ class Hotel extends Model
     return 'disabled';
   }
 
+  /**
+   * Generate Unique slug
+   *
+   * @return string
+   */
+  public function generateSlug(): string
+  {
+    $i = 0;
+    do {
+      $slug = Str::slug($this->name) . ($i > 0 ? '-' . $i : '');
+      $i++;
+    } while (self::withoutGlobalScope('moderation')->whereSlug($slug)->exists());
+
+    return $slug;
+  }
 }

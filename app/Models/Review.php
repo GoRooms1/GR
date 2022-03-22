@@ -2,32 +2,32 @@
 
 namespace App\Models;
 
-use App\Traits\ClearValidated;
-use App\Traits\CreatedAtOrdered;
 use Eloquent;
+use App\Traits\ClearValidated;
+use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 /**
  * App\Models\Review
  *
- * @property int $id
- * @property string $name
- * @property string $city
- * @property string $room
- * @property string $text
- * @property int $hotel_id
- * @property int|null $user_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Hotel $hotel
+ * @property int                      $id
+ * @property string                   $name
+ * @property string                   $city
+ * @property string                   $room
+ * @property string                   $text
+ * @property int                      $hotel_id
+ * @property int|null                 $user_id
+ * @property Carbon|null              $created_at
+ * @property Carbon|null              $updated_at
+ * @property-read Hotel               $hotel
  * @property-read Collection|Rating[] $ratings
- * @property-read int|null $ratings_count
+ * @property-read int|null            $ratings_count
  * @method static Builder|Review newModelQuery()
  * @method static Builder|Review newQuery()
  * @method static Builder|Review query()
@@ -47,7 +47,7 @@ class Review extends Model
   use ClearValidated;
   use CreatedAtOrdered;
 
-  const PER_PAGE = 6;
+  public const PER_PAGE = 6;
 
   protected $fillable = [
     'name',
@@ -59,7 +59,9 @@ class Review extends Model
 
   public function ratings(): HasMany
   {
-    return $this->hasMany(Rating::class)->with('category');
+    return $this
+      ->hasMany(Rating::class)
+      ->with('category');
   }
 
   public function hotel(): BelongsTo

@@ -61,7 +61,6 @@ class AttributeController extends Controller
    */
   public function store(AttributeRequest $request): RedirectResponse
   {
-//    dd($request->all());
     $attribute = new Attribute($request->all());
     $attribute->relationCategory()->associate($request->get('category'));
     $attribute->save();

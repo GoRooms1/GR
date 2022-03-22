@@ -146,10 +146,10 @@
     <div class="container header-menu-container">
       <ul id="js-menu" class="header-menu">
         <li class="header-menu-item">
-          <a href="{{ route('hotels.index') }}" class="header-menu-link">Биржа отелей</a>
+          <a href="{{ route('hotels.index') }}" class="header-menu-link">Отели</a>
         </li>
         <li class="header-menu-item">
-          <a href="{{ route('rooms.index') }}" class="header-menu-link">Биржа номеров</a>
+          <a href="{{ route('rooms.index') }}" class="header-menu-link">Номера</a>
         </li>
         <li class="header-menu-item">
           <a href="{{ route('search.map') }}" class="header-menu-link">Поиск по карте <img

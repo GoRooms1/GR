@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Search
  *
- * @property int $id
+ * @property int         $id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Search newModelQuery()
@@ -28,8 +28,8 @@ class Search extends Model
   /**
    * @var Builder $builder
    */
-  private $builder;
-  private $searchable = false;
+  private Builder $builder;
+  private bool $searchable = false;
 
   public static function makeSearchBuilder(): Search
   {
@@ -45,11 +45,10 @@ class Search extends Model
 
   public static function getBySlug(&$slugs)
   {
-    $hotels = static::getBySlugQuery($slugs);
-    return $hotels->get();
+    return static::getBySlugQuery($slugs)->get();
   }
 
-  static function getBySlugQuery(&$slugs)
+  static function getBySlugQuery(&$slugs): \Illuminate\Database\Eloquent\Builder
   {
     $addresses = DB::table('address_slug')
       ->whereIn('slug', array_values($slugs))
@@ -142,7 +141,7 @@ class Search extends Model
       $this->builder->leftJoin('attribute_hotel', 'hotels.id', '=', 'attribute_hotel.hotel_id')
         ->whereIn('attribute_hotel.attribute_id', $attributes['hotel']);
       $this->searchable = true;
-    } elseif (isset($attributes['room']) && count($attributes['room'])) {
+    } else if (isset($attributes['room']) && count($attributes['room'])) {
       $this->builder->leftJoin('attribute_room', 'rooms.id', '=', 'attribute_room.room_id')
         ->whereIn('attribute_room.attribute_id', $attributes['room']);
       $this->searchable = true;

@@ -19,7 +19,6 @@ trait UrlDecodeFilter
     $array = explode('/', $url);
     $addressIndex = array_search('address', $array, true);
     $arrayParams = array_slice($array, $addressIndex + 1);
-    $arrayParams[] = 'address-test';
 
     $city_url = $arrayParams[0];
     $metro_url = null;

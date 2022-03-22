@@ -13,7 +13,7 @@
           <meta itemprop="position" content="1"/>
         </li>
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <span itemprop="name">  {{ $title ?? 'Биржа номеров' }}</span>
+          <span itemprop="name">  {{ $title ?? 'Номера' }}</span>
           <meta itemprop="position" content="2"/>
         </li>
       </ul>

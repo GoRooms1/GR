@@ -11,3 +11,48 @@
   content:"*";
   color:red;
 }
+
+@media (min-width: 992px) {
+  .sidenav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 230px;
+    height: calc(100vh - 3.5rem);
+    margin-top: 3.5rem;
+    padding-left: 15px;
+    background-color: #fff;
+    box-sizing: border-box;
+    box-shadow: 4px 4px 6px 0px rgb(34 60 80 / 20%);
+  }
+
+  .navbar-expand-lg .sidenav {
+    flex-direction: column;
+  }
+
+  .content-wrapper {
+    margin-top: 3.5rem;
+    margin-left: 230px;
+  }
+}
+.nav-link:hover {
+  transition: all 0.4s;
+}
+
+.nav-link-collapse:after {
+  float: right;
+  content: '\f107';
+  font-family: 'FontAwesome';
+}
+
+.nav-item ul.nav-second-level {
+  padding-left: 0 !important;
+}
+
+.nav-item ul.nav-second-level > .nav-item {
+  padding-left: 20px;
+}
+.nav-item ul.nav-second-level > .nav-item::marker {
+  content:'';
+  display: none;
+}

@@ -207,8 +207,6 @@ class FilterController extends Controller
       $metros = $metros->values();
 
       $metros = $metros->all();
-//
-//      dd($metros);
 
 
       $hotels = $hotels->where('name', 'like', '%' . $q . '%')
