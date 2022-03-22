@@ -2,25 +2,27 @@
 
 namespace App\Models;
 
-use App\Traits\CreatedAtOrdered;
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Attribute
  *
- * @property int $id
- * @property string $name
- * @property string|null $description
- * @property string|null $model
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property boolean $in_filter
- * @property int $attribute_category_id
- * @property-read mixed $category
- * @property-read mixed $model_name
+ * @property int                    $id
+ * @property string                 $name
+ * @property string|null            $description
+ * @property string|null            $model
+ * @property Carbon|null            $created_at
+ * @property Carbon|null            $updated_at
+ * @property boolean                $in_filter
+ * @property int                    $attribute_category_id
+ * @property-read mixed             $category
+ * @property-read mixed             $model_name
+ * @property-read AttributeCategory $relationCategory
  * @method static Builder|Attribute filtered()
  * @method static Builder|Attribute forHotels()
  * @method static Builder|Attribute forRooms()
@@ -36,7 +38,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Attribute whereName($value)
  * @method static Builder|Attribute whereUpdatedAt($value)
  * @mixin Eloquent
- * @property-read \App\Models\AttributeCategory $relationCategory
  */
 class Attribute extends Model
 {
@@ -51,11 +52,11 @@ class Attribute extends Model
     'name',
     'description',
     'model',
-    'in_filter'
+    'in_filter',
   ];
 
   protected $casts = [
-    'in_filter' => 'boolean'
+    'in_filter' => 'boolean',
   ];
 
   public function scopeForHotels(Builder $builder): Builder
@@ -86,7 +87,7 @@ class Attribute extends Model
     return $this->getAttributes()['model'];
   }
 
-  public function relationCategory (): \Illuminate\Database\Eloquent\Relations\BelongsTo
+  public function relationCategory(): BelongsTo
   {
     return $this->belongsTo(AttributeCategory::class, 'attribute_category_id', 'id');
   }

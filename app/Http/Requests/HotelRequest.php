@@ -38,7 +38,7 @@ class HotelRequest extends FormRequest
             'cost.*.description' => ['string'],
             'cost.*.type_id' => ['numeric', 'exists:cost_types,id'],
             'type_id' => ['numeric', 'exists:hotel_types,id'],
-            'route' => ['string'],
+            'route' => ['string', 'nullable'],
             'route_title' => ['string'],
             'metros' => ['array'],
             'metros.*.color' => ['nullable'],

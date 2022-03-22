@@ -19,10 +19,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int                         $id
  * @property string                      $name
+ * @property string|null                 $description
  * @property Carbon|null                 $created_at
  * @property Carbon|null                 $updated_at
  * @property-read Collection|Attribute[] $attributes
  * @property-read int|null               $attributes_count
+ * @property-read mixed                  $attr_hotel
+ * @property-read mixed                  $attr_room
  * @method static Builder|AttributeCategory newModelQuery()
  * @method static Builder|AttributeCategory newQuery()
  * @method static Builder|AttributeCategory query()
@@ -30,11 +33,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|AttributeCategory whereId($value)
  * @method static Builder|AttributeCategory whereName($value)
  * @method static Builder|AttributeCategory whereUpdatedAt($value)
- * @mixin Eloquent
- * @property string|null $description
- * @property-read mixed $attr_hotel
- * @property-read mixed $attr_room
  * @method static Builder|AttributeCategory whereDescription($value)
+ * @mixin Eloquent
  */
 class AttributeCategory extends Model
 {
@@ -51,9 +51,11 @@ class AttributeCategory extends Model
   /**
    * Attributed for Hotel
    */
-  public function getAttrRoomAttribute()
+  public function getAttrRoomAttribute(): HasMany
   {
-    return $this->attributes()->where('model', Room::class);
+    return $this
+      ->attributes()
+      ->where('model', Room::class);
   }
 
   /**
@@ -69,8 +71,10 @@ class AttributeCategory extends Model
   /**
    * Attributed for Hotel
    */
-  public function getAttrHotelAttribute()
+  public function getAttrHotelAttribute(): HasMany
   {
-    return $this->attributes()->where('model', Hotel::class);
+    return $this
+      ->attributes()
+      ->where('model', Hotel::class);
   }
 }

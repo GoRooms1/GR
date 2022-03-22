@@ -8,23 +8,23 @@
 namespace App\Models;
 
 use Eloquent;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 /**
  * Тип для стоимости (На день на ночь и тп)
  *
- * @property int $id
- * @property string $name
- * @property int $sort
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $description
+ * @property int                      $id
+ * @property string                   $name
+ * @property int                      $sort
+ * @property Carbon|null              $created_at
+ * @property Carbon|null              $updated_at
+ * @property string|null              $description
  * @property-read Collection|Period[] $periods
- * @property-read int|null $periods_count
+ * @property-read int|null            $periods_count
  * @method static Builder|CostType newModelQuery()
  * @method static Builder|CostType newQuery()
  * @method static Builder|CostType query()
@@ -41,20 +41,25 @@ class CostType extends Model
   protected $fillable = [
     'name',
     'description',
-    'sort'
+    'sort',
   ];
 
   /**
    * Последняя запись
+   *
    * @return int
    */
   public static function getLastOrder(): int
   {
-    return self::where('sort', '>', 0)->orderBy('sort', 'DESC')->first()->sort ?? 0;
+    return self::where('sort', '>', 0)
+        ->orderBy('sort', 'DESC')
+        ->first()
+        ->sort ?? 0;
   }
 
   /**
    * Периоды для данного типа
+   *
    * @return HasMany
    */
   public function periods(): HasMany

@@ -7,27 +7,28 @@
 
 namespace App\Models;
 
-use App\Traits\CreatedAtOrdered;
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use App\Traits\CreatedAtOrdered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Image
  *
- * @property int $id
+ * @property int             $id
  * @property string|string[] $path
- * @property string $name
- * @property bool $moderate
- * @property string|null $title
- * @property string|null $description
- * @property int|null $default
- * @property string|null $model_type
- * @property int|null $model_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property string          $name
+ * @property bool            $moderate
+ * @property string|null     $title
+ * @property string|null     $description
+ * @property int|null        $default
+ * @property string|null     $model_type
+ * @property int|null        $model_id
+ * @property int|null        $order
+ * @property Carbon|null     $created_at
+ * @property Carbon|null     $updated_at
  * @method static Builder|Image newModelQuery()
  * @method static Builder|Image newQuery()
  * @method static Builder|Image query()
@@ -42,9 +43,8 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Image wherePath($value)
  * @method static Builder|Image whereTitle($value)
  * @method static Builder|Image whereUpdatedAt($value)
- * @mixin Eloquent
- * @property int|null $order
  * @method static Builder|Image whereOrder($value)
+ * @mixin Eloquent
  */
 class Image extends Model
 {
@@ -54,13 +54,13 @@ class Image extends Model
 
   protected static string $orderDirection = 'ASC';
   public $casts = [
-    'moderate' => 'boolean'
+    'moderate' => 'boolean',
   ];
   protected $fillable = [
     'name',
     'path',
     'moderate',
-    'order'
+    'order',
   ];
 
 //  TODO: Переписать алгоритм загузки фотки что бы order становился автоматом последний
@@ -156,7 +156,9 @@ class Image extends Model
 
   /**
    * Меняем урлу картинки на урлу с оптимизацией
+   *
    * @param string $value
+   *
    * @return string|string[]
    */
   public function getPathAttribute(string $value)

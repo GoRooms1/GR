@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\RatingCategory
  *
- * @property int $id
- * @property string $name
- * @property int $sort
+ * @property int         $id
+ * @property string      $name
+ * @property int         $sort
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|RatingCategory newModelQuery()

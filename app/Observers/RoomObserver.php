@@ -15,7 +15,6 @@ use App\Models\Hotel;
 class RoomObserver
 {
 
-  // TODO: Осталось сделать что бы вызывалась проверка для отеля при изменений категорий и фотографий
   /**
    * Handle the room "created" event.
    * Сбрасывает о том что недавно выбрали тип.
@@ -41,9 +40,7 @@ class RoomObserver
     }
     $hotel->save();
 
-//    if (Route::currentRouteNamed('lk.*')) {
       $this->moderate_hotel($hotel);
-//    }
   }
 
   /**
@@ -56,11 +53,9 @@ class RoomObserver
   {
     Cache::flush();
     $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
-//    if (Route::currentRouteNamed('lk.*')) {
     if ($hotel) {
       $this->moderate_hotel($hotel);
     }
-//    }
   }
 
   /**
@@ -127,8 +122,6 @@ class RoomObserver
     } else {
       $hotel->show = false;
     }
-
-    \Log::debug('Show hotel is ' . ($hotel->show ? 'true' : 'false'));
 
     $hotel->save();
   }

@@ -44,12 +44,3 @@ Route::get('/rules', 'PageController@show');
 
 Route::get('lk/start', 'Lk\HomeController@start')->name('lk.start');
 Route::post('lk/object/store', 'Lk\ObjectController@store')->name('lk.object.store');
-
-//Route::any('{error}', function () {
-//    return redirect()->to('/');
-//})->where('any', '.*');
-//
-//Route::any('{page}/{error}', function () {
-//    return redirect()->to('{page}');
-//})->where('any', '.*');
-

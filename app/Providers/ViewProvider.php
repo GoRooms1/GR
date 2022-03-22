@@ -30,15 +30,15 @@ class ViewProvider extends ServiceProvider
     public function boot()
     {
         if (!env('LOCAL', false)) {
-            $search_region = Address::groupBy('region')->pluck('region')->toArray();
-            $search_area = Address::groupBy('city_district')->pluck('city_district')->toArray();
-            $search_city = Address::groupBy('city')->pluck('city')->toArray();
-            $search_street = Address::groupBy('street')->pluck('street')->toArray();
-
-            View::share('search_region', $search_region);
-            View::share('search_area', $search_area);
-            View::share('search_city', $search_city);
-            View::share('search_street', $search_street);
+//            $search_region = Address::groupBy('region')->pluck('region')->toArray();
+//            $search_area = Address::groupBy('city_district')->pluck('city_district')->toArray();
+//            $search_city = Address::groupBy('city')->pluck('city')->toArray();
+//            $search_street = Address::groupBy('street')->pluck('street')->toArray();
+//
+//            View::share('search_region', $search_region);
+//            View::share('search_area', $search_area);
+//            View::share('search_city', $search_city);
+//            View::share('search_street', $search_street);
 
             $url = url()->current();
             $url = str_replace(['https://', 'http://'], '', $url);
