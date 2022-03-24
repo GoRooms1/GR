@@ -48,6 +48,13 @@ Route::put('settings/seo/update/{id}', 'SettingsController@seoUpdate')->name('se
 Route::post('settings', 'SettingsController@store')->name('settings.store');
 Route::post('settings/robot', 'SettingsController@storeRobot')->name('settings.robot_store');
 
+Route::prefix('/settings')->name('settings.')->group(function () {
+  Route::prefix('/menu-costs')->name('menu-costs.')->group(function () {
+    Route::get('/', 'MenuCostsController@index')->name('index');
+    Route::post('/save', 'MenuCostsController@save')->name('save');
+  });
+});
+
 Route::resource('forms', 'FormController', [
   'only' => ['index', 'show'],
 ]);

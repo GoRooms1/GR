@@ -129,8 +129,34 @@
             <li class="nav-item">
               <a href="{{ route('admin.instructions.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.instructions.*') ? 'active' : '' }}">Инструкции</a>
             </li>
+
             <li class="nav-item">
-              <a href="{{ route('admin.settings.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.settings.*') ? 'active' : '' }}">Настройки</a>
+              <a id="hasSubItems4"
+                 class="nav-link nav-link-collapse {{ Route::currentRouteNamed('admin.settings.*') ? 'active nav-link-show' : '' }}"
+                 href="#"
+                 data-toggle="collapse"
+                 data-target="#collapseSubItems4"
+                 aria-controls="collapseSubItems4"
+                 aria-expanded="true"
+              >
+                Настройки
+              </a>
+
+              <ul class="nav-second-level list-unstyled collapse {{ Route::currentRouteNamed('admin.settings.*') ? 'show' : '' }}"
+                  id="collapseSubItems4"
+                  data-parent="#hasSubItems4"
+              >
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.settings.index') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
+                    <span class="nav-link-text">Все настройки</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {{ Route::currentRouteNamed('admin.settings.menu-costs.*') ? 'active' : '' }}" href="{{ route('admin.settings.menu-costs.index') }}">
+                    <span class="nav-link-text">Фильтр стоимостей</span>
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         @endauth
