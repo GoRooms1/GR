@@ -17,14 +17,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * Тип для стоимости (На день на ночь и тп)
  *
- * @property int                      $id
- * @property string                   $name
- * @property int                      $sort
- * @property Carbon|null              $created_at
- * @property Carbon|null              $updated_at
- * @property string|null              $description
- * @property-read Collection|Period[] $periods
- * @property-read int|null            $periods_count
+ * @property int                          $id
+ * @property string                       $name
+ * @property int                          $sort
+ * @property Carbon|null                  $created_at
+ * @property Carbon|null                  $updated_at
+ * @property string|null                  $description
+ * @property-read Collection|Period[]     $periods
+ * @property-read int|null                $periods_count
+ * @property-read Collection|FilterCost[] $filterCosts
+ * @property-read int|null                $filter_costs_count
  * @method static Builder|CostType newModelQuery()
  * @method static Builder|CostType newQuery()
  * @method static Builder|CostType query()
@@ -65,5 +67,10 @@ class CostType extends Model
   public function periods(): HasMany
   {
     return $this->hasMany(Period::class);
+  }
+
+  public function filterCosts(): HasMany
+  {
+    return $this->hasMany(FilterCost::class, 'cost_type_id', 'id');
   }
 }
