@@ -4,6 +4,7 @@ namespace App\Widgets;
 
 use Log;
 use Cookie;
+use JsonException;
 use App\Models\Metro;
 use App\Models\Address;
 use App\Models\CostType;
@@ -180,8 +181,29 @@ class Filter extends AbstractWidget
     ]);
   }
 
+  /**
+   * @throws JsonException
+   */
   private function defaultLocation(): string
   {
+    if (Cookie::get('city', null) === null) {
+      $ch = curl_init('http://ip-api.com/json/' . '95.188.80.41' . '?lang=ru');
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_HEADER, false);
+      $res = curl_exec($ch);
+      curl_close($ch);
+
+      $res = json_decode($res, true, 512, JSON_THROW_ON_ERROR);
+
+      if (!is_null($res) && isset($res['city'])) {
+        $check = Address::where('city', $res['city'])->exists();
+        if ($check) {
+          Cookie::queue('city', $res['city'], 60);
+          return $res['city'];
+        }
+      }
+      Cookie::queue('city', 'Москва', 60);
+    }
     return Cookie::get('city', 'Москва');
   }
 
