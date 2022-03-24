@@ -187,7 +187,7 @@ class Filter extends AbstractWidget
   private function defaultLocation(): string
   {
     if (Cookie::get('city', null) === null) {
-      $ch = curl_init('http://ip-api.com/json/' . '95.188.80.41' . '?lang=ru');
+      $ch = curl_init('http://ip-api.com/json/' . Request::ip() . '?lang=ru');
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($ch, CURLOPT_HEADER, false);
       $res = curl_exec($ch);
