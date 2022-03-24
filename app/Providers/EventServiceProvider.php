@@ -2,19 +2,21 @@
 
 namespace App\Providers;
 
+use App\Models\Room;
 use App\Models\Hotel;
+use App\Models\Image;
 use App\Models\Address;
 use App\Events\FormSend;
 use App\Models\Category;
+use App\Models\CostType;
 use App\Models\Attribute;
+use App\Observers\RoomObserver;
 use App\Observers\HotelObserver;
+use App\Observers\ImageObserver;
 use App\Observers\AddressObserver;
 use App\Observers\CategoryObserver;
+use App\Observers\CostTypeObserver;
 use App\Listeners\FormSendMailEvent;
-use App\Models\Image;
-use App\Models\Room;
-use App\Observers\ImageObserver;
-use App\Observers\RoomObserver;
 use App\Observers\AttributeObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -33,7 +35,7 @@ class EventServiceProvider extends ServiceProvider
     ],
     FormSend::class => [
       FormSendMailEvent::class,
-    ]
+    ],
   ];
 
   /**
@@ -50,5 +52,6 @@ class EventServiceProvider extends ServiceProvider
     Hotel::observe(HotelObserver::class);
     Attribute::observe(AttributeObserver::class);
     Address::observe(AddressObserver::class);
+    CostType::observe(CostTypeObserver::class);
   }
 }

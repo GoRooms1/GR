@@ -10,20 +10,20 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait Filter
 {
-  public function filter (
+  public function filter(
     ?string $search,
-    ?array $attributes,
+    ?array  $attributes,
     ?string $city,
     ?string $city_area,
     ?string $district,
-    ?int $hotel_type,
+    ?int    $hotel_type,
     ?string $metro,
-    bool $hot,
+    bool    $hot,
     ?string $search_price,
     ?string $cost,
-    bool $with_map,
-    bool $popular = false,
-    bool $moderate = false
+    bool    $with_map,
+    bool    $popular = false,
+    bool    $moderate = false
   ): object
   {
     $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot;
@@ -159,8 +159,7 @@ trait Filter
       } else {
         $hotels = $hotels->paginate(16);
       }
-    }
-    else {
+    } else {
       $rooms = Room::query();
 
       if ($search) {
@@ -220,7 +219,7 @@ trait Filter
         foreach ($attributes['room'] as $id) {
           $rooms = $rooms->whereHas('attrs', function (Builder $q_attrs) use ($id) {
             $q_attrs->where('id', $id);
-         });
+          });
         }
       }
 
@@ -271,29 +270,21 @@ trait Filter
       $rooms = $rooms->paginate(16);
     }
 
-    return (object) [
-      'rooms'  => $rooms,
+    return (object)[
+      'rooms' => $rooms,
       'hotels' => $hotels,
       'is_room' => $is_room,
-      'hotels_popular' => $hotels_popular
+      'hotels_popular' => $hotels_popular,
     ];
   }
 
   private function costTypeTranslate($type): string
   {
-    $answer = '';
-    switch ($type) {
-      case 'day':
-        $answer = CostType::where('name', 'На Сутки')->first()->id;
-        break;
-      case 'hour':
-        $answer = CostType::where('name', 'На Час')->first()->id;
-        break;
-      case 'night':
-        $answer = CostType::where('name', 'На Ночь')->first()->id;
-        break;
+    $costType = CostType::where('slug', $type)->first();
+    if ($costType) {
+      return $costType->id;
     }
 
-    return $answer;
+    abort(404);
   }
 }
