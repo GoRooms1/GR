@@ -186,64 +186,58 @@
                 <div class="advanced-search-prices-in advanced-search-prices-control">
                   <p class="advanced-search-prices-in-label">Период размещения:</p>
                   <ul class="advanced-search-prices-list">
-                    <li class="advanced-search-prices-item">
-                      <input id="advanced-search-prices-1" type="checkbox" class="checkbox" name="search-price"
-                             value="hour" @checked('hour', $request->get('search-price'))>
-                      <label for="advanced-search-prices-1" class="checkbox-label checkbox-label-orange">На
-                        час</label>
-                    </li>
-                    <li class="advanced-search-prices-item">
-                      <input id="advanced-search-prices-2" type="checkbox" class="checkbox" name="search-price"
-                             value="night" @checked('night', $request->get('search-price'))>
-                      <label for="advanced-search-prices-2" class="checkbox-label checkbox-label-orange">На
-                        ночь</label>
-                    </li>
-                    <li class="advanced-search-prices-item">
-                      <input id="advanced-search-prices-3" type="checkbox" class="checkbox" name="search-price"
-                             value="day" @checked('day', $request->get('search-price'))>
-                      <label for="advanced-search-prices-3" class="checkbox-label checkbox-label-orange">На
-                        сутки</label>
-                    </li>
+                    @foreach ($costTypes as $type)
+                      <li class="advanced-search-prices-item">
+                        <input id="advanced-search-prices-{{ $loop->iteration }}" type="checkbox" class="checkbox" name="search-price"
+                               value="{{ $type->slug }}" @checked($type->slug, $request->get('search-price'))>
+                        <label for="advanced-search-prices-{{ $loop->iteration }}" class="checkbox-label checkbox-label-orange">{{ $type->name }}</label>
+                      </li>
+                    @endforeach
                   </ul>
                 </div>
-                @foreach (['hour' => 'На час', 'night' => 'На ночь', 'day' => 'На сутки'] as $type => $title)
+                @foreach ($costTypes as $type)
                   <div
-                    class="advanced-search-prices-in advanced-search-prices-in-item {{ $request->get('search-price') !== $type ? 'disabled' : ''}}">
-                    <p class="advanced-search-prices-in-label">{{ $title }}:</p>
+                    class="advanced-search-prices-in advanced-search-prices-in-item {{ $request->get('search-price') !== $type->slug ? 'disabled' : ''}}">
+                    <p class="advanced-search-prices-in-label">{{ $type->name }}:</p>
                     <ul class="advanced-search-prices-list">
-                      <li class="advanced-search-prices-item">
-                        @php($value = $type.'.lte.'.Settings::option($type.'_cost_small'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-1" name="cost" type="radio"
-                               class="checkbox" value="{{$value}}" @checked($value, $request->get('cost')) >
-                        <label for="advanced-search-prices-{{ $loop->index }}-1"
-                               class="checkbox-label checkbox-label-orange">до {{ Settings::option($type.'_cost_small') }}
-                          р.</label>
-                      </li>
-                      <li class="advanced-search-prices-item">
-                        @php($value = $type.'.between.'.Settings::option($type.'_cost_small').'-'.Settings::option($type.'_cost_medium'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-2" name="cost" type="radio"
-                               class="checkbox" value="{{$value}}" @checked($value, $request->get('cost')) >
-                        <label for="advanced-search-prices-{{ $loop->index }}-2"
-                               class="checkbox-label checkbox-label-orange">{{ Settings::option($type.'_cost_small') }}
-                          р.- {{ Settings::option($type.'_cost_medium') }} р</label>
-                      </li>
-                      <li class="advanced-search-prices-item">
-                        @php($value = $type.'.between.'.Settings::option($type.'_cost_medium').'-'.Settings::option($type.'_cost_low'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-3" name="cost" type="radio"
-                               class="checkbox" value="{{$value}}" @checked($value, $request->get('cost')) >
-                        <label for="advanced-search-prices-{{ $loop->index }}-3"
-                               class="checkbox-label checkbox-label-orange">{{ Settings::option($type.'_cost_medium') }}
-                          р. - {{ Settings::option($type.'_cost_low') }}
-                          р</label>
-                      </li>
-                      <li class="advanced-search-prices-item">
-                        @php($value = $type.'.gte.'.Settings::option($type.'_cost_low'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-4" name="cost" type="radio"
-                               class="checkbox" value="{{$value}}" @checked($value, $request->get('cost')) >
-                        <label for="advanced-search-prices-{{ $loop->index }}-4"
-                               class="checkbox-label checkbox-label-orange">от {{ Settings::option($type.'_cost_low') }}
-                          р.</label>
-                      </li>
+                      @foreach($type->filterCosts as $cost)
+                        @php
+                          $flag = false;
+                          if ($loop->first) {
+                            $title = 'до ' . $cost->cost . 'р.';
+                            $value = $type->slug.'.lte.'.$cost->cost;
+                          } else if ($loop->last) {
+                            $flag = true;
+                            $title = 'от ' . $cost->cost . 'р.';
+                            $value = $type->slug.'.gte.'.$cost->cost;
+                          } else {
+                            $title = $type->filterCosts[$loop->index - 1]->cost . 'р. - ' . $cost->cost . ' р.';
+                            $type->slug.'.between.'.$type->filterCosts[$loop->index - 1]->cost . '-' . $cost->cost;
+                          }
+                        @endphp
+                        @if ($flag)
+                          @php
+                            $title2 = $type->filterCosts[$loop->index - 1]->cost . 'р. - ' . $cost->cost . ' р.';
+                            $value2 = $type->slug.'.between.'.$type->filterCosts[$loop->index - 1]->cost . '-' . $cost->cost;
+                          @endphp
+                          <li class="advanced-search-prices-item">
+                            <input id="advanced-search-prices-{{ $cost->id  . '00' }}-{{ $loop->parent->iteration }}" name="cost" type="radio"
+                                   class="checkbox" value="{{ $value2 }}" @checked($value2, $request->get('cost')) >
+                            <label for="advanced-search-prices-{{ $cost->id . '00' }}-{{ $loop->parent->iteration }}"
+                                   class="checkbox-label checkbox-label-orange">
+                              {{ $title2 }}
+                            </label>
+                          </li>
+                        @endif
+                        <li class="advanced-search-prices-item">
+                          <input id="advanced-search-prices-{{ $cost->id }}-{{ $loop->parent->iteration }}" name="cost" type="radio"
+                                 class="checkbox" value="{{$value}}" @checked($value, $request->get('cost')) >
+                          <label for="advanced-search-prices-{{ $cost->id }}-{{ $loop->parent->iteration }}"
+                                 class="checkbox-label checkbox-label-orange">
+                            {{ $title }}
+                          </label>
+                        </li>
+                      @endforeach
                     </ul>
                   </div>
                 @endforeach

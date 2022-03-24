@@ -6,6 +6,7 @@ use Log;
 use Cookie;
 use App\Models\Metro;
 use App\Models\Address;
+use App\Models\CostType;
 use App\Models\HotelType;
 use App\Models\Attribute;
 use App\Traits\UrlDecodeFilter;
@@ -157,6 +158,8 @@ class Filter extends AbstractWidget
       ]
     ];
 
+    $costTypes = CostType::with('filterCosts')->orderBy('sort')->get();
+
     return view('widgets.filter', [
       'request'           => $this->request,
       'city'              => $this->city,
@@ -172,6 +175,7 @@ class Filter extends AbstractWidget
       'moderate'          => $this->moderate,
       'attributes'        => $this->attributes,
       'hot'               => $this->hot,
+      'costTypes'         => $costTypes,
       'data'              => $data
     ]);
   }
