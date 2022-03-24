@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null                  $created_at
  * @property Carbon|null                  $updated_at
  * @property string|null                  $description
+ * @property string|null                  $slug
  * @property-read Collection|Period[]     $periods
  * @property-read int|null                $periods_count
  * @property-read Collection|FilterCost[] $filterCosts
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|CostType whereName($value)
  * @method static Builder|CostType whereSort($value)
  * @method static Builder|CostType whereUpdatedAt($value)
+ * @method static Builder|CostType whereSlug($value)
  * @mixin Eloquent
  */
 class CostType extends Model
@@ -44,6 +46,7 @@ class CostType extends Model
     'name',
     'description',
     'sort',
+    'slug',
   ];
 
   /**
