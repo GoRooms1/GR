@@ -7,7 +7,7 @@
 .advanced-search .search-tags {
   color: #2f64ad;
 }
-.search-tags span {
+.search-tags > span {
   display: flex;
   align-items: center;
   margin-right: 20px;

@@ -97,6 +97,13 @@
           </span>
         @endforeach
 
+        <span class="d-flex" style="display: none" data-type-tag="cost">
+          <span></span>
+          <a href="#">
+            <i class="fa-solid fa-xmark"></i>
+          </a>
+        </span>
+
         <span class="d-none copy-attr">
           <a href="#">
             <i class="fa-solid fa-xmark"></i>

@@ -174,13 +174,13 @@ $(document).ready(function () {
                     for(const item of qArr) {
                         if(item['name'] === 'cost') {
                             const value = item['value']
-                            $(item).find(`input[value="${value}"]`).attr('previousValue', true).prop('checked',true);
+                            $(item).find(`input[value="${value}"]`).attr('previousValue', true).prop('checked',true).trigger('change');
                             flagCost = false
                             continue;
                         }
                     }
                 } else {
-                    $(item).find('input').eq(0).attr('previousValue', true).prop('checked',true);
+                    $(item).find('input').eq(0).attr('previousValue', true).prop('checked',true).trigger('change');
                 }
 
             }

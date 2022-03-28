@@ -212,6 +212,39 @@ $(function () {
     }
   })
 
+  $('.search-tags span[data-type-tag=cost] a').click(function () {
+    $('.advanced-search-prices-in.advanced-search-prices-in-item').addClass('disabled')
+    $('.advanced-search-prices-item').addClass('disabled')
+    $('[name=cost]').prop('checked',false).attr("disabled", true)
+
+    $('input[name=search-price]:checked').prop('checked',false)
+    $('.search-tags span[data-type-tag=cost]').hide()
+
+    let event = new Event('change');
+    let form = document.getElementById('js-advanced-search')
+    form.dispatchEvent(event)
+  })
+
+  // $('[name=cost]:checked + label').text().trim()
+  $('[name=cost]').change(function () {
+    // console.log($('[name=cost]:checked + label').text().trim())
+    setTimeout(function () {
+      let span = $('.search-tags span[data-type-tag=cost] span')
+      let name = $('.advanced-search-prices-in.advanced-search-prices-in-item')
+        .not('.disabled')
+        .find('.advanced-search-prices-in-label').text()
+      console.log(span)
+      if ($('[name=cost]:checked').length > 0 && $('input[name=search-price]:checked').length > 0) {
+        console.log($('input[name=search-price]:checked').length > 0)
+        span.text(name + ' ' + $('[name=cost]:checked + label').text().trim())
+        $('.search-tags span[data-type-tag=cost]').show()
+      } else {
+        console.log(0)
+        span.text('')
+        $('.search-tags span[data-type-tag=cost]').hide()
+      }
+    }, 200)
+  })
 
 //  Возврат значений обратно при свораяивании поиска
   $('form#js-advanced-search #js-advanced-search-close-btn').click(function () {
