@@ -110,7 +110,7 @@
         <div class="col-xl-4 advanced-search-location-wrapper">
           <div class="advanced-search-location">
             <p class="advanced-search-title">
-              Расположение
+              <span>Расположение</span>
               <button class="js-search-btn-collapse search-btn-collapse" type="button"></button>
             </p>
             <div class="filter-collapse js-search-collapse">
@@ -178,7 +178,8 @@
         </div>
         <div class="col-xl-8 advanced-search-prices-wrapper">
           <div class="advanced-search-prices">
-            <p class="advanced-search-title">По цене
+            <p class="advanced-search-title">
+              <span>По цене</span>
               <button class="js-search-btn-collapse search-btn-collapse" type="button"></button>
             </p>
             <div class="filter-collapse js-search-collapse">
@@ -267,6 +268,7 @@
             <p class="search-filter-label search-filter-label-profitably">Рейтинг отелей:</p>
             <div class="rating-block">
               <a href="#">Любой</a>
+              <a href="#">5+</a>
               <a href="#">6+</a>
               <a href="#">7+</a>
               <a href="#">8+</a>
@@ -277,63 +279,69 @@
       </div>
       <div class="row advanced-search-details">
         <div class="col-lg-6 advanced-search-details-col">
-          <p class="advanced-search-title">Детально об отлеле
-            <button class="js-search-btn-collapse search-btn-collapse" type="button"></button>
-          </p>
-          <div class="filter-collapse js-search-collapse">
-            <ul class="advanced-search-details-list">
-              @foreach ($hotels_attributes as $attribute)
-                <li class="advanced-search-details-item">
-                  <input id="advanced-search-hotel-{{ $loop->index }}" type="checkbox"
-                         {{--                         @if(in_array($attribute->id, $attributes, false))--}}
-                         @if($attributes->contains('id', $attribute->id))
-                         checked
-                         @endif
-                         name="attributes[hotel][]" value="{{ $attribute->id }}" class="checkbox">
-                  <label for="advanced-search-hotel-{{ $loop->index }}"
-                         class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
-                </li>
-              @endforeach
-            </ul>
+          <div class="advanced-search-details-wrapper">
+            <p class="advanced-search-title">
+              <span>Детально об отлеле</span>
+              <button class="js-search-btn-collapse search-btn-collapse" type="button"></button>
+            </p>
+            <div class="filter-collapse js-search-collapse">
+              <ul class="advanced-search-details-list">
+                @foreach ($hotels_attributes as $attribute)
+                  <li class="advanced-search-details-item">
+                    <input id="advanced-search-hotel-{{ $loop->index }}" type="checkbox"
+                           @if($attributes->contains('id', $attribute->id))
+                           checked
+                           @endif
+                           name="attributes[hotel][]" value="{{ $attribute->id }}" class="checkbox">
+                    <label for="advanced-search-hotel-{{ $loop->index }}"
+                           class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
+                  </li>
+                @endforeach
+              </ul>
+            </div>
           </div>
         </div>
         <div class="col-lg-6 advanced-search-details-col">
-          <p class="advanced-search-title">Детально о номерах
-            <button class="js-search-btn-collapse search-btn-collapse" type="button"></button>
-          </p>
-          <div class="filter-collapse js-search-collapse">
-            <ul class="advanced-search-details-list">
-              @foreach ($rooms_attributes as $attribute)
-                <li class="advanced-search-details-item">
-                  <input id="advanced-search-rooms-{{ $loop->index }}" type="checkbox"
-                         {{--                         @if(in_array($attribute->id, $attributes['room'], false))--}}
-                         @if($attributes->contains('id', $attribute->id))
-                         checked
-                         @endif
-                         name="attributes[room][]" value="{{ $attribute->id }}" class="checkbox">
-                  <label for="advanced-search-rooms-{{ $loop->index }}"
-                         class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
-                </li>
-              @endforeach
-            </ul>
+          <div class="advanced-search-details-wrapper">
+            <p class="advanced-search-title">
+              <span>Детально о номерах</span>
+              <button class="js-search-btn-collapse search-btn-collapse" type="button"></button>
+            </p>
+            <div class="filter-collapse js-search-collapse">
+              <ul class="advanced-search-details-list">
+                @foreach ($rooms_attributes as $attribute)
+                  <li class="advanced-search-details-item">
+                    <input id="advanced-search-rooms-{{ $loop->index }}" type="checkbox"
+                           @if($attributes->contains('id', $attribute->id))
+                           checked
+                           @endif
+                           name="attributes[room][]" value="{{ $attribute->id }}" class="checkbox">
+                    <label for="advanced-search-rooms-{{ $loop->index }}"
+                           class="checkbox-label checkbox-label-light">{{ $attribute->name }}</label>
+                  </li>
+                @endforeach
+              </ul>
+            </div>
           </div>
         </div>
         @moderator
         <div class="col-lg-12 advanced-search-details-col">
-          <p class="advanced-search-title">Модерация</p>
-          <div class="filter-collapse js-search-collapse">
-            <ul class="advanced-search-details-list">
+          <div class="advanced-search-details-wrapper">
+            <p class="advanced-search-title">Модерация</p>
+            <div class="filter-collapse js-search-collapse">
+              <ul class="advanced-search-details-list">
 
-              <li class="advanced-search-details-item">
-                <input id="advanced-search-moderate" type="checkbox"
-                       @if(isset($moderate))
-                       {{ $moderate ? 'checked' : '' }}
-                       @endif
-                       name="moderate" value="true" class="checkbox">
-                <label for="advanced-search-moderate"
-                       class="checkbox-label checkbox-label-light">На модерации</label>
-              </li>
-            </ul>
+                <li class="advanced-search-details-item">
+                  <input id="advanced-search-moderate" type="checkbox"
+                         @if(isset($moderate))
+                         {{ $moderate ? 'checked' : '' }}
+                         @endif
+                         name="moderate" value="true" class="checkbox">
+                  <label for="advanced-search-moderate"
+                         class="checkbox-label checkbox-label-light">На модерации</label>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         @endmoderator
