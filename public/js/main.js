@@ -243,6 +243,13 @@ $(document).ready(function () {
         const item = btn.closest('.advanced-search-title').siblings('.js-search-collapse')
         btn.toggleClass('active')
         item.slideToggle('400')
+        if (btn.hasClass('active')) {
+            setTimeout( () => {
+                $('#js-advanced-search-in').animate({
+                    scrollTop: $(item).offset().top - 100
+                }, 1000)
+            }, 400)
+        }
     }
 
     $('.js-search-btn-collapse').on('click', collapse)

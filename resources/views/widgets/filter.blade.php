@@ -261,20 +261,22 @@
             <p for="advanced-search-filter-profitably" class="search-filter-label search-filter-label-profitably">
               Выгодно</p>
           </div>
-          <div class="advanced-search-filter-item">
+          <div class="advanced-search-filter-item search-filter-fire">
             <input type="checkbox" id="advanced-search-filter-fire" class="checkbox" name="hot" value="1"
                    @if($request->has('hot')) checked @endif
             />
             <label for="advanced-search-filter-fire"
                    class="search-filter-label search-filter-label-fire checkbox-label checkbox-label-light">Горящие
               предложения</label>
+            <img class="ico-fire-orange" src="{{ asset('img/ico-fire-orange.svg') }}"></img>
           </div>
         </div>
         <div class="right">
           <div class="advanced-search-filter-item rating">
-            <p class="search-filter-label search-filter-label-profitably">Рейтинг отелей:</p>
+            <p class="search-filter-label search-filter-label-profitably">Рейтинг:</p>
             <div class="rating-block">
               <a href="#">Любой</a>
+              <a href="#">4+</a>
               <a href="#">5+</a>
               <a href="#">6+</a>
               <a href="#">7+</a>
@@ -429,6 +431,14 @@
           @if ($hot)
             <span class="d-flex">Горящие предложения
               <a href="{{ \App\Widgets\Filter::remove_key($data, 'hot') }}">
+                <i class="fa-solid fa-xmark"></i>
+              </a>
+            </span>
+          @endif
+          @if (Request::exists('cost'))
+            <span class="d-flex" style="display: none" id="tag-cost-filter">
+              <span></span>
+              <a href="#">
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>

@@ -1864,7 +1864,7 @@ select.form-control {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   padding: 15px;
   background-color: #2f64ad;
 }
@@ -1873,6 +1873,8 @@ select.form-control {
 }
 .advanced-search-filter-item:last-child {
   margin-right: 0;
+   display: flex;
+   align-items: center;
 }
 .advanced-search-filter-item p {
   color: #ffffff;
@@ -1896,12 +1898,10 @@ select.form-control {
 .advanced-search .search-filter-label-fire {
   padding-left: 28px;
 }
-.advanced-search .search-filter-label-fire::after {
-  margin-top: -12px;
-  width: 16px;
-  height: 22px;
-  background-size: 100%;
-  background-image: url("../img/ico-fire-orange.svg");
+
+.ico-fire-orange {
+  height: 24px;
+  margin-left: 10px;
 }
 .advanced-search .search-filter-label-cashback {
   padding-left: 75px;
@@ -4208,9 +4208,9 @@ button.modal-close:focus {
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    padding-bottom: 5px;
+    /*padding-bottom: 5px;*/
   }
-  .advanced-search-filter-item {
+  .advanced-search-filter .left {
     margin-bottom: 10px;
     /*width: 50%;*/
   }
@@ -4501,7 +4501,7 @@ button.modal-close:focus {
     max-height: calc(var(--vh, 1vh) * 100 - 114px - 66px);
   }
   .advanced-search-details-col:first-child {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     padding-bottom: 15px;
   }
 
@@ -5706,20 +5706,25 @@ button.modal-close:focus {
   line-height: 170%;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 990px) {
   .advanced-search-filter .left {
     width: 100%;
     display: flex;
+    align-items: center;
+  }
+
+  .advanced-search-filter .left .advanced-search-filter-item {
+    justify-content: space-between;
   }
   .advanced-search-filter .left > div:first-child {
-    width: 30%;
+    width: 20%;
     margin-right: 0;
   }
   .advanced-search-filter .left, .advanced-search-filter .right {
-    font-size: 12px;
+    font-size: 14px;
   }
   .advanced-search-filter .left > div:last-child {
-    width: 70%;
+    width: 80%;
     display: flex;
     align-items: center;
   }
@@ -5733,17 +5738,18 @@ button.modal-close:focus {
     display: flex;
     align-items: center;
     margin-right: 0;
+    width: 100%;
   }
 
   .advanced-search-filter .right .rating p {
-    width: 30%;
-    font-size: 12px;
+    width: 20%;
+    font-size: 14px;
     line-height: 1rem;
   }
 
   .advanced-search-filter .rating-block {
-    width: 70%;
-    font-size: 12px;
+    width: auto;
+    font-size: 14px;
     display: flex;
     justify-content: flex-start;
     margin-left: 0;
@@ -5751,6 +5757,15 @@ button.modal-close:focus {
   }
 
   .advanced-search-filter-item p {
-    font-size: 12px;
+    font-size: 14px;
+  }
+
+  .ico-fire-orange {
+    height: 22px;
+    margin-left: unset;
+  }
+
+  .advanced-search-title {
+    margin-bottom: 10px;
   }
 }

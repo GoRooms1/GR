@@ -1,5 +1,6 @@
 // При изменении формы мальенькой то применяется большая
 
+let cost = {}
 
 $(function () {
 
@@ -227,23 +228,7 @@ $(function () {
 
   // $('[name=cost]:checked + label').text().trim()
   $('[name=cost]').change(function () {
-    // console.log($('[name=cost]:checked + label').text().trim())
-    setTimeout(function () {
-      let span = $('.search-tags span[data-type-tag=cost] span')
-      let name = $('.advanced-search-prices-in.advanced-search-prices-in-item')
-        .not('.disabled')
-        .find('.advanced-search-prices-in-label').text()
-      console.log(span)
-      if ($('[name=cost]:checked').length > 0 && $('input[name=search-price]:checked').length > 0) {
-        console.log($('input[name=search-price]:checked').length > 0)
-        span.text(name + ' ' + $('[name=cost]:checked + label').text().trim())
-        $('.search-tags span[data-type-tag=cost]').show()
-      } else {
-        console.log(0)
-        span.text('')
-        $('.search-tags span[data-type-tag=cost]').hide()
-      }
-    }, 200)
+    setCostTag(false)
   })
 
 //  Возврат значений обратно при свораяивании поиска
@@ -272,6 +257,14 @@ $(function () {
         span.find('a').click(removeTag)
       }
     })
+
+    if (cost.name) {
+      cost.type.prop('checked', true)
+      cost.name.removeClass('disabled')
+      cost.cost.prop('checked', true)
+    }
+
+    setCostTag(true)
 
     if ($('#advanced-search-location-city').val() !== dataSearch.city) {
       let spanEl = $('#js-advanced-search .search-tags span[data-type-tag="city"]')
@@ -344,6 +337,30 @@ $(function () {
   })
 
 })
+$(document).ready(function () {
+  setCostTag(true)
+  resizeRating()
+  $('#js-advanced-search-open-btn').click(function () {
+    setTimeout(function () {
+      resizeRating()
+    }, 100)
+  })
+  $(window).resize(function () {
+    resizeRating()
+  })
+
+
+})
+
+function resizeRating () {
+  let w = $('.rating-block').width();
+
+  if ($(window).width() <= 990) {
+    $('.advanced-search-filter .left .search-filter-fire').width(w)
+  } else {
+    $('.advanced-search-filter .left .search-filter-fire').css('width', 'auto')
+  }
+}
 
 function removeTag (e) {
   let event = new Event('change');
@@ -387,4 +404,36 @@ function removeTag (e) {
 
   form.dispatchEvent(event);
 
+}
+
+function setCostTag(save = false) {
+  setTimeout(function () {
+    console.log(1)
+    let span = $('.search-tags span[data-type-tag=cost] span')
+    let name = $('.advanced-search-prices-in.advanced-search-prices-in-item')
+      .not('.disabled')
+      .find('.advanced-search-prices-in-label').text()
+    console.log(span)
+    if ($('[name=cost]:checked').length > 0 && $('input[name=search-price]:checked').length > 0) {
+      console.log($('input[name=search-price]:checked').length > 0)
+      span.text(name + ' ' + $('[name=cost]:checked + label').text().trim())
+      $('.search-tags span[data-type-tag=cost]').show()
+      if (save) {
+        cost.name = $('.advanced-search-prices-in.advanced-search-prices-in-item')
+          .not('.disabled')
+        cost.type = $('input[name=search-price]:checked')
+        cost.cost = $('[name=cost]:checked')
+
+        $('#tag-cost-filter span').text(name + ' ' + $('[name=cost]:checked + label').text().trim())
+        $('#tag-cost-filter').show()
+      }
+    } else {
+      if (save) {
+        cost = {}
+      }
+      console.log(0)
+      span.text('')
+      $('.search-tags span[data-type-tag=cost]').hide()
+    }
+  }, 200)
 }
