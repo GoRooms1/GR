@@ -438,7 +438,7 @@
           @if (Request::exists('cost'))
             <span class="d-flex" style="display: none" id="tag-cost-filter">
               <span></span>
-              <a href="#">
+              <a href="{{ App\Widgets\Filter::remove_cost() }}">
                 <i class="fa-solid fa-xmark"></i>
               </a>
             </span>
