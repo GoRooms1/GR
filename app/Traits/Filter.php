@@ -26,7 +26,7 @@ trait Filter
     bool    $moderate = false
   ): object
   {
-    $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot;
+    $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot || isset($cost);
     //    Normalize data
     if (!isset($attributes['room'])) {
       $attributes['room'] = [];
