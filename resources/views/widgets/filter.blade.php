@@ -273,10 +273,9 @@
         </div>
         <div class="right">
           <div class="advanced-search-filter-item rating">
-            <p class="search-filter-label search-filter-label-profitably">Рейтинг:</p>
+            <p class="search-filter-label search-filter-label-profitably">Рейтинг</p>
             <div class="rating-block">
               <a href="#">Любой</a>
-              <a href="#">4+</a>
               <a href="#">5+</a>
               <a href="#">6+</a>
               <a href="#">7+</a>
