@@ -32,7 +32,7 @@ class FilterController extends Controller
         ->unique();
     } else {
       $cities = Address::pluck('city')
-        ->unique()->take(5);
+        ->unique();
     }
 
     return Json::good(['cities' => $cities]);
