@@ -253,9 +253,14 @@
                           class="form-control field metros w-100"
                           {{ $hotel->disabled_save }}
                           required>
-                    <option value="{{ $m->name }}">{{ $m->name }}</option>
+                    <option value="{{ $m->api_value }}">{{ $m->api_value }}</option>
                   </select>
                 </div>
+                <input type="hidden"
+                       name="metros_name[]"
+                       class="metro_name"
+                       value="{{ $m->name }}"
+                >
                 <input type="hidden"
                        name="metros_color[]"
                         value="{{ $m->color }}">
@@ -287,6 +292,11 @@
                           required>
                   </select>
                 </div>
+                <input type="hidden"
+                       name="metros_name[]"
+                       class="metro_name"
+                       value=""
+                >
                 <input type="hidden" name="metros_color[]">
                 <input type="number" min="1" {{ $hotel->disabled_save }} autocomplete="none" name="metros_time[]"
                        class="field field_small station-field" required>
@@ -654,6 +664,7 @@
           "<div class='select' style='width: 45%'>" +
           "<select name='metros[]' class='form-control field metros w-100' required></select>" +
           "</div>" +
+          "<input type='hidden' name='metros_name[]' class='metro_name'>" +
           "<input type='hidden' name='metros_color[]' class='color'>" +
           "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
           "<p class='text'>минут пешком до объекта</p>" +
@@ -699,7 +710,8 @@
                 return {
                   text: e.value,
                   id: e.value,
-                  color: e.data.color
+                  color: e.data.color,
+                  clear_name: e.data.name
                 };
               })
             };
@@ -715,6 +727,7 @@
     $('.metros').on("select2:select", takeColor);
 
     function takeColor(e) {
+      $(e.currentTarget).parent().parent().find('input.metro_name').val(e.params.data.clear_name)
       console.log($(e.currentTarget).parent().parent().children('input[type="hidden"]').get(0).value = e.params.data.color)
       console.log(e.params.data.color);
     }
