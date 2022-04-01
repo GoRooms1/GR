@@ -98,6 +98,9 @@ Please make sure to update tests as appropriate.
 3. `php artisan seo:update-type-seo`
 4. `php artisan seo:reset-seo`
 
+# Reset SEO Hotel (1.04.2022)
+1. `php artisan seo:reset-hotel-seo`
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
