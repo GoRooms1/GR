@@ -185,13 +185,18 @@
                   <select name="metros[]"
                           class="form-control field metros w-100"
                           required>
-                    <option value="{{ $m->name }}">{{ $m->name }}</option>
+                    <option value="{{ $m->api_value }}">{{ $m->api_value }}</option>
                   </select>
                 </div>
                 <input type="hidden"
                        name="metros_custom[]"
                        class="metro_custom_flag"
                        value="{{ $m->custom ? '1' : '0' }}"
+                >
+                <input type="hidden"
+                       name="metros_name[]"
+                       class="metro_name"
+                       value="{{ $m->name }}"
                 >
                 @if($m->custom)
                   <input type='color'
@@ -232,6 +237,11 @@
                           required>
                   </select>
                 </div>
+                <input type="hidden"
+                       name="metros_name[]"
+                       class="metro_name"
+                       value=""
+                >
                 <input type="hidden"
                        name="metros_custom[]"
                        class="metro_custom_flag"
@@ -550,7 +560,8 @@
                 return {
                   text: e.value,
                   id: e.value,
-                  color: e.data.color
+                  color: e.data.color,
+                  clear_name: e.data.name
                 };
               })
             };
@@ -581,12 +592,14 @@
         )
         console.log($(e.currentTarget).parent().parent())
       } else {
+        console.log(e.params.data)
         $(e.currentTarget).parent().parent().find('input.metro_custom_flag').val(0)
         $(e.currentTarget).parent().parent().find('div.select').width('45%')
         $(e.currentTarget).parent().parent().find('div.select').find('span.select2').width('100%')
         $(e.currentTarget).parent().parent().find('div.select').after(
           "<input type='hidden' class='color metro_hidden_color' name='metros_color[]'>"
         )
+        $(e.currentTarget).parent().parent().find('input.metro_name').val(e.params.data.clear_name)
         console.log($(e.currentTarget).parent().parent().children('input.metro_hidden_color').get(0).value = e.params.data.color)
         console.log(e.params.data.color);
       }
@@ -615,6 +628,7 @@
           "<div class='select' style='width: 45%'>" +
           "<select name='metros[]' class='form-control field metros w-100' required></select>" +
           "</div>" +
+          "<input type='hidden' name='metros_name[]' class='metro_name' value=''>" +
           "<input type='hidden' name='metros_custom[]' class='metro_custom_flag' value='0'>" +
           "<input type='hidden' name='metros_color[]' class='color metro_hidden_color'>" +
           "<input type='number' name='metros_time[]' class='form-control field field_small station-field' required>" +
