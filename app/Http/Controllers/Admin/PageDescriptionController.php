@@ -15,6 +15,7 @@ class PageDescriptionController extends Controller
   public function index(Request $request)
   {
     $descriptions = PageDescription::whereNull('model_id');
+    $descriptions->where('type', '!=', 'undefined');
 
     if ($type = $request->get('type')) {
       $descriptions = $descriptions->where('type', $type);
