@@ -44,7 +44,7 @@ class SeoData
 
       $this->description = $type . ' ' . $this->hotel->name;
       foreach ($this->hotel->minimals as $minimal) {
-        if ($minimal->name === 'На час' && $minimal->value > 0) {
+        if ($minimal->name === 'На Час' && $minimal->value > 0) {
           $this->description .= 'с номерами от ' . $minimal->value . ' рублей в час';
         }
       }
