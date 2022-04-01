@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Room;
 use App\Models\Hotel;
 use App\Models\Image;
+use App\Models\Metro;
 use App\Models\Address;
 use App\Events\FormSend;
 use App\Models\Category;
@@ -13,6 +14,7 @@ use App\Models\Attribute;
 use App\Observers\RoomObserver;
 use App\Observers\HotelObserver;
 use App\Observers\ImageObserver;
+use App\Observers\MetroObserver;
 use App\Observers\AddressObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\CostTypeObserver;
@@ -53,5 +55,6 @@ class EventServiceProvider extends ServiceProvider
     Attribute::observe(AttributeObserver::class);
     Address::observe(AddressObserver::class);
     CostType::observe(CostTypeObserver::class);
+    Metro::observe(MetroObserver::class);
   }
 }
