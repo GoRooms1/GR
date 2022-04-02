@@ -185,10 +185,6 @@ class FilterController extends Controller
     $count = 0;
 
     if ($q) {
-//      $metros = $metros->where('name', 'like', '%' . $q . '%')
-//        ->get();
-
-
       $hotelM = Hotel::query();
 
       $hotelM = $hotelM->whereHas('metros', function ($q_metros) use ($q) {
