@@ -302,7 +302,7 @@
     </div>
   </section>
 
-  @include('lk.room.__popup_attributes', [$attribute_categories])
+  @include('moderator.room.__popup_attributes', [$attribute_categories])
 
 
 @endsection

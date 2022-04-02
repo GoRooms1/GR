@@ -398,24 +398,26 @@
           <div class="col-12">
             <ul class="details">
               @foreach($attributeCategories as $category)
-                <li class="detail">
-                  <p class="text-bold_small details__title">{{ $category->name }}</p>
+                @if(count($category->attributes) > 0)
+                  <li class="detail">
+                    <p class="text-bold_small details__title">{{ $category->name }}</p>
 
-                  @foreach($category->attributes as $attr)
-                    <div class="choice">
-                      <input type="checkbox"
-                             {{ $hotel->disabled_save }}
-                             id="attr-{{ $attr->id }}"
-                             name="attr[{{ $attr->id }}]"
+                    @foreach($category->attributes as $attr)
+                      <div class="choice">
+                        <input type="checkbox"
+                               {{ $hotel->disabled_save }}
+                               id="attr-{{ $attr->id }}"
+                               name="attr[{{ $attr->id }}]"
                           {{ $hotel->attrs->contains('id', $attr->id) ? 'checked' : '' }}
-                      >
-                      <div class="check" {{ $hotel->disabled_save }}>
-                        <div class="check__flag"></div>
+                        >
+                        <div class="check" {{ $hotel->disabled_save }}>
+                          <div class="check__flag"></div>
+                        </div>
+                        <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
                       </div>
-                      <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
-                    </div>
-                  @endforeach
-                </li>
+                    @endforeach
+                  </li>
+                @endif
               @endforeach
             </ul>
           </div>
