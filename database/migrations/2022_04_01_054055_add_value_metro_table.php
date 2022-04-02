@@ -17,12 +17,10 @@ class AddValueMetroTable extends Migration
     Schema::table('metros', static function (Blueprint $table) {
       $table->string('api_value')->nullable(true)->after('name');
     });
-
     $metros = Metro::each(static function ($metro) {
       $metro->api_value = $metro->name;
       $metro->save();
     });
-
     Schema::table('metros', static function (Blueprint $table) {
       $table->string('api_value')->nullable(false)->after('name')->change();
     });

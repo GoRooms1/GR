@@ -1,2 +1,41 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /login
+Disallow: /public/
+Disallow: /home/
+Disallow: /*search
+Disallow: /*?query=
+Disallow: */lk/
+Disallow: */register
+
+User-agent: Yandex
+Disallow: /admin
+Disallow: /login
+Disallow: /public/
+Disallow: /home/
+Disallow: /*search
+Disallow: /*?query=
+Disallow: */lk/
+Disallow: */register
+
+User-agent: GoogleBot
+Disallow: /admin
+Disallow: /login
+Disallow: /public/
+Disallow: /home/
+Disallow: /*search
+Disallow: /*?query=
+Disallow: */lk/
+Disallow: */register
+
+User-agent: Mail.Ru
+Disallow: /admin
+Disallow: /login
+Disallow: /public/
+Disallow: /home/
+Disallow: /*search
+Disallow: /*?query=
+Disallow: */lk/
+Disallow: */register
+
+Sitemap: https://gorooms.ru/sitemap.xml
