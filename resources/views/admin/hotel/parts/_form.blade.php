@@ -176,6 +176,8 @@
 
         <input type="text" id="metro_{{ $i }}_name" class="form-control" name="metros[{{ $i }}][name]"
                value="{{ old('metros.'.$i.'.name') }}" placeholder="Название">
+        <input type="text" id="metro_{{ $i }}_api_value" class="form-control" name="metros[{{ $i }}][api_value]"
+               value="{{ old('metros.'.$i.'.api_value') }}" placeholder="Полное наименование (Улицы)">
         <input type="text" id="metro_{{ $i }}_distance" class="form-control" name="metros[{{ $i }}][distance]"
                value="{{ old('metros.'.$i.'.distance') }}" placeholder="Дистанция">
       </div>
@@ -199,9 +201,17 @@
                name="metros[{{ $loop->index }}][color]"
                value="{{ old('metros.'.$loop->index.'.color', $metro->color) }}" placeholder="Цвет">
 
-        <input type="text" id="metro_{{ $loop->index }}_name" class="form-control"
+        <input type="text" id="metro_{{ $loop->index }}_name"
+               class="form-control"
                name="metros[{{ $loop->index }}][name]"
-               value="{{ old('metros.'.$loop->index.'.name', $metro->name) }}" placeholder="Название">
+               value="{{ old('metros.'.$loop->index.'.name', $metro->name) }}"
+               placeholder="Название">
+        <input type="text" id="metro_{{ $loop->index }}_api_value"
+               class="form-control"
+               name="metros[{{ $loop->index }}][api_value]"
+               value="{{ old('metros.'.$loop->index.'.api_value', $metro->api_value) }}"
+               placeholder="Полное наименование (Улицы)"
+        >
         <input type="text" id="metro_{{ $loop->index }}_distance" class="form-control"
                name="metros[{{ $loop->index }}][distance]"
                value="{{ old('metros.'.$loop->index.'.distance', $metro->distance) }}" placeholder="Дистанция">
@@ -221,9 +231,10 @@
         </div>
         <input type="text" id="" class="form-control" name="metros[{{ $i }}][color]"
                value="{{ old('metros.'.$i.'.name') }}" placeholder="Название">
-
         <input type="text" id="metro_{{ $i }}_name" class="form-control" name="metros[{{ $i }}][name]"
                value="{{ old('metros.'.$i.'.name') }}" placeholder="Название">
+        <input type="text" id="metro_{{ $i }}_api_value" class="form-control" name="metros[{{ $i }}][api_value]"
+               value="{{ old('metros.'.$i.'.api_value') }}" placeholder="Полное наименование (Улицы)">
         <input type="text" id="metro_{{ $i }}_distance" class="form-control" name="metros[{{ $i }}][distance]"
                value="{{ old('metros.'.$i.'.distance') }}" placeholder="Дистанция">
       </div>

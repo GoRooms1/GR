@@ -30,7 +30,7 @@ class MetroObserver
    *
    * @return void
    */
-  public function updated(Metro $metro)
+  public function updated(Metro $metro): void
   {
     Metro::generateSlug($metro);
     $csu = new CreateSeoUrls();
@@ -57,7 +57,7 @@ class MetroObserver
    *
    * @return void
    */
-  public function restored(Metro $metro)
+  public function restored(Metro $metro): void
   {
     Cache::forget('sitemap.2g');
   }
@@ -69,7 +69,7 @@ class MetroObserver
    *
    * @return void
    */
-  public function forceDeleted(Metro $metro)
+  public function forceDeleted(Metro $metro): void
   {
     Cache::forget('sitemap.2g');
   }

@@ -63,6 +63,10 @@ Route::resource('descriptions', 'PageDescriptionController', [
   'except' => 'show',
 ]);
 
+Route::resource('descriptions-page', 'PageDescriptionPageController', [
+  'except' => 'show'
+]);
+
 Route::group(['prefix' => 'api'], function () {
   Route::delete('/image/{image}', 'ImageController@delete')->name('api.image.delete');
 });

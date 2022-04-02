@@ -94,7 +94,7 @@
 
             <li class="nav-item">
               <a id="hasSubItems2"
-                 class="nav-link nav-link-collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') ? 'active nav-link-show' : '' }}"
+                 class="nav-link nav-link-collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.descriptions-page.*') || Route::currentRouteNamed('admin.hotels.*') || Route::currentRouteNamed('admin.pages.*') ? 'active nav-link-show' : '' }}"
                  href="#"
                  data-toggle="collapse"
                  data-target="#collapseSubItems3"
@@ -104,13 +104,18 @@
                 SEO Контент
               </a>
 
-              <ul class="nav-second-level list-unstyled collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.pages.*') || Route::currentRouteNamed('admin.hotels.*') ? 'show' : '' }}"
+              <ul class="nav-second-level list-unstyled collapse {{ Route::currentRouteNamed('admin.descriptions.*') || Route::currentRouteNamed('admin.descriptions-page.*') || Route::currentRouteNamed('admin.pages.*') || Route::currentRouteNamed('admin.hotels.*') ? 'show' : '' }}"
                   id="collapseSubItems3"
                   data-parent="#navAccordion"
               >
                 <li class="nav-item">
                   <a href="{{ route('admin.hotels.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.hotels.*') ? 'active' : '' }}">
                     <span class="nav-link-text">Страницы отелей</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('admin.descriptions-page.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.descriptions-page.*') ? 'active' : '' }}">
+                    <span class="nav-link-text">Страницы заготовленные</span>
                   </a>
                 </li>
 

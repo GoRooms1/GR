@@ -1771,15 +1771,7 @@ select.form-control {
 .advanced-search-details-col:first-child {
   position: relative;
 }
-.advanced-search-details-col:first-child::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 1px;
-  height: 100%;
-  background-color: #ffffff;
-}
+
 .advanced-search-details-list {
   column-count: 3;
   column-gap: 10px;
@@ -1796,6 +1788,9 @@ select.form-control {
   font-weight: bold;
   font-size: 16px;
   color: #3c3c3b;
+}
+.advanced-search-title span {
+  position: relative;
 }
 .search-btn-collapse {
     position: absolute;
@@ -1828,16 +1823,17 @@ select.form-control {
     transform: rotate(180deg);
 }
 
-.advanced-search-title::after {
+.advanced-search-title span::after {
   content: '';
   position: absolute;
   left: 0;
   bottom: 0;
   z-index: 1;
   height: 1px;
-  width: 68px;
+  width: 100%;
   background-color: #ffffff;
 }
+
 .advanced-search .search-bottom-in {
   -webkit-box-ordinal-group: 3;
   -webkit-order: 2;
@@ -1868,7 +1864,7 @@ select.form-control {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   padding: 15px;
   background-color: #2f64ad;
 }
@@ -1877,6 +1873,8 @@ select.form-control {
 }
 .advanced-search-filter-item:last-child {
   margin-right: 0;
+   display: flex;
+   align-items: center;
 }
 .advanced-search-filter-item p {
   color: #ffffff;
@@ -1888,7 +1886,7 @@ select.form-control {
   content: '';
   position: absolute;
   top: 50%;
-  left: 34px;
+  left: 106%;
   background-repeat: no-repeat;
 }
 .advanced-search .search-filter-label-profitably {
@@ -1898,14 +1896,12 @@ select.form-control {
   display: none;
 }
 .advanced-search .search-filter-label-fire {
-  padding-left: 60px;
+  padding-left: 28px;
 }
-.advanced-search .search-filter-label-fire::after {
-  margin-top: -12px;
-  width: 16px;
-  height: 22px;
-  background-size: 100%;
-  background-image: url("../img/ico-fire-white.svg");
+
+.ico-fire-orange {
+  height: 24px;
+  margin-left: 10px;
 }
 .advanced-search .search-filter-label-cashback {
   padding-left: 75px;
@@ -4190,6 +4186,9 @@ button.modal-close:focus {
   }
 }
 @media (max-width: 1219px) {
+  .advanced-search-details-list {
+    column-count: 2;
+  }
   .form-group-date-label {
     margin-right: 5px;
   }
@@ -4209,11 +4208,11 @@ button.modal-close:focus {
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    padding-bottom: 5px;
+    /*padding-bottom: 5px;*/
   }
-  .advanced-search-filter-item {
+  .advanced-search-filter .left {
     margin-bottom: 10px;
-    width: 50%;
+    /*width: 50%;*/
   }
   .advanced-search .search-bottom {
     max-width: 960px;
@@ -4502,14 +4501,10 @@ button.modal-close:focus {
     max-height: calc(var(--vh, 1vh) * 100 - 114px - 66px);
   }
   .advanced-search-details-col:first-child {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     padding-bottom: 15px;
   }
-  .advanced-search-details-col:first-child::after {
-    width: 100%;
-    height: 1px;
-    background-color: #ffffff;
-  }
+
   .advanced-search .search-filter-label + .hotel-rating {
     margin-top: 5px;
     margin-left: 0;
@@ -5173,6 +5168,43 @@ button.modal-close:focus {
 @media (max-width: 520px) {
   /*=HOME=*/
   /*Search*/
+  .advanced-search-location-wrapper {
+    margin-bottom: 10px;
+  }
+  .advanced-search-location {
+    display: block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: 0;
+    padding: 15px 15px 1px;
+    background-color: #ff9d45;
+  }
+
+  .advanced-search-details-wrapper {
+    display: block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: 0;
+    padding: 15px 15px 1px;
+    background-color: #ff9d45;
+  }
+
+  .advanced-search-details-wrapper .advanced-search-details-item {
+    color: #ffffff;
+  }
+
+  .advanced-search-details-wrapper .advanced-search-title {
+    color: #ffffff;
+  }
+
+  .advanced-search-location .advanced-search-title {
+    color: #ffffff;
+  }
+
   .advanced-search.fixed .advanced-search-in {
     max-height: -webkit-calc(-53vh);
     max-height: calc(var(--vh, 1vh) * 100 - 153px);
@@ -5194,9 +5226,6 @@ button.modal-close:focus {
   .advanced-search .search-bottom-in .btn {
     margin-top: 10px;
     width: 100%;
-  }
-  .advanced-search-details-list {
-    column-count: 2;
   }
   /*Fire*/
   .room-card-prices-item-price {
@@ -5250,9 +5279,7 @@ button.modal-close:focus {
     .advanced-search-details-col:first-child {
         padding-bottom: 0;
     }
-    .advanced-search-location-wrapper {
-        margin-bottom: 0;
-    }
+
     .advanced-search-location .form-group:last-child {
         margin-bottom: 20px;
     }
@@ -5679,14 +5706,67 @@ button.modal-close:focus {
   line-height: 170%;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 990px) {
+  .advanced-search-filter .left {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .advanced-search-filter .left .advanced-search-filter-item {
+    justify-content: space-between;
+  }
   .advanced-search-filter .left > div:first-child {
-    width: 30%;
+    width: 20%;
+    margin-right: 0;
+  }
+  .advanced-search-filter .left, .advanced-search-filter .right {
+    font-size: 14px;
   }
   .advanced-search-filter .left > div:last-child {
-    width: 130%;
+    width: 80%;
+    display: flex;
+    align-items: center;
   }
+  .advanced-search-filter .right {
+    width: 100%;
+    display: flex;
+  }
+
+  .advanced-search-filter .right .rating {
+    display: flex;
+    align-items: center;
+    margin-right: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .advanced-search-filter .right .rating p {
+    width: 20%;
+    font-size: 14px;
+    line-height: 1rem;
+  }
+
+  .advanced-search-filter .rating-block {
+    width: auto;
+    font-size: 14px;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 0;
+    max-height: 28px;
+  }
+
   .advanced-search-filter-item p {
     font-size: 14px;
+  }
+
+  .ico-fire-orange {
+    height: 22px;
+    margin-left: unset;
+  }
+
+  .advanced-search-title {
+    margin-bottom: 10px;
   }
 }

@@ -257,4 +257,15 @@ class Filter extends AbstractWidget
 
     return strtok($_SERVER['REQUEST_URI'], '?') . '?' . http_build_query($vars);
   }
+
+  public static function remove_cost (): string
+  {
+    parse_str($_SERVER['QUERY_STRING'], $vars);
+    foreach($vars as $key => $item){
+      if ($key === 'cost' || $key === 'search-price'){
+        unset($vars[$key]);
+      }
+    }
+    return strtok($_SERVER['REQUEST_URI'], '?') . '?' . http_build_query($vars);
+  }
 }

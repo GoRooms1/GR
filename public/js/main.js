@@ -174,13 +174,13 @@ $(document).ready(function () {
                     for(const item of qArr) {
                         if(item['name'] === 'cost') {
                             const value = item['value']
-                            $(item).find(`input[value="${value}"]`).attr('previousValue', true).prop('checked',true);
+                            $(item).find(`input[value="${value}"]`).attr('previousValue', true).prop('checked',true).trigger('change');
                             flagCost = false
                             continue;
                         }
                     }
                 } else {
-                    $(item).find('input').eq(0).attr('previousValue', true).prop('checked',true);
+                    $(item).find('input').eq(0).attr('previousValue', true).prop('checked',true).trigger('change');
                 }
 
             }
@@ -243,6 +243,13 @@ $(document).ready(function () {
         const item = btn.closest('.advanced-search-title').siblings('.js-search-collapse')
         btn.toggleClass('active')
         item.slideToggle('400')
+        if (btn.hasClass('active')) {
+            setTimeout( () => {
+                $('#js-advanced-search-in').animate({
+                    scrollTop: $(item).offset().top - 100
+                }, 1000)
+            }, 400)
+        }
     }
 
     $('.js-search-btn-collapse').on('click', collapse)

@@ -86,18 +86,22 @@ class ObjectController extends Controller
         $custom = $request->get('metros_custom');
         $distance = $request->get('metros_time');
         $color = $request->get('metros_color');
+        $names = $request->get('metros_name');
         foreach ($request->get('metros', []) as $index => $metro) {
           if ($custom[$index] === "1") {
             $c = substr($color[$index], 1);
+            $clear_name = $metro;
           } else {
             $c = $color[$index];
+            $clear_name = $names[$index];
           }
           $metros = [
-            'name'     => $metro,
-            'hotel_id' => $hotel->id,
-            'distance' => $distance[$index],
-            'color'    => $c,
-            'custom'   => $custom[$index]
+            'name'      => $clear_name,
+            'api_value' => $metro,
+            'hotel_id'  => $hotel->id,
+            'distance'  => $distance[$index],
+            'color'     => $c,
+            'custom'    => $custom[$index]
            ];
           Metro::create($metros);
         }

@@ -135,9 +135,11 @@ class ObjectController extends Controller
         $hotel->metros()->delete();
         $distance = $request->get('metros_time');
         $color = $request->get('metros_color');
+        $name = $request->get('metros_name');
         foreach ($request->get('metros', []) as $index => $metro) {
           $metros = [
-            'name' => $metro,
+            'name' => $name[$index],
+            'api_value' => $metro,
             'hotel_id' => $hotel->id,
             'distance' => $distance[$index],
             'color' => $color[$index],
