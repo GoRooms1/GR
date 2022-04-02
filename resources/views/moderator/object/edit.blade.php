@@ -357,25 +357,27 @@
           <div class="col-12">
             <ul class="details">
               @foreach($attributeCategories as $category)
-                <li class="detail">
-                  <p class="text-bold_small details__title">{{ $category->name }}</p>
+                @if(count($category->attributes) > 0)
+                  <li class="detail">
+                    <p class="text-bold_small details__title">{{ $category->name }}</p>
 
-                  @foreach($category->attributes as $attr)
-                    <div class="choice">
-                      <input type="hidden" id="attr-{{ $attr->id }}-h" name="attr[{{ $attr->id }}]" value="false">
-                      <input type="checkbox"
-                             id="attr-{{ $attr->id }}"
-                             value="true"
-                             name="attr[{{ $attr->id }}]"
+                    @foreach($category->attributes as $attr)
+                      <div class="choice">
+                        <input type="hidden" id="attr-{{ $attr->id }}-h" name="attr[{{ $attr->id }}]" value="false">
+                        <input type="checkbox"
+                               id="attr-{{ $attr->id }}"
+                               value="true"
+                               name="attr[{{ $attr->id }}]"
                           {{ $hotel->attrs->contains('id', $attr->id) ? 'checked' : '' }}
-                      >
-                      <div class="check">
-                        <div class="check__flag check__flag_blue"></div>
+                        >
+                        <div class="check">
+                          <div class="check__flag check__flag_blue"></div>
+                        </div>
+                        <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
                       </div>
-                      <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
-                    </div>
-                  @endforeach
-                </li>
+                    @endforeach
+                  </li>
+                @endif
               @endforeach
             </ul>
           </div>

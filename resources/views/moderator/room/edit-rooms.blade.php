@@ -198,8 +198,9 @@
                   </div>
                   <ul class="select__hidden category__list">
                     @foreach($hotel->categories as $category)
-                      <li class="select__item {{ $room->category ? $room->category->id === $category->id ? 'active' : '' : '' }}"
-                          data-id="{{ $category->id }}">
+                      <li
+                        class="select__item {{ $room->category ? ($room->category->id === $category->id ? 'active' : '') : '' }}"
+                        data-id="{{ $category->id }}">
                         {{ $category->name }}
                       </li>
                     @endforeach
@@ -347,7 +348,7 @@
   </section>
 
 
-  @include('lk.room.__popup_attributes', [$attribute_categories])
+  @include('moderator.room.__popup_attributes', [$attribute_categories])
 
 
 @endsection

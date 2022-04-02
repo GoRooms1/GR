@@ -10,19 +10,22 @@
   </p>
   <ul class="details">
     @foreach($attribute_categories as $category)
-      <li class="detail">
-        <p class="text-bold_small details__title">{{ $category->name }}</p>
+      @if (count($category->attributes) > 0)
+        <li class="detail">
+          <p class="text-bold_small details__title">{{ $category->name }}</p>
 
-        @foreach($category->attributes as $attr)
-          <div class="choice">
-            <input type="checkbox" data-placeholder="{{ $attr->name }}" id="attr-{{$attr->id}}" value="{{ $attr->id }}" name="attr[{{$attr->id}}]" >
-            <div class="check">
-              <div class="check__flag"></div>
+          @foreach($category->attributes as $attr)
+            <div class="choice">
+              <input type="checkbox" data-placeholder="{{ $attr->name }}" id="attr-{{$attr->id}}"
+                     value="{{ $attr->id }}" name="attr[{{$attr->id}}]">
+              <div class="check">
+                <div class="check__flag"></div>
+              </div>
+              <label for="attr-{{$attr->id}}">{{ $attr->name }}</label>
             </div>
-            <label for="attr-{{$attr->id}}">{{ $attr->name }}</label>
-          </div>
-        @endforeach
-      </li>
+          @endforeach
+        </li>
+      @endif
 
     @endforeach
 

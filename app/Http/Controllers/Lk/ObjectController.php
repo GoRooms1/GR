@@ -89,16 +89,16 @@ class ObjectController extends Controller
     $hotel = auth()->user()->personal_hotel;
     $attributes = Attribute::where('model', Hotel::class)
       ->orWhereNull('model')->get();
-    $attributes_id = Attribute::where('model', Hotel::class)
-      ->orWhereNull('model')->pluck('id');
+
     $hotelTypes = HotelType::orderBy('sort')
       ->get();
     $attributeCategories = AttributeCategory::with(['attributes' => function ($q) {
       $q->whereModel(Hotel::class)->get();
-    }])->whereHas('attributes', function ($q) use ($attributes_id) {
-      $q->whereIn('id', $attributes_id);
-    })
-      ->get();
+    }])
+      ->get()
+      ->sortByDesc(function ($category, $key) {
+        return count($category->attributes);
+      });
     return view('lk.object.edit',
       compact('hotel',
         'attributeCategories',
