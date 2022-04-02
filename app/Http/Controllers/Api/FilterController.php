@@ -28,10 +28,12 @@ class FilterController extends Controller
     $search = $request->get('search');
     if ($search) {
       $cities = Address::where('city', 'like', $search . '%')
+        ->orderBy('city')
         ->pluck('city')
         ->unique();
     } else {
-      $cities = Address::pluck('city')
+      $cities = Address::orderBy('city')
+        ->pluck('city')
         ->unique();
     }
 
@@ -58,6 +60,7 @@ class FilterController extends Controller
 
     $city_areas = Address::whereCity($city)
       ->where('city_area', 'like', $search . '%')
+      ->orderBy('city_area')
       ->pluck('city_area')
       ->unique();
 
@@ -114,6 +117,7 @@ class FilterController extends Controller
       $districts = $districts->where('city_area', $city_area);
     }
     $districts = $districts->where('city_district', 'like', $search . '%')
+      ->orderBy('city_district')
       ->pluck('city_district')
       ->unique();
 
