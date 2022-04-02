@@ -11,8 +11,8 @@ use App\Models\CostType;
 use App\Models\HotelType;
 use App\Models\Attribute;
 use App\Traits\UrlDecodeFilter;
+use App\Models\AttributeCategory;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Arrilot\Widgets\AbstractWidget;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
@@ -115,11 +115,23 @@ class Filter extends AbstractWidget
     });
 
     $this->hotels_attributes = Cache::remember('hotels_attributes', 60 * 60 * 24 * 12, static function () {
-      return Attribute::forHotels()->filtered()->get();
+      $attrs = new Collection();
+      $attrCategories = AttributeCategory::orderBy('name')
+        ->each(static function (AttributeCategory $category) use (&$attrs) {
+          $attrs = $attrs->merge($category->attributes()->forHotels()->filtered()->get());
+        });
+
+      return $attrs;
     });
 
     $this->rooms_attributes = Cache::remember('rooms_attributes', 60 * 60 * 24 * 12, static function () {
-      return Attribute::forRooms()->filtered()->get();
+      $attrs = new Collection();
+      $attrCategories = AttributeCategory::orderBy('name')
+        ->each(static function (AttributeCategory $category) use (&$attrs) {
+          $attrs = $attrs->merge($category->attributes()->forRooms()->filtered()->get());
+        });
+
+      return $attrs;
     });
 
     $attributes = $this->normalizeAttrs();
