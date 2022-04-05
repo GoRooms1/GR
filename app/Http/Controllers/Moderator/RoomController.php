@@ -13,7 +13,6 @@ use App\Models\Cost;
 use App\Models\Hotel;
 use App\Helpers\Json;
 use App\Models\CostType;
-use App\Models\Attribute;
 use Illuminate\Http\Request;
 use App\Models\AttributeCategory;
 use Illuminate\Http\JsonResponse;
@@ -29,15 +28,12 @@ class RoomController extends Controller
     $rooms = $hotel->rooms;
 
     $costTypes = CostType::all();
-    $attributes_id = Attribute::where('model', Room::class)
-      ->orWhereNull('model')->pluck('id');
     $attribute_categories = AttributeCategory::with(['attributes' => function ($q) {
       $q->whereModel(Room::class)->get();
     }])
-      ->whereHas('attributes', function ($q) use ($attributes_id) {
-        $q->whereIn('id', $attributes_id);
-      })
-      ->get();
+      ->get()->sortByDesc(function ($category, $key) {
+        return count($category->attributes);
+      });
 
     if ($hotel->type_fond === Hotel::ROOMS_TYPE) {
       return view('moderator.room.edit-rooms', compact('rooms', 'hotel', 'costTypes', 'attribute_categories'));

@@ -263,7 +263,9 @@
                 >
                 <input type="hidden"
                        name="metros_color[]"
-                        value="{{ $m->color }}">
+                       value="{{ $m->color }}"
+                       class="color"
+                >
                 <input type="number"
                        autocomplete="none"
                        {{ $hotel->disabled_save }}
@@ -297,7 +299,7 @@
                        class="metro_name"
                        value=""
                 >
-                <input type="hidden" name="metros_color[]">
+                <input type="hidden" name="metros_color[]" class="color">
                 <input type="number" min="1" {{ $hotel->disabled_save }} autocomplete="none" name="metros_time[]"
                        class="field field_small station-field" required>
                 <p class="text">минут пешком до объекта</p>
@@ -398,24 +400,26 @@
           <div class="col-12">
             <ul class="details">
               @foreach($attributeCategories as $category)
-                <li class="detail">
-                  <p class="text-bold_small details__title">{{ $category->name }}</p>
+                @if(count($category->attributes) > 0)
+                  <li class="detail">
+                    <p class="text-bold_small details__title">{{ $category->name }}</p>
 
-                  @foreach($category->attributes as $attr)
-                    <div class="choice">
-                      <input type="checkbox"
-                             {{ $hotel->disabled_save }}
-                             id="attr-{{ $attr->id }}"
-                             name="attr[{{ $attr->id }}]"
+                    @foreach($category->attributes as $attr)
+                      <div class="choice">
+                        <input type="checkbox"
+                               {{ $hotel->disabled_save }}
+                               id="attr-{{ $attr->id }}"
+                               name="attr[{{ $attr->id }}]"
                           {{ $hotel->attrs->contains('id', $attr->id) ? 'checked' : '' }}
-                      >
-                      <div class="check" {{ $hotel->disabled_save }}>
-                        <div class="check__flag"></div>
+                        >
+                        <div class="check" {{ $hotel->disabled_save }}>
+                          <div class="check__flag"></div>
+                        </div>
+                        <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
                       </div>
-                      <label for="attr-{{ $attr->id }}">{{ $attr->name }}</label>
-                    </div>
-                  @endforeach
-                </li>
+                    @endforeach
+                  </li>
+                @endif
               @endforeach
             </ul>
           </div>
@@ -728,7 +732,7 @@
 
     function takeColor(e) {
       $(e.currentTarget).parent().parent().find('input.metro_name').val(e.params.data.clear_name)
-      console.log($(e.currentTarget).parent().parent().children('input[type="hidden"]').get(0).value = e.params.data.color)
+      $(e.currentTarget).parent().parent().find('input.color').val(e.params.data.color)
       console.log(e.params.data.color);
     }
 
