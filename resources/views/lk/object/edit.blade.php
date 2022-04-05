@@ -730,7 +730,7 @@
 
     function takeColor(e) {
       $(e.currentTarget).parent().parent().find('input.metro_name').val(e.params.data.clear_name)
-      console.log($(e.currentTarget).parent().parent().children('input[type="hidden"]').get(0).value = e.params.data.color)
+      console.log($(e.currentTarget).parent().parent().children('input.color').value = e.params.data.color)
       console.log(e.params.data.color);
     }
 

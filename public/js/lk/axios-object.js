@@ -179,6 +179,11 @@ $(document).ready(function () {
       } else {
         data.metros_time = []
       }
+      if ($("input[name='metros_time[]']", this).length > 0) {
+        data.metros_name = $("input[name='metros_name[]']", this).map(function () { return this.value}).get()
+      } else {
+        data.metros_name = []
+      }
 
       console.log(data)
       axios.post('/lk/object/update', {
