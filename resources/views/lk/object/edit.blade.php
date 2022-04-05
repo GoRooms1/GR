@@ -263,7 +263,9 @@
                 >
                 <input type="hidden"
                        name="metros_color[]"
-                        value="{{ $m->color }}">
+                       value="{{ $m->color }}"
+                       class="color"
+                >
                 <input type="number"
                        autocomplete="none"
                        {{ $hotel->disabled_save }}
@@ -297,7 +299,7 @@
                        class="metro_name"
                        value=""
                 >
-                <input type="hidden" name="metros_color[]">
+                <input type="hidden" name="metros_color[]" class="color">
                 <input type="number" min="1" {{ $hotel->disabled_save }} autocomplete="none" name="metros_time[]"
                        class="field field_small station-field" required>
                 <p class="text">минут пешком до объекта</p>
@@ -730,7 +732,7 @@
 
     function takeColor(e) {
       $(e.currentTarget).parent().parent().find('input.metro_name').val(e.params.data.clear_name)
-      console.log($(e.currentTarget).parent().parent().children('input.color').value = e.params.data.color)
+      $(e.currentTarget).parent().parent().find('input.color').val(e.params.data.color)
       console.log(e.params.data.color);
     }
 
