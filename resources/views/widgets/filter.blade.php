@@ -444,9 +444,15 @@
           @endif
           @foreach($attributes as $attr)
             <span class="d-flex">{{ $attr->name }}
-              <a href="{{ \App\Widgets\Filter::remove_attr($attr->model === \App\Models\Room::class ? 'room' : 'hotel', $attr->id) }}">
-                <i class="fa-solid fa-xmark"></i>
-              </a>
+              @if (Route::currentRouteNamed('custom.*'))
+                <a href="{{ route('search') }}">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+              @else
+                <a href="{{ \App\Widgets\Filter::remove_attr($attr->model === \App\Models\Room::class ? 'room' : 'hotel', $attr->id) }}">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+              @endif
             </span>
           @endforeach
         </div>

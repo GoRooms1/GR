@@ -235,6 +235,12 @@ class Filter extends AbstractWidget
       $attributes['room'] = [];
     }
 
+    if (Route::currentRouteNamed('custom.jacuzzi')) {
+      $attributes = [];
+      $attributes['room'] = [Attribute::forRooms()->where('name', 'Джакузи')->first()->id];
+      $attributes['hotel'] = [];
+    }
+
     return $attributes;
   }
 
