@@ -36,7 +36,7 @@
 
 
         <button class="btn btn-success" type="submit">Обновить</button>
-        <a href="{{ route('admin.hotel_types.index') }}" class="btn btn-warning">Отмена</a>
+        <a href="{{ route('admin.united_cities.index') }}" class="btn btn-warning">Отмена</a>
       </div>
     </form>
   </div>
