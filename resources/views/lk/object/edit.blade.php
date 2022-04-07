@@ -684,6 +684,15 @@
     }
 
     function selectInit() {
+      let cities = {!! optional($hotel->address)->unitedCities() ?? [] !!};
+      console.log(cities);
+      let filters = []
+      cities.forEach(c => {
+        filters.push({
+          'city': c
+        })
+      })
+
       $('.metros').select2({
         placeholder: "Название станции",
         // multiple: true,
@@ -701,11 +710,7 @@
           data: function (params) {
             return JSON.stringify({
               query: params.term,
-              filters: [
-                {
-                  "city": '{{ $hotel->address->city }}',
-                }
-              ]
+              filters: filters
             })
           },
           processResults: function (data) {

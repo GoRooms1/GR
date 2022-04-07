@@ -533,6 +533,14 @@
     });
 
     function selectInit() {
+      let cities = {!! optional($hotel->address)->unitedCities() ?? [] !!};
+      console.log(cities);
+      let filters = []
+      cities.forEach(c => {
+        filters.push({
+          'city': c
+        })
+      })
       $('.metros').select2({
         placeholder: "Название станции",
         language: "ru",
@@ -549,11 +557,7 @@
           data: function (params) {
             return JSON.stringify({
               query: params.term,
-              filters: [
-                {
-                  "city": '{{ $hotel->address->city }}',
-                }
-              ]
+              filters: filters
             })
           },
           processResults: function (data) {
@@ -651,7 +655,6 @@
     let count_metros = {{ $hotel->metros()->count() > 0 ? $hotel->metros()->count() : 1 }};
     $("input[type='phone']").mask("+7 (999) 999 99-99");
     $("input[name*='attr'][type='checkbox']").on( "change", function() {
-      console.log(2);
       if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
       {
         this.checked=false;
