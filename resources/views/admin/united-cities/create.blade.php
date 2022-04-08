@@ -23,7 +23,7 @@
              <label for="name">Города</label>
              <select name="cities[]" class="form-control @error('cities') is-invalid @enderror" id="cities" multiple="multiple" required>
                @foreach($cities as $city)
-                 <option value="{{ $city }}" @if(in_array($city, old('cities', []))) selected @endif>{{ $city }}</option>
+                 <option value="{{ $city }}" @if(in_array($city, old('cities', []), true)) selected @endif>{{ $city }}</option>
                @endforeach
              </select>
              @error('cities')
