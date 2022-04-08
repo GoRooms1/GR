@@ -229,11 +229,30 @@ trait Filter
       }
 
       if ($city) {
-        $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($city) {
-          $q_hotel->whereHas('address', function ($q) use ($city) {
-            $q->where('city', $city);
+        if ($metro) {
+          $unitedCities = Address::whereCity($city)->first();
+          if ($unitedCities) {
+            $unitedHotelsBool = true;
+            $unitedCities = $unitedCities->unitedCities();
+            $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($city, $unitedCities) {
+              $q_hotel->whereHas('address', function ($q) use ($city, $unitedCities) {
+                foreach ($unitedCities as $key => $unitedCity) {
+                  if ($key === 0) {
+                    $q->where('city', $unitedCity);
+                  } else {
+                    $q->orWhere('city', $unitedCity);
+                  }
+                }
+              });
+            });
+          }
+        } else {
+          $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($city) {
+            $q_hotel->whereHas('address', function ($q) use ($city) {
+              $q->where('city', $city);
+            });
           });
-        });
+        }
       }
 
       if ($city_area) {
@@ -316,6 +335,32 @@ trait Filter
         });
       }
 
+      if ($unitedHotelsBool) {
+        $roomsPrimary = clone $rooms;
+
+        $roomsPrimary = $roomsPrimary->whereHas('hotel', function (Builder $q_hotel) use ($city) {
+          $q_hotel->whereHas('address', function (Builder $q) use ($city) {
+            $q->where('city', $city);
+          });
+        });
+
+        $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($city) {
+          $q_hotel->whereHas('address', function (Builder $q) use ($city) {
+            $q->where('city', '!=', $city);
+          });
+        });
+
+        $ids = $roomsPrimary->pluck('id');
+
+        $ids = $ids->merge($rooms->pluck('id'));
+
+        $rawOrderSql = '(CASE ' . collect($ids)->map(function($id, $order) {
+            return "WHEN id = '{$id}' THEN {$order}";
+          })->implode(' ') . ' ELSE 9999 END) ASC';
+
+        $rooms = Room::whereIn('id', $ids)->orderByRaw($rawOrderSql);
+      }
+
       $rooms = $rooms->paginate(16);
     }
 
@@ -324,6 +369,8 @@ trait Filter
       'hotels' => $hotels,
       'is_room' => $is_room,
       'hotels_popular' => $hotels_popular,
+      'united_cities' => $unitedCities,
+      'united_hotels_bool' => $unitedHotelsBool
     ];
   }
 
