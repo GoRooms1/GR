@@ -4,12 +4,14 @@ namespace App\Traits;
 
 use App\Models\Room;
 use App\Models\Hotel;
+use App\Models\Address;
 use App\Models\CostType;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 
 trait Filter
 {
+  /** @noinspection StaticInvocationViaThisInspection */
   public function filter(
     ?string $search,
     ?array  $attributes,
@@ -27,6 +29,10 @@ trait Filter
   ): object
   {
     $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot || isset($cost);
+
+    $unitedHotelsBool = false;
+    $unitedCities = null;
+
     //    Normalize data
     if (!isset($attributes['room'])) {
       $attributes['room'] = [];
@@ -69,10 +75,35 @@ trait Filter
           });
       }
 
-      if ($city) {
-        $hotels = $hotels->whereHas('address', function (Builder $q) use ($city) {
-          $q->where('city', $city);
+      if ($metro) {
+        $hotels = $hotels->whereHas('metros', static function (Builder $q) use ($metro) {
+          $q->where('name', $metro);
         });
+      }
+
+      if ($city) {
+
+        if ($metro) {
+
+          $unitedCities = Address::whereCity($city)->first();
+          if ($unitedCities) {
+            $unitedHotelsBool = true;
+            $unitedCities = $unitedCities->unitedCities();
+            $hotels = $hotels->whereHas('address', static function (Builder $q) use ($unitedCities, $city) {
+              foreach ($unitedCities as $key => $unitedCity) {
+                if ($key === 0) {
+                  $q->where('city', $unitedCity);
+                } else {
+                  $q->orWhere('city', $unitedCity);
+                }
+              }
+            });
+          }
+        } else {
+          $hotels = $hotels->whereHas('address', static function (Builder $q) use ($city) {
+            $q->where('city', $city);
+          });
+        }
       }
 
       if ($city_area) {
@@ -84,12 +115,6 @@ trait Filter
       if ($district) {
         $hotels = $hotels->whereHas('address', function (Builder $q) use ($district) {
           $q->where('city_district', $district);
-        });
-      }
-
-      if ($metro) {
-        $hotels = $hotels->whereHas('metros', function (Builder $q) use ($metro) {
-          $q->where('name', $metro);
         });
       }
 
@@ -157,8 +182,34 @@ trait Filter
       if ($with_map) {
         $hotels = $hotels->get();
       } else {
+//        Сортировка что бы был главный город выбранный
+        if ($unitedHotelsBool) {
+          $hotelsPrimary = clone $hotels;
+
+          $hotelsPrimary = $hotelsPrimary->whereHas('address', function (Builder $q) use ($city) {
+            $q->where('city', $city);
+          });
+
+          $hotels = $hotels->whereHas('address', function (Builder $q) use ($city) {
+              $q->where('city', '!=', $city);
+            });
+
+          $ids = $hotelsPrimary->pluck('id');
+
+          $ids = $ids->merge($hotels->pluck('id'));
+
+          $rawOrderSql = '(CASE ' . collect($ids)->map(function($id, $order) {
+              return "WHEN id = '{$id}' THEN {$order}";
+            })->implode(' ') . ' ELSE 9999 END) ASC';
+
+          $hotels = Hotel::whereIn('id', $ids)->orderByRaw($rawOrderSql);
+        }
+
+
         $hotels = $hotels->paginate(16);
       }
+
+
     } else {
       $rooms = Room::query();
 
@@ -223,15 +274,13 @@ trait Filter
         }
       }
 
-      if (isset($attributes['hotel'])) {
-        if (count($attributes['hotel']) > 0) {
-          foreach ($attributes['hotel'] as $id) {
-            $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($id) {
-              $q_hotel->whereHas('attrs', function (Builder $q_attrs) use ($id) {
-                $q_attrs->where('id', $id);
-              });
+      if (isset($attributes['hotel']) && count($attributes['hotel']) > 0) {
+        foreach ($attributes['hotel'] as $id) {
+          $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($id) {
+            $q_hotel->whereHas('attrs', function (Builder $q_attrs) use ($id) {
+              $q_attrs->where('id', $id);
             });
-          }
+          });
         }
       }
 
