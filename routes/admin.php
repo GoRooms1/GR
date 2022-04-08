@@ -81,3 +81,5 @@ Route::post('/periods/updateByJson', [PeriodController::class, 'updateByJson'])-
 Route::resource('moderators', 'ModeratorController');
 
 Route::resource('instructions', 'InstructionController');
+
+Route::resource('united_cities', 'UnitedCityController');
