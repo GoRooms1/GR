@@ -197,7 +197,7 @@
                     @foreach ($costTypes as $type)
                       <li class="advanced-search-prices-item">
                         <input id="advanced-search-prices-{{ $loop->iteration }}" type="checkbox" class="checkbox" name="search-price"
-                               value="{{ $type->slug }}" @checked($type->slug, $request->get('search-price'))>
+                               value="{{ $type->slug }}" @checked($type->slug, $search_price)>
                         <label for="advanced-search-prices-{{ $loop->iteration }}" class="checkbox-label checkbox-label-orange">{{ $type->name }}</label>
                       </li>
                     @endforeach
@@ -205,7 +205,7 @@
                 </div>
                 @foreach ($costTypes as $type)
                   <div
-                    class="advanced-search-prices-in advanced-search-prices-in-item {{ $request->get('search-price') !== $type->slug ? 'disabled' : ''}}">
+                    class="advanced-search-prices-in advanced-search-prices-in-item {{ $search_price !== $type->slug ? 'disabled' : ''}}">
                     <p class="advanced-search-prices-in-label">{{ $type->name }}:</p>
                     <ul class="advanced-search-prices-list">
                       @foreach($type->filterCosts as $cost)
@@ -230,7 +230,7 @@
                           @endphp
                           <li class="advanced-search-prices-item">
                             <input id="advanced-search-prices-{{ $cost->id  . '00' }}-{{ $loop->parent->iteration }}" name="cost" type="radio"
-                                   class="checkbox" value="{{ $value2 }}" @checked($value2, $request->get('cost')) >
+                                   class="checkbox" value="{{ $value2 }}" @checked($value2, $costRequest) >
                             <label for="advanced-search-prices-{{ $cost->id . '00' }}-{{ $loop->parent->iteration }}"
                                    class="checkbox-label checkbox-label-orange">
                               {{ $title2 }}
@@ -239,7 +239,7 @@
                         @endif
                         <li class="advanced-search-prices-item">
                           <input id="advanced-search-prices-{{ $cost->id }}-{{ $loop->parent->iteration }}" name="cost" type="radio"
-                                 class="checkbox" value="{{$value}}" @checked($value, $request->get('cost')) >
+                                 class="checkbox" value="{{$value}}" @checked($value, $costRequest) >
                           <label for="advanced-search-prices-{{ $cost->id }}-{{ $loop->parent->iteration }}"
                                  class="checkbox-label checkbox-label-orange">
                             {{ $title }}
@@ -408,9 +408,15 @@
           @endif
           @if ($area)
             <span class="d-flex">округ {{ $area }}
-              <a href="{{ \App\Widgets\Filter::remove_key($data, 'city_area') }}">
-                <i class="fa-solid fa-xmark"></i>
-              </a>
+              @if (Route::currentRouteNamed('custom.*'))
+                <a href="{{ route('search') }}">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+              @else
+                <a href="{{ \App\Widgets\Filter::remove_key($data, 'city_area') }}">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+              @endif
             </span>
           @endif
           @if ($district)
@@ -434,12 +440,18 @@
               </a>
             </span>
           @endif
-          @if (Request::exists('cost'))
+          @if ($costRequest !== null)
             <span class="d-flex" style="display: none" id="tag-cost-filter">
               <span></span>
-              <a href="{{ App\Widgets\Filter::remove_cost() }}">
-                <i class="fa-solid fa-xmark"></i>
-              </a>
+              @if(Route::currentRouteNamed('custom.*'))
+                <a href="{{ route('search') }}">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+              @else
+                <a href="{{ App\Widgets\Filter::remove_cost() }}">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+              @endif
             </span>
           @endif
           @foreach($attributes as $attr)
