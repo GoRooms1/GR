@@ -87,7 +87,7 @@ class CustomPageController extends Controller
     abort(404);
   }
 
-  public function test(Request $request)
+  public function lowcost(Request $request)
   {
     $rooms = Room::whereHas('hotel', static function ($q_hotels) {
       $q_hotels->whereHas('address', static function ($q) {

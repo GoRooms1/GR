@@ -48,4 +48,4 @@ Route::post('lk/object/store', 'Lk\ObjectController@store')->name('lk.object.sto
 Route::get('/jacuzzi', 'CustomPageController@jacuzzi')->name('custom.jacuzzi');
 Route::get('/centre', 'CustomPageController@centre')->name('custom.centre');
 Route::get('/5minut', 'CustomPageController@fiveMinut')->name('custom.5minut');
-Route::get('/test', 'CustomPageController@test')->name('custom.test');
+Route::get('/lowcost', 'CustomPageController@lowcost')->name('custom.lowcost');

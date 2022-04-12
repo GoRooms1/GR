@@ -215,7 +215,7 @@ class Filter extends AbstractWidget
       return 'Москва';
     }
 
-    if (Route::currentRouteNamed('custom.test')) {
+    if (Route::currentRouteNamed('custom.lowcost')) {
       return 'Москва';
     }
 
@@ -250,7 +250,7 @@ class Filter extends AbstractWidget
 
   private function defaultCost(): ?string
   {
-    if (Route::currentRouteNamed('custom.test')) {
+    if (Route::currentRouteNamed('custom.lowcost')) {
       return 'na-cas.lte.700';
     }
     return null;
@@ -259,7 +259,7 @@ class Filter extends AbstractWidget
   private function defaultSearchPrice(): ?string
   {
 
-    if (Route::currentRouteNamed('custom.test')) {
+    if (Route::currentRouteNamed('custom.lowcost')) {
       return 'na-cas';
     }
     return null;

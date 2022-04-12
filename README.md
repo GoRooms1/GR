@@ -105,7 +105,7 @@ Please make sure to update tests as appropriate.
 1. `/jacuzzi`
 2. `/centre`
 3. `/5minut`
-4. `/test`
+4. `/lowcost`
 
 ## License
 
