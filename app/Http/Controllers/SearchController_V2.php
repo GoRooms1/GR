@@ -59,7 +59,7 @@ class SearchController_V2 extends Controller
       $count = $rooms->total();
     }
 
-    if ($data->united_hotels_bool) {
+    if ($data->united_hotels_bool && $count > 0) {
       $key = $data->united_cities->search($city);
       $data->united_cities = $data->united_cities->except($key);
       $data->united_cities->prepend($city);
@@ -123,7 +123,7 @@ class SearchController_V2 extends Controller
     $hotels_popular = $data->hotels_popular;
     $count = $hotels->count();
 
-    if ($data->united_hotels_bool) {
+    if ($data->united_hotels_bool && $count > 0) {
       $key = $data->united_cities->search($city);
       $data->united_cities = $data->united_cities->except($key);
       $data->united_cities->prepend($city);
