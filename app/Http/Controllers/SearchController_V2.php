@@ -130,7 +130,7 @@ class SearchController_V2 extends Controller
       $data->united_cities = $data->united_cities->toArray();
       $city = $data->united_cities;
     }
-    
+
     $pageDescription = $this->seo(
       $city,
       $district,

@@ -185,7 +185,8 @@ trait Filter
 //        Сортировка что бы был главный город выбранный
         if ($unitedHotelsBool) {
           $hotelsPrimary = clone $hotels;
-
+          $unitedCitiesIsHas = clone $hotels;
+          $unitedCities = $unitedCitiesIsHas->get('address')->pluck('address.city')->unique();
           $hotelsPrimary = $hotelsPrimary->whereHas('address', function (Builder $q) use ($city) {
             $q->where('city', $city);
           });
@@ -212,6 +213,7 @@ trait Filter
 
     } else {
       $rooms = Room::query();
+      $rooms = $rooms->with('hotel');
 
       if ($search) {
         $rooms = $rooms->where('name', 'like', '%' . $search . '%')
@@ -337,7 +339,8 @@ trait Filter
 
       if ($unitedHotelsBool) {
         $roomsPrimary = clone $rooms;
-
+        $unitedCitiesIsHas = clone $rooms;
+        $unitedCities = $unitedCitiesIsHas->get()->pluck('hotel.address.city')->unique();
         $roomsPrimary = $roomsPrimary->whereHas('hotel', function (Builder $q_hotel) use ($city) {
           $q_hotel->whereHas('address', function (Builder $q) use ($city) {
             $q->where('city', $city);
