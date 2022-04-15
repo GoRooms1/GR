@@ -8,6 +8,8 @@ use App\Models\HotelType;
 use Illuminate\Http\Request;
 use App\Traits\UrlDecodeFilter;
 use App\Models\PageDescription;
+use Illuminate\Support\Collection;
+use phpDocumentor\Reflection\Types\Mixed_;
 
 class SearchController_V2 extends Controller
 {
@@ -56,6 +58,15 @@ class SearchController_V2 extends Controller
     } else {
       $count = $rooms->total();
     }
+
+    if ($data->united_hotels_bool && $count > 0) {
+      $key = $data->united_cities->search($city);
+      $data->united_cities = $data->united_cities->except($key);
+      $data->united_cities->prepend($city);
+      $data->united_cities = $data->united_cities->toArray();
+      $city = $data->united_cities;
+    }
+
     $pageDescription = $this->seo(
       $city,
       $district,
@@ -110,8 +121,15 @@ class SearchController_V2 extends Controller
     );
     $hotels = $data->hotels;
     $hotels_popular = $data->hotels_popular;
-
     $count = $hotels->count();
+
+    if ($data->united_hotels_bool && $count > 0) {
+      $key = $data->united_cities->search($city);
+      $data->united_cities = $data->united_cities->except($key);
+      $data->united_cities->prepend($city);
+      $data->united_cities = $data->united_cities->toArray();
+      $city = $data->united_cities;
+    }
 
     $pageDescription = $this->seo(
       $city,
@@ -201,6 +219,7 @@ class SearchController_V2 extends Controller
       'street' => $street,
       'metro' => $metro
     ];
+
     $title = 'Отели города ';
     if (isset($slugs['city'])) {
       $title .= $slugs['city']
@@ -221,6 +240,23 @@ class SearchController_V2 extends Controller
   private function seo ($city, $district, $area, $street, $metro, $attr, $is_room, $hotel_type, $count): object
   {
     /* START SEO */
+
+
+    if (!is_array($city)) {
+      $city = [$city];
+    }
+    $countCities = count($city);
+
+    if ($countCities === 2) {
+      $city = implode(' и ', $city);
+      $titleCity = 'городах';
+    } else if ($countCities === 1) {
+      $city = implode('', $city);
+      $titleCity = 'городе';
+    } else {
+      $city = implode(', ', $city);
+      $titleCity = 'городах';
+    }
 
 
     //pageAbout
@@ -247,11 +283,11 @@ class SearchController_V2 extends Controller
     if ((!empty($slugs['city'])) && (!empty($slugs['area'])) && (empty($slugs['district'])) && (empty($slugs['street'])) && (empty($slugs['metro']))) {
 
       if (!is_null($attr)) {
-        $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" с выбранными условиями ' . $attr;
+        $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" с выбранными условиями ' . $attr;
         $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиничные номера на час (сутки) с ' . $attr . ' в "' . $slugs['area'] . '" Москвы ▶Описание номеров с фото  ▶ Звоните!';
 
       } else {
-        $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '"';
+        $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '"';
         $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиничные номера на час (сутки) с ' . $attr . ' в "' . $slugs['area'] . '" Москвы ▶Описание номеров с фото  ▶ Звоните!';
 
       }
@@ -266,13 +302,13 @@ class SearchController_V2 extends Controller
         if ($attr) {
 
           // Улица + метро + страница фильтрации по удобству
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",около метро "' . $slugs['metro'] . '" на улице "' . $slugs['street'] . '" с выбранными условиями ' . $attr;
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '", около метро "' . $slugs['metro'] . '" на улице "' . $slugs['street'] . '" с выбранными условиями ' . $attr;
           //$pageDescription->title = 'Выгодные цены на отели с '.$attr.' на "'.$slugs['street'].'" рядом с метро "'.$slugs['metro'].'"';
           $pageDescription->meta_description = 'Выбирайте и бронируйте почасовую гостиницу с ' . $attr . ' на "' . $slugs['street'] . '" рядом с метро "' . $slugs['metro'] . '" ▶ Актуальные цены ▶Обслуживание 24/7  ▶ Звоните!';
         } else {
 
           // метро + улица
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",около метро "' . $slugs['metro'] . '" на улице "' . $slugs['street'] . '" ';
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",около метро "' . $slugs['metro'] . '" на улице "' . $slugs['street'] . '" ';
           // $pageDescription->title = 'Бронь отелей на "'.$slugs['street'].'" рядом с метро "'.$slugs['metro'].'" онлайн';
           $pageDescription->meta_description = 'Компания Gorooms предлагает отели рядом с метро "' . $slugs['metro'] . '" по улице "' . $slugs['street'] . '" в Москве ▶Описание номеров с фото ▶ Доступные цены ▶ Бронируйте уже сейчас!';
         }
@@ -299,13 +335,13 @@ class SearchController_V2 extends Controller
         if ($attr) {
 
           // Район + метро + страница фильтрации по удобству
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" в районе "' . $slugs['district'] . '" около метро  "' . $slugs['metro'] . '" с выбранными условиями ' . $attr . '';
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" в районе "' . $slugs['district'] . '" около метро  "' . $slugs['metro'] . '" с выбранными условиями ' . $attr . '';
           //  $pageDescription->title = 'Отели с '.$attr.' в "'.$slugs['district'].'" районе рядом с м. "'.$slugs['metro'].'" - бронь онлайн';
           $pageDescription->meta_description = 'Компания Gorooms предлагает отели с ' . $attr . ' в "' . $slugs['district'] . '" районе рядом с м. "' . $slugs['metro'] . '" Москвы ▶Просторные номера▶ Доступные цены ▶ Бронируйте уже сейчас!';
         } else {
 
           // Метро+район
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" в районе "' . $slugs['district'] . '" около метро  "' . $slugs['metro'] . '"';
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" в районе "' . $slugs['district'] . '" около метро  "' . $slugs['metro'] . '"';
           // $pageDescription->title = 'Отели у метро "'.$slugs['metro'].'" в "'.$slugs['district'].'" районе Москвы -бронь, цены';
           $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиницу с почасовыми номерами рядом с метро "' . $slugs['metro'] . '" в "' . $slugs['district'] . '" районе Москвы ▶Описание номеров с фото  ▶ Звоните!';
         }
@@ -315,7 +351,7 @@ class SearchController_V2 extends Controller
         if ($attr) {
 
           // Район + страница фильтрации по удобству
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '", в районе "' . $slugs['district'] . '" с выбранными условиями ' . $attr . '';
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '", в районе "' . $slugs['district'] . '" с выбранными условиями ' . $attr . '';
           // $pageDescription->title = 'Отели в городе "'.$slugs['district'].'" с выбранными условиями '.$attr.'';
           //$pageDescription->title = '111Гостиницы с '.$attr.' в "'.$slugs['district'].'" - бронь онлайн';
           $pageDescription->meta_description = 'Компания Gorooms предлагает отели с "' . $attr . '" в "' . $slugs['district'] . '" районе Москвы ▶Просторные номера▶ Доступные цены ▶ Бронируйте уже сейчас!';
@@ -335,13 +371,13 @@ class SearchController_V2 extends Controller
         if ($attr) {
 
           // Округ + метро + страница фильтрации по удобству
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"с выбранными условиями ' . $attr;
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"с выбранными условиями ' . $attr;
           //  $pageDescription->title = 'Бронь отелей с '.$attr.' в "'.$slugs['area'].'" Москвы рядом с метро "'.$slugs['metro'].'" ';
           $pageDescription->meta_description = 'Забронируйте гостиницу на час с ' . $attr . ' в "' . $slugs['area'] . '" Москвы рядом с метро "' . $slugs['metro'] . '"▶ Свободные номера и актуальные цены ▶ Заказывайте уже сейчас!';
         } else {
 
           // метро + округ
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"';
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"';
           //  $pageDescription->title = 'Отели рядом с метро "'.$slugs['metro'].'" в "'.$slugs['area'].'" Москвы - бронь онлайн';
           $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиницу с почасовыми номерами рядом с метро "' . $slugs['metro'] . '" в "' . $slugs['area'] . '" районе Москвы ▶Описание номеров с фото  ▶ Звоните!';
         }
@@ -351,13 +387,13 @@ class SearchController_V2 extends Controller
         if ($attr) {
 
           // Метро + страница фильтрации по удобству
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"с выбранными условиями ' . $attr;
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"с выбранными условиями ' . $attr;
           //$pageDescription->title = 'Отели с '.$attr.' рядом с "'.$slugs['metro'].'" метро - бронь, цены';
           $pageDescription->meta_description = 'Бронируйте уютные гостиничные номера с ' . $attr . ' рядом с метро "' . $slugs['metro'] . '" по приятным ценам в Москве ▶Описание номеров с фото  ▶ Звоните!';
         } else {
 
           // Станции метро
-          $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"';
+          $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" около метро  "' . $slugs['metro'] . '"';
           // $pageDescription->title = 'Отели у метро "'.$slugs['metro'].'"  - выгодные цены в Москве';
           $pageDescription->meta_description = 'Бронирование отелей рядом с метро "' . $slugs['metro'] . '" по минимальным ценам  ▶ Подробное описание номеров с фото и контактами ▶ Уютные номера с удобствами  ▶ Звоните!';
         }
@@ -368,7 +404,7 @@ class SearchController_V2 extends Controller
 
       if (!empty($slugs['area'])) {
         // Округ + страница фильтрации по удобству
-        $pageDescription->title = 'Отели в городе"' . $slugs['city'] . '",в "' . $slugs['area'] . '" с выбранными условиями ' . $attr;
+        $pageDescription->title = 'Отели в ' . $titleCity . ' "' . $slugs['city'] . '",в "' . $slugs['area'] . '" с выбранными условиями ' . $attr;
         $pageDescription->meta_description = 'Ищете отель? Бронируйте гостиничные номера на час (сутки) с ' . $attr . ' в "' . $slugs['area'] . '" Москвы ▶Описание номеров с фото  ▶ Звоните!';
       } else {
 
@@ -387,22 +423,25 @@ class SearchController_V2 extends Controller
         . (isset($slugs['district']) ? ', ' . $slugs['district'] . ' район ' : '')
         . (isset($slugs['street']) ? ', ул. ' . $slugs['street'] : '')
         . (isset($slugs['metro']) ? ', метро "' . $slugs['metro'] . '"' : '');
-
     }
     if (empty($title)) {
       $title = "Результаты поиска";
     }
     $title .= "<span class=\"count\">($count)</span>";
+    $pageDescription->title = $title;
 
-    if (is_null($hotel_type)) {
-      $desc_city_name = 'Отели ';
+    if (!$is_room) {
+      if (is_null($hotel_type)) {
+        $desc_city_name = 'Отели';
+      } else {
+        $desc_city_name = HotelType::find($hotel_type)->name;
+      }
     } else {
-      $desc_city_name = HotelType::find($hotel_type)->name;
+      $desc_city_name = 'Номера';
     }
 
-
     if ($city) {
-      $desc_city = $desc_city_name . " в городе " . $city;
+      $desc_city = $desc_city_name . " в " . $titleCity . " " . $city;
     } else {
       $desc_city = '';
     }

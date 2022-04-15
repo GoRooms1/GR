@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -132,5 +133,23 @@ class Address extends Model
       $area .= mb_substr($area_prefix, 0, 1);
     }
     return mb_strtoupper($area) . 'АО';
+  }
+
+  public function unitedCities()
+  {
+    $row = DB::table('united_cities_address')->where('city_name', $this->city)->first();
+    if ($row) {
+      $unitedCity = UnitedCity::find($row->united_city);
+      if ($unitedCity) {
+        return $unitedCity->united();
+      }
+
+      return new Collection([
+        $this->city
+      ]);
+    }
+    return new Collection([
+      $this->city
+    ]);
   }
 }

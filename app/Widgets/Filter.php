@@ -91,7 +91,7 @@ class Filter extends AbstractWidget
         }
       }
 
-      if ($area_req = Request::get('city_area')) {
+      if ($area_req = Request::get('city_area', $this->defaultCityAreaLocation())) {
         $adr = Address::where('city_area', $area_req)->first();
         if ($adr) {
           $this->area = $adr->city_area;
@@ -173,6 +173,9 @@ class Filter extends AbstractWidget
 
     $costTypes = CostType::with('filterCosts')->orderBy('sort')->get();
 
+    $costRequest = Request::get('cost', $this->defaultCost());
+    $search_price = Request::get('search_price', $this->defaultSearchPrice());
+
     return view('widgets.filter', [
       'request'           => $this->request,
       'city'              => $this->city,
@@ -189,7 +192,9 @@ class Filter extends AbstractWidget
       'attributes'        => $this->attributes,
       'hot'               => $this->hot,
       'costTypes'         => $costTypes,
-      'data'              => $data
+      'data'              => $data,
+      'costRequest'       => $costRequest,
+      'search_price'      => $search_price
     ]);
   }
 
@@ -198,6 +203,22 @@ class Filter extends AbstractWidget
    */
   private function defaultLocation(): string
   {
+//    TODO: Кастомная страница джакуззи
+    if (Route::currentRouteNamed('custom.jacuzzi')) {
+      return 'Москва';
+    }
+    if (Route::currentRouteNamed('custom.centre')) {
+      return 'Москва';
+    }
+
+    if (Route::currentRouteNamed('custom.5minut')) {
+      return 'Москва';
+    }
+
+    if (Route::currentRouteNamed('custom.lowcost')) {
+      return 'Москва';
+    }
+
     if (Cookie::get('city', null) === null) {
       $ch = curl_init('http://ip-api.com/json/' . Request::ip() . '?lang=ru');
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -219,6 +240,31 @@ class Filter extends AbstractWidget
     return Cookie::get('city', 'Москва');
   }
 
+  private function defaultCityAreaLocation () :?string
+  {
+    if (Route::currentRouteNamed('custom.centre')) {
+      return 'Центральный';
+    }
+    return null;
+  }
+
+  private function defaultCost(): ?string
+  {
+    if (Route::currentRouteNamed('custom.lowcost')) {
+      return 'na-cas.lte.700';
+    }
+    return null;
+  }
+
+  private function defaultSearchPrice(): ?string
+  {
+
+    if (Route::currentRouteNamed('custom.lowcost')) {
+      return 'na-cas';
+    }
+    return null;
+  }
+
   private function normalizeAttrs(): array
   {
     $attributes = Request::get('attributes', [
@@ -233,6 +279,18 @@ class Filter extends AbstractWidget
 
     if (!isset($attributes['room'])) {
       $attributes['room'] = [];
+    }
+
+//    TODO: Кастомная страница Джакуззи
+    if (Route::currentRouteNamed('custom.jacuzzi')) {
+      $attributes = [];
+      $attributes['room'] = [Attribute::forRooms()->where('name', 'Джакузи')->first()->id];
+      $attributes['hotel'] = [];
+    }
+    if (Route::currentRouteNamed('custom.5minut')) {
+      $attributes = [];
+      $attributes['room'] = [];
+      $attributes['hotel'] = [Attribute::forHotels()->where('name', '5 минут до метро')->first()->id];
     }
 
     return $attributes;

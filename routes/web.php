@@ -44,3 +44,8 @@ Route::get('/rules', 'PageController@show');
 
 Route::get('lk/start', 'Lk\HomeController@start')->name('lk.start');
 Route::post('lk/object/store', 'Lk\ObjectController@store')->name('lk.object.store');
+
+Route::get('/jacuzzi', 'CustomPageController@jacuzzi')->name('custom.jacuzzi');
+Route::get('/centre', 'CustomPageController@centre')->name('custom.centre');
+Route::get('/5minut', 'CustomPageController@fiveMinut')->name('custom.5minut');
+Route::get('/lowcost', 'CustomPageController@lowcost')->name('custom.lowcost');

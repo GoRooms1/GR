@@ -101,6 +101,12 @@ Please make sure to update tests as appropriate.
 # Reset SEO Hotel (1.04.2022)
 1. `php artisan seo:reset-hotel-seo`
 
+# Custom page and set SEO
+1. `/jacuzzi`
+2. `/centre`
+3. `/5minut`
+4. `/lowcost`
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
