@@ -26,6 +26,11 @@ Route::resource('hotels/{hotel?}/categories', 'CategoryController', [
 Route::resource('cost_types', 'CostTypeController', [
   'except' => ['show'],
 ]);
+
+Route::resource('bookings', 'BookingController', [
+  'except' => ['destroy', 'create', 'update', 'edit', 'store'],
+]);
+
 Route::resource('hotel_types', 'HotelTypeController', [
   'except' => ['show'],
 ]);

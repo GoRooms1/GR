@@ -68,7 +68,7 @@ class RoomController extends Controller
     $form->save();
 
     $validated['book_number'] = BookingController::defineNextBookNumber();
-    Booking::create([
+    $booking = Booking::create([
       'book_number' => $validated['book_number'],
       'client_fio' => $validated['book-name'],
       'client_phone' => $validated['book-tel'],
@@ -84,6 +84,8 @@ class RoomController extends Controller
         $validated['book_by']
         : null,
     ]);
+    $booking->room()->associate($id);
+    $booking->save();
 
     BookRoomJob::dispatch($id, $validated);
 
