@@ -91,6 +91,9 @@
               <a href="{{ route('admin.ratings.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.ratings.*') ? 'active' : '' }}">Категории рейтинга</a>
             </li>
             <li class="nav-item">
+              <a href="{{ route('admin.bookings.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.bookings.*') ? 'active' : '' }}">Бронирования</a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('admin.articles.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.articles.*') ? 'active' : '' }}">Статьи</a>
             </li>
 

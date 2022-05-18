@@ -41,6 +41,9 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Booking whereToDate($value)
  * @method static Builder|Booking whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property int|null $room_id
+ * @property-read \App\Models\Room|null $room
+ * @method static Builder|Booking whereRoomId($value)
  */
 class Booking extends Model
 {
@@ -54,5 +57,25 @@ class Booking extends Model
     'from-date',
     'to-date',
     'hours_count',
+    'on_show'
   ];
+
+  protected $casts = [
+    'on_show' => 'boolean'
+  ];
+
+  public function room (): \Illuminate\Database\Eloquent\Relations\BelongsTo
+  {
+    return $this->belongsTo(Room::class);
+  }
+  public function GetTypeAttribute ()
+  {
+    if ($this->book_type === 'hour') {
+      return 'На час';
+    } else if ($this->book_type === 'day') {
+      return 'На сутки';
+    } else if ($this->book_type === 'night') {
+    return 'На ночь';
+  }
+  }
 }
