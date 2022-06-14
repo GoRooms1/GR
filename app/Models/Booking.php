@@ -61,7 +61,9 @@ class Booking extends Model
   ];
 
   protected $casts = [
-    'on_show' => 'boolean'
+    'on_show' => 'boolean',
+    'from-date' => 'datetime',
+    'to-date' => 'datetime'
   ];
 
   public function room (): \Illuminate\Database\Eloquent\Relations\BelongsTo
