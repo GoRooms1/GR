@@ -24,23 +24,14 @@ class HotelController extends Controller
    *
    * @return Response
    */
-  public function index(): View
+  public function index (Request $request): View
   {
-    $hotels = Hotel::paginate(15);
-    return view('admin.hotel.index', compact('hotels'));
-  }
-
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return Response
-   */
-  public function create()
-  {
-    $attributes = Attribute::where('model', Hotel::class)->orWhereNull('model')->get();
-    $costTypes = CostType::orderBy('sort')->get();
-    $hotelTypes = HotelType::orderBy('sort')->get();
-    return view('admin.hotel.create', compact('attributes', 'costTypes', 'hotelTypes'));
+    $hotels = Hotel::query();
+    if ($q = $request->get('q', null)) {
+      $hotels = $hotels->where('name', 'like', '%' . $q . '%');
+    }
+    $hotels = $hotels->paginate(15);
+    return view('admin.hotel.index', compact('hotels', 'q'));
   }
 
   /**
@@ -50,23 +41,26 @@ class HotelController extends Controller
    *
    * @return Response
    */
-  public function store(HotelRequest $request)
+  public function store (HotelRequest $request)
   {
     $request->validated();
 
     $hotel = new Hotel();
     $this->save($hotel, $request);
 
-    return redirect()->route('admin.hotels.index')->with('success', true);
+    return redirect()
+      ->route('admin.hotels.index')
+      ->with('success', true);
   }
 
-  private function save(Hotel &$hotel, HotelRequest $request)
+  private function save (Hotel &$hotel, HotelRequest $request)
   {
     try {
       $validated = $request->validated();
 
       if ($request->get('slug') !== $hotel->slug) {
-        PageDescription::where('url', '/hotels/' . $hotel->slug)->delete();
+        PageDescription::where('url', '/hotels/' . $hotel->slug)
+          ->delete();
       }
 
 
@@ -76,7 +70,8 @@ class HotelController extends Controller
       $hotel->save();
 
       if ($request->has('attributes'))
-        $hotel->attrs()->sync($validated['attributes']);
+        $hotel->attrs()
+          ->sync($validated['attributes']);
 
       if ($request->hasFile('image'))
         Image::upload($request, $hotel);
@@ -91,20 +86,40 @@ class HotelController extends Controller
       $hotel->attachMeta($request);
 
 
-      $hotel->metros()->delete();
+      $hotel->metros()
+        ->delete();
       foreach ($request->get('metros', []) as $metros) {
-        if (empty($metros['name'])) continue;
+        if (empty($metros['name']))
+          continue;
         $metros['hotel_id'] = $hotel->id;
         Metro::create($metros);
       }
 
       if ($validated['type_id'])
-        $hotel->type()->associate($validated['type_id']);
+        $hotel->type()
+          ->associate($validated['type_id']);
 
       $hotel->save();
     } catch (Exception $e) {
       dd($e);
     }
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return Response
+   */
+  public function create ()
+  {
+    $attributes = Attribute::where('model', Hotel::class)
+      ->orWhereNull('model')
+      ->get();
+    $costTypes  = CostType::orderBy('sort')
+      ->get();
+    $hotelTypes = HotelType::orderBy('sort')
+      ->get();
+    return view('admin.hotel.create', compact('attributes', 'costTypes', 'hotelTypes'));
   }
 
   /**
@@ -114,7 +129,7 @@ class HotelController extends Controller
    *
    * @return Response
    */
-  public function show(Hotel $hotel): View
+  public function show (Hotel $hotel): View
   {
     return view('admin.hotel.show', compact('hotel'));
   }
@@ -126,11 +141,15 @@ class HotelController extends Controller
    *
    * @return Response
    */
-  public function edit(Hotel $hotel): View
+  public function edit (Hotel $hotel): View
   {
-    $attributes = Attribute::where('model', Hotel::class)->orWhereNull('model')->get();
-    $costTypes = CostType::orderBy('sort')->get();
-    $hotelTypes = HotelType::orderBy('sort')->get();
+    $attributes = Attribute::where('model', Hotel::class)
+      ->orWhereNull('model')
+      ->get();
+    $costTypes  = CostType::orderBy('sort')
+      ->get();
+    $hotelTypes = HotelType::orderBy('sort')
+      ->get();
     return view('admin.hotel.edit', compact('hotel', 'attributes', 'costTypes', 'hotelTypes'));
   }
 
@@ -142,7 +161,7 @@ class HotelController extends Controller
    *
    * @return Response
    */
-  public function update(HotelRequest $request, Hotel $hotel): RedirectResponse
+  public function update (HotelRequest $request, Hotel $hotel): RedirectResponse
   {
     $this->save($hotel, $request);
     return redirect()->route('admin.hotels.show', $hotel);
@@ -156,11 +175,12 @@ class HotelController extends Controller
    * @return RedirectResponse
    * @throws Exception
    */
-  public function destroy(Hotel $hotel): RedirectResponse
+  public function destroy (Hotel $hotel): RedirectResponse
   {
     $users = $hotel->users;
 
-    $hotel->users()->detach();
+    $hotel->users()
+      ->detach();
 
     $hotel->delete();
 

@@ -10,6 +10,20 @@
         </div>
       </div>
       <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <form action="{{ route('admin.hotels.index') }}" method="get">
+              <div class="row">
+                <div class="col-8 col-md-6 col-lg-4">
+                  <input type="text" name="q" value="{{ old('q', $q) }}" placeholder="Поиск" class="form-control mb-2">
+                </div>
+                <div class="col-auto">
+                  <button  type="submit" class="btn btn-primary">Найти</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table">
             <thead>
@@ -48,7 +62,7 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-auto">
-            {{ $hotels->links() }}
+            {{ $hotels->appends(['q' => $q])->links() }}
           </div>
         </div>
       </div>
