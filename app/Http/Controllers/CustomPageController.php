@@ -101,7 +101,8 @@ class CustomPageController extends Controller
 //      Ищем определённый тип периода в комнатах
         $q_period->where('cost_type_id', $type_price->id);
       });
-      $q_costs->where('value', '<=', 700);
+      $q_costs->where('value', '<=', 700)
+        ->where('value', '>', 0);
     });
     $rooms = $rooms->paginate(16);
     $title = 'Недороги отели и Гостиницы в Москве';
