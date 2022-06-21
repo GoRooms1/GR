@@ -1,4 +1,4 @@
-@extends('lk.layouts.app')
+@extends('moderator.layouts.app')
 
 @section('content')
   <input type="hidden" name="category.update" value="{{ route('moderator.category.update') }}">
