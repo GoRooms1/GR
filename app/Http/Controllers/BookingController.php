@@ -18,17 +18,16 @@ class BookingController extends Controller
   {
     $last_book_number = Booking::orderByDesc('id')->first()->book_number ?? '200100000';
 
-    $last_year = mb_substr($last_book_number, 0, 4);
-    $last_number = mb_substr($last_book_number, 4, 9);
-    $year = date("Y");
+    $last_year = (int)mb_substr($last_book_number, 0, 4);
+    $year = (int)date("Y");
 
-    if ($last_year == $year) {
-      $current_number = (int)$last_number + 1;
+    if ($last_year === $year) {
+      $current_number = (int) $last_book_number  + 1;
     } else {
-      $current_number = 1;
+      $current_number = $year . '00001';
     }
 
-    return $year . str_pad($current_number, 5, '0', STR_PAD_LEFT);
+    return (string) $current_number;
   }
 
 

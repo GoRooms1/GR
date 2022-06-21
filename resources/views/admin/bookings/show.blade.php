@@ -27,6 +27,10 @@
             <p>Тип бронирования: <b>{{ $booking->type }}</b></p>
             @if($booking->book_type === 'hour')
               <p>Кол-во часов: <b>{{ $booking->hours_count }}</b></p>
+              <p>Заезд: <b>{{ $booking['from-date']->format('d.m.Y H:i') }}</b></p>
+            @endif
+            @if($booking['to-date'] !== null)
+              <p>Выезд: <b>{{ $booking['to-date']->format('d.m.Y H:i') }}</b></p>
             @endif
           </div>
         </div>
