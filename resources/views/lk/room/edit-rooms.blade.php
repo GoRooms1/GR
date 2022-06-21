@@ -83,7 +83,7 @@
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-attributes="{{ implode(',', $room->attrs->pluck('id')->toArray()) }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('lk.room.save') }}">

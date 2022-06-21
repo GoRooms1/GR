@@ -10,7 +10,7 @@
     <div class="container">
       <div class="row demonstration">
         <div class="col-12">
-          <p class="text">Демонстрация каждого номера объекта в отдельности</p>
+          <p class="text">Демонстрация категорий отеля с квотами комнат</p>
         </div>
 
       </div>
@@ -81,7 +81,7 @@
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id }}">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id }}" data-attributes="{{ implode(',', $room->attrs->pluck('id')->toArray()) }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('lk.room.save') }}">
