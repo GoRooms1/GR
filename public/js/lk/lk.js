@@ -755,14 +755,14 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
   let room = $('.shadow[data-id=' + room_id + ']')
 
   let urlAttrPut = $(room).find('input[name=attributes-put]').val()
-
   axios
     .put(urlAttrPut, {
       ids
     })
     .then(r => {
       if (r.data.success) {
-        let list = $('.shadow[data-id=' + room_id + ']').find('.attributes-list')
+        let shadow = $('.shadow[data-id=' + room_id + ']')
+        let list = $(shadow).find('.attributes-list')
         list = $(list)
         list.empty()
         names.forEach((name, index) => {
@@ -773,8 +773,8 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
           }
         })
 
-        $('.shadow[data-id=' + room_id + ']').find('.more-details').find('p.text').removeClass('is-invalid form-control')
-
+        $(shadow).find('.more-details').find('p.text').removeClass('is-invalid form-control')
+        $(shadow).data('attributes', ids.join(','))
         if (r.data.room.moderate) {
           $(room).find('.row__head')
             .removeClass('row__head_blue')
@@ -786,6 +786,7 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
         }
 
         $(popup).find('.close-this').click()
+        blockSaveRoom (shadow)
       }
     })
     .catch(e => {
@@ -840,6 +841,13 @@ function blockSaveRoom (shadow) {
       flag = false
     }
   })
+  if ( $(shadow).data('attributes') === undefined ) {
+    flag = false
+
+  } else if ($(shadow).data('attributes').split(',').length < 3) {
+    flag = false
+  }
+
 
   if( $(shadow).find('.visualizacao').find('li').length < 1) {
     flag = false
