@@ -10,7 +10,7 @@
     <div class="container">
       <div class="row demonstration">
         <div class="col-12">
-          <p class="text">Демонстрация каждого номера объекта в отдельности</p>
+          <p class="text">Демонстрация категорий отеля с квотами комнат</p>
         </div>
 
       </div>
