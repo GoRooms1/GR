@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use App\Http\Requests\LK\ObjectUpdateRequest;
+use App\Notifications\NotificationCreateHotel;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
@@ -64,9 +65,10 @@ class ObjectController extends Controller
       $user = new User($request->all());
       $user->password = Hash::make($request->password);
       $user->save();
+
       Auth::loginUsingId($user->id, true);
     }
-
+    $user->notify(new NotificationCreateHotel($user, $request->password));
     $hotel = new Hotel();
     $hotel->name = $request->get('hotel')['name'];
     $hotel->type()->associate($request->get('hotel')['type']);
