@@ -88,7 +88,6 @@
             <input type="hidden"
                    name="url-delete"
                    value="{{ route('lk.room.deleteRoom', $room->id) }}">
-
             <input type="hidden"
                    name="attributes-get"
                    value="{{ route('lk.room.attr.get', $room->id) }}">
@@ -293,10 +292,10 @@
 
     <input type="hidden"
            name="attributes-get"
-           value="{{ route('moderator.room.attr.get', '') }}">
+           value="{{ route('lk.room.attr.get', '') }}">
     <input type="hidden"
            name="attributes-put"
-           value="{{ route('moderator.room.attr.put', '') }}">
+           value="{{ route('lk.room.attr.put', '') }}">
 
     <div class="row row__head">
       <div class="col-6">
