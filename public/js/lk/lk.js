@@ -833,6 +833,12 @@ function showPeriodsInShadow(shadow) {
   $(shadow).find('.hours__select').show();
 }
 
+/**
+ * Блокировка либо разблокировать кнопку сохранения данных,
+ * валидация введённых данных
+ *
+ * @param {HTMLElement} shadow
+ */
 function blockSaveRoom (shadow) {
   let flag = true;
   console.log(shadow)
