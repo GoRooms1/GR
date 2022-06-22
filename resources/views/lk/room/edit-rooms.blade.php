@@ -655,7 +655,6 @@
           this.on('success', function (file, json) {
             console.log(json)
             let image = json.payload.images[0]
-            let word = 'image'
             existFile[zone.dataset.id].push({
               id: image.id,
               path: "{{ url('/') }}" + "/" + image.path,
@@ -663,6 +662,10 @@
               moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
               moderate: image.moderate
             })
+
+            if (typeof blockSaveRoom === "function") {
+              blockSaveRoom($('.shadow[data-id=' + zone.dataset.id + ']'))
+            }
           });
           this.on("addedfile", function(file) {
             if (this.files[6] != null){
