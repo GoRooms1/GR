@@ -10,7 +10,7 @@
     <div class="container">
       <div class="row demonstration">
         <div class="col-12">
-          <p class="text">Демонстрация каждого номера объекта в отдельности</p>
+          <p class="text">Демонстрация категорий отеля с квотами комнат</p>
         </div>
 
       </div>
@@ -81,14 +81,13 @@
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id }}">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-category-id="{{ $room->category->id }}" data-attributes="{{ implode(',', $room->attrs->pluck('id')->toArray()) }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('lk.room.save') }}">
             <input type="hidden"
                    name="url-delete"
                    value="{{ route('lk.room.deleteRoom', $room->id) }}">
-
             <input type="hidden"
                    name="attributes-get"
                    value="{{ route('lk.room.attr.get', $room->id) }}">
@@ -293,10 +292,10 @@
 
     <input type="hidden"
            name="attributes-get"
-           value="{{ route('moderator.room.attr.get', '') }}">
+           value="{{ route('lk.room.attr.get', '') }}">
     <input type="hidden"
            name="attributes-put"
-           value="{{ route('moderator.room.attr.put', '') }}">
+           value="{{ route('lk.room.attr.put', '') }}">
 
     <div class="row row__head">
       <div class="col-6">
@@ -502,7 +501,7 @@
 
             let d = file.previewElement.querySelector("[data-dz-success]");
             d.innerHTML = f.moderate_text
-
+            file.previewElement.dataset.id = f.id
             if (!f.moderate) {
               d.style.color = "#2f64ad"
             }
@@ -518,7 +517,6 @@
           this.on('success', function (file, json) {
             console.log(json)
             let image = json.payload.images[0]
-            let word = 'image'
             existFile[zone.dataset.id].push({
               id: image.id,
               path: "{{ url('/') }}" + "/" + image.path,
@@ -526,6 +524,9 @@
               moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
               moderate: image.moderate
             })
+            if (typeof blockSaveRoom === "function") {
+              blockSaveRoom($('.shadow[data-id=' + zone.dataset.id + ']'))
+            }
           });
           this.on("addedfile", function (file) {
             if (this.files[6] != null){
@@ -537,9 +538,6 @@
           this.on("reset", function (file) {
             $(zone).show()
           });
-          // this.on('queuecomplete', function (file) {
-          //   $(this).parents(".shadow").find('.uploud__min').hide()
-          // });
           this.on("removedfile", function (file) {
             console.log(file)
             if (existFile[zone.dataset.id].length === 1) {
@@ -604,9 +602,29 @@
     }
 
     $(document).ready(function () {
-      $('.sortable').sortable({
-        items: '.dz-image-preview',
-      });
+      $('.sortable').each(function () {
+        let sortable = this
+        $(sortable).sortable({
+          items: '.dz-image-preview',
+          update: function (event, ui) {
+            let ids = [];
+            $(sortable).find("li").each(function(i) {
+              ids.push($(this).attr('data-id'))
+            });
+            console.log(ids)
+
+            axios.post('/api/images/ordered', {
+              ids
+            })
+              .catch(e => {
+                if (e.response.data.message) {
+                  alert(e.response.data.message)
+                }
+              })
+          }
+        });
+      })
+
 
 
       Dropzone.autoDiscover = false;
@@ -624,7 +642,7 @@
 
       @foreach($rooms as $room)
         existFile[{{ $room->id }}] = []
-      @foreach($room->images as $image)
+        @foreach($room->images as $image)
 
         existFile[{{ $room->id }}].push({
         id: "{{ $image->id }}",

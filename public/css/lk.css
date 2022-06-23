@@ -1512,3 +1512,7 @@ textarea.form-control {
 .tiny-content p {
 	font-size: 14px!important;
 }
+
+.swal2-no-war {
+	display: none !important;
+}

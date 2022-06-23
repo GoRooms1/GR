@@ -301,6 +301,26 @@ function createFrontData (room_id, category)
 
   if (existFile)
     existFile[room_id] = []
+
+  $(room).find('ul.sortable').sortable({
+    items: '.dz-image-preview',
+    update: function (event, ui) {
+      let ids = [];
+      $(room).find('ul.sortable').find("li").each(function(i) {
+        ids.push($(this).attr('data-id'))
+      });
+      console.log(ids)
+
+      axios.post('/api/images/ordered', {
+        ids
+      })
+        .catch(e => {
+          if (e.response.data.message) {
+            alert(e.response.data.message)
+          }
+        })
+    }
+  });
 }
 
 /**

@@ -273,6 +273,8 @@ $('#howRideBtn2').bind('click', function () {
   }
 })
 
+
+// Сохранить комнату
 $('.room-upload').bind('click', function () {
   let room = $(this).parents('.shadow').get(0)
 
@@ -292,6 +294,7 @@ $('.room-upload').bind('click', function () {
   }
 })
 
+// Модерация фотографии в комнате
 $('.moderate').bind('click', function () {
   let item = $(this).parents('.uploud__item').get(0)
   if (item) {
@@ -377,7 +380,9 @@ $('.agreement-choice').bind('click', function () {
  * Клик на редактирование комнаты
  */
 if (typeof allowedEditRoom === 'function') {
-  $('.quote__read').bind('click', allowedEditRoom)
+  $('.quote__read').bind('click', function () {
+    allowedEditRoom.bind(this)()
+  })
 }
 
 /**
@@ -755,14 +760,14 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
   let room = $('.shadow[data-id=' + room_id + ']')
 
   let urlAttrPut = $(room).find('input[name=attributes-put]').val()
-
   axios
     .put(urlAttrPut, {
       ids
     })
     .then(r => {
       if (r.data.success) {
-        let list = $('.shadow[data-id=' + room_id + ']').find('.attributes-list')
+        let shadow = $('.shadow[data-id=' + room_id + ']')
+        let list = $(shadow).find('.attributes-list')
         list = $(list)
         list.empty()
         names.forEach((name, index) => {
@@ -773,8 +778,8 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
           }
         })
 
-        $('.shadow[data-id=' + room_id + ']').find('.more-details').find('p.text').removeClass('is-invalid form-control')
-
+        $(shadow).find('.more-details').find('p.text').removeClass('is-invalid form-control')
+        $(shadow).data('attributes', ids.join(','))
         if (r.data.room.moderate) {
           $(room).find('.row__head')
             .removeClass('row__head_blue')
@@ -786,6 +791,7 @@ function backEndSaveAttributesRoom (room_id, ids, popup, names) {
         }
 
         $(popup).find('.close-this').click()
+        blockSaveRoom (shadow)
       }
     })
     .catch(e => {
@@ -832,6 +838,12 @@ function showPeriodsInShadow(shadow) {
   $(shadow).find('.hours__select').show();
 }
 
+/**
+ * Блокировка либо разблокировать кнопку сохранения данных,
+ * валидация введённых данных
+ *
+ * @param {HTMLElement} shadow
+ */
 function blockSaveRoom (shadow) {
   let flag = true;
   console.log(shadow)
@@ -840,6 +852,13 @@ function blockSaveRoom (shadow) {
       flag = false
     }
   })
+  if ( $(shadow).data('attributes') === undefined ) {
+    flag = false
+
+  } else if ($(shadow).data('attributes').split(',').length < 3) {
+    flag = false
+  }
+
 
   if( $(shadow).find('.visualizacao').find('li').length < 1) {
     flag = false

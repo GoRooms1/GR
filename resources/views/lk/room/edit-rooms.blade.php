@@ -83,7 +83,7 @@
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-attributes="{{ implode(',', $room->attrs->pluck('id')->toArray()) }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('lk.room.save') }}">
@@ -551,25 +551,28 @@
     let existFile = []
 
     $(document).ready(function () {
-      $('.sortable').sortable({
-        items: '.dz-image-preview',
-        update: function (event, ui) {
-          let ids = [];
-          $(".sortable li").each(function(i) {
-            ids.push($(this).attr('data-id'))
-          });
-          console.log(ids)
+      $('.sortable').each(function () {
+        let sortable = this
+        $(sortable).sortable({
+          items: '.dz-image-preview',
+          update: function (event, ui) {
+            let ids = [];
+            $(sortable).find("li").each(function(i) {
+              ids.push($(this).attr('data-id'))
+            });
+            console.log(ids)
 
-          axios.post('/api/images/ordered', {
-            ids
-          })
-            .catch(e => {
-              if (e.response.data.message) {
-                alert(e.response.data.message)
-              }
+            axios.post('/api/images/ordered', {
+              ids
             })
-        }
-      });
+              .catch(e => {
+                if (e.response.data.message) {
+                  alert(e.response.data.message)
+                }
+              })
+          }
+        });
+      })
 
       $('.quote__read').each(function () {
         saveFrontData.call(this, true)
@@ -655,7 +658,6 @@
           this.on('success', function (file, json) {
             console.log(json)
             let image = json.payload.images[0]
-            let word = 'image'
             existFile[zone.dataset.id].push({
               id: image.id,
               path: "{{ url('/') }}" + "/" + image.path,
@@ -663,6 +665,10 @@
               moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
               moderate: image.moderate
             })
+
+            if (typeof blockSaveRoom === "function") {
+              blockSaveRoom($('.shadow[data-id=' + zone.dataset.id + ']'))
+            }
           });
           this.on("addedfile", function(file) {
             if (this.files[6] != null){
