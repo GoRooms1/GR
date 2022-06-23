@@ -198,29 +198,31 @@ if (typeof removeRoom === 'function') {
  * Клик для создания новой комнаты
  */
 if (typeof createRoom === 'function') {
-  $('.room__add').on('click', createRoom)
+  $('.room__add').on('click', function () {
+    createRoom().bind(this);
 
-  $('.sortable').disable()
-  
-  $('.sortable').sortable({
-    items: '.dz-image-preview',
-    update: function (event, ui) {
-      let ids = [];
-      $(".sortable li").each(function(i) {
-        ids.push($(this).attr('data-id'))
-      });
-      console.log(ids)
+    $('.sortable').disable()
 
-      axios.post('/api/images/ordered', {
-        ids
-      })
-        .catch(e => {
-          if (e.response.data.message) {
-            alert(e.response.data.message)
-          }
+    $('.sortable').sortable({
+      items: '.dz-image-preview',
+      update: function (event, ui) {
+        let ids = [];
+        $(".sortable li").each(function(i) {
+          ids.push($(this).attr('data-id'))
+        });
+        console.log(ids)
+
+        axios.post('/api/images/ordered', {
+          ids
         })
-    }
-  });
+          .catch(e => {
+            if (e.response.data.message) {
+              alert(e.response.data.message)
+            }
+          })
+      }
+    });
+  })
 }
 
 window.textChange = true
