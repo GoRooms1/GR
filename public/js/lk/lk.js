@@ -198,31 +198,7 @@ if (typeof removeRoom === 'function') {
  * Клик для создания новой комнаты
  */
 if (typeof createRoom === 'function') {
-  $('.room__add').on('click', function () {
-    createRoom().bind(this);
-
-    $('.sortable').sortable('disable')
-
-    $('.sortable').sortable({
-      items: '.dz-image-preview',
-      update: function (event, ui) {
-        let ids = [];
-        $(".sortable li").each(function(i) {
-          ids.push($(this).attr('data-id'))
-        });
-        console.log(ids)
-
-        axios.post('/api/images/ordered', {
-          ids
-        })
-          .catch(e => {
-            if (e.response.data.message) {
-              alert(e.response.data.message)
-            }
-          })
-      }
-    });
-  })
+  $('.room__add').on('click', createRoom)
 }
 
 window.textChange = true
@@ -297,6 +273,8 @@ $('#howRideBtn2').bind('click', function () {
   }
 })
 
+
+// Сохранить комнату
 $('.room-upload').bind('click', function () {
   let room = $(this).parents('.shadow').get(0)
 
@@ -316,6 +294,7 @@ $('.room-upload').bind('click', function () {
   }
 })
 
+// Модерация фотографии в комнате
 $('.moderate').bind('click', function () {
   let item = $(this).parents('.uploud__item').get(0)
   if (item) {
@@ -401,7 +380,31 @@ $('.agreement-choice').bind('click', function () {
  * Клик на редактирование комнаты
  */
 if (typeof allowedEditRoom === 'function') {
-  $('.quote__read').bind('click', allowedEditRoom)
+  $('.quote__read').bind('click', function () {
+    allowedEditRoom().bind(this)
+
+    $('.sortable').sortable('disable')
+
+    $('.sortable').sortable({
+      items: '.dz-image-preview',
+      update: function (event, ui) {
+        let ids = [];
+        $(".sortable li").each(function(i) {
+          ids.push($(this).attr('data-id'))
+        });
+        console.log(ids)
+
+        axios.post('/api/images/ordered', {
+          ids
+        })
+          .catch(e => {
+            if (e.response.data.message) {
+              alert(e.response.data.message)
+            }
+          })
+      }
+    });
+  })
 }
 
 /**
