@@ -638,7 +638,7 @@
 
       @foreach($rooms as $room)
         existFile[{{ $room->id }}] = []
-      @foreach($room->images as $image)
+        @foreach($room->images as $image)
 
         existFile[{{ $room->id }}].push({
         id: "{{ $image->id }}",
