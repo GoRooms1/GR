@@ -381,29 +381,7 @@ $('.agreement-choice').bind('click', function () {
  */
 if (typeof allowedEditRoom === 'function') {
   $('.quote__read').bind('click', function () {
-    allowedEditRoom.bind(this)
-
-    $('.sortable').sortable('disable')
-
-    $('.sortable').sortable({
-      items: '.dz-image-preview',
-      update: function (event, ui) {
-        let ids = [];
-        $(".sortable li").each(function(i) {
-          ids.push($(this).attr('data-id'))
-        });
-        console.log(ids)
-
-        axios.post('/api/images/ordered', {
-          ids
-        })
-          .catch(e => {
-            if (e.response.data.message) {
-              alert(e.response.data.message)
-            }
-          })
-      }
-    });
+    allowedEditRoom.bind(this)()
   })
 }
 
