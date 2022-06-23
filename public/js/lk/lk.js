@@ -201,7 +201,7 @@ if (typeof createRoom === 'function') {
   $('.room__add').on('click', function () {
     createRoom().bind(this);
 
-    $('.sortable').disable()
+    $('.sortable').sortable('disable')
 
     $('.sortable').sortable({
       items: '.dz-image-preview',
