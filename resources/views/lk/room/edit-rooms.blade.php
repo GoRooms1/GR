@@ -551,25 +551,28 @@
     let existFile = []
 
     $(document).ready(function () {
-      $('.sortable').sortable({
-        items: '.dz-image-preview',
-        update: function (event, ui) {
-          let ids = [];
-          $(".sortable li").each(function(i) {
-            ids.push($(this).attr('data-id'))
-          });
-          console.log(ids)
+      $('.sortable').each(function () {
+        let sortable = this
+        $(sortable).sortable({
+          items: '.dz-image-preview',
+          update: function (event, ui) {
+            let ids = [];
+            $(sortable).find("li").each(function(i) {
+              ids.push($(this).attr('data-id'))
+            });
+            console.log(ids)
 
-          axios.post('/api/images/ordered', {
-            ids
-          })
-            .catch(e => {
-              if (e.response.data.message) {
-                alert(e.response.data.message)
-              }
+            axios.post('/api/images/ordered', {
+              ids
             })
-        }
-      });
+              .catch(e => {
+                if (e.response.data.message) {
+                  alert(e.response.data.message)
+                }
+              })
+          }
+        });
+      })
 
       $('.quote__read').each(function () {
         saveFrontData.call(this, true)
