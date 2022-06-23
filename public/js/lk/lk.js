@@ -199,6 +199,28 @@ if (typeof removeRoom === 'function') {
  */
 if (typeof createRoom === 'function') {
   $('.room__add').on('click', createRoom)
+
+  $('.sortable').disable()
+  
+  $('.sortable').sortable({
+    items: '.dz-image-preview',
+    update: function (event, ui) {
+      let ids = [];
+      $(".sortable li").each(function(i) {
+        ids.push($(this).attr('data-id'))
+      });
+      console.log(ids)
+
+      axios.post('/api/images/ordered', {
+        ids
+      })
+        .catch(e => {
+          if (e.response.data.message) {
+            alert(e.response.data.message)
+          }
+        })
+    }
+  });
 }
 
 window.textChange = true
