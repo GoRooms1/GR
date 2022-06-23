@@ -381,7 +381,7 @@ $('.agreement-choice').bind('click', function () {
  */
 if (typeof allowedEditRoom === 'function') {
   $('.quote__read').bind('click', function () {
-    allowedEditRoom().bind(this)
+    allowedEditRoom.bind(this)
 
     $('.sortable').sortable('disable')
 
