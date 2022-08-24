@@ -138,6 +138,11 @@ class Room extends Model
   {
     return $query->where('is_hot', true);
   }
+  public function setModerate(): void
+  {
+    $this->moderate = true;
+    $this->save();
+  }
 
   public function getAllCostsAttribute(): Collection
   {
