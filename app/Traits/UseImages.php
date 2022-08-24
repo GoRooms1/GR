@@ -8,7 +8,9 @@
 
 namespace App\Traits;
 
+use Auth;
 use App\Models\Image;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +20,15 @@ trait UseImages
 
     public function images(): MorphMany
     {
-        return $this->morphMany(Image::class, 'model')->orderBy('order', 'ASC');
+      if (Auth::guest() || (Auth::check() && !Auth::user()->is_moderate && !Auth::user()->is_admin)) {
+        if (!Route::currentRouteNamed('lk.*') &&
+          !Route::currentRouteNamed('moderator.*') &&
+          !Route::currentRouteNamed('api.*') &&
+          !Route::currentRouteNamed('admin.*')) {
+            return $this->morphMany(Image::class, 'model')->orderBy('order', 'ASC')->where('moderate', false);
+        }
+      }
+      return $this->morphMany(Image::class, 'model')->orderBy('order', 'ASC');
     }
 
     public function image(): HasOne

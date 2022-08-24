@@ -186,11 +186,19 @@ use App\Models\Hotel;
               <div class="swiper-container product-slider-small">
                 <div class="swiper-wrapper">
                   @foreach ($hotel->images as $image)
-                    <div class="swiper-slide product-slide-small" data-full="{{ asset($image->path) }}?w=640&h=300&fit=crop&fm=webp">
-                      <img itemprop="photo" class="swiper-lazy"
-                           data-src="{{ asset($image->path) }}?w=125&h=85&fit=crop&fm=webp"
-                           src="{{ asset('img/pr125x85.jpg') }}" alt="">
-                    </div>
+                    @if ($image->moderate)
+                      <div class="swiper-slide product-slide-small" data-full="{{ asset('img/hotel-moderate.jpg') }}">
+                        <img itemprop="photo" class="swiper-lazy"
+                             data-src="{{ asset('img/hotel-moderate.jpg') }}"
+                             src="{{ asset('img/hotel-moderate.jpg') }}" alt="">
+                      </div>
+                    @else
+                      <div class="swiper-slide product-slide-small" data-full="{{ asset($image->path) }}?w=640&h=300&fit=crop&fm=webp">
+                        <img itemprop="photo" class="swiper-lazy"
+                             data-src="{{ asset($image->path) }}?w=125&h=85&fit=crop&fm=webp"
+                             src="{{ asset('img/pr125x85.jpg') }}" alt="">
+                      </div>
+                    @endif
                   @endforeach
                 </div>
               </div>

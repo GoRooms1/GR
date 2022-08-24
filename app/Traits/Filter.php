@@ -58,8 +58,25 @@ trait Filter
       $hotels = $hotels->with(['address', 'attrs']);
 
       if ($moderate) {
-        $hotels = $hotels->withoutGlobalScopes(['moderation'])->where('moderate', true)
-          ->where('old_moderate', true);
+        $hotels = $hotels->withoutGlobalScopes(['moderation'])->where(function ($q) {
+          $q->where('moderate', true)->where('old_moderate', true);
+        });
+//          $q->whereHas('rooms', function ($q) {
+//            $q->where('moderate', true);
+//          })->where('old_moderate', true);
+//        });
+
+        $hotelsWhereModerateRoom = Hotel::withoutGlobalScopes(['moderation'])->whereHas('rooms', function ($q) {
+          $q->where('moderate', true);
+        })->pluck('id');
+
+        $hotelsID = $hotels->pluck('id')->merge($hotelsWhereModerateRoom)->unique();
+//        dd($hotelsID);
+        $hotels = Hotel::query();
+        $hotels = $hotels->with(['address', 'attrs']);
+        $hotels = $hotels->withoutGlobalScopes(['moderation'])->whereIn('id',$hotelsID);
+
+
       }
 
       if ($search) {
@@ -100,6 +117,7 @@ trait Filter
             });
           }
         } else {
+
           $hotels = $hotels->whereHas('address', static function (Builder $q) use ($city) {
             $q->where('city', $city);
           });

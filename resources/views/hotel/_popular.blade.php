@@ -44,10 +44,16 @@
       @else
         <div class="swiper-wrapper">
           @foreach($hotel->images AS $image)
-            <a href="{{ route('hotels.show', $hotel) }}" class="swiper-slide" target="_blank">
-              <img class="swiper-lazy" data-src="{{ asset($image->path) }}?w=385&h230&fit=crop&fm=webp&q=85"
-                   src="{{ asset('img/pr385x230.jpg') }}" alt="">
-            </a>
+            @if($image->moderate)
+              <a href="{{ route('hotels.show', $hotel) }}" class="swiper-slide" target="_blank">
+                <img src="{{ asset('img/hotel-moderate.jpg') }}" data-src="{{ asset('img/hotel-moderate.jpg') }}" class="swiper-lazy" alt="moderate">
+              </a>
+            @else
+              <a href="{{ route('hotels.show', $hotel) }}" class="swiper-slide" target="_blank">
+                <img class="swiper-lazy" data-src="{{ asset($image->path) }}?w=385&h230&fit=crop&fm=webp&q=85"
+                     src="{{ asset('img/pr385x230.jpg') }}" alt="">
+              </a>
+            @endif
           @endforeach
         </div>
         <div class="swiper-button swiper-button-next"></div>
