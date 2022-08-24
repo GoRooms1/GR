@@ -112,10 +112,9 @@ class RoomController extends Controller
 
     $room->save();
 
-    if ($room->wasChanged(['category_id', 'name'])) {
-      $room->moderate = true;
-      $room->save();
-    }
+//    if ($room->wasChanged(['category_id', 'name'])) {
+//      $room->setModerate();
+//    }
 
     return response()->json(['success' => true, 'room' => $room]);
   }
@@ -191,7 +190,7 @@ class RoomController extends Controller
 
     $room = Room::findOrFail($id);
 
-    return response()->json(['attrs' => $room->attrs]);
+    return response()->json(['attrs' => $room->attrs, 'room' => $room]);
   }
 
   /**
@@ -210,14 +209,26 @@ class RoomController extends Controller
     ]);
 
     $room = Room::findOrFail($id);
+    if (!$room->moderate) {
+      return response()->json(['success' => false, 'message' => 'Нет прав редактировать атрибуты'], 500);
+    }
     $ids = $room->attrs()->pluck('id')->toArray();
     if (count(array_diff($request->get('ids'), $ids)) > 0) {
-      $room->moderate = true;
+//      $room->moderate = true;
     }
 
     $room->attrs()->sync($request->get('ids'));
     $room->save();
 
     return response()->json(['success' => true, 'room' => $room]);
+  }
+
+  public function uploadImage (Request $request): JsonResponse
+  {
+    $modelID = $request->get('modelID');
+
+    Room::findOrFail($modelID)->setModerate();
+    return $this->uploadFor($request);
+
   }
 }

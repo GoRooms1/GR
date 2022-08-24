@@ -539,7 +539,7 @@ class Hotel extends Model
     return (object)$costs;
   }
 
-  public function getRouteKeyName()
+  public function getRouteKeyName(): string
   {
     return 'slug';
   }

@@ -44,6 +44,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $room_id
  * @property-read \App\Models\Room|null $room
  * @method static Builder|Booking whereRoomId($value)
+ * @property bool $on_show
+ * @method static Builder|Booking whereOnShow($value)
  */
 class Booking extends Model
 {

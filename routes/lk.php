@@ -37,7 +37,7 @@ Route::post('room/edit/fond', 'RoomController@fondUpdate')
 Route::post('room/save', 'RoomController@saveRoom')
   ->name('room.save');
 
-Route::post('room/image/upload', 'RoomController@uploadFor')
+Route::post('room/image/upload', 'RoomController@uploadImage')
   ->name('room.image.upload');
 Route::post('room/image/delete/{image}', 'RoomController@delete')
   ->name('room.image.delete');

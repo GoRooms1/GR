@@ -680,15 +680,7 @@ function openPopupAttributes () {
 
       $(`input[name*='attr'][type='checkbox']`).prop('checked', false)
 
-      $("input[name*='attr'][type='checkbox']").on( "change", function() {
-        console.log(2);
-        if (+$("input[name*='attr'][type='checkbox']:checked").length > 9)
-        {
-          this.checked=false;
-        } else if ($("input[name*='attr'][type='checkbox']:checked").length < 3) {
-          this.checked = true;
-        }
-      });
+
 
       let room_id = $(this).attr('data-room-id')
       let room = $(this).parents('.shadow')
@@ -706,10 +698,33 @@ function openPopupAttributes () {
             attrs.forEach(attr => {
               $('#attr-' + attr.id).prop('checked', true);
             })
-
+            console.log(response.data.room)
 
             popup.addClass('open')
             $('.overlay').addClass('open')
+
+            if (response.data.room) {
+              if (!response.data.room.moderate) {
+                $(`input[name*='attr'][type='checkbox']`).prop('disabled', true)
+                $('#popupDetails .choice .check').attr('disabled', true)
+                $('#popupDetails .popup__button_attributes').prop('disabled', true)
+              } else {
+                $("input[name*='attr'][type='checkbox']").on( "change", function() {
+                  if (+$("input[name*='attr'][type='checkbox']:checked").length > 9) {
+                    this.checked = false;
+                  }
+                  else if ($("input[name*='attr'][type='checkbox']:checked").length < 3) {
+                    this.checked = true;
+                  }
+                });
+                $(`input[name*='attr'][type='checkbox']`).prop('disabled', false)
+                $('#popupDetails .choice .check').removeAttr('disabled')
+                $('#popupDetails .popup__button_attributes').prop('disabled', false)
+              }
+            }
+
+
+
           })
           .catch(e => {
             alert('Ошибка отображения атрибутов')
