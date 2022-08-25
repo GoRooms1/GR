@@ -45,6 +45,7 @@ class Filter extends AbstractWidget
   protected ?string $hotel_type = '';
   protected Object $data;
   protected bool $moderate;
+  protected bool $no_city = false;
   protected Collection $attributes;
 
   /**
@@ -108,6 +109,8 @@ class Filter extends AbstractWidget
       $this->query = Request::get('query');
 
       $this->hotel_type = Request::get('hotel_type');
+
+      $this->no_city = Request::boolean('no_city', false);
     }
 
     $this->hotels_type = Cache::remember('hotels_type', 60 * 60 * 24 * 12, static function () {
@@ -194,7 +197,8 @@ class Filter extends AbstractWidget
       'costTypes'         => $costTypes,
       'data'              => $data,
       'costRequest'       => $costRequest,
-      'search_price'      => $search_price
+      'search_price'      => $search_price,
+      'no_city'           => $this->no_city,
     ]);
   }
 

@@ -333,7 +333,7 @@
           </div>
         </div>
         @moderator
-        <div class="col-lg-12 advanced-search-details-col">
+        <div class="col-lg-6 advanced-search-details-col">
           <div class="advanced-search-details-wrapper">
             <p class="advanced-search-title">Модерация</p>
             <div class="filter-collapse js-search-collapse">
@@ -347,6 +347,15 @@
                          name="moderate" value="true" class="checkbox">
                   <label for="advanced-search-moderate"
                          class="checkbox-label checkbox-label-light">На модерации</label>
+                </li>
+                <li class="advanced-search-details-item">
+                  <input id="advanced-search-no_city" type="checkbox"
+                         @if(isset($no_city))
+                           {{ $no_city ? 'checked' : '' }}
+                         @endif
+                         name="no_city" value="true" class="checkbox">
+                  <label for="advanced-search-no_city"
+                         class="checkbox-label checkbox-label-light">Не учитывать город</label>
                 </li>
               </ul>
             </div>
