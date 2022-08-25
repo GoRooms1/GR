@@ -68,7 +68,11 @@ trait Filter
           $q->withoutGlobalScopes(['moderation'])->where('moderate', true);
         })->pluck('id');
 
-        $hotelsID = $hotels->pluck('id')->merge($hotelsWhereModerateRoom)->unique();
+        $hotelsWhereImageModerate = Hotel::withoutGlobalScopes(['moderation'])->whereHas('images', function ($q) {
+          $q->where('moderate', true);
+        })->pluck('id');
+
+        $hotelsID = $hotels->pluck('id')->merge($hotelsWhereModerateRoom)->merge($hotelsWhereImageModerate)->unique();
 
         $hotels = Hotel::query();
         $hotels = $hotels->with(['address', 'attrs']);
@@ -76,6 +80,8 @@ trait Filter
           ->withoutGlobalScopes(['moderation'])
           ->whereIn('id',$hotelsID)
           ->orderBy('updated_at', 'DESC');
+
+
       }
 
       if ($search) {
