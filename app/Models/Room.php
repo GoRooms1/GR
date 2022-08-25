@@ -142,6 +142,10 @@ class Room extends Model
   {
     $this->moderate = true;
     $this->save();
+
+    $hotel = $this->hotel;
+    $hotel->updated_at = Carbon::now();
+    $hotel->save();
   }
 
   public function getAllCostsAttribute(): Collection

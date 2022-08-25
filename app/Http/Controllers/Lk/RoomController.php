@@ -172,6 +172,7 @@ class RoomController extends Controller
     }
 
     $room->moderate = true;
+    $room->setModerate();
 
     $status = $room->save();
 
