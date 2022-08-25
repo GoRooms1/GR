@@ -71,9 +71,10 @@ trait Filter
 //        dd($hotelsID);
         $hotels = Hotel::query();
         $hotels = $hotels->with(['address', 'attrs']);
-        $hotels = $hotels->withoutGlobalScopes(['moderation'])->whereIn('id',$hotelsID);
-
-
+        $hotels = $hotels
+          ->withoutGlobalScopes(['moderation'])
+          ->whereIn('id',$hotelsID)
+          ->orderBy('updated_at', 'DESC');
       }
 
       if ($search) {
