@@ -13,7 +13,8 @@ class SearchController extends Controller
 
   public function index (Request $request)
   {
-    $search = $request->get('query');
+//    $search = $request->get('query');
+    $search = '';
     $attributes = $request->get('attributes', ['hotel' => [], 'room' => []]);
     $city = $request->get('city');
     $city_area = $request->get('city_area');
@@ -23,7 +24,8 @@ class SearchController extends Controller
     $cost = $request->get('cost');
     $search_price = $request->get('search-price');
     $hot = $request->boolean('hot');
-    $moderate = $request->boolean('moderate');
+    $moderate = $request->boolean('moderate', false);
+    $no_city = $request->boolean('no_city', false);
 
     $data = $this->filter($search,
       $attributes,
@@ -37,14 +39,15 @@ class SearchController extends Controller
       $cost,
       false,
       false,
-      $moderate
+      $moderate,
+      $no_city
     );
 
     $hotels = $data->hotels;
     $rooms = $data->rooms;
 
     $count = 0;
-    if ($rooms === null) {
+    if ($rooms === null || $moderate) {
       $count = $hotels->total();
     } else {
       $count = $rooms->total();
