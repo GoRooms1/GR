@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use ErrorException;
 use App\Models\Room;
 use App\Models\Hotel;
 use App\Models\Address;
@@ -64,11 +65,11 @@ trait Filter
         });
 
         $hotelsWhereModerateRoom = Hotel::withoutGlobalScopes(['moderation'])->whereHas('rooms', function ($q) {
-          $q->where('moderate', true);
+          $q->withoutGlobalScopes(['moderation'])->where('moderate', true);
         })->pluck('id');
 
         $hotelsID = $hotels->pluck('id')->merge($hotelsWhereModerateRoom)->unique();
-//        dd($hotelsID);
+
         $hotels = Hotel::query();
         $hotels = $hotels->with(['address', 'attrs']);
         $hotels = $hotels
@@ -96,43 +97,46 @@ trait Filter
         });
       }
 
-      if ($city && !$no_city) {
+      if (!$no_city) {
+        if ($city) {
 
-        if ($metro) {
+          if ($metro) {
 
-          $unitedCities = Address::whereCity($city)->first();
-          if ($unitedCities) {
-            $unitedHotelsBool = true;
-            $unitedCities = $unitedCities->unitedCities();
-            $hotels = $hotels->whereHas('address', static function (Builder $q) use ($unitedCities, $city) {
-              foreach ($unitedCities as $key => $unitedCity) {
-                if ($key === 0) {
-                  $q->where('city', $unitedCity);
-                } else {
-                  $q->orWhere('city', $unitedCity);
+            $unitedCities = Address::whereCity($city)->first();
+            if ($unitedCities) {
+              $unitedHotelsBool = true;
+              $unitedCities = $unitedCities->unitedCities();
+              $hotels = $hotels->whereHas('address', static function (Builder $q) use ($unitedCities, $city) {
+                foreach ($unitedCities as $key => $unitedCity) {
+                  if ($key === 0) {
+                    $q->where('city', $unitedCity);
+                  } else {
+                    $q->orWhere('city', $unitedCity);
+                  }
                 }
-              }
+              });
+            }
+          } else {
+
+            $hotels = $hotels->whereHas('address', static function (Builder $q) use ($city) {
+              $q->where('city', $city);
             });
           }
-        } else {
+        }
 
-          $hotels = $hotels->whereHas('address', static function (Builder $q) use ($city) {
-            $q->where('city', $city);
+        if ($city_area) {
+          $hotels = $hotels->whereHas('address', function (Builder $q) use ($city_area) {
+            $q->where('city_area', $city_area);
+          });
+        }
+
+        if ($district) {
+          $hotels = $hotels->whereHas('address', function (Builder $q) use ($district) {
+            $q->where('city_district', $district);
           });
         }
       }
 
-      if ($city_area) {
-        $hotels = $hotels->whereHas('address', function (Builder $q) use ($city_area) {
-          $q->where('city_area', $city_area);
-        });
-      }
-
-      if ($district) {
-        $hotels = $hotels->whereHas('address', function (Builder $q) use ($district) {
-          $q->where('city_district', $district);
-        });
-      }
 
       if ($hotel_type) {
         $hotels = $hotels->where('type_id', $hotel_type);
@@ -199,7 +203,7 @@ trait Filter
         $hotels = $hotels->get();
       } else {
 //        Сортировка что бы был главный город выбранный
-        if ($unitedHotelsBool) {
+        if (!$no_city && $unitedHotelsBool) {
           $hotelsPrimary = clone $hotels;
           $unitedCitiesIsHas = clone $hotels;
           $unitedCities = $unitedCitiesIsHas->get('address')->pluck('address.city')->unique();
@@ -208,8 +212,8 @@ trait Filter
           });
 
           $hotels = $hotels->whereHas('address', function (Builder $q) use ($city) {
-              $q->where('city', '!=', $city);
-            });
+            $q->where('city', '!=', $city);
+          });
 
           $ids = $hotelsPrimary->pluck('id');
 
@@ -222,12 +226,12 @@ trait Filter
           $hotels = Hotel::whereIn('id', $ids)->orderByRaw($rawOrderSql);
         }
 
-
         $hotels = $hotels->paginate(16);
       }
 
 
-    } else {
+    }
+    else {
       $rooms = Room::query();
       $rooms = $rooms->with('hotel');
 
