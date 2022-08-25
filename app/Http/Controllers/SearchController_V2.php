@@ -8,8 +8,6 @@ use App\Models\HotelType;
 use Illuminate\Http\Request;
 use App\Traits\UrlDecodeFilter;
 use App\Models\PageDescription;
-use Illuminate\Support\Collection;
-use phpDocumentor\Reflection\Types\Mixed_;
 
 class SearchController_V2 extends Controller
 {
