@@ -24,8 +24,9 @@ trait Filter
     ?string $search_price,
     ?string $cost,
     bool    $with_map,
-    bool    $popular = false,
-    bool    $moderate = false
+    bool    $popular  = false,
+    bool    $moderate = false,
+    bool    $no_city  = false
   ): object
   {
     $is_room = (isset($attributes['room']) && count($attributes['room'])) || $hot || isset($cost);
@@ -61,10 +62,6 @@ trait Filter
         $hotels = $hotels->withoutGlobalScopes(['moderation'])->where(function ($q) {
           $q->where('moderate', true)->where('old_moderate', true);
         });
-//          $q->whereHas('rooms', function ($q) {
-//            $q->where('moderate', true);
-//          })->where('old_moderate', true);
-//        });
 
         $hotelsWhereModerateRoom = Hotel::withoutGlobalScopes(['moderation'])->whereHas('rooms', function ($q) {
           $q->where('moderate', true);
@@ -98,7 +95,7 @@ trait Filter
         });
       }
 
-      if ($city) {
+      if ($city && !$no_city) {
 
         if ($metro) {
 
