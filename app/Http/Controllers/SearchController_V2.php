@@ -29,6 +29,7 @@ class SearchController_V2 extends Controller
     $search_price = $request->get('search-price');
     $hot = $request->boolean('hot');
     $moderate = $request->boolean('moderate', false);
+    $no_city = $request->boolean('no_city', false);
 
     $data = $this->filter($search,
       $attributes,
@@ -42,7 +43,8 @@ class SearchController_V2 extends Controller
       $cost,
       false,
       false,
-      $moderate
+      $moderate,
+      $no_city
     );
 
     $hotels = $data->hotels;
@@ -117,7 +119,8 @@ class SearchController_V2 extends Controller
       $cost,
       true,
       true,
-      $moderate
+      $moderate,
+      false
     );
     $hotels = $data->hotels;
     $hotels_popular = $data->hotels_popular;
@@ -182,6 +185,7 @@ class SearchController_V2 extends Controller
       false,
       $search_price,
       $cost,
+      false,
       false,
       false,
       false
