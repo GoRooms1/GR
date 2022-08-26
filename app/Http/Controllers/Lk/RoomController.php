@@ -112,10 +112,6 @@ class RoomController extends Controller
 
     $room->save();
 
-//    if ($room->wasChanged(['category_id', 'name'])) {
-//      $room->setModerate();
-//    }
-
     return response()->json(['success' => true, 'room' => $room]);
   }
 
@@ -171,7 +167,6 @@ class RoomController extends Controller
       }
     }
 
-    $room->moderate = true;
     $room->setModerate();
 
     $status = $room->save();
@@ -212,10 +207,6 @@ class RoomController extends Controller
     $room = Room::findOrFail($id);
     if (!$room->moderate) {
       return response()->json(['success' => false, 'message' => 'Нет прав редактировать атрибуты'], 500);
-    }
-    $ids = $room->attrs()->pluck('id')->toArray();
-    if (count(array_diff($request->get('ids'), $ids)) > 0) {
-//      $room->moderate = true;
     }
 
     $room->attrs()->sync($request->get('ids'));

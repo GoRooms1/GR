@@ -7,6 +7,7 @@
 
 namespace App\Traits;
 
+use Carbon\Carbon;
 use App\Helpers\Json;
 use App\Models\Image;
 use Illuminate\Http\JsonResponse;
@@ -49,7 +50,7 @@ trait UploadImage
     }
   }
 
-  public function uploadFor(Request $request)
+  public function uploadFor(Request $request): JsonResponse
   {
     $modelName = $request->get('model_name');
     $modelID = $request->get('modelID');
@@ -57,6 +58,10 @@ trait UploadImage
     try {
       $modelName = '\\App\\Models\\'.$modelName;
       $model = $modelName::findOrFail($modelID);
+      if ($model->updated_at) {
+        $model->updated_at = Carbon::now();
+        $model->save();
+      }
       $images = Image::upload($request, $model);
 
       return Json::good(['images' => $images]);
