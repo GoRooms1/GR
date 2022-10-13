@@ -14,8 +14,8 @@ class AddHeaderFooterToPages extends Migration
     public function up()
     {
         Schema::table('pages', function (Blueprint $table) {
-            $table->text('header')->nullable()->default('');
-            $table->text('footer')->nullable()->default('');
+            $table->text('header')->nullable();
+            $table->text('footer')->nullable();
         });
     }
 

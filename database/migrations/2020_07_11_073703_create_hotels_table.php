@@ -20,6 +20,9 @@ class CreateHotelsTable extends Migration
             $table->string('phone');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->on('users')->references('id');
+            $table->boolean('moderate')->default(true);
+            $table->boolean('old_moderate')->default(false);
+            $table->boolean('show')->default(false);
             $table->timestamps();
         });
     }

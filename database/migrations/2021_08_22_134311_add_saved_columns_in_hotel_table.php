@@ -14,8 +14,6 @@ class AddSavedColumnsInHotelTable extends Migration
   public function up(): void
   {
     Schema::table('hotels', function (Blueprint $table) {
-      $table->boolean('old_moderate')->default(false)->after('route');
-      $table->boolean('show')->default(false)->after('old_moderate');
       $table->dropColumn(['moderate']);
     });
   }

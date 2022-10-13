@@ -9,6 +9,7 @@
   "license": "MIT",
   "require": {
     "php": ">=7.4",
+    "ext-curl": "*",
     "ext-json": "*",
     "arrilot/laravel-widgets": "^3.13",
     "fideloper/proxy": "^4.2",
@@ -19,8 +20,7 @@
     "laravel/framework": "^8.0",
     "laravel/tinker": "^2.0",
     "laravel/ui": "^3.0",
-    "league/glide-laravel": "^1.0",
-    "ext-curl": "*"
+    "league/glide-laravel": "^1.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
@@ -74,5 +74,8 @@
     "post-create-project-cmd": [
       "@php artisan key:generate --ansi"
     ]
-  }
+  },
+  "repositories": [
+    { "type": "vcs", "url": "https://gitlab.d-element.ru/fomvasss/laravel-dadata.git" }
+  ]
 }

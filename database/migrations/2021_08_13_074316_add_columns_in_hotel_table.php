@@ -28,8 +28,6 @@ class AddColumnsInHotelTable extends Migration
       $table->string('type_fond')->default(Hotel::ROOMS_TYPE)->after('phone_2');
 //      Заголовок Как добраться
       $table->string('route_title', 255)->default('Как добраться')->after('route');
-//      На модерации
-      $table->boolean('moderate')->default(true)->after('route');
     });
   }
 

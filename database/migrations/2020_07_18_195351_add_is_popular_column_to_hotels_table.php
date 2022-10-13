@@ -14,7 +14,7 @@ class AddIsPopularColumnToHotelsTable extends Migration
     public function up()
     {
         Schema::table('hotels', function (Blueprint $table) {
-            $table->boolean('is_popular')->default('false');
+            $table->boolean('is_popular')->default(false);
         });
     }
 
