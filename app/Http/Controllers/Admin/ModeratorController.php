@@ -62,7 +62,7 @@ class ModeratorController extends Controller
      */
     public function show($id)
     {
-    //
+        //
     }
 
     /**

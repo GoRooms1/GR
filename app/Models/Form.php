@@ -30,5 +30,5 @@ use Illuminate\Support\Carbon;
  */
 class Form extends Model
 {
-  //
+    //
 }

@@ -102,7 +102,7 @@ class RoomController extends Controller
         $room = Room::findOrFail($id);
         $status = $room->delete();
 
-    //    TODO: deleting image;
+        //    TODO: deleting image;
         return response()->json(['success' => $status]);
     }
 

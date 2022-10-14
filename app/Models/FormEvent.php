@@ -24,5 +24,5 @@ use Illuminate\Support\Carbon;
  */
 class FormEvent extends Model
 {
-  //
+    //
 }

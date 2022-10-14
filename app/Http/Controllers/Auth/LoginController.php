@@ -40,12 +40,12 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-  protected function authenticated(Request $request, User $user)
-  {
-      if ($user->personal_hotel) {
-          return redirect()->route('lk.start');
-      }
+    protected function authenticated(Request $request, User $user)
+    {
+        if ($user->personal_hotel) {
+            return redirect()->route('lk.start');
+        }
 
-      return redirect($this->redirectTo);
-  }
+        return redirect($this->redirectTo);
+    }
 }

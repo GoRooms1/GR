@@ -47,7 +47,7 @@ class DefaultValuePhoneInHotelTable extends Migration
     public function down()
     {
         Schema::table('hotels', function (Blueprint $table) {
-      //
+            //
         });
     }
 }

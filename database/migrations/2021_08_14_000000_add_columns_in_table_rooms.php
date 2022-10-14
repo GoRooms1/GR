@@ -14,7 +14,7 @@ class AddColumnsInTableRooms extends Migration
     public function up(): void
     {
         Schema::table('rooms', function (Blueprint $table) {
-      //      На модерации
+            //      На модерации
             $table->boolean('moderate')->default(true)->after('name');
         });
     }

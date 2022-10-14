@@ -88,7 +88,7 @@ class RoomObserver
      */
     public function restored(Room $room): void
     {
-    //
+        //
     }
 
     /**
@@ -99,7 +99,7 @@ class RoomObserver
      */
     public function forceDeleted(Room $room): void
     {
-    //
+        //
     }
 
     /**

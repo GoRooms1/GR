@@ -28,7 +28,7 @@ class BookingController extends Controller
      */
     public function create()
     {
-    //
+        //
     }
 
     /**
@@ -39,7 +39,7 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-    //
+        //
     }
 
     /**
@@ -65,7 +65,7 @@ class BookingController extends Controller
      */
     public function edit($id)
     {
-    //
+        //
     }
 
     /**
@@ -77,7 +77,7 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
-    //
+        //
     }
 
     /**
@@ -88,6 +88,6 @@ class BookingController extends Controller
      */
     public function destroy($id)
     {
-    //
+        //
     }
 }

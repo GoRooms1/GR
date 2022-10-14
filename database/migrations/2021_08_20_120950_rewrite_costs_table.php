@@ -69,11 +69,11 @@ class RewriteCostsTable extends Migration
             if ($cost->description && $cost->value && $cost->model_type === 'App\Models\Room') {
                 $w = $cost->description;
                 if (0 === strpos($w, 'от')) {
-  //      от ..
+                    //      от ..
                     $start = substr(explode(' ', $w)[1], 0, strpos(explode(' ', $w)[1], '-'));
                     $end = null;
                 } elseif (0 === strpos($w, 'с')) {
-  //      с .. до ..
+                    //      с .. до ..
                     $end = explode(':', explode(' ', $w)[3])[0];
                     $start = explode(':', explode(' ', $w)[1])[0];
                 }

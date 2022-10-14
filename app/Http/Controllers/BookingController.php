@@ -37,7 +37,7 @@ class BookingController extends Controller
      */
     public function index(): Response
     {
-    //
+        //
     }
 
     /**
@@ -47,7 +47,7 @@ class BookingController extends Controller
      */
     public function create(): Response
     {
-    //
+        //
     }
 
     /**
@@ -58,7 +58,7 @@ class BookingController extends Controller
      */
     public function store(Request $request): Response
     {
-    //
+        //
     }
 
     /**
@@ -69,7 +69,7 @@ class BookingController extends Controller
      */
     public function show(Booking $booking): Response
     {
-    //
+        //
     }
 
     /**
@@ -80,7 +80,7 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking): Response
     {
-    //
+        //
     }
 
     /**
@@ -92,7 +92,7 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking): Response
     {
-    //
+        //
     }
 
     /**
@@ -103,6 +103,6 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking): Response
     {
-    //
+        //
     }
 }
