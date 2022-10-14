@@ -66,7 +66,7 @@
                   }))
                   @foreach ($hotels_type as $type)
                     <option value="{{ $type->id }}"
-                            @if(isset($request) && optional($request)->get('hotel_type', -1) == $type->id) selected @endif>{{ $type->name }}</option>
+                            @if(isset($request) && $request?->get('hotel_type', -1) == $type->id) selected @endif>{{ $type->name }}</option>
                   @endforeach
                 </select>
               </div>
@@ -107,23 +107,23 @@
                     <ul class="advanced-search-prices-list">
                       <li class="advanced-search-prices-item">
                         @php($value = $type.'.lte.'.Settings::option($type.'_cost_small'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-1" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, optional($request)->get('cost')) >
+                        <input id="advanced-search-prices-{{ $loop->index }}-1" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, $request?->get('cost')) >
                         <label for="advanced-search-prices-{{ $loop->index }}-1" class="checkbox-label checkbox-label-orange">до {{ Settings::option($type.'_cost_small') }} р.</label>
                       </li>
                       <li class="advanced-search-prices-item">
                         @php($value = $type.'.between.'.Settings::option($type.'_cost_small').'-'.Settings::option($type.'_cost_medium'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-2" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, optional($request)->get('cost')) >
+                        <input id="advanced-search-prices-{{ $loop->index }}-2" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, $request?->get('cost')) >
                         <label for="advanced-search-prices-{{ $loop->index }}-2" class="checkbox-label checkbox-label-orange">{{ Settings::option($type.'_cost_small') }} р.- {{ Settings::option($type.'_cost_medium') }} р</label>
                       </li>
                       <li class="advanced-search-prices-item">
                         @php($value = $type.'.between.'.Settings::option($type.'_cost_medium').'-'.Settings::option($type.'_cost_low'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-3" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, optional($request)->get('cost')) >
+                        <input id="advanced-search-prices-{{ $loop->index }}-3" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, $request?->get('cost')) >
                         <label for="advanced-search-prices-{{ $loop->index }}-3" class="checkbox-label checkbox-label-orange">{{ Settings::option($type.'_cost_medium') }} р. - {{ Settings::option($type.'_cost_low') }}
                           р</label>
                       </li>
                       <li class="advanced-search-prices-item">
                         @php($value = $type.'.gte.'.Settings::option($type.'_cost_low'))
-                        <input id="advanced-search-prices-{{ $loop->index }}-4" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, optional($request)->get('cost')) >
+                        <input id="advanced-search-prices-{{ $loop->index }}-4" name="cost" type="radio" class="checkbox" value="{{$value}}" @checked($value, $request?->get('cost')) >
                         <label for="advanced-search-prices-{{ $loop->index }}-4" class="checkbox-label checkbox-label-orange">от {{ Settings::option($type.'_cost_low') }} р.</label>
                       </li>
                     </ul>
@@ -142,7 +142,7 @@
           </div>
           <div class="advanced-search-filter-item">
             <input type="checkbox" id="advanced-search-filter-fire" class="checkbox" name="hot" value="1"
-                   @if(isset($request) && optional($request)->has('hot')) checked @endif
+                   @if(isset($request) && $request?->has('hot')) checked @endif
             />
             <label for="advanced-search-filter-fire"
                    class="search-filter-label search-filter-label-fire checkbox-label checkbox-label-light">Горящие

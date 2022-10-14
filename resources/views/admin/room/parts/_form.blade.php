@@ -43,7 +43,7 @@
             <option value="">Без категории</option>
             @foreach($hotel->categories AS $category)
                 <option value="{{ $category->id }}"
-                        @if ((isset($room) && optional($room)->category && $room->category->id === $category->id) || old('category_id') == $category->id)
+                        @if ((isset($room) && $room?->category && $room->category->id === $category->id) || old('category_id') == $category->id)
                 selected
                         @endif>{{$category->name}}</option>
             @endforeach

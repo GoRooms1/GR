@@ -55,7 +55,7 @@
                 <div class="col-lg-5 col-xxl-6 room-page-info">
                     <h1 class="room-name">Номер: {{ $room->name }}</h1>
                     <div class="room-page-info-in">
-                        <p class="room-type">{{ optional($room->category)->name  }}</p>
+                        <p class="room-type">{{ $room->category?->name  }}</p>
                         <p class="room-hotel-name"><a href="{{ route('hotels.show', $room->hotel) }}">Отель
                                 “{{ $room->hotel->name }}”</a></p>
                     </div>

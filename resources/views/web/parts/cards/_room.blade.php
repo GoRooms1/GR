@@ -21,11 +21,11 @@
             <div class="room-card-content">
                 <a href="{{ route('rooms.show', $room) }}" class="room-card-header">
                     <p class="room-card-title">Номер: {{ $room->name }}</p>
-                    <p class="room-card-type">{{ optional($room->category)->name }}</p>
+                    <p class="room-card-type">{{ $room->category?->name }}</p>
                 </a>
                 <a href="{{ route('hotels.show', $room->hotel) }}" class="room-card-name">Отель “{{ $room->hotel->name }}”</a>
                 <a href="{{ route('rooms.show', $room) }}" class="room-card-address-link">
-                    <p class="room-card-address">{{ optional($room->hotel->address)->value }}</p>
+                    <p class="room-card-address">{{ $room->hotel->address?->value }}</p>
                     <ul class="room-card-metro">
                         <li class="metro"><img src="/img/ico-Fmetro-green.svg" alt="">Измайловская - 950 м</li>
                         <li class="metro"><img src="/img/ico-metro-red.svg" alt="">Измайловская - 950 м</li>

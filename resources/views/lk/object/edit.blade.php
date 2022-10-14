@@ -684,7 +684,7 @@
     }
 
     function selectInit() {
-      let cities = {!! optional($hotel->address)->unitedCities() ?? [] !!};
+      let cities = {!! $hotel->address?->unitedCities() ?? [] !!};
       console.log(cities);
       let filters = []
       cities.forEach(c => {

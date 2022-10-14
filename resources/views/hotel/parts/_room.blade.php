@@ -87,7 +87,7 @@ use App\Models\Room;
             @else
               <p class="room-card-title">Номер: {{ $room->name }}</p>
             @endif
-            <p class="room-card-type">{{ optional($room->category)->name }}</p>
+            <p class="room-card-type">{{ $room->category?->name }}</p>
           @else
             <p class="room-card-title">Номер: {{ $room->category->name ?? '' }}</p>
             <p class="room-card-type">Доступно: {{ $room->category->value ?? '' }} номеров</p>

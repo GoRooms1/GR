@@ -13,7 +13,7 @@
         ({{ count($room->hotel->reviews) }})</p>
       <div class="rating-dropdown">
         <div class="rating-dropdown-in">
-          <p class="rating-dropdown-header">{{ round(optional($room->hotel->ratings)->avg('value'), 1) }} Превосходно
+          <p class="rating-dropdown-header">{{ round($room->hotel->ratings?->avg('value'), 1) }} Превосходно
             <span>({{ count($room->hotel->reviews) }})</span></p>
           <ul class="rating-dropdown-content">
             @foreach($rating_categories AS $category)
@@ -61,7 +61,7 @@
             @else
               <p class="room-card-title">Номер: {{ $room->name }}</p>
             @endif
-            <p class="room-card-type">{{ optional($room->category)->name }}</p>
+            <p class="room-card-type">{{ $room->category?->name }}</p>
           @else
             <p class="room-card-title">Номер: {{  $room->category->name ?? '' }}</p>
             <p class="room-card-type">Доступно: {{ $room->category->value ?? '' }} номеров</p>
