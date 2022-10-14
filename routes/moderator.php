@@ -7,6 +7,7 @@ use App\Http\Controllers\ObjectController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
+
 /*
  * Copyright (c) 2021.
  * This code is the property of the Fulliton developer.

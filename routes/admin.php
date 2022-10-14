@@ -13,14 +13,14 @@ use App\Http\Controllers\Admin\UnitedCityController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\FormController;
-use App\Http\Controllers\HotelController;
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HotelController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\MenuCostsController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\PeriodController;
 use Illuminate\Support\Facades\Route;
 
 /*

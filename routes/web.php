@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
@@ -10,6 +9,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Lk;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SearchController_V2;
 use App\Http\Controllers\SiteMapController;
 use Illuminate\Support\Facades\Auth;
