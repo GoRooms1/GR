@@ -10,13 +10,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class HotelFactory extends Factory
 {
     /**
-     * Название модели, соответствующей фабрике.
-     *
-     * @var string
-     */
-    protected $model = Hotel::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array
