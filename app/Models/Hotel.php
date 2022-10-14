@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\SeoData;
+use App\Parents\Model;
 use App\Traits\ClearValidated;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
@@ -10,7 +11,6 @@ use App\User;
 use Eloquent;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;

@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 

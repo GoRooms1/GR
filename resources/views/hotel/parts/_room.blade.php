@@ -33,7 +33,7 @@ use App\Models\Room;
         "petsAllowed": false,
         "tourBookingPage": "https://gorooms.ru/",
         "yearBuilt": 23,
-        "telephone": "{{ Settings::option('phone') }}",
+        "telephone": "{{ App\Settings::option('phone') }}",
         "address": {
             "@type": "PostalAddress",
             "addressCountry": "Россия",

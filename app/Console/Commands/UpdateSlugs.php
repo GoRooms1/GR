@@ -32,12 +32,7 @@ class UpdateSlugs extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function handle(): int
     {
         $address_fields = ['city',
             'street',
@@ -64,5 +59,7 @@ class UpdateSlugs extends Command
             ];
             \DB::table('address_slug')->updateOrInsert($item, $item);
         }
+
+        return 0;
     }
 }

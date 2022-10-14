@@ -388,7 +388,7 @@ class SearchController_V2 extends Controller
               .(isset($slugs['street']) ? ', ул. '.$slugs['street'] : '')
               .(isset($slugs['metro']) ? ', метро "'.$slugs['metro'].'"' : '');
         }
-        if (empty($title)) {
+        if (! $title) {
             $title = 'Результаты поиска';
         }
         $title .= "<span class=\"count\">($count)</span>";

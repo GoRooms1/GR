@@ -32,7 +32,7 @@
     <link itemprop="image" href="image">
     <meta itemprop="headline name" content="{{ $article->title }}">
     <meta itemprop="description" content="{{ $article->content }}">
-    <meta itemprop="author" content="{{ Settings::option('address') }}">
+    <meta itemprop="author" content="{{ App\Settings::option('address') }}">
     <meta itemprop="datePublished" datetime="{{ $article->created_at->format('Y-m-d') }}" content="{{ $article->created_at->format('Y-m-d') }}">
     <meta itemprop="dateModified" datetime="{{ $article->updated_at->format('Y-m-d') }}" content="{{ $article->updated_at->format('Y-m-d') }}">
     <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
@@ -40,7 +40,7 @@
             <img itemprop="url image" src="images/logo.png" alt="{{ $article->title }}" title="{{ $article->title }}" style="display:none;" />
         </div>
         <meta itemprop="name" content="gorooms.ru">
-        <meta itemprop="telephone" content="{{ Settings::option('phone') }}">
+        <meta itemprop="telephone" content="{{ App\Settings::option('phone') }}">
         <meta itemprop="address" content="Россия">
     </div>
     <p>{{ $article->title }}</p>

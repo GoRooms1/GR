@@ -34,12 +34,7 @@ class UpdateAddressesSlugs extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function handle(): int
     {
         $this->output->title('Update addresses slugs');
         $addresses = Address::all();
@@ -64,5 +59,7 @@ class UpdateAddressesSlugs extends Command
                 }
             }
         }
+
+        return 0;
     }
 }

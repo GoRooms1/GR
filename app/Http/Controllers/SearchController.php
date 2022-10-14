@@ -379,9 +379,8 @@ class SearchController extends Controller
         }
         $title .= "<span class=\"count\">($count)</span>";
 
-        if (is_null($hotel_type)) {
-            $desc_city_name = 'Отели ';
-        } else {
+        $desc_city_name = 'Отели ';
+        if (! is_null($hotel_type)) {
             switch ($hotel_type) {
                 case 1:
                     $desc_city_name = 'Отели ';
@@ -398,10 +397,9 @@ class SearchController extends Controller
             }
         }
 
+        $desc_city = '';
         if (! empty(@$queryAddress['city'])) {
             $desc_city = $desc_city_name.' в городе '.@$queryAddress['city'];
-        } else {
-            $desc_city = '';
         }
         if (! empty(@$queryAddress['city_area'])) {
             $desc_area = ' в '.@$queryAddress['city_area'];

@@ -2,25 +2,25 @@
 
 use App\Http\Controllers\Admin\AttributeCategoriesController;
 use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\CostTypeController;
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\HotelTypeController;
+use App\Http\Controllers\Admin\ImageController;
+use App\Http\Controllers\Admin\MenuCostsController;
 use App\Http\Controllers\Admin\ModeratorController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageDescriptionController;
 use App\Http\Controllers\Admin\PageDescriptionPageController;
 use App\Http\Controllers\Admin\RatingCategoryController;
 use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UnitedCityController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\FormController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\HotelController;
-use App\Http\Controllers\ImageController;
-use App\Http\Controllers\MenuCostsController;
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -24,7 +24,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Swift_TransportException;
 
 class StaffController extends Controller
 {
@@ -165,7 +164,7 @@ class StaffController extends Controller
 
         try {
             $user->notify(new CreateUserInHotel($user, $request->get('password'), $hotel));
-        } catch (Swift_TransportException $e) {
+        } catch (\DomainException $e) {
             return back()->with('success', 'Пользователь успешно создан')->with('error', 'Сообщение небыло отправлено');
         }
 
@@ -215,7 +214,7 @@ class StaffController extends Controller
 
         try {
             $user->notify(new UpdateRandomPasswordUser($user, $password));
-        } catch (Swift_TransportException $e) {
+        } catch (\DomainException $e) {
             return back()->with('success', 'Пароль был сброшен и отправлен на почту сотрудника')->with('error', 'Сообщение небыло отправлено');
         }
 

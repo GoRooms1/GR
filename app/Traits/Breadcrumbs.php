@@ -19,7 +19,7 @@ trait Breadcrumbs
         $crumbs = [];
 
         //На главной не показываем
-        if (! empty($urls)) {
+        if ($urls) {
             $return_url_with_desc = [];
             foreach ($urls as $url) {
                 if (empty($url)) {

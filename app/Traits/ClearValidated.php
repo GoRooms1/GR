@@ -15,7 +15,7 @@ trait ClearValidated
 {
     public static function getFillableData($data): array
     {
-        $selfClass = new static();
+        $selfClass = new self();
         $fillable = $selfClass->getFillable();
 
         if ($data instanceof Collection) {

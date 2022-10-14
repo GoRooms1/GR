@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
@@ -41,21 +40,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
-        $this->bootBuilderMacroses();
         $this->makeDirectives();
-    }
-
-    private function bootBuilderMacroses()
-    {
-        \Illuminate\Database\Query\Builder::macro('toRawSql', function () {
-            return array_reduce($this->getBindings(), function ($sql, $binding) {
-                return preg_replace('/\?/', is_numeric($binding) ? $binding : "'{$binding}'", $sql, 1);
-            }, $this->toSql());
-        });
-
-        Builder::macro('toRawSql', function () {
-            return $this->getQuery()->toRawSql();
-        });
     }
 
     private function makeDirectives()

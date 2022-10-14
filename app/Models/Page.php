@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;

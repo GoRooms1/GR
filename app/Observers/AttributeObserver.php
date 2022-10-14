@@ -27,8 +27,8 @@ class AttributeObserver
      */
     public function created(Attribute $attribute): void
     {
-        Cache::delete('hotels_attributes');
-        Cache::delete('rooms_attributes');
+        Cache::forget('hotels_attributes');
+        Cache::forget('rooms_attributes');
     }
 
     /**
@@ -41,8 +41,8 @@ class AttributeObserver
      */
     public function updated(Attribute $attribute): void
     {
-        Cache::delete('hotels_attributes');
-        Cache::delete('rooms_attributes');
+        Cache::forget('hotels_attributes');
+        Cache::forget('rooms_attributes');
     }
 
     /**
@@ -55,8 +55,8 @@ class AttributeObserver
      */
     public function deleting(Attribute $attribute): void
     {
-        Cache::delete('hotels_attributes');
-        Cache::delete('rooms_attributes');
+        Cache::forget('hotels_attributes');
+        Cache::forget('rooms_attributes');
     }
 
     /**
@@ -69,8 +69,8 @@ class AttributeObserver
      */
     public function deleted(Attribute $attribute): void
     {
-        Cache::delete('hotels_attributes');
-        Cache::delete('rooms_attributes');
+        Cache::forget('hotels_attributes');
+        Cache::forget('rooms_attributes');
     }
 
     /**
@@ -83,8 +83,8 @@ class AttributeObserver
      */
     public function restored(Attribute $attribute): void
     {
-        Cache::delete('hotels_attributes');
-        Cache::delete('rooms_attributes');
+        Cache::forget('hotels_attributes');
+        Cache::forget('rooms_attributes');
     }
 
     /**
@@ -97,7 +97,7 @@ class AttributeObserver
      */
     public function forceDeleted(Attribute $attribute): void
     {
-        Cache::delete('hotels_attributes');
-        Cache::delete('rooms_attributes');
+        Cache::forget('hotels_attributes');
+        Cache::forget('rooms_attributes');
     }
 }

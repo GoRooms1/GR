@@ -188,7 +188,7 @@ class Search extends Model
     public function getHotels()
     {
         $hotels = Hotel::with(['rooms', 'rooms.attrs', 'attrs', 'address']);
-
+        // @phpstan-ignore-next-line
         $hotels_id = $this->builder->select('hotels.id')->get()->pluck('id')->toArray();
         if ($this->searchable) {
             $hotels->whereIn('id', $hotels_id);

@@ -78,6 +78,7 @@ class FilterController extends Controller
         ]);
 
         $city = $request->get('city');
+        // @phpstan-ignore-next-line
         $count = Address::whereCity($city)
           ->whereNotNull('city_area')
           ->pluck('city_area')
@@ -202,7 +203,7 @@ class FilterController extends Controller
             $metros = $metros->values();
 
             $metros = $metros->all();
-
+            // @phpstan-ignore-next-line
             $hotels = $hotels->where('name', 'like', '%'.$q.'%')
               ->get()
               ->take(4);

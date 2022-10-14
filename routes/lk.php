@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\InstructionController;
-use App\Http\Controllers\ObjectController;
+use App\Http\Controllers\Lk\CategoryController;
+use App\Http\Controllers\Lk\InstructionController;
+use App\Http\Controllers\Lk\ObjectController;
+use App\Http\Controllers\Lk\StaffController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
 /*
