@@ -392,7 +392,7 @@ trait Filter
         ];
     }
 
-    private function costTypeTranslate($type): string
+    private function costTypeTranslate($type): string|int
     {
         $costType = CostType::where('slug', $type)->first();
         if ($costType) {

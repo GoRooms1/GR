@@ -22,7 +22,7 @@ class RatingCategoryController extends Controller
         return view('admin.ratings.create');
     }
 
-    public function store(Request $request): View
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string'],

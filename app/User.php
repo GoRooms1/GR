@@ -97,25 +97,10 @@ class User extends Authenticatable
      */
     public const POSITIONS_LANGUAGE = [self::POSITION_STAFF => 'STAFF', self::POSITION_GENERAL => 'GENERAL'];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['name', 'email', 'password', 'is_admin', 'phone', 'position', 'code', 'position', 'is_moderate'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = ['password', 'remember_token'];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = ['email_verified_at' => 'datetime', 'is_admin' => 'boolean', 'is_moderate' => 'boolean'];
 
     private string $info = '';

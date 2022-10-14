@@ -31,7 +31,7 @@ use Illuminate\Support\Str;
  * @property string|null                                               $description
  * @property string                                                    $phone
  * @property string|null                                               $phone_2
- * @property string                                                    $type_fond
+ * @property ?string                                                    $type_fond
  * @property int                                                       $user_id
  * @property Carbon|null                                               $created_at
  * @property Carbon|null                                               $updated_at
@@ -138,11 +138,6 @@ class Hotel extends Model
         self::CATEGORIES_TYPE,
     ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'description',
@@ -163,11 +158,6 @@ class Hotel extends Model
         'slug',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
     protected $hidden = ['email'];
 
     /**
@@ -177,11 +167,6 @@ class Hotel extends Model
      */
     protected $with = ['rooms', 'attrs', 'address', 'ratings', 'reviews', 'metros', 'images', 'image', 'type'];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'moderate' => 'boolean',
         'old_moderate' => 'boolean',
