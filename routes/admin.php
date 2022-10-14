@@ -1,5 +1,25 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributeCategoriesController;
+use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\CostTypeController;
+use App\Http\Controllers\Admin\HotelTypeController;
+use App\Http\Controllers\Admin\ModeratorController;
+use App\Http\Controllers\Admin\PageDescriptionController;
+use App\Http\Controllers\Admin\PageDescriptionPageController;
+use App\Http\Controllers\Admin\RatingCategoryController;
+use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\UnitedCityController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\MenuCostsController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PeriodController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,61 +28,61 @@ use Illuminate\Support\Facades\Route;
 | Admin routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', 'HomeController@index')->name('index');
+Route::get('/', [HomeController::class, 'index'])->name('index');
 
-Route::resource('hotels', 'HotelController');
-Route::resource('rooms', 'RoomController')->except('create');
-Route::get('/rooms/create/{hotel}', 'RoomController@create')->name('rooms.create');
+Route::resource('hotels', HotelController::class);
+Route::resource('rooms', RoomController::class)->except('create');
+Route::get('/rooms/create/{hotel}', [RoomController::class, 'create'])->name('rooms.create');
 
-Route::resource('attributes', 'AttributeController')->except(['show']);
+Route::resource('attributes', AttributeController::class)->except(['show']);
 
-Route::resource('attribute_categories', 'AttributeCategoriesController');
+Route::resource('attribute_categories', AttributeCategoriesController::class);
 
 Route::resource('hotels/{hotel?}/categories', 'CategoryController')->except('index');
-Route::resource('cost_types', 'CostTypeController')->except('show');
+Route::resource('cost_types', CostTypeController::class)->except('show');
 
-Route::resource('bookings', 'BookingController')->except('destroy', 'create', 'update', 'edit', 'store');
+Route::resource('bookings', BookingController::class)->except('destroy', 'create', 'update', 'edit', 'store');
 
-Route::resource('hotel_types', 'HotelTypeController')->except('show');
-Route::resource('ratings', 'RatingCategoryController')->except('show');
+Route::resource('hotel_types', HotelTypeController::class)->except('show');
+Route::resource('ratings', RatingCategoryController::class)->except('show');
 
-Route::resource('hotels/{hotel}/reviews', 'ReviewController');
-Route::resource('pages', 'PageController')->except('show');
-Route::resource('articles', 'ArticleController')->except('show');
+Route::resource('hotels/{hotel}/reviews', ReviewController::class);
+Route::resource('pages', PageController::class)->except('show');
+Route::resource('articles', ArticleController::class)->except('show');
 
-Route::get('settings', 'SettingsController@index')->name('settings.index');
-Route::get('settings/seo', 'SettingsController@seo')->name('settings.seo');
-Route::get('settings/seo/edit/{id}', 'SettingsController@seoEdit')->name('settings.seo.edit');
-Route::put('settings/seo/update/{id}', 'SettingsController@seoUpdate')->name('settings.seo.update');
-Route::post('settings', 'SettingsController@store')->name('settings.store');
-Route::post('settings/robot', 'SettingsController@storeRobot')->name('settings.robot_store');
+Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+Route::get('settings/seo', [SettingsController::class, 'seo'])->name('settings.seo');
+Route::get('settings/seo/edit/{id}', [SettingsController::class, 'seoEdit'])->name('settings.seo.edit');
+Route::put('settings/seo/update/{id}', [SettingsController::class, 'seoUpdate'])->name('settings.seo.update');
+Route::post('settings', [SettingsController::class, 'store'])->name('settings.store');
+Route::post('settings/robot', [SettingsController::class, 'storeRobot'])->name('settings.robot_store');
 
 Route::prefix('/settings')->name('settings.')->group(function () {
     Route::prefix('/menu-costs')->name('menu-costs.')->group(function () {
-        Route::get('/', 'MenuCostsController@index')->name('index');
-        Route::post('/save', 'MenuCostsController@save')->name('save');
+        Route::get('/', [MenuCostsController::class, 'index'])->name('index');
+        Route::post('/save', [MenuCostsController::class, 'save'])->name('save');
     });
 });
 
-Route::resource('forms', 'FormController')->only('index', 'show');
+Route::resource('forms', FormController::class)->only('index', 'show');
 
-Route::resource('descriptions', 'PageDescriptionController')->except('show');
+Route::resource('descriptions', PageDescriptionController::class)->except('show');
 
-Route::resource('descriptions-page', 'PageDescriptionPageController')->except('show');
+Route::resource('descriptions-page', PageDescriptionPageController::class)->except('show');
 
 Route::prefix('api')->group(function () {
-    Route::delete('/image/{image}', 'ImageController@delete')->name('api.image.delete');
+    Route::delete('/image/{image}', [ImageController::class, 'delete'])->name('api.image.delete');
 });
 
-Route::match(['GET', 'POST'], '/upload', 'ImageController@upload');
-Route::match(['GET', 'POST'], '/upload_for/', 'ImageController@uploadFor');
+Route::match(['GET', 'POST'], '/upload', [ImageController::class, 'upload']);
+Route::match(['GET', 'POST'], '/upload_for/', [ImageController::class, 'uploadFor']);
 
-Route::get('/clear-cache', 'SettingsController@clearCache')->name('clear-cache');
+Route::get('/clear-cache', [SettingsController::class, 'clearCache'])->name('clear-cache');
 
 Route::post('/periods/updateByJson', [PeriodController::class, 'updateByJson'])->name('periods.update.json');
 
-Route::resource('moderators', 'ModeratorController');
+Route::resource('moderators', ModeratorController::class);
 
 Route::resource('instructions', 'InstructionController');
 
-Route::resource('united_cities', 'UnitedCityController');
+Route::resource('united_cities', UnitedCityController::class);
