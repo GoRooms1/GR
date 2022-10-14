@@ -66,7 +66,7 @@ class RewriteCostsTable extends Migration
         $costs = DB::table('costs_old')->get();
 
         foreach ($costs as $cost) {
-            if ($cost->description && $cost->value && $cost->model_type === 'App\Models\Room') {
+            if ($cost->description && $cost->value && $cost->model_type === \App\Models\Room::class) {
                 $w = $cost->description;
                 if (0 === strpos($w, 'от')) {
                     //      от ..
