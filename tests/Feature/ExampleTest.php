@@ -4,13 +4,19 @@ namespace Tests\Feature;
 
 use App\Models\Address;
 use App\Models\Hotel;
+use App\Models\HotelType;
 use App\Models\PageDescription;
 use App\Models\Room;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use DatabaseTransactions;
+
     /**
      * A basic test example.
      *
@@ -18,16 +24,22 @@ class ExampleTest extends TestCase
      */
     public function testHotelGenerateSlug(): void
     {
-        $hotel = Factory::factoryForModel(Hotel::class)->create();
+        User::factory()->createOne();
+        HotelType::factory()->createOne();
+        /** @var Hotel $hotel */
+        $hotel = Hotel::factory()->createOne();
         $this->assertModelExists($hotel);
     }
 
     public function testGenerateSeoForAddress(): void
     {
-        $hotel = Hotel::orderBy('id', 'asc')->first();
+        User::factory()->createOne();
+        HotelType::factory()->createOne();
+        /** @var Hotel[] $hotels */
+        $hotels = Hotel::factory()->count(3)->create();
         $countOldPageDescription = PageDescription::count();
-        $hotel->saveAddress('г Красноярск, ул Горького, д 24 кв 25');
-        $hotel->save();
+        $hotels[0]->saveAddress('г Красноярск, ул Горького, д 24 кв 25');
+        $hotels[0]->save();
 
         $countNewPageDescription = PageDescription::count();
 
@@ -36,6 +48,10 @@ class ExampleTest extends TestCase
 
     public function testRemoveAddressAndHotelsSeo(): void
     {
+        User::factory()->createOne();
+        HotelType::factory()->createOne();
+        /** @var Hotel[] $hotels */
+        $hotels = Hotel::factory()->count(3)->create();
         $pgs = PageDescription::where('model_type', Hotel::class)->get();
         foreach ($pgs as $pg) {
             if (! Hotel::withoutGlobalScope('moderation')->where('id', $pg->model_id)->exists()) {

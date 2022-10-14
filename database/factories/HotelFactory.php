@@ -2,17 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Models\Hotel;
 use App\Models\HotelType;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 
 class HotelFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
+    protected $model = Hotel::class;
+
     public function definition(): array
     {
         return [

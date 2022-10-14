@@ -11,6 +11,7 @@ use App\User;
 use Eloquent;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -106,6 +107,7 @@ class Hotel extends Model
     use UseImages;
     use ClearValidated;
     use CreatedAtOrdered;
+    use HasFactory;
 
     /**
      * Page
