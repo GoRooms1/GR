@@ -20,7 +20,8 @@
     "laravel/framework": "^8.0",
     "laravel/tinker": "^2.0",
     "laravel/ui": "^3.0",
-    "league/glide-laravel": "^1.0"
+    "league/glide-laravel": "^1.0",
+    "spatie/laravel-ray": "^1.31"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.4",
