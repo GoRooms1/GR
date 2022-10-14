@@ -7,122 +7,121 @@
 
 namespace App\Observers;
 
-use Route;
-use Illuminate\Support\Facades\Cache;
-use App\Models\Room;
 use App\Models\Hotel;
+use App\Models\Room;
+use Illuminate\Support\Facades\Cache;
+use Route;
 
 class RoomObserver
 {
+    /**
+     * Handle the room "created" event.
+     * Сбрасывает о том что недавно выбрали тип.
+     * При удалении всех комнат будет выбор типа фонда в отеле
+     * При создании самой первой комнаты, отель падает на модерацию
+     *
+     * @param  Room  $room
+     * @return void
+     */
+    public function created(Room $room): void
+    {
+        Cache::flush();
+        $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
 
-  /**
-   * Handle the room "created" event.
-   * Сбрасывает о том что недавно выбрали тип.
-   * При удалении всех комнат будет выбор типа фонда в отеле
-   * При создании самой первой комнаты, отель падает на модерацию
-   *
-   * @param Room $room
-   * @return void
-   */
-  public function created(Room $room): void
-  {
-    Cache::flush();
-    $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
+        // При создании одной комнаты запрет отельеру редактировать поля (Один раз после самой первой созданной комнаты)
+        if ($hotel->old_moderate === false) {
+            $hotel->old_moderate = true;
+        }
 
-    // При создании одной комнаты запрет отельеру редактировать поля (Один раз после самой первой созданной комнаты)
-    if ($hotel->old_moderate === false) {
-      $hotel->old_moderate = true;
+        // При создании комнаты, можно будет заново выбирать тип отеля ко комнатам
+        if ($hotel->checked_type_fond === true) {
+            $hotel->checked_type_fond = false;
+        }
+        $hotel->save();
+
+        $this->moderate_hotel($hotel);
     }
 
-    // При создании комнаты, можно будет заново выбирать тип отеля ко комнатам
-    if ($hotel->checked_type_fond === true) {
-      $hotel->checked_type_fond = false;
+    /**
+     * Handle the room "updated" event.
+     *
+     * @param  Room  $room
+     * @return void
+     */
+    public function updated(Room $room): void
+    {
+        Cache::flush();
+        $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
+        if ($hotel) {
+            $this->moderate_hotel($hotel);
+        }
     }
-    $hotel->save();
 
-      $this->moderate_hotel($hotel);
-  }
+    /**
+     * Handle the room "deleted" event.
+     *
+     * @param  Room  $room
+     * @return void
+     */
+    public function deleted(Room $room): void
+    {
+        Cache::flush();
+        $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
+        if ($hotel->rooms()->count() === 0) {
+            $hotel->type_fond = null;
+            $hotel->checked_type_fond = false;
 
-  /**
-   * Handle the room "updated" event.
-   *
-   * @param Room $room
-   * @return void
-   */
-  public function updated(Room $room): void
-  {
-    Cache::flush();
-    $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
-    if ($hotel) {
-      $this->moderate_hotel($hotel);
-    }
-  }
-
-  /**
-   * Handle the room "deleted" event.
-   *
-   * @param Room $room
-   * @return void
-   */
-  public function deleted(Room $room): void
-  {
-    Cache::flush();
-    $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
-    if ($hotel->rooms()->count() === 0) {
-      $hotel->type_fond = null;
-      $hotel->checked_type_fond = false;
-
-      $hotel->categories()->delete();
-      $hotel->save();
-    }
+            $hotel->categories()->delete();
+            $hotel->save();
+        }
 
 //    if (Route::currentRouteNamed('lk.*')) {
-      $this->moderate_hotel($hotel);
+        $this->moderate_hotel($hotel);
 //    }
-  }
-
-  /**
-   * Handle the room "restored" event.
-   *
-   * @param Room $room
-   * @return void
-   */
-  public function restored(Room $room): void
-  {
-    //
-  }
-
-  /**
-   * Handle the room "force deleted" event.
-   *
-   * @param Room $room
-   * @return void
-   */
-  public function forceDeleted(Room $room): void
-  {
-    //
-  }
-
-  /**
-   * Set show or hide hotel if zero rooms in publish
-   *
-   * @param Hotel $hotel
-   */
-  private function moderate_hotel (Hotel $hotel): void
-  {
-    $roomsModeration = Room::withoutGlobalScope('moderation')
-      ->where('moderate', false)
-      ->whereHas('hotel', function ($q) use ($hotel) {
-        $q->where('id', $hotel->id);
-      })->count();
-
-    // Если все комнаты на модерацию упали, то отель на модерацию
-    if ($roomsModeration > 0) {
-      $hotel->show = true;
-    } else {
-      $hotel->show = false;
     }
 
-    $hotel->save();
-  }
+    /**
+     * Handle the room "restored" event.
+     *
+     * @param  Room  $room
+     * @return void
+     */
+    public function restored(Room $room): void
+    {
+    //
+    }
+
+    /**
+     * Handle the room "force deleted" event.
+     *
+     * @param  Room  $room
+     * @return void
+     */
+    public function forceDeleted(Room $room): void
+    {
+    //
+    }
+
+    /**
+     * Set show or hide hotel if zero rooms in publish
+     *
+     * @param  Hotel  $hotel
+     */
+    private function moderate_hotel(Hotel $hotel): void
+    {
+        $roomsModeration = Room::withoutGlobalScope('moderation')
+          ->where('moderate', false)
+          ->whereHas('hotel', function ($q) use ($hotel) {
+              $q->where('id', $hotel->id);
+          })->count();
+
+        // Если все комнаты на модерацию упали, то отель на модерацию
+        if ($roomsModeration > 0) {
+            $hotel->show = true;
+        } else {
+            $hotel->show = false;
+        }
+
+        $hotel->save();
+    }
 }

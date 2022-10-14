@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Eloquent;
-use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Category
@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Hotel    $hotel
  * @property-read Room     $rooms
  * @property-read int|null $rooms_count
+ *
  * @method static Builder|Category newModelQuery()
  * @method static Builder|Category newQuery()
  * @method static Builder|Category query()
@@ -37,36 +38,36 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Category extends Model
 {
-  use CreatedAtOrdered;
+    use CreatedAtOrdered;
 
-  /**
-   * rows
-   *
-   * @var string[]
-   */
-  protected $fillable = [
-    'name',
-    'description',
-    'hotel_id',
-  ];
+    /**
+     * rows
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'hotel_id',
+    ];
 
-  /**
-   * return Hotel
-   *
-   * @return BelongsTo
-   */
-  public function hotel(): BelongsTo
-  {
-    return $this->belongsTo(Hotel::class);
-  }
+    /**
+     * return Hotel
+     *
+     * @return BelongsTo
+     */
+    public function hotel(): BelongsTo
+    {
+        return $this->belongsTo(Hotel::class);
+    }
 
-  /**
-   * return Rooms
-   *
-   * @return HasMany
-   */
-  public function rooms(): HasMany
-  {
-    return $this->hasMany(Room::class);
-  }
+    /**
+     * return Rooms
+     *
+     * @return HasMany
+     */
+    public function rooms(): HasMany
+    {
+        return $this->hasMany(Room::class);
+    }
 }

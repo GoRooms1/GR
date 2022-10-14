@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use DB;
-use Str;
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Str;
 
 /**
  * App\Models\Metro
@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Hotel  $hotel
+ *
  * @method static Builder|Metro newModelQuery()
  * @method static Builder|Metro newQuery()
  * @method static Builder|Metro query()
@@ -39,74 +40,74 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Metro extends Model
 {
-  public const COLORS = [
-    'green' => 'Зелёный',
-    'red' => 'Красный',
-    'yellow' => 'Жёлтый',
-    'blue' => 'Синий',
-    'light-blue' => 'Голубой',
-    'brown' => 'Коричневый',
-    'orange' => 'Оранжевая',
-    'purple' => 'Фиолетовая',
-    'grey' => 'Серая',
-    'lime' => 'Салатовая',
-    'teal' => 'Бирюзовая',
-    'blue-gray' => 'Серо-голубая',
-  ];
+    public const COLORS = [
+        'green' => 'Зелёный',
+        'red' => 'Красный',
+        'yellow' => 'Жёлтый',
+        'blue' => 'Синий',
+        'light-blue' => 'Голубой',
+        'brown' => 'Коричневый',
+        'orange' => 'Оранжевая',
+        'purple' => 'Фиолетовая',
+        'grey' => 'Серая',
+        'lime' => 'Салатовая',
+        'teal' => 'Бирюзовая',
+        'blue-gray' => 'Серо-голубая',
+    ];
 
-  public const ARRAY_COLORS = [
-    'green',
-    'red',
-    'yellow',
-    'blue',
-    'light-blue',
-    'brown',
-    'orange',
-    'purple',
-    'grey',
-    'lime',
-    'teal',
-    'blue-gray',
-  ];
+    public const ARRAY_COLORS = [
+        'green',
+        'red',
+        'yellow',
+        'blue',
+        'light-blue',
+        'brown',
+        'orange',
+        'purple',
+        'grey',
+        'lime',
+        'teal',
+        'blue-gray',
+    ];
 
-  public const COLORS_HEX = [
-    'green' => '00FF00',
-    'red' => 'FF0000',
-    'yellow' => 'FFFF00',
-    'blue' => '0000FF',
-    'light-blue' => '80A6FF',
-    'brown' => '964b00',
-    'orange' => 'ffa500',
-    'purple' => '8b00ff',
-    'grey' => '808080',
-    'lime' => '7fff00',
-    'teal' => '30d5c8',
-    'blue-gray' => '77a1b5',
-  ];
+    public const COLORS_HEX = [
+        'green' => '00FF00',
+        'red' => 'FF0000',
+        'yellow' => 'FFFF00',
+        'blue' => '0000FF',
+        'light-blue' => '80A6FF',
+        'brown' => '964b00',
+        'orange' => 'ffa500',
+        'purple' => '8b00ff',
+        'grey' => '808080',
+        'lime' => '7fff00',
+        'teal' => '30d5c8',
+        'blue-gray' => '77a1b5',
+    ];
 
-  protected $fillable = [
-    'color',
-    'name',
-    'api_value',
-    'distance',
-    'hotel_id',
-    'custom',
-  ];
+    protected $fillable = [
+        'color',
+        'name',
+        'api_value',
+        'distance',
+        'hotel_id',
+        'custom',
+    ];
 
-  protected $casts = [
-    'custom' => 'boolean',
-  ];
+    protected $casts = [
+        'custom' => 'boolean',
+    ];
 
-  public static function generateSlug(Metro $metro): void
-  {
-    DB::table('address_slug')->updateOrInsert(['address' => $metro->name], [
-      'address' => $metro->name,
-      'slug' => Str::slug($metro->name),
-    ]);
-  }
+    public static function generateSlug(Metro $metro): void
+    {
+        DB::table('address_slug')->updateOrInsert(['address' => $metro->name], [
+            'address' => $metro->name,
+            'slug' => Str::slug($metro->name),
+        ]);
+    }
 
-  public function hotel(): BelongsTo
-  {
-    return $this->belongsTo(Hotel::class);
-  }
+    public function hotel(): BelongsTo
+    {
+        return $this->belongsTo(Hotel::class);
+    }
 }

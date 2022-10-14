@@ -15,11 +15,13 @@ class AddressCollection extends ResourceCollection
     public function toArray($request)
     {
         $address = $this->collection;
+
         return ['data' => $address];
         $areas = explode('-', $address->city_area);
         $area = '';
-        foreach ($areas AS $area_prefix)
+        foreach ($areas as $area_prefix) {
             $area .= mb_substr($area_prefix, 0, 1);
+        }
         $area = mb_strtoupper($area).'АО';
 
         return [

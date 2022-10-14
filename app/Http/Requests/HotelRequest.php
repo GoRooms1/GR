@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Metro;
 use Illuminate\Foundation\Http\FormRequest;
 
 class HotelRequest extends FormRequest
@@ -25,6 +24,7 @@ class HotelRequest extends FormRequest
     public function rules()
     {
         $id = $this->has('hotel') ? $this->get('hotel') : 0;
+
         return [
             'name' => ['required', 'max:255', 'string'],
             'phone' => ['required', 'string'],

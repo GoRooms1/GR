@@ -5,63 +5,62 @@
  *  Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 use App\Models\Image;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddOrderImageTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('images', function (Blueprint $table) {
-      $table->dropColumn(['default']);
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('images', function (Blueprint $table) {
+            $table->dropColumn(['default']);
 
-      $table->tinyInteger('order')->nullable();
-    });
+            $table->tinyInteger('order')->nullable();
+        });
 
+        $hotels = \App\Models\Hotel::withoutGlobalScope('moderation')->get();
+        foreach ($hotels as $h) {
+            $i = 1;
+            $images = $h->images()->each(function (Image $image) use (&$i) {
+                $image->order = $i;
+                $image->save();
 
-    $hotels = \App\Models\Hotel::withoutGlobalScope('moderation')->get();
-    foreach ($hotels as $h) {
-      $i = 1;
-      $images = $h->images()->each(function (Image $image) use (&$i) {
-        $image->order = $i;
-        $image->save();
+                $i++;
+            });
+        }
 
-        $i++;
-      });
+        $rooms = \App\Models\Room::withoutGlobalScope('moderation')->get();
+        foreach ($rooms as $r) {
+            $i = 1;
+            $images = $r->images()->each(function (Image $image) use (&$i) {
+                $image->order = $i;
+                $image->save();
+
+                $i++;
+            });
+        }
+
+        Image::whereNull('order')->delete();
     }
 
-    $rooms = \App\Models\Room::withoutGlobalScope('moderation')->get();
-    foreach ($rooms as $r) {
-      $i = 1;
-      $images = $r->images()->each(function (Image $image) use (&$i) {
-        $image->order = $i;
-        $image->save();
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('images', function (Blueprint $table) {
+            $table->boolean('default')->default(0);
 
-        $i++;
-      });
+            $table->dropColumn(['order']);
+        });
     }
-
-    Image::whereNull('order')->delete();
-  }
-
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('images', function (Blueprint $table) {
-      $table->boolean('default')->default(0);
-
-      $table->dropColumn(['order']);
-    });
-  }
 }

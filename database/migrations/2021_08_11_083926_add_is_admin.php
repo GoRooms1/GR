@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddIsAdmin extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('users', function (Blueprint $table) {
-      $table->boolean('is_admin')->default(false)->after('email');
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('is_admin')->default(false)->after('email');
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('users', function (Blueprint $table) {
-      $table->dropColumn('is_admin');
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('is_admin');
+        });
+    }
 }

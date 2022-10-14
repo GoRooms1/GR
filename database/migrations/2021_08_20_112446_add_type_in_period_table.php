@@ -14,31 +14,31 @@ use Illuminate\Support\Facades\Schema;
  */
 class AddTypeInPeriodTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('periods', function (Blueprint $table) {
-      $table->foreignId('cost_type_id')
-        ->after('end_at')
-        ->constrained('cost_types')
-        ->onUpdate('cascade')
-        ->onDelete('cascade');
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('periods', function (Blueprint $table) {
+            $table->foreignId('cost_type_id')
+              ->after('end_at')
+              ->constrained('cost_types')
+              ->onUpdate('cascade')
+              ->onDelete('cascade');
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('periods', function (Blueprint $table) {
-      $table->dropForeign(['cost_type_id']);
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('periods', function (Blueprint $table) {
+            $table->dropForeign(['cost_type_id']);
+        });
+    }
 }

@@ -8,9 +8,9 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Booking
@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null    $hours_count
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Booking newModelQuery()
  * @method static Builder|Booking newQuery()
  * @method static Builder|Booking query()
@@ -41,45 +42,50 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Booking whereToDate($value)
  * @method static Builder|Booking whereUpdatedAt($value)
  * @mixin Eloquent
+ *
  * @property int|null $room_id
  * @property-read \App\Models\Room|null $room
+ *
  * @method static Builder|Booking whereRoomId($value)
+ *
  * @property bool $on_show
+ *
  * @method static Builder|Booking whereOnShow($value)
  */
 class Booking extends Model
 {
-  protected $fillable = [
-    'id',
-    'book_number',
-    'client_fio',
-    'client_phone',
-    'book_type',
-    'book_comment',
-    'from-date',
-    'to-date',
-    'hours_count',
-    'on_show'
-  ];
+    protected $fillable = [
+        'id',
+        'book_number',
+        'client_fio',
+        'client_phone',
+        'book_type',
+        'book_comment',
+        'from-date',
+        'to-date',
+        'hours_count',
+        'on_show',
+    ];
 
-  protected $casts = [
-    'on_show' => 'boolean',
-    'from-date' => 'datetime',
-    'to-date' => 'datetime'
-  ];
+    protected $casts = [
+        'on_show' => 'boolean',
+        'from-date' => 'datetime',
+        'to-date' => 'datetime',
+    ];
 
-  public function room (): \Illuminate\Database\Eloquent\Relations\BelongsTo
-  {
-    return $this->belongsTo(Room::class);
-  }
-  public function GetTypeAttribute ()
-  {
-    if ($this->book_type === 'hour') {
-      return 'На час';
-    } else if ($this->book_type === 'day') {
-      return 'На сутки';
-    } else if ($this->book_type === 'night') {
-    return 'На ночь';
-  }
-  }
+    public function room(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function GetTypeAttribute()
+    {
+        if ($this->book_type === 'hour') {
+            return 'На час';
+        } elseif ($this->book_type === 'day') {
+            return 'На сутки';
+        } elseif ($this->book_type === 'night') {
+            return 'На ночь';
+        }
+    }
 }

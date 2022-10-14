@@ -6,71 +6,73 @@
  */
 
 use App\Models\Room;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddNewColumnsInRoomTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('rooms', function (Blueprint $table) {
-      $table->integer('order')
-        ->nullable()
-        ->after('name');
-      $table->integer('number')
-        ->nullable()
-        ->after('name');
-      $table->foreignId('category_id')
-        ->nullable()
-        ->after('order')
-        ->constrained()
-        ->onUpdate('cascade')
-        ->onDelete('SET NULL');
-      $table->string('name_temp')
-        ->nullable();
-    });
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->integer('order')
+              ->nullable()
+              ->after('name');
+            $table->integer('number')
+              ->nullable()
+              ->after('name');
+            $table->foreignId('category_id')
+              ->nullable()
+              ->after('order')
+              ->constrained()
+              ->onUpdate('cascade')
+              ->onDelete('SET NULL');
+            $table->string('name_temp')
+              ->nullable();
+        });
 
-    Room::query()->get()->map(function (Room $room) {
-      $room->name_temp = $room->name;
-      $room->save();
-      return $room;
-    });
+        Room::query()->get()->map(function (Room $room) {
+            $room->name_temp = $room->name;
+            $room->save();
 
-    Schema::table('rooms', function (Blueprint $table) {
-      $table->dropColumn(['name']);
-    });
+            return $room;
+        });
 
-    Schema::table('rooms', function (Blueprint $table) {
-      $table->string('name')->nullable()->after('id');
-    });
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->dropColumn(['name']);
+        });
 
-    Room::query()->get()->map(function (Room $room) {
-      $room->name = $room->name_temp;
-      $room->save();
-      return $room;
-    });
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->string('name')->nullable()->after('id');
+        });
 
-    Schema::table('rooms', function (Blueprint $table) {
-      $table->dropColumn(['name_temp']);
-    });
-  }
+        Room::query()->get()->map(function (Room $room) {
+            $room->name = $room->name_temp;
+            $room->save();
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('rooms', function (Blueprint $table) {
-      $table->dropForeign(['category_id']);
-      $table->dropColumn(['order', 'category_id']);
-    });
-  }
+            return $room;
+        });
+
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->dropColumn(['name_temp']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+            $table->dropColumn(['order', 'category_id']);
+        });
+    }
 }

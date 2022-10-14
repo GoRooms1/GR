@@ -6,31 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 class AddRoomInBookingTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up ()
-  {
-    Schema::table('bookings', function (Blueprint $table) {
-      $table->foreignId('room_id')
-        ->nullable()
-        ->constrained('rooms')
-        ->cascadeOnDelete()
-        ->cascadeOnUpdate();
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->foreignId('room_id')
+              ->nullable()
+              ->constrained('rooms')
+              ->cascadeOnDelete()
+              ->cascadeOnUpdate();
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down ()
-  {
-    Schema::table('bookings', function (Blueprint $table) {
-      $table->dropColumn(['room_id']);
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->dropColumn(['room_id']);
+        });
+    }
 }

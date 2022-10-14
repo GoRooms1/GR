@@ -4,10 +4,10 @@ namespace App;
 
 use Cache;
 use Eloquent;
-use JsonException;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use JsonException;
 
 /**
  * App\Settings
@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string      $value
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Settings newModelQuery()
  * @method static Builder|Settings newQuery()
  * @method static Builder|Settings query()
@@ -26,71 +27,66 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Settings whereUpdatedAt($value)
  * @method static Builder|Settings whereValue($value)
  * @mixin Eloquent
+ *
  * @property string|null $header
+ *
  * @method static Builder|Settings whereHeader($value)
  */
 class Settings extends Model
 {
+    protected $fillable = ['option', 'value', 'header'];
 
-  protected $fillable = ['option', 'value', 'header'];
+    public static function header(string $option = null, $default = null)
+    {
+        $setting = Cache::store('file')->rememberForever('setting.'.$option, function () use ($option) {
+            return Settings::where('option', $option)->first();
+        });
+        if ($setting) {
+            try {
+                return json_decode($setting->header, true, 512, JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                return $setting->header;
+            }
+        }
 
-  public static function header (string $option = null, $default = null)
-  {
-    $setting = Cache::store('file')->rememberForever('setting.' . $option, function () use ($option) {
-      return Settings::where('option', $option)->first();
-    });
-    if ($setting) {
-      try {
-        return json_decode($setting->header, true, 512, JSON_THROW_ON_ERROR);
-      } catch (JsonException $e) {
-        return $setting->header;
-      }
+        return $default;
     }
 
-    return $default;
-  }
+    private static function is_json($data): bool
+    {
+        try {
+            json_decode($data, true, 512, JSON_THROW_ON_ERROR);
 
-  /**
-   */
-  private static function is_json ($data): bool
-  {
-    try {
-      json_decode($data, true, 512, JSON_THROW_ON_ERROR);
-
-      return false;
-    } catch (JsonException $e) {
-      return true;
-    }
+            return false;
+        } catch (JsonException $e) {
+            return true;
+        }
 
     //    return (json_last_error() === JSON_ERROR_NONE);
-  }
-
-  /**
-   */
-  public function __call ($method, $parameters)
-  {
-    if ($method === 'option') {
-      return static::option(...$parameters);
     }
 
-    return parent::__call($method, $parameters);
-  }
+    public function __call($method, $parameters)
+    {
+        if ($method === 'option') {
+            return static::option(...$parameters);
+        }
 
-  /**
-   */
-  public static function option (string $option = null, $default = null)
-  {
-    $setting = Cache::store('file')->rememberForever('setting.' . $option, function () use ($option) {
-      return Settings::where('option', $option)->first();
-    });
-    if ($setting) {
-      try {
-        return json_decode($setting->value, true, 512, JSON_THROW_ON_ERROR);
-      } catch (JsonException $e) {
-        return $setting->value;
-      }
+        return parent::__call($method, $parameters);
     }
 
-    return $default;
-  }
+    public static function option(string $option = null, $default = null)
+    {
+        $setting = Cache::store('file')->rememberForever('setting.'.$option, function () use ($option) {
+            return Settings::where('option', $option)->first();
+        });
+        if ($setting) {
+            try {
+                return json_decode($setting->value, true, 512, JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                return $setting->value;
+            }
+        }
+
+        return $default;
+    }
 }

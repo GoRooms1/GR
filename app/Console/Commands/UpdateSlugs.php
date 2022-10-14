@@ -43,24 +43,24 @@ class UpdateSlugs extends Command
             'street',
             'city_district',
             'city_area',
-            'street_with_type'];
+            'street_with_type', ];
         $addresses = Address::query()
             ->select($address_fields)->get();
         $rows = [];
-        foreach ($addresses AS $address) {
-            foreach ($address_fields AS $field) {
+        foreach ($addresses as $address) {
+            foreach ($address_fields as $field) {
                 $item = [
                     'address' => $address->$field,
-                    'slug' => \Str::slug($address->$field)
+                    'slug' => \Str::slug($address->$field),
                 ];
                 \DB::table('address_slug')->updateOrInsert($item, $item);
             }
         }
         $metros = Metro::all();
-        foreach ($metros AS $metro) {
+        foreach ($metros as $metro) {
             $item = [
                 'address' => $metro->name,
-                'slug' => \Str::slug($metro->name)
+                'slug' => \Str::slug($metro->name),
             ];
             \DB::table('address_slug')->updateOrInsert($item, $item);
         }

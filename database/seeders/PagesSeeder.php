@@ -14,7 +14,7 @@ class PagesSeeder extends Seeder
     public function run()
     {
         $page = \App\Models\Page::where('title', 'Контакты')->first();
-        if (!$page) {
+        if (! $page) {
             \App\Models\Page::create([
                 'title' => 'Контакты',
                 'slug' => 'contacts',
@@ -22,7 +22,7 @@ class PagesSeeder extends Seeder
             ]);
         }
         $page = \App\Models\Page::where('title', 'Правила бронирования')->first();
-        if (!$page) {
+        if (! $page) {
             \App\Models\Page::create([
                 'title' => 'Правила бронирования',
                 'slug' => 'rules',
@@ -30,7 +30,7 @@ class PagesSeeder extends Seeder
             ]);
         }
         $page = \App\Models\Page::where('title', 'Бонусная программа')->first();
-        if (!$page) {
+        if (! $page) {
             \App\Models\Page::create([
                 'title' => 'Бонусная программа',
                 'slug' => 'bonuse',
@@ -38,7 +38,7 @@ class PagesSeeder extends Seeder
             ]);
         }
         $page = \App\Models\Page::where('title', 'Пользовательское соглашение')->first();
-        if (!$page) {
+        if (! $page) {
             \App\Models\Page::create([
                 'title' => 'Пользовательское соглашение',
                 'slug' => 'privacy-policy',

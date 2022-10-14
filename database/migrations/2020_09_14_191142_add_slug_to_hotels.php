@@ -17,12 +17,12 @@ class AddSlugToHotels extends Migration
             $table->string('slug')->unique()->index()->nullable();
         });
 
-        foreach (\App\Models\Hotel::all() AS &$hotel) {
+        foreach (\App\Models\Hotel::all() as &$hotel) {
             $start_slug = \Illuminate\Support\Str::slug($hotel->name);
             $slug = $start_slug;
             $try = 0;
             while (\Illuminate\Support\Facades\DB::table('hotels')->where('slug', $slug)->exists()) {
-              $slug = $start_slug . '-' . $try++;
+                $slug = $start_slug.'-'.$try++;
             }
 
             $hotel->slug = $slug;

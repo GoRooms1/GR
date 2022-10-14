@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\HotelType
@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null             $single_name
  * @property-read Collection|Hotel[] $hotels
  * @property-read int|null           $hotels_count
+ *
  * @method static Builder|HotelType newModelQuery()
  * @method static Builder|HotelType newQuery()
  * @method static Builder|HotelType query()
@@ -35,14 +36,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class HotelType extends Model
 {
-  protected $fillable = [
-    'name',
-    'description',
-    'sort',
-  ];
+    protected $fillable = [
+        'name',
+        'description',
+        'sort',
+    ];
 
-  public function hotels(): HasMany
-  {
-    return $this->hasMany(Hotel::class);
-  }
+    public function hotels(): HasMany
+    {
+        return $this->hasMany(Hotel::class);
+    }
 }

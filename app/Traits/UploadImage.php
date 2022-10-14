@@ -7,74 +7,75 @@
 
 namespace App\Traits;
 
-use Carbon\Carbon;
 use App\Helpers\Json;
 use App\Models\Image;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use function Illuminate\Events\queueable;
 
 trait UploadImage
 {
-  public function upload(Request $request): ?JsonResponse
-  {
-    $path = false;
-    if ($files = $request->allFiles()) {
-      foreach ($files AS $file) {
-        $path = '/storage/'.$file->store(date('Y/m/d'));
-      }
+    public function upload(Request $request): ?JsonResponse
+    {
+        $path = false;
+        if ($files = $request->allFiles()) {
+            foreach ($files as $file) {
+                $path = '/storage/'.$file->store(date('Y/m/d'));
+            }
+        }
+        if ($path) {
+            return response()->json(['location' => $path]);
+        }
+
+        return abort(500);
     }
-    if ($path)
-      return response()->json(['location' => $path]);
-    return abort(500);
-  }
 
-  /**
-   * Delete Image
-   *
-   * @param Image $image
-   *
-   * @return JsonResponse
-   */
-  public function delete(Image $image): JsonResponse
-  {
-    try {
-      if ($this->checkLastImage($image)) {
-        return Json::answer(['error' => 'Нельзя удалить последнюю фотографию'], false, 200);
-      }
+    /**
+     * Delete Image
+     *
+     * @param  Image  $image
+     * @return JsonResponse
+     */
+    public function delete(Image $image): JsonResponse
+    {
+        try {
+            if ($this->checkLastImage($image)) {
+                return Json::answer(['error' => 'Нельзя удалить последнюю фотографию'], false, 200);
+            }
 
-      $image->delete();
-      return Json::good(['deleted' => true]);
-    } catch (\Exception $exception) {
-      return Json::bad(['error' => $exception->getMessage()]);
+            $image->delete();
+
+            return Json::good(['deleted' => true]);
+        } catch (\Exception $exception) {
+            return Json::bad(['error' => $exception->getMessage()]);
+        }
     }
-  }
 
-  public function uploadFor(Request $request): JsonResponse
-  {
-    $modelName = $request->get('model_name');
-    $modelID = $request->get('modelID');
+    public function uploadFor(Request $request): JsonResponse
+    {
+        $modelName = $request->get('model_name');
+        $modelID = $request->get('modelID');
 
-    try {
-      $modelName = '\\App\\Models\\'.$modelName;
-      $model = $modelName::findOrFail($modelID);
-      if ($model->updated_at) {
-        $model->updated_at = Carbon::now();
-        $model->save();
-      }
-      $images = Image::upload($request, $model);
+        try {
+            $modelName = '\\App\\Models\\'.$modelName;
+            $model = $modelName::findOrFail($modelID);
+            if ($model->updated_at) {
+                $model->updated_at = Carbon::now();
+                $model->save();
+            }
+            $images = Image::upload($request, $model);
 
-      return Json::good(['images' => $images]);
-    } catch (\Exception $exception) {
-      return Json::bad(['error' => $exception->getMessage()]);
+            return Json::good(['images' => $images]);
+        } catch (\Exception $exception) {
+            return Json::bad(['error' => $exception->getMessage()]);
+        }
     }
-  }
 
-  private function checkLastImage (Image $image): bool
-  {
-    $model = $image->model_type;
-    $object = $model::find($image->model_id);
+    private function checkLastImage(Image $image): bool
+    {
+        $model = $image->model_type;
+        $object = $model::find($image->model_id);
 
-    return $object->images()->count() === 1;
-  }
+        return $object->images()->count() === 1;
+    }
 }

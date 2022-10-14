@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -40,11 +40,12 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-  protected function authenticated(Request $request, User $user) {
-    if ($user->personal_hotel) {
-      return redirect()->route('lk.start');
-    }
+  protected function authenticated(Request $request, User $user)
+  {
+      if ($user->personal_hotel) {
+          return redirect()->route('lk.start');
+      }
 
-    return redirect($this->redirectTo);
+      return redirect($this->redirectTo);
   }
 }

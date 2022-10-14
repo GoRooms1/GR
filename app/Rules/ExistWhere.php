@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\DB;
 class ExistWhere implements Rule
 {
     private $table;
+
     private $need_column;
+
     private $where_column;
+
     private $where_column_value;
+
     /**
      * Create a new rule instance.
      *

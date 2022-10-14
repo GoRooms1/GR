@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Eloquent;
 use App\Traits\ClearValidated;
-use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Review
@@ -28,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Hotel               $hotel
  * @property-read Collection|Rating[] $ratings
  * @property-read int|null            $ratings_count
+ *
  * @method static Builder|Review newModelQuery()
  * @method static Builder|Review newQuery()
  * @method static Builder|Review query()
@@ -44,28 +44,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Review extends Model
 {
-  use ClearValidated;
-  use CreatedAtOrdered;
+    use ClearValidated;
+    use CreatedAtOrdered;
 
-  public const PER_PAGE = 6;
+    public const PER_PAGE = 6;
 
-  protected $fillable = [
-    'name',
-    'city',
-    'room',
-    'text',
-    'hotel_id',
-  ];
+    protected $fillable = [
+        'name',
+        'city',
+        'room',
+        'text',
+        'hotel_id',
+    ];
 
-  public function ratings(): HasMany
-  {
-    return $this
-      ->hasMany(Rating::class)
-      ->with('category');
-  }
+    public function ratings(): HasMany
+    {
+        return $this
+          ->hasMany(Rating::class)
+          ->with('category');
+    }
 
-  public function hotel(): BelongsTo
-  {
-    return $this->belongsTo(Hotel::class);
-  }
+    public function hotel(): BelongsTo
+    {
+        return $this->belongsTo(Hotel::class);
+    }
 }

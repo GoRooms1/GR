@@ -12,49 +12,51 @@ use Illuminate\Support\Facades\Schema;
 
 class ChangeMetro2Table extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up()
-  {
-    Schema::table('metros', function (Blueprint $table) {
-      $table->integer('distance')->after('distance_int');
-    });
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('metros', function (Blueprint $table) {
+            $table->integer('distance')->after('distance_int');
+        });
 
-    $metros = Metro::query()->get()->map(function (Metro $m) {
-      $m->distance = $m->distance_int;
-      $m->save();
-      return $m;
-    });
+        $metros = Metro::query()->get()->map(function (Metro $m) {
+            $m->distance = $m->distance_int;
+            $m->save();
 
-    Schema::table('metros', function (Blueprint $table) {
-      $table->dropColumn(['distance_int']);
-    });
-  }
+            return $m;
+        });
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down()
-  {
-    Schema::table('metros', function (Blueprint $table) {
-      $table->integer('distance_int')->after('distance');
+        Schema::table('metros', function (Blueprint $table) {
+            $table->dropColumn(['distance_int']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('metros', function (Blueprint $table) {
+            $table->integer('distance_int')->after('distance');
 //      $table->dropColumn('distance');
-    });
+        });
 
-    $metros = Metro::query()->get()->map(function (Metro $m) {
-      $m->distance_int = $m->distance;
-      $m->save();
-      return $m;
-    });
+        $metros = Metro::query()->get()->map(function (Metro $m) {
+            $m->distance_int = $m->distance;
+            $m->save();
 
-    Schema::table('metros', function (Blueprint $table) {
+            return $m;
+        });
+
+        Schema::table('metros', function (Blueprint $table) {
 //      $table->integer('distance_int')->after('distance');
-      $table->dropColumn('distance');
-    });
-  }
+            $table->dropColumn('distance');
+        });
+    }
 }

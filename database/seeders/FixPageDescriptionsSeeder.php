@@ -18,9 +18,9 @@ class FixPageDescriptionsSeeder extends Seeder
 
         $pageDescriptions = PageDescription::all();
         foreach ($pageDescriptions as $description) {
-            if(substr($description->url, -1) == '/' && $description->url != '/' && !in_array(substr($description->url,0,-1), $pages) ) {
+            if (substr($description->url, -1) == '/' && $description->url != '/' && ! in_array(substr($description->url, 0, -1), $pages)) {
                 $description->update([
-                    'url' => substr($description->url,0,-1)
+                    'url' => substr($description->url, 0, -1),
                 ]);
             }
         }
@@ -29,7 +29,7 @@ class FixPageDescriptionsSeeder extends Seeder
             $currentPage = PageDescription::where('url', $page)->first();
             if ($currentPage) {
                 $currentPage->update([
-                    'model_type' => null
+                    'model_type' => null,
                 ]);
             }
         }

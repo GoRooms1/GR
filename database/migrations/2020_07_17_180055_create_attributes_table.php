@@ -55,11 +55,11 @@ class CreateAttributesTable extends Migration
      */
     public function down()
     {
-        Schema::table('attribute_hotel', function(Blueprint $table) {
+        Schema::table('attribute_hotel', function (Blueprint $table) {
             $table->dropForeign(['attribute_id', 'hotel_id']);
         });
         Schema::dropIfExists('attribute_hotel');
-        Schema::table('attribute_room', function(Blueprint $table) {
+        Schema::table('attribute_room', function (Blueprint $table) {
             $table->dropForeign(['attribute_id', 'room_id']);
         });
         Schema::dropIfExists('attribute_room');

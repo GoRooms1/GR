@@ -13,6 +13,7 @@ class RatingCategoryController extends Controller
     public function index(): View
     {
         $categories = RatingCategory::all();
+
         return view('admin.ratings.index', compact('categories'));
     }
 
@@ -53,6 +54,7 @@ class RatingCategoryController extends Controller
     public function destroy(RatingCategory $rating): RedirectResponse
     {
         $rating->delete();
+
         return redirect()->route('admin.ratings.index');
     }
 }

@@ -5,20 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoomRequest;
 use App\Models\Attribute;
+use App\Models\Cost;
 use App\Models\CostType;
 use App\Models\Hotel;
 use App\Models\Image;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use App\Models\Cost;
 
 class RoomController extends Controller
 {
     public function index(): View
     {
         $rooms = Room::all();
+
         return view('admin.room.index', compact('rooms'));
     }
 
@@ -26,6 +26,7 @@ class RoomController extends Controller
     {
         $attributes = Attribute::where('model', Room::class)->orWhereNull('model')->get();
         $costTypes = CostType::orderBy('sort')->get();
+
         return view('admin.room.create', compact('hotel', 'attributes', 'costTypes'));
     }
 
@@ -33,24 +34,25 @@ class RoomController extends Controller
     {
         $validated = $request->validated();
 
-
         $room->name = $validated['name'];
         $room->description = $validated['description'];
         $room->hotel_id = $validated['hotel_id'];
         $room->is_hot = $request->has('is_hot');
         $room->save();
         $room->attachMeta($request);
-        if ($request->has('category_id'))
+        if ($request->has('category_id')) {
             $room->category()->associate($validated['category_id']);
-        if ($request->has('attributes'))
+        }
+        if ($request->has('attributes')) {
             $room->attrs()->sync($validated['attributes']);
-		$room->costs()->delete();
+        }
+        $room->costs()->delete();
         foreach ($validated['cost'] as $cost) {
-        	$c = new Cost();
-		    $c->value = $cost['value'];
-		    $c->period()->associate($cost['period']);
-		    $c->room()->associate($room->id);
-		    $c->save();
+            $c = new Cost();
+            $c->value = $cost['value'];
+            $c->period()->associate($cost['period']);
+            $c->room()->associate($room->id);
+            $c->save();
         }
         Image::upload($request, $room);
         $room->save();
@@ -75,12 +77,12 @@ class RoomController extends Controller
     {
         $attributes = Attribute::where('model', Room::class)->orWhereNull('model')->get();
         $costTypes = CostType::orderBy('sort')->get();
+
         return view('admin.room.edit', compact('room', 'attributes', 'costTypes'));
     }
 
     public function update(RoomRequest $request, Room $room): RedirectResponse
     {
-
         $this->save($room, $request);
 
         return redirect()->route('admin.hotels.show', $room->hotel->slug)->with('success', true);

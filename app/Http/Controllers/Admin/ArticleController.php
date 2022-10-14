@@ -7,7 +7,6 @@ use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Models\Image;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -21,6 +20,7 @@ class ArticleController extends Controller
     public function index(): View
     {
         $articles = Article::all();
+
         return view('admin.articles.index', compact('articles'));
     }
 
@@ -47,6 +47,7 @@ class ArticleController extends Controller
         $article->user()->associate(Auth::user()->id);
         $article->save();
         Image::upload($request, $article);
+
         return redirect()->route('admin.articles.index');
     }
 
@@ -74,6 +75,7 @@ class ArticleController extends Controller
         $validated = Article::getFillableData($validated);
         $article->update($validated);
         Image::upload($request, $article);
+
         return redirect()->route('admin.articles.index');
     }
 
@@ -86,6 +88,7 @@ class ArticleController extends Controller
     public function destroy(Article $article): RedirectResponse
     {
         $article->delete();
+
         return redirect()->route('admin.articles.index');
     }
 }

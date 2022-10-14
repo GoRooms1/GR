@@ -11,27 +11,27 @@ use Illuminate\Support\Facades\Schema;
 
 class RemoveCategoryInRoomTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('rooms', function (Blueprint $table) {
-      $table->dropColumn(['category_id']);
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->dropColumn(['category_id']);
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('rooms', function (Blueprint $table) {
-      $table->unsignedBigInteger('category_id')->nullable();
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('rooms', function (Blueprint $table) {
+            $table->unsignedBigInteger('category_id')->nullable();
+        });
+    }
 }

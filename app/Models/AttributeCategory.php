@@ -8,11 +8,11 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Categories for Attributes
@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null               $attributes_count
  * @property-read mixed                  $attr_hotel
  * @property-read mixed                  $attr_room
+ *
  * @method static Builder|AttributeCategory newModelQuery()
  * @method static Builder|AttributeCategory newQuery()
  * @method static Builder|AttributeCategory query()
@@ -38,43 +39,43 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AttributeCategory extends Model
 {
-  /**
-   * @var string[]
-   */
-  protected $fillable = [
-    'name',
-    'description',
-  ];
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'description',
+    ];
 
-  protected $table = 'attribute_categories';
+    protected $table = 'attribute_categories';
 
-  /**
-   * Attributed for Hotel
-   */
-  public function getAttrRoomAttribute(): HasMany
-  {
-    return $this
-      ->attributes()
-      ->where('model', Room::class);
-  }
+    /**
+     * Attributed for Hotel
+     */
+    public function getAttrRoomAttribute(): HasMany
+    {
+        return $this
+          ->attributes()
+          ->where('model', Room::class);
+    }
 
-  /**
-   * Attributed
-   *
-   * @return HasMany
-   */
-  public function attributes(): HasMany
-  {
-    return $this->hasMany(Attribute::class);
-  }
+    /**
+     * Attributed
+     *
+     * @return HasMany
+     */
+    public function attributes(): HasMany
+    {
+        return $this->hasMany(Attribute::class);
+    }
 
-  /**
-   * Attributed for Hotel
-   */
-  public function getAttrHotelAttribute(): HasMany
-  {
-    return $this
-      ->attributes()
-      ->where('model', Hotel::class);
-  }
+    /**
+     * Attributed for Hotel
+     */
+    public function getAttrHotelAttribute(): HasMany
+    {
+        return $this
+          ->attributes()
+          ->where('model', Hotel::class);
+    }
 }

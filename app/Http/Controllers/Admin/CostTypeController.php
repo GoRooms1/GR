@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Cost;
-use App\Models\CostType;
 use App\Http\Controllers\Controller;
+use App\Models\CostType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,6 +18,7 @@ class CostTypeController extends Controller
     public function index(): View
     {
         $types = CostType::orderBy('sort')->get();
+
         return view('admin.cost_types.index', compact('types'));
     }
 
@@ -30,6 +30,7 @@ class CostTypeController extends Controller
     public function create(): View
     {
         $last_order = CostType::getLastOrder();
+
         return view('admin.cost_types.create', compact('last_order'));
     }
 
@@ -50,7 +51,6 @@ class CostTypeController extends Controller
         $cost_type = CostType::create($validated);
 
         return redirect()->route('admin.cost_types.index')->with('success', $cost_type->id);
-
     }
 
     /**
@@ -93,6 +93,7 @@ class CostTypeController extends Controller
     public function destroy(CostType $costType): RedirectResponse
     {
         $costType->delete();
+
         return redirect()->route('admin.cost_types.index');
     }
 }

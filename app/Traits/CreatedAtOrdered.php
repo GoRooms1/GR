@@ -8,19 +8,21 @@
 
 namespace App\Traits;
 
-
 use App\Scopes\CreatedAtOrderScope;
 
 trait CreatedAtOrdered
 {
     public static function getOrderDirection()
     {
-        if (property_exists(static::class, 'orderDirection'))
+        if (property_exists(static::class, 'orderDirection')) {
             return static::$orderDirection;
+        }
+
         return 'DESC';
     }
 
-    protected static function bootCreatedAtOrdered() {
+    protected static function bootCreatedAtOrdered()
+    {
         static::addGlobalScope(new CreatedAtOrderScope(self::getOrderDirection()));
     }
 }

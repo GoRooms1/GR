@@ -10,10 +10,10 @@ use Illuminate\View\View;
 
 class HotelTypeController extends Controller
 {
-
     public function index(): View
     {
         $hotelTypes = HotelType::all();
+
         return view('admin.hotel_types.index', compact('hotelTypes'));
     }
 
@@ -38,6 +38,7 @@ class HotelTypeController extends Controller
     public function edit(HotelType $hotelType): View
     {
         $hotelTypes = HotelType::all();
+
         return view('admin.hotel_types.edit', compact('hotelTypes', 'hotelType'));
     }
 
@@ -57,6 +58,7 @@ class HotelTypeController extends Controller
     public function destroy(HotelType $hotelType): RedirectResponse
     {
         $hotelType->delete();
+
         return redirect()->route('admin.hotel_types.index');
     }
 }

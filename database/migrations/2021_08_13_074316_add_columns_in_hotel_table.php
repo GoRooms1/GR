@@ -12,36 +12,36 @@ use Illuminate\Support\Facades\Schema;
 
 class AddColumnsInHotelTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('hotels', function (Blueprint $table) {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('hotels', function (Blueprint $table) {
 //      Второй номер телефона для заказрв
-      $table->string('phone_2')->nullable()->after('phone');
+            $table->string('phone_2')->nullable()->after('phone');
 //      Удаление лишней колонки
-      $table->dropColumn('about');
+            $table->dropColumn('about');
 //      Либо каждая комната отдельно, либо отели по типу и с выбором кол-ва продаж. (rooms, categories)
-      $table->string('type_fond')->default(Hotel::ROOMS_TYPE)->after('phone_2');
+            $table->string('type_fond')->default(Hotel::ROOMS_TYPE)->after('phone_2');
 //      Заголовок Как добраться
-      $table->string('route_title', 255)->default('Как добраться')->after('route');
-    });
-  }
+            $table->string('route_title', 255)->default('Как добраться')->after('route');
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('hotels', function (Blueprint $table) {
-      $table->dropColumn(['phone_2', 'type_fond', 'moderate']);
-      $table->dropColumn('route_title');
-      $table->text('about')->nullable();
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('hotels', function (Blueprint $table) {
+            $table->dropColumn(['phone_2', 'type_fond', 'moderate']);
+            $table->dropColumn('route_title');
+            $table->text('about')->nullable();
+        });
+    }
 }

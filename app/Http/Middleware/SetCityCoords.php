@@ -23,6 +23,7 @@ class SetCityCoords
     public function handle($request, Closure $next)
     {
         self::set($request);
+
         return $next($request);
     }
 
@@ -30,10 +31,11 @@ class SetCityCoords
     {
         $city = $request->session()->get('city', Settings::option('city_default', null));
         if (Settings::option('city_default', false) || $request->session()->get('city', false)) {
-            if (!$request->session()->get('city', false)) {
+            if (! $request->session()->get('city', false)) {
                 $city = self::getCenterCoords(\Request::ip())['city'];
-                if (Address::where('city', $city)->first() === null)
+                if (Address::where('city', $city)->first() === null) {
                     $city = Settings::option('city_default', 'Москва');
+                }
                 $request->session()->put('city', $city);
             }
             $query = "г. $city";
@@ -63,22 +65,22 @@ class SetCityCoords
         View::share('search_address', $search_address);
     }
 
-    public static function getCenterCoords(string $ip):array
+    public static function getCenterCoords(string $ip): array
     {
         try {
-            $response = file_get_contents('http://api.sypexgeo.net/json/' . $ip);
+            $response = file_get_contents('http://api.sypexgeo.net/json/'.$ip);
             $object = json_decode($response);
 
             return [
                 'city' => $object->city->name_ru,
                 'lat' => $object->city->lat,
-                'lon' => $object->city->lon
+                'lon' => $object->city->lon,
             ];
         } catch (\Exception $exception) {
             return [
                 'city' => Settings::option('city_default', 'Москва'),
                 'lat' => 55.753018,
-                'lon' => 37.619251
+                'lon' => 37.619251,
             ];
         }
     }

@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Scope;
 
 class CreatedAtOrderScope implements Scope
 {
-
     private $direction;
 
     public function __construct($direction = 'DESC')

@@ -14,29 +14,29 @@ use Illuminate\Support\Facades\Schema;
  */
 class CreatePeriodsTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::create('periods', function (Blueprint $table) {
-      $table->id();
-      $table->string('start_at');
-      $table->string('end_at')->nullable();
-      $table->string('description')->nullable();
-      $table->timestamps();
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::create('periods', function (Blueprint $table) {
+            $table->id();
+            $table->string('start_at');
+            $table->string('end_at')->nullable();
+            $table->string('description')->nullable();
+            $table->timestamps();
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down (): void
-  {
-    Schema::dropIfExists('periods');
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('periods');
+    }
 }

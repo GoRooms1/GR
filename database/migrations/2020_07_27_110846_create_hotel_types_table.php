@@ -21,7 +21,7 @@ class CreateHotelTypesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('hotels', function(Blueprint $table) {
+        Schema::table('hotels', function (Blueprint $table) {
             $table->unsignedBigInteger('type_id')->nullable();
         });
     }
@@ -33,8 +33,7 @@ class CreateHotelTypesTable extends Migration
      */
     public function down()
     {
-
-        Schema::table('hotels', function(Blueprint $table) {
+        Schema::table('hotels', function (Blueprint $table) {
             $table->dropColumn('type_id');
         });
 

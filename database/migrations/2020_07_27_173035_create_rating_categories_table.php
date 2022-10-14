@@ -35,7 +35,7 @@ class CreateRatingCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('ratings', function (Blueprint $table){
+        Schema::table('ratings', function (Blueprint $table) {
             $table->dropForeign(['category_id']);
         });
         Schema::dropIfExists('rating_categories');

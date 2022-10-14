@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\RoomController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\RoomController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +15,10 @@ use App\Http\Controllers\Api\ImageController;
 |
 */
 
-
 //Route::match(['GET', 'POST'], '/search', 'SearchController')->name('search');
 //Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.map');
 Route::post('search', 'Api\SearchController@index')->name('search.index');
-Route::post( '/search_map', 'Api\SearchController@map')->name('search.map');
+Route::post('/search_map', 'Api\SearchController@map')->name('search.map');
 
 Route::get('/address/helper', 'Api\AddressController@helper');
 
@@ -34,11 +32,11 @@ Route::post('room/order/down/{id}', 'Lk\OrderRoomController@downOrder');
 Route::post('images/ordered', [ImageController::class, 'ordered']);
 
 Route::prefix('/filter')->name('filter.')->group(function () {
-  Route::get('cities', 'Api\FilterController@cities')->name('cities');
-  Route::get('city-area', 'Api\FilterController@city_area')->name('city_area');
-  Route::get('count-city-area', 'Api\FilterController@count_city_area')->name('count_city_area');
-  Route::get('district', 'Api\FilterController@district')->name('district');
-  Route::get('metro', 'Api\FilterController@metro')->name('metro');
+    Route::get('cities', 'Api\FilterController@cities')->name('cities');
+    Route::get('city-area', 'Api\FilterController@city_area')->name('city_area');
+    Route::get('count-city-area', 'Api\FilterController@count_city_area')->name('count_city_area');
+    Route::get('district', 'Api\FilterController@district')->name('district');
+    Route::get('metro', 'Api\FilterController@metro')->name('metro');
 
-  Route::get('all', 'Api\FilterController@all')->name('all');
+    Route::get('all', 'Api\FilterController@all')->name('all');
 });

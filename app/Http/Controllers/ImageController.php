@@ -14,19 +14,19 @@ use League\Glide\ServerFactory;
  */
 class ImageController extends Controller
 {
-
-  /**
-   * Cache optimized image
-   * return Image
-   * @param string $path
-   */
-  public function show(string $path): void
-  {
-    $server = ServerFactory::create([
-      'source' => config('cache.glide_path'),
-      'cache' => config('cache.glide_path'),
-      'cache_path_prefix' => '.cache',
-    ]);
-    $server->outputImage($path, request()->all());
-  }
+    /**
+     * Cache optimized image
+     * return Image
+     *
+     * @param  string  $path
+     */
+    public function show(string $path): void
+    {
+        $server = ServerFactory::create([
+            'source' => config('cache.glide_path'),
+            'cache' => config('cache.glide_path'),
+            'cache_path_prefix' => '.cache',
+        ]);
+        $server->outputImage($path, request()->all());
+    }
 }

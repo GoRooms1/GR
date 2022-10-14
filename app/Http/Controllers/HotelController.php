@@ -9,29 +9,32 @@ use Illuminate\View\View;
 
 class HotelController extends Controller
 {
-  use Breadcrumbs;
+    use Breadcrumbs;
 
-  public function index(Request $request): View
-  {
-    $Breadcrumbs_din = $this->get_bread();
+    public function index(Request $request): View
+    {
+        $Breadcrumbs_din = $this->get_bread();
 
-    $hotels = Hotel::paginate(18);
-    return view('hotel.index', compact('hotels', 'request', 'Breadcrumbs_din'));
-  }
+        $hotels = Hotel::paginate(18);
 
-  public function show(Hotel $hotel, Request $request): View
-  {
-    $Breadcrumbs_din = $this->get_bread();
+        return view('hotel.index', compact('hotels', 'request', 'Breadcrumbs_din'));
+    }
 
-    $pageAbout = $hotel->meta ?? new class {
-        public $title = null;
-        public $meta_description = null;
-      };
+    public function show(Hotel $hotel, Request $request): View
+    {
+        $Breadcrumbs_din = $this->get_bread();
 
-    $pageAbout->title ??= sprintf('Отель "%s" - бронь номера на час ▶Gorooms', $hotel->name);
+        $pageAbout = $hotel->meta ?? new class
+        {
+            public $title = null;
 
-    $pageAbout->meta_description ??= sprintf('Забронируйте номер в отеле на час (сутки) "%s" онлайн в компании Gorooms ▶ Без комиссий и посредников▶ Качественное обслуживание ▶ Низкие цены ▶ Звоните!', $hotel->name);
+            public $meta_description = null;
+        };
 
-    return view('hotel.show', compact('hotel', 'request', 'pageAbout', 'Breadcrumbs_din'));
-  }
+        $pageAbout->title ??= sprintf('Отель "%s" - бронь номера на час ▶Gorooms', $hotel->name);
+
+        $pageAbout->meta_description ??= sprintf('Забронируйте номер в отеле на час (сутки) "%s" онлайн в компании Gorooms ▶ Без комиссий и посредников▶ Качественное обслуживание ▶ Низкие цены ▶ Звоните!', $hotel->name);
+
+        return view('hotel.show', compact('hotel', 'request', 'pageAbout', 'Breadcrumbs_din'));
+    }
 }

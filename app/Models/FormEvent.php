@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\FormEvent
@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int         $id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|FormEvent newModelQuery()
  * @method static Builder|FormEvent newQuery()
  * @method static Builder|FormEvent query()

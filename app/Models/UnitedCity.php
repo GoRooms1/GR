@@ -4,11 +4,11 @@ namespace App\Models;
 
 use DB;
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\UnitedCity
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|UnitedCity newModelQuery()
  * @method static Builder|UnitedCity newQuery()
  * @method static Builder|UnitedCity query()
@@ -30,15 +31,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class UnitedCity extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $fillable = [
-    'name',
-    'description',
-  ];
+    protected $fillable = [
+        'name',
+        'description',
+    ];
 
-  public function united(): Collection
-  {
-    return DB::table('united_cities_address')->where('united_city', $this->id)->pluck('city_name');
-  }
+    public function united(): Collection
+    {
+        return DB::table('united_cities_address')->where('united_city', $this->id)->pluck('city_name');
+    }
 }

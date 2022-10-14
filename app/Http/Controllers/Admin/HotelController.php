@@ -2,191 +2,196 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Exception;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\HotelRequest;
+use App\Models\Attribute;
+use App\Models\CostType;
 use App\Models\Hotel;
+use App\Models\HotelType;
 use App\Models\Image;
 use App\Models\Metro;
-use App\Models\CostType;
-use App\Models\Attribute;
-use App\Models\HotelType;
-use Illuminate\View\View;
+use App\Models\PageDescription;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Models\PageDescription;
-use App\Http\Requests\HotelRequest;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class HotelController extends Controller
 {
-  /**
-   * Display a listing of the resource.
-   *
-   * @return Response
-   */
-  public function index (Request $request): View
-  {
-    $hotels = Hotel::query();
-    if ($q = $request->get('q', null)) {
-      $hotels = $hotels->where('name', 'like', '%' . $q . '%');
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function index(Request $request): View
+    {
+        $hotels = Hotel::query();
+        if ($q = $request->get('q', null)) {
+            $hotels = $hotels->where('name', 'like', '%'.$q.'%');
+        }
+        $hotels = $hotels->paginate(15);
+
+        return view('admin.hotel.index', compact('hotels', 'q'));
     }
-    $hotels = $hotels->paginate(15);
-    return view('admin.hotel.index', compact('hotels', 'q'));
-  }
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param Request $request
-   *
-   * @return Response
-   */
-  public function store (HotelRequest $request)
-  {
-    $request->validated();
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(HotelRequest $request)
+    {
+        $request->validated();
 
-    $hotel = new Hotel();
-    $this->save($hotel, $request);
+        $hotel = new Hotel();
+        $this->save($hotel, $request);
 
-    return redirect()
-      ->route('admin.hotels.index')
-      ->with('success', true);
-  }
-
-  private function save (Hotel &$hotel, HotelRequest $request)
-  {
-    try {
-      $validated = $request->validated();
-
-      if ($request->get('slug') !== $hotel->slug) {
-        PageDescription::where('url', '/hotels/' . $hotel->slug)
-          ->delete();
-      }
-
-
-      foreach (Hotel::getFillableData($validated) as $option => $value)
-        $hotel->$option = $value;
-
-      $hotel->save();
-
-      if ($request->has('attributes'))
-        $hotel->attrs()
-          ->sync($validated['attributes']);
-
-      if ($request->hasFile('image'))
-        Image::upload($request, $hotel);
-
-      if ($request->has('address'))
-        $hotel->saveAddress($request->get('address', ''));
-
-      if ($request->has('address'))
-        $hotel->saveAddress($request->get('address'), $request->get('address_comment', ''));
-
-
-      $hotel->attachMeta($request);
-
-
-      $hotel->metros()
-        ->delete();
-      foreach ($request->get('metros', []) as $metros) {
-        if (empty($metros['name']))
-          continue;
-        $metros['hotel_id'] = $hotel->id;
-        Metro::create($metros);
-      }
-
-      if ($validated['type_id'])
-        $hotel->type()
-          ->associate($validated['type_id']);
-
-      $hotel->save();
-    } catch (Exception $e) {
-      dd($e);
+        return redirect()
+          ->route('admin.hotels.index')
+          ->with('success', true);
     }
-  }
 
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return Response
-   */
-  public function create ()
-  {
-    $attributes = Attribute::where('model', Hotel::class)
-      ->orWhereNull('model')
-      ->get();
-    $costTypes  = CostType::orderBy('sort')
-      ->get();
-    $hotelTypes = HotelType::orderBy('sort')
-      ->get();
-    return view('admin.hotel.create', compact('attributes', 'costTypes', 'hotelTypes'));
-  }
+    private function save(Hotel &$hotel, HotelRequest $request)
+    {
+        try {
+            $validated = $request->validated();
 
-  /**
-   * Display the specified resource.
-   *
-   * @param Hotel $hotel
-   *
-   * @return Response
-   */
-  public function show (Hotel $hotel): View
-  {
-    return view('admin.hotel.show', compact('hotel'));
-  }
+            if ($request->get('slug') !== $hotel->slug) {
+                PageDescription::where('url', '/hotels/'.$hotel->slug)
+                  ->delete();
+            }
 
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param Hotel $hotel
-   *
-   * @return Response
-   */
-  public function edit (Hotel $hotel): View
-  {
-    $attributes = Attribute::where('model', Hotel::class)
-      ->orWhereNull('model')
-      ->get();
-    $costTypes  = CostType::orderBy('sort')
-      ->get();
-    $hotelTypes = HotelType::orderBy('sort')
-      ->get();
-    return view('admin.hotel.edit', compact('hotel', 'attributes', 'costTypes', 'hotelTypes'));
-  }
+            foreach (Hotel::getFillableData($validated) as $option => $value) {
+                $hotel->$option = $value;
+            }
 
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param Request $request
-   * @param Hotel   $hotel
-   *
-   * @return Response
-   */
-  public function update (HotelRequest $request, Hotel $hotel): RedirectResponse
-  {
-    $this->save($hotel, $request);
-    return redirect()->route('admin.hotels.show', $hotel);
-  }
+            $hotel->save();
 
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param Hotel $hotel
-   *
-   * @return RedirectResponse
-   * @throws Exception
-   */
-  public function destroy (Hotel $hotel): RedirectResponse
-  {
-    $users = $hotel->users;
+            if ($request->has('attributes')) {
+                $hotel->attrs()
+                  ->sync($validated['attributes']);
+            }
 
-    $hotel->users()
-      ->detach();
+            if ($request->hasFile('image')) {
+                Image::upload($request, $hotel);
+            }
 
-    $hotel->delete();
+            if ($request->has('address')) {
+                $hotel->saveAddress($request->get('address', ''));
+            }
 
-    foreach ($users as $user) {
-      $user->forceDelete();
+            if ($request->has('address')) {
+                $hotel->saveAddress($request->get('address'), $request->get('address_comment', ''));
+            }
+
+            $hotel->attachMeta($request);
+
+            $hotel->metros()
+              ->delete();
+            foreach ($request->get('metros', []) as $metros) {
+                if (empty($metros['name'])) {
+                    continue;
+                }
+                $metros['hotel_id'] = $hotel->id;
+                Metro::create($metros);
+            }
+
+            if ($validated['type_id']) {
+                $hotel->type()
+                  ->associate($validated['type_id']);
+            }
+
+            $hotel->save();
+        } catch (Exception $e) {
+            dd($e);
+        }
     }
-    return redirect()->route('admin.hotels.index');
-  }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $attributes = Attribute::where('model', Hotel::class)
+          ->orWhereNull('model')
+          ->get();
+        $costTypes = CostType::orderBy('sort')
+          ->get();
+        $hotelTypes = HotelType::orderBy('sort')
+          ->get();
+
+        return view('admin.hotel.create', compact('attributes', 'costTypes', 'hotelTypes'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  Hotel  $hotel
+     * @return Response
+     */
+    public function show(Hotel $hotel): View
+    {
+        return view('admin.hotel.show', compact('hotel'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Hotel  $hotel
+     * @return Response
+     */
+    public function edit(Hotel $hotel): View
+    {
+        $attributes = Attribute::where('model', Hotel::class)
+          ->orWhereNull('model')
+          ->get();
+        $costTypes = CostType::orderBy('sort')
+          ->get();
+        $hotelTypes = HotelType::orderBy('sort')
+          ->get();
+
+        return view('admin.hotel.edit', compact('hotel', 'attributes', 'costTypes', 'hotelTypes'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  Request  $request
+     * @param  Hotel  $hotel
+     * @return Response
+     */
+    public function update(HotelRequest $request, Hotel $hotel): RedirectResponse
+    {
+        $this->save($hotel, $request);
+
+        return redirect()->route('admin.hotels.show', $hotel);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Hotel  $hotel
+     * @return RedirectResponse
+     *
+     * @throws Exception
+     */
+    public function destroy(Hotel $hotel): RedirectResponse
+    {
+        $users = $hotel->users;
+
+        $hotel->users()
+          ->detach();
+
+        $hotel->delete();
+
+        foreach ($users as $user) {
+            $user->forceDelete();
+        }
+
+        return redirect()->route('admin.hotels.index');
+    }
 }

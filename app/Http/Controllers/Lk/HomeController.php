@@ -16,29 +16,29 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-
-  /**
-   * Index page Personal Area
-   *
-   * @return Application|Factory|View
-   */
-  public function index(): View
-  {
-    return view('lk.index');
-  }
-
-  /**
-   * Create Object
-   *
-   * @return RedirectResponse|View
-   */
-  public function start()
-  {
-    if (auth()->check() && auth()->user()->personal_hotel) {
-      return redirect()->route('lk.index');
+    /**
+     * Index page Personal Area
+     *
+     * @return Application|Factory|View
+     */
+    public function index(): View
+    {
+        return view('lk.index');
     }
 
-    $types = HotelType::all();
-    return view('lk.start', compact('types'));
-  }
+    /**
+     * Create Object
+     *
+     * @return RedirectResponse|View
+     */
+    public function start()
+    {
+        if (auth()->check() && auth()->user()->personal_hotel) {
+            return redirect()->route('lk.index');
+        }
+
+        $types = HotelType::all();
+
+        return view('lk.start', compact('types'));
+    }
 }

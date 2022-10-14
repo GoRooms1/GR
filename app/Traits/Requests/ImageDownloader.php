@@ -11,7 +11,8 @@ namespace App\Traits\Requests;
 use App\Models\Image;
 use Illuminate\Support\Carbon;
 
-trait ImageDownloader {
+trait ImageDownloader
+{
     public function getImageId()
     {
         $image_id = false;
@@ -29,6 +30,7 @@ trait ImageDownloader {
             ]);
             $image_id = $fileModel->id;
         }
+
         return $image_id;
     }
 }

@@ -7,12 +7,12 @@
 
 namespace App\Models;
 
-use Eloquent;
-use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Image
@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null        $order
  * @property Carbon|null     $created_at
  * @property Carbon|null     $updated_at
+ *
  * @method static Builder|Image newModelQuery()
  * @method static Builder|Image newQuery()
  * @method static Builder|Image query()
@@ -48,65 +49,69 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Image extends Model
 {
-  use CreatedAtOrdered;
+    use CreatedAtOrdered;
 
-  public const DEFAULT = 'img/img-hotel.jpg';
+    public const DEFAULT = 'img/img-hotel.jpg';
 
-  protected static string $orderDirection = 'ASC';
-  public $casts = [
-    'moderate' => 'boolean',
-  ];
-  protected $fillable = [
-    'name',
-    'path',
-    'moderate',
-    'order',
-  ];
+    protected static string $orderDirection = 'ASC';
 
-//  TODO: Переписать алгоритм загузки фотки что бы order становился автоматом последний
-  public static function upload($request, &$uploadTo, $attr_name = 'image'): array
-  {
-    if ($request->hasFile($attr_name)) {
-      $files = $request->file($attr_name);
-      if (!is_array($files)) {
-        $files = [$files];
-      }
-      $images = [];
-      if ($uploadTo->images()->count() === 0) {
-        $order = 1;
-      } else {
-        $order = $uploadTo->images->last()->order + 1;
-      }
-      foreach ($files as $file) {
-        $path = $file->store(date('Y/m/d'));
-        $image = new Image();
-        $image->name = $file->getClientOriginalName();
-        $image->path = 'storage/' . $path;
-        $image->moderate = !(Auth::user()->is_moderate || Auth::user()->is_admin);
-        $image->order = $order;
-        $image->save();
-        $images[] = $image;
-        // self::watermark($uploadTo, $image);
-        $order++;
-      }
-      $uploadTo->images()->saveMany($images);
-      $uploadTo->save();
-      return $images;
-    }
-    return [];
-  }
+    public $casts = [
+        'moderate' => 'boolean',
+    ];
 
-  public static function watermark($model, Image $image): void
-  {
-    if (!($model instanceof Hotel || $model instanceof Room)) {
-      return;
+    protected $fillable = [
+        'name',
+        'path',
+        'moderate',
+        'order',
+    ];
+
+    //  TODO: Переписать алгоритм загузки фотки что бы order становился автоматом последний
+    public static function upload($request, &$uploadTo, $attr_name = 'image'): array
+    {
+        if ($request->hasFile($attr_name)) {
+            $files = $request->file($attr_name);
+            if (! is_array($files)) {
+                $files = [$files];
+            }
+            $images = [];
+            if ($uploadTo->images()->count() === 0) {
+                $order = 1;
+            } else {
+                $order = $uploadTo->images->last()->order + 1;
+            }
+            foreach ($files as $file) {
+                $path = $file->store(date('Y/m/d'));
+                $image = new Image();
+                $image->name = $file->getClientOriginalName();
+                $image->path = 'storage/'.$path;
+                $image->moderate = ! (Auth::user()->is_moderate || Auth::user()->is_admin);
+                $image->order = $order;
+                $image->save();
+                $images[] = $image;
+                // self::watermark($uploadTo, $image);
+                $order++;
+            }
+            $uploadTo->images()->saveMany($images);
+            $uploadTo->save();
+
+            return $images;
+        }
+
+        return [];
     }
 
-    $path = str_replace('storage', 'app/public', $image->path);
-    $img = \Intervention\Image\Facades\Image::make(storage_path($path));
-    $img->insert(storage_path('images/watermark.png'), 'center');
-    $img->save($image->path);
-  }
+    public static function watermark($model, Image $image): void
+    {
+        if (! ($model instanceof Hotel || $model instanceof Room)) {
+            return;
+        }
+
+        $path = str_replace('storage', 'app/public', $image->path);
+        $img = \Intervention\Image\Facades\Image::make(storage_path($path));
+        $img->insert(storage_path('images/watermark.png'), 'center');
+        $img->save($image->path);
+    }
 
 //  public static function boot()
 //  {
@@ -144,25 +149,24 @@ class Image extends Model
 //    });
 //  }
 
-  public static function beforeSave(Image $image): void
-  {
+    public static function beforeSave(Image $image): void
+    {
 //    if ($image->default) {
 //      $model_id = $image->model_id;
 //      $model_type = $image->model_type;
 
 //      self::where('model_id', $model_id)->where('model_type', $model_type)->update(['default' => false]);
 //    }
-  }
+    }
 
-  /**
-   * Меняем урлу картинки на урлу с оптимизацией
-   *
-   * @param string $value
-   *
-   * @return string|string[]
-   */
-  public function getPathAttribute(string $value)
-  {
-    return str_replace('storage', 'image', $value);
-  }
+    /**
+     * Меняем урлу картинки на урлу с оптимизацией
+     *
+     * @param  string  $value
+     * @return string|string[]
+     */
+    public function getPathAttribute(string $value)
+    {
+        return str_replace('storage', 'image', $value);
+    }
 }

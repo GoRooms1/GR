@@ -9,5 +9,4 @@ namespace App\Http\Controllers\Moderator;
 
 class CategoryController extends \App\Http\Controllers\Lk\CategoryController
 {
-
 }

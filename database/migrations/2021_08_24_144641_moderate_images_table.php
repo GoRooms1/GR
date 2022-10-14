@@ -11,27 +11,27 @@ use Illuminate\Support\Facades\Schema;
 
 class ModerateImagesTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('images', function (Blueprint $table) {
-      $table->boolean('moderate')->default(true)->after('name');
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('images', function (Blueprint $table) {
+            $table->boolean('moderate')->default(true)->after('name');
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('images', function (Blueprint $table) {
-      $table->dropColumn('moderate');
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('images', function (Blueprint $table) {
+            $table->dropColumn('moderate');
+        });
+    }
 }

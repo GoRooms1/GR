@@ -11,7 +11,6 @@ use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-
     public function index()
     {
         //
@@ -27,6 +26,7 @@ class CategoryController extends Controller
         $validated = $request->validated();
         $validated['hotel_id'] = $hotel->id;
         $category = Category::create($validated);
+
         return redirect()->route('admin.hotels.show', $category->hotel);
     }
 
@@ -39,12 +39,14 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
         $category->update($validated);
+
         return redirect()->route('admin.hotels.show', $hotel);
     }
 
     public function destroy(Hotel $hotel, Category $category): RedirectResponse
     {
         $category->delete();
+
         return redirect()->route('admin.hotels.show', $hotel);
     }
 }

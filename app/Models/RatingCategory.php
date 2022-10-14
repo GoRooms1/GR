@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\RatingCategory
@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int         $sort
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|RatingCategory newModelQuery()
  * @method static Builder|RatingCategory newQuery()
  * @method static Builder|RatingCategory query()
@@ -27,9 +28,9 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class RatingCategory extends Model
 {
-  protected $fillable = [
-    'name',
-    'description',
-    'sort',
-  ];
+    protected $fillable = [
+        'name',
+        'description',
+        'sort',
+    ];
 }

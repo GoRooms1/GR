@@ -11,27 +11,27 @@ use Illuminate\Support\Facades\Schema;
 
 class ChangeMetroTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up()
-  {
-    Schema::table('metros', function (Blueprint $table) {
-      $table->dropColumn('distance');
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('metros', function (Blueprint $table) {
+            $table->dropColumn('distance');
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down()
-  {
-    Schema::table('metros', function (Blueprint $table) {
-      $table->string('distance');
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('metros', function (Blueprint $table) {
+            $table->string('distance');
+        });
+    }
 }

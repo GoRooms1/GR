@@ -7,47 +7,47 @@
 
 namespace App\Http\Requests\LK;
 
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class CategoryRequest extends FormRequest
 {
-  /**
-   * Determine if the user is authorized to make this request.
-   *
-   * @return bool
-   */
-  public function authorize(): bool
-  {
-    return true;
-  }
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-  /**
-   * Get the validation rules that apply to the request.
-   *
-   * @return array
-   */
-  public function rules(): array
-  {
-    return [
-      'id' => [
-        'sometimes',
-        'required',
-        'exists:categories,id'
-      ],
-      'name' => [
-        'sometimes',
-        'required',
-        'string',
-        'max:255',
-        'unique:categories,name,' . $this->get('id') . ',id,hotel_id,' . $this->get('hotel_id'),
-      ],
-      'value' => [
-        'nullable',
-        'sometimes',
-        'integer',
-        'min:0',
-      ]
-    ];
-  }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        return [
+            'id' => [
+                'sometimes',
+                'required',
+                'exists:categories,id',
+            ],
+            'name' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+                'unique:categories,name,'.$this->get('id').',id,hotel_id,'.$this->get('hotel_id'),
+            ],
+            'value' => [
+                'nullable',
+                'sometimes',
+                'integer',
+                'min:0',
+            ],
+        ];
+    }
 }

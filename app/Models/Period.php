@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Period
@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null   $updated_at
  * @property-read string   $info
  * @property-read CostType $type
+ *
  * @method static Builder|Period newModelQuery()
  * @method static Builder|Period newQuery()
  * @method static Builder|Period query()
@@ -34,78 +35,77 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Period extends Model
 {
-  protected $fillable = [
-    'start_at',
-    'end_at',
-    'description',
-    'cost_type_id',
-  ];
+    protected $fillable = [
+        'start_at',
+        'end_at',
+        'description',
+        'cost_type_id',
+    ];
 
-  /**
-   * get methods
-   *
-   * @var string[]
-   */
-  protected $with = [
-    'type',
-  ];
+    /**
+     * get methods
+     *
+     * @var string[]
+     */
+    protected $with = [
+        'type',
+    ];
 
-  protected $appends = [
-    'info',
-  ];
+    protected $appends = [
+        'info',
+    ];
 
-  /**
-   * Тип периода выбранного
-   *
-   * @return BelongsTo
-   */
-  public function type(): BelongsTo
-  {
-    return $this->belongsTo(CostType::class, 'cost_type_id');
-  }
-
-  /**
-   * Get the info for font-end.
-   *
-   * @return string
-   */
-  public function getInfoAttribute(): string
-  {
-    if ($this->end_at) {
-      return 'С ' . $this->start_at . ' до ' . $this->end_at;
+    /**
+     * Тип периода выбранного
+     *
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(CostType::class, 'cost_type_id');
     }
 
-    return 'От ' . $this->start_at . $this->theEnding($this->start_at);
-  }
+    /**
+     * Get the info for font-end.
+     *
+     * @return string
+     */
+    public function getInfoAttribute(): string
+    {
+        if ($this->end_at) {
+            return 'С '.$this->start_at.' до '.$this->end_at;
+        }
 
-  /**
-   * Русское окончание при сокращениие цифрами до 20 часов
-   *
-   * @param $value
-   *
-   * @return string
-   */
-  public function theEnding($value): string
-  {
-    $value = (int)$value;
-    if ($value < 2) {
-      return '-го часа';
+        return 'От '.$this->start_at.$this->theEnding($this->start_at);
     }
 
-    if ($value < 5) {
-      return '-x часов';
+    /**
+     * Русское окончание при сокращениие цифрами до 20 часов
+     *
+     * @param $value
+     * @return string
+     */
+    public function theEnding($value): string
+    {
+        $value = (int) $value;
+        if ($value < 2) {
+            return '-го часа';
+        }
+
+        if ($value < 5) {
+            return '-x часов';
+        }
+
+        if ($value < 20) {
+            return '-и часов';
+        }
+
+        return '';
     }
 
-    if ($value < 20) {
-      return '-и часов';
+    public function __toString()
+    {
+        return (string) $this->info.PHP_EOL.
+          "Тип: {$this->type->name}";
     }
-
-    return '';
-  }
-
-  public function __toString()
-  {
-    return (string)$this->info . PHP_EOL .
-      "Тип: {$this->type->name}";
-  }
 }

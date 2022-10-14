@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Eloquent;
-use Illuminate\Support\Carbon;
 use App\Traits\CreatedAtOrdered;
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Attribute
@@ -18,11 +18,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null            $model
  * @property Carbon|null            $created_at
  * @property Carbon|null            $updated_at
- * @property boolean                $in_filter
+ * @property bool                $in_filter
  * @property int                    $attribute_category_id
  * @property-read mixed             $category
  * @property-read mixed             $model_name
  * @property-read AttributeCategory $relationCategory
+ *
  * @method static Builder|Attribute filtered()
  * @method static Builder|Attribute forHotels()
  * @method static Builder|Attribute forRooms()
@@ -41,54 +42,55 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Attribute extends Model
 {
-  use CreatedAtOrdered;
+    use CreatedAtOrdered;
 
-  public const MODELS_TRANSLATE = [
-    Hotel::class => 'Отели',
-    Room::class => 'Номера',
-  ];
+    public const MODELS_TRANSLATE = [
+        Hotel::class => 'Отели',
+        Room::class => 'Номера',
+    ];
 
-  protected $fillable = [
-    'name',
-    'description',
-    'model',
-    'in_filter',
-  ];
+    protected $fillable = [
+        'name',
+        'description',
+        'model',
+        'in_filter',
+    ];
 
-  protected $casts = [
-    'in_filter' => 'boolean',
-  ];
+    protected $casts = [
+        'in_filter' => 'boolean',
+    ];
 
-  public function scopeForHotels(Builder $builder): Builder
-  {
-    return $builder->where('model', Hotel::class);
-  }
+    public function scopeForHotels(Builder $builder): Builder
+    {
+        return $builder->where('model', Hotel::class);
+    }
 
-  public function scopeForRooms(Builder $builder): Builder
-  {
-    return $builder->where('model', Room::class);
-  }
+    public function scopeForRooms(Builder $builder): Builder
+    {
+        return $builder->where('model', Room::class);
+    }
 
-  public function scopeFiltered(Builder $builder): Builder
-  {
-    return $builder->where('in_filter', true);
-  }
+    public function scopeFiltered(Builder $builder): Builder
+    {
+        return $builder->where('in_filter', true);
+    }
 
-  public function getCategoryAttribute()
-  {
-    $model = explode('\\', $this->getModelNameAttribute());
-    $model = end($model);
-    $model = mb_strtolower($model);
-    return $model;
-  }
+    public function getCategoryAttribute()
+    {
+        $model = explode('\\', $this->getModelNameAttribute());
+        $model = end($model);
+        $model = mb_strtolower($model);
 
-  public function getModelNameAttribute()
-  {
-    return $this->getAttributes()['model'];
-  }
+        return $model;
+    }
 
-  public function relationCategory(): BelongsTo
-  {
-    return $this->belongsTo(AttributeCategory::class, 'attribute_category_id', 'id');
-  }
+    public function getModelNameAttribute()
+    {
+        return $this->getAttributes()['model'];
+    }
+
+    public function relationCategory(): BelongsTo
+    {
+        return $this->belongsTo(AttributeCategory::class, 'attribute_category_id', 'id');
+    }
 }

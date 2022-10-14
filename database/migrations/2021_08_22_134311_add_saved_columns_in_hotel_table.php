@@ -6,28 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 class AddSavedColumnsInHotelTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('hotels', function (Blueprint $table) {
-      $table->dropColumn(['moderate']);
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('hotels', function (Blueprint $table) {
+            $table->dropColumn(['moderate']);
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('hotels', function (Blueprint $table) {
-      $table->dropColumn(['old_moderate', 'show']);
-      $table->boolean('moderate')->default('false');
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('hotels', function (Blueprint $table) {
+            $table->dropColumn(['old_moderate', 'show']);
+            $table->boolean('moderate')->default('false');
+        });
+    }
 }

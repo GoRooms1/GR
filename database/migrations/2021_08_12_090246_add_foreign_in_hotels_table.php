@@ -14,29 +14,29 @@ use Illuminate\Support\Facades\Schema;
  */
 class AddForeignInHotelsTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up(): void
-  {
-    Schema::table('hotels', function (Blueprint $table) {
-      $table->foreign('type_id')->references('id')->on('hotel_types');
-      $table->dropColumn('route_title');
-    });
-  }
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+        Schema::table('hotels', function (Blueprint $table) {
+            $table->foreign('type_id')->references('id')->on('hotel_types');
+            $table->dropColumn('route_title');
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down(): void
-  {
-    Schema::table('hotels', function (Blueprint $table) {
-      $table->dropForeign(['type_id']);
-      $table->string('route_title', 255)->default('Как добраться')->after('route');
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::table('hotels', function (Blueprint $table) {
+            $table->dropForeign(['type_id']);
+            $table->string('route_title', 255)->default('Как добраться')->after('route');
+        });
+    }
 }

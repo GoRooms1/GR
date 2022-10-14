@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Eloquent;
-use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
 use App\Traits\ClearValidated;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * App\Models\Address
@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $comment
  * @property-read mixed  $city_area_short
  * @property-read Hotel  $hotel
+ *
  * @method static Builder|Address newModelQuery()
  * @method static Builder|Address newQuery()
  * @method static Builder|Address query()
@@ -69,87 +70,88 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Address extends Model
 {
-  use ClearValidated;
+    use ClearValidated;
 
-  protected $fillable = [
-    'postal_code',
-    'country',
-    'region',
-    'area',
-    'city',
-    'city_district',
-    'street',
-    'house',
-    'block',
-    'flat',
-    'office',
-    'geo_lat',
-    'geo_lon',
-    'value',
-    'street_type',
-    'city_area',
-    'street_with_type',
-    'comment',
-  ];
+    protected $fillable = [
+        'postal_code',
+        'country',
+        'region',
+        'area',
+        'city',
+        'city_district',
+        'street',
+        'house',
+        'block',
+        'flat',
+        'office',
+        'geo_lat',
+        'geo_lon',
+        'value',
+        'street_type',
+        'city_area',
+        'street_with_type',
+        'comment',
+    ];
 
-
-  public static function setAddressesSlug($model): void
-  {
-    $slugs = self::getSlugFromAddress($model);
-    Cache::forget('sitemap.2g');
-    foreach ($slugs as $slug) {
-      DB::table('address_slug')->updateOrInsert(['address' => $slug['address']], $slug);
-    }
-  }
-
-  public static function getSlugFromAddress(Address $address): array
-  {
-    $columns = ['region', 'area', 'city', 'city_district', 'street', 'city_area'];
-
-    $slugs = [];
-    foreach ($columns as $column) {
-      $attribute = $address->getAttribute($column);
-      if (!empty($attribute)) {
-        $slugs[] = [
-          'address' => $attribute,
-          'slug' => Str::slug($attribute),
-        ];
-      }
+    public static function setAddressesSlug($model): void
+    {
+        $slugs = self::getSlugFromAddress($model);
+        Cache::forget('sitemap.2g');
+        foreach ($slugs as $slug) {
+            DB::table('address_slug')->updateOrInsert(['address' => $slug['address']], $slug);
+        }
     }
 
-    return $slugs;
-  }
+    public static function getSlugFromAddress(Address $address): array
+    {
+        $columns = ['region', 'area', 'city', 'city_district', 'street', 'city_area'];
 
-  public function hotel(): BelongsTo
-  {
-    return $this->belongsTo(Hotel::class);
-  }
+        $slugs = [];
+        foreach ($columns as $column) {
+            $attribute = $address->getAttribute($column);
+            if (! empty($attribute)) {
+                $slugs[] = [
+                    'address' => $attribute,
+                    'slug' => Str::slug($attribute),
+                ];
+            }
+        }
 
-  public function getCityAreaShortAttribute(): string
-  {
-    $areas = explode('-', $this->city_area);
-    $area = '';
-    foreach ($areas as $area_prefix) {
-      $area .= mb_substr($area_prefix, 0, 1);
+        return $slugs;
     }
-    return mb_strtoupper($area) . 'АО';
-  }
 
-  public function unitedCities()
-  {
-    $row = DB::table('united_cities_address')->where('city_name', $this->city)->first();
-    if ($row) {
-      $unitedCity = UnitedCity::find($row->united_city);
-      if ($unitedCity) {
-        return $unitedCity->united();
-      }
-
-      return new Collection([
-        $this->city
-      ]);
+    public function hotel(): BelongsTo
+    {
+        return $this->belongsTo(Hotel::class);
     }
-    return new Collection([
-      $this->city
-    ]);
-  }
+
+    public function getCityAreaShortAttribute(): string
+    {
+        $areas = explode('-', $this->city_area);
+        $area = '';
+        foreach ($areas as $area_prefix) {
+            $area .= mb_substr($area_prefix, 0, 1);
+        }
+
+        return mb_strtoupper($area).'АО';
+    }
+
+    public function unitedCities()
+    {
+        $row = DB::table('united_cities_address')->where('city_name', $this->city)->first();
+        if ($row) {
+            $unitedCity = UnitedCity::find($row->united_city);
+            if ($unitedCity) {
+                return $unitedCity->united();
+            }
+
+            return new Collection([
+                $this->city,
+            ]);
+        }
+
+        return new Collection([
+            $this->city,
+        ]);
+    }
 }

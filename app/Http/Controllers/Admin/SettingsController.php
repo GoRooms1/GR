@@ -16,10 +16,10 @@ class SettingsController extends Controller
     public function index(): View
     {
         return view('admin.settings.index', [
-                'pages' => Settings::where('option', 'LIKE', 'seo_%')->get(),
-                'names' => ['seo_/' => 'Главная страница', 'seo_/rooms/hot' => 'Горячее', 'seo_/rooms' => 'Комнаты', 'seo_/hotels' => 'Отели'],
-                'search_city' => Address::groupBy('city')->pluck('city')->toArray(),
-                'periods' => Period::all(),
+            'pages' => Settings::where('option', 'LIKE', 'seo_%')->get(),
+            'names' => ['seo_/' => 'Главная страница', 'seo_/rooms/hot' => 'Горячее', 'seo_/rooms' => 'Комнаты', 'seo_/hotels' => 'Отели'],
+            'search_city' => Address::groupBy('city')->pluck('city')->toArray(),
+            'periods' => Period::all(),
         ]);
     }
 
@@ -27,7 +27,7 @@ class SettingsController extends Controller
     {
         $all = $request->all();
 
-        foreach ($all AS $option => $value) {
+        foreach ($all as $option => $value) {
             \Cache::forget('setting.'.$option);
             Settings::updateOrCreate(['option' => $option], ['option' => $option, 'value' => $value]);
         }
@@ -46,6 +46,7 @@ class SettingsController extends Controller
     public function clearCache(): RedirectResponse
     {
         Artisan::call('optimize:clear');
+
         return back();
     }
 
@@ -56,6 +57,7 @@ class SettingsController extends Controller
             'header' => \request()->header,
         ]);
         Artisan::call('optimize:clear');
+
         return redirect()->back();
     }
 }

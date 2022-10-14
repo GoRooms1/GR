@@ -7,95 +7,97 @@
 
 namespace App\Http\Controllers\Lk;
 
-use Exception;
-use App\Models\Room;
-use App\Models\Hotel;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Http\Requests\LK\CategoryRequest;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LK\CategoryRequest;
+use App\Models\Category;
+use App\Models\Hotel;
+use App\Models\Room;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-  public function update(CategoryRequest $request): JsonResponse
-  {
-    $category = Category::findOrFail($request->get('id'));
+    public function update(CategoryRequest $request): JsonResponse
+    {
+        $category = Category::findOrFail($request->get('id'));
 
-    if ($this->save($category, $request->all())) {
-      return response()->json(['status' => 'success']);
-    }
-
-    return response()->json(['status' => 'error']);
-  }
-
-  public function create(CategoryRequest $request): JsonResponse
-  {
-    $category = new Category();
-
-    if ($this->save($category, $request->all())) {
-      if ($category->hotel->type_fond === Hotel::CATEGORIES_TYPE) {
-        $room = new Room();
-        $room->hotel()->associate($category->hotel->id);
-        $room->category()->associate($category->id);
-        $hotel = $category->hotel;
-
-        $count = $hotel->rooms()->count();
-        if ($count === 0) {
-          $room->order = 1;
-        } else if ($count > 0) {
-          $roomLastOrder = Room::whereHas('hotel', function ($q) use ($hotel) {
-            $q->whereId($hotel->id);
-          })
-            ->orderByDesc('order')
-            ->firstOrFail();
-
-          $room->order = $roomLastOrder->order + 1;
+        if ($this->save($category, $request->all())) {
+            return response()->json(['status' => 'success']);
         }
-        $room->save();
+
+        return response()->json(['status' => 'error']);
+    }
+
+    public function create(CategoryRequest $request): JsonResponse
+    {
+        $category = new Category();
+
+        if ($this->save($category, $request->all())) {
+            if ($category->hotel->type_fond === Hotel::CATEGORIES_TYPE) {
+                $room = new Room();
+                $room->hotel()->associate($category->hotel->id);
+                $room->category()->associate($category->id);
+                $hotel = $category->hotel;
+
+                $count = $hotel->rooms()->count();
+                if ($count === 0) {
+                    $room->order = 1;
+                } elseif ($count > 0) {
+                    $roomLastOrder = Room::whereHas('hotel', function ($q) use ($hotel) {
+                        $q->whereId($hotel->id);
+                    })
+                      ->orderByDesc('order')
+                      ->firstOrFail();
+
+                    $room->order = $roomLastOrder->order + 1;
+                }
+                $room->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'category' => $category,
+                    'room' => $room,
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'category' => $category,
+            ]);
+        }
+
+        return response()->json(['status' => 'error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete(Category $category): JsonResponse
+    {
+        $countRoomsInHotel = $category->hotel->rooms()->count();
+        $status = $category->delete();
+
         return response()->json([
-          'status' => 'success',
-          'category' => $category,
-          'room' => $room
+            'status' => (bool) $status,
+            'reload' => $countRoomsInHotel <= 0,
         ]);
-      }
-      return response()->json([
-        'status' => 'success',
-        'category' => $category
-      ]);
     }
 
-    return response()->json(['status' => 'error']);
-  }
+    public function save(&$category, $data): bool
+    {
+        try {
+            $category->name = $data['name'];
+            $category->value = $data['value'];
 
-  /**
-   * @throws Exception
-   */
-  public function delete(Category $category): JsonResponse
-  {
-    $countRoomsInHotel = $category->hotel->rooms()->count();
-    $status = $category->delete();
-    return response()->json([
-      'status' => (boolean) $status,
-      'reload' => $countRoomsInHotel <= 0
-    ]);
-  }
+            if (isset($data['hotel_id'])) {
+                $category->hotel()->associate($data['hotel_id']);
+            }
 
-  public function save(&$category, $data): bool
-  {
-    try {
-      $category->name = $data['name'];
-      $category->value = $data['value'];
+            $category->save();
 
-      if (isset($data['hotel_id'])) {
-        $category->hotel()->associate($data['hotel_id']);
-      }
-
-      $category->save();
-
-      return true;
-    } catch (Exception $exception) {
-      return false;
+            return true;
+        } catch (Exception $exception) {
+            return false;
+        }
     }
-  }
 }

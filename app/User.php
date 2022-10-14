@@ -7,17 +7,17 @@
 
 namespace App;
 
-use Eloquent;
 use App\Models\Hotel;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Query\Builder;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 /**
  * User Table
@@ -41,6 +41,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null                                              $notifications_count
  * @property-read mixed                                                 $personal_hotel
+ *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -67,77 +68,79 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  */
 class User extends Authenticatable
 {
+    use Notifiable;
+    use SoftDeletes;
 
-  use Notifiable;
-  use SoftDeletes;
+    /**
+     * General permission, for db
+     *
+     * @var string
+     */
+    public const POSITION_GENERAL = 'general';
 
-  /**
-   * General permission, for db
-   * @var string
-   */
-  public const POSITION_GENERAL = 'general';
+    /**
+     * Staff permission, for db
+     *
+     * @var string
+     */
+    public const POSITION_STAFF = 'staff';
 
-  /**
-   * Staff permission, for db
-   * @var string
-   */
-  public const POSITION_STAFF = 'staff';
+    /**
+     * Array permission for forEach in blade
+     *
+     * @var array
+     */
+    public const POSITIONS = [self::POSITION_GENERAL, self::POSITION_STAFF];
 
-  /**
-   * Array permission for forEach in blade
-   * @var array
-   */
-  public const POSITIONS = [self::POSITION_GENERAL, self::POSITION_STAFF];
+    /**
+     * Russian (Translate) permission, for blade
+     */
+    public const POSITIONS_LANGUAGE = [self::POSITION_STAFF => 'STAFF', self::POSITION_GENERAL => 'GENERAL'];
 
-  /**
-   * Russian (Translate) permission, for blade
-   */
-  public const POSITIONS_LANGUAGE = [self::POSITION_STAFF => 'STAFF', self::POSITION_GENERAL => 'GENERAL'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'email', 'password', 'is_admin', 'phone', 'position', 'code', 'position', 'is_moderate'];
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = ['name', 'email', 'password', 'is_admin', 'phone', 'position', 'code', 'position', 'is_moderate'];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['password', 'remember_token'];
 
-  /**
-   * The attributes that should be hidden for arrays.
-   *
-   * @var array
-   */
-  protected $hidden = ['password', 'remember_token',];
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = ['email_verified_at' => 'datetime', 'is_admin' => 'boolean', 'is_moderate' => 'boolean'];
 
-  /**
-   * The attributes that should be cast to native types.
-   *
-   * @var array
-   */
-  protected $casts = ['email_verified_at' => 'datetime', 'is_admin' => 'boolean', 'is_moderate' => 'boolean'];
+    private string $info = '';
 
-  private string $info = '';
+    /**
+     * Get personal hotel.
+     *
+     * @return HasOne
+     */
+    public function hotel(): HasOne
+    {
+        return $this->hasOne(Hotel::class);
+    }
 
-  /**
-   * Get personal hotel.
-   *
-   * @return HasOne
-   */
-  public function hotel (): HasOne
-  {
-    return $this->hasOne(Hotel::class);
-  }
+    /**
+     * return Hotel where staff or general
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
+     */
+    public function getPersonalHotelAttribute()
+    {
+        $user = $this;
 
-  /**
-   * return Hotel where staff or general
-   *
-   * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
-   */
-  public function getPersonalHotelAttribute ()
-  {
-    $user = $this;
-
-    return Hotel::withoutGlobalScopes()->whereHas('users', function ($q) use ($user) {
-      $q->where('users.id', $user->id);
-    })->first();
-  }
+        return Hotel::withoutGlobalScopes()->whereHas('users', function ($q) use ($user) {
+            $q->where('users.id', $user->id);
+        })->first();
+    }
 }

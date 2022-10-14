@@ -8,8 +8,8 @@
 
 namespace App\Traits;
 
-trait RusMonth {
-
+trait RusMonth
+{
     protected $monthNames = [
         1 => [
             'short' => 'янв',
@@ -61,16 +61,18 @@ trait RusMonth {
         ],
     ];
 
-    public function getCreateMonthName(bool $full = false):string
+    public function getCreateMonthName(bool $full = false): string
     {
         $month = (int) $this->created_at->format('m');
+
         return $this->getMonthName($month, $full);
     }
 
-    public function getMonthName(int $month, bool $full = false):string
+    public function getMonthName(int $month, bool $full = false): string
     {
-        if ($month < 1 || $month > 12)
+        if ($month < 1 || $month > 12) {
             return '';
+        }
 
         return $this->monthNames[$month][$full ? 'full' : 'short'];
     }

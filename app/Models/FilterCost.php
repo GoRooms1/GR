@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\FilterCost
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property Carbon|null   $created_at
  * @property Carbon|null   $updated_at
  * @property-read CostType $costType
+ *
  * @method static Builder|FilterCost newModelQuery()
  * @method static Builder|FilterCost newQuery()
  * @method static Builder|FilterCost query()
@@ -30,14 +31,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class FilterCost extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $fillable = [
-    'cost',
-  ];
+    protected $fillable = [
+        'cost',
+    ];
 
-  public function costType(): BelongsTo
-  {
-    return $this->belongsTo(CostType::class);
-  }
+    public function costType(): BelongsTo
+    {
+        return $this->belongsTo(CostType::class);
+    }
 }

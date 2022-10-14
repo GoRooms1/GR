@@ -12,37 +12,37 @@ use Illuminate\Support\Facades\Schema;
 
 class ChangeTypeColorAndDistanceInMetroTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up()
-  {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('metros', function (Blueprint $table) {
+            $table->integer('distance_int')->after('distance');
+        });
 
-    Schema::table('metros', function (Blueprint $table) {
-      $table->integer('distance_int')->after('distance');
-    });
+        $metros = Metro::query()->get()->map(function (Metro $m) {
+            if (in_array($m->color, Metro::ARRAY_COLORS, true)) {
+                $m->color = Metro::COLORS_HEX[$m->color];
+            }
+            $m->distance_int = explode(' ', $m->distance)[0];
+            $m->save();
 
-    $metros = Metro::query()->get()->map(function (Metro $m) {
-      if (in_array($m->color, Metro::ARRAY_COLORS, true)) {
-        $m->color = Metro::COLORS_HEX[$m->color];
-      }
-      $m->distance_int = explode(' ', $m->distance)[0];
-      $m->save();
-      return $m;
-    });
-  }
+            return $m;
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down()
-  {
-    Schema::table('metros', function (Blueprint $table) {
-      $table->dropColumn(['distance_int']);
-    });
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('metros', function (Blueprint $table) {
+            $table->dropColumn(['distance_int']);
+        });
+    }
 }

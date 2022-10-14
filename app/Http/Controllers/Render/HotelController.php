@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Render;
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\Review;
-use App\Models\Room;
 use Illuminate\Http\Request;
 
 class HotelController extends Controller
@@ -13,12 +12,14 @@ class HotelController extends Controller
     public function index(Request $request)
     {
         $hotels = Hotel::paginate(18);
+
         return view('render.hotel.index', compact('hotels'));
     }
 
     public function show(Hotel $hotel, Request $request)
     {
         $rooms = $hotel->rooms()->paginate(6);
+
         return view('render.hotel.show', compact('rooms', 'hotel'));
     }
 

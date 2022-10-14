@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Form
@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string      $ip
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Form newModelQuery()
  * @method static Builder|Form newQuery()
  * @method static Builder|Form query()

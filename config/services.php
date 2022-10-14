@@ -32,8 +32,8 @@ return [
 
     'yandex' => [
         'map' => [
-            'key' => env('YANDEX_MAPS_KEY', '48a53e1e-0baf-46d3-a56a-6e77254c3f8b')
-        ]
-    ]
+            'key' => env('YANDEX_MAPS_KEY', '48a53e1e-0baf-46d3-a56a-6e77254c3f8b'),
+        ],
+    ],
 
 ];

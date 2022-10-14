@@ -2,12 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\PageDescription;
-use App\Settings;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\ServiceProvider;
 use App\Models\Address;
+use App\Models\PageDescription;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
 class ViewProvider extends ServiceProvider
@@ -29,7 +28,7 @@ class ViewProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!env('LOCAL', false)) {
+        if (! env('LOCAL', false)) {
 //            $search_region = Address::groupBy('region')->pluck('region')->toArray();
 //            $search_area = Address::groupBy('city_district')->pluck('city_district')->toArray();
 //            $search_city = Address::groupBy('city')->pluck('city')->toArray();
@@ -51,9 +50,10 @@ class ViewProvider extends ServiceProvider
             $pageDescription = PageDescription::where('url', $url)->whereNull('model_type')->first();
             View::share('pageDescription', $pageDescription);
         }
-        Blade::directive('area', function(string $area){
+        Blade::directive('area', function (string $area) {
             $area_name = Str::ucfirst($area);
             $area_name = $area_name[0];
+
             return "<?php echo $area_name.'АО'?>";
         });
     }

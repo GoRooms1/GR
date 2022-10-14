@@ -35,7 +35,7 @@ class RoomRequest extends FormRequest
             'category_id' => [
                 'nullable',
                 'integer',
-                new ExistWhere('categories', 'id', 'hotel_id', $this->hotel_id)
+                new ExistWhere('categories', 'id', 'hotel_id', $this->hotel_id),
             ],
             'image.*' => ['nullable', 'image'],
             'is_hot' => ['nullable', 'boolean'],

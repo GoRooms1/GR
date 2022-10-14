@@ -13,7 +13,7 @@ class PageContactSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Page::where("title", "Контакты")->first()->update(["content" => '
+        \App\Models\Page::where('title', 'Контакты')->first()->update(['content' => '
         <div class="row">
     <div class="col-lg-5 contacts-info">
     <div class="contacts-list">
