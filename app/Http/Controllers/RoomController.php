@@ -89,11 +89,12 @@ class RoomController extends Controller
         $booking->save();
 
         BookRoomJob::dispatch($id, $validated);
-
+        /** @var Room $room */
         $room = Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first();
 
         $message = 'Бронирование № '.$validated['book_number'].'<br><br>';
-        $message .= 'Вы совершили бронирование в номере<br>'.$room->name ?? $room->id;
+        $label = $room->name ?? $room->id;
+        $message .= 'Вы совершили бронирование в номере<br>'.$label;
         $message .= $room->category_id ? ' , в категории "'.$room->category->name.'"' : '';
         $message .= '<br>в объекте размещения: "'.$room->hotel->type->single_name.': '.$room->hotel->name.'".';
         $message .= '';

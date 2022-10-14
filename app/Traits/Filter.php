@@ -310,7 +310,7 @@ trait Filter
                 }
             }
 
-            if (isset($attributes['hotel']) && count($attributes['hotel']) > 0) {
+            if ($attributes['hotel'] && count($attributes['hotel']) > 0) {
                 foreach ($attributes['hotel'] as $id) {
                     $rooms = $rooms->whereHas('hotel', function (Builder $q_hotel) use ($id) {
                         $q_hotel->whereHas('attrs', function (Builder $q_attrs) use ($id) {
@@ -392,7 +392,7 @@ trait Filter
         ];
     }
 
-    private function costTypeTranslate($type): string|int
+    private function costTypeTranslate($type): int
     {
         $costType = CostType::where('slug', $type)->first();
         if ($costType) {

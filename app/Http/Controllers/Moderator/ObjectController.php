@@ -67,7 +67,7 @@ class ObjectController extends Controller
      */
     public function update(int $id, ObjectUpdateRequest $request): RedirectResponse
     {
-        $hotel = Hotel::findOrFail($id);
+        $hotel = Hotel::find($id);
         $type = $request->get('type_update');
         if ($hotel) {
             if ($type === 'phone' || $type === 'description') {

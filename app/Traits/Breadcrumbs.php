@@ -19,19 +19,17 @@ trait Breadcrumbs
         $crumbs = [];
 
         //На главной не показываем
-        if ($urls) {
-            $return_url_with_desc = [];
-            foreach ($urls as $url) {
-                if (empty($url)) {
-                    array_push($return_url_with_desc, ['url' => '/', 'text' => 'Главная страница']);
-                }
+        $return_url_with_desc = [];
+        foreach ($urls as $url) {
+            if (empty($url)) {
+                array_push($return_url_with_desc, ['url' => '/', 'text' => 'Главная страница']);
+            }
 
-                //Прописываем название пункта, исходя из url
-                switch ($url) {
-                    case 'hotels':
-                        array_push($return_url_with_desc, ['url' => $url, 'text' => 'Отели']);
-                        break;
-                }
+            //Прописываем название пункта, исходя из url
+            switch ($url) {
+                case 'hotels':
+                    array_push($return_url_with_desc, ['url' => $url, 'text' => 'Отели']);
+                    break;
             }
         }
 

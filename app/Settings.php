@@ -52,19 +52,6 @@ class Settings extends Model
         return $default;
     }
 
-    private static function is_json($data): bool
-    {
-        try {
-            json_decode($data, true, 512, JSON_THROW_ON_ERROR);
-
-            return false;
-        } catch (JsonException $e) {
-            return true;
-        }
-
-        //    return (json_last_error() === JSON_ERROR_NONE);
-    }
-
     public function __call($method, $parameters)
     {
         if ($method === 'option') {

@@ -143,7 +143,7 @@ class SearchController extends Controller
                 }
 
                 foreach ($address as $key => $value) {
-                    if (empty($value) || is_null($value)) {
+                    if (empty($value)) {
                         continue;
                     }
                     $rooms->whereHas('hotel.address', function (Builder $builder) use ($key, $value) {
@@ -235,6 +235,7 @@ class SearchController extends Controller
                 @SetCityCoords::set($request);
             }
         } catch (Exception $exception) {
+            // @phpstan-ignore-next-line
             if ($request->is('api/*')) {
                 return Json::bad(['error' => $exception->getMessage()]);
             }

@@ -51,7 +51,7 @@ class RoomObserver
     public function updated(Room $room): void
     {
         Cache::flush();
-        $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
+        $hotel = Hotel::withoutGlobalScope('moderation')->find($room->hotel_id);
         if ($hotel) {
             $this->moderate_hotel($hotel);
         }

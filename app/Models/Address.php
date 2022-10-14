@@ -39,7 +39,7 @@ use Illuminate\Support\Str;
  * @property string|null $street_with_type
  * @property string|null $comment
  * @property-read mixed  $city_area_short
- * @property-read Hotel  $hotel
+ * @property-read ?Hotel  $hotel
  *
  * @method static Builder|Address newModelQuery()
  * @method static Builder|Address newQuery()

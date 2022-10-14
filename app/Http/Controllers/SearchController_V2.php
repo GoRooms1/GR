@@ -377,7 +377,7 @@ class SearchController_V2 extends Controller
         }
 
         $title = '';
-        if (isset($slugs['city'])) {
+        if ($slugs['city']) {
             $title = ($is_room ? 'Номера города ' : 'Отели города ')
               .$slugs['city']
               .(isset($slugs['area']) ? ', '.$slugs['area'].' округ ' : '')

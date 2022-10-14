@@ -43,7 +43,7 @@ trait ClearValidated
 
     public function getFillable()
     {
-        if (isset($this->fillable)) {
+        if ($this->fillable) {
             return $this->fillable;
         }
 

@@ -47,7 +47,7 @@ use Illuminate\Support\Str;
  * @property int                                                       $hide_phone
  * @property string|null                                               $email
  * @property bool                                                      $checked_type_fond
- * @property-read Address                                              $address
+ * @property-read ?Address                                              $address
  * @property-read \Illuminate\Database\Eloquent\Collection|Attribute[] $attrs
  * @property-read int|null                                             $attrs_count
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[]  $categories
@@ -190,6 +190,7 @@ class Hotel extends Model
                 if (Route::currentRouteNamed('lk.*')) {
                     // Some stop if
                 } elseif ((! auth()->user()->is_admin && ! auth()->user()->is_moderate) &&
+                    // @phpstan-ignore-next-line
                   ! Route::currentRouteNamed('lk.*') &&
                   ! Route::currentRouteNamed('moderator.*') &&
                   ! Route::currentRouteNamed('api.*') &&

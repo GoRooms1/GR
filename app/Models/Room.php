@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
  * App\Models\Room
  *
  * @property int                         $id
- * @property string|null                 $name
+ * @property ?string                 $name
  * @property int|null                    $number
  * @property int|null                    $order
  * @property int|null                    $category_id
