@@ -101,6 +101,10 @@ Please make sure to update tests as appropriate.
 # Reset SEO Hotel (1.04.2022)
 1. `php artisan seo:reset-hotel-seo`
 
+# Possible installation problems
+If you get an error during images loading, run command:
+`ln -s storage image` in public folder.
+
 # Custom page and set SEO
 1. `/jacuzzi`
 2. `/centre`
