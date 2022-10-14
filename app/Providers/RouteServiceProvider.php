@@ -14,15 +14,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/';
 
-    /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
-    protected $namespace = 'App\Http\Controllers';
-
     protected string $admin_namespace = 'App\Http\Controllers\Admin';
 
     protected string $render_namespace = 'App\Http\Controllers';
@@ -38,7 +29,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    //
+        //
 
         parent::boot();
     }
@@ -70,7 +61,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('api')
           ->middleware(['api', 'noDebugbar'])
           ->name('api.')
-          ->namespace($this->namespace)
           ->group(base_path('routes/api.php'));
     }
 
@@ -82,7 +72,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['web', 'auth', 'admin'])
           ->prefix('admin')
           ->name('admin.')
-          ->namespace($this->admin_namespace)
           ->group(base_path('routes/admin.php'));
     }
 
@@ -91,7 +80,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('render')
           ->middleware(['web', 'noDebugbar'])
           ->name('render.')
-          ->namespace($this->render_namespace)
           ->group(base_path('routes/render.php'));
     }
 
@@ -105,7 +93,6 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes(): void
     {
         Route::middleware('web')
-          ->namespace($this->namespace)
           ->group(base_path('routes/web.php'));
     }
 
@@ -121,7 +108,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['web', 'auth', 'lk'])
           ->prefix('lk')
           ->name('lk.')
-          ->namespace($this->lk_namespace)
           ->group(base_path('routes/lk.php'));
     }
 
@@ -137,7 +123,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['web', 'auth', 'moderator'])
           ->prefix('moderator')
           ->name('moderator.')
-          ->namespace($this->moderator_namespace)
           ->group(base_path('routes/moderator.php'));
     }
 }

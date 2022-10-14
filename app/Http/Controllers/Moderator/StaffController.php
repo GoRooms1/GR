@@ -73,11 +73,11 @@ class StaffController extends Controller
         try {
             $user = User::findOrFail($staff_id);
 
-      //    Если у удаляемого юзера прописано что он создатель отеля то...
+            //    Если у удаляемого юзера прописано что он создатель отеля то...
 
             if ($user->id !== auth()->id()) {
                 if ($user->hotel()->exists()) {
-          //      Берём его отель
+                    //      Берём его отель
                     $hotel = $user->hotel;
 
                     if (! $this->check_last_general($hotel, $user)) {
@@ -127,10 +127,10 @@ class StaffController extends Controller
         //  Если в отеле больше 1 главных то..
 
         if ($count_general_users_in_hotel > 1) {
-      //    То берём нового юзера главного из отеля
+            //    То берём нового юзера главного из отеля
             $new_general_user = $hotel->users()->wherePivot('hotel_position', User::POSITION_GENERAL)->wherePivotNotIn('user_id', [$user->id])->first();
 
-      //    И отелю даём нового создателя.
+            //    И отелю даём нового создателя.
             $hotel->user_id = $new_general_user->id;
             $hotel->save();
 
@@ -185,7 +185,7 @@ class StaffController extends Controller
             $user = User::findOrFail($staff_id);
 
             $user->update($request->except('password'));
-      //      If user writen password, update )
+            //      If user writen password, update )
             if ($request->has('password')) {
                 if ($request->get('password') !== '') {
                     $user->password = Hash::make($request->get('password'));

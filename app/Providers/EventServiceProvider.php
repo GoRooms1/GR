@@ -57,4 +57,14 @@ class EventServiceProvider extends ServiceProvider
         CostType::observe(CostTypeObserver::class);
         Metro::observe(MetroObserver::class);
     }
+
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     *
+     * @return bool
+     */
+    public function shouldDiscoverEvents()
+    {
+        return false;
+    }
 }

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  *  Периоды для указания стоимости в комнате.
  */
-class CreatePeriodsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -39,4 +39,4 @@ class CreatePeriodsTable extends Migration
     {
         Schema::dropIfExists('periods');
     }
-}
+};

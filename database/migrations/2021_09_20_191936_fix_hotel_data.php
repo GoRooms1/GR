@@ -3,7 +3,7 @@
 use App\Models\Hotel;
 use Illuminate\Database\Migrations\Migration;
 
-class FixHotelData extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,4 +26,4 @@ class FixHotelData extends Migration
     public function down()
     {
     }
-}
+};

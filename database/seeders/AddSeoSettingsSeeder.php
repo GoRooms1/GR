@@ -79,7 +79,7 @@ class AddSeoSettingsSeeder extends Seeder
                 'meta_description' => '',
                 'meta_keywords' => '',
                 'description' => '',
-                'model_type' => 'App\Models\Room',
+                'model_type' => \App\Models\Room::class,
             ]);
         }
 
@@ -91,7 +91,7 @@ class AddSeoSettingsSeeder extends Seeder
                 'meta_description' => '',
                 'meta_keywords' => '',
                 'description' => '',
-                'model_type' => 'App\Models\Room',
+                'model_type' => \App\Models\Room::class,
             ]);
         }
     }

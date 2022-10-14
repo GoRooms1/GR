@@ -62,7 +62,7 @@ class Settings extends Model
             return true;
         }
 
-    //    return (json_last_error() === JSON_ERROR_NONE);
+        //    return (json_last_error() === JSON_ERROR_NONE);
     }
 
     public function __call($method, $parameters)

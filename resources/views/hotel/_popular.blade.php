@@ -12,11 +12,11 @@
     <a href="{{ route('hotels.show', $hotel) }}" class="hotel-card-title-top" target="_blank">{{ $hotel->name }}</a>
     <div class="rating">
       <p class="rating-title"><span class="rating-title-text">Рейтинг</span>
-        <span>{{ round(optional($hotel->ratings)->avg('value'), 1) }}</span>
-        ({{ optional($hotel->review)->count() ?? 0 }})</p>
+        <span>{{ round($hotel->ratings?->avg('value'), 1) }}</span>
+        ({{ $hotel->review?->count() ?? 0 }})</p>
       <div class="rating-dropdown">
         <div class="rating-dropdown-in">
-          <p class="rating-dropdown-header">{{ round(optional($hotel->ratings)->avg('value'), 1) }}
+          <p class="rating-dropdown-header">{{ round($hotel->ratings?->avg('value'), 1) }}
             Превосходно <span>({{ count($hotel->reviews) }})</span></p>
           <ul class="rating-dropdown-content">
             @foreach($rating_categories AS $category)

@@ -33,7 +33,7 @@ trait Filter
         $unitedHotelsBool = false;
         $unitedCities = null;
 
-    //    Normalize data
+        //    Normalize data
         if (! isset($attributes['room'])) {
             $attributes['room'] = [];
         }

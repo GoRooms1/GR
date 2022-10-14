@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnsInTableRooms extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddColumnsInTableRooms extends Migration
     public function up(): void
     {
         Schema::table('rooms', function (Blueprint $table) {
-      //      На модерации
+            //      На модерации
             $table->boolean('moderate')->default(true)->after('name');
         });
     }
@@ -30,4 +30,4 @@ class AddColumnsInTableRooms extends Migration
             $table->dropColumn('moderate');
         });
     }
-}
+};

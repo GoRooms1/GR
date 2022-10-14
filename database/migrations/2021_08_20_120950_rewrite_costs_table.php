@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Новая таблица для стоимости комнат
  */
-class RewriteCostsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -66,14 +66,14 @@ class RewriteCostsTable extends Migration
         $costs = DB::table('costs_old')->get();
 
         foreach ($costs as $cost) {
-            if ($cost->description && $cost->value && $cost->model_type === 'App\Models\Room') {
+            if ($cost->description && $cost->value && $cost->model_type === \App\Models\Room::class) {
                 $w = $cost->description;
                 if (0 === strpos($w, 'от')) {
-  //      от ..
+                    //      от ..
                     $start = substr(explode(' ', $w)[1], 0, strpos(explode(' ', $w)[1], '-'));
                     $end = null;
                 } elseif (0 === strpos($w, 'с')) {
-  //      с .. до ..
+                    //      с .. до ..
                     $end = explode(':', explode(' ', $w)[3])[0];
                     $start = explode(':', explode(' ', $w)[1])[0];
                 }
@@ -119,4 +119,4 @@ class RewriteCostsTable extends Migration
             $table->text('description')->nullable();
         });
     }
-}
+};

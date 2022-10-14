@@ -88,7 +88,7 @@ class HotelObserver
      */
     public function restored(Hotel $hotel): void
     {
-    //
+        //
     }
 
     /**

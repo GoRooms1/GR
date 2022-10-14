@@ -61,7 +61,7 @@ class AddressObserver
      */
     public function restored(Address $address): void
     {
-    //
+        //
     }
 
     /**

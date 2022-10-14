@@ -74,7 +74,7 @@ class ImageObserver
      */
     public function restored(Image $image): void
     {
-    //
+        //
     }
 
     /**
@@ -85,6 +85,6 @@ class ImageObserver
      */
     public function forceDeleted(Image $image): void
     {
-    //
+        //
     }
 }

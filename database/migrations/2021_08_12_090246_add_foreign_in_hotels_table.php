@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Adding a key to a column. Some moron forgot
  */
-class AddForeignInHotelsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -39,4 +39,4 @@ class AddForeignInHotelsTable extends Migration
             $table->string('route_title', 255)->default('Как добраться')->after('route');
         });
     }
-}
+};

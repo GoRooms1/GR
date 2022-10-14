@@ -113,8 +113,8 @@ class Image extends Model
         $img->save($image->path);
     }
 
-//  public static function boot()
-//  {
+    //  public static function boot()
+    //  {
 //    parent::boot();
 //
 //    self::updating(function (Image $image) {
@@ -147,7 +147,7 @@ class Image extends Model
 //      }
 //      File::delete($image->getRawOriginal('path'));
 //    });
-//  }
+    //  }
 
     public static function beforeSave(Image $image): void
     {

@@ -32,7 +32,7 @@ class CostTypeObserver
      */
     public function updated(CostType $costType): void
     {
-    //
+        //
     }
 
     /**
@@ -43,7 +43,7 @@ class CostTypeObserver
      */
     public function deleted(CostType $costType): void
     {
-    //
+        //
     }
 
     /**
@@ -54,7 +54,7 @@ class CostTypeObserver
      */
     public function restored(CostType $costType): void
     {
-    //
+        //
     }
 
     /**
@@ -65,6 +65,6 @@ class CostTypeObserver
      */
     public function forceDeleted(CostType $costType): void
     {
-    //
+        //
     }
 }

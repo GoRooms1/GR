@@ -10,7 +10,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeNullableColumnInHotelTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -44,4 +44,4 @@ class ChangeNullableColumnInHotelTable extends Migration
             $table->string('type_fond')->default(Hotel::ROOMS_TYPE)->after('old_moderate');
         });
     }
-}
+};
