@@ -16,11 +16,6 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    /**
-     * Index page Personal Area
-     *
-     * @return Application|Factory|View
-     */
     public function index(): View
     {
         return view('lk.index');

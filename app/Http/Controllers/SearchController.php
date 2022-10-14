@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Helpers\Json;
 use App\Http\Middleware\SetCityCoords;
 use App\Models\Attribute;
+use App\Models\Cost;
 use App\Models\Hotel;
+use App\Models\PageDescription;
 use App\Models\Room;
 use App\Models\Search;
 use App\Settings;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class SearchController extends Controller
 {
@@ -27,7 +30,9 @@ class SearchController extends Controller
         $hotel_type = $request->get('hotel_type', false);
         $metro = $request->get('metro', false);
         $hot = $request->has('hot');
-        $with_map = \Request::route()->getName() == 'search.map' || $request->is('/search_map/*');
+        /** @var Route $route */
+        $route = \Request::route();
+        $with_map = $route->getName() == 'search.map' || $request->is('/search_map/*');
 
         $search = Search::makeSearchBuilder();
 
@@ -87,11 +92,14 @@ class SearchController extends Controller
                         return null;
                     })->whereNotNull();
                 }
-                if ($cost = $this->getCost($request)) {
+                /** @var array $cost */
+                $cost = $this->getCost($request);
+                if ($cost) {
                     $before = $hotels->count();
                     $costs = [];
                     $hotels = $hotels->filter(function (Hotel $hotel, int $index) use ($cost, &$costs) {
                         $costs = $hotel->getMinCosts();
+                        /** @var Cost $item */
                         foreach ($costs as $item) {
                             if (isset($item->id)) {
                                 if ($item->id !== $cost['type']) {
@@ -239,9 +247,7 @@ class SearchController extends Controller
         /* START SEO */
 
         //pageAbout
-        $pageDescription = new class
-        {
-        };
+        $pageDescription = new PageDescription();
 
         // Удобства в виде человекочитаемого списка
         $attr = $request->get('attributes');

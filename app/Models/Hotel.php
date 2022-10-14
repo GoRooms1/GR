@@ -471,19 +471,9 @@ class Hotel extends Model
           ->where('model_type', self::class);
     }
 
-    /**
-     * Dynamically retrieve attributes on the model.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function __get($key)
+    public function getMinimalsAttribute(): object
     {
-        if ($key === 'minimals') {
-            return $this->getMinCosts();
-        }
-
-        return parent::__get($key);
+        return $this->getMinCosts();
     }
 
     /**

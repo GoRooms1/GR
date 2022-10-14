@@ -13,7 +13,7 @@ class CostTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index(): View
     {
@@ -25,7 +25,7 @@ class CostTypeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create(): View
     {
@@ -38,7 +38,7 @@ class CostTypeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -56,8 +56,8 @@ class CostTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\CostType  $costType
-     * @return \Illuminate\Http\Response
+     * @param  CostType  $costType
+     * @return View
      */
     public function edit(CostType $costType): View
     {
@@ -68,8 +68,8 @@ class CostTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CostType  $costType
-     * @return \Illuminate\Http\Response
+     * @param  CostType  $costType
+     * @return RedirectResponse
      */
     public function update(Request $request, CostType $costType): RedirectResponse
     {
@@ -87,8 +87,8 @@ class CostTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CostType  $costType
-     * @return \Illuminate\Http\Response
+     * @param  CostType  $costType
+     * @return RedirectResponse
      */
     public function destroy(CostType $costType): RedirectResponse
     {

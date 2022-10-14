@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -54,11 +55,13 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e): Response
     {
         if ($this->isHttpException($e)) {
-            if ((int) $e->getStatusCode() === 404) {
+            /** @var HttpExceptionInterface $exc */
+            $exc = $e;
+            if ((int) $exc->getStatusCode() === 404) {
                 return redirect()->route('index');
             }
 
-            return $this->renderHttpException($e);
+            return $this->renderHttpException($exc);
         }
 
         return parent::render($request, $e);

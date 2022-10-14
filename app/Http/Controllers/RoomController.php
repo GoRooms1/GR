@@ -44,7 +44,7 @@ class RoomController extends Controller
      *
      * @param  int  $id
      * @param  Request  $request
-     * @return Response
+     * @return RedirectResponse
      *
      * @throws \JsonException
      */

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -101,8 +102,10 @@ class Room extends Model
         parent::boot();
 
         static::addGlobalScope('moderation', function (Builder $builder) {
+            /** @var User $user */
+            $user = auth()->user();
             if (auth()->check()) {
-                if ((! auth()->user()->is_admin && ! auth()->user()->is_moderate) &&
+                if ((! $user->is_admin && ! $user->is_moderate) &&
                   ! Route::currentRouteNamed('lk.*') &&
                   ! Route::currentRouteNamed('moderator.*') &&
                   ! Route::currentRouteNamed('api.*') &&

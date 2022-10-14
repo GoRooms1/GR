@@ -19,13 +19,7 @@ class FormSendMailEvent
         //
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  object  $event
-     * @return void
-     */
-    public function handle(FormSend $event)
+    public function handle(FormSend $event): void
     {
         $email = Settings::option('notify') ?? Settings::option('notify', 'gorooms@walfter.ru');
         Mail::to(config('app.admin_email', $email))

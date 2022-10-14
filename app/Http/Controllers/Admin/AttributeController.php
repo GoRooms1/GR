@@ -72,7 +72,7 @@ class AttributeController extends Controller
      * Display the specified resource.
      *
      * @param  Attribute  $attribute
-     * @return Response
+     * @return View
      */
     public function show(Attribute $attribute): View
     {

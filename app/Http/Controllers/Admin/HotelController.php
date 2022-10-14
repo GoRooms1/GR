@@ -22,7 +22,7 @@ class HotelController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return View
      */
     public function index(Request $request): View
     {
@@ -38,10 +38,10 @@ class HotelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
-     * @return Response
+     * @param  HotelRequest  $request
+     * @return RedirectResponse
      */
-    public function store(HotelRequest $request)
+    public function store(HotelRequest $request): RedirectResponse
     {
         $request->validated();
 
@@ -53,7 +53,7 @@ class HotelController extends Controller
           ->with('success', true);
     }
 
-    private function save(Hotel &$hotel, HotelRequest $request)
+    private function save(Hotel $hotel, HotelRequest $request): void
     {
         try {
             $validated = $request->validated();
@@ -112,7 +112,7 @@ class HotelController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -131,7 +131,7 @@ class HotelController extends Controller
      * Display the specified resource.
      *
      * @param  Hotel  $hotel
-     * @return Response
+     * @return View
      */
     public function show(Hotel $hotel): View
     {
@@ -142,7 +142,7 @@ class HotelController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Hotel  $hotel
-     * @return Response
+     * @return View
      */
     public function edit(Hotel $hotel): View
     {
@@ -160,9 +160,9 @@ class HotelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
+     * @param  HotelRequest  $request
      * @param  Hotel  $hotel
-     * @return Response
+     * @return RedirectResponse
      */
     public function update(HotelRequest $request, Hotel $hotel): RedirectResponse
     {

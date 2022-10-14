@@ -9,6 +9,7 @@
 namespace App\Traits;
 
 use App\Models\Image;
+use App\User;
 use Auth;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -19,7 +20,9 @@ trait UseImages
 {
     public function images(): MorphMany
     {
-        if (Auth::guest() || (Auth::check() && ! Auth::user()->is_moderate && ! Auth::user()->is_admin)) {
+        /** @var User $user */
+        $user = Auth::user();
+        if (Auth::guest() || (Auth::check() && ! $user->is_moderate && ! $user->is_admin)) {
             if (! Route::currentRouteNamed('lk.*') &&
               ! Route::currentRouteNamed('moderator.*') &&
               ! Route::currentRouteNamed('api.*') &&

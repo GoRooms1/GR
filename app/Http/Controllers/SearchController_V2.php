@@ -258,10 +258,7 @@ class SearchController_V2 extends Controller
         }
 
         //pageAbout
-        $pageDescription = new class
-        {
-        };
-
+        $pageDescription = new PageDescription();
         // Удобства в виде человекочитаемого списка
         $attr = array_merge(@$attr['hotel'] ?: [], @$attr['room'] ?: []);
 
