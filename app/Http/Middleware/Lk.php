@@ -33,7 +33,7 @@ class Lk
 
                 return redirect()->route('lk.start');
             } catch (ModelNotFoundException $e) {
-                abort('404', 'Пользователь не найден');
+                abort(404, 'Пользователь не найден');
             }
         }
 

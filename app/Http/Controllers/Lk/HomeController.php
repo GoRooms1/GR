@@ -9,8 +9,6 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Models\HotelType;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 

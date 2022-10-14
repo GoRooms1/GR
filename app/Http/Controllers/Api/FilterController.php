@@ -161,7 +161,7 @@ class FilterController extends Controller
         return Json::good(['metros' => $metros]);
     }
 
-    public function all(Request $request)
+    public function all(Request $request): JsonResponse
     {
         $q = $request->get('q');
 
@@ -237,6 +237,7 @@ class FilterController extends Controller
 
             $streetTemp = new Collection();
             foreach ($street as $item) {
+                // @phpstan-ignore-next-line
                 $streetTemp->add([
                     'name' => $item->street,
                     'city' => $item->city,
@@ -249,6 +250,7 @@ class FilterController extends Controller
 
             $cityTemp = new Collection();
             foreach ($city as $item) {
+                // @phpstan-ignore-next-line
                 $cityTemp->add([
                     'name' => $item->city,
                     'id' => $item->id,
@@ -258,6 +260,7 @@ class FilterController extends Controller
 
             $districtTemp = new Collection();
             foreach ($district as $item) {
+                // @phpstan-ignore-next-line
                 $districtTemp->add([
                     'name' => $item->city_district,
                     'city' => $item->city,
@@ -269,6 +272,7 @@ class FilterController extends Controller
 
             $areaTemp = new Collection();
             foreach ($area as $item) {
+                // @phpstan-ignore-next-line
                 $areaTemp->add([
                     'name' => $item->city_area,
                     'city' => $item->city,

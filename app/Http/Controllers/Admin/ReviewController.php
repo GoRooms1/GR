@@ -48,7 +48,7 @@ class ReviewController extends Controller
     public function update(ReviewRequest $request, Hotel $hotel, Review $review): RedirectResponse
     {
         if ($review->hotel->id !== $hotel->id) {
-            return redirect()->back()->withErrors('hotel', ['Not actually hotel']);
+            return redirect()->back()->withErrors('hotel', 'Not actually hotel');
         }
 
         $validated = $request->validated();

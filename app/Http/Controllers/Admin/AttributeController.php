@@ -8,7 +8,6 @@ use App\Models\Attribute;
 use App\Models\AttributeCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class AttributeController extends Controller

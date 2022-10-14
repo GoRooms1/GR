@@ -98,6 +98,7 @@ class StaffController extends Controller
 
                 return back()->with('error', 'Пользователь не удалён');
             }
+
             return back()->with('error', 'Пользователь не удалён. Так как Вы им являетесь');
         } catch (ModelNotFoundException $e) {
             return back()->with('error', 'Не удалось найти пользователя');

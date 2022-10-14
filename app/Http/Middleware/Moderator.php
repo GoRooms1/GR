@@ -31,7 +31,7 @@ class Moderator
 
                 return redirect()->route('index');
             } catch (ModelNotFoundException $e) {
-                abort('404', 'Пользователь не найден');
+                abort(404, 'Пользователь не найден');
             }
         }
 

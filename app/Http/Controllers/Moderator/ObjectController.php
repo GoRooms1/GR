@@ -56,7 +56,7 @@ class ObjectController extends Controller
 
             return view('moderator.object.edit', compact('hotel', 'attributes', 'attributeCategories', 'hotelTypes'));
         } catch (ModelNotFoundException $e) {
-            abort('404', 'Отель с таким индексом не найден');
+            abort(404, 'Отель с таким индексом не найден');
         }
     }
 

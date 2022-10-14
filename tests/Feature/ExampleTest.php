@@ -8,9 +8,7 @@ use App\Models\HotelType;
 use App\Models\PageDescription;
 use App\Models\Room;
 use App\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase

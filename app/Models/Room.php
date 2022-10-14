@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
+use App\Transformers\CostData;
 use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -162,10 +163,11 @@ class Room extends Model
         foreach ($types as $type) {
             $check = $costs->contains('period.type.id', $type->id);
             if (! $check) {
-                $cost = (object) [
+                $cost = new CostData([
                     'type' => $type,
                     'value' => 'Не предоставляется',
-                ];
+                ]);
+                // @phpstan-ignore-next-line
                 $collection->add($cost);
             } else {
                 $collection->add($costs->firstWhere('period.type.id', '=', $type->id));

@@ -6,7 +6,6 @@ use App\Models\Hotel;
 use App\Models\HotelType;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class HotelFactory extends Factory
 {
