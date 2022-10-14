@@ -11,40 +11,24 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'HomeController@index')->name('index');
 
 Route::resource('hotels', 'HotelController');
-Route::resource('rooms', 'RoomController', [
-    'except' => ['create'],
-]);
+Route::resource('rooms', 'RoomController')->except('create');
 Route::get('/rooms/create/{hotel}', 'RoomController@create')->name('rooms.create');
 
 Route::resource('attributes', 'AttributeController')->except(['show']);
 
 Route::resource('attribute_categories', 'AttributeCategoriesController');
 
-Route::resource('hotels/{hotel?}/categories', 'CategoryController', [
-    'except' => ['index'],
-]);
-Route::resource('cost_types', 'CostTypeController', [
-    'except' => ['show'],
-]);
+Route::resource('hotels/{hotel?}/categories', 'CategoryController')->except('index');
+Route::resource('cost_types', 'CostTypeController')->except('show');
 
-Route::resource('bookings', 'BookingController', [
-    'except' => ['destroy', 'create', 'update', 'edit', 'store'],
-]);
+Route::resource('bookings', 'BookingController')->except('destroy', 'create', 'update', 'edit', 'store');
 
-Route::resource('hotel_types', 'HotelTypeController', [
-    'except' => ['show'],
-]);
-Route::resource('ratings', 'RatingCategoryController', [
-    'except' => ['show'],
-]);
+Route::resource('hotel_types', 'HotelTypeController')->except('show');
+Route::resource('ratings', 'RatingCategoryController')->except('show');
 
 Route::resource('hotels/{hotel}/reviews', 'ReviewController');
-Route::resource('pages', 'PageController', [
-    'except' => ['show'],
-]);
-Route::resource('articles', 'ArticleController', [
-    'except' => ['show'],
-]);
+Route::resource('pages', 'PageController')->except('show');
+Route::resource('articles', 'ArticleController')->except('show');
 
 Route::get('settings', 'SettingsController@index')->name('settings.index');
 Route::get('settings/seo', 'SettingsController@seo')->name('settings.seo');
@@ -60,19 +44,13 @@ Route::prefix('/settings')->name('settings.')->group(function () {
     });
 });
 
-Route::resource('forms', 'FormController', [
-    'only' => ['index', 'show'],
-]);
+Route::resource('forms', 'FormController')->only('index', 'show');
 
-Route::resource('descriptions', 'PageDescriptionController', [
-    'except' => 'show',
-]);
+Route::resource('descriptions', 'PageDescriptionController')->except('show');
 
-Route::resource('descriptions-page', 'PageDescriptionPageController', [
-    'except' => 'show',
-]);
+Route::resource('descriptions-page', 'PageDescriptionPageController')->except('show');
 
-Route::group(['prefix' => 'api'], function () {
+Route::prefix('api')->group(function () {
     Route::delete('/image/{image}', 'ImageController@delete')->name('api.image.delete');
 });
 
