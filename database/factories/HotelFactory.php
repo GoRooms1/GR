@@ -26,13 +26,13 @@ class HotelFactory extends Factory
         return [
             'name' => 'Elysium hotel',
             'description' => $this->faker->realText(50),
-            'phone' => $this->faker->phoneNumber,
+            'phone' => $this->faker->phoneNumber(),
             'user_id' => User::first()->id,
-            'is_popular' => $this->faker->boolean,
+            'is_popular' => $this->faker->boolean(),
             'type_id' => HotelType::first()->id,
             'show' => true,
             'old_moderate' => true,
-            'email' => $this->faker->email,
+            'email' => $this->faker->email(),
         ];
     }
 }
