@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Новая таблица для стоимости комнат
  */
-class RewriteCostsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -119,4 +119,4 @@ class RewriteCostsTable extends Migration
             $table->text('description')->nullable();
         });
     }
-}
+};

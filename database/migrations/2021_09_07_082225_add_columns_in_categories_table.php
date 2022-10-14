@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Add Value table
  */
-class AddColumnsInCategoriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -37,4 +37,4 @@ class AddColumnsInCategoriesTable extends Migration
             $table->dropColumn(['value']);
         });
     }
-}
+};

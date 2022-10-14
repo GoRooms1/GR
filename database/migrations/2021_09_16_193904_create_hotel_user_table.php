@@ -4,7 +4,7 @@ use App\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateHotelUserTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -30,4 +30,4 @@ class CreateHotelUserTable extends Migration
     {
         Schema::dropIfExists('hotel_user');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCategoryIdInRoomsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -29,4 +29,4 @@ class AddCategoryIdInRoomsTable extends Migration
             $table->dropColumn('category_id');
         });
     }
-}
+};

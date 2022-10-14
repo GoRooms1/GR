@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Тип (На ночь на день и тд)
  */
-class AddTypeInPeriodTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -41,4 +41,4 @@ class AddTypeInPeriodTable extends Migration
             $table->dropForeign(['cost_type_id']);
         });
     }
-}
+};
