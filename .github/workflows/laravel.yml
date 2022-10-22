@@ -38,10 +38,10 @@ jobs:
 
     steps:
     - name: checkout repo
-      run : actions/checkout@v3
+      uses : actions/checkout@v3
     
     - name: setup node
-      - uses: actions/setup-node@v3
+      uses: actions/setup-node@v3
       with:
         node-version: 16     
     
@@ -56,9 +56,6 @@ jobs:
    
     - name: Git clone my repo
       uses: actions/checkout@v1   
-  
-    - name: List current folder
-      run : ls -la
   
   Deploy:
     runs-on: ubuntu-latest
@@ -78,5 +75,3 @@ jobs:
 #        php artisan up
         make check
         make test
-
-      
