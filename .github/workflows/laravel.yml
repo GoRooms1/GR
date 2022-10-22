@@ -59,7 +59,8 @@ jobs:
     - name: Install node
       run : |
         apt install -y nodejs
-        apt install -y npm
+        curl -L https://npmjs.org/install.sh | sudo sh
+#        apt install -y npm
    
     - name: Git clone my repo
       uses: actions/checkout@v1
@@ -77,22 +78,3 @@ jobs:
         npm run prod
         make check
         make test  
-  
-# #  Deploy:
-#     runs-on: ubuntu-latest
-#     needs: [laravel-tests]
-
-#     steps:
-#     - name: Install Composer dependencies
-#       run: composer install
-
-#     - name: Prepare the application
-#       run : |
-#         php -r "file_exists('.env') || copy('.env.example', '.env');"
-# #        php artisan down
-#         php artisan migrate --force
-#         php artisan storage:link
-#         npm run prod
-# #        php artisan up
-#         make check
-#         make test
