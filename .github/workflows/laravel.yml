@@ -1,7 +1,8 @@
-name: Check-errors-dev
+name: simple-check
 
-#on: 
+on: 
 #  push:
+  workflow_dispatch
 #    branches: 
 #      - develop
 
