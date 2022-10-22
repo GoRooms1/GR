@@ -63,7 +63,7 @@ jobs:
 #        apt install -y npm
    
     - name: Git clone my repo
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
 
     - name: Install Composer dependencies
       run: composer install
