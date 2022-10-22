@@ -59,7 +59,7 @@ jobs:
     - name: Install node
       run : |
         apt install -y nodejs
-        curl -L https://npmjs.org/install.sh | sudo sh
+        curl -L https://npmjs.org/install.sh | sh
 #        apt install -y npm
    
     - name: Git clone my repo
