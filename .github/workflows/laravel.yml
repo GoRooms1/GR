@@ -48,8 +48,11 @@ jobs:
     
     - name: Install additional PHP extensions
       run : |
+        apt install -y curl software-properties-common
+        add-apt-repository ppa:ondrej/php
+        apt update
         apt install -y php8.1 php8.1-bz2 php8.1-zip php8.1-readline php8.1-mysql php8.1-mbstring php8.1-gd php8.1-curl  php-json php-gd
-        apt install -y composer curl 
+        apt install -y composer
 #       php-php-gettext 
         
 
@@ -64,6 +67,8 @@ jobs:
 
     - name: Prepare the application
       run : |
+        systemctl strat mysql
+        systemctl start redis
         php -r "file_exists('.env') || copy('.env.example', '.env');"
         php artisan migrate --force
         php artisan storage:link
