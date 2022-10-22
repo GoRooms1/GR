@@ -398,6 +398,13 @@
                          class="search-filter-label checkbox-label checkbox-label-light">4
                     часа</label>
                 </div>
+                <div class="col-12 col-lg-3">
+                  <input type="radio" id="book_by_5_hour" checked class="checkbox"
+                         name="book_by" value="5" @change="currentHours = 5">
+                  <label for="book_by_5_hour"
+                         class="search-filter-label checkbox-label checkbox-label-light">5
+                    часов</label>
+                </div>
               </div>
             </div>
           </div>

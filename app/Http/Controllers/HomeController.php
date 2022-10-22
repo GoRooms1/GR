@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\RatingCategory\GetRatingCategories;
 use App\Models\Article;
 use App\Models\Hotel;
 use App\Models\Page;
@@ -31,7 +32,8 @@ class HomeController extends Controller
             return Article::orderBy('created_at', 'DESC')->limit(4)->get();
         });
         $pages = Page::all()->keyBy('slug');
+        $rating_categories = GetRatingCategories::run();
 
-        return view('home', compact('hotels', 'rooms', 'articles', 'pages'));
+        return view('home', compact('hotels', 'rooms', 'articles', 'pages', 'rating_categories'));
     }
 }

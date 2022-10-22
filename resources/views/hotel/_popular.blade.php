@@ -1,8 +1,3 @@
-@php
-  use App\Models\RatingCategory;use Illuminate\Support\Facades\Cache;$rating_categories = Cache::remember('rating_category', 60*60*24*12, function () {
-      return RatingCategory::orderBy('sort')->get();
-  })
-@endphp
 @if ($moderate ?? false)
   <div class="col-p-sm col-12 card-wrapper">
 @else
