@@ -48,7 +48,8 @@ jobs:
     
     - name: Install additional PHP extensions
       run : |
-        apt install -y php8.1 php8.1-bz2 php8.1-zip php8.1-readline php8.1-mysql php8.1-mbstring php8.1-gd php8.1-curl php-php-gettext php-json php-gd
+        apt install -y php8.1 php8.1-bz2 php8.1-zip php8.1-readline php8.1-mysql php8.1-mbstring php8.1-gd php8.1-curl  php-json php-gd
+#       php-php-gettext 
         apt install -y composer curl 
 
     - name: Install node
