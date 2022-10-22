@@ -55,23 +55,35 @@ jobs:
         apt install -y npm
    
     - name: Git clone my repo
-      uses: actions/checkout@v1   
-  
-  Deploy:
-    runs-on: ubuntu-latest
-    needs: [laravel-tests]
+      uses: actions/checkout@v1
 
-    steps:
     - name: Install Composer dependencies
       run: composer install
 
     - name: Prepare the application
       run : |
         php -r "file_exists('.env') || copy('.env.example', '.env');"
-#        php artisan down
         php artisan migrate --force
         php artisan storage:link
         npm run prod
-#        php artisan up
         make check
-        make test
+        make test  
+  
+# #  Deploy:
+#     runs-on: ubuntu-latest
+#     needs: [laravel-tests]
+
+#     steps:
+#     - name: Install Composer dependencies
+#       run: composer install
+
+#     - name: Prepare the application
+#       run : |
+#         php -r "file_exists('.env') || copy('.env.example', '.env');"
+# #        php artisan down
+#         php artisan migrate --force
+#         php artisan storage:link
+#         npm run prod
+# #        php artisan up
+#         make check
+#         make test
