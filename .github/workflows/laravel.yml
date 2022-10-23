@@ -9,8 +9,8 @@ on:
 jobs:
   laravel:
     runs-on: ubuntu-latest
-#    container: 
-#      image: kirschbaumdevelopment/laravel-test-runner:8.1
+    container: 
+      image: kirschbaumdevelopment/laravel-test-runner:8.1
     env:
       ROOT_PASSWORD: root
       ROOT_USER: root
