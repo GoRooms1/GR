@@ -9,10 +9,6 @@ on:
 jobs:
   laravel:
     runs-on: ubuntu-latest
-    env:
-      DB_PASSWORD: root
-      DB_DATABASE: gorooms
-      DB_USER: root
     container: 
       image: kirschbaumdevelopment/laravel-test-runner:8.1
 
@@ -55,6 +51,10 @@ jobs:
       run: |
         systemctl strart mysql
         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+      env:
+        DB_PASSWORD: root
+        DB_DATABASE: gorooms
+        DB_USER: root
     
     - name: Install additional PHP extensions
       run : |
