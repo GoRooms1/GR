@@ -38,13 +38,15 @@ jobs:
           --health-retries 5
 
 
+
+    steps:
+    
     - name: Set up MySQL
       run: |
         cat /etc/sudoers
         sudo /etc/init.d/mysql start
         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
-
-    steps:
+    
     - name: checkout repo
       uses : actions/checkout@v3
       
