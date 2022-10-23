@@ -16,8 +16,9 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: gorooms
+          DB_PASSWORD: root
+          DB_DATABASE: gorooms
+          DB_USER: root
         ports:
           - 3306
         options: >-
@@ -45,6 +46,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16.x'     
+
+    - name: Set up MySQL
+      run: |
+        systemctl strat mysql
+        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
     
     - name: Install additional PHP extensions
       run : |
@@ -70,11 +76,10 @@ jobs:
 
     - name: Prepare the application
       run : |
-        systemctl strat mysql
         systemctl start redis
         php -r "file_exists('.env') || copy('.env.example', '.env');"
         php artisan migrate --force
         php artisan storage:link
         npm run prod
         make check
-        make test  
+        make test
