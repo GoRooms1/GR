@@ -43,7 +43,9 @@ jobs:
     
     - name: Set up MySQL
       run: |
-        cat /etc/sudoers
+        apt install sudo
+        usermod -a -G sudo runner
+        sudo sh -c 'cat /etc/sudoers'
         sudo /etc/init.d/mysql start
         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
     
