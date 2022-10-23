@@ -86,7 +86,7 @@ jobs:
       run : |
         php artisan migrate --force
         php artisan storage:link
-        npm run prod
+        npm run build
         make check
         make test  
 #        sudo systemctl start redis
