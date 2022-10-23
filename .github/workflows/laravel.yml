@@ -12,18 +12,17 @@ jobs:
 #    container: 
 #      image: kirschbaumdevelopment/laravel-test-runner:8.1
     env:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_ROOT_USER: root
+      ROOT_PASSWORD: root
+      ROOT_USER: root
       MYSQL_DB: gorooms
       
-
+    # in service use env variable for current service. for mysql - MYSQL_ROOT_PASSWORD
     services:
       mysql:
         image: mysql:latest
         env:
-          DB_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
-          DB_DATABASE: ${{ env.MYSQL_DB }}
-          DB_USER:     ${{ env.MYSQL_ROOT_USER }}
+          MYSQL_ROOT_PASSWORD: ${{ env.ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ env.MYSQL_DB }}
 
         ports:
           - 3306
@@ -52,8 +51,8 @@ jobs:
         sudo systemctl start mysql
         sudo systemctl start redis
         sudo netstat -ntulp
-        sudo mysql -e 'show grants;' -u${{ env.MYSQL_ROOT_USER }} -p${{ env.MYSQL_ROOT_PASSWORD }} --host 127.0.0.1
-        sudo mysql -e 'show databases;' -u${{ env.MYSQL_ROOT_USER }} -p${{ env.MYSQL_ROOT_PASSWORD }} --host 127.0.0.1
+        sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
+        sudo mysql -e 'show databases;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
 #        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
 #        sudo /etc/init.d/mysql start
  
