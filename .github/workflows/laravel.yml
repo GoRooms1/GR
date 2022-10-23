@@ -25,7 +25,7 @@ jobs:
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
-          --health-retries=3    
+          --health-retries=5
 
       redis:
         image: redis
@@ -38,15 +38,17 @@ jobs:
           --health-retries 5
 
 
+    - name: Set up MySQL
+      run: |
+        cat /etc/sudoers
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
+
     steps:
     - name: checkout repo
       uses : actions/checkout@v3
       
-    - name: Set up MySQL
-      run: |
-        echo $USER
-        sudo /etc/init.d/mysql start
-        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
+
         
     
     - name: setup node
