@@ -9,6 +9,10 @@ on:
 jobs:
   laravel:
     runs-on: ubuntu-latest
+    env:
+      DB_PASSWORD: root
+      DB_DATABASE: gorooms
+      DB_USER: root
     container: 
       image: kirschbaumdevelopment/laravel-test-runner:8.1
 
@@ -18,9 +22,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: gorooms
-          DB_PASSWORD: root
-          DB_DATABASE: gorooms
-          DB_USER: root
+
         ports:
           - 3306
         options: >-
