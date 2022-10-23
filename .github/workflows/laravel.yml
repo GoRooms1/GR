@@ -67,21 +67,20 @@ jobs:
         php-version: 8.1
         extensions: dom, curl, mbstring, libxml, zip, gd, json, mysql, readline, bz2    
 
-    - name: Install node
-      run : |
-        sudo apt install -y nodejs
-        curl -L https://npmjs.org/install.sh | sudo sh
-        npm install
-#        apt install -y npm
-   
-    - name: Git clone my repo
-      uses: actions/checkout@v3
 
+   
     - name: Install Composer dependencies
       run: |
         php -r "file_exists('.env') || copy('.env.example', '.env');"
         sudo apt install -y composer
         composer install
+        
+    - name: Install node
+      run : |
+        sudo apt install -y nodejs
+        curl -L https://npmjs.org/install.sh | sudo sh
+        npm install
+#        apt install -y npm    
 
     - name: Prepare the application
       run : |
