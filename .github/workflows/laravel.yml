@@ -9,8 +9,9 @@ on:
 jobs:
   laravel:
     runs-on: ubuntu-latest
-    container: 
-      image: kirschbaumdevelopment/laravel-test-runner:8.1
+#    container: 
+#      image: kirschbaumdevelopment/laravel-test-runner:8.1
+# image not have services and sudo
     env:
       ROOT_PASSWORD: root
       ROOT_USER: root
@@ -42,8 +43,6 @@ jobs:
           --health-timeout 5s
           --health-retries 3
 
-
-
     steps:
     - name: Set up MySQL
       run: |
@@ -55,10 +54,7 @@ jobs:
         mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
  
     - name: checkout repo
-      uses : actions/checkout@v3
-      
-
-        
+      uses : actions/checkout@v3 
     
     - name: setup node
       uses: actions/setup-node@v3
@@ -70,34 +66,32 @@ jobs:
         DB_DATABASE: gorooms
         DB_USER: root
     
-    - name: Install additional PHP extensions
-      run : |
-        apt install -y curl software-properties-common
-        add-apt-repository ppa:ondrej/php
-        apt update
-        apt install -y php8.1 php8.1-bz2 php8.1-zip php8.1-readline php8.1-mysql php8.1-mbstring php8.1-gd php8.1-curl  php-json php-gd
-        apt install -y composer
-#       php-php-gettext 
-        
+    - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: dom, curl, mbstring, libxml, zip, gd, json, mysql, readline, bz2    
 
     - name: Install node
       run : |
-        apt install -y nodejs
-        curl -L https://npmjs.org/install.sh | sh
+        sudo apt install -y nodejs
+        curl -L https://npmjs.org/install.sh | sudo sh
 #        apt install -y npm
    
     - name: Git clone my repo
       uses: actions/checkout@v3
 
     - name: Install Composer dependencies
-      run: composer install
+      run: |
+        sudo apt install -y composer
+        composer install
 
     - name: Prepare the application
       run : |
-        systemctl start redis
         php -r "file_exists('.env') || copy('.env.example', '.env');"
         php artisan migrate --force
         php artisan storage:link
         npm run prod
         make check
         make test  
+#        sudo systemctl start redis
