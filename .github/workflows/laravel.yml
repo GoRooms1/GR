@@ -60,11 +60,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16.x'     
-        
-      env:
-        DB_PASSWORD: root
-        DB_DATABASE: gorooms
-        DB_USER: root
     
     - name: Setup PHP
         uses: shivammathur/setup-php@v2
