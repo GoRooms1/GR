@@ -44,6 +44,7 @@ jobs:
     - name: Set up MySQL
       run: |
         sudo apt install net-tools
+        sudo systemctl start mysql
         sudo netstat -ntulp
 #        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
 #        sudo /etc/init.d/mysql start
