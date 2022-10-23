@@ -71,6 +71,7 @@ jobs:
       run : |
         sudo apt install -y nodejs
         curl -L https://npmjs.org/install.sh | sudo sh
+        npm install
 #        apt install -y npm
    
     - name: Git clone my repo
