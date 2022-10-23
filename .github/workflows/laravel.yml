@@ -78,12 +78,12 @@ jobs:
 
     - name: Install Composer dependencies
       run: |
+        php -r "file_exists('.env') || copy('.env.example', '.env');"
         sudo apt install -y composer
         composer install
 
     - name: Prepare the application
       run : |
-        php -r "file_exists('.env') || copy('.env.example', '.env');"
         php artisan migrate --force
         php artisan storage:link
         npm run prod
