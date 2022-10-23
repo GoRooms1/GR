@@ -44,11 +44,15 @@ jobs:
           --health-retries 3
 
     steps:
+    
+    - name: search redis
+      run: sudo find / -iname "*redis*" ! -path /pros ! -path /sys ! -path /bin
+    
     - name: Set up MySQL
       run: |
         sudo apt install net-tools
         sudo systemctl start mysql
-        sudo systemctl start redis-server
+#        sudo systemctl start redis-server
         sudo netstat -ntulp
         sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         sudo mysql -e 'show databases;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
