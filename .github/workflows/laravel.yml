@@ -16,6 +16,8 @@ jobs:
       mysql:
         image: mysql:latest
         env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: gorooms
           DB_PASSWORD: root
           DB_DATABASE: gorooms
           DB_USER: root
@@ -82,4 +84,4 @@ jobs:
         php artisan storage:link
         npm run prod
         make check
-        make test
+        make test  
