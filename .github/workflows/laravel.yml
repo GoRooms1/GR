@@ -52,8 +52,7 @@ jobs:
         sudo netstat -ntulp
         sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         sudo mysql -e 'show databases;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
-#        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
-#        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
  
     - name: checkout repo
       uses : actions/checkout@v3
