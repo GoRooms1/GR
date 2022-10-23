@@ -11,14 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 #    container: 
 #      image: kirschbaumdevelopment/laravel-test-runner:8.1
+    env:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_USER: root
+      MYSQL_DB: gorooms
+      
 
     services:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_ROOT_USER: root
-          MYSQL_DATABASE: gorooms
+          DB_PASSWORD: ${{ env.MYSQL_ROOT_PASSWORD }}
+          DB_DATABASE: ${{ env.MYSQL_DB }}
+          DB_USER:     ${{ env.MYSQL_ROOT_USER }}
 
         ports:
           - 3306
@@ -26,7 +31,7 @@ jobs:
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
-          --health-retries=5
+          --health-retries=3
 
       redis:
         image: redis
@@ -36,16 +41,16 @@ jobs:
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 3
 
 
 
     steps:
-    
     - name: Set up MySQL
       run: |
         sudo apt install net-tools
         sudo systemctl start mysql
+        sudo systemctl start redis
         sudo netstat -ntulp
         sudo mysql -e 'show grants;' -u${{ env.MYSQL_ROOT_USER }} -p${{ env.MYSQL_ROOT_PASSWORD }} --host 127.0.0.1
         sudo mysql -e 'show databases;' -u${{ env.MYSQL_ROOT_USER }} -p${{ env.MYSQL_ROOT_PASSWORD }} --host 127.0.0.1
