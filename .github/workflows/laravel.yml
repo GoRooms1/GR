@@ -17,6 +17,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_USER: root
           MYSQL_DATABASE: gorooms
 
         ports:
@@ -46,8 +47,8 @@ jobs:
         sudo apt install net-tools
         sudo systemctl start mysql
         sudo netstat -ntulp
-        sudo mysql -e 'show grants;' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
-        sudo mysql -e 'show databases;' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
+        sudo mysql -e 'show grants;' -u${{ env.MYSQL_ROOT_USER }} -p${{ env.MYSQL_ROOT_PASSWORD }} --host 127.0.0.1
+        sudo mysql -e 'show databases;' -u${{ env.MYSQL_ROOT_USER }} -p${{ env.MYSQL_ROOT_PASSWORD }} --host 127.0.0.1
 #        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
 #        sudo /etc/init.d/mysql start
  
