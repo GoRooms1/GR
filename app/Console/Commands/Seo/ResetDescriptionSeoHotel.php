@@ -4,7 +4,7 @@ namespace App\Console\Commands\Seo;
 
 use App\Helpers\SeoData;
 use App\Models\Hotel;
-use App\Models\PageDescription;
+use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Console\Command;
 
 class ResetDescriptionSeoHotel extends Command

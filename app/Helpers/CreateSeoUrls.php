@@ -5,7 +5,7 @@ namespace App\Helpers;
 use App\Models\Address;
 use App\Models\Hotel;
 use App\Models\Metro;
-use App\Models\PageDescription;
+use Domain\PageDescription\Models\PageDescription;
 use Str;
 
 class CreateSeoUrls

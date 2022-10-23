@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\PageDescription;
+use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Database\Seeder;
 
 class FixPageDescriptionsSeeder extends Seeder

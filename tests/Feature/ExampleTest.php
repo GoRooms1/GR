@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use App\Models\Address;
 use App\Models\Hotel;
 use App\Models\HotelType;
-use App\Models\PageDescription;
 use App\Models\Room;
 use App\User;
+use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 

@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
   <link rel="canonical" href="{{ url(Request::url()) }}"/>
   <link rel="stylesheet" href="{{ asset('css/metro.css') }}">
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ asset('css/filter-select.css') }}">
   <link rel="stylesheet" href="{{ asset('css/tags.css') }}">
   <!-- CSRF Token -->
@@ -37,11 +37,11 @@
       <link rel="canonical" href="{{ $hotel->meta_keywords }}"/>
     @endif
   @else
-    @if( isset($pageDescription) && !is_null($pageDescription) ?? get_class($pageDescription) == 'App\Models\PageDescription')
+    @if( isset($pageDescription) && !is_null($pageDescription) ?? get_class($pageDescription) == 'Domain\PageDescription\Models\PageDescription')
       <title>{{ $pageDescription->title ?? config('app.name', 'GoRooms') }}</title>
       <meta name="description" content="{{ $pageDescription->meta_description ?? ''}}">
       <meta name="keywords" content="{{ $pageDescription->meta_keywords ?? '' }}">
-        <link rel="canonical" href="{{ $pageDescription->meta_keywords ?? '' }}"/>
+      <link rel="canonical" href="{{ $pageDescription->meta_keywords ?? '' }}"/>
     @elseif( isset($pageAbout))
       <title>{{ $pageAbout->title ?? config('app.name', 'GoRooms') }}</title>
       <meta name="description" content="{{ $pageAbout->meta_description ?? '' }}">
@@ -53,7 +53,7 @@
     @endif
   @endif
 
-<!-- Fonts -->
+  <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700,900&display=swap&subset=cyrillic"
         rel="stylesheet">
@@ -66,14 +66,17 @@
   <link rel="stylesheet" href="{{ asset('css/swiper.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/jquery.flexdatalist.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=2">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <style>
-      .ml-0 {
-          margin-left: 0 !important;
-      }
-      .mb-3 {
-          margin-bottom: 0.75rem !important;
-      }
+    .ml-0 {
+      margin-left: 0 !important;
+    }
+
+    .mb-3 {
+      margin-bottom: 0.75rem !important;
+    }
   </style>
   <link rel="canonical" href="{{ url(Request::url()) }}"/>
   <script src="https://api-maps.yandex.ru/2.1/?apikey={{ config('services.yandex.map.key') }}&lang=ru_RU"
@@ -111,9 +114,10 @@
               </a>
             @endif
           @else
-            <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный кабинет</a>
+            <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный
+              кабинет</a>
           @endif
-        
+
           @if(auth()->user()->is_admin)
             <a href="{{ route('admin.index') }}" class="header-top-btn btn btn-sm btn-light"
                style="width: auto; padding: 0 10px">Административная панель</a>
@@ -132,7 +136,7 @@
             Зарегистрировать свой объект
           </a>
           <a href="{{ route('login') }}" class="header-top-btn header-top-btn-signin btn btn-sm btn-light">Войти</a>
-{{--          <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>--}}
+          {{--          <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>--}}
         @endauth
       </div>
       <button id="js-menu-btn" class="header-menu-btn" type="button">
@@ -153,7 +157,7 @@
         </li>
         <li class="header-menu-item">
           <a href="{{ route('search.map') }}" class="header-menu-link">Поиск по карте <img
-                src="{{ asset('img/ico-search.svg') }}" alt=""></a>
+                    src="{{ asset('img/ico-search.svg') }}" alt=""></a>
         </li>
         <li class="header-menu-item">
           <a href="/bonuse" class="header-menu-link">Бонусная программа</a>
@@ -174,7 +178,8 @@
             @endif
           @else
             <li class="header-menu-item header-menu-item-mobile">
-              <a href="{{ route('lk.index') }}" class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный кабинет</a>
+              <a href="{{ route('lk.index') }}"
+                 class="header-top-btn header-top-btn-object btn btn-sm btn-light-border">Личный кабинет</a>
             </li>
           @endif
 
@@ -201,7 +206,7 @@
             <a href="{{ route('login') }}" class="header-top-btn header-top-btn-signin btn btn-sm btn-light">Войти</a>
           </li>
           <li class="header-menu-item header-menu-item-mobile">
-{{--            <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>--}}
+            {{--            <a href="{{ route('register') }}" class="header-top-btn header-top-btn-reg btn btn-sm btn-light">Регистрация</a>--}}
           </li>
         @endauth
       </ul>
@@ -317,16 +322,16 @@
                          class="search-filter-label checkbox-label checkbox-label-light">На
                     час</label>
                 </div>
-                <div class="col-12 col-lg-4"  v-if="costs.byNight.exists">
+                <div class="col-12 col-lg-4" v-if="costs.byNight.exists">
                   <input type="radio" id="order_at_night" class="checkbox"
                          name="order_at" value="night" @change="setForm('night')">
                   <label for="order_at_night"
                          class="search-filter-label checkbox-label checkbox-label-light">На
                     ночь</label>
                 </div>
-                <div class="col-12 col-lg-4"  v-if="costs.byDay.exists">
+                <div class="col-12 col-lg-4" v-if="costs.byDay.exists">
                   <input type="radio" id="order_at_day" class="checkbox"
-                         name="order_at" value="day"  @change="setForm('day')">
+                         name="order_at" value="day" @change="setForm('day')">
                   <label for="order_at_day"
                          class="search-filter-label checkbox-label checkbox-label-light">На
                     сутки</label>
@@ -363,7 +368,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 mb-3" id="book-on-title"  v-if="showBookOn">
+            <div class="col-12 mb-3" id="book-on-title" v-if="showBookOn">
               <div>
                 <p class="form-group-date-label">Забронировать на:</p>
               </div>
@@ -377,14 +382,14 @@
                   <label for="book_by_1_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">1 час</label>
                 </div>
-                <div class="col-12 col-lg-3"  v-if="2 >= costs.byHour.start_at">
+                <div class="col-12 col-lg-3" v-if="2 >= costs.byHour.start_at">
                   <input type="radio" id="book_by_2_hour" class="checkbox"
                          name="book_by" value="2" @change="currentHours = 2">
                   <label for="book_by_2_hour"
                          class="search-filter-label checkbox-label checkbox-label-light">2
                     часа</label>
                 </div>
-                <div class="col-12 col-lg-3"  v-if="3 >= costs.byHour.start_at">
+                <div class="col-12 col-lg-3" v-if="3 >= costs.byHour.start_at">
                   <input type="radio" id="book_by_3_hour" class="checkbox"
                          name="book_by" value="3" @change="currentHours = 3">
                   <label for="book_by_3_hour"
@@ -464,7 +469,7 @@
                 name: ''
               }
             },
-            action : '',
+            action: '',
             costs: {
               byHour: {
                 exists: false,
@@ -514,20 +519,20 @@
             }
             if (this.currentPosition === 'byNight') {
               let from = new Date(this.dateTime.fromDate.value);
-              from.setHours(this.costs.byNight.start_at.substr(0,1));
-              from.setMinutes(this.costs.byNight.start_at.substr(3,5))
+              from.setHours(this.costs.byNight.start_at.substr(0, 1));
+              from.setMinutes(this.costs.byNight.start_at.substr(3, 5))
               let to = new Date(from.getTime());
-              to.setHours(this.costs.byNight.end_at.substr(0,1));
-              to.setMinutes(this.costs.byNight.end_at.substr(3,5));
-              to.setDate(to.getDate()+1)
+              to.setHours(this.costs.byNight.end_at.substr(0, 1));
+              to.setMinutes(this.costs.byNight.end_at.substr(3, 5));
+              to.setDate(to.getDate() + 1)
               this.setDate(from, to)
             }
           },
           'dateTime.fromTime.value': function (value) {
             if (this.showBookOn) {
               let from = new Date();
-              from.setHours(value.slice(0,2));
-              let min = value.slice(3,5);
+              from.setHours(value.slice(0, 2));
+              let min = value.slice(3, 5);
               from.setMinutes(min)
               let to = new Date(from.getTime());
               to.setHours(to.getHours() + 1 + this.currentHours);
@@ -538,8 +543,8 @@
         mounted() {
           let dateNow = new Date();
           let dateEnd = new Date();
-          dateNow.setHours(dateNow.getHours()+1);
-          dateEnd.setHours(dateNow.getHours()+2);
+          dateNow.setHours(dateNow.getHours() + 1);
+          dateEnd.setHours(dateNow.getHours() + 2);
           this.setDate(dateNow, dateEnd);
           this.currentHours = 4;
         },
@@ -560,7 +565,7 @@
           },
           setHoursTime() {
             let from = new Date()
-            from.setHours(from.getHours()+1);
+            from.setHours(from.getHours() + 1);
             let to = new Date();
             to.setHours(to.getHours() + 1 + this.currentHours);
             this.setDate(from, to, true)
@@ -602,10 +607,10 @@
           setDate(from, to, ignoreDate = false) {
             from = new Date(from);
             to = new Date(to);
-            let dateIn = `${from.getFullYear()}-${('0' + (from.getMonth()+1)).slice(-2)}-${('0' + (from.getDate())).slice(-2)}`;
-            let dateOut = `${to.getFullYear()}-${('0' + (to.getMonth()+1)).slice(-2)}-${('0' + (to.getDate())).slice(-2)}`;
-            let timeIn = `${('0' + (from.getHours())%24).slice(-2)}:${('0' + from.getMinutes()).slice(-2)}`;
-            let timeOut = `${('0' + (to.getHours())%24).slice(-2)}:${('0' + to.getMinutes()).slice(-2)}`;
+            let dateIn = `${from.getFullYear()}-${('0' + (from.getMonth() + 1)).slice(-2)}-${('0' + (from.getDate())).slice(-2)}`;
+            let dateOut = `${to.getFullYear()}-${('0' + (to.getMonth() + 1)).slice(-2)}-${('0' + (to.getDate())).slice(-2)}`;
+            let timeIn = `${('0' + (from.getHours()) % 24).slice(-2)}:${('0' + from.getMinutes()).slice(-2)}`;
+            let timeOut = `${('0' + (to.getHours()) % 24).slice(-2)}:${('0' + to.getMinutes()).slice(-2)}`;
 
             if (!ignoreDate) {
               this.dateTime.fromDate.value = dateIn;
@@ -625,8 +630,7 @@
 
               this.currentHours = 4;
               this.currentPosition = 'byHours';
-            }
-            else if (value === 'night') {
+            } else if (value === 'night') {
               this.showBookOn = false;
               this.dateTime.fromDate.disabled = false;
               this.dateTime.fromTime.disabled = true;
@@ -636,15 +640,14 @@
               this.currentPosition = 'byNight';
 
               let from = new Date();
-              from.setHours(this.costs.byNight.start_at.substr(0,1));
-              from.setMinutes(this.costs.byNight.start_at.substr(3,5));
+              from.setHours(this.costs.byNight.start_at.substr(0, 1));
+              from.setMinutes(this.costs.byNight.start_at.substr(3, 5));
               let to = new Date(from.getTime());
-              to.setHours(this.costs.byNight.end_at.substr(0,1));
-              to.setMinutes(this.costs.byNight.end_at.substr(3,5));
-              to.setDate(to.getDate()+1)
+              to.setHours(this.costs.byNight.end_at.substr(0, 1));
+              to.setMinutes(this.costs.byNight.end_at.substr(3, 5));
+              to.setDate(to.getDate() + 1)
               this.setDate(from, to)
-            }
-            else if (value === 'day') {
+            } else if (value === 'day') {
               this.showBookOn = false;
               this.dateTime.fromDate.disabled = false;
               this.dateTime.fromTime.disabled = true;
@@ -654,17 +657,18 @@
               this.currentPosition = 'byDay';
 
               let from = new Date();
-              from.setHours(this.costs.byDay.start_at.substr(0,1));
-              from.setMinutes(this.costs.byDay.start_at.substr(3,4))
+              from.setHours(this.costs.byDay.start_at.substr(0, 1));
+              from.setMinutes(this.costs.byDay.start_at.substr(3, 4))
               let to = new Date(from.getTime());
-              to.setHours(this.costs.byDay.end_at.substr(0,1));
-              to.setMinutes(this.costs.byDay.end_at.substr(3,4));
-              to.setDate(to.getDate()+1)
+              to.setHours(this.costs.byDay.end_at.substr(0, 1));
+              to.setMinutes(this.costs.byDay.end_at.substr(3, 4));
+              to.setDate(to.getDate() + 1)
               this.setDate(from, to)
             }
           }
         }
       });
+
       function showFormBookRoom(room_id) {
         Booking.showFormBookRoom(room_id)
       }
@@ -681,7 +685,9 @@
     </div>
   </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js" integrity="sha512-/Q6t3CASm04EliI1QyIDAA/nDo9R8FQ/BULoUFyN4n/BDdyIxeH7u++Z+eobdmr11gG5D/6nPFyDlnisDwhpYA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"
+        integrity="sha512-/Q6t3CASm04EliI1QyIDAA/nDo9R8FQ/BULoUFyN4n/BDdyIxeH7u++Z+eobdmr11gG5D/6nPFyDlnisDwhpYA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="{{ asset('js/bootstrap-modal-tabs-collapse-transition.min.js') }}" defer></script>
 <script src="{{ asset('js/jquery.formstyler.min.js') }}" defer></script>
@@ -717,6 +723,7 @@
     hostname = hostname.split('?')[0];
     return hostname;
   }
+
   let form = document.getElementById('js-advanced-search');
   if (form) {
     form.addEventListener('change', event => {
@@ -726,23 +733,23 @@
         method: 'POST',
         body: new FormData(form)
       })
-        .then(response => response.json())
-        .then(response => {
-          if (response.success) {
-            form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать (' + response.payload.count + ') ' +
-              (response.payload.is_room === true ? num_word(response.payload.count, ['номер', 'номера', 'номеров']) : num_word(response.payload.count, ['отель', 'отеля', 'отелей']));
-          }
-        });
+              .then(response => response.json())
+              .then(response => {
+                if (response.success) {
+                  form.querySelectorAll('button[type=submit]')[0].innerText = 'Показать (' + response.payload.count + ') ' +
+                          (response.payload.is_room === true ? num_word(response.payload.count, ['номер', 'номера', 'номеров']) : num_word(response.payload.count, ['отель', 'отеля', 'отелей']));
+                }
+              });
     });
   }
   let options = document.getElementById('advanced-search-location-type');
 
-  function num_word(value, words){
+  function num_word(value, words) {
     value = Math.abs(value) % 100;
     var num = value % 10;
-    if(value > 10 && value < 20) return words[2];
-    if(num > 1 && num < 5) return words[1];
-    if(num == 1) return words[0];
+    if (value > 10 && value < 20) return words[2];
+    if (num > 1 && num < 5) return words[1];
+    if (num == 1) return words[0];
     return words[2];
   }
 </script>
@@ -776,16 +783,18 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-73NM6845XT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
+
     function gtag() {
       dataLayer.push(arguments);
     }
+
     gtag('js', new Date());
     gtag('config', 'G-73NM6845XT');
   </script>
 @endif
 <script>
-  $("input:checkbox.checkbox").on('click', function() {
-    if($(this).closest(".advanced-search-details").length == 0) {
+  $("input:checkbox.checkbox").on('click', function () {
+    if ($(this).closest(".advanced-search-details").length == 0) {
       // in the handler, 'this' refers to the box clicked on
       var $box = $(this);
       if ($box.is(":checked")) {

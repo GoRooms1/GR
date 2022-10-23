@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Parents;
+namespace Parent\Actions;
 
 use Lorisleiva\Actions\Concerns\AsAction;
 

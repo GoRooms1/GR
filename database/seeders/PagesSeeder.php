@@ -13,33 +13,33 @@ class PagesSeeder extends Seeder
      */
     public function run()
     {
-        $page = \App\Models\Page::where('title', 'Контакты')->first();
+        $page = \Domain\Page\Models\Page::where('title', 'Контакты')->first();
         if (! $page) {
-            \App\Models\Page::create([
+            \Domain\Page\Models\Page::create([
                 'title' => 'Контакты',
                 'slug' => 'contacts',
                 'content' => 'Содержимое контактов',
             ]);
         }
-        $page = \App\Models\Page::where('title', 'Правила бронирования')->first();
+        $page = \Domain\Page\Models\Page::where('title', 'Правила бронирования')->first();
         if (! $page) {
-            \App\Models\Page::create([
+            \Domain\Page\Models\Page::create([
                 'title' => 'Правила бронирования',
                 'slug' => 'rules',
                 'content' => 'Правила бронирования',
             ]);
         }
-        $page = \App\Models\Page::where('title', 'Бонусная программа')->first();
+        $page = \Domain\Page\Models\Page::where('title', 'Бонусная программа')->first();
         if (! $page) {
-            \App\Models\Page::create([
+            \Domain\Page\Models\Page::create([
                 'title' => 'Бонусная программа',
                 'slug' => 'bonuse',
                 'content' => 'Бонусная программа',
             ]);
         }
-        $page = \App\Models\Page::where('title', 'Пользовательское соглашение')->first();
+        $page = \Domain\Page\Models\Page::where('title', 'Пользовательское соглашение')->first();
         if (! $page) {
-            \App\Models\Page::create([
+            \Domain\Page\Models\Page::create([
                 'title' => 'Пользовательское соглашение',
                 'slug' => 'privacy-policy',
                 'content' => 'Пользовательское соглашение',

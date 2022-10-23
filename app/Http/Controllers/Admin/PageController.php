@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PageRequest;
-use App\Models\Page;
-use App\Models\PageDescription;
+use Domain\Page\Models\Page;
+use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -54,7 +54,7 @@ class PageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Page  $page
+     * @param  \Domain\Page\Models\Page  $page
      * @return View
      */
     public function edit(Page $page): View
@@ -66,7 +66,7 @@ class PageController extends Controller
      * Update the specified resource in storage.
      *
      * @param  PageRequest  $request
-     * @param  Page  $page
+     * @param  \Domain\Page\Models\Page  $page
      * @return RedirectResponse
      */
     public function update(PageRequest $request, Page $page): RedirectResponse
@@ -80,7 +80,7 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Page  $page
+     * @param  \Domain\Page\Models\Page  $page
      * @return RedirectResponse
      */
     public function destroy(Page $page): RedirectResponse

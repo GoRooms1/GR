@@ -10,7 +10,7 @@ use App\Models\Hotel;
 use App\Models\HotelType;
 use App\Models\Image;
 use App\Models\Metro;
-use App\Models\PageDescription;
+use Domain\PageDescription\Models\PageDescription;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

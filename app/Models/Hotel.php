@@ -8,6 +8,7 @@ use App\Traits\ClearValidated;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\User;
+use Domain\PageDescription\Models\PageDescription;
 use Eloquent;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Database\Eloquent\Builder;

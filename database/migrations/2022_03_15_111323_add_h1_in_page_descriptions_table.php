@@ -18,7 +18,8 @@ return new class extends Migration
         });
 
         Schema::table('page_descriptions', static function (Blueprint $table) {
-            \App\Models\PageDescription::all()->each(function (App\Models\PageDescription $item) {
+            \Domain\PageDescription\Models\PageDescription::all()->each(function (
+                Domain\PageDescription\Models\PageDescription $item) {
                 $item->h1 = $item->title;
                 $item->save();
             });

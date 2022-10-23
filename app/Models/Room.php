@@ -7,6 +7,7 @@ use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\Transformers\CostData;
 use App\User;
+use Domain\PageDescription\Models\PageDescription;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

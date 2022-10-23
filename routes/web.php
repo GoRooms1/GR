@@ -51,7 +51,7 @@ Route::get('/address/{city}/{area?}/{district?}/{street?}', [SearchController_V2
 
 Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::middleware('noDebugbar')->get('sitemap.xml', [SiteMapController::class, 'index']);
-Route::get('/contacts', [PageController::class, 'show'])->name('pages.show');
+Route::get('/contacts', [\App\Http\Controllers\ContactController::class, 'show'])->name('pages.show');
 Route::get('/bonuse', [PageController::class, 'show']);
 Route::get('/rules', [PageController::class, 'show']);
 

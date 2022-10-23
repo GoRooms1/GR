@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Article;
 use App\Models\Hotel;
-use App\Models\Page;
 use Carbon\Carbon;
+use Domain\Page\Models\Page;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 

@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             SetCityCoords::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
         'api' => [

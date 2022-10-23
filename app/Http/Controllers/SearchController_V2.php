@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Attribute;
 use App\Models\HotelType;
-use App\Models\PageDescription;
 use App\Traits\Filter;
 use App\Traits\UrlDecodeFilter;
+use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Http\Request;
 
 class SearchController_V2 extends Controller

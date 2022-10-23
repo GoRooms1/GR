@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Address;
-use App\Models\PageDescription;
+use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;

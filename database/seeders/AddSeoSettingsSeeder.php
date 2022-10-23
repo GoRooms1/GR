@@ -59,10 +59,10 @@ class AddSeoSettingsSeeder extends Seeder
             ]);
         }
 
-        $page = \App\Models\PageDescription::where('url', '/')->first();
+        $page = \Domain\PageDescription\Models\PageDescription::where('url', '/')->first();
 
         if (! $page) {
-            \App\Models\PageDescription::create([
+            \Domain\PageDescription\Models\PageDescription::create([
                 'url' => '/',
                 'title' => 'Главная страница',
                 'meta_description' => '',
@@ -71,9 +71,9 @@ class AddSeoSettingsSeeder extends Seeder
             ]);
         }
 
-        $page = \App\Models\PageDescription::where('url', '/rooms/')->first();
+        $page = \Domain\PageDescription\Models\PageDescription::where('url', '/rooms/')->first();
         if (! $page) {
-            \App\Models\PageDescription::create([
+            \Domain\PageDescription\Models\PageDescription::create([
                 'url' => '/rooms/',
                 'title' => 'Комнаты',
                 'meta_description' => '',
@@ -83,9 +83,9 @@ class AddSeoSettingsSeeder extends Seeder
             ]);
         }
 
-        $page = \App\Models\PageDescription::where('url', '/rooms/hot/')->first();
+        $page = \Domain\PageDescription\Models\PageDescription::where('url', '/rooms/hot/')->first();
         if (! $page) {
-            \App\Models\PageDescription::create([
+            \Domain\PageDescription\Models\PageDescription::create([
                 'url' => '/rooms/hot/',
                 'title' => 'Топ комнат',
                 'meta_description' => '',

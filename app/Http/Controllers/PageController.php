@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Page;
+use Domain\Page\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
