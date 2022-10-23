@@ -49,8 +49,9 @@ jobs:
 
     - name: Set up MySQL
       run: |
+        find / -iname "*mysql*"
         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
-        mysql -e 'SHOW GRANTS;' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --host 127.0.0.1
+       
         
       env:
         DB_PASSWORD: root
