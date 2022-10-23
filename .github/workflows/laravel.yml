@@ -49,7 +49,6 @@ jobs:
       run: |
         sudo apt install net-tools
         sudo systemctl start mysql
-        sudo systemctl start redis
         sudo netstat -ntulp
         sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         sudo mysql -e 'show databases;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
