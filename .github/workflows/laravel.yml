@@ -1,0 +1,103 @@
+name: simple-check
+
+on: 
+#  push:
+  workflow_dispatch
+#    branches: 
+#      - develop
+
+jobs:
+  laravel:
+    runs-on: ubuntu-latest
+#    container: 
+#      image: kirschbaumdevelopment/laravel-test-runner:8.1
+    env:
+      ROOT_PASSWORD: root
+      ROOT_USER: root
+      MYSQL_DB: gorooms
+      
+    # in service use env variable for current service. for mysql - MYSQL_ROOT_PASSWORD
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ env.ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ env.MYSQL_DB }}
+
+        ports:
+          - 3306
+        options: >-
+          --health-cmd="mysqladmin ping" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
+
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
+
+
+    steps:
+    - name: Set up MySQL
+      run: |
+        sudo apt install net-tools
+        sudo systemctl start mysql
+        sudo netstat -ntulp
+        sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
+        sudo mysql -e 'show databases;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
+        mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
+ 
+    - name: checkout repo
+      uses : actions/checkout@v3
+      
+
+        
+    
+    - name: setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'     
+        
+      env:
+        DB_PASSWORD: root
+        DB_DATABASE: gorooms
+        DB_USER: root
+    
+    - name: Install additional PHP extensions
+      run : |
+        apt install -y curl software-properties-common
+        add-apt-repository ppa:ondrej/php
+        apt update
+        apt install -y php8.1 php8.1-bz2 php8.1-zip php8.1-readline php8.1-mysql php8.1-mbstring php8.1-gd php8.1-curl  php-json php-gd
+        apt install -y composer
+#       php-php-gettext 
+        
+
+    - name: Install node
+      run : |
+        apt install -y nodejs
+        curl -L https://npmjs.org/install.sh | sh
+#        apt install -y npm
+   
+    - name: Git clone my repo
+      uses: actions/checkout@v3
+
+    - name: Install Composer dependencies
+      run: composer install
+
+    - name: Prepare the application
+      run : |
+        systemctl start redis
+        php -r "file_exists('.env') || copy('.env.example', '.env');"
+        php artisan migrate --force
+        php artisan storage:link
+        npm run prod
+        make check
+        make test  
