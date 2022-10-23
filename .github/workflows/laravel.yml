@@ -44,10 +44,7 @@ jobs:
           --health-retries 3
 
     steps:
-    
-    - name: search redis
-      run: sudo find / -iname "*redis*" ! -path /pros ! -path /sys ! -path /bin
-    
+        
     - name: Set up MySQL
       run: |
         sudo apt install net-tools
