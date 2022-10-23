@@ -10,9 +10,11 @@ use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\User;
 use Domain\Page\DataTransferObjects\PageData;
+use Domain\Page\Factories\PageFactory;
 use Domain\PageDescription\Models\PageDescription;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -71,6 +73,7 @@ class Page extends Model
     use UseImages;
     use CreatedAtOrdered;
     use WithData;
+    use HasFactory;
 
     protected $fillable = [
         'title',
@@ -172,5 +175,10 @@ class Page extends Model
         $data['updated_at'] = $this->created_at->format(DATE_ATOM);
 
         return $data;
+    }
+
+    protected static function newFactory(): PageFactory
+    {
+        return PageFactory::new();
     }
 }
