@@ -49,7 +49,7 @@ jobs:
 
     - name: Set up MySQL
       run: |
-        service mysqld status
+        ls -la /etc/init.d/
         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
       env:
         DB_PASSWORD: root
