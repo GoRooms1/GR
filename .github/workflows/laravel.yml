@@ -9,8 +9,8 @@ on:
 jobs:
   laravel:
     runs-on: ubuntu-latest
-    container: 
-      image: kirschbaumdevelopment/laravel-test-runner:8.1
+#    container: 
+#      image: kirschbaumdevelopment/laravel-test-runner:8.1
 
     services:
       mysql:
@@ -25,7 +25,7 @@ jobs:
           --health-cmd="mysqladmin ping" 
           --health-interval=10s 
           --health-timeout=5s 
-          --health-retries=25
+          --health-retries=3    
 
       redis:
         image: redis
