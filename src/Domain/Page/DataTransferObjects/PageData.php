@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Lazy;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
-/** @typescript */
+#[TypeScript]
 final class PageData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(

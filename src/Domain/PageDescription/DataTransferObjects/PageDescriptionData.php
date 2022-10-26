@@ -7,7 +7,9 @@ namespace Domain\PageDescription\DataTransferObjects;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 final class PageDescriptionData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
