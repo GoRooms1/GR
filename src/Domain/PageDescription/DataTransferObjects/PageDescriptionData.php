@@ -12,6 +12,22 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 final class PageDescriptionData extends \Parent\DataTransferObjects\Data
 {
+    /**
+     * @param  int|null  $id
+     * @param  string  $url
+     * @param  string  $type
+     * @param  string|null  $title
+     * @param  string|null  $h1
+     * @param  string|null  $model_type
+     * @param  string|null  $meta_description
+     * @param  string|null  $meta_keywords
+     * @param  string|null  $description
+     * @param  Carbon|null  $created_at
+     * @param  Carbon|null  $updated_at
+     * @param  Image|null  $image
+     * @param  Collection<Image>|array<Image>  $images
+     * @param  int|null  $model_id
+     */
     public function __construct(
         public readonly ?int $id,
         public readonly string $url,

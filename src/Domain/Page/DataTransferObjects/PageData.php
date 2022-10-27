@@ -15,6 +15,19 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 final class PageData extends \Parent\DataTransferObjects\Data
 {
+    /**
+     * @param  int|null  $id
+     * @param  string  $title
+     * @param  string  $slug
+     * @param  string  $content
+     * @param  string|null  $header
+     * @param  string|null  $footer
+     * @param  Image|null  $image
+     * @param  Collection<Image>|array<Image>  $images
+     * @param  int|null  $user_id
+     * @param  Carbon|null  $created_at
+     * @param  Lazy|PageDescriptionData|null  $meta
+     */
     public function __construct(
         public readonly ?int $id,
         public readonly string $title,

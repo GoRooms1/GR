@@ -7,7 +7,7 @@ return [
      */
 
     'auto_discover_types' => [
-        __DIR__ . '/../src'
+        __DIR__.'/../src',
     ],
 
     /*

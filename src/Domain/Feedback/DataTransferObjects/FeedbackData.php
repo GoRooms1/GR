@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Domain\Feedback\DataTransferObjects;
@@ -10,25 +11,27 @@ final class FeedbackData extends \Parent\DataTransferObjects\Data
         public readonly string $email,
         public readonly string $phone,
         public readonly string $message,
-    )
-    {
+    ) {
     }
 
+    /**
+     * @return array<array<string>>
+     */
     public static function rules(): array
     {
         return [
             'name' => [
-                'required', 'string', 'min:3', 'max:190'
+                'required', 'string', 'min:3', 'max:190',
             ],
             'email' => [
-                'required', 'email'
+                'required', 'email',
             ],
             'phone' => [
-                'required', 'phone:RU'
+                'required', 'phone:RU',
             ],
             'message' => [
-                'required', 'string', 'min:5'
-            ]
+                'required', 'string', 'min:5',
+            ],
         ];
     }
 }

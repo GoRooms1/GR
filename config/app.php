@@ -252,6 +252,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
     ],
 
-    'adminEmail' => 'Go@Gorooms.ru'
+    'adminEmail' => 'Go@Gorooms.ru',
 
 ];

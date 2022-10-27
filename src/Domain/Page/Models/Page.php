@@ -83,6 +83,7 @@ class Page extends Model
         'footer',
     ];
 
+    /** @var string[] */
     protected $dates = [
         'created_at',
         'updated_at',
@@ -168,11 +169,14 @@ class Page extends Model
         return @$this->meta->title ?? null;
     }
 
+    /**
+     * @return array<string|null>
+     */
     public function toArray(): array
     {
         $data = parent::toArray();
-        $data['created_at'] = $this->created_at->format(DATE_ATOM);
-        $data['updated_at'] = $this->created_at->format(DATE_ATOM);
+        $data['created_at'] = $this->created_at?->format(DATE_ATOM);
+        $data['updated_at'] = $this->created_at?->format(DATE_ATOM);
 
         return $data;
     }

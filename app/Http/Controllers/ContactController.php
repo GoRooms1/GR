@@ -23,6 +23,7 @@ class ContactController extends Controller
     public function store(FeedbackData $feedbackData): \Illuminate\Http\RedirectResponse
     {
         SendFeedbackMailJob::dispatch($feedbackData);
+
         return Redirect::route('contact')->with('message', 'Ваше сообщение отправлено и в ближайшее время наши менеджеры свяжуться с вами.');
     }
 }

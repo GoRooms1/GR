@@ -12,15 +12,14 @@ class FeedbackSentMail extends Mailable
 {
     public function __construct(
         public FeedbackData $feedbackData
-    )
-    {
+    ) {
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
             from: new Address('no-reply@walfter.ru', 'Walfer'),
-            subject: 'New message from contact form ' . $this->feedbackData->name
+            subject: 'New message from contact form '.$this->feedbackData->name
         );
     }
 

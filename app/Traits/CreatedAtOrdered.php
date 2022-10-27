@@ -12,7 +12,7 @@ use App\Scopes\CreatedAtOrderScope;
 
 trait CreatedAtOrdered
 {
-    public static function getOrderDirection()
+    public static function getOrderDirection(): string
     {
         if (property_exists(static::class, 'orderDirection')) {
             return static::$orderDirection;
@@ -21,7 +21,7 @@ trait CreatedAtOrdered
         return 'DESC';
     }
 
-    protected static function bootCreatedAtOrdered()
+    protected static function bootCreatedAtOrdered(): void
     {
         static::addGlobalScope(new CreatedAtOrderScope(self::getOrderDirection()));
     }

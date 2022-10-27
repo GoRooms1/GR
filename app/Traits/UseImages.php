@@ -44,7 +44,7 @@ trait UseImages
           ]);
     }
 
-    protected static function bootUseImages()
+    protected static function bootUseImages(): void
     {
         self::deleting(function ($model) {
             if ($model->images()->count()) {

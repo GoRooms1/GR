@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Domain\Feedback\Jobs;
@@ -18,8 +19,7 @@ final class SendFeedbackMailJob implements ShouldQueue
 
     public function __construct(
         protected FeedbackData $feedbackData
-    )
-    {
+    ) {
     }
 
     public function handle(): void
