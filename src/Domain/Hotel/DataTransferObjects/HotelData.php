@@ -45,9 +45,9 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public Collection|array $images,
         public Lazy|HotelTypeData|null $type,
         public Lazy|PageDescriptionData|null $meta,
-        /** @var DataCollection<AttributeData> */
+        #[DataCollectionOf(AttributeData::class)]
         public readonly null|Lazy|DataCollection $attrs,
-        /** @var DataCollection<MetroData> */
+        #[DataCollectionOf(MetroData::class)]
         public readonly null|Lazy|DataCollection $metros,
         #[DataCollectionOf(RoomData::class)]
         public readonly DataCollection $rooms,

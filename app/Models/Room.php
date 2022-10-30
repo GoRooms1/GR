@@ -41,10 +41,10 @@ use Illuminate\Support\Facades\Route;
  * @property Carbon|null                 $created_at
  * @property Carbon|null                 $updated_at
  * @property bool                        $is_hot
- * @property-read Collection|Attribute[] $attrs
+ * @property-read Collection<Attribute>|Attribute[] $attrs
  * @property-read int|null               $attrs_count
  * @property-read \Domain\Category\Models\Category|null          $category
- * @property-read Collection|Cost[]      $costs
+ * @property-read Collection<Cost>|Cost[]      $costs
  * @property-read int|null               $costs_count
  * @property-read mixed                  $all_costs
  * @property-read string|null            $meta_description

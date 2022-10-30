@@ -50,12 +50,22 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
 
     public static function fromRequestAndHotel(HotelRequest $request, Hotel $hotel): self
     {
+        /** @var string $h1 */
+        $h1 = $request->get('h1', $hotel->meta_h1);
+        /** @var string $title */
+        $title = $request->get('meta_title', $hotel->meta_title);
+        /** @var string $description */
+        $description = $request->get('meta_description', $hotel->meta_description);
+        /** @var string $keywords */
+        $keywords = $request->get('meta_keywords');
+
         return new self(
             id: null, url: '/hotels/'.$hotel->slug, type: 'hotel',
-            title: $request->get('meta_title', $hotel->meta_title), h1: $request->get('h1', $hotel->meta_h1),
+            title: $title,
+            h1: $h1,
             model_type: $hotel::class,
-            meta_description: $request->get('meta_description', $hotel->meta_description),
-            meta_keywords: $request->get('meta_keywords'),
+            meta_description: $description,
+            meta_keywords: $keywords,
             description: null,
             created_at: Carbon::now(),
             updated_at: Carbon::now(),

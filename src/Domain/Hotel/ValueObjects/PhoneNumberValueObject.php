@@ -28,7 +28,7 @@ final class PhoneNumberValueObject extends PhoneNumber implements ValueObject
      * @param  string  $native
      * @return PhoneNumberValueObject
      */
-    public static function fromNative($native): PhoneNumberValueObject
+    public static function fromNative(mixed $native): PhoneNumberValueObject
     {
         return parent::make($native, 'RU');
     }

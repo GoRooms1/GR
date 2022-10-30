@@ -105,7 +105,7 @@ final class Address extends Model
 
     public function getCityAreaShortAttribute(): string
     {
-        $areas = explode('-', $this->city_area);
+        $areas = explode('-', $this->city_area ?? '');
         $area = '';
         foreach ($areas as $area_prefix) {
             $area .= mb_substr($area_prefix, 0, 1);

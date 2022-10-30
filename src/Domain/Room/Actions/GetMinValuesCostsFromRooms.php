@@ -16,17 +16,19 @@ final class GetMinValuesCostsFromRooms extends Action
 {
     /**
      * @param  int[]  $rooms
-     * @return DataCollection<(int|string), CostData>
+     * @return DataCollection<int|string, CostData>
      */
     public function handle(array $rooms): DataCollection
     {
-        $costs = Cost::query()
-            ->whereIn('room_id', $rooms)->min('value')
-            ->with([
-                'period.type' => function ($query) {
-                    $query->groupBy('id');
-                },
-            ])->get();
+        /** @var Cost $costModel */
+        $costModel = Cost::query()
+            ->whereIn('room_id', $rooms)->min('value');
+        /** @var Cost[] $costs */
+        $costs = $costModel->with([
+            'period.type' => function ($query) {
+                $query->groupBy('id');
+            },
+        ])->get();
 
         return CostData::collection($costs);
     }

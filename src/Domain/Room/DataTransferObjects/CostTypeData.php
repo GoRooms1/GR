@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Room\DataTransferObjects;
 
 use Domain\Room\Models\CostType;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 
@@ -16,7 +17,7 @@ final class CostTypeData extends \Parent\DataTransferObjects\Data
         public int $sort,
         public ?string $description,
         public ?string $slug,
-        /** @var DataCollection<PeriodData> */
+        #[DataCollectionOf(PeriodData::class)]
         public readonly null|Lazy|DataCollection $periods,
     ) {
     }

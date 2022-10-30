@@ -6,6 +6,7 @@ namespace Domain\Attribute\DataTransferObjects;
 
 use Domain\Attribute\Model\AttributeCategory;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 
@@ -17,7 +18,7 @@ final class AttributeCategoryData extends \Spatie\LaravelData\Data
         public readonly ?string $description,
         public readonly ?Carbon $created_at,
         public readonly ?Carbon $updated_at,
-        /** @var DataCollection<AttributeData> */
+        #[DataCollectionOf(AttributeData::class)]
         public readonly null|Lazy|DataCollection $attributes,
     ) {
     }

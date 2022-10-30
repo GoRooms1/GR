@@ -80,7 +80,7 @@ final class Attribute extends Model
         return $model;
     }
 
-    public function getModelNameAttribute()
+    public function getModelNameAttribute(): string
     {
         return $this->getAttributes()['model'];
     }

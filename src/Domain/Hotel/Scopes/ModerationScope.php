@@ -48,14 +48,14 @@ final class ModerationScope implements Scope
 
     protected function checkIfModerator(): bool
     {
-        return (auth()->user()->is_moderate || auth()->user()->is_admin) &&
+        return (auth()->user()?->is_moderate || auth()->user()?->is_admin) &&
             ! Route::currentRouteNamed('admin.*') &&
             ! Route::currentRouteNamed('moderator.*');
     }
 
     protected function checkIfDefaultLoggedInUser(): bool
     {
-        return (! auth()->user()->is_admin && ! auth()->user()->is_moderate) &&
+        return (! auth()->user()?->is_admin && ! auth()->user()?->is_moderate) &&
         ! Route::currentRouteNamed('lk.*') &&
         ! Route::currentRouteNamed('moderator.*') &&
         ! Route::currentRouteNamed('api.*') &&

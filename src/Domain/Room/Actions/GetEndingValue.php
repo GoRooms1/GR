@@ -7,8 +7,9 @@ namespace Domain\Room\Actions;
 use Lorisleiva\Actions\Action;
 
 /**
- * @static @method string run(int $value)
  * Русское окончание при сокращениие цифрами до 20 часов
+ *
+ * @method static string run(int $value)
  */
 final class GetEndingValue extends Action
 {

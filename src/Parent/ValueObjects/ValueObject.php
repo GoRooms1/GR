@@ -17,10 +17,7 @@ interface ValueObject
      */
     public function isSame(ValueObject $object): bool;
 
-    public static function fromNative($native);
+    public static function fromNative(mixed $native): mixed;
 
-    /**
-     * @return mixed
-     */
-    public function toNative();
+    public function toNative(): mixed;
 }

@@ -6,6 +6,7 @@ namespace Domain\Hotel\DataTransferObjects;
 
 use Domain\Hotel\Models\HotelType;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 
@@ -19,7 +20,7 @@ final class HotelTypeData extends \Parent\DataTransferObjects\Data
         public ?Carbon $created_at,
         public ?Carbon $updated_at,
         public ?string $single_name,
-        /** @var DataCollection<HotelData> */
+        #[DataCollectionOf(HotelData::class)]
         public readonly null|Lazy|DataCollection $hotels
     ) {
     }

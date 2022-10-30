@@ -26,7 +26,7 @@ use Spatie\LaravelData\WithData;
  * @property Carbon|null                  $updated_at
  * @property string|null                  $description
  * @property string|null                  $slug
- * @property-read Collection|Period[]     $periods
+ * @property-read Collection<Period>|Period[]     $periods
  * @property-read int|null                $periods_count
  * @property-read Collection|FilterCost[] $filterCosts
  * @property-read int|null                $filter_costs_count

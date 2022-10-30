@@ -7,7 +7,7 @@ namespace Domain\Room\Actions;
 use Lorisleiva\Actions\Action;
 
 /**
- * @static @method string run(string $start, string $end)
+ * @method static string run(string $start, string $end)
  */
 final class GenerateInfoDescForPeriod extends Action
 {

@@ -14,7 +14,7 @@ final class PhoneNumberCast implements CastsAttributes
      * @param  Hotel  $model
      * @param  string  $key
      * @param  ?string  $value
-     * @param  array  $attributes
+     * @param  array<string>  $attributes
      * @return PhoneNumberValueObject|null
      */
     public function get($model, string $key, $value, array $attributes): ?PhoneNumberValueObject
@@ -33,7 +33,7 @@ final class PhoneNumberCast implements CastsAttributes
      * @param  Hotel  $model
      * @param  string  $key
      * @param  PhoneNumberValueObject|string|null  $value
-     * @param  array  $attributes
+     * @param  array<string>  $attributes
      * @return string|null
      */
     public function set($model, string $key, $value, array $attributes): string|null

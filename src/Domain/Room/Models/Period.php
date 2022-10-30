@@ -64,6 +64,9 @@ final class Period extends Model
         'type',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $appends = [
         'info',
     ];
@@ -85,7 +88,7 @@ final class Period extends Model
      */
     public function getInfoAttribute(): string
     {
-        return GenerateInfoDescForPeriod::run($this->start_at, $this->end_at);
+        return GenerateInfoDescForPeriod::run($this->start_at, $this->end_at ?? '');
     }
 
     /**

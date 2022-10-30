@@ -28,6 +28,7 @@ final class MinimumCostsCalculation extends Action
     public function handle(HotelData $hotelData): DataCollection
     {
         $result = [];
+        /** @var CostTypeData[] $types */
         $types = Cache::remember('cost_types.all', 60 * 60 * 24 * 12, fn () => CostType::orderBy('sort')->get()->map->getData());
         $rooms = $hotelData->rooms;
         $roomsId = $rooms->toCollection()->pluck('id')->toArray();
@@ -39,7 +40,6 @@ final class MinimumCostsCalculation extends Action
             return [$attributes['cost_type_id'] => $attributes];
         })->all();
 
-        /** @var CostTypeData $type */
         foreach ($types as $type) {
             if (isset($costs[$type->id])) {
                 $result[] = new MinCostsData(

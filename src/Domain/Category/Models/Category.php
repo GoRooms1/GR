@@ -27,7 +27,7 @@ use Spatie\LaravelData\WithData;
  * @property Carbon|null   $created_at
  * @property Carbon|null   $updated_at
  * @property-read Hotel    $hotel
- * @property-read Room     $rooms
+ * @property-read \Illuminate\Database\Eloquent\Collection<Room>|Room[]     $rooms
  * @property-read int|null $rooms_count
  *
  * @method static Builder|Category newModelQuery()

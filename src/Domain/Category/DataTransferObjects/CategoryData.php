@@ -8,6 +8,7 @@ use Domain\Category\Models\Category;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Room\DataTransferObjects\RoomData;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 
@@ -22,7 +23,7 @@ final class CategoryData extends \Parent\DataTransferObjects\Data
         public ?Carbon $created_at,
         public ?Carbon $updated_at,
         public Lazy|HotelData|null $hotel,
-        /** @var DataCollection<RoomData> */
+        #[DataCollectionOf(RoomData::class)]
         public readonly null|Lazy|DataCollection $rooms,
     ) {
     }

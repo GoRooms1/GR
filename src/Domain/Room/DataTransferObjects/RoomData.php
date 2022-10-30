@@ -12,6 +12,7 @@ use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 
@@ -29,7 +30,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         public ?Carbon $created_at,
         public ?Carbon $updated_at,
         public bool $is_hot,
-        /** @var DataCollection<AttributeData> */
+        #[DataCollectionOf(AttributeData::class)]
         public readonly null|Lazy|DataCollection $attrs,
         public Image $image,
         /** @var Collection<Image>|Image[] */
@@ -37,7 +38,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         public Lazy|PageDescriptionData|null $meta,
         public Lazy|HotelData|null $hotel,
         public Lazy|CategoryData|null $category,
-        /** @var DataCollection<CostData> */
+        #[DataCollectionOf(CostData::class)]
         public readonly null|Lazy|DataCollection $costs,
     ) {
     }
@@ -52,7 +53,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
             'attrs' => Lazy::whenLoaded('attrs', $room, fn () => AttributeData::collection($room->attrs)),
             'meta' => Lazy::whenLoaded('meta', $room, fn () => PageDescriptionData::from($room->meta)),
             'hotel' => Lazy::whenLoaded('hotel', $room, fn () => HotelData::fromModel($room->hotel)),
-            'category' => Lazy::whenLoaded('category', $room, fn () => CategoryData::fromModel($room->category)),
+            'category' => Lazy::whenLoaded('category', $room, fn () => $room->category ? CategoryData::fromModel($room->category) : null),
             'costs' => Lazy::whenLoaded('costs', $room, fn () => RoomData::collection($room->costs)),
         ]);
     }

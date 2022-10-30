@@ -22,6 +22,7 @@ final class GetSlugFromAddress extends Action
 
         $slugs = [];
         foreach ($columns as $column) {
+            /** @var ?string $attribute */
             $attribute = $address->getAttribute($column);
             if (! empty($attribute)) {
                 $slugs[] = new AddressSlugData(address: $attribute, slug: Str::slug($attribute));

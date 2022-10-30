@@ -68,30 +68,30 @@ use Spatie\LaravelData\WithData;
  * @property string|null                                               $email
  * @property bool                                                      $checked_type_fond
  * @property-read ?Address                                              $address
- * @property-read \Illuminate\Database\Eloquent\Collection|Attribute[] $attrs
+ * @property-read \Illuminate\Database\Eloquent\Collection<Attribute>|Attribute[] $attrs
  * @property-read int|null                                             $attrs_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Category[]  $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection<Category>|Category[]  $categories
  * @property-read int|null                                             $categories_count
  * @property-read mixed                                                $costs
  * @property-read mixed                                                $meta_description
  * @property-read mixed                                                $meta_keywords
  * @property-read mixed                                                $meta_title
  * @property-read Image                                                $image
- * @property-read \Illuminate\Database\Eloquent\Collection|Image[]     $images
+ * @property-read \Illuminate\Database\Eloquent\Collection<Image>|Image[]     $images
  * @property-read int|null                                             $images_count
  * @property-read PageDescription                                      $meta
- * @property-read \Illuminate\Database\Eloquent\Collection|Metro[]     $metros
+ * @property-read \Illuminate\Database\Eloquent\Collection<Metro>|Metro[]     $metros
  * @property-read int|null                                             $metros_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Rating[]    $ratings
+ * @property-read \Illuminate\Database\Eloquent\Collection<Rating>|Rating[]    $ratings
  * @property-read int|null                                             $ratings_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Review[]    $reviews
+ * @property-read \Illuminate\Database\Eloquent\Collection<Review>|Review[]    $reviews
  * @property-read int|null                                             $reviews_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Room[]      $rooms
+ * @property-read \Illuminate\Database\Eloquent\Collection<Room>|Room[]      $rooms
  * @property-read int|null                                             $rooms_count
  * @property-read HotelType|null                                       $type
  * @property-read User                                                 $user
  * @property-read mixed                                                $disabled_save
- * @property-read \Illuminate\Database\Eloquent\Collection|User[]      $users
+ * @property-read \Illuminate\Database\Eloquent\Collection<User>|User[]      $users
  * @property-read int|null                                             $users_count
  * @property-read string|null                                          $meta_h1
  * @property-read SeoData                                              $seo_data
@@ -157,7 +157,7 @@ final class Hotel extends Model
     /**
      * Types Rooms in Hotel
      *
-     * @var array
+     * @var string[]
      */
     public const TYPES_FOND = [
         self::ROOMS_TYPE,
@@ -189,7 +189,7 @@ final class Hotel extends Model
     /**
      * The relations to eager load on every query.
      *
-     * @var array
+     * @var string[]
      */
     protected $with = ['rooms', 'attrs', 'address', 'ratings', 'reviews', 'metros', 'images', 'image', 'type'];
 
@@ -291,7 +291,12 @@ final class Hotel extends Model
      */
     public function getMetaDescriptionAttribute(): string
     {
-        return $this->meta->meta_description ?? $this->seo_data->description;
+        $result = $this->meta->meta_description ?? $this->seo_data->description;
+        if (! $result) {
+            return '';
+        }
+
+        return $result;
     }
 
     /**
@@ -357,7 +362,7 @@ final class Hotel extends Model
         return $this->hasMany(Room::class)->orderBy('order', 'ASC');
     }
 
-    public function saveAddress(string $address_raw, $comment = null): void
+    public function saveAddress(string $address_raw, ?string $comment = null): void
     {
         SaveHotelAddress::run($this, $address_raw, $comment);
     }

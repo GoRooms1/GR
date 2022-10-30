@@ -10,7 +10,7 @@ trait UrlDecodeFilter
      * Генерирует массив данные адреса из ссыоки для SEO
      *
      * @param  string  $url
-     * @return array
+     * @return array{city: string, metro: ?string, area: ?string, district: ?string, street: ?string}
      */
     private function decodeUrl(string $url): array
     {
@@ -53,6 +53,10 @@ trait UrlDecodeFilter
         return $this->getDecodeData($data);
     }
 
+    /**
+     * @param  array{city: string, metro: ?string, area: ?string, district: ?string, street: ?string}  $data
+     * @return array{city: string, metro: ?string, area: ?string, district: ?string, street: ?string}
+     */
     private function getDecodeData(array $data): array
     {
         $city = null;

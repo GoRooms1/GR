@@ -24,7 +24,7 @@ use Illuminate\Support\Carbon;
  * @property string|null                 $description
  * @property Carbon|null                 $created_at
  * @property Carbon|null                 $updated_at
- * @property-read Collection|Attribute[] $attributes
+ * @property-read Collection<Attribute>|Attribute[] $attributes
  * @property-read int|null               $attributes_count
  * @property-read mixed                  $attr_hotel
  * @property-read mixed                  $attr_room

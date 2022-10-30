@@ -90,7 +90,7 @@ class User extends Authenticatable
     /**
      * Array permission for forEach in blade
      *
-     * @var array
+     * @var array<string>
      */
     public const POSITIONS = [self::POSITION_GENERAL, self::POSITION_STAFF];
 
