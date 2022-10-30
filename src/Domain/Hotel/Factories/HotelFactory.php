@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Domain\Hotel\Factories;
 
-use App\Models\Hotel;
-use App\Models\HotelType;
 use App\User;
+use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Models\HotelType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class HotelFactory extends Factory
@@ -14,7 +14,7 @@ class HotelFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'Elysium hotel',
+            'name' => $this->faker->company(),
             'description' => $this->faker->realText(50),
             'phone' => $this->faker->phoneNumber(),
             'user_id' => User::first()->id,
@@ -22,6 +22,7 @@ class HotelFactory extends Factory
             'type_id' => HotelType::first()->id,
             'show' => true,
             'old_moderate' => true,
+            'moderate' => false,
             'email' => $this->faker->email(),
         ];
     }

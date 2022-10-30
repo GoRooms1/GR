@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Attribute;
 use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Attribute\Model\Attribute;
 use Illuminate\Database\Seeder;
 
 class FixRoomAttributes extends Seeder

@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands\Seo;
 
-use App\Helpers\SeoData;
-use App\Models\Hotel;
+use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Hotel\Models\Hotel;
+use Domain\Page\Actions\GenerateSeoDataContent;
+use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Console\Command;
 
@@ -22,8 +24,8 @@ class ResetDescriptionSeoHotel extends Command
                 $slug = '/hotels/'.$hotel->slug;
                 $seoData = new SeoData($hotel->address, $slug);
                 $seoData->lastOfType = 'hotel';
-                $seoData->hotel = $hotel;
-                $seoData->generate();
+                $seoData->hotel = HotelData::fromModel($hotel);
+                $seoData = GenerateSeoDataContent::run($seoData);
 
                 $pd = PageDescription::where('url', $slug)->first();
                 if ($pd) {

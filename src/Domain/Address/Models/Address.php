@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
+
+namespace Domain\Address\Models;
 
 use App\Traits\ClearValidated;
+use Domain\Address\Actions\GetUnitedCities;
+use Domain\Address\DataTransferObjects\AddressData;
+use Domain\Hotel\Models\Hotel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\Address
+ * Domain\Address\Models\Address
  *
  * @property int         $id
  * @property string|null $postal_code
@@ -67,9 +70,12 @@ use Illuminate\Support\Str;
  * @method static Builder|Address whereValue($value)
  * @mixin Eloquent
  */
-class Address extends Model
+final class Address extends Model
 {
     use ClearValidated;
+    use WithData;
+
+    protected string $dataClass = AddressData::class;
 
     protected $fillable = [
         'postal_code',
@@ -92,33 +98,6 @@ class Address extends Model
         'comment',
     ];
 
-    public static function setAddressesSlug($model): void
-    {
-        $slugs = self::getSlugFromAddress($model);
-        Cache::forget('sitemap.2g');
-        foreach ($slugs as $slug) {
-            DB::table('address_slug')->updateOrInsert(['address' => $slug['address']], $slug);
-        }
-    }
-
-    public static function getSlugFromAddress(Address $address): array
-    {
-        $columns = ['region', 'area', 'city', 'city_district', 'street', 'city_area'];
-
-        $slugs = [];
-        foreach ($columns as $column) {
-            $attribute = $address->getAttribute($column);
-            if (! empty($attribute)) {
-                $slugs[] = [
-                    'address' => $attribute,
-                    'slug' => Str::slug($attribute),
-                ];
-            }
-        }
-
-        return $slugs;
-    }
-
     public function hotel(): BelongsTo
     {
         return $this->belongsTo(Hotel::class);
@@ -137,20 +116,6 @@ class Address extends Model
 
     public function unitedCities(): \Illuminate\Support\Collection
     {
-        $row = DB::table('united_cities_address')->where('city_name', $this->city)->first();
-        if ($row) {
-            $unitedCity = UnitedCity::find($row->united_city);
-            if ($unitedCity) {
-                return $unitedCity->united();
-            }
-
-            return collect([
-                $this->city,
-            ]);
-        }
-
-        return collect([
-            $this->city,
-        ]);
+        return GetUnitedCities::run($this->city);
     }
 }

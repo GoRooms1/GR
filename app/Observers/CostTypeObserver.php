@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\CostType;
+use Domain\Room\Models\CostType;
 use Illuminate\Support\Str;
 
 class CostTypeObserver
@@ -10,7 +10,7 @@ class CostTypeObserver
     /**
      * Handle the CostType "created" event.
      *
-     * @param  CostType  $costType
+     * @param  \Domain\Room\Models\CostType  $costType
      * @return void
      */
     public function created(CostType $costType): void
@@ -49,7 +49,7 @@ class CostTypeObserver
     /**
      * Handle the CostType "restored" event.
      *
-     * @param  CostType  $costType
+     * @param  \Domain\Room\Models\CostType  $costType
      * @return void
      */
     public function restored(CostType $costType): void
@@ -60,7 +60,7 @@ class CostTypeObserver
     /**
      * Handle the CostType "force deleted" event.
      *
-     * @param  CostType  $costType
+     * @param  \Domain\Room\Models\CostType  $costType
      * @return void
      */
     public function forceDeleted(CostType $costType): void

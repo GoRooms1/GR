@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->after('sort')->nullable();
         });
 
-        \App\Models\CostType::get()->each(function ($costType) {
+        \Domain\Room\Models\CostType::get()->each(function ($costType) {
             $costType->slug = Str::slug($costType->name);
             $costType->save();
         });

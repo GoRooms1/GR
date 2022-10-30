@@ -22,8 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('attribute_category_id')->after('name');
         });
 
-        \App\Models\Attribute::query()
-          ->update(['attribute_category_id' => 1]);
+        \Domain\Attribute\Model\Attribute::query()->update(['attribute_category_id' => 1]);
 
         Schema::table('attributes', function (Blueprint $table) {
             $table->foreign('attribute_category_id')

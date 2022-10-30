@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\OneTime;
 
-use App\Models\Address;
 use App\Models\Metro;
+use Domain\Address\Models\Address;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;

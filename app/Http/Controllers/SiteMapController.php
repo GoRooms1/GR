@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Address;
 use App\Models\Article;
-use App\Models\Hotel;
 use Carbon\Carbon;
+use Domain\Address\Models\Address;
+use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;

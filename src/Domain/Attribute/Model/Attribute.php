@@ -1,21 +1,29 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
 
+namespace Domain\Attribute\Model;
+
+use App\Models\Room;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
+use Domain\Attribute\Builders\AttributeBuilder;
+use Domain\Attribute\DataTransferObjects\AttributeData;
+use Domain\Hotel\Models\Hotel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use function mb_strtolower;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\Attribute
+ * Domain\Attribute\Model\Attribute
  *
  * @property int                    $id
  * @property string                 $name
  * @property string|null            $description
- * @property string|null            $model
+ * @property class-string            $model
  * @property Carbon|null            $created_at
  * @property Carbon|null            $updated_at
  * @property bool                $in_filter
@@ -40,9 +48,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Attribute whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Attribute extends Model
+final class Attribute extends Model
 {
     use CreatedAtOrdered;
+    use WithData;
+
+    protected string $dataClass = AttributeData::class;
 
     public const MODELS_TRANSLATE = [
         Hotel::class => 'Отели',
@@ -60,24 +71,9 @@ class Attribute extends Model
         'in_filter' => 'boolean',
     ];
 
-    public function scopeForHotels(Builder $builder): Builder
+    public function getCategoryAttribute(): string
     {
-        return $builder->where('model', Hotel::class);
-    }
-
-    public function scopeForRooms(Builder $builder): Builder
-    {
-        return $builder->where('model', Room::class);
-    }
-
-    public function scopeFiltered(Builder $builder): Builder
-    {
-        return $builder->where('in_filter', true);
-    }
-
-    public function getCategoryAttribute()
-    {
-        $model = explode('\\', $this->getModelNameAttribute());
+        $model = explode('\\', $this->model);
         $model = end($model);
         $model = mb_strtolower($model);
 
@@ -92,5 +88,14 @@ class Attribute extends Model
     public function relationCategory(): BelongsTo
     {
         return $this->belongsTo(AttributeCategory::class, 'attribute_category_id', 'id');
+    }
+
+    /**
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return AttributeBuilder<Attribute>
+     */
+    public function newEloquentBuilder($query): AttributeBuilder
+    {
+        return new AttributeBuilder($query);
     }
 }

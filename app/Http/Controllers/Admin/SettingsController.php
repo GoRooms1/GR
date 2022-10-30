@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Address;
-use App\Models\Period;
 use App\Settings;
+use Domain\Address\Models\Address;
+use Domain\Room\Models\Period;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;

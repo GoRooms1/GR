@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttributeRequest;
-use App\Models\Attribute;
-use App\Models\AttributeCategory;
+use Domain\Attribute\Model\Attribute;
+use Domain\Attribute\Model\AttributeCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -70,7 +70,7 @@ class AttributeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Attribute  $attribute
+     * @param  \Domain\Attribute\Model\Attribute  $attribute
      * @return View
      */
     public function show(Attribute $attribute): View
@@ -81,7 +81,7 @@ class AttributeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Attribute  $attribute
+     * @param  \Domain\Attribute\Model\Attribute  $attribute
      * @return View
      */
     public function edit(Attribute $attribute): View
@@ -95,7 +95,7 @@ class AttributeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  AttributeRequest  $request
-     * @param  Attribute  $attribute
+     * @param  \Domain\Attribute\Model\Attribute  $attribute
      * @return RedirectResponse
      */
     public function update(AttributeRequest $request, Attribute $attribute): RedirectResponse
@@ -110,7 +110,7 @@ class AttributeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Attribute  $attribute
+     * @param  \Domain\Attribute\Model\Attribute  $attribute
      * @return RedirectResponse
      */
     public function destroy(Attribute $attribute): RedirectResponse

@@ -9,12 +9,12 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LK\RoomRequest;
-use App\Models\AttributeCategory;
-use App\Models\Cost;
-use App\Models\CostType;
-use App\Models\Hotel;
 use App\Models\Room;
 use App\Traits\UploadImage;
+use Domain\Attribute\Model\AttributeCategory;
+use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Cost;
+use Domain\Room\Models\CostType;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;

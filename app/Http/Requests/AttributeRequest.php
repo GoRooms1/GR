@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Attribute;
+use Domain\Attribute\Model\Attribute;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AttributeRequest extends FormRequest

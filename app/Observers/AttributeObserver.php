@@ -7,9 +7,8 @@
 
 namespace App\Observers;
 
-use App\Models\Attribute;
-use App\Models\Category;
 use Cache;
+use Domain\Attribute\Model\Attribute;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
@@ -90,7 +89,7 @@ class AttributeObserver
     /**
      * Handle the Category "force deleted" event.
      *
-     * @param  Attribute  $attribute
+     * @param  \Domain\Attribute\Model\Attribute  $attribute
      * @return void
      *
      * @throws InvalidArgumentException

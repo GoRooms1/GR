@@ -9,14 +9,14 @@ namespace App\Http\Controllers\Moderator;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Moderate\ObjectUpdateRequest;
-use App\Models\Attribute;
-use App\Models\AttributeCategory;
-use App\Models\Hotel;
-use App\Models\HotelType;
 use App\Models\Metro;
 use App\Notifications\NotificationPublishedHotel;
 use App\Notifications\NotificationUnPublishedHotel;
 use App\User;
+use Domain\Attribute\Model\Attribute;
+use Domain\Attribute\Model\AttributeCategory;
+use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Models\HotelType;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

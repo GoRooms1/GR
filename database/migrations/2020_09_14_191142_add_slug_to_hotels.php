@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique()->index()->nullable();
         });
 
-        foreach (\App\Models\Hotel::all() as &$hotel) {
+        foreach (\Domain\Hotel\Models\Hotel::all() as &$hotel) {
             $start_slug = \Illuminate\Support\Str::slug($hotel->name);
             $slug = $start_slug;
             $try = 0;
@@ -35,7 +35,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('hotels', function (Blueprint $table) {
             $table->dropColumn('slug');

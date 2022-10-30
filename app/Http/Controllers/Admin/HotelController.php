@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HotelRequest;
-use App\Models\Attribute;
-use App\Models\CostType;
-use App\Models\Hotel;
-use App\Models\HotelType;
 use App\Models\Image;
 use App\Models\Metro;
+use Domain\Attribute\Model\Attribute;
+use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Models\HotelType;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Room\Models\CostType;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -85,7 +86,10 @@ class HotelController extends Controller
                 $hotel->saveAddress($request->get('address'), $request->get('address_comment', ''));
             }
 
-            $hotel->attachMeta($request);
+            if ($request->isMetaAttachmentAllowed()) {
+                $pageDescriptionData = PageDescriptionData::fromRequestAndHotel($request, $hotel);
+                $hotel->attachMeta($pageDescriptionData);
+            }
 
             $hotel->metros()
               ->delete();

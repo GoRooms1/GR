@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Seo;
 
-use App\Models\Hotel;
 use Carbon\Carbon;
+use Domain\Hotel\Models\Hotel;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Console\Command;
 
@@ -13,7 +13,7 @@ class ResetSeo extends Command
 
     public function handle(): int
     {
-        $address = \App\Models\Address::all();
+        $address = \Domain\Address\Models\Address::all();
         $createSeo = new \App\Helpers\CreateSeoUrls();
         foreach ($address as $a) {
             $createSeo->createUrlFromAddress($a, true, Carbon::now()->addDays(3));

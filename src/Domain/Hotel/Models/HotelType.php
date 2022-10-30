@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
 
+namespace Domain\Hotel\Models;
+
+use Domain\Hotel\DataTransferObjects\HotelTypeData;
+use Domain\Hotel\Factories\HotelTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,9 +13,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\HotelType
+ * Domain\Hotel\Models\HotelType
  *
  * @property int                     $id
  * @property string                  $name
@@ -35,9 +40,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|HotelType whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class HotelType extends Model
+final class HotelType extends Model
 {
     use HasFactory;
+    use WithData;
+
+    protected string $dataClass = HotelTypeData::class;
 
     protected $fillable = [
         'name',
@@ -48,5 +56,10 @@ class HotelType extends Model
     public function hotels(): HasMany
     {
         return $this->hasMany(Hotel::class);
+    }
+
+    public static function newFactory(): HotelTypeFactory
+    {
+        return HotelTypeFactory::new();
     }
 }

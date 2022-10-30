@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Hotels;
 
-use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Console\Command;
 
 class Moderate extends Command

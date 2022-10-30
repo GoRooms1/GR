@@ -2,15 +2,15 @@
 
 namespace App\Widgets;
 
-use App\Models\Address;
-use App\Models\Attribute;
-use App\Models\AttributeCategory;
-use App\Models\CostType;
-use App\Models\HotelType;
 use App\Models\Metro;
 use App\Traits\UrlDecodeFilter;
 use Arrilot\Widgets\AbstractWidget;
 use Cookie;
+use Domain\Address\Models\Address;
+use Domain\Attribute\Model\Attribute;
+use Domain\Attribute\Model\AttributeCategory;
+use Domain\Hotel\Models\HotelType;
+use Domain\Room\Models\CostType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
@@ -305,13 +305,17 @@ class Filter extends AbstractWidget
 //    TODO: Кастомная страница Джакуззи
         if (Route::currentRouteNamed('custom.jacuzzi')) {
             $attributes = [];
-            $attributes['room'] = [Attribute::forRooms()->where('name', 'Джакузи')->first()->id];
+            /** @var Attribute $attribute */
+            $attribute = Attribute::forRooms()->where('name', 'Джакузи')->first();
+            $attributes['room'] = [$attribute->id];
             $attributes['hotel'] = [];
         }
         if (Route::currentRouteNamed('custom.5minut')) {
             $attributes = [];
             $attributes['room'] = [];
-            $attributes['hotel'] = [Attribute::forHotels()->where('name', '5 минут до метро')->first()->id];
+            /** @var Attribute $attribute */
+            $attribute = Attribute::forHotels()->where('name', '5 минут до метро')->first();
+            $attributes['hotel'] = [$attribute->id];
         }
 
         return $attributes;

@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Models\Hotel;
 use App\User;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;

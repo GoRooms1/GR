@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReviewRequest;
-use App\Models\Hotel;
 use App\Models\RatingCategory;
 use App\Models\Review;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 

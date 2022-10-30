@@ -8,8 +8,8 @@
 namespace App\Observers;
 
 use App\Helpers\CreateSeoUrls;
-use App\Models\Hotel;
 use Cache;
+use Domain\Hotel\Models\Hotel;
 
 class HotelObserver
 {

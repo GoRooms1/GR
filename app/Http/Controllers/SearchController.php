@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Json;
 use App\Http\Middleware\SetCityCoords;
-use App\Models\Attribute;
-use App\Models\Cost;
-use App\Models\Hotel;
 use App\Models\Room;
 use App\Models\Search;
 use App\Settings;
+use Domain\Attribute\Model\Attribute;
+use Domain\Hotel\Models\Hotel;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Room\Models\Cost;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

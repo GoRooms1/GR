@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Hotel;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
@@ -10,7 +10,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Hotel::query()->get()->map(function (Hotel $hotel) {
             $hotel->show = true;

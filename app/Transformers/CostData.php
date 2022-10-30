@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Transformers;
 
-use App\Models\CostType;
+use Domain\Room\Models\CostType;
 
 final class CostData extends \Spatie\DataTransferObject\DataTransferObject
 {

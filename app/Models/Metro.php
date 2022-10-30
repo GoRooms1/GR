@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use DB;
+use Domain\Hotel\Models\Hotel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

@@ -5,8 +5,10 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-namespace App\Models;
+namespace Domain\Attribute\Model;
 
+use App\Models\Room;
+use Domain\Hotel\Models\Hotel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

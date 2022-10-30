@@ -1,16 +1,37 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
 
-use App\Helpers\SeoData;
+namespace Domain\Hotel\Models;
+
+use App\Models\Image;
+use App\Models\Metro;
+use App\Models\Rating;
+use App\Models\Review;
+use App\Models\Room;
 use App\Parents\Model;
 use App\Traits\ClearValidated;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\User;
+use Domain\Address\Actions\SaveHotelAddress;
+use Domain\Address\Models\Address;
+use Domain\Attribute\Model\Attribute;
+use Domain\Category\Models\Category;
+use Domain\Hotel\Actions\GenerateSlugForHotel;
+use Domain\Hotel\Actions\MinimumCostsCalculation;
+use Domain\Hotel\Builders\HotelBuilder;
+use Domain\Hotel\Casts\PhoneNumberCast;
+use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Hotel\DataTransferObjects\MinCostsData;
+use Domain\Hotel\Factories\HotelFactory;
+use Domain\Hotel\Scopes\ModerationScope;
+use Domain\Hotel\ValueObjects\PhoneNumberValueObject;
+use Domain\Page\Actions\GenerateSeoDataContent;
+use Domain\Page\DataTransferObjects\SeoData;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 use Eloquent;
-use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,20 +39,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\Hotel
+ * Domain\Hotel\Models\Hotel
  *
  * @property int                                                       $id
  * @property string                                                    $name
  * @property string|null                                               $description
- * @property string                                                    $phone
+ * @property ?PhoneNumberValueObject                                   $phone
  * @property string|null                                               $phone_2
  * @property ?string                                                    $type_fond
  * @property int                                                       $user_id
@@ -43,7 +62,7 @@ use Illuminate\Support\Str;
  * @property bool                                                      $old_moderate
  * @property bool                                                      $show
  * @property bool                                                      $moderate
- * @property string                                                    $route_title
+ * @property ?string                                                    $route_title
  * @property string|null                                               $slug
  * @property int                                                       $hide_phone
  * @property string|null                                               $email
@@ -101,14 +120,18 @@ use Illuminate\Support\Str;
  * @method static Builder|Hotel whereUpdatedAt($value)
  * @method static Builder|Hotel whereUserId($value)
  * @method static Builder|Hotel whereCheckedTypeFond($value)
+ * @method HotelData getData()
  * @mixin Eloquent
  */
-class Hotel extends Model
+final class Hotel extends Model
 {
     use UseImages;
     use ClearValidated;
     use CreatedAtOrdered;
     use HasFactory;
+    use WithData;
+
+    protected string $dataClass = HotelData::class;
 
     /**
      * Page
@@ -175,6 +198,9 @@ class Hotel extends Model
         'old_moderate' => 'boolean',
         'show' => 'boolean',
         'checked_type_fond' => 'boolean',
+        'phone' => PhoneNumberCast::class,
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
@@ -186,52 +212,7 @@ class Hotel extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('moderation', static function (Builder $builder) {
-            if (auth()->check()) {
-                if (Route::currentRouteNamed('lk.*')) {
-                    // Some stop if
-                } elseif ((! auth()->user()->is_admin && ! auth()->user()->is_moderate) &&
-                    // @phpstan-ignore-next-line
-                  ! Route::currentRouteNamed('lk.*') &&
-                  ! Route::currentRouteNamed('moderator.*') &&
-                  ! Route::currentRouteNamed('api.*') &&
-                  ! Route::currentRouteNamed('admin.*')
-                ) {
-//          Если залогинен значит выводим только проверенные отели в которых есть комнаты
-                    $builder
-                      ->withCount(['rooms' => function ($query) {
-                          $query->withoutGlobalScope('moderation')->where('moderate', false);
-                      }])
-                      ->having('rooms_count', '>', 0)
-                      ->where('moderate', false)
-                      ->where('old_moderate', true)
-                      ->where('show', true);
-                } elseif (
-                    (auth()->user()->is_moderate || auth()->user()->is_admin) &&
-                    ! Route::currentRouteNamed('admin.*') &&
-                    ! Route::currentRouteNamed('moderator.*')
-                ) {
-//          Если модератор то показываем отели только те которые уже заполнили и создавали ранее комнату
-                    $builder
-                      ->where('old_moderate', true);
-                }
-//        Если залогинен н админ то выводим просто всё
-            } else {
-//        Если не залогинен значит выводим только проверенные отели в которых есть комнаты
-                $builder->withCount(['rooms' => function ($query) {
-                    $query->withoutGlobalScope('moderation')->where('moderate', false);
-                }])
-                  ->where('moderate', false)
-                  ->where('show', true)
-                  ->where('old_moderate', true)
-                  ->having('rooms_count', '>', 0);
-            }
-        });
-    }
-
-    public function scopePopular(Builder $query): Builder
-    {
-        return $query->where('is_popular', true);
+        static::addGlobalScope(new ModerationScope);
     }
 
     /**
@@ -252,7 +233,7 @@ class Hotel extends Model
     public function attrs(): BelongsToMany
     {
         return $this->belongsToMany(
-            Attribute::class,
+            \Domain\Attribute\Model\Attribute::class,
             'attribute_hotel',
             'hotel_id',
             'attribute_id'
@@ -267,8 +248,8 @@ class Hotel extends Model
     public function categories(): HasMany
     {
         return $this
-          ->hasMany(Category::class)
-          ->orderBy('created_at');
+            ->hasMany(Category::class)
+            ->orderBy('created_at');
     }
 
     /**
@@ -284,8 +265,8 @@ class Hotel extends Model
     public function reviews(): HasMany
     {
         return $this
-          ->hasMany(Review::class)
-          ->with('ratings');
+            ->hasMany(Review::class)
+            ->with('ratings');
     }
 
     public function ratings(): HasManyThrough
@@ -301,21 +282,6 @@ class Hotel extends Model
     public function metros(): HasMany
     {
         return $this->hasMany(Metro::class);
-    }
-
-    /**
-     * If admin or moderator view phone
-     *
-     * @param $value
-     * @return string|null
-     */
-    public function getPhoneAttribute($value): ?string
-    {
-        if (! $this->hide_phone && ! \Request::is('admin/*') && ! \Request::is('lk/*') && ! \Request::is('moderator/*')) {
-            $value = null;
-        }
-
-        return $value;
     }
 
     /**
@@ -366,12 +332,9 @@ class Hotel extends Model
     public function getSeoDataAttribute(): SeoData
     {
         $url = '/hotels/'.$this->slug;
-        $seoData = new SeoData($this->address, $url);
-        $seoData->lastOfType = 'hotel';
-        $seoData->hotel = $this;
-        $seoData->generate();
+        $seoData = SeoData::fromAddressAndUrlHotel($url, $this, $this->address);
 
-        return $seoData;
+        return GenerateSeoDataContent::run($seoData);
     }
 
     /**
@@ -396,19 +359,7 @@ class Hotel extends Model
 
     public function saveAddress(string $address_raw, $comment = null): void
     {
-        $address = $this->getAddressInfo($address_raw);
-        $address['comment'] = empty($comment) ? null : $comment;
-        $this->address()->delete();
-        $this->address()->create($address)->save();
-        $this->save();
-    }
-
-    public function getAddressInfo(string $address): array
-    {
-        $suggest = DadataSuggest::suggest('address', ['query' => $address, 'count' => 1]);
-        $suggest['data']['value'] = $suggest['value'];
-
-        return Address::getFillableData($suggest['data']);
+        SaveHotelAddress::run($this, $address_raw, $comment);
     }
 
     /**
@@ -421,27 +372,9 @@ class Hotel extends Model
         return $this->hasOne(Address::class);
     }
 
-    public function attachMeta(Request $request): Hotel
+    public function attachMeta(PageDescriptionData $data): Hotel
     {
-        if (! $request->get('meta_title', false) && ! $request->get('meta_description', false) && ! $request->get('meta_keywords', false)) {
-            return $this;
-        }
-
-        $url = '/hotels/'.$this->slug;
-
-        $data = [];
-
-        $data['title'] = $request->get('meta_title', $this->meta_title);
-        $data['meta_description'] = $request->get('meta_description', $this->meta_description);
-
-        $data['meta_keywords'] = $request->get('meta_keywords');
-        $data['h1'] = $request->get('h1', $this->meta_h1);
-        $data['url'] = $url;
-        $data['model_type'] = self::class;
-
-        $meta = PageDescription::updateOrCreate(['url' => $url], $data);
-        $meta->model_type = self::class;
-        $meta->save();
+        $meta = PageDescription::updateOrCreate(['url' => $data->url], $data->toArray());
 
         $this->meta()->save($meta);
 
@@ -456,8 +389,8 @@ class Hotel extends Model
     public function meta(): HasOne
     {
         return $this
-          ->hasOne(PageDescription::class, 'model_id')
-          ->where('model_type', self::class);
+            ->hasOne(PageDescription::class, 'model_id')
+            ->where('model_type', self::class);
     }
 
     public function getMinimalsAttribute(): object
@@ -468,51 +401,11 @@ class Hotel extends Model
     /**
      * Minimal costs in type for all rooms
      *
-     * @return object
+     * @return DataCollection<(int|string), MinCostsData>
      */
-    public function getMinCosts(): object
+    public function getMinCosts(): DataCollection
     {
-        $costs = Cache::remember('hotel.'.$this->id.'.costs', 60 * 60 * 24 * 12, function () {
-            $rooms = $this->rooms->pluck('id')->toArray();
-            $items = new Collection();
-            $types = [];
-            foreach ($this->costs->sortBy('period.type.sort') as $cost) {
-                $type_id = $cost->period->type->id;
-                if (! in_array($type_id, $types, true)) {
-                    $types[] = $type_id;
-                    $min_in_rooms = Cache::remember('rooms.costs.'.$type_id.'.'.implode('-', $rooms), 60 * 60 * 24 * 12, function () use ($rooms, $type_id) {
-                        return Cost::whereIn('room_id', $rooms)->whereHas('period', function ($q) use ($type_id) {
-                            $q->where('cost_type_id', $type_id);
-                        })->where('value', '>', 0)->min('value') ?? '0';
-                    });
-
-                    $costPeriod = $this->costs->where('value', $min_in_rooms)->where('period.cost_type_id', $type_id)->first();
-                    $cost = $costPeriod ?? $cost;
-
-                    $item = (object) ['name' => $cost->period->type->name, 'id' => $cost->period->type->id, 'description' => $cost->description, 'info' => $cost->period->info, 'value' => $min_in_rooms];
-                    $items->add($item);
-                }
-            }
-
-            $types = CostType::orderBy('sort')->get();
-            $costs = new Collection();
-            foreach ($types as $type) {
-                $check = $items->contains('id', $type->id);
-                if (! $check) {
-                    $costs->add((object) [
-                        'name' => $type->name,
-                        'info' => 'Не предоставляется',
-                        'value' => 0,
-                    ]);
-                } else {
-                    $costs->add($items->firstWhere('id', '=', $type->id));
-                }
-            }
-
-            return $costs;
-        });
-
-        return (object) $costs;
+        return MinimumCostsCalculation::run($this->getData());
     }
 
     public function getRouteKeyName(): string
@@ -542,12 +435,20 @@ class Hotel extends Model
      */
     public function generateSlug(): string
     {
-        $i = 0;
-        do {
-            $slug = Str::slug($this->name).($i > 0 ? '-'.$i : '');
-            $i++;
-        } while (self::withoutGlobalScope('moderation')->whereSlug($slug)->exists());
+        return GenerateSlugForHotel::run($this->getData());
+    }
 
-        return $slug;
+    public static function newFactory(): HotelFactory
+    {
+        return HotelFactory::new();
+    }
+
+    /**
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return HotelBuilder<Hotel>
+     */
+    public function newEloquentBuilder($query): HotelBuilder
+    {
+        return new HotelBuilder($query);
     }
 }

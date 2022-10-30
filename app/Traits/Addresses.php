@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\Address;
+use Domain\Address\Models\Address;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 

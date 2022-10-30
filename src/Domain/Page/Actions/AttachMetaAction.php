@@ -10,7 +10,7 @@ use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 
 /**
- * @static @method PageData run()
+ * @method static PageData run()
  */
 final class AttachMetaAction extends \Parent\Actions\Action
 {

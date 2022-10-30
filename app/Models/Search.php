@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Domain\Hotel\Models\Hotel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;

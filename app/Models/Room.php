@@ -7,10 +7,16 @@ use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\Transformers\CostData;
 use App\User;
+use Domain\Attribute\Model\Attribute;
+use Domain\Hotel\Models\Hotel;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Room\Factories\RoomFactory;
+use Domain\Room\Models\Cost;
+use Domain\Room\Models\CostType;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,7 +43,7 @@ use Illuminate\Support\Facades\Route;
  * @property bool                        $is_hot
  * @property-read Collection|Attribute[] $attrs
  * @property-read int|null               $attrs_count
- * @property-read Category|null          $category
+ * @property-read \Domain\Category\Models\Category|null          $category
  * @property-read Collection|Cost[]      $costs
  * @property-read int|null               $costs_count
  * @property-read mixed                  $all_costs
@@ -72,6 +78,7 @@ class Room extends Model
 {
     use UseImages;
     use CreatedAtOrdered;
+    use HasFactory;
 
     public const PER_PAGE = 6;
 
@@ -89,6 +96,8 @@ class Room extends Model
     protected $casts = [
         'moderate' => 'boolean',
         'is_hot' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     protected $with = [
@@ -127,7 +136,7 @@ class Room extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(\Domain\Category\Models\Category::class);
     }
 
     public function hotel(): BelongsTo
@@ -228,5 +237,10 @@ class Room extends Model
     public function getMetaTitleAttribute(): ?string
     {
         return $this->meta->title ?? null;
+    }
+
+    protected static function newFactory(): RoomFactory
+    {
+        return RoomFactory::new();
     }
 }

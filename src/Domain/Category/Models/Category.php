@@ -1,17 +1,23 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Category\Models;
 
+use App\Models\Room;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
+use Domain\Category\DataTransferObjects\CategoryData;
+use Domain\Category\Factories\CategoryFactory;
+use Domain\Hotel\Models\Hotel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\Category
+ * Domain\Category\Models\Category
  *
  * @property int           $id
  * @property string        $name
@@ -39,6 +45,10 @@ use Illuminate\Support\Carbon;
 class Category extends Model
 {
     use CreatedAtOrdered;
+    use HasFactory;
+    use WithData;
+
+    protected string $dataClass = CategoryData::class;
 
     /**
      * rows
@@ -69,5 +79,10 @@ class Category extends Model
     public function rooms(): HasMany
     {
         return $this->hasMany(Room::class);
+    }
+
+    public static function newFactory(): CategoryFactory
+    {
+        return CategoryFactory::new();
     }
 }

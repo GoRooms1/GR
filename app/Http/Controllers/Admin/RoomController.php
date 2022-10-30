@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoomRequest;
-use App\Models\Attribute;
-use App\Models\Cost;
-use App\Models\CostType;
-use App\Models\Hotel;
 use App\Models\Image;
 use App\Models\Room;
+use Domain\Attribute\Model\Attribute;
+use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Cost;
+use Domain\Room\Models\CostType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 

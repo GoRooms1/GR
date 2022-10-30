@@ -50,4 +50,10 @@ class HotelRequest extends FormRequest
             'email' => ['nullable', 'email'],
         ];
     }
+
+    public function isMetaAttachmentAllowed(): bool
+    {
+        return ! (! $this->get('meta_title', false) && ! $this->get('meta_description',
+            false) && ! $this->get('meta_keywords', false));
+    }
 }

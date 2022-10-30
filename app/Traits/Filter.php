@@ -2,10 +2,10 @@
 
 namespace App\Traits;
 
-use App\Models\Address;
-use App\Models\CostType;
-use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Address\Models\Address;
+use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\CostType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 

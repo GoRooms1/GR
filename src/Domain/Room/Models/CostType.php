@@ -1,18 +1,20 @@
 <?php
-/*
- * Copyright (c) 2021.
- * This code is the property of the Fulliton developer.
- * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
- */
 
-namespace App\Models;
+declare(strict_types=1);
 
+namespace Domain\Room\Models;
+
+use App\Models\FilterCost;
+use Domain\Room\DataTransferObjects\CostTypeData;
+use Domain\Room\Factories\CostTypeFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\WithData;
 
 /**
  * Тип для стоимости (На день на ночь и тп)
@@ -41,8 +43,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|CostType whereSlug($value)
  * @mixin Eloquent
  */
-class CostType extends Model
+final class CostType extends Model
 {
+    use WithData;
+    use HasFactory;
+
+    protected string $dataClass = CostTypeData::class;
+
     protected $fillable = [
         'name',
         'description',
@@ -76,5 +83,10 @@ class CostType extends Model
     public function filterCosts(): HasMany
     {
         return $this->hasMany(FilterCost::class, 'cost_type_id', 'id');
+    }
+
+    protected static function newFactory(): CostTypeFactory
+    {
+        return CostTypeFactory::new();
     }
 }

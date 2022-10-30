@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\CostType;
+use Domain\Room\Models\CostType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -56,7 +56,7 @@ class CostTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  CostType  $costType
+     * @param  \Domain\Room\Models\CostType  $costType
      * @return View
      */
     public function edit(CostType $costType): View
@@ -68,7 +68,7 @@ class CostTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  CostType  $costType
+     * @param  \Domain\Room\Models\CostType  $costType
      * @return RedirectResponse
      */
     public function update(Request $request, CostType $costType): RedirectResponse
@@ -87,7 +87,7 @@ class CostTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  CostType  $costType
+     * @param  \Domain\Room\Models\CostType  $costType
      * @return RedirectResponse
      */
     public function destroy(CostType $costType): RedirectResponse

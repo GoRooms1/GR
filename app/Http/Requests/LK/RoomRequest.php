@@ -7,7 +7,7 @@
 
 namespace App\Http\Requests\LK;
 
-use App\Models\Hotel;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoomRequest extends FormRequest
@@ -30,7 +30,7 @@ class RoomRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->get('id');
-
+        /** @var Hotel $hotel */
         $hotel = Hotel::whereHas('rooms', function ($q) use ($id) {
             $q->where('id', $id);
         })->firstOrFail();

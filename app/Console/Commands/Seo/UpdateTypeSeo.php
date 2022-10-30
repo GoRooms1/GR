@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Seo;
 
-use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Console\Command;

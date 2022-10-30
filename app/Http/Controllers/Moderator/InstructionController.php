@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Moderator;
 
 use App\Http\Controllers\Controller;
-use App\Models\Hotel;
 use App\Models\Instruction;
+use Domain\Hotel\Models\Hotel;
 
 class InstructionController extends Controller
 {

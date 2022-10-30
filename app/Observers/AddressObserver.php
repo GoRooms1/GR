@@ -3,7 +3,8 @@
 namespace App\Observers;
 
 use App\Helpers\CreateSeoUrls;
-use App\Models\Address;
+use Domain\Address\Actions\SetAddressesSlug;
+use Domain\Address\Models\Address;
 use Illuminate\Support\Facades\Cache;
 
 class AddressObserver
@@ -23,7 +24,7 @@ class AddressObserver
      */
     public function created(Address $address): void
     {
-        Address::setAddressesSlug($address);
+        SetAddressesSlug::run($address);
         $this->createSeoUrls->createUrlFromAddress($address);
         Cache::forget('sitemap.2g');
     }
@@ -36,7 +37,7 @@ class AddressObserver
      */
     public function updated(Address $address): void
     {
-        Address::setAddressesSlug($address);
+        SetAddressesSlug::run($address);
         $this->createSeoUrls->createUrlFromAddress($address);
         Cache::forget('sitemap.2g');
     }

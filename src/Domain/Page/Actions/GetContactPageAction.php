@@ -6,7 +6,7 @@ use Domain\Page\Models\Page;
 use Parent\Actions\Action;
 
 /**
- * @static @method Page run()
+ * @method static Page run()
  */
 final class GetContactPageAction extends Action
 {

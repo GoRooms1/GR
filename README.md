@@ -70,19 +70,27 @@ Remove all data from the `costs` table, but make sure to do a` backup`.
 $rooms = \App\Models\Room::all();
 
 // Periods
-$periods = \App\Models\Period::all();
+$periods = \Domain\Room\Models\Period::all();
 
 // All periods of the room
 \App\Models\Room::fisrt()->costs->pluck('period')
 
 // Beautiful information for the front
-\App\Models\Period::first()->info
+\Domain\Room\Models\Period::first()->info
 
 //Взять все категории из комнат для данного отеля
 $hotel->rooms->pluck('category')->unique('category')
 
 //Взять ве категории для данного отеля
 $hotel->categories
+```
+
+## Refactoring
+
+Hotel model where moved in domain layer. To fix attributes, run query:
+
+```sql
+UPDATE attributes SET model = 'Domain\\Hotel\\Models\\Hotel' WHERE model='App\\Models\\Hotel'
 ```
 
 ## Contributing

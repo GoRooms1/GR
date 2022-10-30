@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Seo;
 
-use App\Models\Hotel;
 use Carbon\Carbon;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Console\Command;
 
 class ResetHotelSeo extends Command

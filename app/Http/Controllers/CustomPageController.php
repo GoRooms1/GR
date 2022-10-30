@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Address;
-use App\Models\Attribute;
-use App\Models\CostType;
-use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Address\Models\Address;
+use Domain\Attribute\Model\Attribute;
+use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\CostType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -14,6 +14,7 @@ class CustomPageController extends Controller
 {
     public function jacuzzi(Request $request)
     {
+        /** @var ?Attribute $attr */
         $attr = Attribute::forRooms()->where('name', 'Джакузи')->first();
         if ($attr) {
             $rooms = Room::whereHas('attrs', static function ($q) use ($attr) {
@@ -27,7 +28,7 @@ class CustomPageController extends Controller
             $rooms = $rooms->paginate(16);
             $title = 'Номера отелей с Джакузи';
             $hotels = null;
-//      dd($request->has('api'));
+
             if ($request->has('api')) {
                 return view('web.search_', compact('rooms', 'hotels'));
             }
@@ -56,6 +57,7 @@ class CustomPageController extends Controller
 
     public function fiveMinut(Request $request)
     {
+        /** @var ?Attribute $attr */
         $attr = Attribute::forHotels()->where('name', '5 минут до метро')->first();
         if ($attr) {
             $hotels = Hotel::whereHas('attrs', static function ($q) use ($attr) {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Domain\Room\Models\CostType;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

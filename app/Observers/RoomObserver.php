@@ -7,8 +7,9 @@
 
 namespace App\Observers;
 
-use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
 use Illuminate\Support\Facades\Cache;
 use Route;
 
@@ -26,7 +27,8 @@ class RoomObserver
     public function created(Room $room): void
     {
         Cache::flush();
-        $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
+        /** @var Hotel $hotel */
+        $hotel = Hotel::withoutGlobalScope(ModerationScope::class)->findOrFail($room->hotel_id);
 
         // При создании одной комнаты запрет отельеру редактировать поля (Один раз после самой первой созданной комнаты)
         if ($hotel->old_moderate === false) {
@@ -51,6 +53,7 @@ class RoomObserver
     public function updated(Room $room): void
     {
         Cache::flush();
+        /** @var ?Hotel $hotel */
         $hotel = Hotel::withoutGlobalScope('moderation')->find($room->hotel_id);
         if ($hotel) {
             $this->moderate_hotel($hotel);
@@ -66,6 +69,7 @@ class RoomObserver
     public function deleted(Room $room): void
     {
         Cache::flush();
+        /** @var Hotel $hotel */
         $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
         if ($hotel->rooms()->count() === 0) {
             $hotel->type_fond = null;

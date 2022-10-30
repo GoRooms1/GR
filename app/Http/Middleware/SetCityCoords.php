@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Address;
 use App\Settings;
 use Closure;
+use Domain\Address\Models\Address;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

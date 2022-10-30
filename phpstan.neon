@@ -12,7 +12,7 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
 #    ignoreErrors:
-#        - '#PHPDoc tag @var#'
+#        - '#Call to an undefined static method .+::whereIn\(\)#'
 #
 #    excludePaths:
 #        - ./*/*/FileToBeExcluded.php

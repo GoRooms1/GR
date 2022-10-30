@@ -1,20 +1,22 @@
 <?php
-/*
- * Copyright (c) 2021.
- * This code is the property of the Fulliton developer.
- * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
- */
 
-namespace App\Models;
+declare(strict_types=1);
 
+namespace Domain\Room\Models;
+
+use App\Models\Room;
+use Domain\Room\DataTransferObjects\CostData;
+use Domain\Room\Factories\CostFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\WithData;
 
 /**
- * Стоимость комнат п периодам
+ * Стоимость комнат пo периодам
  *
  * @property int         $id
  * @property float|null  $value
@@ -25,7 +27,6 @@ use Illuminate\Support\Carbon;
  * @property-read Period $period
  * @property-read Room   $room
  *
- * @method static Builder|Cost minValues($rooms)
  * @method static Builder|Cost newModelQuery()
  * @method static Builder|Cost newQuery()
  * @method static Builder|Cost query()
@@ -37,8 +38,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Cost whereValue($value)
  * @mixin Eloquent
  */
-class Cost extends Model
+final class Cost extends Model
 {
+    use WithData;
+    use HasFactory;
+
+    protected string $dataClass = CostData::class;
+
     /**
      * Columns
      *
@@ -60,13 +66,8 @@ class Cost extends Model
         return $this->belongsTo(Period::class);
     }
 
-    public function scopeMinValues(Builder $query, array $rooms)
+    protected static function newFactory(): CostFactory
     {
-        return $query
-          ->whereIn('room_id', $rooms)->min('value')
-          ->with(['period.type' => function ($query) {
-              $query->groupBy('id');
-          },
-          ]);
+        return CostFactory::new();
     }
 }

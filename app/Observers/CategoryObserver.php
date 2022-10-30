@@ -7,7 +7,7 @@
 
 namespace App\Observers;
 
-use App\Models\Category;
+use Domain\Category\Models\Category;
 
 /**
  * Saved with new data default

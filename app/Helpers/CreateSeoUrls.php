@@ -2,14 +2,22 @@
 
 namespace App\Helpers;
 
-use App\Models\Address;
-use App\Models\Hotel;
 use App\Models\Metro;
+use Domain\Address\DataTransferObjects\AddressData;
+use Domain\Address\Models\Address;
+use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Hotel\Models\Hotel;
+use Domain\Page\Actions\GenerateSeoDataContent;
+use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\Models\PageDescription;
 use Str;
 
 class CreateSeoUrls
 {
+    /**
+     * @param $address
+     * @return SeoData[]
+     */
     private function getURlSeoFromAddress($address): array
     {
         $seo = [];
@@ -19,8 +27,11 @@ class CreateSeoUrls
         if ($address->city) {
             $i = 0;
             while ($i < $max) {
-                $seo[$i] = new SeoData($address, '/address/'.Str::slug($address->city));
-                $seo[$i]->lastOfType = 'city';
+                $seoData = new SeoData();
+                $seoData->address = AddressData::from($address);
+                $seoData->url = '/address/'.Str::slug($address->city);
+                $seoData->lastOfType = 'city';
+                $seo[$i] = $seoData;
                 $i++;
             }
         }
@@ -70,7 +81,7 @@ class CreateSeoUrls
 
         foreach ($seo as $key => $seoData) {
             if ($override && $seoData) {
-                $seoData->generate();
+                $seoData = GenerateSeoDataContent::run($seoData);
                 $data = [
                     'url' => $seoData->url,
                     'title' => $seoData->title,
@@ -86,7 +97,7 @@ class CreateSeoUrls
                 $pageDescription = PageDescription::updateOrCreate(['url' => $seoData->url], $data);
                 $pageDescription->save();
             } elseif (! PageDescription::where('url', $seoData->url)->exists() && $seoData) {
-                $seoData->generate();
+                $seoData = GenerateSeoDataContent::run($seoData);
                 $data = [
                     'url' => $seoData->url,
                     'title' => $seoData->title,
@@ -112,8 +123,9 @@ class CreateSeoUrls
         $url = '/hotels/'.$hotel->slug;
         $seoData = new SeoData($hotel->address, $url);
         $seoData->lastOfType = 'hotel';
-        $seoData->hotel = $hotel;
-        $seoData->generate();
+        $seoData->hotel = HotelData::fromModel($hotel);
+        $seoData = GenerateSeoDataContent::run($seoData);
+
         $description = $hotel->meta->description ?? null;
 
         $data = [
@@ -196,7 +208,7 @@ class CreateSeoUrls
             $seo->metro = $metro->name;
             $seo->lastOfType = 'metro';
 
-            $seo->generate();
+            $seo = GenerateSeoDataContent::run($seo);
             $pageDescription = PageDescription::updateOrCreate(['url' => $seo->url], [
                 'url' => $seo->url,
                 'title' => $seo->title,

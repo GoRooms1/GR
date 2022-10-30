@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Render;
 
 use App\Http\Controllers\Controller;
-use App\Models\Hotel;
 use App\Models\Review;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Http\Request;
 
 class HotelController extends Controller

@@ -13,7 +13,7 @@ class FixPeriodsTable extends Seeder
      */
     public function run()
     {
-        $periods = \App\Models\Period::all();
+        $periods = \Domain\Room\Models\Period::all();
         foreach ($periods as $period) {
             if ($period->cost_type_id == 1) {
                 $period->start_at = substr($period->start_at, 0, 2);

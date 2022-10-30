@@ -5,8 +5,8 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-use App\Models\Cost;
-use App\Models\Period;
+use Domain\Room\Models\Cost;
+use Domain\Room\Models\Period;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->tinyInteger('order')->nullable();
         });
 
-        $hotels = \App\Models\Hotel::withoutGlobalScope('moderation')->get();
+        $hotels = \Domain\Hotel\Models\Hotel::withoutGlobalScope('moderation')->get();
         foreach ($hotels as $h) {
             $i = 1;
             $images = $h->images()->each(function (Image $image) use (&$i) {

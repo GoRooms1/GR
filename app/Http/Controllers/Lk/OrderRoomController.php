@@ -8,8 +8,8 @@
 namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
-use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Http\JsonResponse;
 
 class OrderRoomController extends Controller

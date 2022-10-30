@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace Domain\Hotel\Factories;
 
-use App\Models\HotelType;
+use Domain\Hotel\Models\HotelType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

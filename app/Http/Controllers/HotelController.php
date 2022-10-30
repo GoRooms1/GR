@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Hotel;
 use App\Traits\Breadcrumbs;
+use Domain\Hotel\Models\Hotel;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 

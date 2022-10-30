@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actions\RatingCategory\GetRatingCategories;
 use App\Models\Article;
-use App\Models\Hotel;
 use App\Models\Room;
+use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

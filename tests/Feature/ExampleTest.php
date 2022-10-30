@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\Address;
-use App\Models\Hotel;
-use App\Models\HotelType;
 use App\Models\Room;
 use App\User;
+use Domain\Address\Models\Address;
+use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Models\HotelType;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;

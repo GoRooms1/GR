@@ -8,7 +8,7 @@
 namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
-use App\Models\HotelType;
+use Domain\Hotel\Models\HotelType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 

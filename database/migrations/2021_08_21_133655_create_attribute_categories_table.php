@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        \App\Models\AttributeCategory::create(['name' => 'Удобства']);
+        \Domain\Attribute\Model\AttributeCategory::create(['name' => 'Удобства']);
     }
 
     /**

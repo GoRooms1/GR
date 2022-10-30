@@ -12,10 +12,10 @@ namespace App\Http\Controllers\Moderator;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Moderate\StaffRequest;
-use App\Models\Hotel;
 use App\Notifications\CreateUserInHotel;
 use App\Notifications\UpdateRandomPasswordUser;
 use App\User;
+use Domain\Hotel\Models\Hotel;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;

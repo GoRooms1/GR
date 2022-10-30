@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attribute;
-use App\Models\HotelType;
 use App\Traits\Filter;
 use App\Traits\UrlDecodeFilter;
+use Domain\Attribute\Model\Attribute;
+use Domain\Hotel\Models\HotelType;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Http\Request;
 

@@ -1,15 +1,23 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
 
+namespace Domain\Room\Models;
+
+use Domain\Room\Actions\GenerateInfoDescForPeriod;
+use Domain\Room\Actions\GetEndingValue;
+use Domain\Room\DataTransferObjects\PeriodData;
+use Domain\Room\Factories\PeriodFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\Period
+ * Domain\Room\Models\Period
  *
  * @property int           $id
  * @property string        $start_at
@@ -33,8 +41,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Period whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Period extends Model
+final class Period extends Model
 {
+    use WithData;
+    use HasFactory;
+
+    protected string $dataClass = PeriodData::class;
+
     protected $fillable = [
         'start_at',
         'end_at',
@@ -72,40 +85,22 @@ class Period extends Model
      */
     public function getInfoAttribute(): string
     {
-        if ($this->end_at) {
-            return 'С '.$this->start_at.' до '.$this->end_at;
-        }
-
-        return 'От '.$this->start_at.$this->theEnding($this->start_at);
+        return GenerateInfoDescForPeriod::run($this->start_at, $this->end_at);
     }
 
     /**
      * Русское окончание при сокращениие цифрами до 20 часов
      *
-     * @param $value
+     * @param  string|int  $value
      * @return string
      */
-    public function theEnding($value): string
+    public function theEnding(string|int $value): string
     {
-        $value = (int) $value;
-        if ($value < 2) {
-            return '-го часа';
-        }
-
-        if ($value < 5) {
-            return '-x часов';
-        }
-
-        if ($value < 20) {
-            return '-и часов';
-        }
-
-        return '';
+        return GetEndingValue::run((int) $value);
     }
 
-    public function __toString()
+    protected static function newFactory(): PeriodFactory
     {
-        return (string) $this->info.PHP_EOL.
-          "Тип: {$this->type->name}";
+        return PeriodFactory::new();
     }
 }
