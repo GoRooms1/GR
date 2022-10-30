@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
 
-use DB;
+namespace Domain\Address\Models;
+
+use Domain\Address\DataTransferObjects\MetroData;
 use Domain\Hotel\Models\Hotel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use Str;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\Metro
+ * Domain\Address\Models\Metro
  *
  * @property int         $id
  * @property string      $color
@@ -39,8 +41,12 @@ use Str;
  * @method static Builder|Metro whereCustom($value)
  * @mixin Eloquent
  */
-class Metro extends Model
+final class Metro extends Model
 {
+    use WithData;
+
+    protected string $dataClass = MetroData::class;
+
     public const COLORS = [
         'green' => 'Зелёный',
         'red' => 'Красный',
@@ -98,14 +104,6 @@ class Metro extends Model
     protected $casts = [
         'custom' => 'boolean',
     ];
-
-    public static function generateSlug(Metro $metro): void
-    {
-        DB::table('address_slug')->updateOrInsert(['address' => $metro->name], [
-            'address' => $metro->name,
-            'slug' => Str::slug($metro->name),
-        ]);
-    }
 
     public function hotel(): BelongsTo
     {

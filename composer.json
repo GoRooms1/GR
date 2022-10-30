@@ -61,6 +61,7 @@
             "App\\": "app/",
             "Domain\\": "src/Domain/",
             "Parent\\": "src/Parent/",
+            "Support\\": "src/Support/",
             "Database\\Seeders\\": "database/seeders/",
             "Database\\Factories\\": "database/factories/"
         },

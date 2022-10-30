@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\UnitedCity;
 use DB;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\UnitedCity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 

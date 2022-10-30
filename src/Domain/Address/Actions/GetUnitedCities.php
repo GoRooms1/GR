@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Address\Actions;
 
-use App\Models\UnitedCity;
+use Domain\Address\Models\UnitedCity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +23,7 @@ final class GetUnitedCities extends Action
         /** @var ?Model $row */
         $row = DB::table('united_cities_address')->where('city_name', $city)->first();
         if ($row) {
-            /** @var ?UnitedCity $unitedCity */
+            /** @var ?\Domain\Address\Models\UnitedCity $unitedCity */
             $unitedCity = UnitedCity::find($row->united_city); /** @phpstan-ignore-line */
             if ($unitedCity) {
                 return $unitedCity->united();

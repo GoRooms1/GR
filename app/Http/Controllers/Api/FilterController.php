@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Json;
 use App\Http\Controllers\Controller;
-use App\Models\Metro;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
 use Domain\Hotel\Models\Hotel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;

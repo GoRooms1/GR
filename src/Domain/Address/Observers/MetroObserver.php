@@ -1,22 +1,25 @@
 <?php
 
-namespace App\Observers;
+declare(strict_types=1);
+
+namespace Domain\Address\Observers;
 
 use App\Helpers\CreateSeoUrls;
-use App\Models\Metro;
+use Domain\Address\Actions\GenerateSlugForMetro;
+use Domain\Address\Models\Metro;
 use Illuminate\Support\Facades\Cache;
 
-class MetroObserver
+final class MetroObserver
 {
     /**
      * Handle the Metro "created" event.
      *
-     * @param  Metro  $metro
+     * @param  \Domain\Address\Models\Metro  $metro
      * @return void
      */
     public function created(Metro $metro): void
     {
-        Metro::generateSlug($metro);
+        GenerateSlugForMetro::run($metro->name);
         $csu = new CreateSeoUrls();
         $csu->createSeoFromMetro($metro);
         Cache::forget('sitemap.2g');
@@ -25,12 +28,12 @@ class MetroObserver
     /**
      * Handle the Metro "updated" event.
      *
-     * @param  Metro  $metro
+     * @param  \Domain\Address\Models\Metro  $metro
      * @return void
      */
     public function updated(Metro $metro): void
     {
-        Metro::generateSlug($metro);
+        GenerateSlugForMetro::run($metro->name);
         $csu = new CreateSeoUrls();
         $csu->createSeoFromMetro($metro);
         Cache::forget('sitemap.2g');
@@ -39,7 +42,7 @@ class MetroObserver
     /**
      * Handle the Metro "deleted" event.
      *
-     * @param  Metro  $metro
+     * @param  \Domain\Address\Models\Metro  $metro
      * @return void
      */
     public function deleted(Metro $metro)
@@ -50,7 +53,7 @@ class MetroObserver
     /**
      * Handle the Metro "restored" event.
      *
-     * @param  Metro  $metro
+     * @param  \Domain\Address\Models\Metro  $metro
      * @return void
      */
     public function restored(Metro $metro): void
@@ -61,7 +64,7 @@ class MetroObserver
     /**
      * Handle the Metro "force deleted" event.
      *
-     * @param  Metro  $metro
+     * @param  \Domain\Address\Models\Metro  $metro
      * @return void
      */
     public function forceDeleted(Metro $metro): void

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Seo;
 
-use App\Models\Metro;
 use DB;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
 use Illuminate\Console\Command;
 use Str;
 

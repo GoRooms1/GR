@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Transformers;
+namespace Domain\Address\DataTransferObjects;
 
 final class StreetData extends \Spatie\DataTransferObject\DataTransferObject
 {

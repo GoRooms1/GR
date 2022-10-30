@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Feedback\Jobs;
 
+use App\Settings;
 use Domain\Feedback\DataTransferObjects\FeedbackData;
 use Domain\Feedback\Mail\FeedbackSentMail;
 use Illuminate\Bus\Queueable;
@@ -24,6 +25,7 @@ final class SendFeedbackMailJob implements ShouldQueue
 
     public function handle(): void
     {
-        Mail::to('Go@Gorooms.ru')->send(new FeedbackSentMail($this->feedbackData));
+        $email = Settings::option('notify') ?? Settings::option('notify', 'gorooms@walfter.ru');
+        Mail::to(config('app.admin_email', $email))->send(new FeedbackSentMail($this->feedbackData));
     }
 }

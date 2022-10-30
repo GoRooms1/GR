@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HotelRequest;
 use App\Models\Image;
-use App\Models\Metro;
+use Domain\Address\Models\Metro;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Models\HotelType;

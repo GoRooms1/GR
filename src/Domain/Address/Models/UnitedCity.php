@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
+
+namespace Domain\Address\Models;
 
 use DB;
 use Eloquent;
@@ -11,7 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * App\Models\UnitedCity
+ * Domain\Address\Models\UnitedCity
  *
  * @property int         $id
  * @property string      $name
@@ -29,7 +31,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|UnitedCity whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class UnitedCity extends Model
+final class UnitedCity extends Model
 {
     use HasFactory;
 
@@ -38,8 +40,14 @@ class UnitedCity extends Model
         'description',
     ];
 
+    /**
+     * @return Collection<string>
+     */
     public function united(): Collection
     {
-        return DB::table('united_cities_address')->where('united_city', $this->id)->pluck('city_name');
+        /** @var Collection<string> $result */
+        $result = DB::table('united_cities_address')->where('united_city', $this->id)->pluck('city_name');
+
+        return $result;
     }
 }

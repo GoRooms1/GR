@@ -2,9 +2,9 @@
 
 namespace App\Helpers;
 
-use App\Models\Metro;
 use Domain\Address\DataTransferObjects\AddressData;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\Models\Hotel;
 use Domain\Page\Actions\GenerateSeoDataContent;

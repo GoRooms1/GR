@@ -3,9 +3,9 @@
 namespace App\Console\Commands\Seo;
 
 use App\Helpers\CreateSeoUrls;
-use App\Models\Metro;
 use DB;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
 use Domain\PageDescription\Models\PageDescription;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Console\Command;

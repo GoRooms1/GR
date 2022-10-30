@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Domain\Hotel\Models;
 
 use App\Models\Image;
-use App\Models\Metro;
 use App\Models\Rating;
 use App\Models\Review;
 use App\Models\Room;
@@ -16,6 +15,7 @@ use App\Traits\UseImages;
 use App\User;
 use Domain\Address\Actions\SaveHotelAddress;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
 use Domain\Attribute\Model\Attribute;
 use Domain\Category\Models\Category;
 use Domain\Hotel\Actions\GenerateSlugForHotel;
@@ -80,7 +80,7 @@ use Spatie\LaravelData\WithData;
  * @property-read \Illuminate\Database\Eloquent\Collection<Image>|Image[]     $images
  * @property-read int|null                                             $images_count
  * @property-read PageDescription                                      $meta
- * @property-read \Illuminate\Database\Eloquent\Collection<Metro>|Metro[]     $metros
+ * @property-read \Illuminate\Database\Eloquent\Collection<\Domain\Address\Models\Metro>|\Domain\Address\Models\Metro[]     $metros
  * @property-read int|null                                             $metros_count
  * @property-read \Illuminate\Database\Eloquent\Collection<Rating>|Rating[]    $ratings
  * @property-read int|null                                             $ratings_count
@@ -281,7 +281,7 @@ final class Hotel extends Model
      */
     public function metros(): HasMany
     {
-        return $this->hasMany(Metro::class);
+        return $this->hasMany(\Domain\Address\Models\Metro::class);
     }
 
     /**

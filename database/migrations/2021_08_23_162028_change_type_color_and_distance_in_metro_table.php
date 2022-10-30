@@ -5,7 +5,7 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-use App\Models\Metro;
+use Domain\Address\Models\Metro;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

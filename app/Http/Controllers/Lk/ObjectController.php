@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LK\ObjectUpdateRequest;
-use App\Models\Metro;
 use App\Notifications\NotificationCreateHotel;
 use App\Traits\UploadImage;
 use App\User;
+use Domain\Address\Models\Metro;
 use Domain\Attribute\Model\Attribute;
 use Domain\Attribute\Model\AttributeCategory;
 use Domain\Hotel\Models\Hotel;

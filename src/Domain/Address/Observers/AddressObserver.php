@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Observers;
+declare(strict_types=1);
+
+namespace Domain\Address\Observers;
 
 use App\Helpers\CreateSeoUrls;
 use Domain\Address\Actions\SetAddressesSlug;
 use Domain\Address\Models\Address;
 use Illuminate\Support\Facades\Cache;
 
-class AddressObserver
+final class AddressObserver
 {
-    public CreateSeoUrls $createSeoUrls;
-
-    public function __construct()
-    {
-        $this->createSeoUrls = new CreateSeoUrls();
+    public function __construct(
+        public CreateSeoUrls $createSeoUrls
+    ) {
     }
 
     /**

@@ -92,6 +92,9 @@ Hotel model where moved in domain layer. To fix attributes, run query:
 ```sql
 UPDATE attributes SET model = 'Domain\\Hotel\\Models\\Hotel' WHERE model='App\\Models\\Hotel'
 ```
+```sql
+UPDATE images SET model_type = 'Domain\\Hotel\\Models\\Hotel' WHERE model_type='App\\Models\\Hotel'
+```
 
 ## Contributing
 

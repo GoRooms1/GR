@@ -3,22 +3,22 @@
 namespace App\Providers;
 
 use App\Events\FormSend;
-use App\Listeners\FormSendMailEvent;
 use App\Models\Image;
-use App\Models\Metro;
 use App\Models\Room;
-use App\Observers\AddressObserver;
 use App\Observers\AttributeObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\CostTypeObserver;
 use App\Observers\HotelObserver;
 use App\Observers\ImageObserver;
-use App\Observers\MetroObserver;
 use App\Observers\RoomObserver;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
+use Domain\Address\Observers\AddressObserver;
+use Domain\Address\Observers\MetroObserver;
 use Domain\Attribute\Model\Attribute;
 use Domain\Category\Models\Category;
 use Domain\Hotel\Models\Hotel;
+use Domain\Page\Listeners\FormSendMailEvent;
 use Domain\Room\Models\CostType;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;

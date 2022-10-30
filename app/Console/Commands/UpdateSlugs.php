@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Metro;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
 use Illuminate\Console\Command;
 
 class UpdateSlugs extends Command

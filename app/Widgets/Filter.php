@@ -2,11 +2,11 @@
 
 namespace App\Widgets;
 
-use App\Models\Metro;
 use App\Traits\UrlDecodeFilter;
 use Arrilot\Widgets\AbstractWidget;
 use Cookie;
 use Domain\Address\Models\Address;
+use Domain\Address\Models\Metro;
 use Domain\Attribute\Model\Attribute;
 use Domain\Attribute\Model\AttributeCategory;
 use Domain\Hotel\Models\HotelType;

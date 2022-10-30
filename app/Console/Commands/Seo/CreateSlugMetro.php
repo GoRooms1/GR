@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Seo;
 
-use App\Models\Metro;
+use Domain\Address\Actions\GenerateSlugForMetro;
+use Domain\Address\Models\Metro;
 use Illuminate\Console\Command;
 
-class CreateSlugMetro extends Command
+final class CreateSlugMetro extends Command
 {
     protected $signature = 'seo:create-slug-metro';
 
     public function handle(): int
     {
-        $metros = Metro::all();
+        $this->withProgressBar(Metro::all(), function (Metro $metro) {
+            GenerateSlugForMetro::run($metro->name);
+        });
 
-        foreach ($metros as $metro) {
-            Metro::generateSlug($metro);
-        }
         $this->info('End will be generated slug for metros');
 
         return 0;

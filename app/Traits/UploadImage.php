@@ -1,17 +1,16 @@
 <?php
-/*
- * Copyright (c) 2021.
- * This code is the property of the Fulliton developer.
- * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
- */
+
+declare(strict_types=1);
 
 namespace App\Traits;
 
 use App\Helpers\Json;
 use App\Models\Image;
+use App\Parents\Model;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Support\Enums\ModelNamesEnum;
 
 trait UploadImage
 {
@@ -53,11 +52,18 @@ trait UploadImage
 
     public function uploadFor(Request $request): JsonResponse
     {
-        $modelName = $request->get('model_name');
+        /** @var string $modelShort */
+        $modelShort = $request->get('model_name');
         $modelID = $request->get('modelID');
 
         try {
-            $modelName = '\\App\\Models\\'.$modelName;
+            /** @var class-string<Model> $modelName */
+            $modelName = '\\App\\Models\\'.$modelShort;
+            if (! class_exists($modelName)) {
+                $modelEnum = ModelNamesEnum::fromName($modelShort);
+                /** @var class-string<Model> $modelName */
+                $modelName = $modelEnum->getClassName();
+            }
             $model = $modelName::findOrFail($modelID);
             if ($model->updated_at) {
                 $model->updated_at = Carbon::now();
@@ -73,6 +79,7 @@ trait UploadImage
 
     private function checkLastImage(Image $image): bool
     {
+        /** @var class-string<Model> $model */
         $model = $image->model_type;
         $object = $model::find($image->model_id);
 
