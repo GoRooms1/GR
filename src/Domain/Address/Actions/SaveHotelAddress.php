@@ -25,7 +25,7 @@ final class SaveHotelAddress extends Action
 
     /**
      * @param  string  $address
-     * @return array<string>
+     * @return array<string, mixed>
      */
     public function getAddressInfo(string $address): array
     {

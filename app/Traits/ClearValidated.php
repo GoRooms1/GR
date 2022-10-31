@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 trait ClearValidated
 {
-    public static function getFillableData($data): array
+    /**
+     * @param  iterable<mixed>  $data
+     * @return array<string, mixed>
+     */
+    public static function getFillableData(iterable $data): array
     {
         $selfClass = new self();
         $fillable = $selfClass->getFillable();
@@ -19,7 +23,7 @@ trait ClearValidated
         }
 
         if (in_array('user_id', $fillable) && ! isset($dataRaw['user_id'])) {
-            $dataRaw['user_id'] = Auth::user()->id;
+            $dataRaw['user_id'] = Auth::user()?->id;
         }
 
         if (count($fillable) <= 0) {
