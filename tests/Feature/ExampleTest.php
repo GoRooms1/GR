@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Room;
 use App\User;
 use Domain\Address\Models\Address;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Models\HotelType;
+use Domain\Hotel\Scopes\ModerationScope;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Room\Models\Room;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -52,7 +53,7 @@ class ExampleTest extends TestCase
         $hotels = Hotel::factory()->count(3)->create();
         $pgs = PageDescription::where('model_type', Hotel::class)->get();
         foreach ($pgs as $pg) {
-            if (! Hotel::withoutGlobalScope('moderation')->where('id', $pg->model_id)->exists()) {
+            if (! Hotel::withoutGlobalScope(ModerationScope::class)->where('id', $pg->model_id)->exists()) {
                 $pg->delete();
             }
         }
@@ -64,7 +65,7 @@ class ExampleTest extends TestCase
             $address->delete();
         }
 
-        $hotels = Hotel::withoutGlobalScope('moderation')->get();
+        $hotels = Hotel::withoutGlobalScope(ModerationScope::class)->get();
         foreach ($hotels as $hotel) {
             $hotel->delete();
         }

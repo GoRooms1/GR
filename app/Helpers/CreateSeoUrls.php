@@ -7,6 +7,7 @@ use Domain\Address\Models\Address;
 use Domain\Address\Models\Metro;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
 use Domain\Page\Actions\GenerateSeoDataContent;
 use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\Models\PageDescription;
@@ -65,7 +66,7 @@ class CreateSeoUrls
     {
         $seo = $this->getURlSeoFromAddress($address);
 
-        if ($hotel = $address->hotel()->withoutGlobalScope('moderation')->first()) {
+        if ($hotel = $address->hotel()->withoutGlobalScope(ModerationScope::class)->first()) {
             if ($hotel->metros()->count() > 0) {
                 $metros_name = $hotel->metros()->pluck('name');
                 foreach ($metros_name as $j => $name) {
@@ -200,7 +201,7 @@ class CreateSeoUrls
 
     public function createSeoFromMetro(Metro $metro): CreateSeoUrls
     {
-        $hotel = $metro->hotel()->withoutGlobalScope('moderation')->first();
+        $hotel = $metro->hotel()->withoutGlobalScope(ModerationScope::class)->first();
         if ($hotel) {
             $address = $hotel->address;
             $seo = new SeoData($address);

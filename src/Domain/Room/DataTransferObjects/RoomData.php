@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Domain\Room\DataTransferObjects;
 
 use App\Models\Image;
-use App\Models\Room;
 use Domain\Attribute\DataTransferObjects\AttributeData;
 use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -50,11 +50,12 @@ final class RoomData extends \Parent\DataTransferObjects\Data
             'created_at' => $room->created_at,
             'updated_at' => $room->updated_at,
             'image' => $room->image,
+            'images' => $room->images,
             'attrs' => Lazy::whenLoaded('attrs', $room, fn () => AttributeData::collection($room->attrs)),
             'meta' => Lazy::whenLoaded('meta', $room, fn () => PageDescriptionData::from($room->meta)),
             'hotel' => Lazy::whenLoaded('hotel', $room, fn () => HotelData::fromModel($room->hotel)),
             'category' => Lazy::whenLoaded('category', $room, fn () => $room->category ? CategoryData::fromModel($room->category) : null),
-            'costs' => Lazy::whenLoaded('costs', $room, fn () => RoomData::collection($room->costs)),
+            'costs' => Lazy::whenLoaded('costs', $room, fn () => CostData::collection($room->costs)),
         ]);
     }
 }

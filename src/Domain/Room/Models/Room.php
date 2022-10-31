@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
 
+namespace Domain\Room\Models;
+
+use App\Models\Image;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
-use App\Transformers\CostData;
-use App\User;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Room\Actions\GetAllRoomCosts;
+use Domain\Room\Builders\RoomBuilder;
+use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Room\Factories\RoomFactory;
-use Domain\Room\Models\Cost;
-use Domain\Room\Models\CostType;
+use Domain\Room\Scopes\RoomModerationScope;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,13 +24,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Models\Room
+ * Domain\Room\Models\Room
  *
  * @property int                         $id
  * @property ?string                 $name
@@ -46,7 +47,7 @@ use Illuminate\Support\Facades\Route;
  * @property-read \Domain\Category\Models\Category|null          $category
  * @property-read Collection<Cost>|Cost[]      $costs
  * @property-read int|null               $costs_count
- * @property-read mixed                  $all_costs
+ * @property-read \Illuminate\Support\Collection<\Domain\Room\DataTransferObjects\CostData>                  $all_costs
  * @property-read string|null            $meta_description
  * @property-read string|null            $meta_keywords
  * @property-read string|null            $meta_title
@@ -74,13 +75,16 @@ use Illuminate\Support\Facades\Route;
  * @method static Builder|Room whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class Room extends Model
+final class Room extends Model
 {
     use UseImages;
     use CreatedAtOrdered;
     use HasFactory;
+    use WithData;
 
     public const PER_PAGE = 6;
+
+    protected string $dataClass = RoomData::class;
 
     public string $no_image = 'img/img-room-sm-1.jpg';
 
@@ -100,38 +104,20 @@ class Room extends Model
         'updated_at' => 'datetime',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $with = [
         'attrs',
         'images',
         'costs',
     ];
 
-    //## SCOPES
-
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
-        static::addGlobalScope('moderation', function (Builder $builder) {
-            /** @var User $user */
-            $user = auth()->user();
-            if (auth()->check()) {
-                if ((! $user->is_admin && ! $user->is_moderate) &&
-                  ! Route::currentRouteNamed('lk.*') &&
-                  ! Route::currentRouteNamed('moderator.*') &&
-                  ! Route::currentRouteNamed('api.*') &&
-                  ! Route::currentRouteNamed('admin.*')
-                ) {
-                    $builder->whereHas('hotel', function ($q) {
-                        $q->where('moderate', false)->where('show', true);
-                    })->where('moderate', false);
-                }
-            } else {
-                $builder->whereHas('hotel', function ($q) {
-                    $q->where('moderate', false)->where('show', true);
-                })->where('moderate', false);
-            }
-        });
+        self::addGlobalScope(new RoomModerationScope());
     }
 
     public function category(): BelongsTo
@@ -149,72 +135,17 @@ class Room extends Model
         return $this->belongsToMany(Attribute::class, 'attribute_room', 'room_id', 'attribute_id');
     }
 
-    public function scopeHot(Builder $query): Builder
+    /**
+     * @return \Illuminate\Support\Collection<\Domain\Room\DataTransferObjects\CostData>
+     */
+    public function getAllCostsAttribute(): \Illuminate\Support\Collection
     {
-        return $query->where('is_hot', true);
-    }
-
-    public function setModerate(): void
-    {
-        $this->moderate = true;
-        $this->save();
-    }
-
-    public function getAllCostsAttribute(): Collection
-    {
-        $costs = $this->costs()->with('period.type')->get()->sortBy('type.sort');
-
-        $types = Cache::remember('types', 60 * 60 * 24 * 12, static function () {
-            return CostType::orderBy('sort')->get();
-        });
-
-        $collection = new Collection();
-
-        foreach ($types as $type) {
-            $check = $costs->contains('period.type.id', $type->id);
-            if (! $check) {
-                $cost = new CostData([
-                    'type' => $type,
-                    'value' => 'Не предоставляется',
-                ]);
-                // @phpstan-ignore-next-line
-                $collection->add($cost);
-            } else {
-                $collection->add($costs->firstWhere('period.type.id', '=', $type->id));
-            }
-        }
-
-        return $collection;
+        return GetAllRoomCosts::run($this);
     }
 
     public function costs(): HasMany
     {
         return $this->hasMany(Cost::class, 'room_id', 'id');
-    }
-
-    public function attachMeta(Request $request): Room
-    {
-        if (! $request->get('meta_title', false) && ! $request->get('meta_description', false) && ! $request->get('meta_keywords', false)) {
-            return $this;
-        }
-
-        $key = $this->getRouteKeyName();
-        $url = '/rooms/'.$this->$key;
-
-        $data = [];
-        $data['title'] = $request->get('meta_title');
-        $data['meta_description'] = $request->get('meta_description');
-        $data['meta_keywords'] = $request->get('meta_keywords');
-        $data['url'] = $url;
-        $data['model_type'] = self::class;
-
-        $meta = PageDescription::updateOrCreate(['url' => $url], $data);
-        $meta->model_type = self::class;
-        $meta->save();
-
-        $this->meta()->save($meta);
-
-        return $this;
     }
 
     public function meta(): HasOne
@@ -242,5 +173,14 @@ class Room extends Model
     protected static function newFactory(): RoomFactory
     {
         return RoomFactory::new();
+    }
+
+    /**
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return RoomBuilder<Room>
+     */
+    public function newEloquentBuilder($query): RoomBuilder
+    {
+        return new RoomBuilder($query);
     }
 }

@@ -12,7 +12,7 @@ final class CostData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
         public ?int $id,
-        public ?float $value,
+        public float|string|null $value,
         public int $room_id,
         public int $period_id,
         public ?Carbon $created_at,
@@ -25,7 +25,8 @@ final class CostData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$cost->toArray(),
-            'period' => Lazy::whenLoaded('period', $cost, fn () => PeriodData::from($cost->period)),
+            'created_at' => $cost->created_at,
+            'period' => Lazy::whenLoaded('period', $cost, fn () => PeriodData::fromModel($cost->period)),
             'room' => Lazy::whenLoaded('room', $cost, fn () => RoomData::from($cost->room)),
         ]);
     }

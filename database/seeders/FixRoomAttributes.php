@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Hotel;
-use App\Models\Room;
 use Domain\Attribute\Model\Attribute;
+use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Seeder;
 
 class FixRoomAttributes extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         $rooms = Room::withoutGlobalScopes()->get();
 

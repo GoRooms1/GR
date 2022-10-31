@@ -10,11 +10,11 @@ namespace App\Http\Controllers\Moderator;
 use App\Helpers\Json;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LK\RoomRequest;
-use App\Models\Room;
 use Domain\Attribute\Model\AttributeCategory;
 use Domain\Hotel\Models\Hotel;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -80,7 +80,7 @@ class RoomController extends Controller
      * Save data if hotel has type Room
      *
      * @param    $data
-     * @param  Room  $room
+     * @param  \Domain\Room\Models\Room  $room
      * @return Room
      */
     private function saveDataTypeRoom($data, Room $room): Room

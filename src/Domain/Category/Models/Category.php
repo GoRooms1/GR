@@ -2,12 +2,12 @@
 
 namespace Domain\Category\Models;
 
-use App\Models\Room;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Category\Factories\CategoryFactory;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,7 +27,7 @@ use Spatie\LaravelData\WithData;
  * @property Carbon|null   $created_at
  * @property Carbon|null   $updated_at
  * @property-read Hotel    $hotel
- * @property-read \Illuminate\Database\Eloquent\Collection<Room>|Room[]     $rooms
+ * @property-read \Illuminate\Database\Eloquent\Collection<Room>|\Domain\Room\Models\Room[]     $rooms
  * @property-read int|null $rooms_count
  *
  * @method static Builder|Category newModelQuery()
@@ -78,7 +78,7 @@ class Category extends Model
      */
     public function rooms(): HasMany
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(\Domain\Room\Models\Room::class);
     }
 
     public static function newFactory(): CategoryFactory

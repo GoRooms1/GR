@@ -3,14 +3,14 @@
  * @var Room $room ;
  */
 
-use App\Models\Room;
+use Domain\Room\Models\Room;
 
 ?>
 
 
 @push('header')
 
-  <script type="application/ld+json">
+    <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Apartment",
@@ -50,145 +50,155 @@ use App\Models\Room;
   
 
 
-  </script>
+
+
+    </script>
 
 @endpush
 
 <div class="card-wrapper" id="room-{{ $room->id }}">
-  <a name="room-{{ $room->id }}"></a>
-  <div class="room-card room-card-horizontal">
-    <p class="room-card-name-top">Номер: {{ $room->name }}</p>
-    @include('room.parts._rating')
-    <div class="room-card-slider swiper-container js-hotel-card-slider">
-      <div class="swiper-wrapper">
-        @if($room->moderate)
-          <div class="swiper-slide">
-            <img class="swiper-lazy" data-src="{{ asset('img/hotel-moderate.jpg') }}"
-                 src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
-          </div>
-        @else
-          @foreach($room->images AS $image)
-            <div class="swiper-slide">
-              <img class="swiper-lazy" data-src="{{ asset($image->path) }}?w=578&h=340&fit=crop&fm=webp&q=85"
-                   src="{{ asset('img/pr578x340.jpg') }}" alt="">
+    <a name="room-{{ $room->id }}"></a>
+    <div class="room-card room-card-horizontal">
+        <p class="room-card-name-top">Номер: {{ $room->name }}</p>
+        @include('room.parts._rating')
+        <div class="room-card-slider swiper-container js-hotel-card-slider">
+            <div class="swiper-wrapper">
+                @if($room->moderate)
+                    <div class="swiper-slide">
+                        <img class="swiper-lazy" data-src="{{ asset('img/hotel-moderate.jpg') }}"
+                             src="{{ asset('img/hotel-moderate.jpg') }}" alt="moderate">
+                    </div>
+                @else
+                    @foreach($room->images AS $image)
+                        <div class="swiper-slide">
+                            <img class="swiper-lazy"
+                                 data-src="{{ asset($image->path) }}?w=578&h=340&fit=crop&fm=webp&q=85"
+                                 src="{{ asset('img/pr578x340.jpg') }}" alt="">
+                        </div>
+                    @endforeach
+                @endif
             </div>
-          @endforeach
-        @endif
-      </div>
-      <div class="swiper-button swiper-button-next"></div>
-      <div class="swiper-button swiper-button-prev"></div>
-    </div>
-    <div class="room-card-in">
-      <div class="room-card-content">
-        <a href="{{ route('hotels.show', $room->hotel) }}#room-{{ $room->id }}" class="room-card-header">
-          @if ($room->number || $room->name)
-            @if ($room->number)
-              <p class="room-card-title">Номер: ({{ $room->number }}) {{ $room->name }}</p>
-            @else
-              <p class="room-card-title">Номер: {{ $room->name }}</p>
-            @endif
-            <p class="room-card-type">{{ $room->category?->name }}</p>
-          @else
-            <p class="room-card-title">Номер: {{ $room->category->name ?? '' }}</p>
-            <p class="room-card-type">Доступно: {{ $room->category->value ?? '' }} номеров</p>
-          @endif
-        </a>
-        <button class="room-card-more" type="button">Подробнее</button>
-        <a href="{{ route('hotels.show', $room->hotel) }}" class="room-card-name">Отель “{{ $room->hotel->name }}”</a>
-        <p class="room-card-address">
-          <button type="button" class="room-address-link js-room-address-link"></button>
-          @php
-            $has_district = false;
-            $has_area = false;
-            $url = '/address/'
-          @endphp
-          @if(isset($hotel->address->city) && !is_null($hotel->address->city))
-            @php
-              $url .= Str::slug($hotel->address->city)
-            @endphp
-            <a href="{{ $url }}">{{ $hotel->address->city }}</a>,
-          @endif
-          @if(isset($hotel->address->city_area) && !is_null($hotel->address->city_area))
-            @php
-              $has_area = true;
-              $url .= '/area-'.Str::slug($hotel->address->city_area);
-              $areas = explode('-', $hotel->address->city_area);
-              $area = '';
-              foreach ($areas AS $area_prefix)
-                  $area .= mb_substr($area_prefix, 0, 1);
-              $area = mb_strtoupper($area).'АО'
-            @endphp
-            <a href="{{ $url }}">{{ $area }}</a>,
-          @endif
-          @if(isset($hotel->address->city_district) && !is_null($hotel->address->city_district))
-            @php
-              $has_district = true;
-              $url .= '/district-'.Str::slug($hotel->address->city_district)
-            @endphp
-            <a href="{{ $url }}">{{ $hotel->address->city_district }} район</a>,
-          @endif
-          @if(isset($hotel->address->street) && !is_null($hotel->address->street))
-            {{ $hotel->address->street_with_type ?? $hotel->address->street }}@isset($hotel->address->house)
-              , д.{{ $hotel->address->house }} @endisset
-            @isset($hotel->address->block), к.{{ $hotel->address->block }} @endisset
-          @endif {{ $hotel->address->comment ? ', '.$hotel->address->comment : '' }}
-        </p>
-        @if(count($room->hotel->metros))
-          <ul class="room-card-metro">
-            @foreach ($room->hotel->metros as $metro)
-              <li class="metro">
-                <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ \Str::slug($metro->name) }}">
-                  <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>
-                  {{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt="">
-                </a>
-              </li>
-            @endforeach
-          </ul>
-        @endif
-        <p class="room-card-attributes">
-          @foreach($room->attrs AS $attr)
-            <span class="attribute">{{ $attr->name }}</span>@if(!$loop->last) @endif
-          @endforeach
-        </p>
-      </div>
-      <a href="{{ route('hotels.show', $room->hotel) }}#room-{{ $room->id }}">
-        <ul class="room-card-prices">
-          @foreach($room->all_costs AS $cost)
-            <li class="room-card-prices-item">
-              @if(isset($cost->period))
-                <div>
-                  <p class="room-card-prices-item-title">{{ $cost->period->type->name }}</p>
-                  <p class="room-card-prices-item-price">
-                    @if((int) $cost->value === 0)
-                       Не предоставляется
+            <div class="swiper-button swiper-button-next"></div>
+            <div class="swiper-button swiper-button-prev"></div>
+        </div>
+        <div class="room-card-in">
+            <div class="room-card-content">
+                <a href="{{ route('hotels.show', $room->hotel) }}#room-{{ $room->id }}" class="room-card-header">
+                    @if ($room->number || $room->name)
+                        @if ($room->number)
+                            <p class="room-card-title">Номер: ({{ $room->number }}) {{ $room->name }}</p>
+                        @else
+                            <p class="room-card-title">Номер: {{ $room->name }}</p>
+                        @endif
+                        <p class="room-card-type">{{ $room->category?->name }}</p>
                     @else
-                        {{ $cost->value }} руб.
+                        <p class="room-card-title">Номер: {{ $room->category->name ?? '' }}</p>
+                        <p class="room-card-type">Доступно: {{ $room->category->value ?? '' }} номеров</p>
                     @endif
-                  </p>
-                  @if(isset($cost->period->info) && (int) $cost->value !== 0)
-                    {{$cost->period->info}}
-                  @endif
-                </div>
-              @else
-                <div>
-                  <p class="room-card-prices-item-title">{{ $cost->type->name }}</p>
-                  <p class="room-card-prices-item-price">{{ $cost->value }}</p>
-                </div>
-              @endif
-            </li>
-          @endforeach
-        </ul>
-      </a>
-      <div class="room-card-btns">
-        <a href="" class="btn btn-orange btn-block" data-href="#book-popup" data-toggle="modal"
-           data-target="#book-popup" data-action="{{ route('booking.room', $room->id) }}"
-           onclick="showFormBookRoom('{{$room->id}}')">Забронировать</a>
+                </a>
+                <button class="room-card-more" type="button">Подробнее</button>
+                <a href="{{ route('hotels.show', $room->hotel) }}" class="room-card-name">Отель
+                    “{{ $room->hotel->name }}”</a>
+                <p class="room-card-address">
+                    <button type="button" class="room-address-link js-room-address-link"></button>
+                    @php
+                        $has_district = false;
+                        $has_area = false;
+                        $url = '/address/'
+                    @endphp
+                    @if(isset($hotel->address->city) && !is_null($hotel->address->city))
+                        @php
+                            $url .= Str::slug($hotel->address->city)
+                        @endphp
+                        <a href="{{ $url }}">{{ $hotel->address->city }}</a>,
+                    @endif
+                    @if(isset($hotel->address->city_area) && !is_null($hotel->address->city_area))
+                        @php
+                            $has_area = true;
+                            $url .= '/area-'.Str::slug($hotel->address->city_area);
+                            $areas = explode('-', $hotel->address->city_area);
+                            $area = '';
+                            foreach ($areas AS $area_prefix)
+                                $area .= mb_substr($area_prefix, 0, 1);
+                            $area = mb_strtoupper($area).'АО'
+                        @endphp
+                        <a href="{{ $url }}">{{ $area }}</a>,
+                    @endif
+                    @if(isset($hotel->address->city_district) && !is_null($hotel->address->city_district))
+                        @php
+                            $has_district = true;
+                            $url .= '/district-'.Str::slug($hotel->address->city_district)
+                        @endphp
+                        <a href="{{ $url }}">{{ $hotel->address->city_district }} район</a>,
+                    @endif
+                    @if(isset($hotel->address->street) && !is_null($hotel->address->street))
+                        {{ $hotel->address->street_with_type ?? $hotel->address->street }}@isset($hotel->address->house)
+                            , д.{{ $hotel->address->house }}
+                        @endisset
+                        @isset($hotel->address->block)
+                            , к.{{ $hotel->address->block }}
+                        @endisset
+                    @endif {{ $hotel->address->comment ? ', '.$hotel->address->comment : '' }}
+                </p>
+                @if(count($room->hotel->metros))
+                    <ul class="room-card-metro">
+                        @foreach ($room->hotel->metros as $metro)
+                            <li class="metro">
+                                <a href="/address/{{ Str::slug($hotel->address->city) }}/metro-{{ \Str::slug($metro->name) }}">
+                                    <i class="icon-metro mr-2" style="color: #{{ $metro->color }}"></i>
+                                    {{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk"
+                                                                                         src="{{asset('img/walk.svg')}}"
+                                                                                         alt="">
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+                <p class="room-card-attributes">
+                    @foreach($room->attrs AS $attr)
+                        <span class="attribute">{{ $attr->name }}</span>@if(!$loop->last) @endif
+                    @endforeach
+                </p>
+            </div>
+            <a href="{{ route('hotels.show', $room->hotel) }}#room-{{ $room->id }}">
+                <ul class="room-card-prices">
+                    @foreach($room->all_costs AS $cost)
+                        <li class="room-card-prices-item">
+                            @if(isset($cost->period))
+                                <div>
+                                    <p class="room-card-prices-item-title">{{ $cost->period->type->name }}</p>
+                                    <p class="room-card-prices-item-price">
+                                        @if((int) $cost->value === 0)
+                                            Не предоставляется
+                                        @else
+                                            {{ $cost->value }} руб.
+                                        @endif
+                                    </p>
+                                    @if(isset($cost->period->info) && (int) $cost->value !== 0)
+                                        {{$cost->period->info}}
+                                    @endif
+                                </div>
+                            @else
+                                <div>
+                                    <p class="room-card-prices-item-title">{{ $cost->type->name }}</p>
+                                    <p class="room-card-prices-item-price">{{ $cost->value }}</p>
+                                </div>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+            </a>
+            <div class="room-card-btns">
+                <a href="" class="btn btn-orange btn-block" data-href="#book-popup" data-toggle="modal"
+                   data-target="#book-popup" data-action="{{ route('booking.room', $room->id) }}"
+                   onclick="showFormBookRoom('{{$room->id}}')">Забронировать</a>
 
-        @moderator
-          <a href="{{ route('moderator.room.edit', $hotel->id) }}" class="btn btn-orange btn-block btn-moderator-edit">Редактировать</a>
-        @endmoderator
-      </div>
+                @moderator
+                <a href="{{ route('moderator.room.edit', $hotel->id) }}"
+                   class="btn btn-orange btn-block btn-moderator-edit">Редактировать</a>
+                @endmoderator
+            </div>
+        </div>
     </div>
-  </div>
 
 </div>

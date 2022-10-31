@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands\Seo;
 
-use App\Models\Room;
 use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Room\Models\Room;
 use Illuminate\Console\Command;
 use Str;
 

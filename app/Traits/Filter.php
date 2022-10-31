@@ -2,10 +2,12 @@
 
 namespace App\Traits;
 
-use App\Models\Room;
 use Domain\Address\Models\Address;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Room;
+use Domain\Room\Scopes\RoomModerationScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -58,15 +60,15 @@ trait Filter
             $hotels = $hotels->with(['address', 'attrs']);
 
             if ($moderate) {
-                $hotels = $hotels->withoutGlobalScopes(['moderation'])->where(function ($q) {
+                $hotels = $hotels->withoutGlobalScope(ModerationScope::class)->where(function ($q) {
                     $q->where('moderate', true)->where('old_moderate', true);
                 });
 
-                $hotelsWhereModerateRoom = Hotel::withoutGlobalScopes(['moderation'])->whereHas('rooms', function ($q) {
-                    $q->withoutGlobalScopes(['moderation'])->where('moderate', true);
+                $hotelsWhereModerateRoom = Hotel::withoutGlobalScope(ModerationScope::class)->whereHas('rooms', function ($q) {
+                    $q->withoutGlobalScope(RoomModerationScope::class)->where('moderate', true);
                 })->pluck('id');
 
-                $hotelsWhereImageModerate = Hotel::withoutGlobalScopes(['moderation'])->whereHas('images', function ($q) {
+                $hotelsWhereImageModerate = Hotel::withoutGlobalScope(ModerationScope::class)->whereHas('images', function ($q) {
                     $q->where('moderate', true);
                 })->pluck('id');
 
@@ -75,7 +77,7 @@ trait Filter
                 $hotels = Hotel::query();
                 $hotels = $hotels->with(['address', 'attrs']);
                 $hotels = $hotels
-                  ->withoutGlobalScopes(['moderation'])
+                  ->withoutGlobalScope(ModerationScope::class)
                   ->whereIn('id', $hotelsID)
                   ->orderBy('updated_at', 'DESC');
             }

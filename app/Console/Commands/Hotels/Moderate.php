@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands\Hotels;
 
-use App\Models\Room;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
+use Domain\Room\Models\Room;
+use Domain\Room\Scopes\RoomModerationScope;
 use Illuminate\Console\Command;
 
 class Moderate extends Command
@@ -33,21 +35,21 @@ class Moderate extends Command
      */
     public function handle(): int
     {
-        $hotels = Hotel::withoutGlobalScope('moderation')->get();
+        $hotels = Hotel::withoutGlobalScope(ModerationScope::class)->get();
         foreach ($hotels as $hotel) {
             $hotel->show = false;
 
             $hotel->moderate = true;
             $hotel->old_moderate = false;
             $hotel->show = false;
-            if ($hotel->rooms()->withoutGlobalScope('moderation')->count() > 0) {
+            if ($hotel->rooms()->withoutGlobalScope(RoomModerationScope::class)->count() > 0) {
                 $hotel->old_moderate = true;
             } else {
                 $hotel->old_moderate = false;
             }
             $hotel->save();
 
-            $rooms = Room::withoutGlobalScope('moderation')->where('hotel_id', $hotel->id)->get();
+            $rooms = Room::withoutGlobalScope(RoomModerationScope::class)->where('hotel_id', $hotel->id)->get();
 
             foreach ($rooms as $room) {
                 $room->moderate = true;

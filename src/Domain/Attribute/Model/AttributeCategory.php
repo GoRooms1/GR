@@ -7,8 +7,8 @@
 
 namespace Domain\Attribute\Model;
 
-use App\Models\Room;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

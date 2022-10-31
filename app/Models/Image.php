@@ -10,6 +10,7 @@ namespace App\Models;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;

@@ -6,6 +6,7 @@ use App\Helpers\CreateSeoUrls;
 use DB;
 use Domain\Address\Models\Address;
 use Domain\Address\Models\Metro;
+use Domain\Hotel\Scopes\ModerationScope;
 use Domain\PageDescription\Models\PageDescription;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Console\Command;
@@ -23,7 +24,7 @@ class UpdateNameAndSlugMetro extends Command
             $result = DadataSuggest::suggest('metro', [
                 'query' => $metro->name,
                 'filters' => [
-                    'city' => optional($metro->hotel()->withoutGlobalScope('moderation'))->address->city ?? null,
+                    'city' => optional($metro->hotel()->withoutGlobalScope(ModerationScope::class))->address->city ?? null,
                 ],
             ]);
             if (! isset($result['value'])) {

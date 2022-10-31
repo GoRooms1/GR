@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Domain\PageDescription\DataTransferObjects;
 
 use App\Http\Requests\HotelRequest;
+use App\Http\Requests\RoomRequest;
 use App\Models\Image;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
@@ -31,8 +33,8 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
      * @param  int|null  $model_id
      */
     public function __construct(
-        public readonly ?int $id,
-        public readonly string $url,
+        public ?int $id,
+        public string $url,
         public readonly string $type,
         public readonly ?string $title,
         public readonly ?string $h1,
@@ -44,7 +46,7 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
         public readonly ?Carbon $updated_at,
         public readonly ?Image $image,
         public readonly Collection|array $images,
-        public readonly ?int $model_id,
+        public ?int $model_id,
     ) {
     }
 
@@ -71,6 +73,30 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
             updated_at: Carbon::now(),
             image: null,
             images: [], model_id: $hotel->id
+        );
+    }
+
+    public static function fromRoomRequest(RoomRequest $request): self
+    {
+        /** @var string $meta_title */
+        $meta_title = $request->get('meta_title');
+        /** @var string $description */
+        $description = $request->get('meta_description');
+        /** @var string $keywords */
+        $keywords = $request->get('meta_keywords');
+
+        return new self(
+            id: null, url: '', type: 'room',
+            title: $meta_title,
+            h1: $meta_title,
+            model_type: Room::class,
+            meta_description: $description,
+            meta_keywords: $keywords,
+            description: null,
+            created_at: Carbon::now(),
+            updated_at: Carbon::now(),
+            image: null,
+            images: [], model_id: 0
         );
     }
 }

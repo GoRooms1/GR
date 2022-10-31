@@ -67,13 +67,13 @@ Remove all data from the `costs` table, but make sure to do a` backup`.
 
 ```php
 // All rooms
-$rooms = \App\Models\Room::all();
+$rooms = \Domain\Room\Models\Room::all();
 
 // Periods
 $periods = \Domain\Room\Models\Period::all();
 
 // All periods of the room
-\App\Models\Room::fisrt()->costs->pluck('period')
+\Domain\Room\Models\Room::fisrt()->costs->pluck('period')
 
 // Beautiful information for the front
 \Domain\Room\Models\Period::first()->info

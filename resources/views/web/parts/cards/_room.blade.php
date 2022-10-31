@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Models\Room $room;
+ * @var \Domain\Room\Models\Room $room ;
  */
 ?>
 <div class="card-wrapper">
@@ -10,7 +10,8 @@
             <div class="swiper-wrapper">
                 @foreach($room->images AS $image)
                     <a href="{{ route('rooms.show', $room) }}" class="swiper-slide">
-                        <img class="swiper-lazy" data-src="{{ asset($image->path) }}" src="{{ asset('img/pr578x340.jpg') }}" alt="">
+                        <img class="swiper-lazy" data-src="{{ asset($image->path) }}"
+                             src="{{ asset('img/pr578x340.jpg') }}" alt="">
                     </a>
                 @endforeach
             </div>
@@ -23,7 +24,8 @@
                     <p class="room-card-title">Номер: {{ $room->name }}</p>
                     <p class="room-card-type">{{ $room->category?->name }}</p>
                 </a>
-                <a href="{{ route('hotels.show', $room->hotel) }}" class="room-card-name">Отель “{{ $room->hotel->name }}”</a>
+                <a href="{{ route('hotels.show', $room->hotel) }}" class="room-card-name">Отель
+                    “{{ $room->hotel->name }}”</a>
                 <a href="{{ route('rooms.show', $room) }}" class="room-card-address-link">
                     <p class="room-card-address">{{ $room->hotel->address?->value }}</p>
                     <ul class="room-card-metro">
@@ -33,12 +35,14 @@
                         <li class="metro"><img src="/img/ico-metro-blue.svg" alt="">Измайловская - 950 м</li>
                     </ul>
                 </a>
-            </div>F
+            </div>
+            F
             <a href="{{ route('rooms.show', $room) }}">
                 <ul class="room-card-prices">
                     @foreach($room->costs->sortBy('period.type.sort') AS $cost)
                         <li class="room-card-prices-item">
-                            <p class="room-card-prices-item-title">{{ $cost->period->type->name }} - от {{ $cost->value }}
+                            <p class="room-card-prices-item-title">{{ $cost->period->type->name }} -
+                                от {{ $cost->value }}
                                 руб.</p>
                             <p class="room-card-prices-item-price">{{ $cost->period->info }}</p>
                         </li>

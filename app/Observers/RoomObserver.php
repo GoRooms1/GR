@@ -7,11 +7,11 @@
 
 namespace App\Observers;
 
-use App\Models\Room;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Scopes\ModerationScope;
+use Domain\Room\Models\Room;
+use Domain\Room\Scopes\RoomModerationScope;
 use Illuminate\Support\Facades\Cache;
-use Route;
 
 class RoomObserver
 {
@@ -21,7 +21,7 @@ class RoomObserver
      * При удалении всех комнат будет выбор типа фонда в отеле
      * При создании самой первой комнаты, отель падает на модерацию
      *
-     * @param  Room  $room
+     * @param  \Domain\Room\Models\Room  $room
      * @return void
      */
     public function created(Room $room): void
@@ -47,14 +47,14 @@ class RoomObserver
     /**
      * Handle the room "updated" event.
      *
-     * @param  Room  $room
+     * @param  \Domain\Room\Models\Room  $room
      * @return void
      */
     public function updated(Room $room): void
     {
         Cache::flush();
         /** @var ?Hotel $hotel */
-        $hotel = Hotel::withoutGlobalScope('moderation')->find($room->hotel_id);
+        $hotel = Hotel::withoutGlobalScope(ModerationScope::class)->find($room->hotel_id);
         if ($hotel) {
             $this->moderate_hotel($hotel);
         }
@@ -63,14 +63,14 @@ class RoomObserver
     /**
      * Handle the room "deleted" event.
      *
-     * @param  Room  $room
+     * @param  \Domain\Room\Models\Room  $room
      * @return void
      */
     public function deleted(Room $room): void
     {
         Cache::flush();
         /** @var Hotel $hotel */
-        $hotel = Hotel::withoutGlobalScope('moderation')->findOrFail($room->hotel_id);
+        $hotel = Hotel::withoutGlobalScope(ModerationScope::class)->findOrFail($room->hotel_id);
         if ($hotel->rooms()->count() === 0) {
             $hotel->type_fond = null;
             $hotel->checked_type_fond = false;
@@ -87,7 +87,7 @@ class RoomObserver
     /**
      * Handle the room "restored" event.
      *
-     * @param  Room  $room
+     * @param  \Domain\Room\Models\Room  $room
      * @return void
      */
     public function restored(Room $room): void
@@ -98,7 +98,7 @@ class RoomObserver
     /**
      * Handle the room "force deleted" event.
      *
-     * @param  Room  $room
+     * @param  \Domain\Room\Models\Room  $room
      * @return void
      */
     public function forceDeleted(Room $room): void
@@ -113,7 +113,7 @@ class RoomObserver
      */
     private function moderate_hotel(Hotel $hotel): void
     {
-        $roomsModeration = Room::withoutGlobalScope('moderation')
+        $roomsModeration = Room::withoutGlobalScope(RoomModerationScope::class)
           ->where('moderate', false)
           ->whereHas('hotel', function ($q) use ($hotel) {
               $q->where('id', $hotel->id);

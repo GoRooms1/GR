@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoomRequest;
 use App\Models\Image;
-use App\Models\Room;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
+use Domain\PageDescription\Actions\UpsertForRoom;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -30,7 +32,7 @@ class RoomController extends Controller
         return view('admin.room.create', compact('hotel', 'attributes', 'costTypes'));
     }
 
-    public function save(Room &$room, RoomRequest $request): void
+    public function save(Room $room, RoomRequest $request): void
     {
         $validated = $request->validated();
 
@@ -39,7 +41,7 @@ class RoomController extends Controller
         $room->hotel_id = $validated['hotel_id'];
         $room->is_hot = $request->has('is_hot');
         $room->save();
-        $room->attachMeta($request);
+        UpsertForRoom::run(PageDescriptionData::fromRoomRequest($request), $room);
         if ($request->has('category_id')) {
             $room->category()->associate($validated['category_id']);
         }

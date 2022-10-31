@@ -9,9 +9,9 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LK\CategoryRequest;
-use App\Models\Room;
 use Domain\Category\Models\Category;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Http\JsonResponse;
 

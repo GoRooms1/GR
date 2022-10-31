@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Events\FormSend;
 use App\Models\Image;
-use App\Models\Room;
 use App\Observers\AttributeObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\CostTypeObserver;
@@ -20,6 +19,7 @@ use Domain\Category\Models\Category;
 use Domain\Hotel\Models\Hotel;
 use Domain\Page\Listeners\FormSendMailEvent;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Room;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

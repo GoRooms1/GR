@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Room\Models;
 
-use App\Models\Room;
 use Domain\Room\DataTransferObjects\CostData;
 use Domain\Room\Factories\CostFactory;
 use Eloquent;

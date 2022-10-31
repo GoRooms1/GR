@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Hotel;
 
-use App\Models\Room;
 use App\User;
 use Domain\Hotel\Actions\MinimumCostsCalculation;
 use Domain\Hotel\DataTransferObjects\HotelData;
@@ -12,6 +11,7 @@ use Domain\Hotel\Models\HotelType;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
 use Domain\Room\Models\Period;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -45,7 +45,7 @@ class CostsCalculationTest extends TestCase
         /** @var Hotel $hotel */
         $hotel = Hotel::withoutEvents(fn () => Hotel::factory()->createOne());
 
-        /** @var Room[] $rooms */
+        /** @var \Domain\Room\Models\Room[] $rooms */
         $rooms = Room::withoutEvents(fn () => Room::factory()->count(10)->create([
             'hotel_id' => $hotel->id,
         ]));

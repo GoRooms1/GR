@@ -8,23 +8,25 @@
 namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
-use App\Models\Room;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
+use Domain\Room\Models\Room;
+use Domain\Room\Scopes\RoomModerationScope;
 use Illuminate\Http\JsonResponse;
 
 class OrderRoomController extends Controller
 {
     public function upOrder(int $id): JsonResponse
     {
-        $room = Room::withoutGlobalScope('moderation')->findOrFail($id);
+        $room = Room::withoutGlobalScope(RoomModerationScope::class)->findOrFail($id);
 
         $oldOrder = $room->order;
 
-        $hotel = Hotel::withoutGlobalScope('moderation')->find($room->hotel_id);
+        $hotel = Hotel::withoutGlobalScope(ModerationScope::class)->find($room->hotel_id);
 
-        $upperRoom = Room::withoutGlobalScope('moderation')->where('order', '<', $oldOrder)
+        $upperRoom = Room::withoutGlobalScope(RoomModerationScope::class)->where('order', '<', $oldOrder)
           ->whereHas('hotel', function ($q) use ($hotel) {
-              $q->withoutGlobalScope('moderation')->whereId($hotel->id);
+              $q->withoutGlobalScope(ModerationScope::class)->whereId($hotel->id);
           })
           ->orderByDesc('order')
           ->first();
@@ -51,15 +53,15 @@ class OrderRoomController extends Controller
 
     public function downOrder(int $id): JsonResponse
     {
-        $room = Room::withoutGlobalScope('moderation')->findOrFail($id);
+        $room = Room::withoutGlobalScope(RoomModerationScope::class)->findOrFail($id);
 
         $oldOrder = $room->order;
 
-        $hotel = Hotel::withoutGlobalScope('moderation')->find($room->hotel_id);
+        $hotel = Hotel::withoutGlobalScope(ModerationScope::class)->find($room->hotel_id);
 
-        $upperRoom = Room::withoutGlobalScope('moderation')->where('order', '>', $oldOrder)
+        $upperRoom = Room::withoutGlobalScope(RoomModerationScope::class)->where('order', '>', $oldOrder)
           ->whereHas('hotel', function ($q) use ($hotel) {
-              $q->withoutGlobalScope('moderation')->whereId($hotel->id);
+              $q->withoutGlobalScope(ModerationScope::class)->whereId($hotel->id);
           })
           ->orderBy('order')
           ->first();

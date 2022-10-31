@@ -4,6 +4,7 @@ namespace App\Console\Commands\Seo;
 
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
 use Domain\Page\Actions\GenerateSeoDataContent;
 use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\Models\PageDescription;
@@ -17,7 +18,7 @@ class ResetDescriptionSeoHotel extends Command
     {
         $this->alert('Start generate new Description for Hotel');
 
-        $hotels = Hotel::withoutGlobalScope('moderation')->get();
+        $hotels = Hotel::withoutGlobalScope(ModerationScope::class)->get();
         $count = 0;
         foreach ($hotels as $hotel) {
             if ($hotel->address) {

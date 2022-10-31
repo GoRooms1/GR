@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Json;
 use App\Http\Middleware\SetCityCoords;
-use App\Models\Room;
 use App\Models\Search;
 use App\Settings;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
 use Domain\PageDescription\Models\PageDescription;
 use Domain\Room\Models\Cost;
+use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class SearchController extends Controller
         $query_args = $search->createQueryArray($query);
         $moderate = $request->has('moderate');
         if ($moderate) {
-            $hotels = Hotel::withoutGlobalScope('moderation')
+            $hotels = Hotel::withoutGlobalScope(ModerationScope::class)
               ->where('moderate', true)
               ->where('old_moderate', true)
               ->orWhereHas('rooms', function ($q) {
@@ -220,7 +221,7 @@ class SearchController extends Controller
             return view('render.hotel.index', compact('hotels'));
         }
         if ($moderate) {
-            $count = Hotel::withoutGlobalScope('moderation')
+            $count = Hotel::withoutGlobalScope(ModerationScope::class)
               ->where('moderate', true)
               ->where('old_moderate', true)
               ->count();

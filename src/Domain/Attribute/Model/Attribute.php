@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Domain\Attribute\Model;
 
-use App\Models\Room;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use Domain\Attribute\Builders\AttributeBuilder;
 use Domain\Attribute\DataTransferObjects\AttributeData;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

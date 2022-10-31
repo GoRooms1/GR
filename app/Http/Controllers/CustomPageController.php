@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
 use Domain\Address\Models\Address;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 

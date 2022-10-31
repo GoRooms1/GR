@@ -4,6 +4,7 @@ namespace App\Console\Commands\Seo;
 
 use Carbon\Carbon;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
 use Illuminate\Console\Command;
 
 class ResetHotelSeo extends Command
@@ -14,7 +15,7 @@ class ResetHotelSeo extends Command
     {
         $createSeo = new \App\Helpers\CreateSeoUrls();
 
-        $hotels = Hotel::withoutGlobalScope('moderation')->get();
+        $hotels = Hotel::withoutGlobalScope(ModerationScope::class)->get();
         foreach ($hotels as $a) {
             if ($a->address) {
                 $createSeo->createUrlFromHotel($a, Carbon::now()->addDays(3));

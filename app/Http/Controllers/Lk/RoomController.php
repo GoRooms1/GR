@@ -9,12 +9,13 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LK\RoomRequest;
-use App\Models\Room;
 use App\Traits\UploadImage;
 use Domain\Attribute\Model\AttributeCategory;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Actions\SetRoomAsModerate;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -117,7 +118,7 @@ class RoomController extends Controller
      *
      * @param    $data
      * @param  Room  $room
-     * @return Room
+     * @return \Domain\Room\Models\Room
      */
     private function saveDataTypeRoom($data, Room $room): Room
     {
@@ -162,7 +163,7 @@ class RoomController extends Controller
             }
         }
 
-        $room->setModerate();
+        SetRoomAsModerate::run($room);
 
         $status = $room->save();
 
@@ -211,7 +212,8 @@ class RoomController extends Controller
     {
         $modelID = $request->get('modelID');
 
-        Room::findOrFail($modelID)->setModerate();
+        $room = Room::findOrFail($modelID);
+        SetRoomAsModerate::run($room);
 
         return $this->uploadFor($request);
     }

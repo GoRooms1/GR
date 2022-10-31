@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Room\Factories;
 
-use App\Models\Room;
 use Domain\Category\Models\Category;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

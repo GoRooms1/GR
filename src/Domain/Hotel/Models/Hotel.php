@@ -7,7 +7,6 @@ namespace Domain\Hotel\Models;
 use App\Models\Image;
 use App\Models\Rating;
 use App\Models\Review;
-use App\Models\Room;
 use App\Parents\Model;
 use App\Traits\ClearValidated;
 use App\Traits\CreatedAtOrdered;
@@ -15,7 +14,6 @@ use App\Traits\UseImages;
 use App\User;
 use Domain\Address\Actions\SaveHotelAddress;
 use Domain\Address\Models\Address;
-use Domain\Address\Models\Metro;
 use Domain\Attribute\Model\Attribute;
 use Domain\Category\Models\Category;
 use Domain\Hotel\Actions\GenerateSlugForHotel;
@@ -31,6 +29,7 @@ use Domain\Page\Actions\GenerateSeoDataContent;
 use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -86,7 +85,7 @@ use Spatie\LaravelData\WithData;
  * @property-read int|null                                             $ratings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<Review>|Review[]    $reviews
  * @property-read int|null                                             $reviews_count
- * @property-read \Illuminate\Database\Eloquent\Collection<Room>|Room[]      $rooms
+ * @property-read \Illuminate\Database\Eloquent\Collection<Room>|\Domain\Room\Models\Room[]      $rooms
  * @property-read int|null                                             $rooms_count
  * @property-read HotelType|null                                       $type
  * @property-read User                                                 $user
@@ -359,7 +358,7 @@ final class Hotel extends Model
      */
     public function rooms(): HasMany
     {
-        return $this->hasMany(Room::class)->orderBy('order', 'ASC');
+        return $this->hasMany(\Domain\Room\Models\Room::class)->orderBy('order', 'ASC');
     }
 
     public function saveAddress(string $address_raw, ?string $comment = null): void

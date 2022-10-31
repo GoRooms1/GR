@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Room\Factories;
 
-use App\Models\Room;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\Period;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

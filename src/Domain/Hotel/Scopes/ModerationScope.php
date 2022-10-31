@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Scopes;
 
+use Domain\Room\Scopes\RoomModerationScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -16,7 +17,7 @@ final class ModerationScope implements Scope
         if (auth()->guest()) {
             //        Если не залогинен значит выводим только проверенные отели в которых есть комнаты
             $builder->withCount(['rooms' => function ($query) {
-                $query->withoutGlobalScope('moderation')->where('moderate', false);
+                $query->withoutGlobalScope(RoomModerationScope::class)->where('moderate', false);
             }])
                 ->where('moderate', false)
                 ->where('show', true)
@@ -32,7 +33,7 @@ final class ModerationScope implements Scope
 //          Если залогинен значит выводим только проверенные отели в которых есть комнаты
             $builder
                 ->withCount(['rooms' => function ($query) {
-                    $query->withoutGlobalScope('moderation')->where('moderate', false);
+                    $query->withoutGlobalScope(RoomModerationScope::class)->where('moderate', false);
                 }])
                 ->having('rooms_count', '>', 0)
                 ->where('moderate', false)

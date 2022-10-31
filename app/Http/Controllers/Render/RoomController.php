@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Render;
 
 use App\Http\Controllers\Controller;
-use App\Models\Room;
+use Domain\Room\Models\Room;
 use Illuminate\View\View;
 
 class RoomController extends Controller

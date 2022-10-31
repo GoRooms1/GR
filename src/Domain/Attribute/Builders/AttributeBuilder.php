@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Attribute\Builders;
 
-use App\Models\Room;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Builder;
 
 /**

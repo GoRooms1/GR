@@ -1,22 +1,22 @@
 @extends('layouts.app')
 <?php
-/** @var \App\Models\Room $room */
+/** @var \Domain\Room\Models\Room $room */
 ?>
 @section('content')
     <div class="breadcrumbs">
         <div class="container">
             <ul itemscope itemtype="https://schema.org/BreadcrumbList">
-                <li   itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                     <a itemprop="item" href="/"><span itemprop="name">Главная</span></a>
                     <meta itemprop="position" content="1"/>
                 </li>
-                <li   itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                     <a itemprop="item" href="{{ route('rooms.index') }}"><span itemprop="name">Номера</span></a>
                     <meta itemprop="position" content="2"/>
                 </li>
-                <li  itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name">{{ $room->name }}</span>
-                <meta itemprop="position" content="3"/>
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <span itemprop="name">{{ $room->name }}</span>
+                    <meta itemprop="position" content="3"/>
                 </li>
             </ul>
         </div>
@@ -31,17 +31,19 @@
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide product-slide-big">
                                     <img itemprop="photo" class="swiper-lazy"
-                                        data-src="{{ asset($hotel->images{0}->path) }}?w=640&h=300&fit=crop&fm=webp"
-                                        src="{{ $hotel->images{0}->path }}" alt="">
+                                         data-src="{{ asset($hotel->images{0}->path) }}?w=640&h=300&fit=crop&fm=webp"
+                                         src="{{ $hotel->images{0}->path }}" alt="">
                                 </div>
                             </div>
                         </div>
                         <div class="product-slider-small-wrapper">
-                            <div class="swiper-container product-slider-small" data-full="{{ asset($image->path) }}?w=640&h=300&fit=crop&fm=webp">
+                            <div class="swiper-container product-slider-small"
+                                 data-full="{{ asset($image->path) }}?w=640&h=300&fit=crop&fm=webp">
                                 <div class="swiper-wrapper">
                                     @foreach($room->images AS $image)
                                         <div class="swiper-slide product-slide-small">
-                                            <img class="swiper-lazy" data-src="{{ asset($image->path) }}" src="{{ asset('img/pr125x85.jpg') }}" alt="">
+                                            <img class="swiper-lazy" data-src="{{ asset($image->path) }}"
+                                                 src="{{ asset('img/pr125x85.jpg') }}" alt="">
                                         </div>
                                     @endforeach
                                 </div>
@@ -94,8 +96,11 @@
                         @endif
                         @if(isset($hotel->address->street) && !is_null($hotel->address->street))
                             {{ $hotel->address->street_with_type ?? $hotel->address->street }}@isset($hotel->address->house)
-                                    , д.{{ $hotel->address->house }} @endisset
-                                @isset($hotel->address->block), к.{{ $hotel->address->block }} @endisset
+                                , д.{{ $hotel->address->house }}
+                            @endisset
+                            @isset($hotel->address->block)
+                                , к.{{ $hotel->address->block }}
+                            @endisset
                         @endif {{ $hotel->address->comment ? ', '.$hotel->address->comment : '' }}
                     </p>
                     <ul class="room-metro">
@@ -103,8 +108,10 @@
                         @foreach ($hotel->metros as $metro)
                             <li class="metro">
                                 <a href="/address/{{ \Str::slug($hotel->address->city) }}/metro-{{ \Str::slug($metro->name) }}"><img
-                                        src="{{ asset('/img/ico-metro-'.$metro->color.'.svg') }}"
-                                        alt="">{{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk" src="{{asset('img/walk.svg')}}" alt=""></a>
+                                            src="{{ asset('/img/ico-metro-'.$metro->color.'.svg') }}"
+                                            alt="">{{ $metro->name }} - {{ $metro->distance }} мин <img class="svg-walk"
+                                                                                                        src="{{asset('img/walk.svg')}}"
+                                                                                                        alt=""></a>
                             </li>
                         @endforeach
                     </ul>
@@ -112,7 +119,8 @@
                         @foreach($room->costs->sortBy('period.type.sort') AS $cost)
                             <li class="room-prices-item">
                                 <strong class="room-prices-item-price">{{ $cost->period->type->name }}@if($cost->value !== '0')
-                                        - от {{ $cost->value }} руб.@endif</strong>
+                                        - от {{ $cost->value }} руб.
+                                    @endif</strong>
                                 <span class="room-prices-item-info">{{ $cost->value === '0' ? 'не предоставляется' : $cost->period->info }}</span>
                             </li>
                         @endforeach
@@ -139,7 +147,9 @@
 
     <section class="section">
         <div class="container">
-            <div><div class="h2 section-title">О номере</div></div>
+            <div>
+                <div class="h2 section-title">О номере</div>
+            </div>
             <div class="text-section">
                 {!! html_entity_decode($room->description) !!}
             </div>

@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -44,7 +45,7 @@ use Illuminate\Support\Carbon;
  * @mixin Eloquent
  *
  * @property int|null $room_id
- * @property-read \App\Models\Room|null $room
+ * @property-read \Domain\Room\Models\Room|null $room
  *
  * @method static Builder|Booking whereRoomId($value)
  *

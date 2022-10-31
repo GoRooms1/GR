@@ -26,6 +26,7 @@ final class PeriodData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$period->toArray(),
+            'created_at' => $period->created_at,
             'type' => Lazy::whenLoaded('type', $period, fn () => CostTypeData::from($period->type)),
         ]);
     }
