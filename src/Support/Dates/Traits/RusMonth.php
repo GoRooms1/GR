@@ -1,16 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: walft
- * Date: 31.07.2020
- * Time: 15:22
- */
 
-namespace App\Traits;
+declare(strict_types=1);
+
+namespace Support\Dates\Traits;
 
 trait RusMonth
 {
-    protected $monthNames = [
+    /**
+     * @var array<array{short: string, full: string}>
+     */
+    protected array $monthNames = [
         1 => [
             'short' => 'янв',
             'full' => 'январь',
@@ -63,7 +62,7 @@ trait RusMonth
 
     public function getCreateMonthName(bool $full = false): string
     {
-        $month = (int) $this->created_at->format('m');
+        $month = (int) $this->created_at?->format('m');
 
         return $this->getMonthName($month, $full);
     }

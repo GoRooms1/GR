@@ -11,16 +11,13 @@ class FormSendMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $form;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Form $form)
+    public function __construct(public Form $form)
     {
-        $this->form = $form;
     }
 
     /**
