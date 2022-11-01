@@ -8,7 +8,6 @@ use App\Models\Image;
 use App\Models\Rating;
 use App\Models\Review;
 use App\Parents\Model;
-use App\Traits\ClearValidated;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\User;
@@ -42,6 +41,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\WithData;
+use Support\DataProcessing\Traits\ClearValidated;
 
 /**
  * Domain\Hotel\Models\Hotel

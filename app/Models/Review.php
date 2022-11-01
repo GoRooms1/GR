@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Parents\Model;
-use App\Traits\ClearValidated;
 use App\Traits\CreatedAtOrdered;
 use Domain\Hotel\Models\Hotel;
 use Eloquent;
@@ -12,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Support\DataProcessing\Traits\ClearValidated;
 
 /**
  * App\Models\Review

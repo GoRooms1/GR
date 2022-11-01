@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Parents\Model;
-use App\Traits\ClearValidated;
 use App\Traits\CreatedAtOrdered;
 use App\Traits\UseImages;
 use App\User;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Support\DataProcessing\Traits\ClearValidated;
 use Support\Dates\Traits\RusMonth;
 
 /**

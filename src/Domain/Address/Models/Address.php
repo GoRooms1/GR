@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Address\Models;
 
-use App\Traits\ClearValidated;
 use Domain\Address\Actions\GetUnitedCities;
 use Domain\Address\DataTransferObjects\AddressData;
 use Domain\Hotel\Models\Hotel;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\WithData;
+use Support\DataProcessing\Traits\ClearValidated;
 
 /**
  * Domain\Address\Models\Address

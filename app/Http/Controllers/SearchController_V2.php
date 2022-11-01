@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Filter;
-use App\Traits\UrlDecodeFilter;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\HotelType;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Http\Request;
+use Support\DataProcessing\Traits\UrlDecodeFilter;
 
 class SearchController_V2 extends Controller
 {

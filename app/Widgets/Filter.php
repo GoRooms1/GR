@@ -2,7 +2,6 @@
 
 namespace App\Widgets;
 
-use App\Traits\UrlDecodeFilter;
 use Arrilot\Widgets\AbstractWidget;
 use Cookie;
 use Domain\Address\Models\Address;
@@ -17,6 +16,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use JsonException;
 use Log;
+use Support\DataProcessing\Traits\UrlDecodeFilter;
 
 class Filter extends AbstractWidget
 {

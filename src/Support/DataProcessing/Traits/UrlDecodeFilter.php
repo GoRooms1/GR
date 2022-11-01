@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Traits;
+declare(strict_types=1);
+
+namespace Support\DataProcessing\Traits;
 
 use Illuminate\Support\Facades\DB;
 
