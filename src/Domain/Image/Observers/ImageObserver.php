@@ -1,11 +1,8 @@
 <?php
-/*
- * Copyright (c) 2021.
- * This code is the property of the Fulliton developer.
- * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
- */
 
-namespace App\Observers;
+declare(strict_types=1);
+
+namespace Domain\Image\Observers;
 
 use Domain\Image\Models\Image;
 use Exception;
@@ -15,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Saved with new data default
  */
-class ImageObserver
+final class ImageObserver
 {
     /**
      * Handle the image "created" event.
@@ -55,15 +52,17 @@ class ImageObserver
                   ->where('model_type', $model_type)
                   ->whereNot('id', $image->id)
                   ->first();
-                $other_image->default = true;
-                $other_image->save();
-            } catch (Exception $exception) {
-                if (Image::where('model_id', $model_id)->where('model_type', $model_type)->count() > 0) {
-                    Log::error($exception);
+                if ($other_image) {
+                    $other_image->default = 1;
+                    $other_image->save();
                 }
+            } catch (Exception $exception) {
+                Log::error($exception->getMessage());
             }
         }
-        File::delete($image->getRawOriginal('path'));
+        /** @var string $path */
+        $path = $image->getRawOriginal('path');
+        File::delete($path);
     }
 
     /**

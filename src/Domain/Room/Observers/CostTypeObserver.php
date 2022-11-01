@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Observers;
+declare(strict_types=1);
+
+namespace Domain\Room\Observers;
 
 use Domain\Room\Models\CostType;
 use Illuminate\Support\Str;
 
-class CostTypeObserver
+final class CostTypeObserver
 {
     /**
      * Handle the CostType "created" event.

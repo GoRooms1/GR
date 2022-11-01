@@ -1,17 +1,14 @@
 <?php
-/*
- * Copyright (c) 2021.
- * This code is the property of the Fulliton developer.
- * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
- */
 
-namespace App\Observers;
+declare(strict_types=1);
+
+namespace Domain\Hotel\Observers;
 
 use App\Helpers\CreateSeoUrls;
 use Cache;
 use Domain\Hotel\Models\Hotel;
 
-class HotelObserver
+final class HotelObserver
 {
     public CreateSeoUrls $csu;
 

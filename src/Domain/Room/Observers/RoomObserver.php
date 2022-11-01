@@ -1,11 +1,8 @@
 <?php
-/*
- * Copyright (c) 2021.
- * This code is the property of the Fulliton developer.
- * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
- */
 
-namespace App\Observers;
+declare(strict_types=1);
+
+namespace Domain\Room\Observers;
 
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Scopes\ModerationScope;
@@ -13,7 +10,7 @@ use Domain\Room\Models\Room;
 use Domain\Room\Scopes\RoomModerationScope;
 use Illuminate\Support\Facades\Cache;
 
-class RoomObserver
+final class RoomObserver
 {
     /**
      * Handle the room "created" event.
