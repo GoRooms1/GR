@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Models;
 
-use App\Models\Image;
 use App\Models\Rating;
 use App\Models\Review;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use App\User;
 use Domain\Address\Actions\SaveHotelAddress;
 use Domain\Address\Models\Address;
@@ -24,6 +22,7 @@ use Domain\Hotel\DataTransferObjects\MinCostsData;
 use Domain\Hotel\Factories\HotelFactory;
 use Domain\Hotel\Scopes\ModerationScope;
 use Domain\Hotel\ValueObjects\PhoneNumberValueObject;
+use Domain\Image\Traits\UseImages;
 use Domain\Page\Actions\GenerateSeoDataContent;
 use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
@@ -75,8 +74,8 @@ use Support\DataProcessing\Traits\ClearValidated;
  * @property-read mixed                                                $meta_description
  * @property-read mixed                                                $meta_keywords
  * @property-read mixed                                                $meta_title
- * @property-read Image                                                $image
- * @property-read \Illuminate\Database\Eloquent\Collection<Image>|Image[]     $images
+ * @property-read \Domain\Image\Models\Image                                                $image
+ * @property-read \Illuminate\Database\Eloquent\Collection<\Domain\Image\Models\Image>|\Domain\Image\Models\Image[]     $images
  * @property-read int|null                                             $images_count
  * @property-read PageDescription                                      $meta
  * @property-read \Illuminate\Database\Eloquent\Collection<\Domain\Address\Models\Metro>|\Domain\Address\Models\Metro[]     $metros

@@ -8,7 +8,7 @@
 
 namespace App\Traits\Requests;
 
-use App\Models\Image;
+use Domain\Image\Models\Image;
 use Illuminate\Support\Carbon;
 
 trait ImageDownloader

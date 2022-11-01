@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HotelRequest;
-use App\Models\Image;
 use Domain\Address\Models\Metro;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Models\HotelType;
+use Domain\Image\Actions\UploadImageAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 use Domain\Room\Models\CostType;
@@ -74,9 +74,7 @@ class HotelController extends Controller
                   ->sync($validated['attributes']);
             }
 
-            if ($request->hasFile('image')) {
-                Image::upload($request, $hotel);
-            }
+            UploadImageAction::run($request, $hotel);
 
             if ($request->has('address')) {
                 $hotel->saveAddress($request->get('address', ''));

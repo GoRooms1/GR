@@ -7,7 +7,7 @@
 
 namespace App\Observers;
 
-use App\Models\Image;
+use Domain\Image\Models\Image;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -42,7 +42,7 @@ class ImageObserver
     /**
      * Handle the image "deleted" event.
      *
-     * @param  Image  $image
+     * @param  \Domain\Image\Models\Image  $image
      * @return void
      */
     public function deleted(Image $image): void
@@ -80,7 +80,7 @@ class ImageObserver
     /**
      * Handle the image "force deleted" event.
      *
-     * @param  Image  $image
+     * @param  \Domain\Image\Models\Image  $image
      * @return void
      */
     public function forceDeleted(Image $image): void

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
-use App\Models\Image;
+use Domain\Image\Actions\UploadImageAction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -46,7 +46,7 @@ class ArticleController extends Controller
         $article = Article::create(Article::getFillableData($validated));
         $article->user()->associate(Auth::user()->id);
         $article->save();
-        Image::upload($request, $article);
+        UploadImageAction::run($request, $article);
 
         return redirect()->route('admin.articles.index');
     }
@@ -74,7 +74,8 @@ class ArticleController extends Controller
         $validated = $request->validated();
         $validated = Article::getFillableData($validated);
         $article->update($validated);
-        Image::upload($request, $article);
+
+        UploadImageAction::run($request, $article);
 
         return redirect()->route('admin.articles.index');
     }

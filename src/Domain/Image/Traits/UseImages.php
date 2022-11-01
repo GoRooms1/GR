@@ -1,16 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: walft
- * Date: 17.07.2020
- * Time: 17:49
- */
 
-namespace App\Traits;
+declare(strict_types=1);
 
-use App\Models\Image;
+namespace Domain\Image\Traits;
+
 use App\User;
 use Auth;
+use Domain\Image\Models\Image;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Route;

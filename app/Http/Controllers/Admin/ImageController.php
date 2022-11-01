@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Traits\UploadImage;
+use Domain\Image\Traits\UploadImage;
 
 class ImageController extends Controller
 {

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Domain\Page\Models;
 
-use App\Models\Image;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use App\User;
+use Domain\Image\Traits\UseImages;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\Page\Factories\PageFactory;
 use Domain\PageDescription\Models\PageDescription;
@@ -40,8 +39,8 @@ use Spatie\LaravelData\WithData;
  * @property-read mixed              $meta_description
  * @property-read mixed              $meta_keywords
  * @property-read mixed              $meta_title
- * @property-read Image              $image
- * @property-read Collection|Image[] $images
+ * @property-read \Domain\Image\Models\Image              $image
+ * @property-read Collection|\Domain\Image\Models\Image[] $images
  * @property-read int|null           $images_count
  * @property-read \Domain\PageDescription\Models\PageDescription    $meta
  * @property-read User|null          $user

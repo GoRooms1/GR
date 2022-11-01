@@ -6,8 +6,8 @@ namespace Domain\PageDescription\DataTransferObjects;
 
 use App\Http\Requests\HotelRequest;
 use App\Http\Requests\RoomRequest;
-use App\Models\Image;
 use Domain\Hotel\Models\Hotel;
+use Domain\Image\Models\Image;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -29,7 +29,7 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
      * @param  Carbon|null  $created_at
      * @param  Carbon|null  $updated_at
      * @param  Image|null  $image
-     * @param  Collection<Image>|array<Image>  $images
+     * @param  Collection<Image>|array<\Domain\Image\Models\Image>  $images
      * @param  int|null  $model_id
      */
     public function __construct(

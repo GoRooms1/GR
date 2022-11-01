@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Domain\Room\Models;
 
-use App\Models\Image;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
+use Domain\Image\Models\Image;
+use Domain\Image\Traits\UseImages;
 use Domain\PageDescription\Models\PageDescription;
 use Domain\Room\Actions\GetAllRoomCosts;
 use Domain\Room\Builders\RoomBuilder;
@@ -52,7 +52,7 @@ use Spatie\LaravelData\WithData;
  * @property-read string|null            $meta_keywords
  * @property-read string|null            $meta_title
  * @property-read Hotel                  $hotel
- * @property-read Image                  $image
+ * @property-read \Domain\Image\Models\Image                  $image
  * @property-read Collection|Image[]     $images
  * @property-read int|null               $images_count
  * @property-read PageDescription|null   $meta

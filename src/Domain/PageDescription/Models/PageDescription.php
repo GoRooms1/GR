@@ -2,10 +2,10 @@
 
 namespace Domain\PageDescription\Models;
 
-use App\Models\Image;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
+use Domain\Image\Models\Image;
+use Domain\Image\Traits\UseImages;
 use Domain\Page\DataTransferObjects\PageData;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,7 +30,7 @@ use Spatie\LaravelData\WithData;
  * @property string|null             $h1
  * @property string                  $type
  * @property-read Image              $image
- * @property-read Collection|Image[] $images
+ * @property-read Collection|\Domain\Image\Models\Image[] $images
  * @property-read int|null           $images_count
  *
  * @method static Builder|PageDescription newModelQuery()

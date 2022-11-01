@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Page\DataTransferObjects;
 
-use App\Models\Image;
+use Domain\Image\Models\Image;
 use Domain\Page\Models\Page;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,8 +22,8 @@ final class PageData extends \Parent\DataTransferObjects\Data
      * @param  string  $content
      * @param  string|null  $header
      * @param  string|null  $footer
-     * @param  Image|null  $image
-     * @param  Collection<Image>|array<Image>  $images
+     * @param  \Domain\Image\Models\Image|null  $image
+     * @param  Collection<\Domain\Image\Models\Image>|array<\Domain\Image\Models\Image>  $images
      * @param  int|null  $user_id
      * @param  Carbon|null  $created_at
      * @param  Lazy|PageDescriptionData|null  $meta

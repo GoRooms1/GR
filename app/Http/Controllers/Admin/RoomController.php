@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoomRequest;
-use App\Models\Image;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
+use Domain\Image\Actions\UploadImageAction;
 use Domain\PageDescription\Actions\UpsertForRoom;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Models\Cost;
@@ -56,7 +56,7 @@ class RoomController extends Controller
             $c->room()->associate($room->id);
             $c->save();
         }
-        Image::upload($request, $room);
+        UploadImageAction::run($request, $room);
         $room->save();
     }
 

@@ -9,8 +9,8 @@ namespace App\Http\Controllers\Moderator;
 
 use App\Helpers\Json;
 use App\Http\Controllers\Controller;
-use App\Models\Image;
-use App\Traits\UploadImage;
+use Domain\Image\Models\Image;
+use Domain\Image\Traits\UploadImage;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -21,7 +21,7 @@ class ImageController extends Controller
     use UploadImage;
 
     /**
-     * @param  Image  $image
+     * @param  \Domain\Image\Models\Image  $image
      * @return JsonResponse
      */
     public function moderate(Image $image): JsonResponse

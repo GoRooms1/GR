@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Events\FormSend;
-use App\Models\Image;
 use App\Observers\AttributeObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\CostTypeObserver;
@@ -17,6 +16,7 @@ use Domain\Address\Observers\MetroObserver;
 use Domain\Attribute\Model\Attribute;
 use Domain\Category\Models\Category;
 use Domain\Hotel\Models\Hotel;
+use Domain\Image\Models\Image;
 use Domain\Page\Listeners\FormSendMailEvent;
 use Domain\Room\Models\CostType;
 use Domain\Room\Models\Room;

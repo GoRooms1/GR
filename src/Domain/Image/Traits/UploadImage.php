@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace Domain\Image\Traits;
 
 use App\Helpers\Json;
-use App\Models\Image;
 use App\Parents\Model;
 use Carbon\Carbon;
+use Domain\Image\Actions\UploadImageAction;
+use Domain\Image\Models\Image;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Enums\ModelNamesEnum;
@@ -69,7 +70,7 @@ trait UploadImage
                 $model->updated_at = Carbon::now();
                 $model->save();
             }
-            $images = Image::upload($request, $model);
+            $images = UploadImageAction::run($request, $model);
 
             return Json::good(['images' => $images]);
         } catch (\Exception $exception) {

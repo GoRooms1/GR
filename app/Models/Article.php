@@ -4,8 +4,9 @@ namespace App\Models;
 
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
-use App\Traits\UseImages;
 use App\User;
+use Domain\Image\Models\Image;
+use Domain\Image\Traits\UseImages;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

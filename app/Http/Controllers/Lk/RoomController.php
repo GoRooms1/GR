@@ -9,9 +9,9 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LK\RoomRequest;
-use App\Traits\UploadImage;
 use Domain\Attribute\Model\AttributeCategory;
 use Domain\Hotel\Models\Hotel;
+use Domain\Image\Traits\UploadImage;
 use Domain\Room\Actions\SetRoomAsModerate;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;

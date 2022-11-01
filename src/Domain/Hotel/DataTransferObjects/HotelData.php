@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\DataTransferObjects;
 
-use App\Models\Image;
 use Domain\Address\DataTransferObjects\MetroData;
 use Domain\Attribute\DataTransferObjects\AttributeData;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\ValueObjects\PhoneNumberValueObject;
+use Domain\Image\Models\Image;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\DataTransferObjects\RoomData;
 use Illuminate\Database\Eloquent\Collection;

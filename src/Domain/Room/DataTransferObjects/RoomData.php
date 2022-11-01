@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Domain\Room\DataTransferObjects;
 
-use App\Models\Image;
 use Domain\Attribute\DataTransferObjects\AttributeData;
 use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Image\Models\Image;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
@@ -33,7 +33,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         #[DataCollectionOf(AttributeData::class)]
         public readonly null|Lazy|DataCollection $attrs,
         public Image $image,
-        /** @var Collection<Image>|Image[] */
+        /** @var Collection<Image>|\Domain\Image\Models\Image[] */
         public Collection|array $images,
         public Lazy|PageDescriptionData|null $meta,
         public Lazy|HotelData|null $hotel,
