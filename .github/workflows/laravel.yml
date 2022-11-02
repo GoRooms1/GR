@@ -91,8 +91,10 @@ jobs:
         npm run build
         make check
         make test
+        
+    - name: Show version
+      run : |
         node -v
         nodejs -v
         composer -v
         php -v
-#        sudo systemctl start redis
