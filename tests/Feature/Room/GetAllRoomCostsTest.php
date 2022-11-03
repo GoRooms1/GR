@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Room;
 
+use App\User;
 use Domain\Room\Actions\GetAllRoomCosts;
 use Domain\Room\DataTransferObjects\CostData;
 use Domain\Room\Models\Cost;
@@ -19,6 +20,7 @@ class GetAllRoomCostsTest extends TestCase
 
     public function testDataGeneratedSuccessfully(): void
     {
+        User::factory()->createOne();
         /** @var CostType[] $costTypes */
         $costTypes = CostType::factory()->count(3)->state(new Sequence(
             ['name' => 'test1', 'sort' => 1],
