@@ -90,5 +90,11 @@ jobs:
         php artisan storage:link
         npm run build
         make check
-        make test  
-#        sudo systemctl start redis
+        make test
+        
+    - name: Show version
+      run : |
+        node -v
+        nodejs -v
+        composer -v
+        php -v
