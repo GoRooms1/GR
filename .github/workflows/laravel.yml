@@ -94,6 +94,7 @@ jobs:
         
     - name: Show version
       run : |
+        npm -v
         node -v
         nodejs -v
         composer -v
