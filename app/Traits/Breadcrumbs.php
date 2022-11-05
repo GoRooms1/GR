@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: walft
- * Date: 01.08.2020
- * Time: 0:00
- */
 
 namespace App\Traits;
 
@@ -14,9 +8,6 @@ trait Breadcrumbs
     {
         $url = $_SERVER['REQUEST_URI'];
         $urls = explode('/', $url);
-
-        //Хлебные крошки
-        $crumbs = [];
 
         //На главной не показываем
         $return_url_with_desc = [];
@@ -33,8 +24,6 @@ trait Breadcrumbs
             }
         }
 
-        $Breadcrumbs_data = $return_url_with_desc;
-
-        return $Breadcrumbs_data;
+        return $return_url_with_desc;
     }
 }

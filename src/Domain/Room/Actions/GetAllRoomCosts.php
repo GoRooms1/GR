@@ -29,9 +29,7 @@ final class GetAllRoomCosts extends Action
         $costs = $room->costs()->with('period.type')->get()->sortBy('type.sort');
 
         /** @var CostTypeData[] $types */
-        $types = Cache::remember('types', 60 * 60 * 24 * 12, static function () {
-            return CostType::orderBy('sort')->get()->map(fn (CostType $costType) => $costType->getData());
-        });
+        $types = CostType::orderBy('sort')->get()->map(fn (CostType $costType) => $costType->getData());
 
         $collection = new Collection();
 
