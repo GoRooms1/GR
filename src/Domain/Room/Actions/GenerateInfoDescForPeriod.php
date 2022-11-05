@@ -7,11 +7,11 @@ namespace Domain\Room\Actions;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static string run(string $start, string $end)
+ * @method static string run(string $start, ?string $end)
  */
 final class GenerateInfoDescForPeriod extends Action
 {
-    public function handle(string $start, string $end): string
+    public function handle(string $start, ?string $end): string
     {
         if ($end) {
             return 'С '.$start.' до '.$end;

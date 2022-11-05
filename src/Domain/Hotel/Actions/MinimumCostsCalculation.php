@@ -29,7 +29,7 @@ final class MinimumCostsCalculation extends Action
     {
         $result = [];
         /** @var CostTypeData[] $types */
-        $types = Cache::remember('cost_types.all', 60 * 60 * 24 * 12, fn () => CostType::orderBy('sort')->get()->map->getData());
+        $types = CostType::orderBy('sort')->get()->map->getData();
         $rooms = $hotelData->rooms;
         $roomsId = $rooms->toCollection()->pluck('id')->toArray();
         /** @var array{cost_type_id: int, value: float, start_at: string, end_at: string}[] $costs */
