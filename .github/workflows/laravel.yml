@@ -51,10 +51,10 @@ jobs:
         sudo apt install net-tools
         sudo systemctl start mysql
         sudo netstat -ntulp
-        sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB_TEST }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         sudo mysql -e 'show databases;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
+        sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
 #        sudo systemctl start redis-server
 
     - name: checkout repo
@@ -93,6 +93,7 @@ jobs:
     - name: Check application
       run : |
         php artisan migrate --force
+        sudo mysql -e 'show tables in gorooms_test;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         php artisan storage:link
         npm run build
         make check
