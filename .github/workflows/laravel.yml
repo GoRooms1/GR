@@ -30,6 +30,7 @@ jobs:
         sed -i "10s/^DB_DATABASE=root/DB_DATABASE=${{ env.MYSQL_DB_TEST }}/" .env.testing
         sed -i "12s/^DB_PASSWORD=root/DB_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWD }}/" .env.testing
         composer install
+        npm install
 
     - name: Check application
       run : |
