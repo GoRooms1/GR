@@ -8,14 +8,15 @@ on:
 
 jobs:
   build:
-    runs-on:
-      - self-hosted
+    runs-on: self-hosted
 
     env:
       ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWD }}
       ROOT_USER: root
       MYSQL_DB: gorooms_devDB
       MYSQL_DB_TEST: gorooms_test
+
+    steps:
 
     - name: checkout repo
       uses : actions/checkout@v3
