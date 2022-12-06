@@ -133,6 +133,10 @@ jobs:
         RAY_HOST=localhost
         EOF
         
+    - name: Create env.testing
+      run : cat .env.testing
+        
+        
     - name: Check application
       run : |
         php artisan migrate --force
