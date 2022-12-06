@@ -88,7 +88,7 @@ jobs:
         cat > .env.testing <<EOF    
         APP_NAME=Gorooms.ru
         APP_ENV=local
-        APP_KEY=${{ secrets.APPKEY }}
+        APP_KEY=base64:5U8WZxC6k6jiL3bAYWQiZjeN3YH/7i2f1+w0RMSeOtc=
         APP_DEBUG=true
         APP_URL=http://gorooms.local
         LOG_CHANNEL=stack
@@ -112,7 +112,7 @@ jobs:
         MAIL_USERNAME=
         MAIL_PASSWORD=
         MAIL_ENCRYPTION=ssl
-        MAIL_FROM_ADDRESS="${{ secrets.EMAIL }}"
+        MAIL_FROM_ADDRESS="no-reply@walfter.ru"
         MAIL_FROM_NAME="GoRooms"
         AWS_ACCESS_KEY_ID=
         AWS_SECRET_ACCESS_KEY=
