@@ -1,105 +1,40 @@
-name: check and deploy
+name: selfcheck and deploy
 
-on: 
+on:
 #  push:
   workflow_dispatch
-#    branches: 
+#    branches:
 #      - develop
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-#    container: 
+    runs-on: self-hosted
+#    container:
 #      image: kirschbaumdevelopment/laravel-test-runner:8.1
 # image not have services and sudo
     env:
-      ROOT_PASSWORD: root
+      ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWD }}
       ROOT_USER: root
-      MYSQL_DB: gorooms
+      MYSQL_DB: gorooms_devDB
       MYSQL_DB_TEST: gorooms_test
-      
-    # in service use env variable for current service. for mysql - MYSQL_ROOT_PASSWORD
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ env.ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ env.MYSQL_DB }}
-
-        ports:
-          - 3306
-        options: >-
-          --health-cmd="mysqladmin ping" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=5
-
-      redis:
-        image: redis
-        ports:
-          - 6379/tcp
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-
-    steps:
-        
-    - name: Set up MySQL
-      run: |
-        sudo apt install net-tools
-        sudo systemctl start mysql
-        sudo netstat -ntulp
-        mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
-        mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB_TEST }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
-        sudo mysql -e 'show databases;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
-        sudo mysql -e 'show grants;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
-#        sudo systemctl start redis-server
 
     - name: checkout repo
-      uses : actions/checkout@v3 
-    
-    - name: setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'     
-    
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 8.1
-        extensions: dom, curl, mbstring, libxml, zip, gd, json, mysql, readline, bz2    
-   
+      uses : actions/checkout@v3
+
     - name: Install Composer dependencies
       run: |
         php -r "file_exists('.env') || copy('.env.example', '.env');"
-        sudo apt install -y composer
         composer install
-        
-    - name: Install node
-      run : |
-        sudo apt install -y nodejs
-        curl -L https://npmjs.org/install.sh | sudo sh
-        npm install
-        
-    - name: Create env.testing
-      run : mv env_tests .env.testing
-        
-    - name: Check env.testing
-      run : cat .env.testing
-        
-        
+
     - name: Check application
       run : |
         php artisan migrate --force
-        sudo mysql -e 'show tables in gorooms_test;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
         php artisan storage:link
         npm run build
         make check
         make test
-        
-              
+
+
   deploy:
     runs-on: ubuntu-latest
     needs: [ build ]
@@ -113,4 +48,3 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
           script: "cd ${{ secrets.PATHGOROOMS }} && ./.scripts/check.sh"
-
