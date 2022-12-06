@@ -8,10 +8,9 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
-#    container:
-#      image: kirschbaumdevelopment/laravel-test-runner:8.1
-# image not have services and sudo
+    runs-on:
+      - self-hosted
+
     env:
       ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWD }}
       ROOT_USER: root
