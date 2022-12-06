@@ -34,6 +34,7 @@ jobs:
 
     - name: Check application
       run : |
+        cat .env.testing
         php artisan migrate --force
         php artisan storage:link
         npm run build
