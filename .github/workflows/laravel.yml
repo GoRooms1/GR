@@ -24,14 +24,14 @@ jobs:
     - name: Install Composer dependencies
       run: |
         php -r "file_exists('.env') || copy('.env.example', '.env');"
-        sed -i "12s/^DB_DATABASE=root/DB_DATABASE=${{ env.MYSQL_DB_TEST }}/" .env
+        sed -i "12s/^DB_DATABASE=root/DB_DATABASE=${{ env.MYSQL_DB }}/" .env
         sed -i "14s/^DB_PASSWORD=root/DB_PASSWORD=${{ env.ROOT_PASSWORD }}/" .env
         php -r "file_exists('.env.testing') || copy('env_tests', '.env.testing');"
         sed -i "10s/^DB_DATABASE=root/DB_DATABASE=${{ env.MYSQL_DB_TEST }}/" .env.testing
         sed -i "12s/^DB_PASSWORD=root/DB_PASSWORD=${{ env.ROOT_PASSWORD }}/" .env.testing
         composer install
         npm install
-        mysql -e 'show tables in gorooms_test;' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
+        mysql -e 'show tables in ${{ env.MYSQL_DB_TEST }};' -u${{ env.ROOT_USER }} -p${{ env.ROOT_PASSWORD }} --host 127.0.0.1
 
     - name: Check application
       run : |
