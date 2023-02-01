@@ -13,14 +13,12 @@
   <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="shortcut icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
-  <link rel="canonical" href="{{ url(Request::url()) }}"/>
-{{--  <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />--}}
-  @vite
-{{--  <script src="{{ mix('/js/app.js') }}" defer></script>--}}
+  <link rel="canonical" href="{{ url(Request::url()) }}"/>  
+  @vite  
   @inertiaHead
 </head>
 
-<body>
+<body class="text-zinc-600">
   @inertia
 </body>
 </html>

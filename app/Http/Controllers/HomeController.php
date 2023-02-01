@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class HomeController extends Controller
 {
@@ -35,5 +38,17 @@ class HomeController extends Controller
         $rating_categories = GetRatingCategories::run();
 
         return view('home', compact('hotels', 'rooms', 'articles', 'pages', 'rating_categories'));
+    }
+
+    public function show(): Response | ResponseFactory
+    {
+        return Inertia::render('Content/Home', [
+            'model' => [
+                'page' => [
+                    'title' => 'Home',
+                    'slug' => '/'
+                ]
+            ],
+        ]);
     }
 }

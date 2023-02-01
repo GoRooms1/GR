@@ -14,7 +14,7 @@ use Inertia\ResponseFactory;
 class ContactController extends Controller
 {
     public function show(GetContactPageAction $action): Response | ResponseFactory
-    {
+    {        
         return Inertia::render('Content/Contact', [
             'model' => new PageDetailViewModel($action->handle()),
         ]);

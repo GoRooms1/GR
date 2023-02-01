@@ -3,7 +3,7 @@ export interface PageInterface {
         id: number|null,
         title: string,
         slug: string,
-        content: string,
+        content: string|null,
         header: string|null,
         footer: string|null
     }

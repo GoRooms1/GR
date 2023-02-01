@@ -3,7 +3,7 @@
   <Layout>
     <div class="container mx-auto">
       <div class="py-4 lg:my-16 px-2 lg:px-6">
-        <div v-html="model.page.content"></div>
+        Home!
       </div>
     </div>     
   </Layout>
@@ -17,7 +17,7 @@ import Layout from '../../Layouts/Layout.vue';
 
 export default {
   components: {
-    AppHead, 
+    AppHead,
     Layout
   },
   props: {
