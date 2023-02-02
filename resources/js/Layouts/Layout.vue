@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <main class="pb-[104px]">
+  <main class="pb-[104px]">    
     <slot />
   </main>
   <Footer />
@@ -12,7 +12,7 @@ import Footer from "../components/Footer.vue";
 export default {
   components: {
     Header,
-    Footer,
+    Footer,    
   },
 };
 </script>

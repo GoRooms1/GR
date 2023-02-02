@@ -21,3 +21,4 @@ package-lock.json
 composer.lock
 .DS_Store
 .scripts/
+composer.lock

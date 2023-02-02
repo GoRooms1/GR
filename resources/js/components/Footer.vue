@@ -15,13 +15,13 @@
 					<button data="open-modal" clck-btn="" clck-btn-class="bg-[#6170FF]" clck-btn-class-nonclk="bg-[#EAEFFD]" class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
 						<img src="img/filters.svg" alt="filters">
 					</button>
-					<button clck-btn="" clck-btn-class="bg-[#6170FF]" clck-btn-class-nonclk="bg-[#EAEFFD]" class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+					<button clck-btn="" clck-btn-class="bg-[#6170FF]" clck-btn-class-nonclk="bg-[#EAEFFD]" class="btn-disabled p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
 						<img src="img/bolt.svg" alt="bolt">
 					</button>
-					<button clck-btn="" clck-btn-class="bg-[#6170FF]" clck-btn-class-nonclk="bg-[#EAEFFD]" class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+					<button clck-btn="" clck-btn-class="bg-[#6170FF]" clck-btn-class-nonclk="bg-[#EAEFFD]" class="btn-disabled p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
 						<img src="img/footer-cashback.svg" alt="footer-cashback">
 					</button>
-					<button data="favorites-open" clck-btn="" clck-btn-class="bg-[#6170FF]" clck-btn-class-nonclk="bg-[#EAEFFD]" class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+					<button data="favorites-open" clck-btn="" clck-btn-class="bg-[#6170FF]" clck-btn-class-nonclk="bg-[#EAEFFD]" class="btn-disabled p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
 						<img src="img/heart.svg" alt="heart">
 					</button>
 				</div>
@@ -47,41 +47,41 @@
 						Хранение и обработка персональных данных
 					</a>
 				</div>
-				<div class="flex  hidden lg:flex">
+				<div class="flex hidden lg:flex">
 					<button class="flex">
-						<a class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]">
+						<Link  :href="route('search.map')" class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]">
+
+						</Link>
+					</button>
+					<button class="flex">
+						<a class="btn-disabled ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link2_1.svg)] hover:bg-[url(/img/link2_2.svg)]">
 
 						</a>
 					</button>
 					<button class="flex">
-						<a class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link2_1.svg)] hover:bg-[url(/img/link2_2.svg)]">
+						<a class="btn-disabled ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]">
 
 						</a>
 					</button>
 					<button class="flex">
-						<a class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]">
+						<a class="btn-disabled ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]">
 
 						</a>
 					</button>
 					<button class="flex">
-						<a class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]">
+						<Link :href="route('contact')" class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]">
 
-						</a>
-					</button>
-					<button class="flex">
-						<a class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]">
-
-						</a>
+						</Link>
 					</button>
 					<button data="favorites-open" class="flex">
-						<a class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]">
+						<a class="btn-disabled ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]">
 
 						</a>
 					</button>
 					<button class="flex">
-						<a class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]">
+						<Link href="/login" class="ml-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]">
 
-						</a>
+						</Link>
 					</button>
 				</div>
 			</div>
@@ -90,7 +90,11 @@
 </template>
 
 <script>
+	import {Link} from '@inertiajs/inertia-vue3'
     export default {
+		components: {
+            Link
+        },
 		data() {
 			return {
 				appYear: new Date().getFullYear(),

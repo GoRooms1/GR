@@ -13,7 +13,9 @@
   <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="shortcut icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
-  <link rel="canonical" href="{{ url(Request::url()) }}"/>  
+  <link rel="canonical" href="{{ url(Request::url()) }}"/> 
+   
+  @routes
   @vite  
   @inertiaHead
 </head>
