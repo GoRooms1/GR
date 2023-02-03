@@ -15,6 +15,6 @@ final class GetAvailibleHotelsCountAction extends Action
 {
     public function handle(): int
     {
-        return Hotel::whereModerate(0)->whereShow(1)->count();
+        return Hotel::moderated()->withRooms()->count();
     }
 }

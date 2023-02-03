@@ -16,7 +16,7 @@
                     </Link>                   
 				</div>
 				<div class="text-sm ml-4 pt-1">
-					{{$page.props.availibleHotelsCount}} почасовых отелей
+					{{$page.props.count.hotels}} почасовых отелей
 				</div>
 				<div class="flex ml-auto hidden lg:flex">
 					<button class="flex">

@@ -7,10 +7,13 @@ namespace Domain\Address\Models;
 use Domain\Address\Actions\GetUnitedCities;
 use Domain\Address\DataTransferObjects\AddressData;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\WithData;
 use Support\DataProcessing\Traits\ClearValidated;
@@ -101,6 +104,11 @@ final class Address extends Model
     public function hotel(): BelongsTo
     {
         return $this->belongsTo(Hotel::class);
+    }
+
+    public function rooms(): HasMany
+    {
+        return $this->HasMany(Room::class, 'hotel_id', 'hotel_id');
     }
 
     public function getCityAreaShortAttribute(): string
