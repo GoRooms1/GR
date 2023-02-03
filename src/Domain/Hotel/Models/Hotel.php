@@ -210,7 +210,7 @@ final class Hotel extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new ModerationScope);
+        //static::addGlobalScope(new ModerationScope);
     }
 
     /**

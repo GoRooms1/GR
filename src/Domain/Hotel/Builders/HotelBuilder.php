@@ -16,4 +16,17 @@ final class HotelBuilder extends Builder
     {
         return $this->where('is_popular', true);
     }
+
+    public function moderated(): self
+    {       
+        return $this->where('moderate', false)->where('show', true)->where('old_moderate', true);
+    }
+
+    public function withRooms(): self
+    {
+        return $this->withCount(['rooms' => function ($query) {
+            $query->where('moderate', false);
+        }])
+        ->having('rooms_count', '>', 0);
+    }
 }

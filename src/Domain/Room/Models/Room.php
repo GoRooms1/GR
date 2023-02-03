@@ -117,7 +117,7 @@ final class Room extends Model
     {
         parent::boot();
 
-        self::addGlobalScope(new RoomModerationScope());
+        //self::addGlobalScope(new RoomModerationScope());
     }
 
     public function category(): BelongsTo

@@ -16,4 +16,12 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
     {
         return $this->where('is_hot', true);
     }
+
+    public function moderated(): self
+    {
+        return $this->whereHas('hotel', function ($query) {
+            $query->where('moderate', false)->where('show', true);
+        })
+        ->where('moderate', false);
+    }
 }
