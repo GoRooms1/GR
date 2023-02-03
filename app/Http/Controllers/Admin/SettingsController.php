@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Settings;
+use Domain\Settings\Models\Settings;
 use Domain\Address\Models\Address;
 use Domain\Room\Models\Period;
 use Illuminate\Http\RedirectResponse;

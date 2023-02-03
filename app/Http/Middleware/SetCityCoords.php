@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Settings;
+use Domain\Settings\Models\Settings;
 use Closure;
 use Domain\Address\Models\Address;
 use Fomvasss\Dadata\Facades\DadataSuggest;

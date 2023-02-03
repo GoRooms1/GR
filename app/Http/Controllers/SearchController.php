@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Json;
 use App\Http\Middleware\SetCityCoords;
 use App\Models\Search;
-use App\Settings;
+use Domain\Settings\Models\Settings;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Scopes\ModerationScope;

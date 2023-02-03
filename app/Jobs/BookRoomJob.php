@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\RoomBookingMail;
-use App\Settings;
+use Domain\Settings\Models\Settings;
 use Domain\Room\Models\Room;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

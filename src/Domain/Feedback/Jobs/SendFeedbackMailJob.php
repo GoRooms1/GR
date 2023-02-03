@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Feedback\Jobs;
 
-use App\Settings;
+use Domain\Settings\Models\Settings;
 use Domain\Feedback\DataTransferObjects\FeedbackData;
 use Domain\Feedback\Mail\FeedbackSentMail;
 use Illuminate\Bus\Queueable;

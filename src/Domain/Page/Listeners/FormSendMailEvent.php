@@ -6,7 +6,7 @@ namespace Domain\Page\Listeners;
 
 use App\Events\FormSend;
 use App\Mail\FormSendMail;
-use App\Settings;
+use Domain\Settings\Models\Settings;
 use Illuminate\Support\Facades\Mail;
 
 final class FormSendMailEvent

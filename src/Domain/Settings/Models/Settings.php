@@ -1,16 +1,20 @@
 <?php
 
-namespace App;
+declare(strict_types=1);
 
+namespace Domain\Settings\Models;
+
+use App\Parents\Model;
 use Cache;
+use Domain\Settings\DataTransferObjects\SettingsData;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use JsonException;
+use Spatie\LaravelData\WithData;
 
 /**
- * App\Settings
+ * Domain\Settings\Models\Settings
  *
  * @property int         $id
  * @property string      $option
@@ -34,6 +38,10 @@ use JsonException;
  */
 class Settings extends Model
 {
+    use WithData;
+
+    protected string $dataClass = SettingsData::class;
+    
     protected $fillable = ['option', 'value', 'header'];
 
     public static function header(string $option = null, $default = null)
