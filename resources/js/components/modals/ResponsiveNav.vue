@@ -16,18 +16,18 @@
             <button class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left">Личный кабинет</button>
             <h3 class="mb-6 mt-10 font-semibold">Мы в социальных сетях</h3>
             <div class="grid grid-cols-2 grid-rows-2 gap-2">
-                <button class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc11.svg)] hover:bg-[url(/img/soc12.svg)] pl-[42px] w-full text-left">
+                <a :href="$page.props.contacts.fb" target="_blank" class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc11.svg)] hover:bg-[url(/img/soc12.svg)] pl-[42px] w-full text-left">
                     Facebook
-                </button>
-                <button class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc31.svg)] hover:bg-[url(/img/soc32.svg)] pl-[42px] w-full text-left">
+                </a>
+                <a :href="$page.props.contacts.vk" target="_blank" class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc31.svg)] hover:bg-[url(/img/soc32.svg)] pl-[42px] w-full text-left">
                     Вконтакте
-                </button>
-                <button class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc21.svg)] hover:bg-[url(/img/soc22.svg)] pl-[42px] w-full text-left">
+                </a>
+                <a :href="$page.props.contacts.instagram" target="_blank" class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc21.svg)] hover:bg-[url(/img/soc22.svg)] pl-[42px] w-full text-left">
                     Instagram
-                </button>
-                <button class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc41.svg)] hover:bg-[url(/img/soc42.svg)] pl-[42px] w-full text-left">
+                </a>
+                <a :href="$page.props.contacts.youtube" target="_blank" class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc41.svg)] hover:bg-[url(/img/soc42.svg)] pl-[42px] w-full text-left">
                     YouTube
-                </button>
+                </a>
             </div>
         </div>
     </div> 

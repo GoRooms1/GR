@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
+use Domain\Settings\Actions\GetContactsSettingsAction;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,13 +42,17 @@ class HandleInertiaRequests extends Middleware
      * @return array
      */
     public function share(Request $request): array
-    {
+    {    
         return array_merge(parent::share($request), [
+            'flash' => [
+                'message' => fn () => $request->session()->get('message')
+            ],
             'count' => [
                 'hotels' => GetAvailibleHotelsCountAction::run(),
                 'rooms' => GetAvailibleRoomsCountAction::run(),
                 'cities' => GetAvailibleCitiesCountAction::run(),
             ],
+            'contacts' => GetContactsSettingsAction::run(),
         ]);
     }
 }

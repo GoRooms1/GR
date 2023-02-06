@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FixTypeHotelSeeder::class);
         $this->call(FixPageDescriptionsSeeder::class);
         $this->call(PageContactSeeder::class);
+        $this->call(AddContactsSettingsSeeder::class);
     }
 }

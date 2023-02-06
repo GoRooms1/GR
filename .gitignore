@@ -5,6 +5,7 @@
 /storage/*.key
 /vendor
 /public/build
+/bootstrap/ssr
 .env
 .env.testing
 .env.backup
