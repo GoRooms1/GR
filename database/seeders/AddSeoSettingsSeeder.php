@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Settings;
+use Domain\Settings\Models\Settings;
 use Illuminate\Database\Seeder;
 
 class AddSeoSettingsSeeder extends Seeder
