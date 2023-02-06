@@ -24,6 +24,6 @@ class ContactController extends Controller
     {
         SendFeedbackMailJob::dispatch($feedbackData);
 
-        return Redirect::route('contact')->with('message', 'Ваше сообщение отправлено и в ближайшее время наши менеджеры свяжуться с вами.');
+        return Redirect::route('contact')->with(['message' => 'Ваше сообщение отправлено и в ближайшее время наши менеджеры свяжуться с вами.']);
     }
 }
