@@ -22,7 +22,9 @@
 					</div>
 				</div>
         <div class="flex flex-wrap lg:flex -mx-3 pt-1">
-					<div class="w-full lg:w-3/12 px-3 mb-4 md:w-1/2">
+					<div class="w-full  px-3 mb-4"
+              v-bind:class="isMapVisible ? '' : 'lg:w-3/12 md:w-1/2'"
+          >
 						<div class="w-full bg-white rounded-3xl p-4">
 							<h3 class="font-semibold text-base mb-4">
 								Контакты
@@ -65,12 +67,19 @@
 									</span>
 								</a>
 							</div>
-							<button class="w-full h-12 text-center bg-blue-500 text-white rounded-md mt-3 hover:bg-blue-800">
-								Посмотреть на карте
+							<button @click="toggleMapVisibility()" class="w-full h-12 text-center bg-blue-500 text-white rounded-md mt-3 hover:bg-blue-800"
+                v-bind:class="isMapVisible ? 'lg:w-3/12' : ''"
+              >
+								{{ showMapBtnText }}
 							</button>
+              <div v-if="isMapVisible">
+                <div id="map" class="w-full py-3" style="height: 500px"></div>
+              </div>
 						</div>
 					</div>
-					<div class="w-full lg:w-3/12 px-3 mb-4 md:w-1/2">
+					<div class="w-full px-3 mb-4"
+            v-bind:class="isMapVisible ? 'lg:w-1/2 ' : 'lg:w-3/12 md:w-1/2'"
+          >
 						<div class="w-full bg-white rounded-3xl p-4">
 							<h3 class="font-semibold text-base mb-4">
 								Реквизиты
@@ -100,6 +109,7 @@
             <FeedbackForm/>
           </div>					
 				</div>
+        <div v-html="model.page.footer"></div>                 
       </div>
     </div>     
   </Layout>
@@ -110,7 +120,7 @@
   import type { PropType } from "vue";
   import { PageInterface } from "../../models/pages/page.interface";
   import Layout from '../../Layouts/Layout.vue';
-  import FeedbackForm from '../../components/forms/FeedbackForm.vue';
+  import FeedbackForm from '../../components/forms/FeedbackForm.vue'; 
 
   export default {
     components: {
@@ -118,16 +128,60 @@
       Layout,
       FeedbackForm
     },
+    created() {
+       
+    },
     props: {
       model: {
         type: Object as PropType<PageInterface>,
         required: true,
       },
     },
+    data: () => ({
+      coords: [
+        55.757572,
+        37.825793
+      ], 
+      isMapVisible: false,      
+      showMapBtnText: 'Посмотреть на карте',    
+    }),
     methods: {
       formatPhoneLink(phone) {
         return phone.replace(/[^0-9+]/g, '');
-      }
+      },
+      toggleMapVisibility() {
+        this.isMapVisible = !this.isMapVisible;
+        if (this.isMapVisible) {          
+          this.showMapBtnText = 'Скрыть карту';          
+          ymaps.ready(this.initMap);
+        } else {
+          this.showMapBtnText = 'Посмотреть на карте';
+        }          
+      },
+      initMap() {
+        let myMap = new ymaps.Map("map", {
+          center: this.coords,
+          zoom: 15,
+          controls: ['zoomControl',]
+        });
+
+        let orgGeoObject = new ymaps.GeoObject({            
+          geometry: {
+              type: "Point",
+              coordinates: this.coords
+          },            
+          properties: {             
+              iconCaption: 'GoRooms',
+              balloonContent: 'Россия, Москва, Напольный проезд, 10'
+          }
+        }, {            
+          preset: 'islands#icon',            
+          draggable: false
+        });
+
+        myMap.geoObjects
+          .add(orgGeoObject);        
+      }      
     }   
   };
 </script>

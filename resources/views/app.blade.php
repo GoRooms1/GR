@@ -14,6 +14,7 @@
   <link rel="shortcut icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
   <link rel="canonical" href="{{ url(Request::url()) }}"/> 
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=48a53e1e-0baf-46d3-a56a-6e77254c3f8b&amp;lang=ru_RU" type="text/javascript"></script>  
    
   @routes
   @vite  
