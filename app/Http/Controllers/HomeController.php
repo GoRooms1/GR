@@ -17,7 +17,7 @@ use Inertia\ResponseFactory;
 
 class HomeController extends Controller
 {
-    public function index(Request $request): View
+    public function index_(Request $request): View
     {
         $city = session('city', 'null');
         $auth = auth()->check() ? auth()->id() : 'user';
@@ -40,9 +40,9 @@ class HomeController extends Controller
         return view('home', compact('hotels', 'rooms', 'articles', 'pages', 'rating_categories'));
     }
 
-    public function show(): Response | ResponseFactory
+    public function index(): Response | ResponseFactory
     {
-        return Inertia::render('Content/Home', [
+        return Inertia::render('Home/Index', [
             'model' => [
                 'page' => [
                     'title' => 'Home',

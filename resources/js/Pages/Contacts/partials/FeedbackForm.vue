@@ -5,6 +5,7 @@
     import { usePage } from '@inertiajs/inertia-vue3';
     import {mask as vMask} from 'vue-the-mask';
     import _ from 'lodash';
+    import Button from '@/components/ui/Button.vue' 
      
     const form = useForm({
         name: null,
@@ -44,7 +45,7 @@
         return Object.keys(form.passedFields).length == Object.keys(valudationRules).length;
     };
       
-    const submit = () => { 
+    const submit = () => {        
         if (isValidated())       
             form.post(route('contact'));
     };
@@ -160,28 +161,28 @@
                 </label>
                 </div>
                 <div class="lg:w-1/2 lg:pl-2">
-                <label class="block w-full">
-                    <span class="flex">
-                        <span class="block mb-2">Сообщение</span>
-                        <span  v-if="form.passedFields.message" class="pl-2">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 6.5L7.20001 9.5L6 8.21429" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
+                    <label class="block w-full">
+                        <span class="flex">
+                            <span class="block mb-2">Сообщение</span>
+                            <span  v-if="form.passedFields.message" class="pl-2">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 6.5L7.20001 9.5L6 8.21429" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </span>
+                            <span v-if="form.errors.message" class="pl-2">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 10.5002L8 10.5068" stroke="#E1183D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M8 5.5L8 8" stroke="#E1183D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="#E1183D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </span>
+                            <span v-if="form.errors.message" class="pl-2 text-red-500">
+                                Не заполнено
+                            </span>
                         </span>
-                        <span v-if="form.errors.message" class="pl-2">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 10.5002L8 10.5068" stroke="#E1183D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M8 5.5L8 8" stroke="#E1183D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z" stroke="#E1183D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                        </span>
-                        <span v-if="form.errors.message" class="pl-2 text-red-500">
-                            Не заполнено
-                        </span>
-                    </span>
-                    <textarea v-model="form.message" name="message" @input="validate" class="w-full h-44 rounded-md p-2 placeholder-zinc-500" placeholder="Опишите вопрос или предложение"></textarea>
-                </label>
+                        <textarea v-model="form.message" name="message" @input="validate" class="w-full h-44 rounded-md p-2 placeholder-zinc-500" placeholder="Опишите вопрос или предложение"></textarea>
+                    </label>
                 </div>
             </div>
             <div class="flex-wrap lg:flex mt-4">
@@ -189,11 +190,10 @@
                     Нажимая «Отправить» вы даёте согласие на обработку персональных данных и соглашаетесь c
                     <a class="underline" href="#">пользовательским соглашением</a> и <a class="underline" href="#">политикой конфиденциальности</a>.
                 </div>
-                <div class="lg:w-1/2 lg:pl-2">
-                    <button type="submit" class="w-full h-12 text-center text-white rounded-md"
-                        v-bind:class="isValidated() ? 'bg-blue-500 hover:bg-blue-800 ' : 'bg-slate-400 pointer-events-none'">
+                <div class="lg:w-1/2 lg:pl-2">                   
+                    <Button type="submit" v-bind:disabled="!isValidated()" classes="w-full">
                         Отправить
-                    </button>
+                    </Button>                    
                 </div>
             </div>
         </div>

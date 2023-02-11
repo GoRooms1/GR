@@ -3,16 +3,31 @@
   <main class="pb-[104px]">    
     <slot />
   </main>
-  <Footer />
+  <Footer>   
+      <Social-links/>
+      <div data="footer-copyr" class="lg:block pt-1 mx-auto lg:ml-12 lg:mr-auto">
+        © {{new Date().getFullYear()}} {{$page.props.contacts.org_name}}
+      </div>
+      <div class="mr-12 pt-1  hidden lg:flex">
+        <a href="#" class="underline">
+          Хранение и обработка персональных данных
+        </a>
+      </div>				
+      <Navigation simple classes="hidden lg:flex"/>
+  </Footer>
 </template>
 
 <script>
-import Header from "../components/Header.vue";
-import Footer from "../components/Footer.vue";
+import Header from "./partials/Header.vue";
+import Footer from "./partials/Footer.vue";
+import Navigation from "./partials/Navigation.vue"
+import SocialLinks from "./partials/SocialLinks.vue"
 export default {
   components: {
     Header,
-    Footer,    
+    Footer,
+    Navigation, 
+    SocialLinks,
   },
 };
 </script>

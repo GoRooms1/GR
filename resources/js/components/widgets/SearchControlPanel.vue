@@ -1,0 +1,31 @@
+<template>
+    <div class="flex lg:hidden w-full p-2">
+        <button class="p-2.5 rounded-l-lg bg-[#EAEFFD]">
+            <img src="img/map.svg" alt="map">
+        </button>
+        <button class="p-2.5 rounded-r-lg mr-[10%] bg-[#6170FF]">
+            <img src="img/listpointers2.svg" alt="listpointers">
+        </button>
+        <button class="p-2.5 rounded-lg mx-[1.7%] ml-auto bg-[#6170FF]">
+            <img src="img/search2.svg" alt="search">
+        </button>	
+        <button class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+            <img src="img/filters.svg" alt="filters">
+        </button>				
+        <button class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+            <img src="img/bolt.svg" alt="bolt">
+        </button>
+        <button class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+            <img src="img/footer-cashback.svg" alt="footer-cashback">
+        </button>
+        <button class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+            <img src="img/heart.svg" alt="heart">
+        </button>        
+    </div>
+</template>
+
+<script>
+    export default {
+       
+    }
+</script>

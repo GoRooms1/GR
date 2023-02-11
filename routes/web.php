@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'show'])->name('index');
+Route::get('/', [HomeController::class, 'index'])->name('index');
 
 Auth::routes();
 
@@ -51,7 +51,7 @@ Route::get('/address/{city}/{area?}/{district?}/{street?}', [SearchController_V2
 
 Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::middleware('noDebugbar')->get('sitemap.xml', [SiteMapController::class, 'index']);
-Route::get('/contacts', [\App\Http\Controllers\ContactController::class, 'show'])->name('contact');
+Route::get('/contacts', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 Route::get('/bonuse', [PageController::class, 'show']);
 Route::get('/rules', [PageController::class, 'show']);
