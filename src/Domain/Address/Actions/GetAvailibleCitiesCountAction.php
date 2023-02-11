@@ -13,12 +13,7 @@ use Lorisleiva\Actions\Action;
 final class GetAvailibleCitiesCountAction extends Action
 {
     public function handle(): int
-    {        
-        return Address::selectRaw('DISTINCT city')
-            ->join('rooms', 'addresses.hotel_id', 'rooms.hotel_id')
-            ->join('hotels', 'addresses.hotel_id', 'hotels.id')
-            ->where('rooms.moderate', false)
-            ->where('hotels.moderate', false)->where('hotels.show', true)->where('hotels.old_moderate', true)
-            ->get()->count();       
+    {       
+        return Address::joinModeratedObjects()->distinctCity()->count('city');            
     }
 }

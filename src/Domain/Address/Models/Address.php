@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Address\Models;
 
 use Domain\Address\Actions\GetUnitedCities;
+use Domain\Address\Builders\AddressBuilder;
 use Domain\Address\DataTransferObjects\AddressData;
 use Domain\Hotel\Models\Hotel;
 use Domain\Room\Models\Room;
@@ -125,5 +126,14 @@ final class Address extends Model
     public function unitedCities(): \Illuminate\Support\Collection
     {
         return GetUnitedCities::run($this->city);
+    }
+
+     /**
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return AddressBuilder<Address>
+     */
+    public function newEloquentBuilder($query): AddressBuilder
+    {
+        return new AddressBuilder($query);
     }
 }
