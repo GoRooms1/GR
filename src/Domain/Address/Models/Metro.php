@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Address\Models;
 
+use Domain\Address\Builders\MetroBuilder;
 use Domain\Address\DataTransferObjects\MetroData;
 use Domain\Hotel\Models\Hotel;
 use Eloquent;
@@ -108,5 +109,14 @@ final class Metro extends Model
     public function hotel(): BelongsTo
     {
         return $this->belongsTo(Hotel::class);
+    }
+
+    /**
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return MetroBuilder<Address>
+     */
+    public function newEloquentBuilder($query): MetroBuilder
+    {
+        return new MetroBuilder($query);
     }
 }

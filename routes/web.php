@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CustomPageController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
@@ -30,6 +31,15 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 
 Auth::routes();
 
+//new
+
+Route::post('/filter', [FilterController::class, 'filter'])->name('filter.list');
+
+Route::get('/contacts', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
+//old
+/*
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
@@ -48,11 +58,9 @@ Route::get('/search_map_old', SearchController::class)->name('search.map1');
 Route::get('/search_map', [SearchController_V2::class, 'map'])->name('search.map');
 
 Route::get('/address/{city}/{area?}/{district?}/{street?}', [SearchController_V2::class, 'address'])->name('search.address');
-
 Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::middleware('noDebugbar')->get('sitemap.xml', [SiteMapController::class, 'index']);
-Route::get('/contacts', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact');
-Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
 Route::get('/bonuse', [PageController::class, 'show']);
 Route::get('/rules', [PageController::class, 'show']);
 
@@ -63,3 +71,4 @@ Route::get('/jacuzzi', [CustomPageController::class, 'jacuzzi'])->name('custom.j
 Route::get('/centre', [CustomPageController::class, 'centre'])->name('custom.centre');
 Route::get('/5minut', [CustomPageController::class, 'fiveMinut'])->name('custom.5minut');
 Route::get('/lowcost', [CustomPageController::class, 'lowcost'])->name('custom.lowcost');
+*/

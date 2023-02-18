@@ -13,23 +13,23 @@ use Lorisleiva\Actions\Action;
 use Parent\Filters\Filter;
 
 /**
- * @method static Collection<int, Hotel> run(array $filters)
+ * @method static int run(array $filters)
  */
-final class FilterHotelsAction extends Action
+final class FilterHotelsCountAction extends Action
 {
     /**
      * @param  array<string, string>  $filters
-     * @return Collection<int, Hotel>
+     * @return int
      */
-    public function handle(array $filters): Collection
+    public function handle(array $filters): int
     {
         /** @var HotelBuilder $result */
         $result = app(Pipeline::class)
             ->send(Hotel::query())
             ->through($this->filters($filters))
             ->thenReturn();        
-        /** @var Collection<int, Hotel> $data */
-        $data = $result->moderated()->withRooms()->get();
+        /** @var int $data */
+        $data = $result->moderated()->withRooms()->count();
         
         return $data;
     }

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
+use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class HandleInertiaRequests extends Middleware
      * @return array
      */
     public function share(Request $request): array
-    {    
+    { 
         return array_merge(parent::share($request), [
             'modals' => [],
             'flash' => [
@@ -53,7 +54,7 @@ class HandleInertiaRequests extends Middleware
                 'rooms' => GetAvailibleRoomsCountAction::run(),
                 'cities' => GetAvailibleCitiesCountAction::run(),
             ],
-            'contacts' => GetContactsSettingsAction::run(),
+            'contacts' => GetContactsSettingsAction::run(),                        
         ]);
     }
 }

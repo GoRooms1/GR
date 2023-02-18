@@ -6,7 +6,7 @@ use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use Domain\Image\Models\Image;
 use Domain\Image\Traits\UseImages;
-use Domain\Page\DataTransferObjects\PageData;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -72,10 +72,17 @@ class PageDescription extends Model
         'updated_at',
     ];
 
-    protected string $dataClass = PageData::class;
+    /** @var string[] */
+    protected $dates = [
+        'created_at',
+        'updated_at',        
+    ];
+
+    protected string $dataClass = PageDescriptionData::class;
 
     protected $casts = [
-        'updated_at' => 'datetime',
+        'created_at'  => 'datetime:Y-m-d\Th:i:sP',
+        'updated_at' => 'datetime:Y-m-d\Th:i:sP',
     ];
 
     protected static function boot(): void

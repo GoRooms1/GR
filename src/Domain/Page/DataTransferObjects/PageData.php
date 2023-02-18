@@ -6,7 +6,9 @@ namespace Domain\Page\DataTransferObjects;
 
 use Domain\Image\Models\Image;
 use Domain\Page\Models\Page;
+use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
+use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Lazy;
@@ -47,7 +49,24 @@ final class PageData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$page->toArray(),
-            'meta' => Lazy::whenLoaded('meta', $page, fn () => PageDescriptionData::from($page->meta)),
+            'meta' => $page->meta ? Lazy::whenLoaded('meta', $page, fn () => PageDescriptionData::from($page->meta)) : null,
         ]);
+    }
+
+    public static function fromPageDescription(PageDescription | null $pageDescription): self
+    { 
+        return new self(            
+            id: 0,
+            title: optional($pageDescription)->title ?? env('APP_NAME', 'App'),
+            slug: optional($pageDescription)->url ?? '/',
+            content: '',
+            header: '',
+            footer: '',
+            image: null,
+            images: [],
+            user_id: 0,
+            created_at: $data['created_at'] ?? Carbon::now(),
+            meta: $pageDescription ? PageDescriptionData::fromModel($pageDescription) : null
+        );
     }
 }

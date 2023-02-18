@@ -4,15 +4,35 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Json;
 use App\Http\Controllers\Controller;
+use Domain\Address\Actions\GetAllCitiesNamesAction;
+use Domain\Address\Actions\GetAllMetrosByCityNameAction;
 use Domain\Address\Models\Address;
 use Domain\Address\Models\Metro;
+use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Hotel\Models\Hotel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class FilterController extends Controller
-{
+{       
+    public function getLocationParams(Request $request)
+    {
+        return response()->json([
+            'cities' => GetAllCitiesNamesAction::run(),
+            'metros' => GetAllMetrosByCityNameAction::run($request->all()['city']),
+        ]);        
+    }
+
+    public function getResultsCount(Request $request)
+    {
+        return response()->json([
+            'found' => GetNumOfFilteredObjectsAction::run($request->all()),
+        ]);        
+    }
+    
+    
+    //old
     /**
      * Поиск города
      *
