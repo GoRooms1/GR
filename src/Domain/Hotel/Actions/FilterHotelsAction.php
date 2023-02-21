@@ -11,25 +11,30 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pipeline\Pipeline;
 use Lorisleiva\Actions\Action;
 use Parent\Filters\Filter;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * @method static Collection<int, Hotel> run(array $filters)
+ * @method static Collection<int, Hotel> run(array $filters, bool $paginate?)
  */
 final class FilterHotelsAction extends Action
 {
     /**
      * @param  array<string, string>  $filters
+     * @param bool  $paginate
      * @return Collection<int, Hotel>
      */
-    public function handle(array $filters): Collection
+    public function handle(array $filters, bool $paginate = false): Collection | LengthAwarePaginator
     {
         /** @var HotelBuilder $result */
         $result = app(Pipeline::class)
             ->send(Hotel::query())
             ->through($this->filters($filters))
-            ->thenReturn();        
-        /** @var Collection<int, Hotel> $data */
-        $data = $result->moderated()->withRooms()->get();
+            ->thenReturn()
+            ->moderated()->withRooms();
+        if ($paginate)
+            $data = $result->paginate(env('HOTELS_PER_PAGE'), 20);
+        else
+            $data = $result->get(); 
         
         return $data;
     }

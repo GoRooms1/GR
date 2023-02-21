@@ -14,7 +14,7 @@ final class GenerateInfoDescForPeriod extends Action
     public function handle(string $start, ?string $end): string
     {
         if ($end) {
-            return 'С '.$start.' до '.$end;
+            return $start.' - '.$end;
         }
 
         return 'От '.$start.GetEndingValue::run((int) $start);

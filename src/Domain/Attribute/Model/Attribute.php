@@ -69,7 +69,9 @@ final class Attribute extends Model
 
     protected $casts = [
         'in_filter' => 'boolean',
-    ];
+        'created_at' => 'datetime:Y-m-d\TH:i:sP',
+        'updated_at' => 'datetime:Y-m-d\TH:i:sP',
+    ];    
 
     public function getCategoryAttribute(): string
     {

@@ -101,7 +101,7 @@
         },
         mounted() {
             this.filterStore.init(true); 
-            this.locate();            
+            this.locate();          
         },        
         data() {
             return {
@@ -125,7 +125,7 @@
                 this.form = useForm(                   
                     this.filterStore.getFiltersValues()
                 );                          
-                this.form.post(route('filter.list'));                
+                this.form.get(route('hotels.index'));               
             },
             locate() {
                 this.geolocationStore.locate();

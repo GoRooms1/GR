@@ -71,8 +71,15 @@
 .filter-scrollbar3 {
     scrollbar-width: thin;
     scrollbar-color: #6170FF #ffffff;
-} 
+}
 
+.swiper-pagination-bullet {
+    background-color: white;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #6170FF;
+}
 /* @media (max-height: 800px) {
     html {
         font-size: 1.875vh;

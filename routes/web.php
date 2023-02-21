@@ -32,8 +32,7 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Auth::routes();
 
 //new
-
-Route::post('/filter', [FilterController::class, 'filter'])->name('filter.list');
+Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 
 Route::get('/contacts', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');

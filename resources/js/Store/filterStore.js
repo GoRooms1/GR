@@ -17,16 +17,20 @@ export const filterStore = reactive({
   init(isClear) {
     if (isClear)
     {
-        this.clearFilters();
-    }         
+        this.clearFilters();        
+    }
+    //add default city filter
+    this.addFilter('hotels', false, 'city', 'Москва', 'Москва');
+    this.timestamp = Date.now();                          
+    this.updateResultsCount();        
     this.updateLocationParams(); 
     this.watchFiltersChange();
-    //add default city filter
-    this.updateFilter('hotels', false, 'city', 'Москва', 'Москва'); 
+
+    console.log(this.filters);
   },
 
   clearFilters() {
-    this.filters = this.filters.filter(el => el.key == 'city');
+    this.filters = this.filters.filter(el => el.key == 'city');    
   },
   
   getFilterId(modelType, isAttribute, filterKey, filterValue) {
@@ -41,7 +45,7 @@ export const filterStore = reactive({
   addFilter(modelType, isAttribute, filterKey, filterValue, filterTitle) { 
     let filterObj = {
         id: this.getFilterId(modelType, isAttribute, filterKey, filterValue),
-        title: filterTitle,
+        title: filterTitle ?? filterKey,
         modelType: modelType,
         isAttribute: isAttribute,
         key: filterKey,

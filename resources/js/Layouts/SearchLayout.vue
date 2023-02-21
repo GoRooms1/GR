@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <main class="pb-[104px]">    
+  <main class="pb-[104px]">
     <slot />
   </main>
   <Footer>

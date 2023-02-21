@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 export const geolocationStore = reactive({
   //State
   geolocation: [],
-  city: 'Москва',
+  city: '',
 
   //Getters and Actions
   locate() {    
