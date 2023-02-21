@@ -16,7 +16,7 @@
         </button>
         <div class="flex flex-col px-6 py-8 bg-white rounded-3xl w-full mb-[17%]">
             <h3 class="mb-6 font-semibold">Меню</h3>
-            <responsive-nav-link title="Карта" :href="route('search.map')" classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"/>
+            <responsive-nav-link title="Карта" classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"/>
             <responsive-nav-link disabled title="Горящие предложения" classes="bg-[url(/img/link2_1.svg)] hover:bg-[url(/img/link2_2.svg)]"/>
             <responsive-nav-link disabled title="Бонусная программа" classes="bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]"/>
             <responsive-nav-link disabled title="Добавить объект" classes="bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]"/>

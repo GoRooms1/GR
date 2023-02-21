@@ -8,6 +8,7 @@ use App\Http\Requests\HotelRequest;
 use App\Http\Requests\RoomRequest;
 use Domain\Hotel\Models\Hotel;
 use Domain\Image\Models\Image;
+use Domain\PageDescription\Models\PageDescription;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -35,7 +36,7 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
     public function __construct(
         public ?int $id,
         public string $url,
-        public readonly string $type,
+        public readonly ?string $type,
         public readonly ?string $title,
         public readonly ?string $h1,
         public readonly ?string $model_type,
@@ -48,6 +49,14 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
         public readonly Collection|array $images,
         public ?int $model_id,
     ) {
+    }
+
+    public static function fromModel(PageDescription $pageDescription): self
+    {
+        return self::from([
+            ...$pageDescription->toArray(),
+            'images' => [],         
+        ]);
     }
 
     public static function fromRequestAndHotel(HotelRequest $request, Hotel $hotel): self
@@ -98,5 +107,5 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
             image: null,
             images: [], model_id: 0
         );
-    }
+    }    
 }

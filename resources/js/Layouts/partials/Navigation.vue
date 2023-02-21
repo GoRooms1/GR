@@ -1,6 +1,6 @@
 <template>
     <div class="flex" :class="classes">
-        <nav-link :title="simple ? '': 'Карта'"  :href="route('search.map')" classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"/>
+        <nav-link :title="simple ? '': 'Карта'"  classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"/>
         <nav-link v-if="simple" disabled classes="bg-[url(/img/link2_1.svg)] hover:bg-[url(/img/link2_2.svg)]"/>
         <nav-link disabled :title="simple ? '': 'Бонусная программа'" classes="bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]"/>
         <nav-link disabled :title="simple ? '': 'Добавить объект'" classes="bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]"/>

@@ -24,5 +24,5 @@ final class AddressBuilder extends Builder
     public function distinctCity(): self
     {
         return $this->distinct('city');     
-    }
+    }   
 }

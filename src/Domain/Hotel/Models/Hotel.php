@@ -197,8 +197,8 @@ final class Hotel extends Model
         'show' => 'boolean',
         'checked_type_fond' => 'boolean',
         'phone' => PhoneNumberCast::class,
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d\TH:i:sP',
+        'updated_at' => 'datetime:Y-m-d\TH:i:sP',
     ];
 
     /**
@@ -408,7 +408,7 @@ final class Hotel extends Model
      */
     public function getMinCosts(): DataCollection
     {
-        return MinimumCostsCalculation::run($this->getData());
+        return MinimumCostsCalculation::run($this);
     }
 
     public function getRouteKeyName(): string

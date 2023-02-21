@@ -1,19 +1,13 @@
 <template>
   <Header />
-  <main class="pb-[104px]">    
+  <main class="pb-[104px]">
     <slot />
   </main>
   <Footer>
     <search-control-panel/>
-    <social-links/>
-    <div data="footer-copyr" class="hidden lg:block pt-1 mx-auto lg:ml-12 lg:mr-auto">
-      © {{new Date().getFullYear()}} {{$page.props.contacts.org_name}}
-    </div>
-    <div class="mr-12 pt-1  hidden lg:flex">
-      <a href="#" class="underline">
-        Хранение и обработка персональных данных
-      </a>
-    </div>				
+    <social-links />
+    <copyright class="hidden lg:block pt-1 mx-auto lg:ml-12 lg:mr-auto"/>
+    <privacy-policy class="mr-12 pt-1 hidden lg:flex"/>			
     <navigation simple classes="hidden lg:flex"/>
   </Footer>
 </template>
@@ -24,6 +18,8 @@ import Footer from "./partials/Footer.vue";
 import Navigation from "./partials/Navigation.vue"
 import SocialLinks from "./partials/SocialLinks.vue"
 import SearchControlPanel from "@/components/widgets/SearchControlPanel.vue"
+import Copyright from './partials/Copyright.vue'
+import PrivacyPolicy from './partials/PrivacyPolicy.vue'
 export default {
   components: {
     Header,
@@ -31,6 +27,8 @@ export default {
     Navigation,
     SocialLinks,
     SearchControlPanel,
+    Copyright,
+    PrivacyPolicy,
   },
 };
 </script>

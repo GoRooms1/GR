@@ -5,14 +5,8 @@
   </main>
   <Footer>   
       <Social-links/>
-      <div data="footer-copyr" class="lg:block pt-1 mx-auto lg:ml-12 lg:mr-auto">
-        © {{new Date().getFullYear()}} {{$page.props.contacts.org_name}}
-      </div>
-      <div class="mr-12 pt-1  hidden lg:flex">
-        <a href="#" class="underline">
-          Хранение и обработка персональных данных
-        </a>
-      </div>				
+      <copyright class="block pt-1 mx-auto lg:ml-12 lg:mr-auto"/>
+      <privacy-policy class="mr-12 pt-1 hidden lg:flex"/>
       <Navigation simple classes="hidden lg:flex"/>
   </Footer>
 </template>
@@ -22,12 +16,16 @@ import Header from "./partials/Header.vue";
 import Footer from "./partials/Footer.vue";
 import Navigation from "./partials/Navigation.vue"
 import SocialLinks from "./partials/SocialLinks.vue"
+import Copyright from './partials/Copyright.vue'
+import PrivacyPolicy from './partials/PrivacyPolicy.vue'
 export default {
   components: {
     Header,
     Footer,
     Navigation, 
     SocialLinks,
+    Copyright,
+    PrivacyPolicy,
   },
 };
 </script>

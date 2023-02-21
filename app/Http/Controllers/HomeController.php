@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Actions\RatingCategory\GetRatingCategories;
 use App\Models\Article;
 use Domain\Hotel\Models\Hotel;
+use Domain\Page\DataTransferObjects\PageData;
 use Domain\Page\Models\Page;
+use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -40,15 +42,12 @@ class HomeController extends Controller
         return view('home', compact('hotels', 'rooms', 'articles', 'pages', 'rating_categories'));
     }
 
-    public function index(): Response | ResponseFactory
+    public function index(Request $request): Response | ResponseFactory
     {
         return Inertia::render('Home/Index', [
             'model' => [
-                'page' => [
-                    'title' => 'Home',
-                    'slug' => '/'
-                ]
-            ],
+                'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($request->route()->uri))->toArray(),
+            ]                  
         ]);
     }
 }

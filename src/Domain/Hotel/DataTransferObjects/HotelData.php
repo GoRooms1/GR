@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\DataTransferObjects;
 
+use Domain\Address\DataTransferObjects\AddressData;
 use Domain\Address\DataTransferObjects\MetroData;
 use Domain\Attribute\DataTransferObjects\AttributeData;
+use Domain\Hotel\Actions\MinimumCostsCalculation;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\ValueObjects\PhoneNumberValueObject;
 use Domain\Image\Models\Image;
@@ -16,6 +18,7 @@ use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
+use Spatie\LaravelData\Optional;
 
 final class HotelData extends \Parent\DataTransferObjects\Data
 {
@@ -42,7 +45,8 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public bool $checked_type_fond,
         public Image $image,
         /** @var Collection<Image>|Image[] */
-        public Collection|array $images,
+        public Collection|array $images,        
+        public Lazy|AddressData|null $address,
         public Lazy|HotelTypeData|null $type,
         public Lazy|PageDescriptionData|null $meta,
         #[DataCollectionOf(AttributeData::class)]
@@ -50,9 +54,13 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         #[DataCollectionOf(MetroData::class)]
         public readonly null|Lazy|DataCollection $metros,
         #[DataCollectionOf(RoomData::class)]
-        public readonly DataCollection $rooms,
+        public readonly null|Lazy|DataCollection $rooms,
+        #[DataCollectionOf(MinCostsData::class)]        
+        public readonly null|DataCollection $min_costs,
     ) {
     }
+
+    
 
     public static function fromModel(Hotel $hotel): self
     {
@@ -66,11 +74,13 @@ final class HotelData extends \Parent\DataTransferObjects\Data
             'phone' => $hotel->phone,
             'image' => $hotel->image,
             'images' => $hotel->images,
+            'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressData::from($hotel->address)),
             'type' => Lazy::whenLoaded('type', $hotel, fn () => HotelTypeData::from($hotel->type)),
             'meta' => Lazy::whenLoaded('meta', $hotel, fn () => PageDescriptionData::from($hotel->meta)),
-            'attrs' => Lazy::whenLoaded('attrs', $hotel, fn () => AttributeData::collection($hotel->attrs)),
+            'attrs' => Lazy::create(fn () => AttributeData::collection($hotel->attrs))->defaultIncluded(false),
             'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros)),
-            'rooms' => RoomData::collection($hotel->rooms),
+            'rooms' => Lazy::create(fn () => RoomData::collection($hotel->rooms))->defaultIncluded(false),
+            'min_costs' => MinimumCostsCalculation::run($hotel),
         ]);
     }
 }

@@ -3,15 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Breadcrumbs;
+use Domain\Hotel\Actions\FilterHotelsAction;
+use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\Models\Hotel;
+use Domain\Page\DataTransferObjects\PageData;
+use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class HotelController extends Controller
 {
     use Breadcrumbs;
 
-    public function index(Request $request): View
+    public function index(Request $request): Response | ResponseFactory
+    {        
+        return Inertia::render('Hotel/Index', [
+            'model' => [
+                'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/hotels'))->toArray(),
+            ],
+            'hotels' => HotelData::Collection(FilterHotelsAction::run(optional($request->all())['hotels'] ?? [], true)),                        
+        ]);
+    }
+    
+    //Depricated
+    public function index_(Request $request): View
     {
         $Breadcrumbs_din = $this->get_bread();
 
@@ -20,7 +38,7 @@ class HotelController extends Controller
         return view('hotel.index', compact('hotels', 'request', 'Breadcrumbs_din'));
     }
 
-    public function show(Hotel $hotel, Request $request): View
+    public function show_(Hotel $hotel, Request $request): View
     {
         $Breadcrumbs_din = $this->get_bread();
 
