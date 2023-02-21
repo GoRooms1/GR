@@ -1,5 +1,7 @@
 import { reactive, watch } from 'vue'
+import { useStorage } from '@vueuse/core'
 import axios from 'axios'
+import { geolocationStore } from './geolocationStore.js' 
 
 export const filterStore = reactive({
   //State
@@ -8,25 +10,26 @@ export const filterStore = reactive({
   ],
   locationParams: {},
   params: {},   
-  filters: [],
+  filters: useStorage('filters', []),
   timestamp: Date.now(),
   found: 0,
   stopWatching: false,  
 
   //Getters and Actions
-  init(isClear) {
-    if (isClear)
+  async init(isClear) {    
+    if (isClear == true)
     {
-        this.clearFilters();        
+      geolocationStore.city = null;  
+      this.clearFilters();        
     }
-    //add default city filter
-    this.addFilter('hotels', false, 'city', 'Москва', 'Москва');
+    //add city filter
+    let city = await geolocationStore.locate();      
+    this.updateFilter('hotels', false, 'city', city, city);
+
     this.timestamp = Date.now();                          
     this.updateResultsCount();        
     this.updateLocationParams(); 
     this.watchFiltersChange();
-
-    console.log(this.filters);
   },
 
   clearFilters() {

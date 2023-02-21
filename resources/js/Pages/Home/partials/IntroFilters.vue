@@ -100,8 +100,7 @@
             FilterAttrToggle,            
         },
         mounted() {
-            this.filterStore.init(true); 
-            this.locate();          
+            this.filterStore.init(true);
         },        
         data() {
             return {
@@ -135,20 +134,13 @@
             city: {
                 handler(newVal, oldVal) {                
                     if (oldVal != newVal) {
+                        this.geolocationStore.city = newVal;
                         this.filterStore.removeFilter('hotels', false, 'metro');
                         this.filterStore.updateLocationParams();
                     }                    
                 },
                 immediate: true
-            },
-            geolocationCity: {
-                handler(newVal, oldVal) {
-                    if (newVal && !oldVal) {                                            
-                        this.filterStore.updateFilter('hotels', false, 'city', newVal, newVal);                      
-                    }
-                },
-                immediate: true
-            }
+            },            
         }
     }
 </script>

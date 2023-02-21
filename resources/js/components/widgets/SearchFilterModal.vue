@@ -459,6 +459,7 @@
                 handler(newVal, oldVal) {                
                     if (oldVal != newVal) {
                         this.filterStore.removeFilter('hotels', false, 'metro');
+                        this.geolocationStore.city = newVal;
                         this.filterStore.updateLocationParams();
                     }                    
                 },
@@ -466,8 +467,9 @@
             },
             geolocationCity: {
                 handler(newVal, oldVal) {
-                    if (newVal && !oldVal) {                                            
-                        this.filterStore.updateFilter('hotels', false, 'city', newVal, newVal);                      
+                    if (newVal && !oldVal) {
+                        console.log('geolocation...');
+                        this.filter();                     
                     }
                 },
                 immediate: true
