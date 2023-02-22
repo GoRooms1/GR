@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Address\Actions;
 
 use Domain\Address\Models\Metro;
+use Illuminate\Support\Collection;
 use Log;
 use Lorisleiva\Actions\Action;
 
@@ -13,11 +14,11 @@ use Lorisleiva\Actions\Action;
  */
 final class GetAllMetrosByCityNameAction extends Action
 {
-    public function handle($city): array
+    public function handle($city): Collection | array
     {       
         if (!$city)
             return array();
         else  
-            return Metro::distinctName()->selectNameAndColor()->whereCity($city)->ordered()->get()->toArray(); 
+            return Metro::distinctName()->select('name', 'color', 'api_value')->whereCity($city)->ordered()->get(); 
     }
 }

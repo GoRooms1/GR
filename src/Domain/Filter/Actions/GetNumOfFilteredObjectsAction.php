@@ -14,6 +14,6 @@ final class GetNumOfFilteredObjectsAction extends Action
 {
     public function handle(array $filters): int
     {       
-        return FilterHotelsCountAction::run($filters['hotels']);           
+        return FilterHotelsCountAction::run($filters['hotels'] ?? []);           
     }
 }

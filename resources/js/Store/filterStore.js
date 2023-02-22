@@ -1,5 +1,6 @@
 import { reactive, watch } from 'vue'
 import { useStorage } from '@vueuse/core'
+import qs from 'qs'
 import axios from 'axios'
 import { geolocationStore } from './geolocationStore.js' 
 
@@ -8,7 +9,10 @@ export const filterStore = reactive({
   notRemovableFilters: [
     'city',
   ],
-  locationParams: {},
+  locationParams: {
+    cities: [],
+    metros: [],
+  },
   params: {},   
   filters: useStorage('filters', []),
   timestamp: Date.now(),
@@ -102,28 +106,56 @@ export const filterStore = reactive({
   },
 
   updateLocationParams() {
-    axios.post(route('api.filter.location'),{
-            city: this.getFilterValue('hotels', false, 'city') ?? null,            
-        } 
-    )
+    this.getCities();
+    this.getMetros();
+  },
+
+  getCities() {
+    axios.get(route('api.filter.cities'), {      
+      headers: {
+        'Content-Type' : 'application/json;charset=utf-8',
+      }
+    })
     .then(resp => {
-        this.locationParams = resp.data ?? this.locationParams;
+      console.log(resp.data);
+      this.locationParams.cities = resp.data?.data ?? this.locationParams.cities;
     })
     .catch(function (error) {
-        console.log(error.toJSON());                
+      console.log(error.toJSON());                
+    });
+  },
+
+  getMetros() {
+    axios.get(route('api.filter.metros'),{
+        params: {
+          city: this.getFilterValue('hotels', false, 'city') ?? null
+        },            
+      } 
+    )
+    .then(resp => {
+      console.log(resp.data);
+      this.locationParams.metros = resp.data?.data ?? this.locationParams.metros;
+    })
+    .catch(function (error) {
+      console.log(error.toJSON());                
     });
   },
 
   updateResultsCount() {
     let data = this.getFiltersValues();
-    let requestTimestamp = Date.now();
-    axios.post(route('api.filter.count'), data)
-    .then(resp => {        
-        if (this.timestamp <= requestTimestamp)
-            this.found = resp.data.found ?? 0;        
+    let requestTimestamp = Date.now();    
+    axios.get(route('api.filter.count'), {
+       params: data,
+       paramsSerializer: params => {
+        return qs.stringify(params)
+      }
+    })
+    .then(resp => {
+      if (this.timestamp <= requestTimestamp)
+          this.found = resp.data.found ?? 0;        
     })
     .catch(function (error) {
-        console.log(rror.toJSON());                
+        console.log(error.toJSON());                
     });
   },
 

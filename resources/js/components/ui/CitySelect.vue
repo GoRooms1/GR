@@ -33,8 +33,8 @@
                     <input type="text" :placeholder="placeholder" v-model="searchValue" class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-sm leading-[16px] " wfd-id="id7">
                 </div>
                 <div class="flex flex-col gap-[8px] rounded-[8px] bg-white">
-                    <button v-for="option in options" @click="choose" :data-value="option" type="button" class="text-sm leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                        {{ option }}
+                    <button v-for="option in options" @click="choose" :data-value="option.name" type="button" class="text-sm leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
+                        {{ option.name }}
                     </button>
                 </div>
                 <div v-if="options.length == 0">
@@ -76,7 +76,7 @@
                 if (this.searchValue) {
                     let searchValue = this.searchValue.toLowerCase().trim();
                     return this.optionsArray.filter(function (el) {                 
-                        return el.toString().toLowerCase().startsWith(searchValue);               
+                        return el.name.toString().toLowerCase().startsWith(searchValue);               
                     }, searchValue);                   
                 }                    
                 else {

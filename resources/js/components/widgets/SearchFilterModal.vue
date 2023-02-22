@@ -7,11 +7,11 @@
                     <path d="M1 15L15 1" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
                 </svg>
             </button>
-            <search-panel/>
+            <!-- <search-panel/> -->
            
             <div class="max-w-[832px] mx-auto w-full px-[16px] max-[768px]:mb-[40px] md:h-full">
-                <div data="filter-content" class="scrollbar overflow-y-auto max-h-auto w-[820px] bg-transparent" style="max-height: 904px;">
-                    <div data="filter-main" class="bg-[#EAEFFD] rounded-t-[16px] max-w-[800px] w-full md:rounded-b-none rounded-b-[16px]" style="width: 800px;">
+                <div data="filter-content" class="scrollbar overflow-y-auto max-h-auto max-w-[820px] bg-transparent" style="max-height: 904px;">
+                    <div data="filter-main" class="bg-[#EAEFFD] rounded-t-[16px] max-w-[800px] w-full md:rounded-b-none rounded-b-[16px]">
                         <p class="px-[16px] py-[15px] text-[16px] leading-[19px] font-semibold">Фильтры</p>
                         <div class="grid md:grid-cols-4 grid-cols-2  gap-[16px] p-[16px] bg-[#EAEFFD] shadow-sm">
                             <div class="">
@@ -414,14 +414,14 @@
         mounted() {
             this.filterStore.init(); 
             this.locate();            
-        },
+        },        
         data() {
             return {
                 filterStore,
                 geolocationStore,              
                 form: useForm({}),
                 city: null,
-                metro: null,                
+                metro: null,                                
             }
         },
         computed: {
@@ -460,7 +460,7 @@
                     if (oldVal != newVal) {
                         this.filterStore.removeFilter('hotels', false, 'metro');
                         this.geolocationStore.city = newVal;
-                        this.filterStore.updateLocationParams();
+                        this.filterStore.getMetros();
                     }                    
                 },
                 immediate: true

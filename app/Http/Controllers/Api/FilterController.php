@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Json;
 use App\Http\Controllers\Controller;
-use Domain\Address\Actions\GetAllCitiesNamesAction;
+use Domain\Address\Actions\GetAllUniqueCitiesAction;
 use Domain\Address\Actions\GetAllMetrosByCityNameAction;
+use Domain\Address\DataTransferObjects\CityData;
+use Domain\Address\DataTransferObjects\SimpleMetroData;
 use Domain\Address\Models\Address;
 use Domain\Address\Models\Metro;
 use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
@@ -16,13 +18,20 @@ use Illuminate\Http\Request;
 
 class FilterController extends Controller
 {       
-    public function getLocationParams(Request $request)
+    public function getCities(Request $request)
     {
         return response()->json([
-            'cities' => GetAllCitiesNamesAction::run(),
-            'metros' => GetAllMetrosByCityNameAction::run($request->all()['city']),
+            'data' => CityData::collection(GetAllUniqueCitiesAction::run())
         ]);        
     }
+
+    public function getMetros(Request $request)
+    {
+        return response()->json([           
+            'data' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['city'] ?? null)),
+        ]);       
+    }
+
 
     public function getResultsCount(Request $request)
     {

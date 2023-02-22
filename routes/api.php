@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 //new
 Route::prefix('/filter')->name('filter.')->group(function () {
-    Route::post('location', [Api\FilterController::class, 'getLocationParams'])->name('location');
-    Route::post('count', [Api\FilterController::class, 'getResultsCount'])->name('count');
+    Route::get('cities', [Api\FilterController::class, 'getCities'])->name('cities');
+    Route::get('metros', [Api\FilterController::class, 'getMetros'])->name('metros');
+    Route::get('count', [Api\FilterController::class, 'getResultsCount'])->name('count');
 });
 
 

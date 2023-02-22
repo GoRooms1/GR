@@ -3,13 +3,13 @@
         <button class="p-2.5 rounded-l-lg bg-[#EAEFFD]">
             <img src="img/map.svg" alt="map">
         </button>
-        <button class="p-2.5 rounded-r-lg mr-[10%] bg-[#6170FF]">
+        <button @click="filter()" class="p-2.5 rounded-r-lg mr-[10%] bg-[#6170FF]">
             <img src="img/listpointers2.svg" alt="listpointers">
         </button>
         <button class="p-2.5 rounded-lg mx-[1.7%] ml-auto bg-[#6170FF]">
             <img src="img/search2.svg" alt="search">
         </button>	
-        <button class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
+        <button @click="toggleFilters()" class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
             <img src="img/filters.svg" alt="filters">
         </button>				
         <button class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]">
@@ -25,7 +25,22 @@
 </template>
 
 <script>
+    import { usePage } from '@inertiajs/inertia-vue3'
     export default {
-       
+        methods: {
+            filter() {                                
+                this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: ['hotels', 'rooms'],                                  
+                    //onSuccess: () => {},
+                    //onStart: () => {this.isLoading = true},
+                    //onFinish: () => {this.isLoading = false},
+                });                
+            },
+            toggleFilters() {
+                usePage().props.value.modals.filters = !usePage().props.value.modals.filters;
+            },
+        }       
     }
 </script>

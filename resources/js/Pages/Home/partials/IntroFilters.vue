@@ -136,7 +136,7 @@
                     if (oldVal != newVal) {
                         this.geolocationStore.city = newVal;
                         this.filterStore.removeFilter('hotels', false, 'metro');
-                        this.filterStore.updateLocationParams();
+                        this.filterStore.getMetros();
                     }                    
                 },
                 immediate: true
