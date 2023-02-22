@@ -1,12 +1,12 @@
 <template>
+  <AppHead :title="model.page.title" />  
   <div class="md:mt-[49px] mt-[40px] relative">
     <div class="overflow-hidden fixed top-0 left-0 right-0 bottom-0 -z-[1] block md:hidden">
 			<img class="absolute top-[21px] right-[-10px] -z-[1] md:w-initial w-[220px]" src="img/lens1.svg" alt="lens">
 			<div class="absolute top-0 left-0 h-full w-full -z-[1] bg-[#0018ff] opacity-60"></div>
 		</div>
     <search-panel/>
-  </div>
-  <AppHead :title="model.page.title" />  
+  </div>    
   <div class="container mx-auto">
     <div class="py-4 lg:my-16 px-2 lg:px-6">      
       <div class="block md:hidden">
@@ -32,7 +32,7 @@ export default {
     Layout,
     IntroLayout,
     SearchPanel,
-    IntroFilters,
+    IntroFilters,    
   },
   props: {
     model: {

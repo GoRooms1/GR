@@ -1,7 +1,8 @@
-import { reactive, watch } from 'vue'
+import { reactive, watch, computed } from 'vue'
 import { useStorage } from '@vueuse/core'
 import qs from 'qs'
 import axios from 'axios'
+import _ from 'lodash'
 import { geolocationStore } from './geolocationStore.js' 
 
 export const filterStore = reactive({
@@ -70,14 +71,14 @@ export const filterStore = reactive({
   removeFilter(modelType, isAttribute, filterKey, filterValue) {
     let id = this.getFilterId(modelType, isAttribute, filterKey, filterValue);
     if (this.filters.find(el => el.id == id)) {
-        this.filters = this.filters.filter(el => el.id != id);       
+        this.filters = this.filters.filter(el => el.id != id);              
     }       
   },
 
   updateFilter(modelType, isAttribute, filterKey, filterValue, filterTitle) {
-    this.stopWatching = true;
+    this.stopHandlChange = true;
     this.removeFilter(modelType, isAttribute, filterKey, filterValue);
-    this.stopWatching = false;
+    this.stopHandlChange = false;
     this.addFilter(modelType, isAttribute, filterKey, filterValue, filterTitle);
   },
 
@@ -116,8 +117,7 @@ export const filterStore = reactive({
         'Content-Type' : 'application/json;charset=utf-8',
       }
     })
-    .then(resp => {
-      console.log(resp.data);
+    .then(resp => {      
       this.locationParams.cities = resp.data?.data ?? this.locationParams.cities;
     })
     .catch(function (error) {
@@ -132,8 +132,7 @@ export const filterStore = reactive({
         },            
       } 
     )
-    .then(resp => {
-      console.log(resp.data);
+    .then(resp => {      
       this.locationParams.metros = resp.data?.data ?? this.locationParams.metros;
     })
     .catch(function (error) {
@@ -159,9 +158,9 @@ export const filterStore = reactive({
     });
   },
 
-  watchFiltersChange() {    
-    watch( () => this.filters, (newData, oldData) => {       
-        if (!this.stopWatching) {
+  watchFiltersChange() {
+    watch( () => this.getFiltersValues(), (newData, oldData) => {             
+        if (!this.stopWatching && !_.isEqual(newData, oldData)) {            
             this.timestamp = Date.now();                          
             this.updateResultsCount(); 
         }               
