@@ -1,7 +1,7 @@
 <template>
     <div v-if="isOpen" data="modal-search-filter" class="items-center justify-center fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex">
         <div class="flex flex-grow flex-col lg:gap-[8px] gap-[32px] max-w-[890px] w-full pb-[15px] md:overflow-hidden max-[768px]:pb-[40px] max-[768px]:pt-[40px] pt-[15px] overflow-x-hidden scrollbar overflow-y-auto md:px-[20px] px-0 h-[100%] relative ">
-            <button @click="close()" class="absolute right-0 max-[768px]:right-[10px] top-[15px] max-[768px]:top-0 w-[32px] h-[32px] md:bg-white bg-transparent rounded-[8px] flex items-center justify-center">
+            <button @click="closeAndReturnFilters()" class="absolute right-0 max-[768px]:right-[10px] top-[15px] max-[768px]:top-0 w-[32px] h-[32px] md:bg-white bg-transparent rounded-[8px] flex items-center justify-center">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L15 15" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
                     <path d="M1 15L15 1" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
@@ -112,7 +112,7 @@
                                 <p class="text-[14px] leading-[16px] mb-[8px]">Расположение</p>
                                 <div class="grid gap-[16px]">
                                   
-                                    <city-select name="city" type="form" searchable placeholder="Город" v-model="city" :options-array="filterStore.locationParams.cities"/>
+                                    <city-select name="city" type="form" searchable placeholder="Город" v-model="city" :options-array="$page.props.cities ?? []"/>
                                     <div data="select-data-div" class="relative md:static z-[3]">
                                         <button select-data="place" data="button-tab" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between">
                                             <span select-text="" class="text-[14px] leading-[16px]">Округ</span>
@@ -220,7 +220,7 @@
                                         </div>
                                     </div>
                                 
-                                    <metro-select name="metro" type="form" searchable placeholder="Станция метро" v-model="metro" :options-array="filterStore.locationParams.metros"/>
+                                    <metro-select name="metro" type="form" searchable placeholder="Станция метро" v-model="metro" :options-array="$page.props.metros ?? []"/>
                                 </div>
                             </div>
                             <div class="md:col-start-4 md:row-start-1 col-start-1 row-start-2">
@@ -359,7 +359,7 @@
                 <div data="filter-footer" class="bg-transparent md:h-[80px] h-auto w-full flex items-center justify-center">
                     <div class="md:w-full w-[calc(100%-48px)] h-full px-[16px] md:py-0 py-[16px] bg-white rounded-b-[24px] flex md:flex-row flex-col items-center justify-between gap-[16px] md:max-w-none max-w-[400px]">
                         <div class="flex items-center justify-between md:gap-[54px] gap-[10px] md:w-initial w-full ">
-                            <span class="text-[14px] leading-[16px] font-semibold">Найдено {{ foundMessage }}</span>
+                            <span class="text-[14px] leading-[16px] font-semibold">Найдено {{ $page.props.found_objects ?? [] }}</span>
                             <button class="text-[14px] leading-[16px] underline">Очистить фильтры</button>
                         </div>
                         <div class="flex items-center gap-[8px] md:justify-end justify-between md:w-initial w-full flex-wrap ">
@@ -391,11 +391,9 @@
 </template>
 
 <script>
-    import SearchPanel from "@/components/widgets/SearchPanel.vue"
-    import axios from 'axios' 
+    import SearchPanel from "@/components/widgets/SearchPanel.vue"    
     import { useForm, usePage } from '@inertiajs/inertia-vue3'
-    import { filterStore } from '@/Store/filterStore.js'
-    import { geolocationStore } from '@/Store/geolocationStore.js'
+    import { filterStore } from '@/Store/filterStore.js'    
     import { numWord } from '@/Services/numWord.js'
     import Select from '@/components/ui/Select.vue'
     import Button from '@/components/ui/Button.vue'
@@ -412,68 +410,85 @@
             FilterAttrToggle,
         },
         mounted() {
-            this.filterStore.init(); 
-            this.locate();            
+            this.filterStore.init(usePage().url.value);                       
         },        
         data() {
             return {
-                filterStore,
-                geolocationStore,              
+                filterStore,              
                 form: useForm({}),
                 city: null,
-                metro: null,                                
+                metro: null,
+                initialUrl: usePage().url.value,
+                initialFilters: [],
             }
         },
         computed: {
             isOpen() {
                 return usePage().props.value.modals?.filters ?? false;
-            },
-            geolocationCity() {
-                return this.geolocationStore.city;
-            },
+            },           
             foundMessage() {
                 return this.filterStore.found + ' ' + numWord(this.filterStore.found, ['предложение', 'предлжения', 'предложений']);
+            },
+            filterTimestamp() {
+                return this.filterStore.timestamp;
             }
         },
         methods: {
             close() {
-                usePage().props.value.modals.filters = false;
-            },                    
+                usePage().props.value.modals.filters = false;                
+            },
+            closeAndReturnFilters() {
+                this.close();
+                window.history.replaceState({}, this.$page.title, this.initialUrl);
+                this.filterStore.filters = this.initialFilters;
+                this.updateFilters(['found_objects']);
+            },                               
             filter() {                                
                 this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
-                    only: ['hotels', 'rooms'],                                  
-                    //onSuccess: () => {},
-                    //onStart: () => {this.isLoading = true},
-                    //onFinish: () => {this.isLoading = false},
+                    only: ['hotels', 'rooms'],                    
                 });
                 this.close();
             },
-            locate() {
-                this.geolocationStore.locate();
-            }
+            updateFilters(only) {
+                let data = this.filterStore.getFiltersValues();                
+                this.$inertia.get(route('hotels.index'), data, {
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                    only: only ?? [],                   
+                });
+            },            
         },
         watch: {
-            city: {
-                handler(newVal, oldVal) {                
-                    if (oldVal != newVal) {
-                        this.filterStore.removeFilter('hotels', false, 'metro');
-                        this.geolocationStore.city = newVal;
-                        this.filterStore.getMetros();
-                    }                    
-                },
-                immediate: true
+            isOpen: function (newVal, oldVal) {
+                if (newVal == true && oldVal == false) {
+                    this.initialUrl = usePage().url.value;
+                    this.initialFilters = this.filterStore.filters; 
+                }
             },
-            geolocationCity: {
-                handler(newVal, oldVal) {
-                    if (newVal && !oldVal) {
-                        console.log('geolocation...');
-                        this.filter();                     
-                    }
-                },
-                immediate: true
+            city: {
+                handler(newVal, oldVal) {              
+                    if (oldVal != newVal) {                        
+                        this.filterStore.removeFilter('hotels', false, 'metro');                                       
+                        this.updateFilters(['found_objects', 'metros']);
+                    }                    
+                },               
+            },
+            metro: function (newVal, oldVal) {
+                if (oldVal != newVal)
+                    this.updateFilters(['found_objects', 'metros']);                
+            },
+            filterTimestamp: function(newVal, oldVal) {
+                if (newVal >= oldVal) {
+                    if (this.isOpen == false)
+                        this.updateFilters();  
+                    else                 
+                        this.updateFilters(['found_objects']);
+                }                    
             }
+            
         }
     }
 </script>

@@ -66,6 +66,9 @@
                 default: 'intro',
             },                                           
         },
+        created() {
+            this.emmitUpdate();
+        },
         data() {
             return {
                 filterStore,
@@ -112,9 +115,7 @@
             },            
         },
         watch: {
-            selectedOption: function(newVal, oldVal) {                
-                if (oldVal && !newVal)
-                    this.clear(); 
+            selectedOption: function(newVal, oldVal) {
                 if (oldVal != newVal)
                     this.emmitUpdate();        
             }

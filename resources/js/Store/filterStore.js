@@ -1,44 +1,38 @@
-import { reactive, watch, computed } from 'vue'
+import { reactive } from 'vue'
 import { useStorage } from '@vueuse/core'
 import qs from 'qs'
-import axios from 'axios'
-import _ from 'lodash'
 import { geolocationStore } from './geolocationStore.js' 
 
 export const filterStore = reactive({
   //State
   notRemovableFilters: [
     'city',
-  ],
-  locationParams: {
-    cities: [],
-    metros: [],
-  },
-  params: {},   
-  filters: useStorage('filters', []),
+  ],  
+  filters: [],
+  titles: [],
   timestamp: Date.now(),
-  found: 0,
-  stopWatching: false,  
+  stopHandlChange: false,  
 
   //Getters and Actions
-  async init(isClear) {    
-    if (isClear == true)
-    {
-      geolocationStore.city = null;  
-      this.clearFilters();        
+  async init(url) {    
+    this.parceUrlParameters(url);
+    if (this.getFilterValue('hotels', false, 'city') == null) {
+      let city = await geolocationStore.locate();      
+      this.updateFilter('hotels', false, 'city', city, city);
     }
-    //add city filter
-    let city = await geolocationStore.locate();      
-    this.updateFilter('hotels', false, 'city', city, city);
-
-    this.timestamp = Date.now();                          
-    this.updateResultsCount();        
-    this.updateLocationParams(); 
-    this.watchFiltersChange();
   },
 
-  clearFilters() {
-    this.filters = this.filters.filter(el => el.key == 'city');    
+  addTitle(key, value) {
+    if (!this.titles.find(el => el.key == key)) {
+      this.titles.push({
+        key: key,
+        value: value,
+      });
+    }
+  },
+
+  getTitle(key, value) {
+    return this.titles.find(el => el.key == key)?.value ?? value;
   },
   
   getFilterId(modelType, isAttribute, filterKey, filterValue) {
@@ -65,14 +59,22 @@ export const filterStore = reactive({
             this.filters.unshift(filterObj);
         else
             this.filters.push(filterObj);
+
+        this.updateTimestamp();
     }          
   },
 
   removeFilter(modelType, isAttribute, filterKey, filterValue) {
-    let id = this.getFilterId(modelType, isAttribute, filterKey, filterValue);
+    let id = this.getFilterId(modelType, isAttribute, filterKey, filterValue);   
     if (this.filters.find(el => el.id == id)) {
-        this.filters = this.filters.filter(el => el.id != id);              
+        this.filters = this.filters.filter(el => el.id != id);
+        this.updateTimestamp();                     
     }       
+  },
+
+  updateTimestamp() {
+    if (this.stopHandlChange == false)
+      this.timestamp = Date.now();
   },
 
   updateFilter(modelType, isAttribute, filterKey, filterValue, filterTitle) {
@@ -104,71 +106,46 @@ export const filterStore = reactive({
     }, data);
     
     return data;
-  },
+  }, 
 
-  updateLocationParams() {
-    this.getCities();
-    this.getMetros();
-  },
+  parceUrlParameters(url) {   
+    url = url.substring(url.indexOf("?") + 1);
+    let paramsObj = qs.parse(url);
 
-  getCities() {
-    axios.get(route('api.filter.cities'), {      
-      headers: {
-        'Content-Type' : 'application/json;charset=utf-8',
-      }
-    })
-    .then(resp => {      
-      this.locationParams.cities = resp.data?.data ?? this.locationParams.cities;
-    })
-    .catch(function (error) {
-      console.log(error.toJSON());                
+    //Hotel filters
+    let hotels = paramsObj.hotels ?? {};
+    for (const [key, value] of Object.entries(hotels)) {      
+      if (`${key}` != 'attributes') {        
+        this.addFilter('hotels', false, `${key}`, `${value}`, this.getTitle(`${key}`, `${value}`));
+      }      
+    }
+
+    //Hotel attribute filters
+    let hotelAttributes = hotels?.attributes ?? [];
+    if (!Array.isArray(hotelAttributes)) {
+      hotelAttributes = new Array(hotelAttributes);
+    }    
+    hotelAttributes.forEach(element => {      
+      this.addFilter('hotels', true, null, element, this.getTitle(element, element));
     });
-  },
 
-  getMetros() {
-    axios.get(route('api.filter.metros'),{
-        params: {
-          city: this.getFilterValue('hotels', false, 'city') ?? null
-        },            
-      } 
-    )
-    .then(resp => {      
-      this.locationParams.metros = resp.data?.data ?? this.locationParams.metros;
-    })
-    .catch(function (error) {
-      console.log(error.toJSON());                
+    //Room filters
+    let rooms = paramsObj.rooms ?? {};
+    for (const [key, value] of Object.entries(rooms)) {      
+      if (`${key}` != 'attributes') {        
+        this.addFilter('rooms', false, `${key}`, `${value}`, this.getTitle(`${key}`, `${value}`));
+      }      
+    }
+
+    //Rooms attribute filters
+    let roomAttributes = rooms?.attributes ?? [];
+    if (!Array.isArray(roomAttributes)) {
+      roomAttributes = new Array(roomAttributes);
+    }
+    roomAttributes.forEach(element => {      
+      this.addFilter('rooms', true, null, element, this.getTitle(element, element));
     });
-  },
-
-  updateResultsCount() {
-    let data = this.getFiltersValues();
-    let requestTimestamp = Date.now();    
-    axios.get(route('api.filter.count'), {
-       params: data,
-       paramsSerializer: params => {
-        return qs.stringify(params)
-      }
-    })
-    .then(resp => {
-      if (this.timestamp <= requestTimestamp)
-          this.found = resp.data.found ?? 0;        
-    })
-    .catch(function (error) {
-        console.log(error.toJSON());                
-    });
-  },
-
-  watchFiltersChange() {
-    watch( () => this.getFiltersValues(), (newData, oldData) => {             
-        if (!this.stopWatching && !_.isEqual(newData, oldData)) {            
-            this.timestamp = Date.now();                          
-            this.updateResultsCount(); 
-        }               
-     }, 
-     {
-        deep: true
-     });     
-  },
+  }
   
 
 })

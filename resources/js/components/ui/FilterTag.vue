@@ -19,6 +19,7 @@
 
 <script>
     import { filterStore  } from '@/Store/filterStore.js'
+    import { usePage } from '@inertiajs/inertia-vue3'
     export default {
         props: {
             title: String,                
@@ -38,7 +39,7 @@
         methods: {
             close() {
                 if (this.isRemovable()) {
-                    this.filterStore.removeFilter(this.attrModel, this.isAttribute, this.filterKey, this.filterValue);                 
+                    this.filterStore.removeFilter(this.attrModel, this.isAttribute, this.filterKey, this.filterValue);
                 }
             },
             isRemovable() {

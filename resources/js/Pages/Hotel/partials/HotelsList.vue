@@ -29,6 +29,7 @@
 <script>
     import { filterStore } from '@/Store/filterStore.js'
     import { filterResultsStore } from '@/Store/filterResultsStore.js'
+    import { usePage } from '@inertiajs/inertia-vue3'
     import HotelCard from "./HotelCard.vue"
     import Loader from '@/components/ui/Loader.vue'
     import Button from '@/components/ui/Button.vue'
@@ -64,10 +65,15 @@
                         preserveState: true,
                         preserveScroll: true,
                         only: ['hotels'],                                     
-                        onSuccess: () => {
-                            //console.log(this.hotels);
+                        onSuccess: () => {                            
                             if (this.hotels.meta.current_page != 1)                         
                                 this.allHotels = [...this.allHotels, ...this.hotels.data]
+                            
+                            let url = usePage().url.value;
+                            let params = new URLSearchParams(url.substring(url.indexOf("?") + 1));
+                            params.delete('page');
+                            let newUrl = route('hotels.index') + '?' + params;                            
+                            window.history.replaceState({}, this.$page.title, newUrl);
                         },
                         onStart: () => {this.isLoading = true},
                         onFinish: () => {this.isLoading = false},

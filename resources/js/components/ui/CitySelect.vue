@@ -70,6 +70,9 @@
                 filterStore,                                                               
             }
         },
+        created() {
+            this.emmitUpdate();
+        },
         emits: ['update:modelValue'],
         computed: {
             options: function() {                                
@@ -96,8 +99,10 @@
             },
             choose(event) {                
                 let value = event.target.dataset['value'];
-                this.filterStore.updateFilter('hotels', false, 'city', value, value); 
-                this.hide();                                              
+                if (this.selectedOption != value)
+                    this.filterStore.updateFilter('hotels', false, 'city', value, value); 
+                
+                    this.hide();                                              
             },            
             emmitUpdate() {
                 this.$emit('update:modelValue', this.selectedOption);

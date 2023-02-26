@@ -16,12 +16,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//new
-Route::prefix('/filter')->name('filter.')->group(function () {
-    Route::get('cities', [Api\FilterController::class, 'getCities'])->name('cities');
-    Route::get('metros', [Api\FilterController::class, 'getMetros'])->name('metros');
-    Route::get('count', [Api\FilterController::class, 'getResultsCount'])->name('count');
-});
 
 
 //old

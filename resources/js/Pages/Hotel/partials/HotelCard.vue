@@ -101,8 +101,8 @@
                             </svg>
                         </div>
                         <div class="leading-tight	text-sm">
-                            <a href="#" class="underline text-[#6170FF]">{{ hotel.address?.city ? (hotel.address.city + ',') : ''}}</a>
-                            <a href="#" class="underline text-[#6170FF]">{{ hotel.address?.city_area ? (hotel.address.city_area + ',') : ''}}</a>
+                            <a href="#" class="underline text-[#6170FF]">{{ hotel.address?.city ? (hotel.address.city + ', ') : ''}}</a>
+                            <a href="#" class="underline text-[#6170FF]">{{ hotel.address?.city_area ? (hotel.address.city_area + ', ') : ''}}</a>
                             <a href="#" class="underline text-[#6170FF]">{{ hotel.address?.city_district ? (hotel.address.city_district + ' район,') : '' }}</a><br>                            
                             {{ hotel.address?.street_with_type + ', д.' +  hotel.address?.house }}
                         </div>
