@@ -32,7 +32,7 @@ final class FilterHotelsAction extends Action
             ->thenReturn()
             ->moderated()->withRooms();
         if ($paginate)
-            $data = $result->paginate(env('HOTELS_PER_PAGE'), 20);
+            $data = $result->paginate(config('pagination.hotels_per_page'));
         else
             $data = $result->get(); 
         

@@ -112,7 +112,7 @@
                                 <p class="text-[14px] leading-[16px] mb-[8px]">Расположение</p>
                                 <div class="grid gap-[16px]">
                                   
-                                    <city-select name="city" type="form" searchable placeholder="Город" v-model="city" :options-array="$page.props.cities ?? []"/>
+                                    <city-select name="city" type="form" searchable placeholder="Город" v-model="city" :options-array="filter.cities ?? []"/>
                                     <div data="select-data-div" class="relative md:static z-[3]">
                                         <button select-data="place" data="button-tab" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between">
                                             <span select-text="" class="text-[14px] leading-[16px]">Округ</span>
@@ -220,7 +220,7 @@
                                         </div>
                                     </div>
                                 
-                                    <metro-select name="metro" type="form" searchable placeholder="Станция метро" v-model="metro" :options-array="$page.props.metros ?? []"/>
+                                    <metro-select name="metro" type="form" searchable placeholder="Станция метро" v-model="metro" :options-array="filter.metros ?? []"/>
                                 </div>
                             </div>
                             <div class="md:col-start-4 md:row-start-1 col-start-1 row-start-2">
@@ -359,7 +359,7 @@
                 <div data="filter-footer" class="bg-transparent md:h-[80px] h-auto w-full flex items-center justify-center">
                     <div class="md:w-full w-[calc(100%-48px)] h-full px-[16px] md:py-0 py-[16px] bg-white rounded-b-[24px] flex md:flex-row flex-col items-center justify-between gap-[16px] md:max-w-none max-w-[400px]">
                         <div class="flex items-center justify-between md:gap-[54px] gap-[10px] md:w-initial w-full ">
-                            <span class="text-[14px] leading-[16px] font-semibold">Найдено {{ $page.props.found_objects ?? [] }}</span>
+                            <span class="text-[14px] leading-[16px] font-semibold">Найдено {{ foundMessage  ?? 0 }}</span>
                             <button class="text-[14px] leading-[16px] underline">Очистить фильтры</button>
                         </div>
                         <div class="flex items-center gap-[8px] md:justify-end justify-between md:w-initial w-full flex-wrap ">
@@ -371,7 +371,7 @@
                                 </svg>
                                 <span class="text-white">На карте</span>
                             </button>
-                            <button @click="filter()" class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
+                            <button @click="getData()" class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6.85718 7H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                     <path d="M6.85718 12.143H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -395,6 +395,7 @@
     import { useForm, usePage } from '@inertiajs/inertia-vue3'
     import { filterStore } from '@/Store/filterStore.js'    
     import { numWord } from '@/Services/numWord.js'
+    import _ from 'lodash'
     import Select from '@/components/ui/Select.vue'
     import Button from '@/components/ui/Button.vue'
     import CitySelect from '@/components/ui/CitySelect.vue'
@@ -409,6 +410,12 @@
             MetroSelect,
             FilterAttrToggle,
         },
+        props: {
+            filter: {
+                type: Object,
+                default: {},
+            }
+        },
         mounted() {
             this.filterStore.init(usePage().url.value);                       
         },        
@@ -416,8 +423,9 @@
             return {
                 filterStore,              
                 form: useForm({}),
-                city: null,
-                metro: null,
+                nonAtrributes: ['city', 'metro'],
+                city: 'init',
+                metro: 'init',
                 initialUrl: usePage().url.value,
                 initialFilters: [],
             }
@@ -427,11 +435,11 @@
                 return usePage().props.value.modals?.filters ?? false;
             },           
             foundMessage() {
-                return this.filterStore.found + ' ' + numWord(this.filterStore.found, ['предложение', 'предлжения', 'предложений']);
+                return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
             },
-            filterTimestamp() {
-                return this.filterStore.timestamp;
-            }
+            attributes() {
+                return _.cloneDeep(_.filter(this.filterStore.filters, el => !this.nonAtrributes.includes(el.key)));
+            },
         },
         methods: {
             close() {
@@ -441,9 +449,9 @@
                 this.close();
                 window.history.replaceState({}, this.$page.title, this.initialUrl);
                 this.filterStore.filters = this.initialFilters;
-                this.updateFilters(['found_objects']);
+                this.updateFilters(['total']);
             },                               
-            filter() {                                
+            getData() {                                
                 this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
@@ -462,33 +470,40 @@
             },            
         },
         watch: {
-            isOpen: function (newVal, oldVal) {
-                if (newVal == true && oldVal == false) {
-                    this.initialUrl = usePage().url.value;
-                    this.initialFilters = this.filterStore.filters; 
-                }
+            isOpen: {
+                handler (newVal, oldVal) {
+                    if (newVal == true && oldVal == false) {
+                        this.initialUrl = usePage().url.value;
+                        this.initialFilters = this.filterStore.filters; 
+                    }                    
+                },
+                immediate: true           
             },
             city: {
-                handler(newVal, oldVal) {              
-                    if (oldVal != newVal) {                        
-                        this.filterStore.removeFilter('hotels', false, 'metro');                                       
-                        this.updateFilters(['found_objects', 'metros']);
+                handler(newVal, oldVal) {       
+                    if (oldVal != newVal && oldVal != 'init' && newVal != 'init') {                                         
+                        this.filterStore.removeFilter('hotels', false, 'metro');
+                        this.updateFilters(['total', 'metros']);                                               
                     }                    
-                },               
+                },                               
             },
-            metro: function (newVal, oldVal) {
-                if (oldVal != newVal)
-                    this.updateFilters(['found_objects', 'metros']);                
-            },
-            filterTimestamp: function(newVal, oldVal) {
-                if (newVal >= oldVal) {
-                    if (this.isOpen == false)
-                        this.updateFilters();  
-                    else                 
-                        this.updateFilters(['found_objects']);
-                }                    
-            }
-            
+            metro: function (newVal, oldVal) {                
+                if (oldVal != newVal && newVal != null) {                                     
+                    this.updateFilters(['total']);                  
+                }
+                
+                if (oldVal != null && newVal == null) {
+                    this.updateFilters(['total', 'metros']);
+                }
+            },                     
+            attributes: {
+                handler(newVal, oldVal) {         
+                    if (!_.isEqual(newVal, oldVal)) {                        
+                        this.updateFilters(['total']);                                             
+                    }                    
+                },
+                deep: true
+            },            
         }
     }
 </script>

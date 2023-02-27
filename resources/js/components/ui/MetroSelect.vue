@@ -88,8 +88,8 @@
                     return this.optionsArray ?? [];
                 }
             },
-            selectedOption: function() {
-                return this.filterStore.getFilterValue('hotels', false, 'metro') ?? null;
+            selectedOption: function() {                
+                return this.filterStore.getFilterValue('hotels', false, 'metro');
             }
         },
         emits: ['update:modelValue'],
@@ -102,7 +102,8 @@
             },
             choose(event) {                
                 let value = event.currentTarget.dataset['key'];
-                this.filterStore.updateFilter('hotels', false, 'metro', value, value);
+                if (this.selectedOption != value)
+                    this.filterStore.updateFilter('hotels', false, 'metro', value, value);
                 this.hide();                                               
             },            
             clear() {                
@@ -110,7 +111,7 @@
                 this.filterStore.removeFilter('hotels', false, 'metro');
                 this.hide();             
             },
-            emmitUpdate() {
+            emmitUpdate() {                
                 this.$emit('update:modelValue', this.selectedOption);
             },            
         },

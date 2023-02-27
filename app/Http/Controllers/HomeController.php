@@ -48,14 +48,14 @@ class HomeController extends Controller
     }
 
     public function index(Request $request): Response | ResponseFactory
-    {
+    {        
         return Inertia::render('Home/Index', [
             'model' => [
                 'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($request->route()->uri))->toArray(),
             ],
             'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
             'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
-            'found_objects' => GetNumOfFilteredObjectsAction::run($request->all()),                 
+            'total' => GetNumOfFilteredObjectsAction::run($request->all()),
         ]);
     }
 }

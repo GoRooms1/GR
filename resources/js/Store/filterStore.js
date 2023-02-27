@@ -10,16 +10,20 @@ export const filterStore = reactive({
   ],  
   filters: [],
   titles: [],
-  timestamp: Date.now(),
-  stopHandlChange: false,  
 
   //Getters and Actions
   async init(url) {    
-    this.parceUrlParameters(url);
-    if (this.getFilterValue('hotels', false, 'city') == null) {
+    console.log('init filters');    
+    if (url.substring(url.indexOf("?") + 1).length > 2) {
+      this.parceUrlParameters(url);
+    }
+    else {
+      this.filters = [];
+    }        
+    if (this.getFilterValue('hotels', false, 'city') == null) {      
       let city = await geolocationStore.locate();      
       this.updateFilter('hotels', false, 'city', city, city);
-    }
+    }    
   },
 
   addTitle(key, value) {
@@ -55,33 +59,29 @@ export const filterStore = reactive({
     };    
    
     if (!this.filters.find(el => el.id == filterObj.id)) {
-        if (filterKey == 'city')
-            this.filters.unshift(filterObj);
-        else
-            this.filters.push(filterObj);
-
-        this.updateTimestamp();
-    }          
+        if (filterKey == 'city') {
+          this.filters.unshift(filterObj);
+        }            
+        else {
+          this.filters.push(filterObj);
+        }
+        return true;
+    }    
+    return false;
   },
 
   removeFilter(modelType, isAttribute, filterKey, filterValue) {
     let id = this.getFilterId(modelType, isAttribute, filterKey, filterValue);   
     if (this.filters.find(el => el.id == id)) {
         this.filters = this.filters.filter(el => el.id != id);
-        this.updateTimestamp();                     
-    }       
+        return true;                           
+    }
+    return false;       
   },
 
-  updateTimestamp() {
-    if (this.stopHandlChange == false)
-      this.timestamp = Date.now();
-  },
-
-  updateFilter(modelType, isAttribute, filterKey, filterValue, filterTitle) {
-    this.stopHandlChange = true;
-    this.removeFilter(modelType, isAttribute, filterKey, filterValue);
-    this.stopHandlChange = false;
-    this.addFilter(modelType, isAttribute, filterKey, filterValue, filterTitle);
+  updateFilter(modelType, isAttribute, filterKey, filterValue, filterTitle) {    
+    this.removeFilter(modelType, isAttribute, filterKey, filterValue);    
+    return this.addFilter(modelType, isAttribute, filterKey, filterValue, filterTitle);
   },
 
   getFiltersValues() {
@@ -108,7 +108,7 @@ export const filterStore = reactive({
     return data;
   }, 
 
-  parceUrlParameters(url) {   
+  parceUrlParameters(url) {        
     url = url.substring(url.indexOf("?") + 1);
     let paramsObj = qs.parse(url);
 
@@ -144,7 +144,7 @@ export const filterStore = reactive({
     }
     roomAttributes.forEach(element => {      
       this.addFilter('rooms', true, null, element, this.getTitle(element, element));
-    });
+    });    
   }
   
 

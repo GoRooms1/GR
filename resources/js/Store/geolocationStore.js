@@ -5,6 +5,7 @@ export const geolocationStore = reactive({
   //State
   geolocation: [],
   city: useStorage('city', null),
+  //city: 'Москва',
   defaultCity: 'Москва',
 
   //Getters and Actions

@@ -104,8 +104,7 @@
 
 <script>
     import { useForm, usePage } from '@inertiajs/inertia-vue3'
-    import { filterStore  } from '@/Store/filterStore.js'
-    import { filterResultsStore } from '@/Store/filterResultsStore.js'
+    import { filterStore  } from '@/Store/filterStore.js'    
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
     
@@ -116,8 +115,7 @@
         },
         data() {
             return {
-                filterStore,
-                filterResultsStore,                
+                filterStore,                                
             }
         },
         methods: {

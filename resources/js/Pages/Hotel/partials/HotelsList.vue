@@ -19,7 +19,7 @@
                 <Button @click="loadMore()" classes="mx-auto mt-3">
                     Показать ещё отели
                 </Button>
-            </div>
+            </div>            
         </div>
     </div>
     <div v-if="allHotels.length == 0" class="w-full py-8"></div>
@@ -27,9 +27,9 @@
 </template>
 
 <script>
-    import { filterStore } from '@/Store/filterStore.js'
-    import { filterResultsStore } from '@/Store/filterResultsStore.js'
+    import { filterStore } from '@/Store/filterStore.js'    
     import { usePage } from '@inertiajs/inertia-vue3'
+    import _ from 'lodash'
     import HotelCard from "./HotelCard.vue"
     import Loader from '@/components/ui/Loader.vue'
     import Button from '@/components/ui/Button.vue'
@@ -46,19 +46,27 @@
                 required: false,                
             },
         },
-        mounted() {            
+        mounted() {                 
         },        
         data() {
             return {
-                filterStore,
-                filterResultsStore,
+                filterStore,                
                 allHotels: this.hotels.data ?? [],
-                isLoading: false,                                          
+                isLoading: false,                                                         
             }
         },
-        computed: {            
+        computed: {
+            filters() {
+                return _.cloneDeep(this.filterStore.filters);
+            },                   
         },
         methods: {
+            getData() {                                
+                this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
+                    preserveState: true,
+                    preserveScroll: true,                                       
+                });                
+            },         
             loadMore() {                
                 if (this?.hotels?.meta?.next_page_url) {
                     this.$inertia.get(this.hotels.meta.next_page_url, this.filterStore.getFiltersValues(), {
@@ -73,10 +81,10 @@
                             let params = new URLSearchParams(url.substring(url.indexOf("?") + 1));
                             params.delete('page');
                             let newUrl = route('hotels.index') + '?' + params;                            
-                            window.history.replaceState({}, this.$page.title, newUrl);
+                            window.history.pushState({}, this.$page.title, newUrl);
                         },
                         onStart: () => {this.isLoading = true},
-                        onFinish: () => {this.isLoading = false},
+                        onFinish: () => {this.isLoading = false;},
                     })
                 }
             },
@@ -86,7 +94,15 @@
                 if (this.hotels.meta.current_page == 1) {                    
                     this.allHotels = this.hotels.data ?? [];
                 }                    
-            }
+            },
+            filters: {
+                handler(newVal, oldVal) {                                
+                    if (!_.isEqual(newVal, oldVal) && (usePage().props.value.modals?.filters ?? false) != true) {                                                
+                        this.getData();                      
+                    }                    
+                },
+                deep: true
+            },
         }
     }
 </script>

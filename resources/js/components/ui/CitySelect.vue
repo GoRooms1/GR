@@ -86,8 +86,8 @@
                     return this.optionsArray ?? [];
                 }
             },
-            selectedOption: function() {
-                return this.filterStore.getFilterValue('hotels', false, 'city') ?? null;
+            selectedOption: function() {                
+                return this.filterStore.getFilterValue('hotels', false, 'city');
             },
         },
         methods: {

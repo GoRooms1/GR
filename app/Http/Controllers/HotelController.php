@@ -32,7 +32,7 @@ class HotelController extends Controller
             'hotels' => HotelData::Collection(FilterHotelsAction::run(optional($request->all())['hotels'] ?? [], true)),
             'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
             'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
-            'found_objects' => GetNumOfFilteredObjectsAction::run($request->all()),                       
+            'total' => GetNumOfFilteredObjectsAction::run($request->all()),                                   
         ]);
     }
     
