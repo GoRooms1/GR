@@ -98,7 +98,7 @@
         watch: {
             rooms: function (newVal, oldVal) {                
                 if (this.rooms?.meta?.current_page == 1) {                    
-                    this.allRooms = this.rooms.data ?? [];
+                    this.allRooms = this.rooms.data ?? [];                    
                 }                    
             },
             filters: {

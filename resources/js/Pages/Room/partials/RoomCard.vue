@@ -91,8 +91,8 @@
                 <div class="font-bold text-xl leading-6 cursor-pointer">
                     {{ room.number ? room.number + ' / ' : '' }} {{ room?.name?.length > 1 ? room.name : '' }} {{ room.category?.name?.length > 1 ? ('(' + room.category.name + ')') : '' }}
                 </div>
-                <div class="text-sm leading-4	">
-                    Отель
+                <div class="text-sm leading-4">
+                    {{ room.hotel.type.single_name }}
                     <a class="underline text-[#6170FF] font-bold">{{ room.hotel.name }}</a>
                 </div>
             </a>
