@@ -455,7 +455,8 @@
                 this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
-                    only: ['hotels', 'rooms'],                    
+                    onStart: () => {usePage().props.value.isLoadind = true},
+                    onFinish: () => {usePage().props.value.isLoadind = false},                                       
                 });
                 this.close();
             },

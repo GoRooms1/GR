@@ -1,13 +1,13 @@
 <template>
     <div class="container mx-auto px-4 min-[1920px]:px-[10vw] relative z-10">
-        <div class="flex flex-wrap -mx-4 mb-4">
+        <div v-if="globalLoading == false" class="flex flex-wrap -mx-4 mb-4">
             <hotel-card
                 v-for="hotel in allHotels"
                 :hotel="hotel"
             /> 
         </div>           
     </div>    
-    <div v-if="allHotels.length > 0" class="container mx-auto px-4 min-[1920px]:px-[10vw] mt-8 mb-12">
+    <div v-if="allHotels.length > 0 && globalLoading == false" class="container mx-auto px-4 min-[1920px]:px-[10vw] mt-8 mb-12">
         <div v-if="isLoading" class="text-center">
             <Loader/>
         </div>
@@ -22,7 +22,10 @@
             </div>            
         </div>
     </div>
-    <div v-if="allHotels.length == 0" class="w-full py-8"></div>
+    <div v-if="allHotels.length == 0 || globalLoading == true" class="w-full py-8"></div>
+    <div v-if="globalLoading == true" class="text-center py-8">
+        <Loader/>
+    </div>   
     
 </template>
 
@@ -52,19 +55,25 @@
             return {
                 filterStore,                
                 allHotels: this.hotels.data ?? [],
-                isLoading: false,                                                         
+                isLoading: false,
+                gettinData: false,                                                        
             }
         },
         computed: {
             filters() {
                 return _.cloneDeep(this.filterStore.filters);
-            },                   
+            },
+            globalLoading() {
+                return usePage().props.value.isLoadind ?? false;
+            }                   
         },
         methods: {
             getData() {                                
                 this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
-                    preserveScroll: true,                                       
+                    preserveScroll: true,
+                    onStart: () => {usePage().props.value.isLoadind = true},
+                    onFinish: () => {usePage().props.value.isLoadind = false},                                       
                 });                
             },         
             loadMore() {                
