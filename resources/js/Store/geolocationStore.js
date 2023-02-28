@@ -4,7 +4,8 @@ import { useStorage } from '@vueuse/core'
 export const geolocationStore = reactive({
   //State
   geolocation: [],
-  city: useStorage('city', null),  
+  city: useStorage('city', null),
+  //city: 'Москва',
   defaultCity: 'Москва',
 
   //Getters and Actions

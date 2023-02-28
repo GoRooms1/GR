@@ -8,7 +8,7 @@ use Domain\Hotel\Actions\FilterHotelsCountAction;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static array run()
+ * @method static int run()
  */
 final class GetNumOfFilteredObjectsAction extends Action
 {

@@ -6,9 +6,11 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import FilterPagesService from "@/Services/FilterPagesService";
 import Layout from  '@/Layouts/Layout.vue';
-// import { InertiaProgress } from '@inertiajs/progress'
+import { InertiaProgress } from '@inertiajs/progress'
 
-// InertiaProgress.init()
+InertiaProgress.init({
+    includeCSS: true,    
+});
 createInertiaApp({
     resolve: (name) => {
         const page = resolvePageComponent(`./Pages/${name}.vue`,

@@ -31,6 +31,10 @@
             },
             attrId: String,
         },
+        created() {
+            this.filterStore.addTitle(this.isAttribute ? this.attrId : this.filterKey, this.title);
+            this.emmitUpdate();
+        },
         emits: ['update:modelValue'],
         data() {
             return {

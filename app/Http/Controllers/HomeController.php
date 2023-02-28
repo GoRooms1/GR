@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Actions\RatingCategory\GetRatingCategories;
 use App\Models\Article;
+use Domain\Address\Actions\GetAllMetrosByCityNameAction;
+use Domain\Address\Actions\GetAllUniqueCitiesAction;
+use Domain\Address\DataTransferObjects\CityData;
+use Domain\Address\DataTransferObjects\SimpleMetroData;
+use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Hotel\Models\Hotel;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\Page\Models\Page;
@@ -43,11 +48,14 @@ class HomeController extends Controller
     }
 
     public function index(Request $request): Response | ResponseFactory
-    {
+    {        
         return Inertia::render('Home/Index', [
             'model' => [
                 'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($request->route()->uri))->toArray(),
-            ]                  
+            ],
+            'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
+            'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
+            'total' => GetNumOfFilteredObjectsAction::run($request->all()),
         ]);
     }
 }

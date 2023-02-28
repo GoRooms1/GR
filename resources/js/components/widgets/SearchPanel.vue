@@ -18,7 +18,7 @@
                         </svg>
                         <span class="text-white">На карте</span>
                     </button>
-                    <button @click="filter()" class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
+                    <button @click="getData()" class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6.85718 7H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                             <path d="M6.85718 12.143H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -104,8 +104,7 @@
 
 <script>
     import { useForm, usePage } from '@inertiajs/inertia-vue3'
-    import { filterStore  } from '@/Store/filterStore.js'
-    import { filterResultsStore } from '@/Store/filterResultsStore.js'
+    import { filterStore  } from '@/Store/filterStore.js'    
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
     
@@ -116,19 +115,18 @@
         },
         data() {
             return {
-                filterStore,
-                filterResultsStore,                
+                filterStore,                                
             }
         },
         methods: {
-            filter() {                                
+            getData() {                                
                 this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
                     only: ['hotels', 'rooms'],                                  
                     //onSuccess: () => {},
-                    //onStart: () => {this.isLoading = true},
-                    //onFinish: () => {this.isLoading = false},
+                    onStart: () => {usePage().props.value.isLoadind = true},
+                    onFinish: () => {usePage().props.value.isLoadind = false},
                 });
                 this.closeFilters();
             },

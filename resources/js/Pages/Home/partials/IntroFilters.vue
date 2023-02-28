@@ -1,16 +1,16 @@
 <template>
     <form @submit.prevent="">
         <div class="mx-[1.625rem] relative z-10 flex flex-col items-center">
-            <div class="w-full p-6 bg-[#EAEFFD] rounded-3xl grid grid-cols-2 grid-rows-7 max-[330px]:grid-cols-1 max-[330px]:grid-rows-14 gap-4">            
-                <city-select name="city" searchable placeholder="Город" v-model="city" :options-array="filterStore.locationParams.cities"/>                 
-                <metro-select name="metro" searchable placeholder="Станция метро" v-model="metro" :options-array="filterStore.locationParams.metros"/>
+            <div class="w-full p-6 bg-[#EAEFFD] rounded-3xl grid grid-cols-2 grid-rows-7 max-[330px]:grid-cols-1 max-[330px]:grid-rows-14 gap-4">
+                <city-select searchable placeholder="Город" v-model="city" :options-array="filter.cities ?? []"/>                 
+                <metro-select searchable placeholder="Станция метро" v-model="metro" :options-array="filter.metros ?? []"/>
 
                 <filter-attr-toggle
                     title="Low Cost"
                     img="img/low-cost.svg" toggle-img="img/low-cost2.svg"
                     type="horizontal"
                     attr-model="rooms"
-                    filter-key="low_cost"            
+                    filter-key="low_cost"                   
                 />
                 <filter-attr-toggle
                     title="От 1 часа"
@@ -18,14 +18,14 @@
                     type="horizontal"
                     attr-model="rooms"
                     is-attribute
-                    attr-id="68"                    
+                    attr-id="68"                                                        
                 />                
                 <filter-attr-toggle
                     title="Горящие предложения"
                     img="img/flash.svg" toggle-img="img/flash2.svg"
                     type="horizontal"
                     attr-model="rooms"
-                    filter-key="is_hot"
+                    filter-key="is_hot"                                      
                 />
                 <filter-attr-toggle
                     title="Кешбэк"
@@ -39,7 +39,7 @@
                     type="horizontal"
                     attr-model="rooms"
                     is-attribute
-                    attr-id="52"
+                    attr-id="52"                                       
                 />
                 <filter-attr-toggle
                     title="Джакузи"
@@ -47,7 +47,7 @@
                     type="horizontal"
                     attr-model="rooms"
                     is-attribute
-                    attr-id="65"
+                    attr-id="65"                                       
                 />
             </div>
             <div class="md:w-full w-[calc(100%-48px)] h-full px-[16px] md:py-0 pb-[16px] pt-[10px] bg-white rounded-b-[24px] flex md:flex-row flex-col items-center justify-between gap-[16px] md:max-w-none max-w-[400px]">
@@ -77,15 +77,14 @@
                 </div>
             </div>
         </div> 
-    </form>    
+    </form>
 </template>
 
-<script>
-    import axios from 'axios' 
+<script>     
     import { useForm, usePage } from '@inertiajs/inertia-vue3'
-    import { filterStore } from '@/Store/filterStore.js'
-    import { geolocationStore } from '@/Store/geolocationStore.js'
+    import { filterStore } from '@/Store/filterStore.js'    
     import { numWord } from '@/Services/numWord.js'
+    import _ from 'lodash'    
     import Select from '@/components/ui/Select.vue'
     import Button from '@/components/ui/Button.vue'
     import CitySelect from '@/components/ui/CitySelect.vue'
@@ -99,25 +98,32 @@
             MetroSelect,
             FilterAttrToggle,            
         },
-        mounted() {
-            this.filterStore.init(true);
+        props: {
+            filter: {
+                type: Object,
+                default: {},
+            }
+        },
+        created() {
+            this.filterStore.init(usePage().url.value);                                   
         },        
         data() {
             return {
-                filterStore,
-                geolocationStore,              
+                filterStore,                              
                 form: useForm({}),
-                city: null,
-                metro: null,                
+                propsToUpdate: [],
+                nonAtrributes: ['city', 'metro'],                               
+                city: 'init',
+                metro: 'init',                                          
             }
         },
-        computed: {
-            geolocationCity() {
-                return this.geolocationStore.city;
-            },
+        computed: {            
             foundMessage() {
-                return this.filterStore.found + ' ' + numWord(this.filterStore.found, ['предложение', 'предлжения', 'предложений']);
-            }
+                return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
+            },
+            attributes() {
+                return _.cloneDeep(_.filter(this.filterStore.filters, el => !this.nonAtrributes.includes(el.key)));
+            },       
         },
         methods: {                     
             submit() {
@@ -125,22 +131,43 @@
                     this.filterStore.getFiltersValues()
                 );                          
                 this.form.get(route('hotels.index'));               
-            },
-            locate() {
-                this.geolocationStore.locate();
-            }
+            },            
+            updateFilters(only) {
+                let data = this.filterStore.getFiltersValues();                
+                this.$inertia.get(route('home'), data, {
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                    only: only ?? [],                                      
+                });
+            },            
         },
         watch: {
             city: {
-                handler(newVal, oldVal) {                
-                    if (oldVal != newVal) {
-                        this.geolocationStore.city = newVal;
+                handler(newVal, oldVal) {       
+                    if (oldVal != newVal && oldVal != 'init' && newVal != 'init') {                                         
                         this.filterStore.removeFilter('hotels', false, 'metro');
-                        this.filterStore.getMetros();
+                        this.updateFilters(['total', 'metros']);                                               
+                    }                    
+                },                               
+            },
+            metro: function (newVal, oldVal) {                
+                if (oldVal != newVal && newVal != null) {                                     
+                    this.updateFilters(['total']);                  
+                }
+                
+                if (oldVal != null && newVal == null) {
+                    this.updateFilters(['total', 'metros']);
+                }
+            },                     
+            attributes: {
+                handler(newVal, oldVal) {         
+                    if (!_.isEqual(newVal, oldVal)) {                       
+                        this.updateFilters(['total']);                                             
                     }                    
                 },
-                immediate: true
-            },            
+                deep: true
+            },
         }
     }
 </script>

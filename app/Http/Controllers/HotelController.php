@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Breadcrumbs;
+use Domain\Address\Actions\GetAllMetrosByCityNameAction;
+use Domain\Address\Actions\GetAllUniqueCitiesAction;
+use Domain\Address\DataTransferObjects\CityData;
+use Domain\Address\DataTransferObjects\SimpleMetroData;
+use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Hotel\Actions\FilterHotelsAction;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\Models\Hotel;
@@ -24,7 +29,10 @@ class HotelController extends Controller
             'model' => [
                 'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/hotels'))->toArray(),
             ],
-            'hotels' => HotelData::Collection(FilterHotelsAction::run(optional($request->all())['hotels'] ?? [], true)),                        
+            'hotels' => HotelData::Collection(FilterHotelsAction::run(optional($request->all())['hotels'] ?? [], true)),
+            'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
+            'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
+            'total' => GetNumOfFilteredObjectsAction::run($request->all()),                                   
         ]);
     }
     

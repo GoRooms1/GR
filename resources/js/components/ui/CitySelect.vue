@@ -70,6 +70,9 @@
                 filterStore,                                                               
             }
         },
+        created() {
+            this.emmitUpdate();
+        },
         emits: ['update:modelValue'],
         computed: {
             options: function() {                                
@@ -83,8 +86,8 @@
                     return this.optionsArray ?? [];
                 }
             },
-            selectedOption: function() {
-                return this.filterStore.getFilterValue('hotels', false, 'city') ?? null;
+            selectedOption: function() {                
+                return this.filterStore.getFilterValue('hotels', false, 'city');
             },
         },
         methods: {
@@ -96,8 +99,10 @@
             },
             choose(event) {                
                 let value = event.target.dataset['value'];
-                this.filterStore.updateFilter('hotels', false, 'city', value, value); 
-                this.hide();                                              
+                if (this.selectedOption != value)
+                    this.filterStore.updateFilter('hotels', false, 'city', value, value); 
+                
+                    this.hide();                                              
             },            
             emmitUpdate() {
                 this.$emit('update:modelValue', this.selectedOption);
