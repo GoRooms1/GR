@@ -9,7 +9,7 @@ export const filterStore = reactive({
     'city',
   ],  
   filters: [],
-  titles: [],
+  titles: [], 
 
   //Getters and Actions
   async init(url) {    
@@ -110,7 +110,7 @@ export const filterStore = reactive({
 
   parceUrlParameters(url) {        
     url = url.substring(url.indexOf("?") + 1);
-    let paramsObj = qs.parse(url);
+    let paramsObj = qs.parse(url);   
 
     //Hotel filters
     let hotels = paramsObj.hotels ?? {};
