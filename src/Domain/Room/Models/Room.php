@@ -100,8 +100,8 @@ final class Room extends Model
     protected $casts = [
         'moderate' => 'boolean',
         'is_hot' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d\TH:i:sP',
+        'updated_at' => 'datetime:Y-m-d\TH:i:sP',
     ];
 
     /**
@@ -110,7 +110,7 @@ final class Room extends Model
     protected $with = [
         'attrs',
         'images',
-        'costs',
+        'costs',        
     ];
 
     protected static function boot(): void

@@ -1,11 +1,9 @@
 <template>
-    <div class="container mx-auto px-4 min-[1920px]:px-[10vw] relative z-10">
-        <div v-if="globalLoading == false" class="flex flex-wrap -mx-4 mb-4">
-            <room-card
-                v-for="room in allRooms"
-                :room="room"
-            /> 
-        </div>           
+    <div v-if="globalLoading == false" class="container mx-auto px-4 relative z-10 min-[1920px]:px-[10vw]">
+        <room-card
+            v-for="room in allRooms"
+            :room="room"
+        />           
     </div>    
     <div v-if="allRooms.length > 0 && globalLoading == false" class="container mx-auto px-4 min-[1920px]:px-[10vw] mt-8 mb-12">
         <div v-if="isLoading" class="text-center">

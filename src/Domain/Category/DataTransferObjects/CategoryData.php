@@ -21,19 +21,14 @@ final class CategoryData extends \Parent\DataTransferObjects\Data
         public int $hotel_id,
         public ?int $value,
         public ?Carbon $created_at,
-        public ?Carbon $updated_at,
-        public Lazy|HotelData|null $hotel,
-        #[DataCollectionOf(RoomData::class)]
-        public readonly null|Lazy|DataCollection $rooms,
+        public ?Carbon $updated_at,        
     ) {
     }
 
     public static function fromModel(Category $category): self
     {
         return self::from([
-            ...$category->toArray(),
-            'hotel' => Lazy::whenLoaded('hotel', $category, fn () => HotelData::from($category->hotel)),
-            'rooms' => Lazy::whenLoaded('room', $category, fn () => RoomData::collection($category->rooms)),
+            ...$category->toArray(),            
         ]);
     }
 }

@@ -13,6 +13,8 @@ use Domain\Address\DataTransferObjects\SimpleMetroData;
 use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\Room\Actions\FilterRoomsAction;
+use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Room\Models\Room;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -31,7 +33,7 @@ class RoomController extends Controller
             'model' => [
                 'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/rooms'))->toArray(),
             ],
-            'rooms' => [],
+            'rooms' => RoomData::collection(FilterRoomsAction::run($request->all()['rooms'] ?? [], true)),
             'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
             'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
             'total' => GetNumOfFilteredObjectsAction::run($request->all()),                                   
