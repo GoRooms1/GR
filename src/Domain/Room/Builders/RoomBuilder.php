@@ -24,4 +24,24 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
         })
         ->where('moderate', false);
     }
+
+    public function lowCost(): self
+    {
+        return $this->whereHas('costs', function($query) {
+            $query
+            ->where('value', '!=', '0')
+            ->where('value', '<', function($query) {
+                $query->from('filter_costs')->where('cost_type_id', 1)->selectRaw('MIN(cost)');
+            })            
+            ->whereHas('period', function ($query) {
+                $query->where('cost_type_id', 1);
+            });
+        });
+    }
+
+    public function hotelIn(array $hotels_ids): self
+    {
+        return $this->whereIn('hotel_id', $hotels_ids);
+    }
+    
 }

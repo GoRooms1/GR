@@ -33,7 +33,7 @@ class RoomController extends Controller
             'model' => [
                 'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/rooms'))->toArray(),
             ],
-            'rooms' => RoomData::collection(FilterRoomsAction::run($request->all()['rooms'] ?? [], true)),
+            'rooms' => RoomData::collection(FilterRoomsAction::run($request->all()['rooms'] ?? [], $request->all()['hotels'] ?? [], true)),
             'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
             'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
             'total' => GetNumOfFilteredObjectsAction::run($request->all()),                                   
