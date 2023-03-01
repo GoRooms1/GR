@@ -91,8 +91,7 @@
             <a href="#" class="block mb-6">
                 <div class="font-bold text-xl leading-6 cursor-pointer">
                     {{ room.number ? room.number + ' / ' : '' }} {{ room?.name?.length > 1 ? room.name : '' }} {{ room.category?.name?.length > 1 ? ('(' + room.category.name + ')') : '' }}
-                </div>
-                {{ room.id }}
+                </div>                
                 <div class="text-sm leading-4">
                     {{ room.hotel.type.single_name }}
                     <a class="underline text-[#6170FF] font-bold">{{ room.hotel.name }}</a>
@@ -120,8 +119,7 @@
                     :name="cost.name"
                     :info="cost.info"
                     :description="cost.description"
-                />
-                <!-- <div v-for="cost in room.costs">{{ cost.description }}</div> -->
+                />               
             </div>
             <div class="xl:absolute xl:bottom-4 xl:left-4 xl:right-4">
                 <Button disabled classes="w-full">
