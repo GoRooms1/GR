@@ -11,6 +11,7 @@ use Domain\Hotel\DataTransferObjects\MinCostsData;
 use Domain\Hotel\DataTransferObjects\RoomHotelData;
 use Domain\Image\Models\Image;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
+use Domain\Room\Actions\GetAllRoomCosts;
 use Domain\Room\Actions\GetAllUniqueRoomCosts;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
@@ -58,7 +59,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
             'meta' => Lazy::whenLoaded('meta', $room, fn () => PageDescriptionData::from($room->meta)),
             'hotel' => RoomHotelData::fromModel($room->hotel),            
             'category' => $room->category ? CategoryData::fromModel($room->category) : null,
-            'costs' => Lazy::whenLoaded('costs', $room, fn () => MinCostsData::collection(GetAllUniqueRoomCosts::run($room))),
+            'costs' => Lazy::whenLoaded('costs', $room, fn () => GetAllRoomCosts::run($room)),
         ]);
     }
 }

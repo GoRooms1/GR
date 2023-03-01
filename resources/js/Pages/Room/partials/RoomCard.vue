@@ -8,7 +8,7 @@
             :pagination="pagination"      
             :navigation="navigation"
             :breakpoints="breakpoints"
-            class="swiper-image2 overflow-hidden relative mx-6 lg:mx-0 lg:w-1/2 h-60 lg:h-[256px] lg:rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl lg:rounded-tr-none lg:rounded-bl-2xl"              
+            class="swiper-image2 overflow-hidden relative mx-4 xl:mx-0 xl:w-full h-60 xl:h-80 xl:rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl xl:rounded-tr-none xl:max-w-[550px] swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"              
         >                
             <swiper-slide v-for="image in room.images">                                  
                 <Image class="w-full h-full object-cover" :src="image.path"/>
@@ -92,6 +92,7 @@
                 <div class="font-bold text-xl leading-6 cursor-pointer">
                     {{ room.number ? room.number + ' / ' : '' }} {{ room?.name?.length > 1 ? room.name : '' }} {{ room.category?.name?.length > 1 ? ('(' + room.category.name + ')') : '' }}
                 </div>
+                {{ room.id }}
                 <div class="text-sm leading-4">
                     {{ room.hotel.type.single_name }}
                     <a class="underline text-[#6170FF] font-bold">{{ room.hotel.name }}</a>
@@ -113,7 +114,14 @@
         </div>
         <div class="relative bg-white rounded-bl-2xl rounded-br-2xl xl:rounded-bl-none xl:rounded-tr-2xl px-4 pb-4 pt-8 mx-4 xl:mx-0 xl:w-1/3 xl:h-80 xl:pb-16 xl:flex xl:items-left xl:justify-items-start xl:justify-start">            
             <div class="flex justify-between text-center xl:flex-col xl:text-left xl:m-auto xl:w-full xl:ml-8">                
-                <cost-item v-for="cost in room.costs" :cost="cost"/>
+                <cost-item 
+                    v-for="cost in room.costs" 
+                    :value="cost.value"
+                    :name="cost.name"
+                    :info="cost.info"
+                    :description="cost.description"
+                />
+                <!-- <div v-for="cost in room.costs">{{ cost.description }}</div> -->
             </div>
             <div class="xl:absolute xl:bottom-4 xl:left-4 xl:right-4">
                 <Button disabled classes="w-full">
