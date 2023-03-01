@@ -2,20 +2,21 @@
     <div class="px-4 w-full xl:w-1/3">
         <div class="my-4">
             <swiper                
-                slides-per-view="1"               
+                :slides-per-view="1"               
                 :loop="true"
                 :lazy="true"
                 :preloadImages="false"
                 :pagination="pagination"      
                 :navigation="navigation"
+                :breakpoints="breakpoints"
                 class="swiper-image overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60"              
             >                
                 <swiper-slide v-for="image in hotel.images">                    
                     <Image class="w-full h-full object-cover" :src="image.path"/>
                 </swiper-slide>                
-                <div class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full swiper-button-disabled"></div>
+                <div class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"></div>
                 <div class="swiper-image-next max-[768px]:hidden absolute top-0 right-0 z-10 bg-transparent w-[50%] h-full"></div>
-                <div class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px] swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"></div>
+                <div class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"></div>
             </swiper>
             <div class="bg-white rounded-2xl p-5 shadow-xl	relative z-10">
                 <div class="flex mb-4">
@@ -171,6 +172,11 @@
                 navigation: {
                     nextEl: '.swiper-image-next',
                     prevEl: '.swiper-image-prev',
+                },                
+                breakpoints: {
+                    1024: {
+                        noSwipingClass: "swiper-slide"
+                    }
                 },
             }
         },
