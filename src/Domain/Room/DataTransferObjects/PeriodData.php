@@ -12,8 +12,8 @@ final class PeriodData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
         public ?int $id,
-        public string $start_at,
-        public string $end_at,
+        public ?string $start_at,
+        public ?string $end_at,
         public int $cost_type_id,
         public ?string $description,
         public ?Carbon $created_at,
