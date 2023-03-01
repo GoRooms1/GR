@@ -6,15 +6,42 @@ use App\Jobs\BookRoomJob;
 use App\Models\Booking;
 use App\Models\Form;
 use Carbon\Carbon;
+use Domain\Address\Actions\GetAllMetrosByCityNameAction;
+use Domain\Address\Actions\GetAllUniqueCitiesAction;
+use Domain\Address\DataTransferObjects\CityData;
+use Domain\Address\DataTransferObjects\SimpleMetroData;
+use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
+use Domain\Page\DataTransferObjects\PageData;
+use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\Room\Actions\FilterRoomsAction;
+use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Room\Models\Room;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class RoomController extends Controller
 {
-    public function index(): View
+    
+    public function index(Request $request): Response | ResponseFactory
+    {
+        return Inertia::render('Room/Index', [
+            'model' => [
+                'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/rooms'))->toArray(),
+            ],
+            'rooms' => RoomData::collection(FilterRoomsAction::run($request->all()['rooms'] ?? [], $request->all()['hotels'] ?? [], true)),
+            'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
+            'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
+            'total' => GetNumOfFilteredObjectsAction::run($request->all()),                                   
+        ]);
+    }
+    
+    //Depricated
+    public function index_(): View
     {
         $rooms = Room::paginate(20);
         $hide_filter = false;
