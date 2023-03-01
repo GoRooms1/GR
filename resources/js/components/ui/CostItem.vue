@@ -19,8 +19,11 @@
     </div>
     <div v-if="value == 0" class="xl:mb-2">              
         <div class="text-sm xs:text-base font-bold">
-            <span>{{ description }}</span>  
-        </div>        
+            <span>{{ name }}</span>  
+        </div>
+        <div class="text-xs xs:text-sm">
+            {{ description }}
+        </div>       
     </div>
 
 </template>

@@ -45,14 +45,25 @@ final class MinimumCostsCalculation extends Action
 
         foreach ($types as $type) {
             if (isset($costs[$type->id])) {
+                $value =$costs[$type->id]['value'];
                 $result[] = new MinCostsData(
                     id: $type->id,
-                    name: str_replace('на ', '', mb_strtolower($type->name)),
+                    name: $value > 0 ? str_replace('на ', '', mb_strtolower($type->name)) : mb_strtolower($type->name),
                     info: GenerateInfoDescForPeriod::run($costs[$type->id]['start_at'], $costs[$type->id]['end_at']),
-                    value: $costs[$type->id]['value']
+                    value: $value,
+                    description: $value > 0 ? '' : 'Не предоставляется' 
                 );
             }
-        }
+            else {
+                $result[] = new MinCostsData(
+                    id: $type->id, 
+                    name: $type->name,
+                    info: '',
+                    value: 0,
+                    description: 'Не предоставляется'
+                );
+            }
+        }        
 
         return new DataCollection(MinCostsData::class, $result);        
     }

@@ -127,15 +127,14 @@
                 </div>
             </div>
             <div class="relative bg-white rounded-bl-2xl rounded-br-2xl px-4 pb-4 pt-6 mx-4">
-                <div class="flex justify-between text-center">
-                    <div v-for="cost in (hotel.min_costs ?? [])" class="xl:mb-2">
-                        <div class="text-sm xs:text-base font-bold">
-                            {{ cost.value }} ₽/{{ cost.name }}
-                        </div>
-                        <div class="text-xs xs:text-sm">
-                            {{ cost.info }}
-                        </div>
-                    </div>                    
+                <div class="flex justify-between text-center">                    
+                    <cost-item 
+                        v-for="cost in (hotel.min_costs ?? [])" 
+                        :value="cost.value"
+                        :name="cost.name"
+                        :info="cost.info"
+                        :description="cost.description"
+                    />                     
                 </div>
             </div>
         </div>
@@ -147,6 +146,7 @@
     import SwiperCore, { Pagination, Navigation } from "swiper"
     import CashbackTag from '@/components/ui/CashbackTag.vue'
     import Image from '@/components/ui/Image.vue'
+    import CostItem from '@/components/ui/CostItem.vue'
     
     // install Swiper modules
     SwiperCore.use([Pagination, Navigation]);
@@ -156,6 +156,7 @@
             SwiperSlide,
             CashbackTag,
             Image,
+            CostItem,
         },
         props: {
             hotel: Object,

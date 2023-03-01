@@ -37,8 +37,8 @@ final class GetAllRoomCosts extends Action
             $check = $costs->contains('period.type.id', $type->id);
             if (! $check) {
                 $costData = new MinCostsData(
-                    id: null, 
-                    name: '',
+                    id: $type->id, 
+                    name: $type->name,
                     info: '',
                     value: 0,
                     description: 'Не предоставляется'
