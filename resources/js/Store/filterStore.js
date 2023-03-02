@@ -145,7 +145,6 @@ export const filterStore = reactive({
     roomAttributes.forEach(element => {      
       this.addFilter('rooms', true, null, element, this.getTitle(element, element));
     });    
-  }
-  
+  } 
 
 })

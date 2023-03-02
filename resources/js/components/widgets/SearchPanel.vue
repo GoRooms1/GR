@@ -120,7 +120,7 @@
         },
         methods: {
             getData() {                                
-                this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
+                this.$inertia.get(route('filter'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
                     only: ['hotels', 'rooms'],                                  

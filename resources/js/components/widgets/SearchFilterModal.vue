@@ -392,7 +392,7 @@
 
 <script>
     import SearchPanel from "@/components/widgets/SearchPanel.vue"    
-    import { useForm, usePage } from '@inertiajs/inertia-vue3'
+    import { usePage } from '@inertiajs/inertia-vue3'
     import { filterStore } from '@/Store/filterStore.js'    
     import { numWord } from '@/Services/numWord.js'
     import _ from 'lodash'
@@ -421,8 +421,7 @@
         },        
         data() {
             return {
-                filterStore,              
-                form: useForm({}),
+                filterStore,
                 nonAtrributes: ['city', 'metro'],
                 city: 'init',
                 metro: 'init',
@@ -452,7 +451,7 @@
                 this.updateFilters(['total']);
             },                               
             getData() {                                
-                this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
+                this.$inertia.get(route('filter'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
                     onStart: () => {usePage().props.value.isLoadind = true},
@@ -462,7 +461,7 @@
             },
             updateFilters(only) {
                 let data = this.filterStore.getFiltersValues();                
-                this.$inertia.get(route('hotels.index'), data, {
+                this.$inertia.get(route('filter'), data, {
                     preserveState: true,
                     preserveScroll: true,
                     replace: true,

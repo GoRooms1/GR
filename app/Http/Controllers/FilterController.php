@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Domain\Hotel\Actions\FilterHotelsAction;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
-use Inertia\ResponseFactory;
 
 class FilterController extends Controller
 {
     public function filter(Request $request)
-    {
-        dd(FilterHotelsAction::run($request->all()['hotels']));
-        return Inertia::location(route('home'));
+    {        
+        $isRoomsFilter = $request->all()['isRoomsFilter'] ?? 'false';       
+        if ($isRoomsFilter == 'true') {
+            return redirect()->route('rooms.index', $request->all());
+        }
+        else {
+            return redirect()->route('hotels.index', $request->all());
+        }       
     }
 }
