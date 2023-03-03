@@ -11,6 +11,7 @@ use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Hotel\Actions\FilterHotelsAction;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\ViewModels\HotelViewModel;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Illuminate\Http\Request;
@@ -25,15 +26,7 @@ class HotelController extends Controller
 
     public function index(Request $request): Response | ResponseFactory
     {        
-        return Inertia::render('Hotel/Index', [
-            'model' => [
-                'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/hotels'))->toArray(),
-            ],
-            'hotels' => HotelData::Collection(FilterHotelsAction::run(optional($request->all())['hotels'] ?? [], true)),
-            'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
-            'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
-            'total' => GetNumOfFilteredObjectsAction::run($request->all()),                                   
-        ]);
+        return Inertia::render('Hotel/Index', new HotelViewModel($request->all()));
     }
     
     //Depricated

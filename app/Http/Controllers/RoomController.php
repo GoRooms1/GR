@@ -16,6 +16,7 @@ use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\FilterRoomsAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Room\Models\Room;
+use Domain\Room\ViewModels\RoomViewModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,15 +30,7 @@ class RoomController extends Controller
     
     public function index(Request $request): Response | ResponseFactory
     {
-        return Inertia::render('Room/Index', [
-            'model' => [
-                'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/rooms'))->toArray(),
-            ],
-            'rooms' => RoomData::collection(FilterRoomsAction::run($request->all()['rooms'] ?? [], $request->all()['hotels'] ?? [], true)),
-            'cities' => CityData::collection(GetAllUniqueCitiesAction::run()),
-            'metros' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['hotels']['city'] ?? null)),
-            'total' => GetNumOfFilteredObjectsAction::run($request->all()),                                   
-        ]);
+        return Inertia::render('Room/Index', new RoomViewModel($request->all()));
     }
     
     //Depricated
