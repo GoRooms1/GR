@@ -10,7 +10,7 @@ use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\FilterRoomsAction;
 use Domain\Room\DataTransferObjects\RoomData;
 
-final class RoomViewModel extends \Parent\ViewModels\ViewModel
+final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
     use ExtendedFiltersParamsTrait;
     
@@ -28,6 +28,6 @@ final class RoomViewModel extends \Parent\ViewModels\ViewModel
 
     public function rooms()
     {
-        return RoomData::collection(FilterRoomsAction::run($params['rooms'] ?? [], $params['hotels'] ?? [], true));
+        return RoomData::collection(FilterRoomsAction::run($this->params['rooms'] ?? [], $this->params['hotels'] ?? [], true));
     }
 }

@@ -6,17 +6,8 @@ use App\Jobs\BookRoomJob;
 use App\Models\Booking;
 use App\Models\Form;
 use Carbon\Carbon;
-use Domain\Address\Actions\GetAllMetrosByCityNameAction;
-use Domain\Address\Actions\GetAllUniqueCitiesAction;
-use Domain\Address\DataTransferObjects\CityData;
-use Domain\Address\DataTransferObjects\SimpleMetroData;
-use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
-use Domain\Page\DataTransferObjects\PageData;
-use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
-use Domain\Room\Actions\FilterRoomsAction;
-use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Room\Models\Room;
-use Domain\Room\ViewModels\RoomViewModel;
+use Domain\Room\ViewModels\RoomListViewModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,7 +21,7 @@ class RoomController extends Controller
     
     public function index(Request $request): Response | ResponseFactory
     {
-        return Inertia::render('Room/Index', new RoomViewModel($request->all()));
+        return Inertia::render('Room/Index', new RoomListViewModel($request->all()));
     }
     
     //Depricated

@@ -10,7 +10,7 @@ use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 
-final class HotelViewModel extends \Parent\ViewModels\ViewModel
+final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
     use ExtendedFiltersParamsTrait;
     
@@ -26,7 +26,7 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
         ];
     }
 
-    public function hotels() {
-        return HotelData::Collection(FilterHotelsAction::run($params['hotels'] ?? [], true));
+    public function hotels() {        
+        return HotelData::Collection(FilterHotelsAction::run($this->params['hotels'] ?? [], true));
     }
 }
