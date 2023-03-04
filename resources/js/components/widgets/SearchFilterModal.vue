@@ -12,7 +12,7 @@
                 <div class="lg:block flex flex-col relative">
                     <div class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]">
                         <filter-tag 
-                            v-for="tag in filterStoreCopy.filters ?? []"
+                            v-for="tag in filterStoreCopy?.filters ?? []"
                             :initial-filter-store="filterStoreCopy"
                             :title="tag.title"
                             :attr-model="tag.modelType"
@@ -452,11 +452,10 @@
             city_area: selectGetSetObj('city_area'),           
         },
         methods: {
-            close() {
-                console.log(decodeURI(this.initialUrl));              
-                //window.history.replaceState({}, this.$page.title, this.initialUrl);
-                //usePage().url.value = this.initialUrl;
-                usePage().props.value.modals.filters = false;                                              
+            close() {                              
+                window.history.pushState({}, this.$page.title, this.initialUrl);
+                this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);               
+                usePage().props.value.modals.filters = false;                                             
             },                                       
             getData() {
                 this.filterStore.filters = _.cloneDeep(this.filterStoreCopy.filters);                                
@@ -479,18 +478,13 @@
             },                        
         },
         watch: {
-            isOpen: {
-                handler (newVal, oldVal) {
-                    if (newVal == true && oldVal == false) {
-                        console.log(decodeURI(usePage().url.value));                       
-                        //this.initialUrl = usePage().url.value;                        
-                        this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);                        
-                    }                    
-                },
-                //immediate: true           
+            isOpen: function (newVal, oldVal) {
+                if (newVal == true && (!oldVal || oldVal == false)) {                                           
+                    this.initialUrl = usePage().url.value;                        
+                    this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);                        
+                }                    
             },
-            city: {
-                handler(newVal, oldVal) {       
+            city: function(newVal, oldVal) {       
                     if (oldVal != newVal) {
                         this.metro = null;
                         this.city_area = null;
@@ -498,7 +492,6 @@
                         usePage().props.value.metros = [];
                         this.updateFilters(['total', 'metros', 'city_areas']);                                               
                     }                    
-                },                               
             },
             city_area: function (newVal, oldVal) {
                 if (oldVal != newVal && newVal != null) {                                     
