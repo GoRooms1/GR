@@ -32,8 +32,9 @@
                             <div class="">
                                 <p class="text-[14px] leading-[16px] mb-[8px]">Тип заведения</p>
                                 <filter-select 
-                                    :options-array="filter.hotel_types ?? []" 
+                                    :options-array="$page.props.hotel_types ?? []" 
                                     placeholder="Все"
+                                    left
                                     v-model="hotel_type"
                                 />                                
                                 <button data="items-type" class="w-full mt-[16px] pb-[8px] bg-[#6170FF] rounded-[8px] hidden md:flex items-center flex-col justify-center h-[128px] select-none">
@@ -104,62 +105,16 @@
                                         searchable 
                                         placeholder="Город" 
                                         v-model="city" 
-                                        :options-array="filter.cities ?? []"                                                                          
+                                        :options-array="$page.props.cities ?? []"                                                                          
                                     />
 
-                                    <div data="select-data-div" class="relative md:static z-[3]">
-                                        <button select-data="place" data="button-tab" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between">
-                                            <span select-text="" class="text-[14px] leading-[16px]">Округ</span>
-                                            <svg data="filter-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                            <svg data="filter-close" class="hidden" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <g clip-path="url(#clip0_790_13114)">
-                                                    <path d="M0.999146 0.999203L10.9999 11" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                                    <path d="M0.999146 11L10.9999 0.999203" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                                </g>
-                                                <defs>
-                                                    <clipPath id="clip0_790_13114">
-                                                        <rect width="12" height="12" fill="white"></rect>
-                                                    </clipPath>
-                                                </defs>
-                                            </svg>
-                                        </button>
-                                        <div class="absolute max-[768px]:top-[32px] max-[768px]:right-[-16px] z-100 md:w-[376px] w-[calc(200%+48px)] hidden">
-                                            <div class="flex items-center justify-between bg-white w-full">
-                                                <div class="md:w-[22%] w-[72%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
-                                                <div class="md:w-[73%] w-[24%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
-                                            </div>
-                                            <div class="filter-scrollbar2 p-[16px] bg-white flex flex-col gap-[8px] max-h-[296px] md:max-h-[calc(45vh-48px)] overflow-y-auto rounded-[8px] shadow-xl">
-                                                <div class="bg-white rounded-t-[8px]">
-                                                    <input type="text" placeholder="Округ" class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-[14px] leading-[16px] " wfd-id="id8">
-                                                </div>
-                                                <div class="flex flex-col gap-[8px] rounded-[8px] bg-white">
-                                                    <button select-parent="place" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Восточный
-                                                    </button>
-                                                    <button select-parent="place" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Западный
-                                                    </button>
-                                                    <button select-parent="place" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Северный
-                                                    </button>
-                                                    <button select-parent="place" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Северо-восточный
-                                                    </button>
-                                                    <button select-parent="place" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Северо-западный
-                                                    </button>
-                                                    <button select-parent="place" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Центральный
-                                                    </button>
-                                                    <button select-parent="place" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Центральный
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <city-area-select                                         
+                                        placeholder="Округ"
+                                        v-model="city_area"
+                                        searchable                                        
+                                        :options-array="$page.props.city_areas ?? []"                                        
+                                    />
+
                                     <div data="select-data-div" class="relative md:static z-[2]">
                                         <button select-data="district" data="button-tab" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between">
                                             <span select-text="" class="text-[14px] leading-[16px]">Район</span>
@@ -219,7 +174,7 @@
                                         searchable 
                                         placeholder="Станция метро" 
                                         v-model="metro" 
-                                        :options-array="filter.metros ?? []"
+                                        :options-array="$page.props.metros ?? []"
                                     />
 
                                 </div>
@@ -400,22 +355,47 @@
     import FilterSelect from '@/components/ui/FilterSelect.vue'
     import Button from '@/components/ui/Button.vue'
     import CitySelect from '@/components/ui/CitySelect.vue'
+    import CityAreaSelect from '@/components/ui/CityAreaSelect.vue'
     import MetroSelect from '@/components/ui/MetroSelect.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
 
     const nonAtrributes = [
-        'city', 
+        'city',
+        'city_area',
         'metro', 
-        'hotel_type',
+        'hotel_type',        
     ];
 
+    let selectGetSetObj = function (key) {
+        return {
+                get() {
+                    let val = null;
+                    if (this.filterStoreCopy?.getFilter('hotels', false, key).value) {
+                        val = {
+                            key: this.filterStoreCopy.getFilter('hotels', false, key).value,
+                            name: this.filterStoreCopy.getFilter('hotels', false, key).title
+                        }
+                    }                               
+                    return val;
+                },
+                set(obj) {
+                    if (obj) {    
+                        this.filterStoreCopy.updateFilter('hotels', false, key, obj.key, obj.name);
+                    }
+                    if (obj === null)
+                        this.filterStoreCopy.removeFilter('hotels', false, key);
+                }
+            }
+    };
+    
     export default {
         components: {
             SearchPanel,
             FilterSelect,
             Button,
             CitySelect,
+            CityAreaSelect,
             MetroSelect,
             FilterAttrToggle,
             FilterTag,
@@ -445,7 +425,7 @@
                 return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
             },
             attributes() {
-                return _.cloneDeep(_.filter(this.filterStore.filters, el => !nonAtrributes.includes(el.key)));
+                return _.cloneDeep(_.filter(this.filterStoreCopy?.filters, el => !nonAtrributes.includes(el.key)));
             },
             city: {
                 get() {                    
@@ -468,30 +448,15 @@
                         this.filterStoreCopy.removeFilter('hotels', false, 'metro');
                 }
             },
-            hotel_type: {
-                get() {
-                    let val = null;
-                    if (this.filterStoreCopy?.getFilter('hotels', false, 'hotel_type').value) {
-                        val = {
-                            key: this.filterStoreCopy.getFilter('hotels', false, 'hotel_type').value,
-                            name: this.filterStoreCopy.getFilter('hotels', false, 'hotel_type').title
-                        }
-                    }                               
-                    return val;
-                },
-                set(obj) {
-                    if (obj) {    
-                        this.filterStoreCopy.updateFilter('hotels', false, 'hotel_type', obj.key, obj.name);
-                    }
-                    if (obj === null)
-                        this.filterStoreCopy.removeFilter('hotels', false, 'hotel_type');
-                }
-            },
+            hotel_type: selectGetSetObj('hotel_type'),            
+            city_area: selectGetSetObj('city_area'),           
         },
         methods: {
-            close() {                
-                usePage().props.value.modals.filters = false;
-                window.history.replaceState({}, this.$page.title, this.initialUrl);                
+            close() {
+                console.log(decodeURI(this.initialUrl));              
+                //window.history.replaceState({}, this.$page.title, this.initialUrl);
+                //usePage().url.value = this.initialUrl;
+                usePage().props.value.modals.filters = false;                                              
             },                                       
             getData() {
                 this.filterStore.filters = _.cloneDeep(this.filterStoreCopy.filters);                                
@@ -511,25 +476,38 @@
                     replace: true,
                     only: only ?? [],                   
                 });
-            },            
+            },                        
         },
         watch: {
             isOpen: {
                 handler (newVal, oldVal) {
-                    if (newVal == true && oldVal == false) {                        
-                        this.initialUrl = usePage().url.value;                        
+                    if (newVal == true && oldVal == false) {
+                        console.log(decodeURI(usePage().url.value));                       
+                        //this.initialUrl = usePage().url.value;                        
                         this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);                        
                     }                    
                 },
-                immediate: true           
+                //immediate: true           
             },
             city: {
                 handler(newVal, oldVal) {       
                     if (oldVal != newVal) {
                         this.metro = null;
-                        this.updateFilters(['total', 'metros']);                                               
+                        this.city_area = null;
+                        usePage().props.value.city_areas = [];
+                        usePage().props.value.metros = [];
+                        this.updateFilters(['total', 'metros', 'city_areas']);                                               
                     }                    
                 },                               
+            },
+            city_area: function (newVal, oldVal) {
+                if (oldVal != newVal && newVal != null) {                                     
+                    this.updateFilters(['total']);                  
+                }
+                
+                if (oldVal != null && newVal == null) {
+                    this.updateFilters(['total', 'metros', 'city_areas']);
+                }
             },
             metro: function (newVal, oldVal) {                
                 if (oldVal != newVal && newVal != null) {                                     
@@ -537,14 +515,14 @@
                 }
                 
                 if (oldVal != null && newVal == null) {
-                    this.updateFilters(['total', 'metros']);
+                    this.updateFilters(['total', 'metros', 'city_areas']);
                 }
             },
             hotel_type: function (newVal, oldVal) {
                 if (oldVal != newVal) {                                     
-                    this.updateFilters(['total']);                
-                }
-            },                 
+                    this.updateFilters(['total']);           
+                }                
+            },                         
             attributes: {
                 handler(newVal, oldVal) {         
                     if (!_.isEqual(newVal, oldVal)) {                        

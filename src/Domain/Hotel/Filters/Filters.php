@@ -10,6 +10,7 @@ enum Filters: string
 {
     case Name = 'name';
     case City = 'city';
+    case CityArea = 'city_area';
     case Metro = 'metro';
     case HotelAttributes = 'attributes';
     case Type = 'hotel_type';
@@ -22,6 +23,7 @@ enum Filters: string
             self::Metro => new MetroFilter($value),
             self::HotelAttributes => new HotelAttributeFilter($value),
             self::Type => new TypeFilter($value),
+            self::CityArea => new CityAreaFilter($value),
         };
     }
 }

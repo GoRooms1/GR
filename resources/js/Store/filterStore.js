@@ -84,11 +84,7 @@ export const filterStore = reactive({
     return this.addFilter(modelType, isAttribute, filterKey, filterValue, filterTitle);
   },
 
-  getFiltersValues(filters) {
-    if (filters == null) {
-      filters = this.filters;
-    }
-
+  getFiltersValues() {   
     let data = {
         hotels: {
             attributes: []
@@ -99,7 +95,7 @@ export const filterStore = reactive({
         isRoomsFilter: false,
     };
 
-   filters.forEach(el => {
+    this.filters.forEach(el => {
         if (el.isAttribute)
             data[el.modelType].attributes.push(el.value);
         else

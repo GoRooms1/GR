@@ -1,5 +1,5 @@
 <template>
-    <div v-click-outside="hide" class="relative" :class="collapsed ? 'z-[1]' : 'z-[5]'">
+    <div v-click-outside="hide" class="relative md:static" :class="collapsed ? 'z-[1]' : 'z-[5]'">
         <button @click="toggle()" class="w-full px-[12px] h-[32px] flex items-center justify-between bg-white rounded-[8px]" 
             :class="(options.length == 0 && !searchable) ? 'btn-disabled pointer-events-none' : ''"
         >
@@ -23,12 +23,12 @@
                 </svg>
             </button> 
         </div>                    
-        <div v-if="!collapsed" class="absolute top-[32px] sm:left-0 left-[-16px] z-10 sm:w-full w-[calc(200%+48px)]">
+        <div v-if="!collapsed" class="absolute max-[768px]:top-[32px] max-[768px]:right-[-16px] z-100 md:w-[376px] w-[calc(200%+48px)]">
             <div class="flex items-center justify-between bg-white w-full">               
-                <div class="sm:w-[45%] w-[24%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
-                <div class="sm:w-[45%] w-[72%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
+                <div class="md:w-[22%] w-[72%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
+                <div class="md:w-[73%] w-[24%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
             </div>
-            <div class="filter-scrollbar2 flex flex-col gap-[8px] rounded-[8px] bg-white py-[12px] px-[16px] shadow-xl overflow-y-auto max-h-[296px] md:max-h-[calc(45vh-48px)]">
+            <div class="filter-scrollbar2 p-[16px] bg-white flex flex-col gap-[8px] max-h-[296px] md:max-h-[calc(45vh-48px)] overflow-y-auto rounded-[8px] shadow-xl">
                 <div v-if="searchable" class="bg-white rounded-t-[8px]">
                     <input type="text" :placeholder="placeholder" v-model="searchValue" class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-sm leading-[16px] ">
                 </div>
