@@ -88,7 +88,7 @@
                 }
             },
             value() {
-                return this.filterStore.getFilterValue(this.attrModel, this.isAttribute, this.filterKey, this.attrId);
+                return this.filterStore.getFilter(this.attrModel, this.isAttribute, this.filterKey, this.attrId).value;
             }
         },
         methods: {

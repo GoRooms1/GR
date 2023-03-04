@@ -40,6 +40,7 @@
                 required: true,
             },
             rooms: [Object],
+            hotel_types: Array,
             cities: Array,
             metros: Array,
             total: Number,           
@@ -47,6 +48,7 @@
         computed: {
             filter() {
                 return {
+                    hotel_types: this.hotel_types,
                     cities: this.cities,
                     metros: this.metros,
                     total: this.total,

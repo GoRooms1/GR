@@ -53,7 +53,7 @@
                         attr-id="68"                    
                     />                
                     <filter-attr-toggle
-                        title="Горящие предложения"
+                        title="Горящие"
                         type="small"
                         attr-model="rooms"
                         filter-key="is_hot"

@@ -4,9 +4,13 @@
 
 .select-clear {
     position: absolute;
-    top: 0%;
+    bottom: 100%;
     left: calc(100% - 36px);
-    z-index: 11;
+    z-index: 11;   
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
 }
 
 .small-icon {

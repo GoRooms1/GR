@@ -30,16 +30,21 @@
                 default: false,
             },
             filterValue: [String, Number, Boolean],
+            initialFilterStore: Object,
+        },
+        created() {
+            this.customfilterStore = this.initialFilterStore ?? this.filterStore;
         },
         data() {
             return {
                 filterStore,
+                customfilterStore: this.initialFilterStore ?? this.filterStore,
             }
         },
         methods: {
             close() {
                 if (this.isRemovable()) {
-                    this.filterStore.removeFilter(this.attrModel, this.isAttribute, this.filterKey, this.filterValue);
+                    this.customfilterStore.removeFilter(this.attrModel, this.isAttribute, this.filterKey, this.filterValue);
                 }
             },
             isRemovable() {

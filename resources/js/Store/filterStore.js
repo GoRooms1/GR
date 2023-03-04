@@ -1,7 +1,7 @@
 import { reactive } from 'vue'
 import { useStorage } from '@vueuse/core'
 import qs from 'qs'
-import { geolocationStore } from './geolocationStore.js' 
+import { geolocationStore } from './geolocationStore.js'
 
 export const filterStore = reactive({
   //State
@@ -12,7 +12,7 @@ export const filterStore = reactive({
   titles: [], 
 
   //Getters and Actions
-  async init(url) {    
+  async init(url, params) {    
     console.log('init filters');    
     if (url.substring(url.indexOf("?") + 1).length > 2) {
       this.parceUrlParameters(url);
@@ -20,13 +20,13 @@ export const filterStore = reactive({
     else {
       this.filters = [];
     }        
-    if (this.getFilterValue('hotels', false, 'city') == null) {      
+    if (this.getFilter('hotels', false, 'city').value == null) {      
       let city = await geolocationStore.locate();      
       this.updateFilter('hotels', false, 'city', city, city);
     }    
   },
 
-  addTitle(key, value) {
+  addTitle(key, value) {    
     if (!this.titles.find(el => el.key == key)) {
       this.titles.push({
         key: key,
@@ -43,9 +43,9 @@ export const filterStore = reactive({
     return modelType + (isAttribute ? '.attr_' + filterValue : '.' + filterKey);
   },
 
-  getFilterValue(modelType, isAttribute, filterKey, filterValue) {     
+  getFilter(modelType, isAttribute, filterKey, filterValue) {     
     let id = this.getFilterId(modelType, isAttribute, filterKey, filterValue);
-    return this.filters.find(el => el.id == id)?.value ?? null;
+    return this.filters.find(el => el.id == id) ?? {};
   },  
 
   addFilter(modelType, isAttribute, filterKey, filterValue, filterTitle) { 
@@ -84,7 +84,11 @@ export const filterStore = reactive({
     return this.addFilter(modelType, isAttribute, filterKey, filterValue, filterTitle);
   },
 
-  getFiltersValues() {
+  getFiltersValues(filters) {
+    if (filters == null) {
+      filters = this.filters;
+    }
+
     let data = {
         hotels: {
             attributes: []
@@ -95,7 +99,7 @@ export const filterStore = reactive({
         isRoomsFilter: false,
     };
 
-    this.filters.forEach(el => {
+   filters.forEach(el => {
         if (el.isAttribute)
             data[el.modelType].attributes.push(el.value);
         else
@@ -145,6 +149,6 @@ export const filterStore = reactive({
     roomAttributes.forEach(element => {      
       this.addFilter('rooms', true, null, element, this.getTitle(element, element));
     });    
-  } 
+  },
 
 })

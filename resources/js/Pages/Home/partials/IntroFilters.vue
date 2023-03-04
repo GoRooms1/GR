@@ -82,15 +82,19 @@
     import { usePage } from '@inertiajs/inertia-vue3'
     import { filterStore } from '@/Store/filterStore.js'    
     import { numWord } from '@/Services/numWord.js'
-    import _ from 'lodash'    
-    import Select from '@/components/ui/Select.vue'
+    import _ from 'lodash'
     import Button from '@/components/ui/Button.vue'
     import CitySelect from '@/components/ui/CitySelect.vue'
     import MetroSelect from '@/components/ui/MetroSelect.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
+
+    const nonAtrributes = [
+        'city', 
+        'metro',
+    ];
+
     export default {
-        components: {
-            Select,
+        components: {           
             Button,
             CitySelect,
             MetroSelect,
@@ -107,11 +111,7 @@
         },        
         data() {
             return {
-                filterStore,
-                propsToUpdate: [],
-                nonAtrributes: ['city', 'metro'],                               
-                city: 'init',
-                metro: 'init',                                          
+                filterStore,                           
             }
         },
         computed: {            
@@ -119,7 +119,28 @@
                 return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
             },
             attributes() {
-                return _.cloneDeep(_.filter(this.filterStore.filters, el => !this.nonAtrributes.includes(el.key)));
+                return _.cloneDeep(_.filter(this.filterStore.filters, el => !nonAtrributes.includes(el.key)));
+            },
+            city: {
+                get() {                    
+                    return this.filterStore?.getFilter('hotels', false, 'city').value ?? null;
+                },
+                set(val) {                    
+                    if (val) {
+                        this.filterStore.updateFilter('hotels', false, 'city', val, val); 
+                    }
+                }
+            },
+            metro: {
+                get() {                    
+                    return this.filterStore?.getFilter('hotels', false, 'metro').value ?? null;
+                },
+                set(val) {
+                    if (val)                   
+                        this.filterStore.updateFilter('hotels', false, 'metro', val, val);
+                    if (val === null)
+                        this.filterStore.removeFilter('hotels', false, 'metro');
+                }
             },       
         },
         methods: {                     
@@ -142,8 +163,8 @@
         watch: {
             city: {
                 handler(newVal, oldVal) {       
-                    if (oldVal != newVal && oldVal != 'init' && newVal != 'init') {                                         
-                        this.filterStore.removeFilter('hotels', false, 'metro');
+                    if (oldVal != newVal) {
+                        this.metro = null;
                         this.updateFilters(['total', 'metros']);                                               
                     }                    
                 },                               
@@ -156,7 +177,7 @@
                 if (oldVal != null && newVal == null) {
                     this.updateFilters(['total', 'metros']);
                 }
-            },                     
+            },                    
             attributes: {
                 handler(newVal, oldVal) {         
                     if (!_.isEqual(newVal, oldVal)) {                       

@@ -1,24 +1,11 @@
 <template>
-    <div v-click-outside="hide" class="relative md:static" :class="classes + ' ' + (collapsed ? 'z-[1]' : 'z-[4]') ">       
+    <div v-click-outside="hide" class="relative md:static" :class="collapsed ? 'z-[1]' : 'z-[4]'">       
         <button @click="toggle()" type="button" class="w-full px-[12px] h-[32px] flex items-center justify-between bg-white rounded-[8px]">
             <span class="text-sm leading-[16px]">{{ selectedOption ?  selectedOption : placeholder }}</span>            
-            <svg v-if="collapsed" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block" :class="collapsed ? '' : 'rotate-180'">
                 <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>                 
-        </button>            
-        <button v-if="!collapsed && type == 'intro'" type="button" class="px-[12px] h-[32px] select-clear">
-            <svg   width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_790_13114)">
-                    <path d="M0.999146 0.999203L10.9999 11" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                    <path d="M0.999146 11L10.9999 0.999203" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                </g>
-                <defs>
-                    <clipPath id="clip0_790_13114">
-                        <rect width="12" height="12" fill="white"></rect>
-                    </clipPath>
-                </defs>
-            </svg>
-        </button>                     
+        </button>        
         <div v-if="!collapsed" 
             :class="type == 'intro' ? 'absolute top-[32px] w-[calc(200%+4rem)] max-[330px]:w-[calc(100%+3rem)] left-[-1.5rem]' : 'absolute max-[768px]:top-[32px] max-[768px]:right-[-16px] z-10 md:w-[376px] w-[calc(200%+48px)] block'">
             <div class="flex items-center justify-between bg-white w-full">                
@@ -57,22 +44,20 @@
             placeholder: String,
             searchable: Boolean,
             optionsArray: Array,             
-            classes: String,
+            modelValue: String,
             type: {
                 type: String,
                 default: 'intro',
-            },                                           
+            },                                                    
         },
         data() {
             return {
                 collapsed: true,
                 searchValue: '',
-                filterStore,                                                               
+                filterStore,
+                value: null,                                                               
             }
-        },
-        created() {
-            this.emmitUpdate();
-        },
+        },       
         emits: ['update:modelValue'],
         computed: {
             options: function() {                                
@@ -86,9 +71,9 @@
                     return this.optionsArray ?? [];
                 }
             },
-            selectedOption: function() {                
-                return this.filterStore.getFilterValue('hotels', false, 'city');
-            },
+            selectedOption() {                
+                return this.modelValue ?? this.value;
+            }            
         },
         methods: {
             toggle() {
@@ -99,21 +84,22 @@
             },
             choose(event) {                
                 let value = event.target.dataset['value'];
-                if (this.selectedOption != value)
-                    this.filterStore.updateFilter('hotels', false, 'city', value, value); 
-                
-                    this.hide();                                              
+                if (this.modelValue != value) {
+                    this.emmitUpdate(value);
+                    this.value = value;
+                }
+                                    
+                this.hide();                                              
             },            
-            emmitUpdate() {
-                this.$emit('update:modelValue', this.selectedOption);
+            emmitUpdate(value) {
+                this.$emit('update:modelValue', value);
             },                         
         },
         watch: {
-            selectedOption: function (newVal, oldVal) {
-                if (newVal != oldVal)
-                    this.emmitUpdate();
+            modelValue: function (newVal, oldVal) {
+                if (!newVal && oldVal)
+                    this.value = newVal;
             }
         }
-
     }
 </script>
