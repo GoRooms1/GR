@@ -4,11 +4,11 @@
             :class="(options.length == 0 && !searchable) ? 'btn-disabled pointer-events-none' : ''"
         >
             <span class="text-sm leading-[16px]">{{ getOptionName(selectedOption?.key) ?? placeholder }}</span>            
-            <svg v-if="selectedOption?.key == null || notNull == true" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block" :class="collapsed ? '' : 'rotate-180'">
+            <svg v-if="selectedOption?.key == null" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block" :class="collapsed ? '' : 'rotate-180'">
                 <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>                 
         </button>            
-        <div v-if="selectedOption?.key && notNull == false" class="relative">
+        <div v-if="selectedOption?.key" class="relative">
             <button type="button" @click="clear()" class="px-[12px] h-[32px] select-clear">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_790_13114)">
@@ -52,20 +52,12 @@
         },
         props: {
             placeholder: String,
-            searchable: Boolean,
-            notNull: {
-                type: Boolean,
-                default: false,
-            },           
+            searchable: Boolean,                      
             optionsArray: Array,
             modelValue: {
                 type: Object,
                 default: null,
-            },
-            left: {
-                type: Boolean,
-                default: true,
-            }                                                                            
+            },                                                                        
         },        
         data() {
             return {                              

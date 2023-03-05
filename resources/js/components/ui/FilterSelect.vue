@@ -61,12 +61,14 @@
             modelValue: {
                 type: Object,
                 default: null,
-            },
-            left: {
-                type: Boolean,
-                default: true,
-            }                                                                            
-        },        
+            }                                                                          
+        },
+        mounted() {
+            if (this.notNull == true && !this.selectedOption?.key) {                
+                this.value = this.optionsArray[0];
+                this.emmitUpdate(this.optionsArray[0]);
+            }               
+        },       
         data() {
             return {                               
                 collapsed: true,
