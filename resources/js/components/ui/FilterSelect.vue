@@ -45,8 +45,7 @@
 
 <script>
     import vClickOutside from "click-outside-vue3"
-    import _ from 'lodash'
-    import { filterStore } from '@/Store/filterStore.js'
+    import _ from 'lodash'    
     export default {
         directives: {
             clickOutside: vClickOutside.directive
@@ -69,9 +68,7 @@
             }                                                                            
         },        
         data() {
-            return {
-                filterStore,
-                //options: this.optionsArray,                
+            return {                               
                 collapsed: true,
                 searchValue: '',
                 value: null,                                         
@@ -120,15 +117,7 @@
             },
             getOptionName(key) {
                 return this.optionsArray.find(el => el.key == key)?.name ?? key;
-            },            
-            // search() {                
-            //     let searchValue = this.searchValue.toLowerCase();
-            //     this.options = this.optionsArray.filter(function (el) {                    
-            //         return el.name.toString().toLowerCase().startsWith(searchValue);                 
-            //     }, searchValue);
-            //     if (!searchValue.trim().length)
-            //         this.options = this.optionsArray;
-            // },
+            },
             emmitUpdate(value) {
                 this.$emit('update:modelValue', value);
             }     

@@ -114,61 +114,14 @@
                                         searchable                                        
                                         :options-array="$page.props.city_areas ?? []"                                        
                                     />
-
-                                    <div data="select-data-div" class="relative md:static z-[2]">
-                                        <button select-data="district" data="button-tab" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between">
-                                            <span select-text="" class="text-[14px] leading-[16px]">Район</span>
-                                            <svg data="filter-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                            <svg data="filter-close" class="hidden" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <g clip-path="url(#clip0_790_13114)">
-                                                    <path d="M0.999146 0.999203L10.9999 11" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                                    <path d="M0.999146 11L10.9999 0.999203" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                                </g>
-                                                <defs>
-                                                    <clipPath id="clip0_790_13114">
-                                                        <rect width="12" height="12" fill="white"></rect>
-                                                    </clipPath>
-                                                </defs>
-                                            </svg>
-                                        </button>
-                                        <div class="absolute max-[768px]:top-[32px] max-[768px]:right-[-16px] z-100 md:w-[376px] w-[calc(200%+48px)] hidden">
-                                            <div class="flex items-center justify-between bg-white w-full">
-                                                <div class="md:w-[22%] w-[72%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
-                                                <div class="md:w-[73%] w-[24%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
-                                            </div>
-                                            <div class="filter-scrollbar2 p-[16px] bg-white flex flex-col gap-[8px] max-h-[248px] md:max-h-[calc(45vh-96px)] overflow-y-auto rounded-[8px] shadow-xl">
-                                                <div class="bg-white rounded-t-[8px]">
-                                                    <input type="text" placeholder="Район" class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-[14px] leading-[16px] " wfd-id="id9">
-                                                </div>
-                                                <div class="flex flex-col gap-[8px] rounded-[8px] bg-white">
-                                                    <button select-parent="district" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Академический
-                                                    </button>
-                                                    <button select-parent="district" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Алексеевский
-                                                    </button>
-                                                    <button select-parent="district" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Алтуфьевский
-                                                    </button>
-                                                    <button select-parent="district" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Арбат
-                                                    </button>
-                                                    <button select-parent="district" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Алексеевский
-                                                    </button>
-                                                    <button select-parent="district" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Алтуфьевский
-                                                    </button>
-                                                    <button select-parent="district" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                        Арбат
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
+                                    
+                                    <city-area-select                                         
+                                        placeholder="Район"
+                                        v-model="city_district"
+                                        searchable                                        
+                                        :options-array="$page.props.city_districts ?? []"                                        
+                                    />
+                                    
                                     <metro-select 
                                         type="form" 
                                         searchable 
@@ -356,6 +309,7 @@
     import Button from '@/components/ui/Button.vue'
     import CitySelect from '@/components/ui/CitySelect.vue'
     import CityAreaSelect from '@/components/ui/CityAreaSelect.vue'
+    import CityDistrictSelect from '@/components/ui/CityDistrictSelect.vue'
     import MetroSelect from '@/components/ui/MetroSelect.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
@@ -363,6 +317,7 @@
     const nonAtrributes = [
         'city',
         'city_area',
+        'city_district',
         'metro', 
         'hotel_type',        
     ];
@@ -449,7 +404,8 @@
                 }
             },
             hotel_type: selectGetSetObj('hotel_type'),            
-            city_area: selectGetSetObj('city_area'),           
+            city_area: selectGetSetObj('city_area'),
+            city_district: selectGetSetObj('city_district'),          
         },
         methods: {
             close() {                              
@@ -488,18 +444,26 @@
                     if (oldVal != newVal) {
                         this.metro = null;
                         this.city_area = null;
-                        usePage().props.value.city_areas = [];
-                        usePage().props.value.metros = [];
-                        this.updateFilters(['total', 'metros', 'city_areas']);                                               
+                        this.city_district = null;                        
+                        this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);                                               
                     }                    
             },
             city_area: function (newVal, oldVal) {
+                if (oldVal != newVal && newVal != null) {                                     
+                    this.updateFilters(['total', 'city_districts']);                  
+                }
+                
+                if (oldVal != null && newVal == null) {
+                    this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
+                }
+            },
+            city_district: function (newVal, oldVal) {                
                 if (oldVal != newVal && newVal != null) {                                     
                     this.updateFilters(['total']);                  
                 }
                 
                 if (oldVal != null && newVal == null) {
-                    this.updateFilters(['total', 'metros', 'city_areas']);
+                    this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
                 }
             },
             metro: function (newVal, oldVal) {                
@@ -508,9 +472,9 @@
                 }
                 
                 if (oldVal != null && newVal == null) {
-                    this.updateFilters(['total', 'metros', 'city_areas']);
+                    this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
                 }
-            },
+            },            
             hotel_type: function (newVal, oldVal) {
                 if (oldVal != newVal) {                                     
                     this.updateFilters(['total']);           

@@ -45,7 +45,7 @@
 
 <script>
     import vClickOutside from "click-outside-vue3"
-    import _ from 'lodash'   
+    import _ from 'lodash'    
     export default {
         directives: {
             clickOutside: vClickOutside.directive
@@ -68,7 +68,7 @@
             }                                                                            
         },        
         data() {
-            return {                              
+            return {                                            
                 collapsed: true,
                 searchValue: '',
                 value: null,                                         
