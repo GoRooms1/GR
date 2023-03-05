@@ -8,6 +8,7 @@ use Domain\Address\Actions\GetCityAreasAsParamsAction;
 use Domain\Address\Actions\GetCityDistrictsAsParamsAction;
 use Domain\Hotel\Actions\GetAllHotelTypesAction;
 use Domain\Hotel\DataTransferObjects\HotelTypeSelectData;
+use Domain\Room\Actions\GetCostTypesWithCostRangesAsParamsAction;
 
 trait ExtendedFiltersParamsTrait {
 
@@ -24,9 +25,13 @@ trait ExtendedFiltersParamsTrait {
 
     public function city_districts() {
         $city = $this->params['hotels']['city'] ?? null;
-        $city_area = $this->params['hotels']['city_area'] ?? null;
-        //dd($city, $city_area, GetCityDistrictsAsParamsAction::run($city, $city_area));
+        $city_area = $this->params['hotels']['city_area'] ?? null;        
         return GetCityDistrictsAsParamsAction::run($city, $city_area);
+    }
+
+    public function cost_types() {             
+        //dd(GetCostTypesWithCostRangesAsParamsAction::run());
+        return GetCostTypesWithCostRangesAsParamsAction::run();
     }
     
 }

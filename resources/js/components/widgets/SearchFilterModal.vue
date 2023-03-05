@@ -133,54 +133,11 @@
                                 </div>
                             </div>
                             <div class="md:col-start-4 md:row-start-1 col-start-1 row-start-2">
-                                <p class="text-[14px] leading-[16px] mb-[8px]">Период</p>
-                                <div class="grid gap-[16px]">
-                                    <div class="relative z-[4]">
-                                        <button select-data="time" data="button-tab" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between">
-                                            <span select-text="" class="text-[14px] leading-[16px]">На сутки</span>
-                                            <svg data="filter-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                            <svg data="filter-close" class="hidden" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <g clip-path="url(#clip0_790_13114)">
-                                                    <path d="M0.999146 0.999203L10.9999 11" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                                    <path d="M0.999146 11L10.9999 0.999203" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                                </g>
-                                                <defs>
-                                                    <clipPath id="clip0_790_13114">
-                                                        <rect width="12" height="12" fill="white"></rect>
-                                                    </clipPath>
-                                                </defs>
-                                            </svg>
-                                        </button>
-                                        <div class="absolute top-[32px] sm:left-0 left-[-16px] z-10 sm:w-full w-[calc(200%+48px)] hidden">
-                                            <div class="flex items-center justify-between bg-white w-full">
-                                                <div class="sm:w-[45%] w-[24%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
-                                                <div class="sm:w-[45%] w-[72%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
-                                            </div>
-                                            <div class="flex flex-col gap-[8px] rounded-[8px] bg-white py-[12px] px-[16px] shadow-xl">
-                                                <button select-parent="time" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                    На час
-                                                </button>
-                                                <button select-parent="time" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                    На ночь
-                                                </button>
-                                                <button select-parent="time" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                    На сутки
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button data="price-item" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between md:hover:outline outline-solid outline-[#6170FF] transition duration-150 bg-[#6170FF] text-white">
-                                        <span class="text-[14px] leading-[16px]">До 1500 ₽</span>
-                                    </button>
-                                    <button data="price-item" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between md:hover:outline outline-solid outline-[#6170FF] transition duration-150">
-                                        <span class="text-[14px] leading-[16px]">1500-2500 ₽</span>
-                                    </button>
-                                    <button data="price-item" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between md:hover:outline outline-solid outline-[#6170FF] transition duration-150">
-                                        <span class="text-[14px] leading-[16px]">От 3000 ₽</span>
-                                    </button>
-                                </div>
+                                <p class="text-[14px] leading-[16px] mb-[8px]">Период</p>                                                             
+                                <period-cost-select 
+                                    :options="$page.props.cost_types"
+                                    v-model="period_cost"
+                                />
                             </div>
                             <div class="col-span-2 md:hidden grid gap-[16px]">
                                 <button data="items-type" class="rounded-[8px] bg-white  px-[5px] h-[32px] flex items-center justify-center gap-[8px]">
@@ -231,7 +188,6 @@
                         <div class="shadow-sm">
                             <button data="filter-tab" class="flex items-center justify-between md:px-[16px] md:py-[14px] px-[24px] py-[24px] w-full">
                                 <p class="text-[16px] leading-[19px] font-semibold ">Детально о номере</p>
-
                                 <div data="tab-closed">
                                     <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M1.83301 13.0002L5.99967 17.1669L10.1663 13.0002" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -311,35 +267,35 @@
     import CityAreaSelect from '@/components/ui/CityAreaSelect.vue'
     import CityDistrictSelect from '@/components/ui/CityDistrictSelect.vue'
     import MetroSelect from '@/components/ui/MetroSelect.vue'
+    import PeriodCostSelect from '@/components/ui/PeriodCostSelect.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
 
-    const nonAtrributes = [
+    const customWatchedFields = [
         'city',
         'city_area',
         'city_district',
-        'metro', 
-        'hotel_type',        
+        'metro',
     ];
 
-    let selectGetSetObj = function (key) {
+    let selectGetSetObj = function (model, key) {
         return {
                 get() {
                     let val = null;
-                    if (this.filterStoreCopy?.getFilter('hotels', false, key).value) {
+                    if (this.filterStoreCopy?.getFilter(model, false, key).value) {
                         val = {
-                            key: this.filterStoreCopy.getFilter('hotels', false, key).value,
-                            name: this.filterStoreCopy.getFilter('hotels', false, key).title
+                            key: this.filterStoreCopy.getFilter(model, false, key).value,
+                            name: this.filterStoreCopy.getFilter(model, false, key).title
                         }
                     }                               
                     return val;
                 },
                 set(obj) {
                     if (obj) {    
-                        this.filterStoreCopy.updateFilter('hotels', false, key, obj.key, obj.name);
+                        this.filterStoreCopy.updateFilter(model, false, key, obj.key, obj.name);
                     }
                     if (obj === null)
-                        this.filterStoreCopy.removeFilter('hotels', false, key);
+                        this.filterStoreCopy.removeFilter(model, false, key);
                 }
             }
     };
@@ -352,6 +308,7 @@
             CitySelect,
             CityAreaSelect,
             MetroSelect,
+            PeriodCostSelect,
             FilterAttrToggle,
             FilterTag,
         },
@@ -369,7 +326,7 @@
             return {
                 filterStore,
                 initialUrl: usePage().url.value,                
-                filterStoreCopy: _.cloneDeep(this.filterStore),
+                filterStoreCopy: _.cloneDeep(this.filterStore),                
             }
         },
         computed: {
@@ -380,7 +337,7 @@
                 return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
             },
             attributes() {
-                return _.cloneDeep(_.filter(this.filterStoreCopy?.filters, el => !nonAtrributes.includes(el.key)));
+                return _.cloneDeep(_.filter(this.filterStoreCopy?.filters, el => !customWatchedFields.includes(el.key)));
             },
             city: {
                 get() {                    
@@ -403,9 +360,10 @@
                         this.filterStoreCopy.removeFilter('hotels', false, 'metro');
                 }
             },
-            hotel_type: selectGetSetObj('hotel_type'),            
-            city_area: selectGetSetObj('city_area'),
-            city_district: selectGetSetObj('city_district'),          
+            hotel_type: selectGetSetObj('hotels', 'hotel_type'),            
+            city_area: selectGetSetObj('hotels', 'city_area'),
+            city_district: selectGetSetObj('hotels', 'city_district'),
+            period_cost: selectGetSetObj('rooms', 'period_cost'),         
         },
         methods: {
             close() {                              
@@ -424,8 +382,8 @@
                 this.close();
             },
             updateFilters(only) {
-                let data = this.filterStoreCopy.getFiltersValues();              
-                this.$inertia.get(route('filter'), data, {
+                let data = this.filterStoreCopy.getFiltersValues();                          
+                this.$inertia.get(route(route().current()), data, {
                     preserveState: true,
                     preserveScroll: true,
                     replace: true,
@@ -474,12 +432,7 @@
                 if (oldVal != null && newVal == null) {
                     this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
                 }
-            },            
-            hotel_type: function (newVal, oldVal) {
-                if (oldVal != newVal) {                                     
-                    this.updateFilters(['total']);           
-                }                
-            },                         
+            },                    
             attributes: {
                 handler(newVal, oldVal) {         
                     if (!_.isEqual(newVal, oldVal)) {                        

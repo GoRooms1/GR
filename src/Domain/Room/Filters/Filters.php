@@ -13,6 +13,7 @@ enum Filters: string
     case RoomAttributes = 'attributes';
     case IsHot = 'is_hot';
     case LowCost = 'low_cost';
+    case PeriodCost = 'period_cost';
 
     public function createFilter(string $value): Filter
     {        
@@ -20,6 +21,7 @@ enum Filters: string
             self::RoomAttributes => new RoomAttributeFilter($value),
             self::IsHot => new IsHotFilter($value),
             self::LowCost => new LowCostFilter($value),
+            self::PeriodCost => new PeriodCostFilter($value),
         };
     }
 }

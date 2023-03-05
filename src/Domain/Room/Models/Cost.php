@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\WithData;
 
@@ -63,6 +64,11 @@ final class Cost extends Model
     public function period(): BelongsTo
     {
         return $this->belongsTo(Period::class);
+    }
+
+    public function costType(): HasOneThrough
+    {
+        return $this->hasOneThrough(Period::class, CostType::class);
     }
 
     protected static function newFactory(): CostFactory
