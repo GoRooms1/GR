@@ -76,10 +76,8 @@
             close() {
                 if (this.removable == true) {
                     this.$emit('tag-closed', {
-                        modelType: this.filterModel,
-                        isAttribute: this.isAttribute,
-                        key: this.filterKey,
-                        value: this.filterValue,
+                        modelType: this.filterModel,                        
+                        key: this.filterKey,                        
                     });                    
                 }
             }

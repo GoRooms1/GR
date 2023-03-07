@@ -129,7 +129,7 @@
                                                 :title="attribute.name"                                    
                                                 type="small"
                                                 :initial-value="attribute.id"
-                                                :model-value="filterStoreCopy?.getFilterValue('hotels', true, null, attribute.id)"
+                                                :model-value="filterStoreCopy?.getFilterValue('hotels','attr_'+attribute.id)"
                                                 @update:modelValue="(event) => attributeHandler('hotels', event, attribute.id)"                                                              
                                             />
                                         </div>                                
@@ -148,7 +148,7 @@
                                                 :title="attribute.name"                                    
                                                 type="small"
                                                 :initial-value="attribute.id"
-                                                :model-value="filterStoreCopy?.getFilterValue('rooms', true, null, attribute.id)"
+                                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_'+attribute.id)"
                                                 @update:modelValue="(event) => attributeHandler('rooms', event, attribute.id)"                  
                                             />
                                         </div>                                
@@ -213,13 +213,13 @@
     let filterGetSetObj = function (model, key) {
         return {
                 get() {                                           
-                    return this.filterStoreCopy?.getFilterValue(model, false, key);
+                    return this.filterStoreCopy?.getFilterValue(model, key);
                 },
                 set(val) {
                     if (val)    
                         this.filterStoreCopy.updateFilter(model, false, key, val);                    
                     if (val === null)
-                        this.filterStoreCopy.removeFilter(model, false, key);
+                        this.filterStoreCopy.removeFilter(model, key);
                 }
             }
     };
@@ -299,14 +299,14 @@
             },            
             attributeHandler(modelType, filterValue, attrID) {                
                 if (filterValue == null)
-                    this.filterStoreCopy.removeFilter(modelType, true, null, attrID);
+                    this.filterStoreCopy.removeFilter(modelType, 'attr_'+attrID);
                 else
-                    this.filterStoreCopy.addFilter(modelType, true, null, attrID);
+                    this.filterStoreCopy.addFilter(modelType, true, 'attr_'+attrID, attrID);
 
                 this.updateFilters(['total']);
             },
             closeTag(obj) {                
-                this.filterStoreCopy.removeFilter(obj.modelType, obj.isAttribute, obj.key, obj.value);
+                this.filterStoreCopy.removeFilter(obj.modelType, obj.key);
                 this.updateFilters(['total']);
             },                  
         },

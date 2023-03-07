@@ -49,7 +49,7 @@
                         title="От 1 часа"
                         type="small"
                         :initial-value="68"
-                        :model-value="filterStore.getFilterValue('rooms', true, null, 68)"
+                        :model-value="filterStore.getFilterValue('rooms', 'attr_68')"
                         @update:modelValue="(event) => attributeHandler('rooms', event, 68)"                                           
                     />                
                     <filter-attr-toggle
@@ -67,14 +67,14 @@
                         title="Арт дизайн"
                         type="small"
                         :initial-value="52"
-                        :model-value="filterStore.getFilterValue('rooms', true, null, 52)"
+                        :model-value="filterStore.getFilterValue('rooms', 'attr_52')"
                         @update:modelValue="(event) => attributeHandler('rooms', event, 52)"                        
                     />
                     <filter-attr-toggle
                         title="Джакузи"
                         type="small"
                         :initial-value="65"
-                        :model-value="filterStore.getFilterValue('rooms', true, null, 65)"
+                        :model-value="filterStore.getFilterValue('rooms', 'attr_65')"
                         @update:modelValue="(event) => attributeHandler('rooms', event, 65)"                        
                     />
                 </div>
@@ -112,13 +112,13 @@
     let filterGetSetObj = function (model, key) {
         return {
                 get() {                                           
-                    return this.filterStore.getFilterValue(model, false, key);
+                    return this.filterStore.getFilterValue(model, key);
                 },
                 set(val) {
                     if (val)    
                         this.filterStore.updateFilter(model, false, key, val);                    
                     if (val === null)
-                        this.filterStore.removeFilter(model, false, key);
+                        this.filterStore.removeFilter(model, key);
                 }
             }
     };
@@ -157,12 +157,12 @@
             },
             attributeHandler(modelType, filterValue, attrID) {                
                 if (filterValue == null)
-                    this.filterStore.removeFilter(modelType, true, null, attrID);
+                    this.filterStore.removeFilter(modelType, 'attr_'+attrID);
                 else
-                    this.filterStore.addFilter(modelType, true, null, attrID);
+                    this.filterStore.addFilter(modelType, true, 'attr_'+attrID, attrID);
             },
             closeTag(obj) {                
-                this.filterStore.removeFilter(obj.modelType, obj.isAttribute, obj.key, obj.value);               
+                this.filterStore.removeFilter(obj.modelType, obj.key);               
             }, 
         }
 
