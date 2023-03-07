@@ -1,30 +1,30 @@
 <template>    
     <div class="mx-[1.625rem] relative z-10 flex flex-col items-center">
         <div class="w-full p-6 bg-[#EAEFFD] rounded-3xl grid grid-cols-2 grid-rows-7 max-[330px]:grid-cols-1 max-[330px]:grid-rows-14 gap-4">
-            <city-select searchable placeholder="Город" v-model="city" :options-array="filter.cities ?? []"/>                 
-            <metro-select searchable placeholder="Станция метро" v-model="metro" :options-array="filter.metros ?? []"/>
+            <city-select searchable placeholder="Город" v-model="city" :options-array="$page.props.cities ?? []"/>                 
+            <metro-select searchable placeholder="Станция метро" v-model="metro" :options-array="$page.props.metros ?? []"/>
 
             <filter-attr-toggle
                 title="Low Cost"
                 img="img/low-cost.svg" toggle-img="img/low-cost2.svg"
                 type="horizontal"
-                attr-model="rooms"
-                filter-key="low_cost"                   
+                initial-value=true                                        
+                v-model="low_cost"                   
             />
             <filter-attr-toggle
                 title="От 1 часа"
                 img="img/hour.svg" toggle-img="img/hour2.svg"
                 type="horizontal"
-                attr-model="rooms"
-                is-attribute
-                attr-id="68"                                                        
+                :initial-value="68"
+                :model-value="filterStore.getFilterValue('rooms', true, null, 68)"
+                @update:modelValue="(event) => attributeHandler('rooms', event, 68)"                                                     
             />                
             <filter-attr-toggle
                 title="Горящие предложения"
                 img="img/flash.svg" toggle-img="img/flash2.svg"
                 type="horizontal"
-                attr-model="rooms"
-                filter-key="is_hot"                                      
+                initial-value=true                                        
+                v-model="is_hot"                                      
             />
             <filter-attr-toggle
                 title="Кешбэк"
@@ -36,17 +36,17 @@
                 title="Арт дизайн"
                 img="img/art.svg" toggle-img="img/art2.svg"
                 type="horizontal"
-                attr-model="rooms"
-                is-attribute
-                attr-id="52"                                       
+                :initial-value="52"
+                :model-value="filterStore.getFilterValue('rooms', true, null, 52)"
+                @update:modelValue="(event) => attributeHandler('rooms', event, 52)"                                       
             />
             <filter-attr-toggle
                 title="Джакузи"
                 img="img/jacuzzi.svg" toggle-img="img/jacuzzi2.svg"
                 type="horizontal"
-                attr-model="rooms"
-                is-attribute
-                attr-id="65"                                       
+                :initial-value="65"
+                :model-value="filterStore.getFilterValue('rooms', true, null, 65)"
+                @update:modelValue="(event) => attributeHandler('rooms', event, 65)"                                       
             />
         </div>
         <div class="md:w-full w-[calc(100%-48px)] h-full px-[16px] md:py-0 pb-[16px] pt-[10px] bg-white rounded-b-[24px] flex md:flex-row flex-col items-center justify-between gap-[16px] md:max-w-none max-w-[400px]">
@@ -88,10 +88,19 @@
     import MetroSelect from '@/components/ui/MetroSelect.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
 
-    const nonAtrributes = [
-        'city', 
-        'metro',
-    ];
+    let filterGetSetObj = function (model, key) {
+        return {
+                get() {                                           
+                    return this.filterStore.getFilterValue(model, false, key);
+                },
+                set(val) {
+                    if (val)    
+                        this.filterStore.updateFilter(model, false, key, val);                    
+                    if (val === null)
+                        this.filterStore.removeFilter(model, false, key);
+                }
+            }
+    };
 
     export default {
         components: {           
@@ -100,11 +109,7 @@
             MetroSelect,
             FilterAttrToggle,            
         },
-        props: {
-            filter: {
-                type: Object,
-                default: {},
-            }
+        props: {           
         },
         created() {
             this.filterStore.init(usePage().url.value);                                   
@@ -121,27 +126,10 @@
             attributes() {
                 return _.cloneDeep(_.filter(this.filterStore.filters, el => !nonAtrributes.includes(el.key)));
             },
-            city: {
-                get() {                    
-                    return this.filterStore?.getFilter('hotels', false, 'city').value ?? null;
-                },
-                set(val) {                    
-                    if (val) {
-                        this.filterStore.updateFilter('hotels', false, 'city', val, val); 
-                    }
-                }
-            },
-            metro: {
-                get() {                    
-                    return this.filterStore?.getFilter('hotels', false, 'metro').value ?? null;
-                },
-                set(val) {
-                    if (val)                   
-                        this.filterStore.updateFilter('hotels', false, 'metro', val, val);
-                    if (val === null)
-                        this.filterStore.removeFilter('hotels', false, 'metro');
-                }
-            },       
+            city: filterGetSetObj('hotels', 'city'),
+            metro: filterGetSetObj('hotels', 'metro'),
+            is_hot: filterGetSetObj('rooms', 'is_hot'),
+            low_cost: filterGetSetObj('rooms', 'low_cost'), 
         },
         methods: {                     
             getData() {
@@ -158,6 +146,14 @@
                     replace: true,
                     only: only ?? [],                                      
                 });
+            },
+            attributeHandler(modelType, filterValue, attrID) {             
+                if (filterValue == null)
+                    this.filterStore.removeFilter(modelType, true, null, attrID);
+                else
+                    this.filterStore.addFilter(modelType, true, null, attrID);
+
+                this.updateFilters(['total']);
             },            
         },
         watch: {
@@ -178,13 +174,15 @@
                     this.updateFilters(['total', 'metros']);
                 }
             },                    
-            attributes: {
-                handler(newVal, oldVal) {         
-                    if (!_.isEqual(newVal, oldVal)) {                       
-                        this.updateFilters(['total']);                                             
-                    }                    
-                },
-                deep: true
+            is_hot: function (newVal, oldVal) {                
+                if (oldVal != newVal) {                                     
+                    this.updateFilters(['total']);                  
+                }
+            },
+            low_cost: function (newVal, oldVal) {                
+                if (oldVal != newVal) {                                     
+                    this.updateFilters(['total']);                  
+                }
             },
         }
     }

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isOpen" data="modal-search-filter" class="items-center justify-center fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex">
+    <div v-if="isOpen" class="items-center justify-center fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex">
         <div class="flex flex-grow flex-col lg:gap-[8px] gap-[32px] max-w-[890px] w-full pb-[15px] md:overflow-hidden max-[768px]:pb-[40px] max-[768px]:pt-[40px] pt-[15px] overflow-x-hidden scrollbar overflow-y-auto md:px-[20px] px-0 h-[100%] relative ">
             <button @click="close()" class="absolute right-0 max-[768px]:right-[10px] top-[15px] max-[768px]:top-0 w-[32px] h-[32px] md:bg-white bg-transparent rounded-[8px] flex items-center justify-center">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,20 +13,20 @@
                     <div class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]">
                         <filter-tag 
                             v-for="tag in filterStoreCopy?.filters ?? []"
-                            :initial-filter-store="filterStoreCopy"
-                            :title="tag.title"
-                            :attr-model="tag.modelType"
+                            :filter-model="tag.modelType"
                             :filter-key="tag.key"
                             :is-attribute="tag.isAttribute"
-                            :filter-value="tag.value"                        
+                            :filter-value="tag.value"
+                            :removable="tag.key == 'city' ? false : true"
+                            @tag-closed="(event) => closeTag(event)"                       
                         />					
                     </div>
                 </div>
             </div>            
            
-            <div class="max-w-[832px] mx-auto w-full px-[16px] max-[768px]:mb-[40px] md:h-full">
-                <div data="filter-content" class="scrollbar overflow-y-auto max-h-auto max-w-[820px] bg-transparent" style="max-height: 904px;">
-                    <div data="filter-main" class="bg-[#EAEFFD] rounded-t-[16px] max-w-[800px] w-full md:rounded-b-none rounded-b-[16px]">
+            <div class="max-w-[832px] mx-auto w-full px-[16px] max-[768px]:mb-[40px] md:h-full" >
+                <div class="max-h-auto max-w-[820px] bg-transparent" >
+                    <div class="bg-[#EAEFFD] rounded-t-[16px] max-w-[800px] w-full md:rounded-b-none rounded-b-[16px] scrollbar overflow-y-auto" :style="'max-height: '+windowHeight+'px;'">
                         <p class="px-[16px] py-[15px] text-[16px] leading-[19px] font-semibold">Фильтры</p>
                         <div class="grid md:grid-cols-4 grid-cols-2  gap-[16px] p-[16px] bg-[#EAEFFD] shadow-sm">
                             <div class="">
@@ -37,64 +37,28 @@
                                     left
                                     v-model="hotel_type"
                                 />                                
-                                <button data="items-type" class="w-full mt-[16px] pb-[8px] bg-[#6170FF] rounded-[8px] hidden md:flex items-center flex-col justify-center h-[128px] select-none">
-                                    <img class="mt-[18px] max-w-full" src="img/flash2.svg" alt="flash">
-                                    <span class="text-[14px] leading-[16px] text-white mt-auto px-[5px] text-center">Горящие предложения</span>
-                                </button>
+                                <div class="hidden md:flex w-full">
+                                    <filter-attr-toggle
+                                        title="Горящие предложения"
+                                        img="img/flash.svg" toggle-img="img/flash2.svg"
+                                        type="vertical"
+                                        initial-value=true                                        
+                                        v-model="is_hot"                
+                                    />
+                                </div>                                                                                        
                             </div>
                             <div class="">
-                                <p class="text-[14px] leading-[16px] mb-[8px]">Рейтинг</p>
-                                <div class="relative z-[5]">
-                                    <button select-data="rating" data="button-tab" class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between">
-                                        <div class="flex items-center gap-[8px]">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10 14.1667L5 16.6667L6.25 11.6667L2.5 7.5L7.91667 7.08333L10 2.5L12.0833 7.08333L17.5 7.5L13.75 11.6667L15 16.6667L10 14.1667Z" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                            <span select-text="" class="text-[14px] leading-[16px]">Любой</span>
-                                        </div>
-                                        <svg data="filter-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                        <svg data="filter-close" class="hidden" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_790_13114)">
-                                                <path d="M0.999146 0.999203L10.9999 11" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                                <path d="M0.999146 11L10.9999 0.999203" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_790_13114">
-                                                    <rect width="12" height="12" fill="white"></rect>
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                    <div class="absolute top-[32px] sm:left-0 right-[-16px] z-10 sm:w-full w-[calc(200%+48px)] hidden">
-                                        <div class="flex items-center justify-between bg-white w-full">
-                                            <div class="sm:w-[45%] w-[72%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
-                                            <div class="sm:w-[45%] w-[26%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
-                                        </div>
-                                        <div class="flex flex-col gap-[8px] rounded-[8px] bg-white py-[12px] px-[16px] shadow-xl">
-                                            <button select-parent="rating" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                Любой
-                                            </button>
-                                            <button select-parent="rating" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                6+
-                                            </button>
-                                            <button select-parent="rating" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                7+
-                                            </button>
-                                            <button select-parent="rating" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                8+
-                                            </button>
-                                            <button select-parent="rating" class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
-                                                9+
-                                            </button>
-                                        </div>
-                                    </div>
+                                <p class="text-[14px] leading-[16px] mb-[8px]">Рейтинг</p>                                
+                                <rating-select/>
+                                <div class="hidden md:flex w-full">
+                                    <filter-attr-toggle
+                                        title="Кешбэк"
+                                        img="img/cashback.svg" toggle-img="img/cashback2.svg"
+                                        type="vertical"                                        
+                                        disabled              
+                                    />
                                 </div>
-                                <button data="items-type" class="w-full mt-[16px] pb-[8px] bg-white rounded-[8px] md:flex hidden items-center flex-col justify-center h-[128px] select-none">
-                                    <img class="mt-[19px] max-w-full" src="img/cashback.svg" alt="cashback">
-                                    <span class="text-[14px] leading-[16px] mt-auto">Кешбэк</span>
-                                </button>
+                                
                             </div>
                             <div>
                                 <p class="text-[14px] leading-[16px] mb-[8px]">Расположение</p>
@@ -140,92 +104,65 @@
                                 />
                             </div>
                             <div class="col-span-2 md:hidden grid gap-[16px]">
-                                <button data="items-type" class="rounded-[8px] bg-white  px-[5px] h-[32px] flex items-center justify-center gap-[8px]">
-                                    <img src="img/cashback-small.svg" alt="cashback">
-                                    <span class="text-[14px] leading-[16px] ">Программа кешбэк</span>
-                                </button>
-                                <button data="items-type" class="rounded-[8px] bg-[#6170FF] px-[5px] h-[32px] flex items-center justify-center gap-[8px]">
-                                    <img src="img/flash-small2.svg" alt="flash">
-                                    <span class="text-[14px] leading-[16px] text-white">Горящие предложения</span>
-                                </button>
+                                <filter-attr-toggle
+                                    title="Программа кешбэк"
+                                    img="img/cashback.svg" toggle-img="img/cashback2.svg"
+                                    type="small"                                    
+                                    disabled                   
+                                />
+                                <filter-attr-toggle
+                                    title="Горящие предложения"
+                                    img="img/flash.svg" toggle-img="img/flash2.svg"
+                                    type="small"
+                                    initial-value=true                                        
+                                    v-model="is_hot"                   
+                                />                                
                             </div>
-                        </div>
-                        <div class="shadow-sm">
-                            <button data="filter-tab" class="flex items-center justify-between md:px-[16px] px-[24px] md:py-[14px] py-[24px] w-full">
-                                <p class="text-[16px] leading-[19px] font-semibold">Детально об отеле</p>
-                                <div data="tab-closed">
-                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1.83301 13.0002L5.99967 17.1669L10.1663 13.0002" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M10.167 7.16692L6.00033 3.00025L1.83366 7.16692" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </div>
-                                <div data="tab-open" class="hidden">
-                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M10.1667 17.1668L6.00002 13.0001L1.83335 17.1668" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M1.83386 2.99982L6.00053 7.16648L10.1672 2.99982" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </div>
-                            </button>
-                            <div class="maxh overflow-hidden">
-                                <span class="inline-block md:pt-[16px] pt-0 md:px-[16px] px-[24px] text-[16px] leading-[19px]">Удобства</span>
-                                <div class="flex flex-wrap md:p-[8px] p-[16px]">
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Услуги прачечной</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Оплата картой</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Wi-Fi</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">10 минут до&nbsp;метро</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">5 минут до&nbsp;метро</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Доставка еды</button>
-                                </div>
-                                <span class="text-[16px] md:px-[16px] px-[24px] leading-[19px]">Парковка</span>
-                                <div class="flex flex-wrap md:p-[8px] md:pb-[24px] pb-[16px] p-[16px]">
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Городская</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Платная</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Бесплатная</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Отеля</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="shadow-sm">
-                            <button data="filter-tab" class="flex items-center justify-between md:px-[16px] md:py-[14px] px-[24px] py-[24px] w-full">
-                                <p class="text-[16px] leading-[19px] font-semibold ">Детально о номере</p>
-                                <div data="tab-closed">
-                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1.83301 13.0002L5.99967 17.1669L10.1663 13.0002" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M10.167 7.16692L6.00033 3.00025L1.83366 7.16692" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </div>
-                                <div data="tab-open" class="hidden">
-                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M10.1667 17.1668L6.00002 13.0001L1.83335 17.1668" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M1.83386 2.99982L6.00053 7.16648L10.1672 2.99982" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </div>
-
-                            </button>
-                            <div class="maxh overflow-hidden">
-                                <span class="inline-block md:px-[16px] px-[24px] text-[16px] leading-[19px] md:pt-[16px] pt-0">Особенности номера</span>
-                                <div class="flex flex-wrap md:p-[8px] p-[16px]">
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Двухкомнатный</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Ультрафиолетовая лампа</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Звукоизоляция</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Пилон</button>
-                                </div>
-                                <span class="inline-block md:px-[16px] px-[24px] text-[16px] leading-[19px]">В&nbsp;ванной комнате</span>
-                                <div class="flex flex-wrap md:p-[8px] p-[16px] md:pb-[24px] pb-[16px]">
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Общий санузел</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Тапочки</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Фен</button>
-                                    <button clck-btn="" clck-btn-class="bg-[#6170FF] text-white" class="m-[8px] text-[14px] leading-[16px] px-[12px] h-[32px] flex items-center justify-center bg-white rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150 ">Туалет с ванной напротив номера</button>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                                               
+                        <filter-collapse title="Детально об отеле">
+                            <div v-for="category in $page.props.attribute_categories">
+                                <div v-if="$page.props.attributes.filter(el => el.category == 'hotel' && el.attribute_category_id == category.id).length > 0">
+                                    <span class="inline-block md:pt-[16px] pt-0 md:px-[16px] px-[24px] text-[16px] leading-[19px]">{{ category.name }}</span>
+                                    <div class="flex flex-wrap md:p-[8px] p-[16px]">
+                                        <div v-for="attribute in $page.props.attributes.filter(el => el.category == 'hotel' && el.attribute_category_id == category.id)" :key="attribute" class="m-[8px]">
+                                            <filter-attr-toggle
+                                                :title="attribute.name"                                    
+                                                type="small"
+                                                :initial-value="attribute.id"
+                                                :model-value="filterStoreCopy?.getFilterValue('hotels', true, null, attribute.id)"
+                                                @update:modelValue="(event) => attributeHandler('hotels', event, attribute.id)"                                                              
+                                            />
+                                        </div>                                
+                                    </div>
+                                </div>                                
+                            </div>                                                        
+                        </filter-collapse>
+                        
+                        <filter-collapse title="Детально о номере">
+                            <div v-for="category in $page.props.attribute_categories">                               
+                                <div v-if="$page.props.attributes.filter(el => el.category == 'room' && el.attribute_category_id == category.id).length > 0">
+                                    <span class="inline-block md:pt-[16px] pt-0 md:px-[16px] px-[24px] text-[16px] leading-[19px]">{{ category.name }}</span>
+                                    <div class="flex flex-wrap md:p-[8px] p-[16px]">
+                                        <div v-for="attribute in $page.props.attributes.filter(el => el.category == 'room' && el.attribute_category_id == category.id)" class="m-[8px]">
+                                            <filter-attr-toggle
+                                                :title="attribute.name"                                    
+                                                type="small"
+                                                :initial-value="attribute.id"
+                                                :model-value="filterStoreCopy?.getFilterValue('rooms', true, null, attribute.id)"
+                                                @update:modelValue="(event) => attributeHandler('rooms', event, attribute.id)"                  
+                                            />
+                                        </div>                                
+                                    </div>
+                                </div>                                
+                            </div>                                                                                  
+                        </filter-collapse>                     
                     </div>
                 </div>
-                <div data="filter-footer" class="bg-transparent md:h-[80px] h-auto w-full flex items-center justify-center">
+                <div class="bg-transparent md:h-[80px] h-auto w-full flex items-center justify-center">
                     <div class="md:w-full w-[calc(100%-48px)] h-full px-[16px] md:py-0 py-[16px] bg-white rounded-b-[24px] flex md:flex-row flex-col items-center justify-between gap-[16px] md:max-w-none max-w-[400px]">
                         <div class="flex items-center justify-between md:gap-[54px] gap-[10px] md:w-initial w-full ">
                             <span class="text-[14px] leading-[16px] font-semibold">Найдено {{ foundMessage  ?? 0 }}</span>
-                            <button class="text-[14px] leading-[16px] underline">Очистить фильтры</button>
+                            <button @click="clearFilters()" class="text-[14px] leading-[16px] underline">Очистить фильтры</button>
                         </div>
                         <div class="flex items-center gap-[8px] md:justify-end justify-between md:w-initial w-full flex-wrap ">
                             <button class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
@@ -267,39 +204,26 @@
     import CityAreaSelect from '@/components/ui/CityAreaSelect.vue'
     import CityDistrictSelect from '@/components/ui/CityDistrictSelect.vue'
     import MetroSelect from '@/components/ui/MetroSelect.vue'
+    import RatingSelect from '@/components/ui/RatingSelect.vue'
     import PeriodCostSelect from '@/components/ui/PeriodCostSelect.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
+    import FilterCollapse from '@/components/ui/FilterCollapse.vue'    
 
-    const customWatchedFields = [
-        'city',
-        'city_area',
-        'city_district',
-        'metro',
-    ];
-
-    let selectGetSetObj = function (model, key) {
+    let filterGetSetObj = function (model, key) {
         return {
-                get() {
-                    let val = null;
-                    if (this.filterStoreCopy?.getFilter(model, false, key).value) {
-                        val = {
-                            key: this.filterStoreCopy.getFilter(model, false, key).value,
-                            name: this.filterStoreCopy.getFilter(model, false, key).title
-                        }
-                    }                               
-                    return val;
+                get() {                                           
+                    return this.filterStoreCopy?.getFilterValue(model, false, key);
                 },
-                set(obj) {
-                    if (obj) {    
-                        this.filterStoreCopy.updateFilter(model, false, key, obj.key, obj.name);
-                    }
-                    if (obj === null)
+                set(val) {
+                    if (val)    
+                        this.filterStoreCopy.updateFilter(model, false, key, val);                    
+                    if (val === null)
                         this.filterStoreCopy.removeFilter(model, false, key);
                 }
             }
     };
-    
+
     export default {
         components: {
             SearchPanel,
@@ -311,13 +235,9 @@
             PeriodCostSelect,
             FilterAttrToggle,
             FilterTag,
-        },
-        props: {
-            filter: {
-                type: Object,
-                default: {},
-            }
-        },
+            FilterCollapse,
+            RatingSelect
+        },       
         mounted() {
             this.filterStore.init(usePage().url.value);
             this.filterStoreCopy = _.cloneDeep(this.filterStore);                     
@@ -326,7 +246,7 @@
             return {
                 filterStore,
                 initialUrl: usePage().url.value,                
-                filterStoreCopy: _.cloneDeep(this.filterStore),                
+                filterStoreCopy: _.cloneDeep(this.filterStore),                                                           
             }
         },
         computed: {
@@ -336,40 +256,23 @@
             foundMessage() {
                 return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
             },
-            attributes() {
-                return _.cloneDeep(_.filter(this.filterStoreCopy?.filters, el => !customWatchedFields.includes(el.key)));
-            },
-            city: {
-                get() {                    
-                    return this.filterStoreCopy?.getFilter('hotels', false, 'city').value ?? null;
-                },
-                set(val) {                    
-                    if (val) {
-                        this.filterStoreCopy.updateFilter('hotels', false, 'city', val, val); 
-                    }
-                }
-            },
-            metro: {
-                get() {                    
-                    return this.filterStoreCopy?.getFilter('hotels', false, 'metro').value ?? null;
-                },
-                set(val) {
-                    if (val)                   
-                        this.filterStoreCopy.updateFilter('hotels', false, 'metro', val, val);
-                    if (val === null)
-                        this.filterStoreCopy.removeFilter('hotels', false, 'metro');
-                }
-            },
-            hotel_type: selectGetSetObj('hotels', 'hotel_type'),            
-            city_area: selectGetSetObj('hotels', 'city_area'),
-            city_district: selectGetSetObj('hotels', 'city_district'),
-            period_cost: selectGetSetObj('rooms', 'period_cost'),         
+            windowHeight() {
+                return window.innerHeight - 200;
+            },            
+            city: filterGetSetObj('hotels', 'city'),
+            metro: filterGetSetObj('hotels', 'metro'),
+            hotel_type: filterGetSetObj('hotels', 'hotel_type'),            
+            city_area: filterGetSetObj('hotels', 'city_area'),
+            city_district: filterGetSetObj('hotels', 'city_district'),
+            period_cost: filterGetSetObj('rooms', 'period_cost'),
+            is_hot: filterGetSetObj('rooms', 'is_hot'),                 
         },
         methods: {
             close() {                              
                 window.history.pushState({}, this.$page.title, this.initialUrl);
                 this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);               
-                usePage().props.value.modals.filters = false;                                             
+                usePage().props.value.modals.filters = false;
+                document.body.classList.remove("fixed");                                           
             },                                       
             getData() {
                 this.filterStore.filters = _.cloneDeep(this.filterStoreCopy.filters);                                
@@ -389,13 +292,30 @@
                     replace: true,
                     only: only ?? [],                   
                 });
-            },                        
+            },
+            clearFilters() {                
+                this.filterStoreCopy.clearFilters();
+                this.updateFilters(['total']);
+            },            
+            attributeHandler(modelType, filterValue, attrID) {                
+                if (filterValue == null)
+                    this.filterStoreCopy.removeFilter(modelType, true, null, attrID);
+                else
+                    this.filterStoreCopy.addFilter(modelType, true, null, attrID);
+
+                this.updateFilters(['total']);
+            },
+            closeTag(obj) {                
+                this.filterStoreCopy.removeFilter(obj.modelType, obj.isAttribute, obj.key, obj.value);
+                this.updateFilters(['total']);
+            },                  
         },
         watch: {
             isOpen: function (newVal, oldVal) {
                 if (newVal == true && (!oldVal || oldVal == false)) {                                           
                     this.initialUrl = usePage().url.value;                        
-                    this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);                        
+                    this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);
+                    document.body.classList.add("fixed");                       
                 }                    
             },
             city: function(newVal, oldVal) {       
@@ -416,7 +336,7 @@
                 }
             },
             city_district: function (newVal, oldVal) {                
-                if (oldVal != newVal && newVal != null) {                                     
+                if (oldVal != newVal && newVal != null) {                                    
                     this.updateFilters(['total']);                  
                 }
                 
@@ -432,15 +352,17 @@
                 if (oldVal != null && newVal == null) {
                     this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
                 }
-            },                    
-            attributes: {
-                handler(newVal, oldVal) {         
-                    if (!_.isEqual(newVal, oldVal)) {                        
-                        this.updateFilters(['total']);                                             
-                    }                    
-                },
-                deep: true
-            },            
+            },
+            period_cost: function (newVal, oldVal) {                
+                if (oldVal != newVal) {                                     
+                    this.updateFilters(['total']);                  
+                }
+            },
+            is_hot: function (newVal, oldVal) {                
+                if (oldVal != newVal) {                                     
+                    this.updateFilters(['total']);                  
+                }
+            },                          
         }
     }
 </script>

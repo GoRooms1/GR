@@ -42,21 +42,21 @@
                     <filter-attr-toggle
                         title="Low Cost"
                         type="small"
-                        attr-model="rooms"
-                        filter-key="low_cost"            
+                        initial-value=true                                        
+                        v-model="low_cost"            
                     />
                     <filter-attr-toggle
                         title="От 1 часа"
                         type="small"
-                        attr-model="rooms"
-                        is-attribute
-                        attr-id="68"                    
+                        :initial-value="68"
+                        :model-value="filterStore.getFilterValue('rooms', true, null, 68)"
+                        @update:modelValue="(event) => attributeHandler('rooms', event, 68)"                                           
                     />                
                     <filter-attr-toggle
                         title="Горящие"
                         type="small"
-                        attr-model="rooms"
-                        filter-key="is_hot"
+                        initial-value=true                                        
+                        v-model="is_hot"
                     />
                     <filter-attr-toggle
                         title="Кешбэк"
@@ -66,16 +66,16 @@
                     <filter-attr-toggle
                         title="Арт дизайн"
                         type="small"
-                        attr-model="rooms"
-                        is-attribute
-                        attr-id="52"
+                        :initial-value="52"
+                        :model-value="filterStore.getFilterValue('rooms', true, null, 52)"
+                        @update:modelValue="(event) => attributeHandler('rooms', event, 52)"                        
                     />
                     <filter-attr-toggle
                         title="Джакузи"
                         type="small"
-                        attr-model="rooms"
-                        is-attribute
-                        attr-id="65"
+                        :initial-value="65"
+                        :model-value="filterStore.getFilterValue('rooms', true, null, 65)"
+                        @update:modelValue="(event) => attributeHandler('rooms', event, 65)"                        
                     />
                 </div>
                 <div class="p-[8px]">
@@ -91,11 +91,12 @@
             <div class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap">
                 <filter-tag 
                     v-for="tag in filterStore.filters"
-                    :title="tag.title"
-                    :attr-model="tag.modelType"
+                    :filter-model="tag.modelType"
                     :filter-key="tag.key"
                     :is-attribute="tag.isAttribute"
-                    :filter-value="tag.value"                        
+                    :filter-value="tag.value"
+                    :removable="tag.key == 'city' ? false : true"
+                    @tag-closed="(event) => closeTag(event)"                        
                 />
             </div>
         </div>
@@ -107,6 +108,20 @@
     import { filterStore  } from '@/Store/filterStore.js'    
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
+
+    let filterGetSetObj = function (model, key) {
+        return {
+                get() {                                           
+                    return this.filterStore.getFilterValue(model, false, key);
+                },
+                set(val) {
+                    if (val)    
+                        this.filterStore.updateFilter(model, false, key, val);                    
+                    if (val === null)
+                        this.filterStore.removeFilter(model, false, key);
+                }
+            }
+    };
     
     export default {
         components: {
@@ -117,6 +132,10 @@
             return {
                 filterStore,                                
             }
+        },
+        computed: {
+            is_hot: filterGetSetObj('rooms', 'is_hot'),
+            low_cost: filterGetSetObj('rooms', 'low_cost'),
         },
         methods: {
             getData() {                                
@@ -135,7 +154,16 @@
             },
             closeFilters() {
                 usePage().props.value.modals.filters = false;
-            }
+            },
+            attributeHandler(modelType, filterValue, attrID) {                
+                if (filterValue == null)
+                    this.filterStore.removeFilter(modelType, true, null, attrID);
+                else
+                    this.filterStore.addFilter(modelType, true, null, attrID);
+            },
+            closeTag(obj) {                
+                this.filterStore.removeFilter(obj.modelType, obj.isAttribute, obj.key, obj.value);               
+            }, 
         }
 
     }

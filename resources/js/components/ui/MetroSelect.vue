@@ -54,8 +54,7 @@
 </template>
 
 <script>
-    import vClickOutside from "click-outside-vue3"
-    import { filterStore  } from '@/Store/filterStore.js'
+    import vClickOutside from "click-outside-vue3"    
     export default {
         directives: {
             clickOutside: vClickOutside.directive
@@ -71,8 +70,7 @@
             },                                           
         },        
         data() {
-            return {
-                filterStore,
+            return {                
                 collapsed: true,
                 searchValue: '',
                 value: null,                                        

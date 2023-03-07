@@ -3,12 +3,12 @@
         <button @click="toggle()" class="w-full px-[12px] h-[32px] flex items-center justify-between bg-white rounded-[8px]" 
             :class="(options.length == 0 && !searchable) ? 'btn-disabled pointer-events-none' : ''"
         >
-            <span class="text-sm leading-[16px]">{{ getOptionName(selectedOption?.key) ?? placeholder }}</span>            
-            <svg v-if="selectedOption?.key == null" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block" :class="collapsed ? '' : 'rotate-180'">
+            <span class="text-sm leading-[16px]">{{ getOptionName(selectedOption) ?? placeholder }}</span>            
+            <svg v-if="selectedOption == null" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="block" :class="collapsed ? '' : 'rotate-180'">
                 <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>                 
         </button>            
-        <div v-if="selectedOption?.key" class="relative">
+        <div v-if="selectedOption" class="relative">
             <button type="button" @click="clear()" class="px-[12px] h-[32px] select-clear">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_790_13114)">
@@ -44,81 +44,6 @@
 </template>
 
 <script>
-    import vClickOutside from "click-outside-vue3"
-    import _ from 'lodash'   
-    export default {
-        directives: {
-            clickOutside: vClickOutside.directive
-        },
-        props: {
-            placeholder: String,
-            searchable: Boolean,                      
-            optionsArray: Array,
-            modelValue: {
-                type: Object,
-                default: null,
-            },                                                                        
-        },        
-        data() {
-            return {                              
-                collapsed: true,
-                searchValue: '',
-                value: null,                                         
-            }
-        },        
-        emits: ['update:modelValue'],
-        computed: {
-            options: function() {                                
-                if (this.searchValue) {
-                    let searchValue = this.searchValue.toLowerCase().trim();
-                    return this.optionsArray.filter(function (el) {                 
-                        return el.name.toString().toLowerCase().startsWith(searchValue);               
-                    }, searchValue);                   
-                }                    
-                else {
-                    return this.optionsArray ?? [];
-                }
-            },
-            selectedOption() {
-                return this.modelValue ?? this.value;
-            }
-        },        
-        methods: {
-            toggle() {
-                this.collapsed = !this.collapsed;
-            },
-            hide() {
-                this.collapsed = true;
-            },
-            choose(event) {                
-                let value = {
-                    key: event.currentTarget.dataset['key'],
-                    name: event.currentTarget.dataset['name']
-                };
-                if (!_.isEqual(value, this.modelValue)) {
-                    this.emmitUpdate(value);
-                    this.value = value;
-                }                            
-                this.hide();                                                         
-            },            
-            clear() {                
-                this.searchValue = '';
-                this.emmitUpdate(null);
-                this.value = null;
-                this.hide(); 
-            },
-            getOptionName(key) {
-                return this.optionsArray.find(el => el.key == key)?.name ?? key;
-            },
-            emmitUpdate(value) {
-                this.$emit('update:modelValue', value);
-            }     
-        },
-        watch: {
-            modelValue: function (newVal, oldVal) {
-                if (!newVal && oldVal)
-                    this.value = newVal;
-            }
-        }        
-    }
+    import selectOptions from "@/Services/selectOptions.js"    
+    export default selectOptions()    
 </script>

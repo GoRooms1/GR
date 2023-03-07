@@ -10,35 +10,26 @@
     </button>
 </template>
 
-<script>
-    import { filterStore  } from '@/Store/filterStore.js'
+<script>    
     export default {        
         props: {
             title: String,
             img: String,
             toggleImg: String,
             type: String,
-            modelValue: [String, Boolean, Number],           
-            disabled: Boolean,            
-            attrModel: {
-                type: String,
-                default: 'rooms',
-            },
-            filterKey: String,
-            isAttribute: {
-                type: Boolean,
-                default: false,
-            },
-            attrId: String,
+            modelValue: {
+                type: [String, Boolean, Number],
+                default: null,
+            },           
+            disabled: Boolean,
+            initialValue: [String, Boolean, Number],                        
         },
-        created() {
-            this.filterStore.addTitle(this.isAttribute ? this.attrId : this.filterKey, this.title);
-            this.emmitUpdate();
+        created() {                   
         },
         emits: ['update:modelValue'],
         data() {
-            return {
-                filterStore,                
+            return {                
+                localValue: null,                
             }
         },
         computed: {
@@ -78,7 +69,7 @@
                         return 'px-[12px] row-span-2 flex items-center text-sm text-left'
                         break;
                     case 'vertical':
-                        return 'w-full mt-[16px] pb-[8px] md:flex items-center flex-col justify-center h-[128px]';
+                        return 'w-full mt-[16px] pb-[8px] flex items-center flex-col justify-center h-[128px]';
                         break;
                     case 'small':
                         return 'px-[12px] h-[32px] flex items-center gap-[8px] justify-center md:hover:outline outline-solid outline-[#6170FF] transition duration-150';
@@ -88,29 +79,30 @@
                 }
             },
             value() {
-                return this.filterStore.getFilter(this.attrModel, this.isAttribute, this.filterKey, this.attrId).value;
+                return this.modelValue ?? this.localValue;                
             }
         },
         methods: {
-            toggle() { 
-                if ( (this.isAttribute && !this.attrId) || (!this.isAttribute && !this.filterKey) )
+            toggle() {                
+                if (!this.initialValue)
                     return false;
                 if (!this.value) {
-                    let value = this.isAttribute ? this.attrId : true;                    
-                    this.filterStore.addFilter(this.attrModel, this.isAttribute, this.filterKey, value, this.title);
-                }
-                else {                    
-                    this.filterStore.removeFilter(this.attrModel, this.isAttribute, this.filterKey, this.attrId);
+                    let value = this.initialValue ?? true; 
+                    this.localValue = value;
+                    this.emmitUpdate(value);                    
+                } else {
+                    this.localValue = null;
+                    this.emmitUpdate(null);
                 }
             },
-            emmitUpdate() {
-                this.$emit('update:modelValue', this.value);
+            emmitUpdate(value) {                
+                this.$emit('update:modelValue', value);
             }
         },
-        watch: {
-            value: function(newVal, oldVal) {
-                if (newVal != oldVal)
-                    this.emmitUpdate();
+        watch: {            
+            modelValue: function (newVal, oldVal) {
+                if (!newVal && oldVal)
+                    this.localValue = newVal;
             }
         }
     }
