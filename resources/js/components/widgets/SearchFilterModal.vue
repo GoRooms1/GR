@@ -10,6 +10,87 @@
             <!-- <search-panel/> -->
             <div class="max-w-[832px] w-full mx-auto px-[16px]">
                 <div class="lg:block flex flex-col relative">
+                    <div data="search-input" class="w-full bg-white lg:rounded-t-[16px] rounded-t-[24px]  lg:rounded-b-none rounded-b-[24px] lg:p-[8px] p-0  px-[8px] py-[12px] flex items-center">
+                        <button class="p-[8px]">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M19.9999 20L15.8032 15.8033" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+                        <input type="text" class="bg-transparent p-[8px] grow text-[16px] leading-[19px] text-ellipsis whitespace-nowrap overflow-hidden placeholder:text-[#A7ABB7] text-[#515561] text-[1rem]" placeholder="Название отеля, адрес, метро, округ, район, город" wfd-id="id6">
+                        <div class="md:flex hidden items-center gap-[8px]">
+                            <button class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15 3V19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M9 5V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M3 3L9 5L15 3L21 5V21L15 19L9 21L3 19V3Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                <span class="text-white">На карте</span>
+                            </button>
+                            <button @click="getData()" class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.85718 7H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M6.85718 12.143H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M6.85718 17.2857H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M3 7V7.01284" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M3 12.143V12.1558" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M3 17.2857V17.2985" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                <span class="text-white">Списком</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between ordering">
+                        <div class="lg:p-[8px] p-[24px] bg-[#EAEFFD] rounded-b-[16px] lg:rounded-t-none lg:w-[fit-content] w-full rounded-t-[16px] items-center gap-[8px] flex-wrap justify-center flex">
+                            <filter-attr-toggle
+                                title="Low Cost"
+                                type="small"
+                                initial-value=true                                        
+                                v-model="low_cost"            
+                            />
+                            <filter-attr-toggle
+                                title="От 1 часа"
+                                type="small"
+                                :initial-value="68"
+                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_68')"
+                                @update:modelValue="(event) => attributeHandler('rooms', event, 68)"                                           
+                            />                
+                            <filter-attr-toggle
+                                title="Горящие"
+                                type="small"
+                                initial-value=true                                        
+                                v-model="is_hot"
+                            />
+                            <filter-attr-toggle
+                                title="Кешбэк"
+                                type="small"
+                                disabled
+                            />
+                            <filter-attr-toggle
+                                title="Арт дизайн"
+                                type="small"
+                                :initial-value="52"
+                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_52')"
+                                @update:modelValue="(event) => attributeHandler('rooms', event, 52)"                        
+                            />
+                            <filter-attr-toggle
+                                title="Джакузи"
+                                type="small"
+                                :initial-value="65"
+                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_65')"
+                                @update:modelValue="(event) => attributeHandler('rooms', event, 65)"                        
+                            />
+                        </div>
+                        <!-- <div class="lg:block hidden p-[8px] bg-[#EAEFFD] rounded-b-[16px]">
+                            <button class="flex items-center gap-[16px] p-[8px]">
+                                <span class="text-[14px] leading-[16px] whitespace-nowrap">Больше фильтров</span>
+                                <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.83301 13.0002L5.99967 17.1669L10.1663 13.0002" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M10.167 7.16692L6.00033 3.00025L1.83366 7.16692" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </button>
+                        </div> -->
+                    </div>
                     <div class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]">
                         <filter-tag 
                             v-for="tag in filterStoreCopy?.filters ?? []"
@@ -257,7 +338,7 @@
                 return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
             },
             windowHeight() {
-                return window.innerHeight - 200;
+                return window.innerHeight - 300;
             },            
             city: filterGetSetObj('hotels', 'city'),
             metro: filterGetSetObj('hotels', 'metro'),
@@ -265,7 +346,8 @@
             city_area: filterGetSetObj('hotels', 'city_area'),
             city_district: filterGetSetObj('hotels', 'city_district'),
             period_cost: filterGetSetObj('rooms', 'period_cost'),
-            is_hot: filterGetSetObj('rooms', 'is_hot'),                 
+            is_hot: filterGetSetObj('rooms', 'is_hot'),
+            low_cost: filterGetSetObj('rooms', 'low_cost'),                 
         },
         methods: {
             close() {                              
@@ -366,3 +448,9 @@
         }
     }
 </script>
+
+<style>
+.ordering {
+    order: 3
+}
+</style>
