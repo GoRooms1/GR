@@ -305,6 +305,12 @@
             }
     };
 
+    let filterWatchUpdate = function (newVal, oldVal) {                
+        if (oldVal != newVal) {                                     
+            this.updateFilters(['total']);                  
+        }
+    };
+
     export default {
         components: {
             SearchPanel,
@@ -339,10 +345,10 @@
             },
             windowHeight() {
                 return window.innerHeight - 300;
-            },            
+            }, 
+            hotel_type: filterGetSetObj('hotels', 'hotel_type'),           
             city: filterGetSetObj('hotels', 'city'),
-            metro: filterGetSetObj('hotels', 'metro'),
-            hotel_type: filterGetSetObj('hotels', 'hotel_type'),            
+            metro: filterGetSetObj('hotels', 'metro'),                        
             city_area: filterGetSetObj('hotels', 'city_area'),
             city_district: filterGetSetObj('hotels', 'city_district'),
             period_cost: filterGetSetObj('rooms', 'period_cost'),
@@ -409,11 +415,12 @@
                     }                    
             },
             city_area: function (newVal, oldVal) {
-                if (oldVal != newVal && newVal != null) {                                     
+                if (oldVal != newVal && newVal != null) {
+                    this.city_district = null;                                    
                     this.updateFilters(['total', 'city_districts']);                  
                 }
                 
-                if (oldVal != null && newVal == null) {
+                if (oldVal != null && newVal == null) {                    
                     this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
                 }
             },
@@ -435,16 +442,10 @@
                     this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
                 }
             },
-            period_cost: function (newVal, oldVal) {                
-                if (oldVal != newVal) {                                     
-                    this.updateFilters(['total']);                  
-                }
-            },
-            is_hot: function (newVal, oldVal) {                
-                if (oldVal != newVal) {                                     
-                    this.updateFilters(['total']);                  
-                }
-            },                          
+            hotel_type: filterWatchUpdate,
+            period_cost: filterWatchUpdate,
+            is_hot: filterWatchUpdate,
+            low_cost: filterWatchUpdate,                          
         }
     }
 </script>
