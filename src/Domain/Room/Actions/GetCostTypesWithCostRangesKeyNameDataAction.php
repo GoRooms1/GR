@@ -11,14 +11,14 @@ use Lorisleiva\Actions\Action;
 use Spatie\LaravelData\DataCollection;
 
 /**
- * @method static mixed run()
+ * @method static DataCollection run()
  */
-final class GetCostTypesWithCostRangesAsParamsAction extends Action
+final class GetCostTypesWithCostRangesKeyNameDataAction extends Action
 {
     /**     
-     * @return mixed
+     * @return DataCollection
      */
-    public function handle()
+    public function handle(): DataCollection
     {
         $result = [];
         $cost_types = CostType::with('filterCosts')->orderBy('sort')->get();        

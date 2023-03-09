@@ -9,17 +9,17 @@ use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static array run()
+ * @method static Collection run()
  */
-final class GetCityAreasAsParamsAction extends Action
+final class GetCityAreasAction extends Action
 {
-    public function handle($city): array
+    public function handle($city): Collection
     {       
         if (!isset($city))
             return array();
 
-        return Address::distinct()->select('city_area as key', 'city_area as name')
+        return Address::distinct()->select('city_area', 'city')
             ->whereCity($city)->whereNotNull('city_area')
-            ->orderBy('city_area')->get()->toArray();          
+            ->orderBy('city_area')->get();          
     }
 }

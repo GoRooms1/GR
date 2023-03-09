@@ -9,12 +9,12 @@ use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static array run()
+ * @method static Collection run()
  */
-final class GetAllUniqueCitiesAction extends Action
+final class GetAllCitiesAction extends Action
 {
     public function handle(): Collection
     {       
-        return Address::distinctCity()->select('city as name', 'region')->get();           
+        return Address::distinctCity()->select('city', 'region')->orderBy('city')->get();        
     }
 }

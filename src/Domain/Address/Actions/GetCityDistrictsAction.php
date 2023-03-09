@@ -9,19 +9,19 @@ use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static array run()
+ * @method static Collection run()
  */
-final class GetCityDistrictsAsParamsAction extends Action
+final class GetCityDistrictsAction extends Action
 {
-    public function handle($city, $city_area): array
+    public function handle($city, $city_area): Collection
     {       
         if (!isset($city))
             return array();
 
-        return Address::distinct()->select('city_district as key', 'city_district as name')
+        return Address::distinct()->select('city_district')
             ->whereCity($city)->whereNotNull('city_district')
             ->when($city_area, function($q) use ($city_area) {
                 return $q->where('city_area', $city_area);
-            })->orderBy('city_district')->get()->toArray();          
+            })->orderBy('city_district')->get();          
     }
 }

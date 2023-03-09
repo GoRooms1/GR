@@ -12,7 +12,7 @@ use Lorisleiva\Actions\Action;
 /**
  * @method static array run()
  */
-final class GetAllMetrosByCityNameAction extends Action
+final class GetAllCityMetrosAction extends Action
 {
     public function handle($city): Collection | array
     {       

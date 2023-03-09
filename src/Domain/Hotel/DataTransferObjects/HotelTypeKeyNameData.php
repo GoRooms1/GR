@@ -6,7 +6,7 @@ namespace Domain\Hotel\DataTransferObjects;
 
 use Domain\Hotel\Models\HotelType;
 
-final class HotelTypeSelectData extends \Parent\DataTransferObjects\Data
+final class HotelTypeKeyNameData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
         public int $key,
