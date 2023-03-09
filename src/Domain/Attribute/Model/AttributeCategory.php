@@ -49,6 +49,11 @@ class AttributeCategory extends Model
         'description',
     ];
 
+    protected $casts = [        
+        'created_at' => 'datetime:Y-m-d\TH:i:sP',
+        'updated_at' => 'datetime:Y-m-d\TH:i:sP',
+    ];
+
     protected $table = 'attribute_categories';
 
     /**

@@ -17,30 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class FilterController extends Controller
-{       
-    public function getCities(Request $request)
-    {
-        return response()->json([
-            'data' => CityData::collection(GetAllUniqueCitiesAction::run())
-        ]);        
-    }
-
-    public function getMetros(Request $request)
-    {
-        return response()->json([           
-            'data' => SimpleMetroData::collection(GetAllMetrosByCityNameAction::run($request->all()['city'] ?? null)),
-        ]);       
-    }
-
-
-    public function getResultsCount(Request $request)
-    {
-        return response()->json([
-            'found' => GetNumOfFilteredObjectsAction::run($request->all()),
-        ]);        
-    }
-    
-    
+{
     //old
     /**
      * Поиск города

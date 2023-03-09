@@ -14,16 +14,16 @@ use Parent\Filters\Filter;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
- * @method static Collection<int, Hotel> run(array $filters, bool $paginate?)
+ * @method static Collection<int, Hotel> run(array $filters, ?bool $paginate)
  */
 final class FilterHotelsAction extends Action
 {
     /**
      * @param  array<string, string>  $filters
-     * @param bool  $paginate
+     * @param ?bool  $paginate
      * @return Collection<int, Hotel>
      */
-    public function handle(array $filters, bool $paginate = false): Collection | LengthAwarePaginator
+    public function handle(array $filters, ?bool $paginate = false): Collection | LengthAwarePaginator
     {
         /** @var HotelBuilder $result */
         $result = app(Pipeline::class)
@@ -40,7 +40,7 @@ final class FilterHotelsAction extends Action
     }
 
     /**
-     * @param  array<string, string>  $filters
+     * @param  array<string, string|array>  $filters
      * @return Filter[]
      */
     protected function filters(array $filters): array

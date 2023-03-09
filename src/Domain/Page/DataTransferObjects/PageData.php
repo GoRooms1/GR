@@ -49,7 +49,7 @@ final class PageData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$page->toArray(),
-            'meta' => $page->meta ? Lazy::whenLoaded('meta', $page, fn () => PageDescriptionData::from($page->meta)) : null,
+            'meta' => Lazy::whenLoaded('meta', $page, fn () => PageDescriptionData::from($page->meta)),
         ]);
     }
 
@@ -57,15 +57,15 @@ final class PageData extends \Parent\DataTransferObjects\Data
     { 
         return new self(            
             id: 0,
-            title: optional($pageDescription)->title ?? env('APP_NAME', 'App'),
-            slug: optional($pageDescription)->url ?? '/',
+            title: $pageDescription ? $pageDescription->title : env('APP_NAME', 'App'),
+            slug: $pageDescription ? $pageDescription->url : '/',
             content: '',
             header: '',
             footer: '',
             image: null,
             images: [],
             user_id: 0,
-            created_at: $data['created_at'] ?? Carbon::now(),
+            created_at: $pageDescription ? $pageDescription->created_at : Carbon::now(),
             meta: $pageDescription ? PageDescriptionData::fromModel($pageDescription) : null
         );
     }

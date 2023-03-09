@@ -3,7 +3,7 @@
         <button class="p-2.5 rounded-l-lg bg-[#EAEFFD]">
             <img src="img/map.svg" alt="map">
         </button>
-        <button @click="filter()" class="p-2.5 rounded-r-lg mr-[10%] bg-[#6170FF]">
+        <button @click="getData()" class="p-2.5 rounded-r-lg mr-[10%] bg-[#6170FF]">
             <img src="img/listpointers2.svg" alt="listpointers">
         </button>
         <button class="p-2.5 rounded-lg mx-[1.7%] ml-auto bg-[#6170FF]">
@@ -26,17 +26,21 @@
 
 <script>
     import { usePage } from '@inertiajs/inertia-vue3'
+    import { filterStore } from '@/Store/filterStore.js'
     export default {
+        data() {
+            return {
+                filterStore,
+            }
+        },
         methods: {
-            filter() {                                
-                this.$inertia.get(route('hotels.index'), this.filterStore.getFiltersValues(), {
+            getData() {                                
+                this.$inertia.get(route('filter'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
-                    only: ['hotels', 'rooms'],                                  
-                    //onSuccess: () => {},
-                    //onStart: () => {this.isLoading = true},
-                    //onFinish: () => {this.isLoading = false},
-                });                
+                    onStart: () => {usePage().props.value.isLoadind = true},
+                    onFinish: () => {usePage().props.value.isLoadind = false},                                       
+                });              
             },
             toggleFilters() {
                 usePage().props.value.modals.filters = !usePage().props.value.modals.filters;

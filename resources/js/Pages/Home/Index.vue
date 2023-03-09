@@ -10,7 +10,7 @@
   <div class="container mx-auto">
     <div class="py-4 lg:my-16 px-2 lg:px-6">      
       <div class="block md:hidden">
-        <intro-filters :filter="filter"/>
+        <intro-filters/>
       </div>      
     </div>
   </div>  
@@ -38,20 +38,8 @@ export default {
     model: {
       type: Object as PropType<PageInterface>,
       required: true,
-    },
-    cities: Array,
-    metros: Array,
-    found_objects: Number,    
-  }, 
-  computed: {
-    filter() {
-        return {
-          cities: this.cities,
-          metros: this.metros,
-          found_objects: this.found_objects,
-        }
-      }
-  }
+    },        
+  },
 };
 </script>
 

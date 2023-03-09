@@ -1,6 +1,6 @@
 <template>
     <AppHead :title="model.page.title" />
-    <search-filter-modal :filter="filter"/>
+    <search-filter-modal/>
     <div class="md:mt-[49px] mt-[40px] relative">
         <img class="md:block hidden absolute bottom-[-50px] left-0 -z-[1]" src="img/lens.svg" alt="lens">
         <img class="absolute md:bottom-[-150px] bottom-[-20px] md:right-0 right-[50px] -z-[1] md:w-initial sm:w-[30%] w-[50%]" src="img/lens1.svg" alt="lens">
@@ -40,19 +40,6 @@
                 required: true,
             },
             rooms: [Object],
-            cities: Array,
-            metros: Array,
-            total: Number,           
-        },               
-        computed: {
-            filter() {
-                return {
-                    cities: this.cities,
-                    metros: this.metros,
-                    total: this.total,
-                }
-            }
-        }
-       
+        },
     }
 </script>

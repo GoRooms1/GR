@@ -6,6 +6,7 @@ use Domain\Address\DataTransferObjects\MetroData;
 use Domain\Hotel\Actions\MinimumCostsCalculation;
 use Domain\Hotel\DataTransferObjects\HotelTypeData;
 use Domain\Hotel\DataTransferObjects\MinCostsData;
+use Domain\Hotel\Models\Hotel;
 use Domain\Page\DataTransferObjects\SeoData;
 use Illuminate\Support\Str;
 use Lorisleiva\Actions\Action;
@@ -44,7 +45,7 @@ final class GenerateSeoDataContent extends Action
             return $seoData;
         }
         $seoData->description = $type.' '.$seoData->hotel->name;
-        $minimals = MinimumCostsCalculation::run($seoData->hotel);
+        $minimals = MinimumCostsCalculation::run(Hotel::find($seoData->hotel->id));
         /** @var MinCostsData $minimal */
         foreach ($minimals as $minimal) {
             if ($minimal->name === 'На Час' && $minimal->value > 0) {

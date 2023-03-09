@@ -4,9 +4,13 @@
 
 .select-clear {
     position: absolute;
-    top: 0%;
+    bottom: 100%;
     left: calc(100% - 36px);
-    z-index: 11;
+    z-index: 11;   
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
 }
 
 .small-icon {
@@ -73,6 +77,40 @@
     scrollbar-color: #6170FF #ffffff;
 }
 
+.scrollbar::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 4px;
+}
+
+.scrollbar2::-webkit-scrollbar {
+    width: 24px;
+    border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track,
+.scrollbar2::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 4px;
+    border-left: 12px solid transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #6170FF;
+    border-radius: 4px;
+}
+
+.scrollbar2::-webkit-scrollbar-thumb {
+    border: 8px solid white;
+    background: #6170FF;
+    border-radius: 12px;
+}
+
+.scrollbar,
+.scrollbar2 {
+    scrollbar-width: thin;
+    scrollbar-color: #6170FF #ffffff;
+}
+
 .swiper-pagination-bullet {
     background-color: white;
 }
@@ -80,33 +118,3 @@
 .swiper-pagination-bullet-active {
     background-color: #6170FF;
 }
-/* @media (max-height: 800px) {
-    html {
-        font-size: 1.875vh;
-    }
-}
-
-@media (min-height: 800px) {
-    .bns-btn {
-        margin-top: 7vh;
-        height: 7.5rem;
-    }
-}
-
-@media (max-height: 760px) {
-    .bns-btn {
-        margin-top: 1.25rem;
-    }
-}
-
-@media (min-width: 330px) {
-
-    html,
-    body {
-        overflow: hidden;
-    }
-
-    body {
-        position: relative;
-    }
-} */

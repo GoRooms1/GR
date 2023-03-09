@@ -5,19 +5,22 @@ declare(strict_types=1);
 namespace Domain\Address\Actions;
 
 use Domain\Address\Models\Metro;
-use Illuminate\Support\Collection;
-use Log;
+use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static array run()
+ * @method static Collection run($city)
  */
-final class GetAllMetrosByCityNameAction extends Action
+final class GetAllCityMetrosAction extends Action
 {
-    public function handle($city): Collection | array
+    /**
+     * @param $city   
+     * @return Collection
+     */
+    public function handle($city): Collection
     {       
         if (!$city)
-            return array();
+            return new Collection();
         else  
             return Metro::distinctName()->select('name', 'color', 'api_value')->whereCity($city)->ordered()->get(); 
     }
