@@ -121,7 +121,12 @@
         },
         computed: {            
             foundMessage() {
-                return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
+                let objectWords;
+                if (this.filterStore.getFiltersValues().isRoomsFilter == true)
+                    objectWords = ['номер', 'номера', 'номеров'];
+                else
+                    objectWords = ['отель', 'отеля', 'отелей'];
+                return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, objectWords);
             },
             attributes() {
                 return _.cloneDeep(_.filter(this.filterStore.filters, el => !nonAtrributes.includes(el.key)));

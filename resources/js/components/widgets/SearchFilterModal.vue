@@ -341,7 +341,12 @@
                 return usePage().props.value.modals?.filters ?? false;
             },           
             foundMessage() {
-                return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, ['предложение', 'предлжения', 'предложений']);
+                let objectWords;
+                if (this.filterStoreCopy?.getFiltersValues()?.isRoomsFilter == true)
+                    objectWords = ['номер', 'номера', 'номеров'];
+                else
+                    objectWords = ['отель', 'отеля', 'отелей'];
+                return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, objectWords);
             },
             windowHeight() {
                 return window.innerHeight - 300;
