@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Domain\Attribute\Actions;
 
-use Domain\Attribute\Model\Attribute;
 use Domain\Attribute\Model\AttributeCategory;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static Collection<AttributeCategory> run()
+ * @method static Collection run()
  */
 final class GetFilteredAttributeCategoriesAction extends Action
 {
     /**     
-     * @return Collection<AttributeCategory>
+     * @return Collection
      */
     public function handle(): Collection
     {        

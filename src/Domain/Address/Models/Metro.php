@@ -113,7 +113,7 @@ final class Metro extends Model
 
     /**
      * @param  \Illuminate\Database\Query\Builder  $query
-     * @return MetroBuilder<Address>
+     * @return MetroBuilder<Metro>
      */
     public function newEloquentBuilder($query): MetroBuilder
     {

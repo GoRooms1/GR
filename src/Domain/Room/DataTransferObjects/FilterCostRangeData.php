@@ -22,11 +22,11 @@ final class FilterCostRangeData extends \Parent\DataTransferObjects\Data
             $key = $from.'-'.$to;
             $name = $from.'-'.$to;
         }
-        elseif ($from == 0 ?? $to > 0) {
+        elseif ($from == 0 && $to > 0) {
             $key = $from.'-'.$to;
             $name = 'До '.$to;
         }
-        elseif ($from > 0 ?? $to == 0) {
+        elseif ($from > 0 && $to == 0) {
             $key = $from.'-'.PHP_INT_MAX;
             $name = 'От '.$from;
         }

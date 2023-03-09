@@ -15,14 +15,8 @@ final class TypeFilter extends \Parent\Filters\Filter
      * @return Builder
      */
     public function handle(Builder $builder, \Closure $next): Builder
-    {
-        $value = $this->value;
-        if (!isset($value)) {
-            return $next($builder);
-        }
-
-        $builder->where('type_id', $value);
-
+    {       
+        $builder->where('type_id', $this->value);
         return $next($builder);
     }
 }

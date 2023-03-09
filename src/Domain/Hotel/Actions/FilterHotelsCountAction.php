@@ -35,7 +35,7 @@ final class FilterHotelsCountAction extends Action
     }
 
     /**
-     * @param  array<string, string>  $filters
+     * @param  array<string, string|array>  $filters
      * @return Filter[]
      */
     protected function filters(array $filters): array

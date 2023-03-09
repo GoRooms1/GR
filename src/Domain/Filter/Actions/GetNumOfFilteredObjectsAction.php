@@ -9,10 +9,14 @@ use Domain\Room\Actions\FilterRoomsCountAction;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static int run()
+ * @method static int run(array $filters)
  */
 final class GetNumOfFilteredObjectsAction extends Action
 {
+    /**
+     * @param array $filters   
+     * @return int
+     */
     public function handle(array $filters): int
     {       
         

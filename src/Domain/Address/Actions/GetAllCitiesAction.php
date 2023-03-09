@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Domain\Address\Actions;
 
 use Domain\Address\Models\Address;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
