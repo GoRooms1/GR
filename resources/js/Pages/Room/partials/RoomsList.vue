@@ -15,7 +15,7 @@
             </div>
             <div v-if="rooms?.meta?.next_page_url">
                 <Button @click="loadMore()" classes="mx-auto mt-3">
-                    Показать ещё комнаты
+                    Показать ещё номера
                 </Button>
             </div>            
         </div>
