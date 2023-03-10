@@ -1,5 +1,5 @@
 <template>
-    <div v-click-outside="hide" class="relative md:static" :class="collapsed ? 'z-[1]' : 'z-[5]'">
+    <div v-click-outside="hide" :class="collapsed ? 'z-[1]' : 'z-[5]' + ' ' + position">
         <button @click="toggle()" class="w-full px-[12px] h-[32px] flex items-center justify-between bg-white rounded-[8px]" 
             :class="(options.length == 0 && !searchable) ? 'btn-disabled pointer-events-none' : ''"
         >

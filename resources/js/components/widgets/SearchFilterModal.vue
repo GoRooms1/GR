@@ -1,6 +1,6 @@
 <template>
     <div v-if="isOpen" class="items-center justify-center fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex">
-        <div class="flex flex-grow flex-col lg:gap-[8px] gap-[32px] max-w-[890px] w-full pb-[15px] md:overflow-hidden max-[768px]:pb-[40px] max-[768px]:pt-[40px] pt-[15px] overflow-x-hidden scrollbar overflow-y-auto md:px-[20px] px-0 h-[100%] relative ">
+        <div class="flex flex-grow flex-col lg:gap-[8px] gap-[32px] max-w-[890px] w-full pb-[15px] md:overflow-hidden max-[768px]:pb-[40px] max-[768px]:pt-[40px] pt-[15px] overflow-x-hidden scrollbar overflow-y-auto md:px-[20px] px-0 h-[100%] relative">
             <button @click="close()" class="absolute right-0 max-[768px]:right-[10px] top-[15px] max-[768px]:top-0 w-[32px] h-[32px] md:bg-white bg-transparent rounded-[8px] flex items-center justify-center">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L15 15" stroke="#6170FF" stroke-width="2" stroke-linecap="round"></path>
@@ -103,11 +103,13 @@
                         />					
                     </div>
                 </div>
-            </div>            
+            </div>
            
-            <div class="max-w-[832px] mx-auto w-full px-[16px] max-[768px]:mb-[40px] md:h-full" >
-                <div class="max-h-auto max-w-[820px] bg-transparent" >
-                    <div class="bg-[#EAEFFD] rounded-t-[16px] max-w-[800px] w-full md:rounded-b-none rounded-b-[16px] scrollbar overflow-y-auto" :style="'max-height: '+windowHeight+'px;'">
+            <div class="max-w-[832px] mx-auto w-full px-[16px] max-[768px]:mb-[40px] md:h-full">
+                <div ref="filterContent" @click="filterContentResize" class="scrollbar overflow-y-auto max-h-auto bg-transparent" :class="innerWidth < 860 ? 'w-full' : 'w-[820px]'"
+                    :style=" innerWidth > 768 ? 'max-height: '+ (innerHeight - 300) +'px;' : ''" 
+                 >
+                    <div class="bg-[#EAEFFD] rounded-t-[16px] max-w-[800px] w-full md:rounded-b-none rounded-b-[16px]" >
                         <p class="px-[16px] py-[15px] text-[16px] leading-[19px] font-semibold">Фильтры</p>
                         <div class="grid md:grid-cols-4 grid-cols-2  gap-[16px] p-[16px] bg-[#EAEFFD] shadow-sm">
                             <div class="">
@@ -145,26 +147,28 @@
                                 <p class="text-[14px] leading-[16px] mb-[8px]">Расположение</p>
                                 <div class="grid gap-[16px]">
                                   
-                                    <city-select 
-                                        type="form" 
+                                    <city-select                                        
                                         searchable 
                                         placeholder="Город" 
                                         v-model="city" 
-                                        :options-array="$page.props.cities ?? []"                                                                          
+                                        :options-array="$page.props.cities ?? []"
+                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"                                                                        
                                     />
 
                                     <city-area-select                                         
                                         placeholder="Округ"
                                         v-model="city_area"
                                         searchable                                        
-                                        :options-array="$page.props.city_areas ?? []"                                        
+                                        :options-array="$page.props.city_areas ?? []"
+                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"                                        
                                     />
                                     
                                     <city-area-select                                         
                                         placeholder="Район"
                                         v-model="city_district"
                                         searchable                                        
-                                        :options-array="$page.props.city_districts ?? []"                                        
+                                        :options-array="$page.props.city_districts ?? []"
+                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"                                         
                                     />
                                     
                                     <metro-select 
@@ -173,6 +177,7 @@
                                         placeholder="Станция метро" 
                                         v-model="metro" 
                                         :options-array="$page.props.metros ?? []"
+                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"
                                     />
 
                                 </div>
@@ -238,7 +243,7 @@
                             </div>                                                                                  
                         </filter-collapse>                     
                     </div>
-                </div>
+                </div>                
                 <div class="bg-transparent md:h-[80px] h-auto w-full flex items-center justify-center">
                     <div class="md:w-full w-[calc(100%-48px)] h-full px-[16px] md:py-0 py-[16px] bg-white rounded-b-[24px] flex md:flex-row flex-col items-center justify-between gap-[16px] md:max-w-none max-w-[400px]">
                         <div class="flex items-center justify-between md:gap-[54px] gap-[10px] md:w-initial w-full ">
@@ -277,7 +282,7 @@
     import SearchPanel from "@/components/widgets/SearchPanel.vue"    
     import { usePage } from '@inertiajs/inertia-vue3'
     import { filterStore } from '@/Store/filterStore.js'    
-    import { numWord } from '@/Services/numWord.js'
+    import { numWord } from '@/Services/numWord.js'    
     import _ from 'lodash'
     import FilterSelect from '@/components/ui/FilterSelect.vue'
     import Button from '@/components/ui/Button.vue'
@@ -311,7 +316,7 @@
         }
     };
 
-    export default {
+    export default {        
         components: {
             SearchPanel,
             FilterSelect,
@@ -323,17 +328,27 @@
             FilterAttrToggle,
             FilterTag,
             FilterCollapse,
-            RatingSelect
-        },       
+            RatingSelect,            
+        },
+        created() {
+            window.addEventListener('resize', this.handleResize);
+            this.handleResize();
+        },  
         mounted() {
             this.filterStore.init(usePage().url.value);
-            this.filterStoreCopy = _.cloneDeep(this.filterStore);                     
+            this.filterStoreCopy = _.cloneDeep(this.filterStore);             
+        },
+        destroyed() {
+            window.removeEventListener('resize', this.handleResize);            
         },        
         data() {
             return {
                 filterStore,
                 initialUrl: usePage().url.value,                
-                filterStoreCopy: _.cloneDeep(this.filterStore),                                                           
+                filterStoreCopy: _.cloneDeep(this.filterStore),
+                innerWidth: window.innerWidth,
+                innerHeight: window.innerHeight,
+                filterContentScroll: false,                                                       
             }
         },
         computed: {
@@ -347,10 +362,7 @@
                 else
                     objectWords = ['отель', 'отеля', 'отелей'];
                 return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, objectWords);
-            },
-            windowHeight() {
-                return window.innerHeight - 300;
-            }, 
+            },           
             hotel_type: filterGetSetObj('hotels', 'hotel_type'),           
             city: filterGetSetObj('hotels', 'city'),
             metro: filterGetSetObj('hotels', 'metro'),                        
@@ -366,7 +378,19 @@
                 this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);               
                 usePage().props.value.modals.filters = false;
                 document.body.classList.remove("fixed");                                           
-            },                                       
+            },
+            handleResize() {                
+                if (this.isOpen) {                                       
+                    this.innerHeight = window.innerHeight;
+                    this.innerWidth = window.innerWidth;
+                    
+                    this.filterContentResize();
+                }         
+            },
+            filterContentResize() {
+                if (this.$refs.filterContent)                
+                    this.filterContentScroll = this.$refs.filterContent.clientHeight < this.$refs.filterContent.scrollHeight;                
+            },                                     
             getData() {
                 this.filterStore.filters = _.cloneDeep(this.filterStoreCopy.filters);                                
                 this.$inertia.get(route('filter'), this.filterStore.getFiltersValues(), {
@@ -408,7 +432,7 @@
                 if (newVal == true && (!oldVal || oldVal == false)) {                                           
                     this.initialUrl = usePage().url.value;                        
                     this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);
-                    document.body.classList.add("fixed");                       
+                    document.body.classList.add("fixed");
                 }                    
             },
             city: function(newVal, oldVal) {       

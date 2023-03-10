@@ -15,7 +15,11 @@ export default function selectOptions() {
             modelValue: {
                 type: [String, Number, Boolean],
                 default: null,
-            }                                                                          
+            },
+            position: {
+                type: String,
+                default: 'relative md:static',
+            },                                                                         
         },
         mounted() {
             if (this.notNull == true && !this.selectedOption?.key) {                
@@ -27,7 +31,7 @@ export default function selectOptions() {
             return {                               
                 collapsed: true,
                 searchValue: '',
-                value: null,                                         
+                value: null,                           
             }
         },        
         emits: ['update:modelValue'],
@@ -49,7 +53,7 @@ export default function selectOptions() {
         },        
         methods: {
             toggle() {
-                this.collapsed = !this.collapsed;
+                this.collapsed = !this.collapsed;                
             },
             hide() {
                 this.collapsed = true;
@@ -71,9 +75,10 @@ export default function selectOptions() {
             getOptionName(key) {
                 return this.optionsArray.find(el => el.key == key)?.name ?? key;
             },
+
             emmitUpdate(value) {
                 this.$emit('update:modelValue', value);
-            }     
+            },   
         },
         watch: {
             modelValue: function (newVal, oldVal) {

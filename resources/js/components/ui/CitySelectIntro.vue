@@ -6,12 +6,12 @@
                 <path d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>                 
         </button>        
-        <div v-if="!collapsed" class="absolute max-[768px]:top-[32px] max-[768px]:right-[-16px] z-10 md:w-[376px] w-[calc(200%+48px)]">
+        <div v-if="!collapsed" class="absolute top-[32px] z-10 w-[calc(200%+4rem)] max-[330px]:w-[calc(100%+3rem)] left-[-1.5rem]">
             <div class="flex items-center justify-between bg-white w-full">                
-                <div class="md:w-[22%] w-[72%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
-                <div class="md:w-[73%] w-[24%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
+                <div class="w-[24%] max-[330px]:w-[48%] bg-[#EAEFFD] h-[16px] rounded-r-[8px]"></div>
+                <div class="w-[72%] max-[330px]:w-[48%] bg-[#EAEFFD] h-[16px] rounded-l-[8px]"></div>
             </div>
-            <div class="filter-scrollbar2 p-[16px] bg-white flex flex-col gap-[8px] max-h-[344px] md:max-h-[calc(45vh)] overflow-y-auto rounded-[8px] shadow-xl">
+            <div class="filter-scrollbar2 p-[16px] bg-white flex flex-col gap-[8px] max-h-[60vh] overflow-y-auto rounded-[24px] pb-[20px] shadow-xl min-h-[388px] max-h-[388px]">
                 <div v-if="searchable" class="bg-white rounded-t-[8px]">
                     <input type="text" :placeholder="placeholder" v-model="searchValue" class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-sm leading-[16px] ">
                 </div>

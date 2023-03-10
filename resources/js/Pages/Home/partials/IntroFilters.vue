@@ -1,8 +1,8 @@
 <template>    
     <div class="mx-[1.625rem] relative z-10 flex flex-col items-center">
         <div class="w-full p-6 bg-[#EAEFFD] rounded-3xl grid grid-cols-2 grid-rows-7 max-[330px]:grid-cols-1 max-[330px]:grid-rows-14 gap-4">
-            <city-select searchable placeholder="Город" v-model="city" :options-array="$page.props.cities ?? []"/>                 
-            <metro-select searchable placeholder="Станция метро" v-model="metro" :options-array="$page.props.metros ?? []"/>
+            <city-select-intro searchable placeholder="Город" v-model="city" :options-array="$page.props.cities ?? []"/>                 
+            <metro-select-intro searchable placeholder="Станция метро" v-model="metro" :options-array="$page.props.metros ?? []"/>
 
             <filter-attr-toggle
                 title="Low Cost"
@@ -84,8 +84,8 @@
     import { numWord } from '@/Services/numWord.js'
     import _ from 'lodash'
     import Button from '@/components/ui/Button.vue'
-    import CitySelect from '@/components/ui/CitySelect.vue'
-    import MetroSelect from '@/components/ui/MetroSelect.vue'
+    import CitySelectIntro from '@/components/ui/CitySelectIntro.vue'
+    import MetroSelectIntro from '@/components/ui/MetroSelectIntro.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
 
     let filterGetSetObj = function (model, key) {
@@ -105,8 +105,8 @@
     export default {
         components: {           
             Button,
-            CitySelect,
-            MetroSelect,
+            CitySelectIntro,
+            MetroSelectIntro,
             FilterAttrToggle,            
         },
         props: {           
