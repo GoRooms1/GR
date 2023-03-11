@@ -8,3 +8,5 @@ analyze:
 	COMPOSER_MEMORY_LIMIT=-1 composer phpstan
 test:
 	COMPOSER_MEMORY_LIMIT=-1 composer test
+jsfix:
+	npx prettier --write resources/js
