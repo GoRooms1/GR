@@ -13,8 +13,6 @@ use Support\DataProcessing\Traits\CustomStr;
  */
 final class GetSlugFromAddress extends Action
 {
-   use CustomStr; 
-    
     /**
      * @param  Address  $address
      * @return AddressSlugData[]
@@ -28,7 +26,7 @@ final class GetSlugFromAddress extends Action
             /** @var ?string $attribute */
             $attribute = $address->getAttribute($column);
             if (! empty($attribute)) {
-                $slugs[] = new AddressSlugData(address: $attribute, slug: $this->getCustomSlug($attribute));
+                $slugs[] = new AddressSlugData(address: $attribute, slug: CustomStr::getCustomSlug($attribute));
             }
         }
 

@@ -6,16 +6,16 @@ namespace Support\DataProcessing\Traits;
 
 use Str;
 
-trait CustomStr
+final class CustomStr
 {
-    protected array $custom_slug_rules = [
+    const CUSTOM_SLUG_RULES = [
         'ю' => 'yu',
         'я' => 'ya',
     ];
 
-    public function getCustomSlug(string $str) {
+    public static function getCustomSlug(string $str) {
         $str = Str::lower($str);
-        foreach($this->custom_slug_rules as $key => $value) {
+        foreach(CustomStr::CUSTOM_SLUG_RULES as $key => $value) {
             $str = Str::replace($key, $value, $str);
         }
 

@@ -108,7 +108,7 @@
             </div>
             <div>
                 <hotel-address :address="room.hotel.address"/>               
-                <hotel-metro-item v-for="metro in room.hotel.metros" :metro="metro"/>              
+                <hotel-metro-item v-for="metro in room.hotel.metros" :address="room.hotel.address" :metro="metro"/>              
             </div>
         </div>
         <div class="relative bg-white rounded-bl-2xl rounded-br-2xl xl:rounded-bl-none xl:rounded-tr-2xl px-4 pb-4 pt-8 mx-4 xl:mx-0 xl:w-1/3 xl:h-80 xl:pb-16 xl:flex xl:items-left xl:justify-items-start xl:justify-start">            

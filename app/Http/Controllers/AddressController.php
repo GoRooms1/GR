@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Arr;
-use DB;
 use Domain\Hotel\ViewModels\HotelListViewModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -23,7 +21,8 @@ class AddressController extends Controller
         else
             $params = [
                 'hotels' => $this->decodeUrl($request->url()),
-            ];        
+            ]; 
+               
         return Inertia::render('Hotel/Index', new HotelListViewModel($params, Str::start($request->path(), '/')));
     }
 }
