@@ -55,7 +55,7 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$pageDescription->toArray(),
-            'images' => [],         
+            'images' => [],
         ]);
     }
 
@@ -107,5 +107,5 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
             image: null,
             images: [], model_id: 0
         );
-    }    
+    }
 }

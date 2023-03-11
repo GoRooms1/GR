@@ -13,7 +13,7 @@ use Lorisleiva\Actions\Action;
 final class GetAvailibleCitiesCountAction extends Action
 {
     public function handle(): int
-    {       
-        return Address::joinModeratedObjects()->distinctCity()->count('city');            
+    {
+        return Address::joinModeratedObjects()->distinctCity()->count('city');
     }
 }

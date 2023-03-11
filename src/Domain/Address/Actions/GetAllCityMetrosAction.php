@@ -14,14 +14,15 @@ use Lorisleiva\Actions\Action;
 final class GetAllCityMetrosAction extends Action
 {
     /**
-     * @param $city   
+     * @param $city
      * @return Collection
      */
     public function handle($city): Collection
-    {       
-        if (!$city)
+    {
+        if (! $city) {
             return new Collection();
-        else  
-            return Metro::distinctName()->select('name', 'color', 'api_value')->whereCity($city)->ordered()->get(); 
+        } else {
+            return Metro::distinctName()->select('name', 'color', 'api_value')->whereCity($city)->ordered()->get();
+        }
     }
 }

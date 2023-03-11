@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Actions;
 
-
 use Domain\Hotel\Models\HotelType;
-use Lorisleiva\Actions\Action;
 use Illuminate\Database\Eloquent\Collection;
+use Lorisleiva\Actions\Action;
 
 /**
  * @method static Collection run()

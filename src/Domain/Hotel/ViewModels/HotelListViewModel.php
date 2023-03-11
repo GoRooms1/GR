@@ -13,20 +13,23 @@ use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
-    
+
     public array $params = [];
-    
-    public function __construct(array $params) {
+
+    public function __construct(array $params)
+    {
         $this->params = $params;
     }
 
-    public function model() {        
+    public function model()
+    {
         return [
             'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/hotels'))->toArray(),
         ];
     }
 
-    public function hotels() {        
+    public function hotels()
+    {
         return HotelData::Collection(FilterHotelsAction::run($this->params['hotels'] ?? [], true));
     }
 }

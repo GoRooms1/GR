@@ -7,11 +7,9 @@ namespace Domain\Room\Actions;
 use Domain\Hotel\DataTransferObjects\MinCostsData;
 use Domain\Room\DataTransferObjects\CostData;
 use Domain\Room\DataTransferObjects\CostTypeData;
-use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
 use Domain\Room\Models\Room;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Action;
 
@@ -32,12 +30,12 @@ final class GetAllRoomCosts extends Action
         $types = CostType::orderBy('sort')->get()->map(fn (CostType $costType) => $costType->getData());
 
         $collection = new Collection();
-        
+
         foreach ($types as $type) {
             $check = $costs->contains('period.type.id', $type->id);
             if (! $check) {
                 $costData = new MinCostsData(
-                    id: $type->id, 
+                    id: $type->id,
                     name: $type->name,
                     info: '',
                     value: 0,

@@ -18,12 +18,11 @@ use Inertia\ResponseFactory;
 
 class RoomController extends Controller
 {
-    
     public function index(Request $request): Response | ResponseFactory
     {
         return Inertia::render('Room/Index', new RoomListViewModel($request->all()));
     }
-    
+
     //Depricated
     public function index_(): View
     {

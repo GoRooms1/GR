@@ -18,7 +18,7 @@ final class HotelBuilder extends Builder
     }
 
     public function moderated(): self
-    {       
+    {
         return $this->where('moderate', false)->where('show', true)->where('old_moderate', true);
     }
 

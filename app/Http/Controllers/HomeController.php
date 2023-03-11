@@ -4,16 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\RatingCategory\GetRatingCategories;
 use App\Models\Article;
-use Domain\Address\Actions\GetAllMetrosByCityNameAction;
-use Domain\Address\Actions\GetAllUniqueCitiesAction;
-use Domain\Address\DataTransferObjects\CityData;
-use Domain\Address\DataTransferObjects\SimpleMetroData;
-use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Home\ViewModels\HomeViewModel;
 use Domain\Hotel\Models\Hotel;
-use Domain\Page\DataTransferObjects\PageData;
 use Domain\Page\Models\Page;
-use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -49,7 +42,7 @@ class HomeController extends Controller
     }
 
     public function index(Request $request): Response | ResponseFactory
-    {        
+    {
         return Inertia::render('Home/Index', new HomeViewModel($request->all()));
     }
 }

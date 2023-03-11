@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Actions;
 
-
 use Domain\Hotel\Models\Hotel;
 use Lorisleiva\Actions\Action;
 

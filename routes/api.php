@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 //old
 /*
 //Route::match(['GET', 'POST'], '/search', 'SearchController')->name('search');

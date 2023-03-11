@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Domain\Address\DataTransferObjects;
 
 use Domain\Address\Models\Address;
-use Illuminate\Support\Carbon;
 
 final class CityKeyNameData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
         public ?string $key,
-        public ?string $name,     
+        public ?string $name,
         public ?string $region,
     ) {
     }
@@ -19,10 +18,9 @@ final class CityKeyNameData extends \Parent\DataTransferObjects\Data
     public static function fromModel(Address $address): self
     {
         return self::from([
-           'key' => $address->city,
-           'name' => $address->city,
-           'region' => $address->region
+            'key' => $address->city,
+            'name' => $address->city,
+            'region' => $address->region,
         ]);
     }
-    
 }

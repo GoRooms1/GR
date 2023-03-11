@@ -13,11 +13,11 @@ use Lorisleiva\Actions\Action;
  */
 final class GetFilteredAttributeCategoriesAction extends Action
 {
-    /**     
+    /**
      * @return Collection
      */
     public function handle(): Collection
-    {        
+    {
         return AttributeCategory::whereHas('attributes', function ($q) {
             $q->where('in_filter', true);
         })->get();

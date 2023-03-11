@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Feedback\Jobs;
 
-use Domain\Settings\Models\Settings;
 use Domain\Feedback\DataTransferObjects\FeedbackData;
 use Domain\Feedback\Mail\FeedbackSentMail;
+use Domain\Settings\Models\Settings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

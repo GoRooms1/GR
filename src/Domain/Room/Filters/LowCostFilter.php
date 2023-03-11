@@ -15,8 +15,9 @@ final class LowCostFilter extends \Parent\Filters\Filter
      * @return Builder
      */
     public function handle(Builder $builder, \Closure $next): Builder
-    {        
-        $builder->lowCost();      
+    {
+        $builder->lowCost();
+
         return $next($builder);
     }
 }

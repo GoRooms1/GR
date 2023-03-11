@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\WithData;
 use Support\DataProcessing\Traits\ClearValidated;
@@ -128,7 +127,7 @@ final class Address extends Model
         return GetUnitedCities::run($this->city);
     }
 
-     /**
+    /**
      * @param  \Illuminate\Database\Query\Builder  $query
      * @return AddressBuilder<Address>
      */

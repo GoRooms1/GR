@@ -6,7 +6,6 @@ namespace Domain\Page\DataTransferObjects;
 
 use Domain\Image\Models\Image;
 use Domain\Page\Models\Page;
-use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Database\Eloquent\Collection;
@@ -54,8 +53,8 @@ final class PageData extends \Parent\DataTransferObjects\Data
     }
 
     public static function fromPageDescription(PageDescription | null $pageDescription): self
-    { 
-        return new self(            
+    {
+        return new self(
             id: 0,
             title: $pageDescription ? $pageDescription->title : env('APP_NAME', 'App'),
             slug: $pageDescription ? $pageDescription->url : '/',

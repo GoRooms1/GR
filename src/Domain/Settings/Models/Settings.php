@@ -41,7 +41,7 @@ class Settings extends Model
     use WithData;
 
     protected string $dataClass = SettingsData::class;
-    
+
     protected $fillable = ['option', 'value', 'header'];
 
     public static function header(string $option = null, $default = null)

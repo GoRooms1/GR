@@ -13,20 +13,21 @@ use Lorisleiva\Actions\Action;
  */
 final class GetCityDistrictsAction extends Action
 {
-     /**
+    /**
      * @param $city
      * @param $city_area
      * @return Collection
      */
     public function handle($city, $city_area): Collection
-    {       
-        if (!isset($city))
+    {
+        if (! isset($city)) {
             return new Collection();
+        }
 
         return Address::distinct()->select('city_district')
             ->whereCity($city)->whereNotNull('city_district')
-            ->when($city_area, function($q) use ($city_area) {
+            ->when($city_area, function ($q) use ($city_area) {
                 return $q->where('city_area', $city_area);
-            })->orderBy('city_district')->get();          
+            })->orderBy('city_district')->get();
     }
 }

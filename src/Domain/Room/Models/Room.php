@@ -110,7 +110,7 @@ final class Room extends Model
     protected $with = [
         'attrs',
         'images',
-        'costs',        
+        'costs',
     ];
 
     protected static function boot(): void

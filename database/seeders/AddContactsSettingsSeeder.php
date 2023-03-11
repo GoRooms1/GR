@@ -36,6 +36,6 @@ class AddContactsSettingsSeeder extends Seeder
             ['option' => 'bank_kpp', 'value' => '770201001'],
         ];
 
-        Settings::upsert($data, ['option']);        
+        Settings::upsert($data, ['option']);
     }
 }

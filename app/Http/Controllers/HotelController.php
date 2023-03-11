@@ -16,10 +16,10 @@ class HotelController extends Controller
     use Breadcrumbs;
 
     public function index(Request $request): Response | ResponseFactory
-    {        
+    {
         return Inertia::render('Hotel/Index', new HotelListViewModel($request->all()));
     }
-    
+
     //Depricated
     public function index_(Request $request): View
     {

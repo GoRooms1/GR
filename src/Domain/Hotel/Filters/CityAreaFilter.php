@@ -21,7 +21,7 @@ final class CityAreaFilter extends \Parent\Filters\Filter
             return $next($builder);
         }
 
-        $builder->whereHas('address', function($q) use ($value) {
+        $builder->whereHas('address', function ($q) use ($value) {
             $q->where('city_area', $value);
         });
 

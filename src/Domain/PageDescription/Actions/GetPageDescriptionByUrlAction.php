@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\PageDescription\Actions;
 
-use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 use Lorisleiva\Actions\Action;
 
@@ -14,8 +13,9 @@ use Lorisleiva\Actions\Action;
 final class GetPageDescriptionByUrlAction extends Action
 {
     public function handle(string $url): PageDescription | Null
-    {        
+    {
         $data = PageDescription::whereUrl($url)->first();
+
         return $data;
     }
 }

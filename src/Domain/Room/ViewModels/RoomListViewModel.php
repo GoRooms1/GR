@@ -13,14 +13,16 @@ use Domain\Room\DataTransferObjects\RoomData;
 final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
-    
+
     public array $params = [];
-    
-    public function __construct(array $params) {
+
+    public function __construct(array $params)
+    {
         $this->params = $params;
     }
 
-    public function model() {        
+    public function model()
+    {
         return [
             'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/rooms'))->toArray(),
         ];

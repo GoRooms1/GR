@@ -17,6 +17,7 @@ final class IsHotFilter extends \Parent\Filters\Filter
     public function handle(Builder $builder, \Closure $next): Builder
     {
         $builder->hot();
+
         return $next($builder);
     }
 }

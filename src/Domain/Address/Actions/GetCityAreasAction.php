@@ -14,14 +14,15 @@ use Lorisleiva\Actions\Action;
 final class GetCityAreasAction extends Action
 {
     /**
-     * @param $city   
+     * @param $city
      * @return Collection
      */
     public function handle($city): Collection
-    {       
-        if (!isset($city))
+    {
+        if (! isset($city)) {
             return new Collection();
-        
+        }
+
         return Address::distinct()->select('city_area', 'city')
             ->whereCity($city)->whereNotNull('city_area')
             ->orderBy('city_area')->get();

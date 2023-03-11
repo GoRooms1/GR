@@ -11,28 +11,28 @@ use Illuminate\Database\Eloquent\Builder;
  * @extends Builder<TModelClass>
  */
 final class MetroBuilder extends Builder
-{    
+{
     public function ordered(): self
     {
-        return $this->orderBy('name');   
+        return $this->orderBy('name');
     }
-    
+
     public function distinctName(): self
     {
-        return $this->distinct('name');     
+        return $this->distinct('name');
     }
 
     public function selectNameAndColor(): self
     {
-        return $this->select('name', 'color');     
-    }    
-    
+        return $this->select('name', 'color');
+    }
+
     public function whereCity($city): self
-    {        
-        return $this->whereIn('hotel_id', function($q) use ($city) {
+    {
+        return $this->whereIn('hotel_id', function ($q) use ($city) {
             $q->select('hotel_id')
                 ->from('addresses')
                 ->whereRaw('LOWER(`city`) = ?', trim(strtolower($city)));
-        });     
+        });
     }
 }

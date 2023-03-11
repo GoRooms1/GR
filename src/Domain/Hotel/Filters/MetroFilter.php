@@ -21,7 +21,7 @@ final class MetroFilter extends \Parent\Filters\Filter
             return $next($builder);
         }
 
-        $builder->whereHas('metros', function($q) use ($value) {
+        $builder->whereHas('metros', function ($q) use ($value) {
             $q->where('name', $value);
         });
 

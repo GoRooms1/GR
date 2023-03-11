@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Domain\Room\Actions;
 
 use Domain\Hotel\Actions\FilterHotelsAction;
-use Domain\Room\Filters\Filters;
 use Domain\Room\Builders\RoomBuilder;
+use Domain\Room\Filters\Filters;
 use Domain\Room\Models\Room;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pipeline\Pipeline;
 use Lorisleiva\Actions\Action;
 use Parent\Filters\Filter;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @method static int run(array $filters, array $hotelFilters)
@@ -21,11 +19,11 @@ final class FilterRoomsCountAction extends Action
 {
     /**
      * @param  array<string, string>  $filters
-     * @param  array<string, string>  $hotelFilters    
+     * @param  array<string, string>  $hotelFilters
      * @return int
      */
     public function handle(array $filters, array $hotelFilters = []): int
-    {        
+    {
         /** @var RoomBuilder $result */
         $result = app(Pipeline::class)
             ->send(Room::query())
@@ -33,8 +31,8 @@ final class FilterRoomsCountAction extends Action
             ->thenReturn()
             ->moderated()
             ->hotelIn(FilterHotelsAction::run($hotelFilters, false)->pluck('id')->toArray());
-        $data = $result->count();        
-        
+        $data = $result->count();
+
         return $data;
     }
 
@@ -43,20 +41,20 @@ final class FilterRoomsCountAction extends Action
      * @return Filter[]
      */
     protected function filters(array $filters): array
-    {        
+    {
         $result = [];
-        foreach ($filters as $key => $value) {                           
-            if (is_array($value)) {            
-                foreach ($value as $k => $v) {                    
-                    if ($v && Filters::tryFrom($key))
-                        $result[] = Filters::from($key)->createFilter($v);                    
+        foreach ($filters as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    if ($v && Filters::tryFrom($key)) {
+                        $result[] = Filters::from($key)->createFilter($v);
+                    }
+                }
+            } else {
+                if ($value && Filters::tryFrom($key)) {
+                    $result[] = Filters::from($key)->createFilter($value);
                 }
             }
-            else {
-                if ($value && Filters::tryFrom($key))
-                    $result[] = Filters::from($key)->createFilter($value);
-            }
-            
         }
 
         return $result;

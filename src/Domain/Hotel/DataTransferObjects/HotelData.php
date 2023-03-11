@@ -18,7 +18,6 @@ use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
-use Spatie\LaravelData\Optional;
 
 final class HotelData extends \Parent\DataTransferObjects\Data
 {
@@ -45,7 +44,7 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public bool $checked_type_fond,
         public Image $image,
         /** @var Collection<Image>|Image[] */
-        public Collection|array $images,        
+        public Collection|array $images,
         public Lazy|AddressData|null $address,
         public Lazy|HotelTypeData|null $type,
         public Lazy|PageDescriptionData|null $meta,
@@ -55,12 +54,10 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public readonly null|Lazy|DataCollection $metros,
         #[DataCollectionOf(RoomData::class)]
         public readonly null|Lazy|DataCollection $rooms,
-        #[DataCollectionOf(MinCostsData::class)]        
+        #[DataCollectionOf(MinCostsData::class)]
         public readonly null|DataCollection $min_costs,
     ) {
     }
-
-    
 
     public static function fromModel(Hotel $hotel): self
     {

@@ -14,18 +14,16 @@ use Lorisleiva\Actions\Action;
 final class GetNumOfFilteredObjectsAction extends Action
 {
     /**
-     * @param array $filters   
+     * @param  array  $filters
      * @return int
      */
     public function handle(array $filters): int
-    {       
-        
+    {
         $isRoomsFilter = $filters['isRoomsFilter'] ?? 'false';
         if ($isRoomsFilter == 'true') {
             return FilterRoomsCountAction::run($filters['rooms'] ?? [], $filters['hotels'] ?? []);
-        }
-        else {
+        } else {
             return FilterHotelsCountAction::run($filters['hotels'] ?? []);
-        }                  
+        }
     }
 }

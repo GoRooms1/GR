@@ -11,7 +11,7 @@ final class HotelTypeKeyNameData extends \Parent\DataTransferObjects\Data
     public function __construct(
         public int $key,
         public string $name,
-       
+
     ) {
     }
 
@@ -19,7 +19,7 @@ final class HotelTypeKeyNameData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             'key' => $hotelType->id,
-            'name' => $hotelType->name
+            'name' => $hotelType->name,
         ]);
     }
 }

@@ -75,13 +75,13 @@ class PageDescription extends Model
     /** @var string[] */
     protected $dates = [
         'created_at',
-        'updated_at',        
+        'updated_at',
     ];
 
     protected string $dataClass = PageDescriptionData::class;
 
     protected $casts = [
-        'created_at'  => 'datetime:Y-m-d\Th:i:sP',
+        'created_at' => 'datetime:Y-m-d\Th:i:sP',
         'updated_at' => 'datetime:Y-m-d\Th:i:sP',
     ];
 

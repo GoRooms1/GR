@@ -5,12 +5,7 @@ declare(strict_types=1);
 namespace Domain\Category\DataTransferObjects;
 
 use Domain\Category\Models\Category;
-use Domain\Hotel\DataTransferObjects\HotelData;
-use Domain\Room\DataTransferObjects\RoomData;
 use Illuminate\Support\Carbon;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
-use Spatie\LaravelData\DataCollection;
-use Spatie\LaravelData\Lazy;
 
 final class CategoryData extends \Parent\DataTransferObjects\Data
 {
@@ -21,14 +16,14 @@ final class CategoryData extends \Parent\DataTransferObjects\Data
         public int $hotel_id,
         public ?int $value,
         public ?Carbon $created_at,
-        public ?Carbon $updated_at,        
+        public ?Carbon $updated_at,
     ) {
     }
 
     public static function fromModel(Category $category): self
     {
         return self::from([
-            ...$category->toArray(),            
+            ...$category->toArray(),
         ]);
     }
 }

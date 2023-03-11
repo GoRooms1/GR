@@ -6,7 +6,7 @@ namespace Domain\Room\DataTransferObjects;
 
 final class FilterCostRangeData extends \Parent\DataTransferObjects\Data
 {
-    public function __construct(        
+    public function __construct(
         public string $key,
         public string $name,
         public int $from,
@@ -21,12 +21,10 @@ final class FilterCostRangeData extends \Parent\DataTransferObjects\Data
         if ($from > 0 && $to > 0) {
             $key = $from.'-'.$to;
             $name = $from.'-'.$to;
-        }
-        elseif ($from == 0 && $to > 0) {
+        } elseif ($from == 0 && $to > 0) {
             $key = $from.'-'.$to;
             $name = 'До '.$to;
-        }
-        elseif ($from > 0 && $to == 0) {
+        } elseif ($from > 0 && $to == 0) {
             $key = $from.'-'.PHP_INT_MAX;
             $name = 'От '.$from;
         }
@@ -38,5 +36,4 @@ final class FilterCostRangeData extends \Parent\DataTransferObjects\Data
             'to' => $to > 0 ? $to : PHP_INT_MAX,
         ]);
     }
-   
 }

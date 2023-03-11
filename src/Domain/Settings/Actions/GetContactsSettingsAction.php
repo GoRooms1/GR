@@ -37,7 +37,7 @@ final class GetContactsSettingsAction extends Action
                 'bank_bik',
                 'bank_inn',
                 'bank_kpp',
-            ])->pluck('value', 'option');                
+            ])->pluck('value', 'option');
         });
 
         return $data;

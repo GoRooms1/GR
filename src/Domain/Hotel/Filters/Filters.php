@@ -17,7 +17,7 @@ enum Filters: string
     case Type = 'hotel_type';
 
     public function createFilter(string $value): Filter
-    {        
+    {
         return match ($this) {
             self::Name => new NameFilter($value),
             self::City => new CityFilter($value),

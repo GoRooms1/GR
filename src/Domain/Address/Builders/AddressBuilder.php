@@ -20,9 +20,9 @@ final class AddressBuilder extends Builder
             ->where('rooms.moderate', false)
             ->where('hotels.moderate', false)->where('hotels.show', true)->where('hotels.old_moderate', true);
     }
-    
+
     public function distinctCity(): self
     {
-        return $this->distinct('city');     
-    }   
+        return $this->distinct('city');
+    }
 }
