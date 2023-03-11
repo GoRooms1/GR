@@ -16,7 +16,7 @@ final class GenerateInfoDescForPeriod extends Action
         if ($end) {
             return $start.' - '.$end;
         }
-
+        // @todo: Static strings is forbidden
         return 'От '.$start.GetEndingValue::run((int) $start);
     }
 }

@@ -31,9 +31,8 @@ final class FilterRoomsCountAction extends Action
             ->thenReturn()
             ->moderated()
             ->hotelIn(FilterHotelsAction::run($hotelFilters, false)->pluck('id')->toArray());
-        $data = $result->count();
 
-        return $data;
+        return $result->count();
     }
 
     /**

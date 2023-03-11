@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
+use App\Models\FilterCost;
 use Domain\Room\DataTransferObjects\CostTypeKeyNameData;
 use Domain\Room\DataTransferObjects\FilterCostRangeData;
 use Domain\Room\Models\CostType;
@@ -20,16 +21,20 @@ final class GetCostTypesWithCostRangesKeyNameDataAction extends Action
      */
     public function handle(): DataCollection
     {
-        $result = [];
-        $cost_types = CostType::with('filterCosts')->orderBy('sort')->get();
+        $keyNames = new DataCollection(CostTypeKeyNameData::class, []);
+        /** @var CostType[] $costTypes */
+        $costTypes = CostType::with('filterCosts')->orderBy('sort')->get();
 
-        foreach ($cost_types as $type) {
-            $ranges = [];
-            $filter_costs = $type->filterCosts ?? [];
+        foreach ($costTypes as $costType) {
+            $ranges = new DataCollection(FilterCostRangeData::class, []);
+            /** @var FilterCost[] $filterCosts */
+            $filterCosts = $costType->filterCosts->sortBy('cost');
             $from = 0;
-            $to = 0;
-            foreach ($filter_costs->sortBy('cost') as $i => $cost) {
-                $to = $cost->cost;
+            // @todo second foreach in separate function
+            // $ranges[] = [...$filterCosts]
+            foreach ($filterCosts as $cost) {
+                /** @var int $to */
+                $to = $cost->cost ?? 0;
                 $ranges[] = FilterCostRangeData::fromRange($from, $to);
                 $from = $to;
             }
@@ -37,13 +42,13 @@ final class GetCostTypesWithCostRangesKeyNameDataAction extends Action
                 $ranges[] = FilterCostRangeData::fromRange($from, 0);
             }
 
-            $result[] = new CostTypeKeyNameData(
-                key: $type->id,
-                name: $type->name,
-                cost_ranges: new DataCollection(FilterCostRangeData::class, $ranges)
+            $keyNames[] = new CostTypeKeyNameData(
+                key: $costType->id,
+                name: $costType->name,
+                cost_ranges: $ranges
             );
         }
 
-        return new DataCollection(CostTypeKeyNameData::class, $result);
+        return $keyNames;
     }
 }

@@ -6,6 +6,7 @@ namespace Domain\Room\Actions;
 
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\Room;
+use Domain\Room\RoomConfig;
 use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Action;
 
@@ -20,8 +21,9 @@ final class GetAllUniqueRoomCosts extends Action
      */
     public function handle(Room $room): Collection
     {
+        // @todo Static strings to constants
         $costs = $room->costs()->with('period.type')->get()
-            ->unique('period.type.id')->sortBy('period.type.sort');
+            ->unique(RoomConfig::PERIOD_TYPE_ID)->sortBy('period.type.sort');
 
         $collection = new Collection();
         foreach ($costs as $cost) {

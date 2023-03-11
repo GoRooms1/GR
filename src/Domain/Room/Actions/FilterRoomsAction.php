@@ -15,32 +15,34 @@ use Lorisleiva\Actions\Action;
 use Parent\Filters\Filter;
 
 /**
- * @method static Collection<int, Room> run(array $filters, array $hotelFilters, ?bool $paginate)
+ * @method static LengthAwarePaginator<int, Room> run(array $filters, array $hotelFilters, ?bool $paginate)
  */
 final class FilterRoomsAction extends Action
 {
     /**
      * @param  array<string, string>  $filters
      * @param  array<string, string>  $hotelFilters
-     * @param  ?bool  $paginate
-     * @return Collection<int, Room>
+     * @param  bool  $paginate
+     * @return Collection<int, Room>|LengthAwarePaginator<Room>
      */
-    public function handle(array $filters, array $hotelFilters = [], ?bool $paginate = false): Collection | LengthAwarePaginator
+    public function handle(array $filters, array $hotelFilters = [], bool $paginate = false): Collection | LengthAwarePaginator
     {
-        /** @var RoomBuilder $result */
-        $result = app(Pipeline::class)
+        /** @var RoomBuilder $rooms */
+        $rooms = app(Pipeline::class)
             ->send(Room::query())
             ->through($this->filters($filters))
             ->thenReturn()
             ->moderated()
             ->hotelIn(FilterHotelsAction::run($hotelFilters, false)->pluck('id')->toArray());
+
         if ($paginate) {
-            $data = $result->paginate(config('pagination.rooms_per_page'));
-        } else {
-            $data = $result->get();
+            /** @var int $perPage */
+            $perPage = config('pagination.rooms_per_page');
+
+            return $rooms->paginate($perPage);
         }
 
-        return $data;
+        return $rooms->get();
     }
 
     /**

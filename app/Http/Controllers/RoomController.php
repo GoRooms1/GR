@@ -20,6 +20,7 @@ class RoomController extends Controller
 {
     public function index(Request $request): Response | ResponseFactory
     {
+        // ParamsData::fromRequest($request)
         return Inertia::render('Room/Index', new RoomListViewModel($request->all()));
     }
 

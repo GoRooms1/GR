@@ -14,21 +14,29 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
 
-    public array $params = [];
+    /**
+     * @param  array<string, string|int|array|bool>  $params
+     * @todo instead of array pass DTO
+     */
+    public function __construct(
+        // $paramData
+        protected array $params
+    )
+    {}
 
-    public function __construct(array $params)
-    {
-        $this->params = $params;
-    }
-
-    public function model()
+    /**
+     * @return array<string, array<string, string|int|array|null>>
+     */
+    public function model(): array
     {
         return [
-            'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/rooms'))->toArray(),
+            'page' => PageData::fromPageDescription(
+                GetPageDescriptionByUrlAction::run('/rooms')
+            )->toArray(),
         ];
     }
 
-    public function rooms()
+    public function rooms(): \Spatie\LaravelData\DataCollection|\Spatie\LaravelData\CursorPaginatedDataCollection|\Spatie\LaravelData\PaginatedDataCollection
     {
         return RoomData::collection(FilterRoomsAction::run($this->params['rooms'] ?? [], $this->params['hotels'] ?? [], true));
     }

@@ -16,6 +16,10 @@ enum Filters: string
     case HotelAttributes = 'attributes';
     case Type = 'hotel_type';
 
+    /**
+     * @param  non-empty-string  $value
+     * @return Filter
+     */
     public function createFilter(string $value): Filter
     {
         return match ($this) {

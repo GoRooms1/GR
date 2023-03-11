@@ -11,6 +11,8 @@ use Domain\Room\DataTransferObjects\CostData;
 use Domain\Room\DataTransferObjects\CostTypeData;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Room;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Action;
 use Spatie\LaravelData\DataCollection;
@@ -30,6 +32,7 @@ final class MinimumCostsCalculation extends Action
 
         /** @var CostTypeData[] $types */
         $types = CostType::orderBy('sort')->get()->map->getData();
+        /** @var Collection<Room> $rooms */
         $rooms = $hotel->rooms;
         $roomsId = $rooms->pluck('id')->toArray();
         /** @var array{cost_type_id: int, value: float, start_at: string, end_at: string}[] $costs */

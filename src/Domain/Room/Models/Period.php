@@ -84,6 +84,8 @@ final class Period extends Model
     /**
      * Get the info for font-end.
      *
+     * @deprecated
+     *
      * @return string
      */
     public function getInfoAttribute(): string
@@ -93,6 +95,8 @@ final class Period extends Model
 
     /**
      * Русское окончание при сокращениие цифрами до 20 часов
+     *
+     * @deprecated
      *
      * @param  string|int  $value
      * @return string

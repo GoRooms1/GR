@@ -20,24 +20,23 @@ final class FilterHotelsAction extends Action
 {
     /**
      * @param  array<string, string>  $filters
-     * @param  ?bool  $paginate
+     * @param  bool  $paginate
      * @return Collection<int, Hotel>
      */
-    public function handle(array $filters, ?bool $paginate = false): Collection | LengthAwarePaginator
+    public function handle(array $filters, bool $paginate = false): Collection | LengthAwarePaginator
     {
-        /** @var HotelBuilder $result */
-        $result = app(Pipeline::class)
+        // @todo Single Responsibility breaking. Need to create 2 classes
+        /** @var HotelBuilder $hotels */
+        $hotels = app(Pipeline::class)
             ->send(Hotel::query())
             ->through($this->filters($filters))
             ->thenReturn()
             ->moderated()->withRooms();
-        if ($paginate) {
-            $data = $result->paginate(config('pagination.hotels_per_page'));
-        } else {
-            $data = $result->get();
-        }
 
-        return $data;
+        if ($paginate) {
+            return $hotels->paginate(config('pagination.hotels_per_page'));
+        }
+        return $hotels->get();
     }
 
     /**
@@ -47,14 +46,19 @@ final class FilterHotelsAction extends Action
     protected function filters(array $filters): array
     {
         $result = [];
+/*        $filterCollection = collect($filters);
+        $filterCollection->map(function (array|string $data) {
+
+        })*/
         foreach ($filters as $key => $value) {
             if (is_array($value)) {
-                foreach ($value as $k => $v) {
+                foreach ($value as $v) {
                     if ($v && Filters::tryFrom($key)) {
                         $result[] = Filters::from($key)->createFilter($v);
                     }
                 }
             } else {
+                // @todo to separate function
                 if ($value && Filters::tryFrom($key)) {
                     $result[] = Filters::from($key)->createFilter($value);
                 }
@@ -62,5 +66,10 @@ final class FilterHotelsAction extends Action
         }
 
         return $result;
+    }
+
+    private function createFilter(): Filter
+    {
+
     }
 }

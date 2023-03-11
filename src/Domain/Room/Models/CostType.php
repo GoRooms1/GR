@@ -60,6 +60,8 @@ final class CostType extends Model
     /**
      * Последняя запись
      *
+     * @todo move to Builder
+     *
      * @return int
      */
     public static function getLastOrder(): int
