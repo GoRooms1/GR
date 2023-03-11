@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FilterController;
@@ -37,6 +38,8 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
 Route::get('/filter', [FilterController::class, 'filter'])->name('filter');
+
+Route::get('/address/{city}/{area?}/{district?}/{street?}', [AddressController::class, 'address'])->name('address');
 
 Route::get('/contacts', [\App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');

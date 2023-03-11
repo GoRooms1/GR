@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Domain\Address\DataTransferObjects;
 
+use Domain\Address\Actions\GetSlugFromAddress;
+use Domain\Address\Models\Address;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 
 final class AddressData extends \Parent\DataTransferObjects\Data
 {
@@ -31,6 +35,16 @@ final class AddressData extends \Parent\DataTransferObjects\Data
         public ?string $street_type,
         public ?string $street_with_type,
         public ?string $comment,
+        #[DataCollectionOf(AddressSlugData::class)]        
+        public readonly null|DataCollection $slugs,
     ) {
+    }
+
+    public static function fromModel(Address $address): self
+    {
+        return self::from([
+            ...$address->toArray(),
+            'slugs' => GetSlugFromAddress::run($address),
+        ]);
     }
 }

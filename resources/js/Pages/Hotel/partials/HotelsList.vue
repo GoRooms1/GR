@@ -30,7 +30,8 @@
 </template>
 
 <script>
-    import { filterStore } from '@/Store/filterStore.js'    
+    import { filterStore } from '@/Store/filterStore.js'
+    import { tempFilterStore } from '@/Store/tempFilterStore.js'    
     import { usePage } from '@inertiajs/inertia-vue3'
     import _ from 'lodash'
     import HotelCard from "./HotelCard.vue"
@@ -49,34 +50,24 @@
                 required: false,                
             },
         },
-        mounted() {                 
+        mounted() {
         },        
         data() {
             return {
-                filterStore,                
+                filterStore,
+                tempFilterStore,                               
                 allHotels: this.hotels.data ?? [],
-                isLoading: false,
-                gettinData: false,                                                        
+                isLoading: false,                                     
             }
         },
-        computed: {
-            filters() {
-                return _.cloneDeep(this.filterStore.filters);
-            },
+        computed: {           
             globalLoading() {
                 return usePage().props.value.isLoadind ?? false;
             }                   
         },
-        methods: {
-            getData() {                                
-                this.$inertia.get(route('filter'), this.filterStore.getFiltersValues(), {
-                    preserveState: true,
-                    preserveScroll: true,
-                    onStart: () => {usePage().props.value.isLoadind = true},
-                    onFinish: () => {usePage().props.value.isLoadind = false},                                       
-                });                
-            },         
-            loadMore() {                
+        methods: {            
+            loadMore() {
+                let initialUrl = window.location.href;               
                 if (this?.hotels?.meta?.next_page_url) {
                     this.$inertia.get(this.hotels.meta.next_page_url, this.filterStore.getFiltersValues(), {
                         preserveState: true,
@@ -84,13 +75,9 @@
                         only: ['hotels'],                                     
                         onSuccess: () => {                            
                             if (this.hotels.meta.current_page != 1)                         
-                                this.allHotels = [...this.allHotels, ...this.hotels.data]
-                            
-                            let url = usePage().url.value;
-                            let params = new URLSearchParams(url.substring(url.indexOf("?") + 1));
-                            params.delete('page');
-                            let newUrl = route('hotels.index') + '?' + params;                            
-                            window.history.pushState({}, this.$page.title, newUrl);
+                                this.allHotels = [...this.allHotels, ...this.hotels.data];
+                                                     
+                            window.history.pushState({}, this.$page.title, initialUrl);
                         },
                         onStart: () => {this.isLoading = true},
                         onFinish: () => {this.isLoading = false;},
@@ -103,15 +90,7 @@
                 if (this.hotels.meta.current_page == 1) {                    
                     this.allHotels = this.hotels.data ?? [];
                 }                    
-            },
-            filters: {
-                handler(newVal, oldVal) {                                
-                    if (!_.isEqual(newVal, oldVal) && (usePage().props.value.modals?.filters ?? false) != true) {                                                
-                        this.getData();                      
-                    }                    
-                },
-                deep: true
-            },
+            },           
         }
     }
 </script>
