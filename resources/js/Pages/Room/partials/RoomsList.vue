@@ -1,4 +1,4 @@
-<template>
+<template>    
     <div v-if="globalLoading == false" class="container mx-auto px-4 relative z-10 min-[1920px]:px-[10vw]">
         <room-card
             v-for="room in allRooms"

@@ -3,7 +3,7 @@
         <div class="container mx-auto px-4 min-[1920px]:px-[10vw]">
             <div class="flex justify-between items-center">
                 <h1 class="text-white font-bold xl:text-3xl">
-                Мы нашли для вас {{ foundMessage }}
+                {{ foundMessage }}
                 </h1>
                 <button class="xl:hidden">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,6 +82,9 @@
                 type: Number,
                 default: 0,
             },
+            customMessage: {
+                type: String,                
+            }
         },
         data() {
             return {
@@ -90,7 +93,11 @@
         },        
         computed: {           
             foundMessage() {
-                return this.found + ' ' + numWord(this.found, ['номер', 'номера', 'номеров']);
+                let message = this.customMessage != null ? 
+                    this.customMessage 
+                        : 
+                    'Мы нашли для вас ' + this.found + ' ' + numWord(this.found, ['номер', 'номера', 'номеров']);
+                return message;
             }
         },       
     }

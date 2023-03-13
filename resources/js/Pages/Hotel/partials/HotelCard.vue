@@ -89,13 +89,13 @@
                     {{ hotel?.type?.single_name ?? 'Отель' }}
                 </div>
                 <div class="mb-6">
-                    <a href="#" target="_blank" class="block font-bold text-xl leading-6 text-center underline text-[#6170FF]">
+                    <a :href="route('hotels.show', hotel)" target="_blank" class="block font-bold text-xl leading-6 text-center underline text-[#6170FF]">
                         {{ hotel.name }}
                     </a>
                 </div>
                 <div>
-                    <hotel-address :address="hotel.address"/>
-                    <hotel-metro-item :metro="metro" :address="hotel.address"/>
+                    <hotel-address :address="hotel.address"  class="flex mb-2"/>
+                    <hotel-metro-item :metro="metro" :address="hotel.address"  class="flex mb-2"/>
                 </div>
             </div>
             <div class="relative bg-white rounded-bl-2xl rounded-br-2xl px-4 pb-4 pt-6 mx-4">
@@ -118,6 +118,7 @@
     import _ from 'lodash'
     import { Swiper, SwiperSlide } from 'swiper/vue'
     import SwiperCore, { Pagination, Navigation } from "swiper"
+    import {Link} from '@inertiajs/inertia-vue3' 
     import CashbackTag from '@/components/ui/CashbackTag.vue'
     import Image from '@/components/ui/Image.vue'
     import CostItem from '@/components/ui/CostItem.vue'
@@ -130,6 +131,7 @@
         components: {
             Swiper,
             SwiperSlide,
+            Link,
             CashbackTag,
             Image,
             CostItem,

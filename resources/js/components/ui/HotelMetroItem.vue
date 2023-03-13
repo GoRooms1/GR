@@ -1,5 +1,5 @@
 <template>
-   <div class="flex mb-2">
+   <div v-bind="$attrs">
         <div class="flex mr-2">
             <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.2343 12.231H16.3397L12.6234 3H12.6203L10.1173 8.22059L7.62034 3H7.61728L3.89485 12.231H3.00024V13H8.12586V12.231H7.1087L8.29436 9.30208L10.1173 13L11.9463 9.30208L13.1259 12.231H12.1087V13H17.2343V12.231Z" :fill="'#' + metro.color"></path>

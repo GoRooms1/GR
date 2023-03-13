@@ -27,7 +27,8 @@ final class RoomHotelData extends \Parent\DataTransferObjects\Data
         public string $name,        
         public ?PhoneNumberValueObject $phone,
         public ?string $phone_2,        
-        public ?string $email,        
+        public ?string $email,
+        public ?string $slug,       
         public Lazy|HotelTypeData|null $type,       
         public Lazy|AddressData|null $address,
         #[DataCollectionOf(MetroData::class)]

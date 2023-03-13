@@ -59,9 +59,7 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public readonly null|DataCollection $min_costs,
     ) {
     }
-
     
-
     public static function fromModel(Hotel $hotel): self
     {
         return self::from([
@@ -77,9 +75,9 @@ final class HotelData extends \Parent\DataTransferObjects\Data
             'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressData::from($hotel->address)),
             'type' => Lazy::whenLoaded('type', $hotel, fn () => HotelTypeData::from($hotel->type)),
             'meta' => Lazy::whenLoaded('meta', $hotel, fn () => PageDescriptionData::from($hotel->meta)),
-            'attrs' => Lazy::create(fn () => AttributeData::collection($hotel->attrs))->defaultIncluded(false),
+            'attrs' => Lazy::whenLoaded('attrs', $hotel, fn () => AttributeData::collection($hotel->attrs))->defaultIncluded(false),
             'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros)),
-            'rooms' => Lazy::create(fn () => RoomData::collection($hotel->rooms))->defaultIncluded(false),
+            'rooms' => Lazy::whenLoaded('rooms', $hotel, fn () => RoomData::collection($hotel->rooms))->defaultIncluded(false),
             'min_costs' => MinimumCostsCalculation::run($hotel),
         ]);
     }

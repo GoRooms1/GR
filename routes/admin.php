@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AttributeCategoriesController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CostTypeController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HotelController;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 | Admin routes
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
 Route::resource('hotels', HotelController::class);
@@ -38,7 +40,7 @@ Route::resource('attributes', AttributeController::class)->except(['show']);
 
 Route::resource('attribute_categories', AttributeCategoriesController::class);
 
-Route::resource('hotels/{hotel?}/categories', 'CategoryController')->except('index');
+Route::resource('hotels/{hotel?}/categories', CategoryController::class)->except('index');
 Route::resource('cost_types', CostTypeController::class)->except('show');
 
 Route::resource('bookings', BookingController::class)->except('destroy', 'create', 'update', 'edit', 'store');
