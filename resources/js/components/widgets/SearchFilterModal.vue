@@ -46,20 +46,22 @@
                                 title="Low Cost"
                                 type="small"
                                 initial-value=true                                        
-                                v-model="low_cost"            
+                                :model-value="tempFilterStore.getFilterValue('rooms', 'low_cost')"
+                                @update:modelValue="(event) => filterValueHandler('rooms', false, 'low_cost', event)"            
                             />
                             <filter-attr-toggle
                                 title="От 1 часа"
                                 type="small"
-                                :initial-value="68"
-                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_68')"
-                                @update:modelValue="(event) => attributeHandler('rooms', event, 68)"                                           
+                                :initial-value="68"                                
+                                :model-value="tempFilterStore.getFilterValue('rooms', 'attr_68')"
+                                @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_68', event)"                                           
                             />                
                             <filter-attr-toggle
                                 title="Горящие"
                                 type="small"
                                 initial-value=true                                        
-                                v-model="is_hot"
+                                :model-value="tempFilterStore.getFilterValue('rooms', 'is_hot')"
+                                @update:modelValue="(event) => filterValueHandler('rooms', false, 'is_hot', event)"
                             />
                             <filter-attr-toggle
                                 title="Кешбэк"
@@ -70,15 +72,15 @@
                                 title="Арт дизайн"
                                 type="small"
                                 :initial-value="52"
-                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_52')"
-                                @update:modelValue="(event) => attributeHandler('rooms', event, 52)"                        
+                                :model-value="tempFilterStore.getFilterValue('rooms', 'attr_52')"
+                                @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_52', event)"                        
                             />
                             <filter-attr-toggle
                                 title="Джакузи"
                                 type="small"
                                 :initial-value="65"
-                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_65')"
-                                @update:modelValue="(event) => attributeHandler('rooms', event, 65)"                        
+                                :model-value="tempFilterStore.getFilterValue('rooms', 'attr_65')"
+                                @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_65', event)"                        
                             />
                         </div>
                         <!-- <div class="lg:block hidden p-[8px] bg-[#EAEFFD] rounded-b-[16px]">
@@ -90,10 +92,10 @@
                                 </svg>
                             </button>
                         </div> -->
-                    </div>
+                    </div>                   
                     <div class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]">
                         <filter-tag 
-                            v-for="tag in filterStoreCopy?.filters ?? []"
+                            v-for="tag in tempFilterStore.filters ?? []"
                             :filter-model="tag.modelType"
                             :filter-key="tag.key"
                             :is-attribute="tag.isAttribute"
@@ -116,17 +118,18 @@
                                 <p class="text-[14px] leading-[16px] mb-[8px]">Тип заведения</p>
                                 <filter-select 
                                     :options-array="$page.props.hotel_types ?? []" 
-                                    placeholder="Все"
-                                    left
-                                    v-model="hotel_type"
+                                    placeholder="Все"                                    
+                                    :model-value="tempFilterStore.getFilterValue('hotels', 'hotel_type')"
+                                    @update:modelValue="(event) => filterValueHandler('hotels', false, 'hotel_type', event)"
                                 />                                
                                 <div class="hidden md:flex w-full">
                                     <filter-attr-toggle
                                         title="Горящие предложения"
-                                        img="img/flash.svg" toggle-img="img/flash2.svg"
+                                        img="/img/flash.svg" toggle-img="/img/flash2.svg"
                                         type="vertical"
                                         initial-value=true                                        
-                                        v-model="is_hot"                
+                                        :model-value="tempFilterStore.getFilterValue('rooms', 'is_hot')"
+                                        @update:modelValue="(event) => filterValueHandler('rooms', false, 'is_hot', event)"                
                                     />
                                 </div>                                                                                        
                             </div>
@@ -136,7 +139,7 @@
                                 <div class="hidden md:flex w-full">
                                     <filter-attr-toggle
                                         title="Кешбэк"
-                                        img="img/cashback.svg" toggle-img="img/cashback2.svg"
+                                        img="/img/cashback.svg" toggle-img="/img/cashback2.svg"
                                         type="vertical"                                        
                                         disabled              
                                     />
@@ -150,34 +153,38 @@
                                     <city-select                                        
                                         searchable 
                                         placeholder="Город" 
-                                        v-model="city" 
+                                        :model-value="tempFilterStore.getFilterValue('hotels', 'city')" 
                                         :options-array="$page.props.cities ?? []"
-                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"                                                                        
+                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"
+                                        @update:modelValue="(event) => filterValueHandler('hotels', false, 'city', event)"                                                                       
                                     />
 
                                     <city-area-select                                         
                                         placeholder="Округ"
-                                        v-model="city_area"
+                                        :model-value="tempFilterStore.getFilterValue('hotels', 'city_area')"
                                         searchable                                        
                                         :options-array="$page.props.city_areas ?? []"
-                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"                                        
+                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'" 
+                                        @update:modelValue="(event) => filterValueHandler('hotels', false, 'city_area', event)"                                       
                                     />
                                     
                                     <city-area-select                                         
                                         placeholder="Район"
-                                        v-model="city_district"
+                                        :model-value="tempFilterStore.getFilterValue('hotels', 'city_district')"
                                         searchable                                        
                                         :options-array="$page.props.city_districts ?? []"
-                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"                                         
+                                        :position="filterContentScroll == true ? 'relative' : 'relative md:static'"
+                                        @update:modelValue="(event) => filterValueHandler('hotels', false, 'city_district', event)"                                        
                                     />
                                     
                                     <metro-select 
                                         type="form" 
                                         searchable 
                                         placeholder="Станция метро" 
-                                        v-model="metro" 
+                                        :model-value="tempFilterStore.getFilterValue('hotels', 'metro')" 
                                         :options-array="$page.props.metros ?? []"
                                         :position="filterContentScroll == true ? 'relative' : 'relative md:static'"
+                                        @update:modelValue="(event) => filterValueHandler('hotels', false, 'metro', event)"
                                     />
 
                                 </div>
@@ -186,22 +193,24 @@
                                 <p class="text-[14px] leading-[16px] mb-[8px]">Период</p>                                                             
                                 <period-cost-select 
                                     :options="$page.props.cost_types"
-                                    v-model="period_cost"
+                                    :model-value="tempFilterStore.getFilterValue('rooms', 'period_cost')"
+                                    @update:modelValue="(event) => filterValueHandler('rooms', false, 'period_cost', event)"
                                 />
                             </div>
                             <div class="col-span-2 md:hidden grid gap-[16px]">
                                 <filter-attr-toggle
                                     title="Программа кешбэк"
-                                    img="img/cashback.svg" toggle-img="img/cashback2.svg"
+                                    img="/img/cashback.svg" toggle-img="/img/cashback2.svg"
                                     type="small"                                    
                                     disabled                   
                                 />
                                 <filter-attr-toggle
                                     title="Горящие предложения"
-                                    img="img/flash.svg" toggle-img="img/flash2.svg"
+                                    img="/img/flash.svg" toggle-img="/img/flash2.svg"
                                     type="small"
                                     initial-value=true                                        
-                                    v-model="is_hot"                   
+                                    :model-value="tempFilterStore.getFilterValue('rooms', 'is_hot')"
+                                    @update:modelValue="(event) => filterValueHandler('rooms', false, 'is_hot', event)"                   
                                 />                                
                             </div>
                         </div>                                               
@@ -215,8 +224,8 @@
                                                 :title="attribute.name"                                    
                                                 type="small"
                                                 :initial-value="attribute.id"
-                                                :model-value="filterStoreCopy?.getFilterValue('hotels','attr_'+attribute.id)"
-                                                @update:modelValue="(event) => attributeHandler('hotels', event, attribute.id)"                                                              
+                                                :model-value="tempFilterStore.getFilterValue('hotels','attr_'+attribute.id)"
+                                                @update:modelValue="(event) => filterValueHandler('hotels', true, 'attr_'+attribute.id, event)"                                                              
                                             />
                                         </div>                                
                                     </div>
@@ -234,8 +243,8 @@
                                                 :title="attribute.name"                                    
                                                 type="small"
                                                 :initial-value="attribute.id"
-                                                :model-value="filterStoreCopy?.getFilterValue('rooms', 'attr_'+attribute.id)"
-                                                @update:modelValue="(event) => attributeHandler('rooms', event, attribute.id)"                  
+                                                :model-value="tempFilterStore.getFilterValue('rooms', 'attr_'+attribute.id)"
+                                                @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_'+attribute.id, event)"                  
                                             />
                                         </div>                                
                                     </div>
@@ -281,7 +290,8 @@
 <script>
     import SearchPanel from "@/components/widgets/SearchPanel.vue"    
     import { usePage } from '@inertiajs/inertia-vue3'
-    import { filterStore } from '@/Store/filterStore.js'    
+    import { filterStore } from '@/Store/filterStore.js' 
+    import { tempFilterStore } from '@/Store/tempFilterStore.js'  
     import { numWord } from '@/Services/numWord.js'    
     import _ from 'lodash'
     import FilterSelect from '@/components/ui/FilterSelect.vue'
@@ -294,28 +304,8 @@
     import PeriodCostSelect from '@/components/ui/PeriodCostSelect.vue'
     import FilterAttrToggle from '@/components/ui/FilterAttrToggle.vue'
     import FilterTag from '@/components/ui/FilterTag.vue'
-    import FilterCollapse from '@/components/ui/FilterCollapse.vue'    
-
-    let filterGetSetObj = function (model, key) {
-        return {
-                get() {                                           
-                    return this.filterStoreCopy?.getFilterValue(model, key);
-                },
-                set(val) {
-                    if (val)    
-                        this.filterStoreCopy.updateFilter(model, false, key, val);                    
-                    if (val === null)
-                        this.filterStoreCopy.removeFilter(model, key);
-                }
-            }
-    };
-
-    let filterWatchUpdate = function (newVal, oldVal) {                
-        if (oldVal != newVal) {                                     
-            this.updateFilters(['total']);                  
-        }
-    };
-
+    import FilterCollapse from '@/components/ui/FilterCollapse.vue'
+    
     export default {        
         components: {
             SearchPanel,
@@ -335,17 +325,27 @@
             this.handleResize();
         },  
         mounted() {
-            this.filterStore.init(usePage().url.value);
-            this.filterStoreCopy = _.cloneDeep(this.filterStore);             
+            let initPromise = new Promise((resolve, reject) => {
+                resolve(this.filterStore.init(usePage().props.value.query_string ?? usePage().url.value));
+            });
+            
+            initPromise.then((value) => {                
+                this.inited = true;
+                this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
+
+                if (value == true)
+                    this.getData();
+            });                     
         },
         destroyed() {
             window.removeEventListener('resize', this.handleResize);            
         },        
         data() {
             return {
+                inited: false,          
                 filterStore,
                 initialUrl: usePage().url.value,                
-                filterStoreCopy: _.cloneDeep(this.filterStore),
+                tempFilterStore,
                 innerWidth: window.innerWidth,
                 innerHeight: window.innerHeight,
                 filterContentScroll: false,                                                       
@@ -357,33 +357,27 @@
             },           
             foundMessage() {
                 let objectWords;
-                if (this.filterStoreCopy?.getFiltersValues()?.isRoomsFilter == true)
+                if (this.tempFilterStore.getFiltersValues().isRoomsFilter == true)
                     objectWords = ['номер', 'номера', 'номеров'];
                 else
                     objectWords = ['отель', 'отеля', 'отелей'];
+
                 return usePage().props.value.total + ' ' + numWord(usePage().props.value.total, objectWords);
-            },           
-            hotel_type: filterGetSetObj('hotels', 'hotel_type'),           
-            city: filterGetSetObj('hotels', 'city'),
-            metro: filterGetSetObj('hotels', 'metro'),                        
-            city_area: filterGetSetObj('hotels', 'city_area'),
-            city_district: filterGetSetObj('hotels', 'city_district'),
-            period_cost: filterGetSetObj('rooms', 'period_cost'),
-            is_hot: filterGetSetObj('rooms', 'is_hot'),
-            low_cost: filterGetSetObj('rooms', 'low_cost'),                 
+            },
+            filters() {
+                return _.cloneDeep(this.filterStore.filters);
+            },        
         },
         methods: {
             close() {                              
-                window.history.pushState({}, this.$page.title, this.initialUrl);
-                this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);               
+                window.history.pushState({}, this.$page.title, this.initialUrl);                              
                 usePage().props.value.modals.filters = false;
-                document.body.classList.remove("fixed");                                           
+                document.body.classList.remove("fixed");             
             },
             handleResize() {                
                 if (this.isOpen) {                                       
                     this.innerHeight = window.innerHeight;
-                    this.innerWidth = window.innerWidth;
-                    
+                    this.innerWidth = window.innerWidth;                    
                     this.filterContentResize();
                 }         
             },
@@ -392,89 +386,73 @@
                     this.filterContentScroll = this.$refs.filterContent.clientHeight < this.$refs.filterContent.scrollHeight;                
             },                                     
             getData() {
-                this.filterStore.filters = _.cloneDeep(this.filterStoreCopy.filters);                                
+                if (this.isOpen == true) {
+                    this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);                    
+                }
+                                                    
                 this.$inertia.get(route('filter'), this.filterStore.getFiltersValues(), {
                     preserveState: true,
                     preserveScroll: true,
-                    onStart: () => {usePage().props.value.isLoadind = true},
+                    onStart: () => {usePage().props.value.isLoadind = true; this.close();},
                     onFinish: () => {usePage().props.value.isLoadind = false},                                       
                 });
-                this.close();
             },
             updateFilters(only) {
-                let data = this.filterStoreCopy.getFiltersValues();                          
+                let data = this.tempFilterStore.getFiltersValues();                                        
                 this.$inertia.get(route(route().current()), data, {
                     preserveState: true,
                     preserveScroll: true,
                     replace: true,
                     only: only ?? [],                   
-                });
+                });            
             },
             clearFilters() {                
-                this.filterStoreCopy.clearFilters();
-                this.updateFilters(['total']);
-            },            
-            attributeHandler(modelType, filterValue, attrID) {                
-                if (filterValue == null)
-                    this.filterStoreCopy.removeFilter(modelType, 'attr_'+attrID);
-                else
-                    this.filterStoreCopy.addFilter(modelType, true, 'attr_'+attrID, attrID);
-
+                this.tempFilterStore.clearFilters();
                 this.updateFilters(['total']);
             },
-            closeTag(obj) {                
-                this.filterStoreCopy.removeFilter(obj.modelType, obj.key);
-                this.updateFilters(['total']);
+            filterValueHandler(model, isAttr = false, key, value) {
+                let propsToUpdate = ['total'];
+                if (key == 'city') {
+                    this.tempFilterStore.removeFilter('hotels', 'city_area');
+                    this.tempFilterStore.removeFilter('hotels', 'city_district');
+                    this.tempFilterStore.removeFilter('hotels', 'metro');
+                    propsToUpdate = _.union(propsToUpdate, ['total', 'metros', 'city_areas', 'city_districts']);                      
+                }
+
+                if (key == 'city_area') {                    
+                    this.tempFilterStore.removeFilter('hotels', 'city_district');
+                    propsToUpdate = _.union(propsToUpdate, ['total', 'city_districts']);                        
+                }
+
+                if (value == null) {
+                    this.tempFilterStore.removeFilter(model, key);
+                } else {
+                    this.tempFilterStore.updateFilter(model, isAttr, key, value);
+                }
+
+                this.updateFilters(propsToUpdate);
+            },
+            closeTag(obj) {
+                this.filterValueHandler(obj.modelType, false, obj.key, null);               
             },                  
         },
         watch: {
-            isOpen: function (newVal, oldVal) {
-                if (newVal == true && (!oldVal || oldVal == false)) {                                           
-                    this.initialUrl = usePage().url.value;                        
-                    this.filterStoreCopy.filters = _.cloneDeep(this.filterStore.filters);
-                    document.body.classList.add("fixed");
-                }                    
+            isOpen: function (newVal, oldVal) {               
+                if (newVal == true && (!oldVal || oldVal == false)) {
+                    this.initialUrl = window.location.href;
+                    document.body.classList.add("fixed");                    
+                    this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
+                    this.updateFilters(['total']); 
+                }
             },
-            city: function(newVal, oldVal) {       
-                    if (oldVal != newVal) {
-                        this.metro = null;
-                        this.city_area = null;
-                        this.city_district = null;                        
-                        this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);                                               
+            filters: {
+                handler(newVal, oldVal) {                                
+                    if (!_.isEqual(newVal, oldVal) && this.isOpen == false && this.inited == true) {                                                
+                        this.getData();                      
                     }                    
-            },
-            city_area: function (newVal, oldVal) {
-                if (oldVal != newVal && newVal != null) {
-                    this.city_district = null;                                    
-                    this.updateFilters(['total', 'city_districts']);                  
-                }
-                
-                if (oldVal != null && newVal == null) {                    
-                    this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
-                }
-            },
-            city_district: function (newVal, oldVal) {                
-                if (oldVal != newVal && newVal != null) {                                    
-                    this.updateFilters(['total']);                  
-                }
-                
-                if (oldVal != null && newVal == null) {
-                    this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
-                }
-            },
-            metro: function (newVal, oldVal) {                
-                if (oldVal != newVal && newVal != null) {                                     
-                    this.updateFilters(['total']);                  
-                }
-                
-                if (oldVal != null && newVal == null) {
-                    this.updateFilters(['total', 'metros', 'city_areas', 'city_districts']);
-                }
-            },
-            hotel_type: filterWatchUpdate,
-            period_cost: filterWatchUpdate,
-            is_hot: filterWatchUpdate,
-            low_cost: filterWatchUpdate,                          
+                },
+                deep: true
+            },                   
         }
     }
 </script>

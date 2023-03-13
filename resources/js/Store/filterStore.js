@@ -10,17 +10,20 @@ export const filterStore = reactive({
 
   //Getters and Actions
   async init(url) {    
-    console.log('init filters');    
-    if (url.substring(url.indexOf("?") + 1).length > 2) {
+    console.log('init filters');
+    this.filters = [];
+    let reloadStatus = false;  
+    if (url.substring(url.indexOf("?") + 1).length > 2) {      
       this.parceUrlParameters(url);
     }
-    else {
-      this.filters = [];
-    }        
-    if (this.getFilterValue('hotels', false, 'city') == null) {    
-      let city = await geolocationStore.locate();      
+          
+    if (this.getFilterValue('hotels', 'city') == null) {  
+      let city = await geolocationStore.locate();
       this.updateFilter('hotels', false, 'city', city);
-    }  
+      //Reload if city was located
+      reloadStatus = true;
+    }
+    return reloadStatus; 
   },
 
   clearFilters() {
@@ -96,7 +99,7 @@ export const filterStore = reactive({
 
   parceUrlParameters(url) {        
     url = url.substring(url.indexOf("?") + 1);
-    let paramsObj = qs.parse(url);   
+    let paramsObj = qs.parse(url);
 
     let models = ['hotels', 'rooms'];
 

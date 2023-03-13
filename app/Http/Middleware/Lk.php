@@ -30,7 +30,7 @@ class Lk
                 if ($user->personal_hotel) {
                     return $next($request);
                 }
-
+                
                 return redirect()->route('lk.start');
             } catch (ModelNotFoundException $e) {
                 abort(404, 'Пользователь не найден');

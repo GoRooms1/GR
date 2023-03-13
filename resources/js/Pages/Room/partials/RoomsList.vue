@@ -1,4 +1,4 @@
-<template>
+<template>    
     <div v-if="globalLoading == false" class="container mx-auto px-4 relative z-10 min-[1920px]:px-[10vw]">
         <room-card
             v-for="room in allRooms"
@@ -56,24 +56,14 @@
                 isLoading: false,                                                                        
             }
         },
-        computed: {
-            filters() {
-                return _.cloneDeep(this.filterStore.filters);
-            },
+        computed: {           
             globalLoading() {
                 return usePage().props.value.isLoadind ?? false;
             }                   
         },
-        methods: {
-            getData() {                                
-                this.$inertia.get(route('filter'), this.filterStore.getFiltersValues(), {
-                    preserveState: true,
-                    preserveScroll: true,
-                    onStart: () => {usePage().props.value.isLoadind = true},
-                    onFinish: () => {usePage().props.value.isLoadind = false},                                       
-                });                
-            },         
-            loadMore() {                
+        methods: {            
+            loadMore() {
+                let initialUrl = window.location.href;               
                 if (this?.rooms?.meta?.next_page_url) {
                     this.$inertia.get(this.rooms.meta.next_page_url, this.filterStore.getFiltersValues(), {
                         preserveState: true,
@@ -81,13 +71,9 @@
                         only: ['rooms'],                                     
                         onSuccess: () => {                            
                             if (this.rooms.meta.current_page != 1)                         
-                                this.allRooms = [...this.allRooms, ...this.rooms.data]
-                            
-                            let url = usePage().url.value;
-                            let params = new URLSearchParams(url.substring(url.indexOf("?") + 1));
-                            params.delete('page');
-                            let newUrl = route('rooms.index') + '?' + params;                            
-                            window.history.pushState({}, this.$page.title, newUrl);
+                                this.allRooms = [...this.allRooms, ...this.rooms.data];
+                                                   
+                            window.history.pushState({}, this.$page.title, initialUrl);
                         },
                         onStart: () => {this.isLoading = true},
                         onFinish: () => {this.isLoading = false;},
@@ -100,14 +86,6 @@
                 if (this.rooms?.meta?.current_page == 1) {                    
                     this.allRooms = this.rooms.data ?? [];                    
                 }                    
-            },
-            filters: {
-                handler(newVal, oldVal) {                                
-                    if (!_.isEqual(newVal, oldVal) && (usePage().props.value.modals?.filters ?? false) != true) {                                                
-                        this.getData();                      
-                    }                    
-                },
-                deep: true
             },
         }
     }

@@ -9,6 +9,7 @@ use App\Traits\CreatedAtOrdered;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Str;
 
 /**
  * Domain\Image\Models\Image
@@ -47,7 +48,7 @@ final class Image extends Model
 {
     use CreatedAtOrdered;
 
-    public const DEFAULT = 'img/img-hotel.jpg';
+    public const DEFAULT = '/img/img-hotel.jpg';
 
     protected static string $orderDirection = 'ASC';
 
@@ -72,6 +73,7 @@ final class Image extends Model
     {
         //TODO optimisate with spatie medialibrary package
         //return str_replace('storage', 'storage', $value);
+        $value = Str::start($value, '/');
         return $value;
     }
 }

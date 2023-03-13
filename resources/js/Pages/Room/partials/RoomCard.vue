@@ -88,15 +88,15 @@
                 </button>
                 <cashback-tag/>
             </div>
-            <a href="#" class="block mb-6">
-                <div class="font-bold text-xl leading-6 cursor-pointer">
+            <div class="block mb-6">
+                <div class="font-bold text-xl leading-6">
                     {{ room.number ? room.number + ' / ' : '' }} {{ room?.name?.length > 1 ? room.name : '' }} {{ room.category?.name?.length > 1 ? ('(' + room.category.name + ')') : '' }}
                 </div>                
                 <div class="text-sm leading-4">
                     {{ room.hotel.type.single_name }}
-                    <a class="underline text-[#6170FF] font-bold">{{ room.hotel.name }}</a>
+                    <a :href="route('hotels.index') + '/' + room.hotel.slug" target="_blank" class="underline text-[#6170FF] font-bold">{{ room.hotel.name }}</a>
                 </div>
-            </a>
+            </div>
             <div class="flex flex-wrap items-center text-xs mb-4">
                 <div v-for="(attr, index) in room.attrs" class="flex items-center">
                     <div>{{ attr.name }}
@@ -107,8 +107,8 @@
                 </div>               
             </div>
             <div>
-                <hotel-address :address="room.hotel.address"/>               
-                <hotel-metro-item v-for="metro in room.hotel.metros" :metro="metro"/>              
+                <hotel-address :address="room.hotel.address"  class="flex mb-2"/>               
+                <hotel-metro-item v-for="metro in room.hotel.metros" :address="room.hotel.address" :metro="metro"  class="flex mb-2"/>              
             </div>
         </div>
         <div class="relative bg-white rounded-bl-2xl rounded-br-2xl xl:rounded-bl-none xl:rounded-tr-2xl px-4 pb-4 pt-8 mx-4 xl:mx-0 xl:w-1/3 xl:h-80 xl:pb-16 xl:flex xl:items-left xl:justify-items-start xl:justify-start">            

@@ -19,7 +19,10 @@ trait UrlDecodeFilter
         $array = explode('/', $url);
         $addressIndex = array_search('address', $array, true);
         $arrayParams = array_slice($array, $addressIndex + 1);
-
+        
+        if (count($arrayParams) == 0)
+            return [];
+        
         $city_url = $arrayParams[0];
         $metro_url = null;
         $area_url = null;
@@ -91,8 +94,8 @@ trait UrlDecodeFilter
         return [
             'city' => $city,
             'metro' => $metro,
-            'area' => $area,
-            'district' => $district,
+            'city_area' => $area,
+            'city_district' => $district,
             'street' => $street,
         ];
     }
