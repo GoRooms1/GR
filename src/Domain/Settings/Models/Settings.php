@@ -44,7 +44,13 @@ class Settings extends Model
 
     protected $fillable = ['option', 'value', 'header'];
 
-    public static function header(string $option = null, $default = null)
+    /**  
+     * @todo refactor with action   
+     * @param string|null $option
+     * @param string|null $default
+     * @return mixed
+     */
+    public static function header(string $option = null, string $default = null): mixed
     {
         $setting = Cache::store('file')->rememberForever('setting.'.$option, function () use ($option) {
             return Settings::where('option', $option)->first();
@@ -52,7 +58,7 @@ class Settings extends Model
         if ($setting) {
             try {
                 return json_decode($setting->header, true, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
+            } catch (JsonException $e) {                
                 return $setting->header;
             }
         }
@@ -60,7 +66,10 @@ class Settings extends Model
         return $default;
     }
 
-    public function __call($method, $parameters)
+    /** 
+     * @todo remove after refactor header() and option()   
+     */
+    public function __call($method, $parameters): mixed
     {
         if ($method === 'option') {
             return static::option(...$parameters);
@@ -69,7 +78,13 @@ class Settings extends Model
         return parent::__call($method, $parameters);
     }
 
-    public static function option(string $option = null, $default = null)
+    /** 
+     * @todo refactor with action   
+     * @param string|null $option
+     * @param string|null $default
+     * @return mixed
+     */
+    public static function option($option = null, $default = null): mixed
     {
         $setting = Cache::store('file')->rememberForever('setting.'.$option, function () use ($option) {
             return Settings::where('option', $option)->first();
@@ -77,7 +92,7 @@ class Settings extends Model
         if ($setting) {
             try {
                 return json_decode($setting->value, true, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
+            } catch (JsonException $e) {                
                 return $setting->value;
             }
         }

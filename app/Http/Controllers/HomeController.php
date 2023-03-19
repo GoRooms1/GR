@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\RatingCategory\GetRatingCategories;
 use App\Models\Article;
+use Domain\Filter\DataTransferObjects\ParamsData;
 use Domain\Home\ViewModels\HomeViewModel;
 use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;
@@ -43,6 +44,6 @@ class HomeController extends Controller
 
     public function index(Request $request): Response | ResponseFactory
     {
-        return Inertia::render('Home/Index', new HomeViewModel($request->all()));
+        return Inertia::render('Home/Index', new HomeViewModel(ParamsData::fromRequest($request)));
     }
 }

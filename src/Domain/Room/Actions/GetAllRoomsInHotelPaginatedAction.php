@@ -9,16 +9,17 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static LengthAwarePaginator<Room> run(Hotel  $hotel)
+ * @method static LengthAwarePaginator run(Hotel  $hotel)
  */
 final class GetAllRoomsInHotelPaginatedAction extends Action
 {
     /**
      * @param  Hotel  $hotel
-     * @return LengthAwarePaginator<Room>
+     * @return LengthAwarePaginator
      */
     public function handle(Hotel  $hotel): LengthAwarePaginator
     {
+        /** @var int $perPage */
         $perPage = config('pagination.rooms_per_page');
         return $hotel->rooms()->paginate($perPage);
     }

@@ -9,20 +9,19 @@ use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static Collection run($city, $city_area)
+ * @method static Collection run(string|null $city, string|null $city_area)
  */
 final class GetCityDistrictsAction extends Action
-{
-    /**
-     * @param $city
-     * @param $city_area
+{   
+    /**    
+     * @param string|null $city
+     * @param string|null $city_area
      * @return Collection
      */
-    public function handle($city, $city_area): Collection
+    public function handle(?string $city, ?string $city_area): Collection
     {
-        if (! isset($city)) {
-            return new Collection();
-        }
+        if (! isset($city))
+            return new Collection();        
 
         return Address::distinct()->select('city_district')
             ->whereCity($city)->whereNotNull('city_district')

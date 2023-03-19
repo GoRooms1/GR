@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Breadcrumbs;
-use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Filter\DataTransferObjects\ParamsData;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\ViewModels\HotelListViewModel;
 use Domain\Hotel\ViewModels\HotelViewModel;
@@ -19,17 +19,14 @@ class HotelController extends Controller
 
     public function index(Request $request): Response | ResponseFactory
     {
-        return Inertia::render('Hotel/Index', new HotelListViewModel($request->all()));
+        return Inertia::render('Hotel/Index', new HotelListViewModel(ParamsData::fromRequest($request)));
     }
 
-<<<<<<< HEAD
-=======
-    public function show(Hotel $hotel, Request $request): Response | ResponseFactory
+    public function show(Hotel $hotel): Response | ResponseFactory
     {       
         return Inertia::render('Hotel/Show', new HotelViewModel($hotel));
     }
     
->>>>>>> hotel-card-dev
     //Depricated
     public function index_(Request $request): View
     {

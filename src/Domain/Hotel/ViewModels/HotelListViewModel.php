@@ -5,44 +5,56 @@ declare(strict_types=1);
 namespace Domain\Hotel\ViewModels;
 
 use Arr;
+use Domain\Filter\DataTransferObjects\ParamsData;
 use Domain\Filter\Traits\FiltersParamsTrait;
-use Domain\Hotel\Actions\FilterHotelsAction;
+use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Spatie\LaravelData\CursorPaginatedDataCollection;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\PaginatedDataCollection;
 
+/**
+ * Summary of HotelListViewModel
+ */
 final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
 
-    public array $params = [];
-<<<<<<< HEAD
-
-    public function __construct(array $params)
-    {
-=======
-    public string|null $url;
-    public string|null $queryString;
-    
-    public function __construct(array $params, string|null $url = null) {
->>>>>>> hotel-card-dev
-        $this->params = $params;
-        $this->url = $url ?? '/hotels';        
+    /**    
+     * @param ParamsData $params
+     * @param string $url
+     */
+    public function __construct(
+        protected ParamsData $params,
+        protected string $url = '/hotels'
+    ) {
     }
 
-    public function model()
+    /**     
+     * @return array{page: PageData}
+     */
+    public function model(): array
     {
         return [
-            'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($this->url))->toArray(),
+            'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($this->url)),
         ];
     }
 
-    public function hotels()
+    /**
+     * Paginated hotels array
+     * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+     */
+    public function hotels(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
     {
-        return HotelData::Collection(FilterHotelsAction::run($this->params['hotels'] ?? [], true));
+        return HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
     }
 
-    public function query_string() {      
-        return Arr::query($this->params);
+    /**     
+     * @return string
+     */
+    public function query_string(): string {      
+        return Arr::query($this->params->toArray());
     }
 }

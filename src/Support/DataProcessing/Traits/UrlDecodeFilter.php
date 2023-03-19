@@ -4,24 +4,36 @@ declare(strict_types=1);
 
 namespace Support\DataProcessing\Traits;
 
+use Domain\Filter\DataTransferObjects\HotelParamsData;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Summary of UrlDecodeFilter
+ */
 trait UrlDecodeFilter
 {
     /**
      * Генерирует массив данные адреса из ссыоки для SEO
      *
      * @param  string  $url
-     * @return array{city: string, metro: ?string, area: ?string, district: ?string, street: ?string}
+     * @return HotelParamsData
      */
-    private function decodeUrl(string $url): array
+    private function decodeUrl(string $url): HotelParamsData
     {
         $array = explode('/', $url);
         $addressIndex = array_search('address', $array, true);
         $arrayParams = array_slice($array, $addressIndex + 1);
         
         if (count($arrayParams) == 0)
-            return [];
+            return new HotelParamsData(
+                attributes: [],
+                city: null,
+                metro: null,
+                city_area: null,
+                city_district: null,
+                street: null,
+                hotel_type: null
+            );
         
         $city_url = $arrayParams[0];
         $metro_url = null;
@@ -47,6 +59,7 @@ trait UrlDecodeFilter
             }
         }, $arrayParams);
 
+        /** @var array<string, string|null> */
         $data = [
             'city' => $city_url,
             'metro' => $metro_url,
@@ -57,12 +70,12 @@ trait UrlDecodeFilter
 
         return $this->getDecodeData($data);
     }
-
-    /**
-     * @param  array{city: string, metro: ?string, area: ?string, district: ?string, street: ?string}  $data
-     * @return array{city: string, metro: ?string, area: ?string, district: ?string, street: ?string}
+    
+    /**     
+     * @param array<string, string|null> $data
+     * @return HotelParamsData
      */
-    private function getDecodeData(array $data): array
+    private function getDecodeData(array $data): HotelParamsData
     {
         $city = null;
         $metro = null;
@@ -91,12 +104,14 @@ trait UrlDecodeFilter
             }
         }
 
-        return [
-            'city' => $city,
-            'metro' => $metro,
-            'city_area' => $area,
-            'city_district' => $district,
-            'street' => $street,
-        ];
+        return new HotelParamsData(
+            attributes: [],
+            city: $city,
+            metro: $metro,
+            city_area: $area,
+            city_district: $district,
+            street: $street,
+            hotel_type: null
+        );
     }
 }

@@ -16,6 +16,10 @@ final class LowCostFilter extends \Parent\Filters\Filter
      */
     public function handle(Builder $builder, \Closure $next): Builder
     {
+        $value = $this->value ?? null;
+        if (filter_var($value, FILTER_VALIDATE_BOOLEAN) == false)
+            return $next($builder);
+
         $builder->lowCost();
 
         return $next($builder);

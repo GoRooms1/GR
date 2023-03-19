@@ -99,7 +99,7 @@ export const filterStore = reactive({
 
   parceUrlParameters(url) {        
     url = url.substring(url.indexOf("?") + 1);
-    let paramsObj = qs.parse(url);
+    let paramsObj = qs.parse(url);    
 
     let models = ['hotels', 'rooms'];
 
@@ -121,6 +121,7 @@ export const filterStore = reactive({
         this.addFilter(el, true, 'attr_'+element, element);
       });
     });
+    //console.log(decodeURI(url), this.filters);
   },
 
 })

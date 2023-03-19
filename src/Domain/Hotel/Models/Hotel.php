@@ -119,7 +119,6 @@ use Support\DataProcessing\Traits\ClearValidated;
  * @method static Builder|Hotel whereUserId($value)
  * @method static Builder|Hotel whereCheckedTypeFond($value)
  * @method HotelData getData()
- * @mixin Eloquent
  */
 final class Hotel extends Model
 {

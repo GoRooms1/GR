@@ -27,11 +27,15 @@ final class MetroBuilder extends Builder
         return $this->select('name', 'color');
     }
 
-    public function whereCity($city): self
-    {
+    /**    
+     * @param string $city
+     * @return MetroBuilder
+     */
+    public function whereCity(string $city): self
+    {        
         return $this->whereIn('hotel_id', function ($q) use ($city) {
             $q->select('hotel_id')
-                ->from('addresses')
+                ->from('addresses')                
                 ->whereRaw('LOWER(`city`) = ?', trim(strtolower($city)));
         });
     }

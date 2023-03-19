@@ -31,7 +31,7 @@ final class PageData extends \Parent\DataTransferObjects\Data
      */
     public function __construct(
         public readonly ?int $id,
-        public readonly string $title,
+        public readonly ?string $title,
         public readonly string $slug,
         public readonly string $content,
         public readonly ?string $header,

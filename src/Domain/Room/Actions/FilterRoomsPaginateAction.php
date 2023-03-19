@@ -8,25 +8,27 @@ use Domain\Filter\DataTransferObjects\HotelParamsData;
 use Domain\Filter\DataTransferObjects\RoomParamsData;
 use Domain\Room\Builders\RoomBuilder;
 use Domain\Room\Models\Room;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static LengthAwarePaginator<int, Room> run(RoomParamsData $filters, HotelParamsData $hotelFilters)
+ * @method static LengthAwarePaginator run(RoomParamsData $filters, HotelParamsData $hotelFilters)
  */
-final class FilterRoomsAction extends Action
+final class FilterRoomsPaginateAction extends Action
 {
     /**
      * @param  RoomParamsData  $filters
      * @param  HotelParamsData  $hotelFilters     
-     * @return Collection<int, Room>
+     * @return LengthAwarePaginator
      */
-    public function handle(RoomParamsData $filters, HotelParamsData $hotelFilters): Collection
+    public function handle(RoomParamsData $filters, HotelParamsData $hotelFilters): LengthAwarePaginator
     {
         /** @var RoomBuilder $rooms */
         $rooms = Room::filter($filters, $hotelFilters);
+        
+        /** @var int $perPage */
+        $perPage = config('pagination.rooms_per_page');
 
-        /** @var Collection<int, Room>*/
-        return $rooms->get();
+        return $rooms->paginate($perPage);
     }
 }

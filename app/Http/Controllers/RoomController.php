@@ -6,6 +6,7 @@ use App\Jobs\BookRoomJob;
 use App\Models\Booking;
 use App\Models\Form;
 use Carbon\Carbon;
+use Domain\Filter\DataTransferObjects\ParamsData;
 use Domain\Room\Models\Room;
 use Domain\Room\ViewModels\RoomListViewModel;
 use Illuminate\Http\JsonResponse;
@@ -19,9 +20,8 @@ use Inertia\ResponseFactory;
 class RoomController extends Controller
 {
     public function index(Request $request): Response | ResponseFactory
-    {
-        // ParamsData::fromRequest($request)
-        return Inertia::render('Room/Index', new RoomListViewModel($request->all()));
+    {       
+        return Inertia::render('Room/Index', new RoomListViewModel(ParamsData::fromRequest($request)));
     }
 
     //Depricated

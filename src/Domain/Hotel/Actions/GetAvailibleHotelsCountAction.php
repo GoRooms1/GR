@@ -12,6 +12,10 @@ use Lorisleiva\Actions\Action;
  */
 final class GetAvailibleHotelsCountAction extends Action
 {
+    /**
+     * Availible rooms count
+     * @return int
+     */
     public function handle(): int
     {
         return Hotel::moderated()->withRooms()->count();

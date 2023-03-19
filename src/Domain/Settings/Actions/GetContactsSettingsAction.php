@@ -14,9 +14,13 @@ use Lorisleiva\Actions\Action;
  */
 final class GetContactsSettingsAction extends Action
 {
+    /**     
+     * @return Collection
+     */
     public function handle(): Collection
     {
-        $data = Cache::store('file')->rememberForever('contacts', function () {
+        $data = Cache::store('file')->rememberForever('contacts', function (): Collection {
+            /** @var Collection */
             return Settings::whereIn('option', [
                 'notify',
                 'instagram',
@@ -40,6 +44,7 @@ final class GetContactsSettingsAction extends Action
             ])->pluck('value', 'option');
         });
 
+         /** @var Collection */
         return $data;
     }
 }

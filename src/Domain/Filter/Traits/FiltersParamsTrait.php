@@ -20,57 +20,89 @@ use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Hotel\Actions\GetAllHotelTypesAction;
 use Domain\Hotel\DataTransferObjects\HotelTypeKeyNameData;
 use Domain\Room\Actions\GetCostTypesWithCostRangesKeyNameDataAction;
+use Spatie\LaravelData\CursorPaginatedDataCollection;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\PaginatedDataCollection;
+
 
 trait FiltersParamsTrait
 {
-    public function cities()
+    /**     
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    public function cities(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {
         return CityKeyNameData::collection(GetAllCitiesAction::run());
     }
 
-    public function metros()
+    /**    
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    public function metros(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {
-        $city = $this->params['hotels']['city'] ?? null;
+        $city = $this->params->hotels->city;
 
         return MetroKeyNameData::collection(GetAllCityMetrosAction::run($city));
     }
 
-    public function hotel_types()
+    /**    
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    public function hotel_types(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {
         return HotelTypeKeyNameData::collection(GetAllHotelTypesAction::run());
     }
 
-    public function city_areas()
+    /**     
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    public function city_areas(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {
-        $city = $this->params['hotels']['city'] ?? null;
+        $city = $this->params->hotels->city;
 
         return CityAreaKeyNameData::collection(GetCityAreasAction::run($city));
     }
 
-    public function city_districts()
+    /**     
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    public function city_districts(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {
-        $city = $this->params['hotels']['city'] ?? null;
-        $city_area = $this->params['hotels']['city_area'] ?? null;
+        $city = $this->params->hotels->city;
+        $city_area = $this->params->hotels->city_area;
 
         return CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $city_area));
     }
 
-    public function cost_types()
+    /**    
+     * @return DataCollection
+     */
+    public function cost_types(): DataCollection
     {
         return GetCostTypesWithCostRangesKeyNameDataAction::run();
     }
 
-    public function attributes()
+    /**
+     * Summary of attributes
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    public function attributes(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {
         return AttributeData::collection(GetFilteredAttributesAction::run());
     }
 
-    public function attribute_categories()
+    /**     
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     */
+    public function attribute_categories(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {
         return AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run());
     }
 
-    public function total()
+    /**     
+     * @return int
+     */
+    public function total(): int
     {
         return GetNumOfFilteredObjectsAction::run($this->params);
     }

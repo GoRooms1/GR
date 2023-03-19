@@ -9,15 +9,15 @@ use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static Collection run($city)
+ * @method static Collection run(?string $city)
  */
 final class GetCityAreasAction extends Action
-{
-    /**
-     * @param $city
+{    
+    /**     
+     * @param string|null $city
      * @return Collection
      */
-    public function handle($city): Collection
+    public function handle(?string $city): Collection
     {
         if (! isset($city)) {
             return new Collection();
