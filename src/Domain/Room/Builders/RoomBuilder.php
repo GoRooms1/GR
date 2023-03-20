@@ -84,7 +84,10 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
     {
         $result = [];
         /** @var array<string, string|int|bool|null> */        
-        $mainFilters = $filters->except('attributes')->toArray();
+        $mainFilters = array_filter($filters->toArray(), function($k) {
+            return $k != 'attributes';
+        }, ARRAY_FILTER_USE_KEY);
+        
         foreach ($mainFilters as $key => $value) {
             if ($value != null && Filters::tryFrom($key))
                 $result[] = Filters::from($key)->createFilter(strval($value));
