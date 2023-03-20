@@ -1,10 +1,10 @@
 import intus from "intus";
-import {useForm} from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/inertia-vue3";
 
 export default function (definition, rememberKey) {
   let fields = {}; // holds fields with default values
   let rules = {}; // holds fields with their validation rules
-  
+
   for (let field in definition) {
     fields[field] = definition[field][0];
     rules[field] = definition[field][1] || [];

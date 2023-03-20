@@ -1,19 +1,24 @@
-import {watch} from 'vue';
-import {Inertia} from '@inertiajs/inertia';
- 
-export function usePrevalidate(form, {method, url}) {
+import { watch } from "vue";
+import { Inertia } from "@inertiajs/inertia";
+
+export function usePrevalidate(form, { method, url }) {
   let touchedFields = new Set();
   let needsValidation = false;
   form.passedFields = {};
- 
-  watch(() => form.data(), (newData, oldData) => {
-    let changedFields = Object.keys(newData).filter(field => newData[field] !== oldData[field]);
- 
-    touchedFields = new Set([...changedFields, ...touchedFields]);
- 
-    needsValidation = true;   
-  });
- 
+
+  watch(
+    () => form.data(),
+    (newData, oldData) => {
+      let changedFields = Object.keys(newData).filter(
+        (field) => newData[field] !== oldData[field]
+      );
+
+      touchedFields = new Set([...changedFields, ...touchedFields]);
+
+      needsValidation = true;
+    }
+  );
+
   function validate() {
     Inertia.visit(url, {
       method: method,
@@ -23,25 +28,25 @@ export function usePrevalidate(form, {method, url}) {
       },
       preserveState: true,
       preserveScroll: true,
-      onSuccess:() =>{
-        form.clearErrors();        
+      onSuccess: () => {
+        form.clearErrors();
       },
-      onError: (errors) => {               
+      onError: (errors) => {
         Object.keys(errors)
-          .filter(field => !touchedFields.has(field))
-          .forEach(field => delete errors[field]);        
-        
+          .filter((field) => !touchedFields.has(field))
+          .forEach((field) => delete errors[field]);
+
         form.passedFields = {};
         Array.from(touchedFields)
-        .filter(field => !Object.keys(errors).includes(field))
-        .forEach(field => {
-            form.passedFields[field] = true;           
-        });
-        
+          .filter((field) => !Object.keys(errors).includes(field))
+          .forEach((field) => {
+            form.passedFields[field] = true;
+          });
+
         form.clearErrors().setError(errors);
       },
     });
   }
- 
-  return {validate};
+
+  return { validate };
 }

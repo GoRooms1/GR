@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { Head } from '@inertiajs/inertia-vue3'
+import { Head } from "@inertiajs/inertia-vue3";
 
 export default {
   name: "AppHead",
@@ -14,10 +14,8 @@ export default {
   },
   props: {
     title: String,
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
