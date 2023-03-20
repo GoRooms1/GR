@@ -14,12 +14,14 @@ use Support\DataProcessing\Traits\UrlDecodeFilter;
 class AddressController extends Controller
 {
     use UrlDecodeFilter;
+
     public function address(Request $request): Response | ResponseFactory
-    {        
+    {
         $params = ParamsData::fromRequest($request);
-        if ($request->path() !== 'address')
-            $params->hotels = $this->decodeUrl($request->url());    
-               
+        if ($request->path() !== 'address') {
+            $params->hotels = $this->decodeUrl($request->url());
+        }
+
         return Inertia::render('Hotel/Index', new HotelListViewModel($params, Str::start($request->path(), '/')));
     }
 }

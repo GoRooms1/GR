@@ -22,9 +22,9 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
 
-    /**    
-     * @param ParamsData $params
-     * @param string $url
+    /**
+     * @param  ParamsData  $params
+     * @param  string  $url
      */
     public function __construct(
         protected ParamsData $params,
@@ -32,7 +32,7 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
     ) {
     }
 
-    /**     
+    /**
      * @return array{page: PageData}
      */
     public function model(): array
@@ -44,6 +44,7 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 
     /**
      * Paginated hotels array
+     *
      * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
      */
     public function hotels(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
@@ -51,10 +52,11 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
         return HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
     }
 
-    /**     
+    /**
      * @return string
      */
-    public function query_string(): string {      
+    public function query_string(): string
+    {
         return Arr::query($this->params->toArray());
     }
 }

@@ -20,7 +20,7 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 
     /**
      * @param  ParamsData  $params
-     * @param string $url     
+     * @param  string  $url
      */
     public function __construct(
         protected ParamsData $params,
@@ -32,8 +32,7 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
      * @return array{page: PageData}>
      */
     public function model(): array
-    {        
-        
+    {
         return [
             'page' => PageData::fromPageDescription(
                 GetPageDescriptionByUrlAction::run($this->url)

@@ -17,7 +17,8 @@ final class GenerateSlugForHotel extends Action
 {
     /**
      * Summary of handle
-     * @param HotelData $hotelData
+     *
+     * @param  HotelData  $hotelData
      * @return string
      */
     public function handle(HotelData $hotelData): string

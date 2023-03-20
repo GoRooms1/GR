@@ -23,10 +23,10 @@ class HotelController extends Controller
     }
 
     public function show(Hotel $hotel): Response | ResponseFactory
-    {       
+    {
         return Inertia::render('Hotel/Show', new HotelViewModel($hotel));
     }
-    
+
     //Depricated
     public function index_(Request $request): View
     {

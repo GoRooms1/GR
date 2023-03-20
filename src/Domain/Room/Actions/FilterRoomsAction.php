@@ -18,7 +18,7 @@ final class FilterRoomsAction extends Action
 {
     /**
      * @param  RoomParamsData  $filters
-     * @param  HotelParamsData  $hotelFilters     
+     * @param  HotelParamsData  $hotelFilters
      * @return Collection<int, Room>
      */
     public function handle(RoomParamsData $filters, HotelParamsData $hotelFilters): Collection
@@ -26,7 +26,7 @@ final class FilterRoomsAction extends Action
         /** @var RoomBuilder $rooms */
         $rooms = Room::filter($filters, $hotelFilters);
 
-        /** @var Collection<int, Room>*/
+        /** @var Collection<int, Room> */
         return $rooms->get();
     }
 }

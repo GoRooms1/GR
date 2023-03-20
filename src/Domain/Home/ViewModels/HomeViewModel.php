@@ -9,19 +9,19 @@ use Domain\Filter\Traits\FiltersParamsTrait;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 
-
 final class HomeViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
-    /**    
-     * @param ParamsData $params    
+
+    /**
+     * @param  ParamsData  $params
      */
     public function __construct(
-        protected ParamsData $params       
+        protected ParamsData $params
     ) {
     }
 
-    /**     
+    /**
      * @return array{page: PageData}
      */
     public function model(): array

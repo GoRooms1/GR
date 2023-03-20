@@ -17,7 +17,7 @@ final class FilterRoomsCountAction extends Action
 {
     /**
      * @param  RoomParamsData  $filters
-     * @param  HotelParamsData  $hotelFilters     
+     * @param  HotelParamsData  $hotelFilters
      * @return int
      */
     public function handle(RoomParamsData $filters, HotelParamsData $hotelFilters): int

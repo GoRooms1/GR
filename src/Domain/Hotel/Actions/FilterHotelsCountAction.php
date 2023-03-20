@@ -15,14 +15,14 @@ use Lorisleiva\Actions\Action;
 final class FilterHotelsCountAction extends Action
 {
     /**
-     * @param  HotelParamsData $filters
+     * @param  HotelParamsData  $filters
      * @return int
      */
     public function handle(HotelParamsData $filters): int
     {
         /** @var HotelBuilder $hotels */
         $hotels = Hotel::filter($filters);
-        
+
         return $hotels->count();
     }
 }

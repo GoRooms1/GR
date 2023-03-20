@@ -28,7 +28,6 @@ use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 use Domain\Room\Models\Room;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

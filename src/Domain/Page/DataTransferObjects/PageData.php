@@ -56,6 +56,7 @@ final class PageData extends \Parent\DataTransferObjects\Data
     {
         /** @var string $appName */
         $appName = config('app.name');
+
         return new self(
             id: 0,
             title: $pageDescription ? $pageDescription->title : $appName,

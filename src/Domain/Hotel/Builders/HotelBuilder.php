@@ -6,7 +6,6 @@ namespace Domain\Hotel\Builders;
 
 use Domain\Filter\DataTransferObjects\HotelParamsData;
 use Domain\Hotel\Filters\Filters;
-use Domain\Hotel\Models\Hotel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
 use Parent\Filters\Filter;
@@ -35,20 +34,21 @@ final class HotelBuilder extends Builder
         ->having('rooms_count', '>', 0);
     }
 
-    /**     
-     * @param HotelParamsData $filters
+    /**
+     * @param  HotelParamsData  $filters
      * @return HotelBuilder
      */
-    public function filter(HotelParamsData $filters): self 
+    public function filter(HotelParamsData $filters): self
     {
         /** @var HotelBuilder $builder */
         $builder = app(Pipeline::class)
             ->send($this)
             ->through($this->filters($filters))
             ->thenReturn();
+
         return $builder
             ->moderated()
-            ->withRooms();            
+            ->withRooms();
     }
 
     /**
@@ -58,21 +58,23 @@ final class HotelBuilder extends Builder
     private function filters(HotelParamsData $filters): array
     {
         $result = [];
-        /** @var array<string, string|int|bool|null> */        
-        $mainFilters = array_filter($filters->toArray(), function($k) {
+        /** @var array<string, string|int|bool|null> */
+        $mainFilters = array_filter($filters->toArray(), function ($k) {
             return $k != 'attributes';
         }, ARRAY_FILTER_USE_KEY);
-        
+
         foreach ($mainFilters as $key => $value) {
-            if ($value != null && Filters::tryFrom($key))
+            if ($value != null && Filters::tryFrom($key)) {
                 $result[] = Filters::from($key)->createFilter(strval($value));
+            }
         }
 
         /** @var array<int> */
-        $filterAttrs = $filters->attributes;        
+        $filterAttrs = $filters->attributes;
         foreach ($filterAttrs as $value) {
-            if ($value != null && Filters::tryFrom('attributes'))
+            if ($value != null && Filters::tryFrom('attributes')) {
                 $result[] = Filters::from('attributes')->createFilter(strval($value));
+            }
         }
 
         return $result;

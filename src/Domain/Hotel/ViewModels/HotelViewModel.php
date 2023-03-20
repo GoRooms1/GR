@@ -18,31 +18,32 @@ use Spatie\LaravelData\PaginatedDataCollection;
  * Summary of HotelViewModel
  */
 final class HotelViewModel extends \Parent\ViewModels\ViewModel
-{       
-    public function __construct (
+{
+    public function __construct(
         public Hotel $hotel,
         public string $url = '/hotels'
-    ) {       
+    ) {
     }
 
-    /**    
+    /**
      * @return array{page: PageData}
      */
-    public function model(): array {      
+    public function model(): array
+    {
         return [
             'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($this->url)),
         ];
     }
 
-    /**     
+    /**
      * @return HotelData
      */
     public function hotel(): HotelData
-    {        
+    {
         return $this->hotel->getData()->include('attrs');
     }
 
-    /**     
+    /**
      * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
      */
     public function rooms(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection

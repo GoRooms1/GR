@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::redirect('/', 'lk/object/edit')
   ->name('index');
 

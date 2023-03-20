@@ -18,14 +18,14 @@ final class FilterRoomsPaginateAction extends Action
 {
     /**
      * @param  RoomParamsData  $filters
-     * @param  HotelParamsData  $hotelFilters     
+     * @param  HotelParamsData  $hotelFilters
      * @return LengthAwarePaginator
      */
     public function handle(RoomParamsData $filters, HotelParamsData $hotelFilters): LengthAwarePaginator
     {
         /** @var RoomBuilder $rooms */
         $rooms = Room::filter($filters, $hotelFilters);
-        
+
         /** @var int $perPage */
         $perPage = config('pagination.rooms_per_page');
 

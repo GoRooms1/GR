@@ -23,8 +23,8 @@ trait UrlDecodeFilter
         $array = explode('/', $url);
         $addressIndex = array_search('address', $array, true);
         $arrayParams = array_slice($array, $addressIndex + 1);
-        
-        if (count($arrayParams) == 0)
+
+        if (count($arrayParams) == 0) {
             return new HotelParamsData(
                 attributes: [],
                 city: null,
@@ -34,7 +34,8 @@ trait UrlDecodeFilter
                 street: null,
                 hotel_type: null
             );
-        
+        }
+
         $city_url = $arrayParams[0];
         $metro_url = null;
         $area_url = null;
@@ -70,9 +71,9 @@ trait UrlDecodeFilter
 
         return $this->getDecodeData($data);
     }
-    
-    /**     
-     * @param array<string, string|null> $data
+
+    /**
+     * @param  array<string, string|null>  $data
      * @return HotelParamsData
      */
     private function getDecodeData(array $data): HotelParamsData

@@ -74,6 +74,7 @@ final class Image extends Model
         //TODO optimisate with spatie medialibrary package
         //return str_replace('storage', 'storage', $value);
         $value = Str::start($value, '/');
+
         return $value;
     }
 }

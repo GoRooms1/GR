@@ -24,10 +24,9 @@ use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
-
 trait FiltersParamsTrait
 {
-    /**     
+    /**
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function cities(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
@@ -35,7 +34,7 @@ trait FiltersParamsTrait
         return CityKeyNameData::collection(GetAllCitiesAction::run());
     }
 
-    /**    
+    /**
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function metros(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
@@ -45,7 +44,7 @@ trait FiltersParamsTrait
         return MetroKeyNameData::collection(GetAllCityMetrosAction::run($city));
     }
 
-    /**    
+    /**
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function hotel_types(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
@@ -53,7 +52,7 @@ trait FiltersParamsTrait
         return HotelTypeKeyNameData::collection(GetAllHotelTypesAction::run());
     }
 
-    /**     
+    /**
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function city_areas(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
@@ -63,7 +62,7 @@ trait FiltersParamsTrait
         return CityAreaKeyNameData::collection(GetCityAreasAction::run($city));
     }
 
-    /**     
+    /**
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function city_districts(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
@@ -74,7 +73,7 @@ trait FiltersParamsTrait
         return CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $city_area));
     }
 
-    /**    
+    /**
      * @return DataCollection
      */
     public function cost_types(): DataCollection
@@ -84,6 +83,7 @@ trait FiltersParamsTrait
 
     /**
      * Summary of attributes
+     *
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function attributes(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
@@ -91,7 +91,7 @@ trait FiltersParamsTrait
         return AttributeData::collection(GetFilteredAttributesAction::run());
     }
 
-    /**     
+    /**
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
     public function attribute_categories(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
@@ -99,7 +99,7 @@ trait FiltersParamsTrait
         return AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run());
     }
 
-    /**     
+    /**
      * @return int
      */
     public function total(): int

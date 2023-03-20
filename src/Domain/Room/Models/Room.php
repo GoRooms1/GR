@@ -137,6 +137,7 @@ final class Room extends Model
 
     /**
      * @return \Illuminate\Support\Collection<\Domain\Room\DataTransferObjects\CostData>
+     *
      * @deprecated Use action instead
      */
     public function getAllCostsAttribute(): \Illuminate\Support\Collection

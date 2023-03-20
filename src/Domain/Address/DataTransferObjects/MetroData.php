@@ -10,7 +10,7 @@ use Spatie\LaravelData\Lazy;
 use Support\DataProcessing\Traits\CustomStr;
 
 final class MetroData extends \Parent\DataTransferObjects\Data
-{    
+{
     public function __construct(
         public ?int $id,
         public string $color,
@@ -27,6 +27,7 @@ final class MetroData extends \Parent\DataTransferObjects\Data
     public static function fromModel(Metro $metro): self
     {
         $slug = CustomStr::getCustomSlug($metro->name);
+
         return self::from([
             ...$metro->toArray(),
             'slug' => $slug,

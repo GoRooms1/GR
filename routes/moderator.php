@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-
 Route::get('/hotel/{id}', [ObjectController::class, 'edit'])->name('object.edit');
 Route::post('/hotel/{id}', [ObjectController::class, 'update'])->name('object.update');
 

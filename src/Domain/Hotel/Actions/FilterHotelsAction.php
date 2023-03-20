@@ -16,15 +16,15 @@ use Lorisleiva\Actions\Action;
 final class FilterHotelsAction extends Action
 {
     /**
-     * @param  HotelParamsData  $filters     
+     * @param  HotelParamsData  $filters
      * @return Collection<int, Hotel>
      */
     public function handle(HotelParamsData $filters): Collection
-    {       
+    {
         /** @var HotelBuilder $hotels */
         $hotels = Hotel::filter($filters);
-        
-        /** @var Collection<int, Hotel>*/
+
+        /** @var Collection<int, Hotel> */
         return $hotels->get();
     }
 }

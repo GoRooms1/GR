@@ -14,6 +14,7 @@ final class GetAvailibleHotelsCountAction extends Action
 {
     /**
      * Availible rooms count
+     *
      * @return int
      */
     public function handle(): int

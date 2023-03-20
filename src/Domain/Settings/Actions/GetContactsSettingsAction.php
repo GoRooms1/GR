@@ -14,7 +14,7 @@ use Lorisleiva\Actions\Action;
  */
 final class GetContactsSettingsAction extends Action
 {
-    /**     
+    /**
      * @return Collection
      */
     public function handle(): Collection
@@ -44,7 +44,7 @@ final class GetContactsSettingsAction extends Action
             ])->pluck('value', 'option');
         });
 
-         /** @var Collection */
+        /** @var Collection */
         return $data;
     }
 }

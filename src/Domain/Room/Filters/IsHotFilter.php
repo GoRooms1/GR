@@ -17,8 +17,9 @@ final class IsHotFilter extends \Parent\Filters\Filter
     public function handle(Builder $builder, \Closure $next): Builder
     {
         $value = $this->value ?? null;
-        if (filter_var($value, FILTER_VALIDATE_BOOLEAN) == false)
+        if (filter_var($value, FILTER_VALIDATE_BOOLEAN) == false) {
             return $next($builder);
+        }
 
         $builder->hot();
 

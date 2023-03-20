@@ -44,10 +44,11 @@ class Settings extends Model
 
     protected $fillable = ['option', 'value', 'header'];
 
-    /**  
-     * @todo refactor with action   
-     * @param string|null $option
-     * @param string|null $default
+    /**
+     * @todo refactor with action
+     *
+     * @param  string|null  $option
+     * @param  string|null  $default
      * @return mixed
      */
     public static function header(string $option = null, string $default = null): mixed
@@ -58,7 +59,7 @@ class Settings extends Model
         if ($setting) {
             try {
                 return json_decode($setting->header, true, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {                
+            } catch (JsonException $e) {
                 return $setting->header;
             }
         }
@@ -66,8 +67,8 @@ class Settings extends Model
         return $default;
     }
 
-    /** 
-     * @todo remove after refactor header() and option()   
+    /**
+     * @todo remove after refactor header() and option()
      */
     public function __call($method, $parameters): mixed
     {
@@ -78,10 +79,11 @@ class Settings extends Model
         return parent::__call($method, $parameters);
     }
 
-    /** 
-     * @todo refactor with action   
-     * @param string|null $option
-     * @param string|null $default
+    /**
+     * @todo refactor with action
+     *
+     * @param  string|null  $option
+     * @param  string|null  $default
      * @return mixed
      */
     public static function option($option = null, $default = null): mixed
@@ -92,7 +94,7 @@ class Settings extends Model
         if ($setting) {
             try {
                 return json_decode($setting->value, true, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {                
+            } catch (JsonException $e) {
                 return $setting->value;
             }
         }

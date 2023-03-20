@@ -58,7 +58,7 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public readonly null|DataCollection $min_costs,
     ) {
     }
-    
+
     public static function fromModel(Hotel $hotel): self
     {
         return self::from([

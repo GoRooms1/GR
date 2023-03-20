@@ -12,9 +12,9 @@ use Lorisleiva\Actions\Action;
  * @method static Collection run(?string $city)
  */
 final class GetCityAreasAction extends Action
-{    
-    /**     
-     * @param string|null $city
+{
+    /**
+     * @param  string|null  $city
      * @return Collection
      */
     public function handle(?string $city): Collection
