@@ -20,6 +20,7 @@ final class RoomParamsData extends \Parent\DataTransferObjects\Data
         public ?array $attributes,
         public ?bool $is_hot,
         public ?bool $low_cost,
+        public ?string $period_cost,
     ) {
     }
 
@@ -36,6 +37,7 @@ final class RoomParamsData extends \Parent\DataTransferObjects\Data
             'attributes' => $data['attributes'] ?? [],
             'is_hot' => isset($data['is_hot']) ? filter_var($data['is_hot'], FILTER_VALIDATE_BOOLEAN) : null,
             'low_cost' => isset($data['low_cost']) ? filter_var($data['low_cost'], FILTER_VALIDATE_BOOLEAN) : null,
+            'period_cost' => $data['period_cost'] ?? null,
         ]);
     }
 }
