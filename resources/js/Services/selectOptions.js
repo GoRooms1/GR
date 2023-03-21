@@ -22,9 +22,9 @@ export default function selectOptions() {
       },
     },
     mounted() {
-      if (this.notNull == true && !this.selectedOption?.key) {
-        this.value = this.optionsArray[0];
-        this.emmitUpdate(this.optionsArray[0]);
+      if (this.notNull == true && !this.selectedOption) {
+        this.value = this.optionsArray[0].value;
+        this.emmitUpdate(this.optionsArray[0].value);
       }
     },
     data() {
