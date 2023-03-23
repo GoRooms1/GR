@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Mail;
+namespace Domain\Room\Mails;
 
+use Domain\Room\DataTransferObjects\BookingData;
 use Domain\Room\Models\Room;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -13,18 +14,18 @@ class RoomBookingMail extends Mailable
 
     public Room $room;
 
-    public array $fields;
+    public BookingData $data;
 
     /**
      * RoomBookingMail constructor.
      *
      * @param  Room  $room
-     * @param  array  $fields
+     * @param  BookingData  $data
      */
-    public function __construct(Room $room, array $fields)
+    public function __construct(Room $room, BookingData $data)
     {
         $this->room = $room;
-        $this->fields = $fields;
+        $this->data = $data;
     }
 
     /**
@@ -34,7 +35,7 @@ class RoomBookingMail extends Mailable
      */
     public function build(): RoomBookingMail
     {
-        return $this->subject('Сервис GoRooms – новое бронирование '.$this->fields['book_number'])
+        return $this->subject('Сервис GoRooms – новое бронирование '.$this->data->book_number)
             ->view('emails.room-bookin');
     }
 }

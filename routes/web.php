@@ -37,6 +37,7 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+Route::post('/rooms/booking', [RoomController::class, 'booking'])->name('rooms.booking');
 
 Route::get('/filter', [FilterController::class, 'filter'])->name('filter');
 
@@ -51,7 +52,7 @@ Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'store
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 
 Route::get('/rooms/hot', [RoomController::class, 'hot'])->name('rooms.hot');
-Route::post('/rooms/{id}', [RoomController::class, 'booking'])->name('booking.room');
+
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
 
 Route::get('/blog', [ArticleController::class, 'index'])->name('articles.index');
