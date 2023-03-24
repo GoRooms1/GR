@@ -39,7 +39,8 @@ final class GetAllRoomCosts extends Action
                     name: $type->name,
                     info: '',
                     value: 0,
-                    description: 'Не предоставляется'
+                    description: 'Не предоставляется',
+                    period: null,
                 );
                 $collection->add($costData);
             } else {

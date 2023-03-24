@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Hotel\DataTransferObjects;
 
 use Domain\Room\Actions\GenerateInfoDescForPeriod;
+use Domain\Room\DataTransferObjects\PeriodData;
 use Domain\Room\Models\Cost;
 
 final class MinCostsData extends \Parent\DataTransferObjects\Data
@@ -15,6 +16,7 @@ final class MinCostsData extends \Parent\DataTransferObjects\Data
         public readonly string $info,
         public readonly float|string $value,
         public readonly ?string $description,
+        public readonly ?PeriodData $period,
     ) {
     }
 
@@ -26,6 +28,7 @@ final class MinCostsData extends \Parent\DataTransferObjects\Data
             'info' => GenerateInfoDescForPeriod::run($cost->period->start_at, $cost->period->end_at),
             'value' => $cost->value,
             'description' => $cost->value > 0 ? '' : 'Не предоставляется',
+            'period' => $cost->period->getData(),
         ]);
     }
 }

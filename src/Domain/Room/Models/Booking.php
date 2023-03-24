@@ -5,16 +5,15 @@
  * Write all questions and suggestions on the Vkontakte social network https://vk.com/fulliton
  */
 
-namespace App\Models;
+namespace  Domain\Room\Models;
 
-use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Booking
+ *  Domain\Room\Models\Booking
  *
  * @property int         $id
  * @property string      $book_number
@@ -79,7 +78,10 @@ class Booking extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function GetTypeAttribute()
+    /**
+     * @return string|null
+     */
+    public function GetTypeAttribute(): string|null
     {
         if ($this->book_type === 'hour') {
             return 'На час';
@@ -88,5 +90,7 @@ class Booking extends Model
         } elseif ($this->book_type === 'night') {
             return 'На ночь';
         }
+
+        return null;
     }
 }

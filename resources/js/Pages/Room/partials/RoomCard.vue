@@ -195,9 +195,10 @@
           :description="cost.description"
         />
       </div>
+      <booking-form @close="closeBookingModal()" :is-active="isBookingOpen" :room="room"/>
       <div class="xl:absolute xl:bottom-4 xl:left-4 xl:right-4">
-        <Button disabled classes="w-full"> Забронировать </Button>
-      </div>
+        <Button @click="openBookingModal()" classes="w-full"> Забронировать </Button>
+      </div>      
     </div>
   </div>
 </template>
@@ -211,6 +212,7 @@ import Button from "@/components/ui/Button.vue";
 import HotelAddress from "@/components/ui/HotelAddress.vue";
 import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "@/components/ui/CostItem.vue";
+import BookingForm from "./BookingForm.vue";
 
 // install Swiper modules
 SwiperCore.use([Pagination, Navigation]);
@@ -224,6 +226,7 @@ export default {
     HotelAddress,
     HotelMetroItem,
     CostItem,
+    BookingForm,
   },
   props: {
     room: Object,
@@ -251,8 +254,16 @@ export default {
           noSwipingClass: "swiper-slide",
         },
       },
+      isBookingOpen: false,
     };
   },
-  methods: {},
+  methods: {
+    openBookingModal() {
+      this.isBookingOpen = true;
+    },
+    closeBookingModal() {
+      this.isBookingOpen = false;
+    }
+  },
 };
 </script>

@@ -53,7 +53,8 @@ final class MinimumCostsCalculation extends Action
                     name: $value > 0 ? str_replace('на ', '', mb_strtolower($type->name)) : mb_strtolower($type->name),
                     info: GenerateInfoDescForPeriod::run($costs[$type->id]['start_at'], $costs[$type->id]['end_at']),
                     value: $value,
-                    description: $value > 0 ? '' : 'Не предоставляется'
+                    description: $value > 0 ? '' : 'Не предоставляется',
+                    period: null,
                 );
             } else {
                 $result[] = new MinCostsData(
@@ -61,7 +62,8 @@ final class MinimumCostsCalculation extends Action
                     name: $type->name,
                     info: '',
                     value: 0,
-                    description: 'Не предоставляется'
+                    description: 'Не предоставляется',
+                    period: null,
                 );
             }
         }

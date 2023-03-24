@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Jobs;
+namespace Domain\Room\Jobs;
 
-use App\Mail\RoomBookingMail;
+use Domain\Room\DataTransferObjects\BookingData;
+use Domain\Room\Mails\RoomBookingMail;
 use Domain\Room\Models\Room;
 use Domain\Settings\Models\Settings;
 use Illuminate\Bus\Queueable;
@@ -16,19 +17,16 @@ class BookRoomJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $room_id = 0;
-
-    protected $fields = [];
+    protected BookingData $data;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(int $room_id, array $fields)
+    public function __construct(BookingData $data)
     {
-        $this->room_id = $room_id;
-        $this->fields = $fields;
+        $this->data = $data;
     }
 
     /**
@@ -38,16 +36,17 @@ class BookRoomJob implements ShouldQueue
      */
     public function handle()
     {
-        $room = Room::findOrFail($this->room_id);
+        $room = Room::findOrFail($this->data->room_id);
         $email = Settings::option('notify', 'gorooms@walfter.ru');
+
         Mail::to('GoRooms@yandex.ru')
-          ->send(new RoomBookingMail($room, $this->fields));
+          ->send(new RoomBookingMail($room, $this->data));
         if ($room->hotel->email != null) {
             Mail::to($room->hotel->email)
-              ->send(new RoomBookingMail($room, $this->fields));
+              ->send(new RoomBookingMail($room, $this->data));
         } else {
             Mail::to($email)
-              ->send(new RoomBookingMail($room, $this->fields));
+              ->send(new RoomBookingMail($room, $this->data));
         }
     }
 }
