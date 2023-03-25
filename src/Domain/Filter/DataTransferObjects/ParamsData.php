@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace Domain\Filter\DataTransferObjects;
 
+use Arr;
 use Illuminate\Http\Request;
 
 final class ParamsData extends \Parent\DataTransferObjects\Data
 {
+    /**     
+     * @param HotelParamsData $hotels
+     * @param RoomParamsData $rooms     
+     * @param string|null $search
+     * @param bool $isRoomsFilter
+     */
     public function __construct(
         public HotelParamsData $hotels,
         public RoomParamsData $rooms,
-        public bool $isRoomsFilter = false,
+        public ?string $search,
+        public bool $isRoomsFilter = false,        
     ) {
     }
 
@@ -21,6 +29,14 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
             'hotels' => HotelParamsData::fromRequest($request),
             'rooms' => RoomParamsData::fromRequest($request),
             'isRoomsFilter' => filter_var($request->get('isRoomsFilter', false), FILTER_VALIDATE_BOOLEAN),
+            'search' => $request->get('search'),
         ]);
+    }
+
+    /**     
+     * @return string
+     */
+    public function toQueryString(): string {
+        return Arr::query($this->toArray());
     }
 }

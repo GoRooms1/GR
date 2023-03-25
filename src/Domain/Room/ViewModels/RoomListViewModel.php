@@ -10,6 +10,7 @@ use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomData;
+use Domain\Search\Traits\SearchResultTrait;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -17,6 +18,7 @@ use Spatie\LaravelData\PaginatedDataCollection;
 final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
+    use SearchResultTrait;
 
     /**
      * @param  ParamsData  $params

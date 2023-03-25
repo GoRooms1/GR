@@ -11,6 +11,7 @@ use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\Search\Traits\SearchResultTrait;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -21,6 +22,7 @@ use Spatie\LaravelData\PaginatedDataCollection;
 final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
+    use SearchResultTrait;
 
     /**
      * @param  ParamsData  $params
