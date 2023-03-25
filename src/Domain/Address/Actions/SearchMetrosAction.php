@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Domain\Address\Actions;
 
 use Domain\Address\Models\Metro;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
@@ -30,11 +30,12 @@ final class SearchMetrosAction extends Action
             ->whereHas('hotel.address', function($q) {
                 return $q->whereNotNull('city');
             })          
-            ->orderBy('name')
+            ->orderBy('name')            
             ->get()
             ->unique(function ($item) {
                 return $item['name'].$item['hotel.address.city'];
             })
-            ->take($limit);
+            ->take($limit)
+            ->flatten();
     }
 }
