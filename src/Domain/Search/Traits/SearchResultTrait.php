@@ -14,26 +14,53 @@ use Domain\Address\DataTransferObjects\CitySearchData;
 use Domain\Address\DataTransferObjects\MetroSearchData;
 use Domain\Hotel\Actions\SearchHotelsAction;
 use Domain\Hotel\DataTransferObjects\HotelSearchData;
+use Domain\Search\DataTransferObjects\SearchData;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
+
+/**
+ * Summary of SearchResultTrait
+ */
 trait SearchResultTrait
 {
-    /**    
-     * @return array<string,  DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection>
+    
+    /**     
+     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
      */
-    public function search_result(): array
+    public function search_result(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
     {        
         $search = $this->params->search;
-
-        return [
-            'hotels' => HotelSearchData::collection(SearchHotelsAction::run($search)),
-            'metros' => MetroSearchData::collection(SearchMetrosAction::run($search)),
-            'city_districts' => CityDistrictSearchData::collection(SearchCityDistrictsAction::run($search)),
-            'city_areas' => CityAreaSearchData::collection(SearchCityAreasAction::run($search)),
-            'cities' => CitySearchData::collection(SearchCitiesAction::run($search)),           
-        ];
+        
+        return SearchData::collection([
+            [
+                'title' => 'Отели',
+                'sort' => 1,
+                'blank' => true,
+                'data' => HotelSearchData::collection(SearchHotelsAction::run($search))
+            ],
+            [
+                'title' => 'Метро',
+                'sort' => 2,
+                'data' => MetroSearchData::collection(SearchMetrosAction::run($search))
+            ],
+            [
+                'title' => 'Районы',
+                'sort' => 3,
+                'data' => CityDistrictSearchData::collection(SearchCityDistrictsAction::run($search))
+            ],
+            [
+                'title' => 'Огруга',
+                'sort' => 4,
+                'data' => CityAreaSearchData::collection(SearchCityAreasAction::run($search))
+            ],
+            [
+                'title' => 'Города',
+                'sort' => 5,
+                'data' => CitySearchData::collection(SearchCitiesAction::run($search))
+            ],
+        ]);
     }
 
 }
