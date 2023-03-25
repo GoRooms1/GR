@@ -26,7 +26,7 @@ final class CitySearchData extends \Parent\DataTransferObjects\Data
         ]);
         
         return self::from([            
-            'name' => 'г. '.$address->city,
+            'name' => $address->city,
             'link' => route('hotels.index', $params),
         ]);
     }
