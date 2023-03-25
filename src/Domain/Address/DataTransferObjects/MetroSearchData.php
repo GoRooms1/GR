@@ -12,6 +12,7 @@ final class MetroSearchData extends \Parent\DataTransferObjects\Data
     public function __construct(
         public ?string $name,
         public ?string $color,
+        public ?string $img,
         public ?string $city,    
         public ?string $link,
     ) {
@@ -31,6 +32,7 @@ final class MetroSearchData extends \Parent\DataTransferObjects\Data
         return self::from([            
             'name' => $metro->name,
             'color' => $metro->color,
+            'img' => '/img/metro.svg',
             'city' => !is_null($metro->hotel->address) ? ('г. '.$metro->hotel->address->city) : '',
             'link' => route('hotels.index', $params),
         ]);
