@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isActive"
+  <div
     class="fixed px-[1.625rem] pb-[1.625rem] pt-[3.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex flex-col lg:justify-center items-center overflow-y-auto">
     <div class="max-w-[800px] flex flex-col w-full lg:mb-[160px]">
       <button @click="close()"
@@ -158,8 +158,7 @@ export default {
   },
   mounted() {
     this.switchCostType(1);
-  },
-  emits: ['close'],
+  }, 
   data() {
     return {
       costType: 1,
@@ -197,8 +196,8 @@ export default {
   methods: {
     close() {
       usePage().props.value.flash.message = null;
-      this.bookingSuccess = false;
-      this.$emit('close');
+      this.bookingSuccess = false;      
+      eventBus.emit('booking-close');
     },
     switchCostType(typeId) {
       if (typeId) {

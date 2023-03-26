@@ -194,17 +194,17 @@
           :info="cost.info"
           :description="cost.description"
         />
-      </div>
-      <booking-form @close="closeBookingModal()" :is-active="isBookingOpen" :room="room"/>
+      </div>      
       <div class="xl:absolute xl:bottom-4 xl:left-4 xl:right-4">
         <Button @click="openBookingModal()" classes="w-full"> Забронировать </Button>
       </div>      
     </div>
-  </div>
+  </div>  
 </template>
 
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
+import { usePage } from "@inertiajs/inertia-vue3";
 import SwiperCore, { Pagination, Navigation } from "swiper";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
@@ -212,7 +212,7 @@ import Button from "@/components/ui/Button.vue";
 import HotelAddress from "@/components/ui/HotelAddress.vue";
 import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "@/components/ui/CostItem.vue";
-import BookingForm from "./BookingForm.vue";
+
 
 // install Swiper modules
 SwiperCore.use([Pagination, Navigation]);
@@ -225,11 +225,12 @@ export default {
     Button,
     HotelAddress,
     HotelMetroItem,
-    CostItem,
-    BookingForm,
+    CostItem,    
   },
   props: {
     room: Object,
+  },
+  mounted() {   
   },
   data() {
     return {
@@ -253,17 +254,16 @@ export default {
         1024: {
           noSwipingClass: "swiper-slide",
         },
-      },
-      isBookingOpen: false,
+      },      
     };
   },
   methods: {
-    openBookingModal() {
-      this.isBookingOpen = true;
+    openBookingModal() {          
+      eventBus.emit('booking-open', this.room);
     },
-    closeBookingModal() {
-      this.isBookingOpen = false;
-    }
+  },
+  watch: {
+
   },
 };
 </script>

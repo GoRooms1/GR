@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="globalLoading == false"
-    class="container mx-auto px-4 relative z-10 min-[1920px]:px-[10vw]"
+    class="container mx-auto px-4 relative min-[1920px]:px-[10vw]"
+    :class="isBookingOpen === true ? 'z-20' : 'z-10'"
   >
     <room-card v-for="room in allRooms" :room="room" />
   </div>
@@ -31,6 +32,7 @@
   <div v-if="globalLoading == true" class="text-center py-8">
     <Loader />
   </div>
+  <booking-form v-if="isBookingOpen === true" :room="bookingRoom"/>
 </template>
 
 <script>
@@ -40,12 +42,14 @@ import _ from "lodash";
 import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
+import BookingForm from "./BookingForm.vue";
 
 export default {
   components: {
     RoomCard,
     Loader,
     Button,
+    BookingForm,
   },
   props: {
     rooms: {
@@ -53,12 +57,17 @@ export default {
       required: false,
     },
   },
-  mounted() {},
+  created() {
+    eventBus.on('booking-open', e => this.openBookingModal(e));
+    eventBus.on('booking-close', e => this.closeBookingModal());
+  },
   data() {
     return {
       filterStore,
       allRooms: this.rooms.data ?? [],
       isLoading: false,
+      isBookingOpen: false,
+      bookingRoom: null,
     };
   },
   computed: {
@@ -93,6 +102,14 @@ export default {
         );
       }
     },
+    openBookingModal(e) {
+      this.bookingRoom = e;
+      this.isBookingOpen = true;
+    },
+    closeBookingModal() {      
+      this.isBookingOpen = false;
+      this.bookingRoom = null;
+    }
   },
   watch: {
     rooms: function (newVal, oldVal) {
