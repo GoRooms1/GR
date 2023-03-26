@@ -1,7 +1,7 @@
 <template>
   <AppHead :title="model.page.title" />
   <search-filter-modal />
-  <div class="md:mt-[49px] mt-[40px] relative">
+  <div class="md:mt-[49px] mt-[40px] relative " style="min-height: 160px;">
     <img
       class="md:block hidden absolute bottom-[-50px] left-0 -z-[1]"
       src="/img/lens.svg"

@@ -1,16 +1,7 @@
 <template>
   <button
-    @click="toggle()"
-    class="rounded-[8px]"
-    :class="
-      btnClass +
-      ' ' +
-      (value
-        ? 'bg-[#6170FF] text-white'
-        : disabled
-        ? 'btn-disabled pointer-events-none bg-slate-200'
-        : 'bg-white')
-    "
+    @click="toggle()"    
+    :class="btnClass + ' ' + activeClass"
   >
     <img :src="img" :class="imgClass + ' ' + (!value && img ? '' : 'hidden')" />
     <img
@@ -77,16 +68,28 @@ export default {
     btnClass() {
       switch (this.type) {
         case "horizontal":
-          return "px-[12px] row-span-2 flex items-center text-sm text-left";
+          return "px-[12px] row-span-2 flex items-center text-sm text-left rounded-[8px]";
           break;
         case "vertical":
-          return "w-full mt-[16px] pb-[8px] flex items-center flex-col justify-center h-[128px]";
+          return "w-full mt-[16px] pb-[8px] flex items-center flex-col justify-center h-[128px] rounded-[8px]";
           break;
         case "small":
-          return "px-[12px] h-[32px] flex items-center gap-[8px] justify-center md:hover:outline outline-solid outline-[#6170FF] transition duration-150";
+          return "px-[12px] h-[32px] flex items-center gap-[8px] justify-center md:hover:outline outline-solid outline-[#6170FF] transition duration-150 rounded-[8px]";
+          break;
+        case "square":
+          return "p-2.5 rounded-lg mx-[1.7%]";
           break;
         default:
           return "";
+      }    
+    },
+    activeClass() {
+      switch (this.type) {
+        case "square":
+          return this.value ? 'bg-[#6170FF] text-white' : (this.disabled ? 'btn-disabled pointer-events-none bg-slate-200' : 'bg-[#EAEFFD]');
+          break;        
+        default:
+          return this.value ? 'bg-[#6170FF] text-white' : (this.disabled ? 'btn-disabled pointer-events-none bg-slate-200' : 'bg-white');
       }
     },
     value() {

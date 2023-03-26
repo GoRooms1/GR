@@ -1,5 +1,5 @@
 <template>
-  <div   
+  <div v-if="$page.props.modals.search !== false"
     class="z-[11] max-w-[832px] w-full mx-auto px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px] transition"
   >
     <div class="relative">
@@ -117,6 +117,11 @@ export default {
     FilterTag,
     Search,
   },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+    usePage().props.value.modals.search = true;
+  },
   data() {
     return {
       filterStore,      
@@ -141,6 +146,11 @@ export default {
     },
     closeTag(obj) {
       this.filterStore.removeFilter(obj.modelType, obj.key);
+    },
+    handleResize() {
+      if (usePage().props.value.modals.search === false) {        
+        if (window.innerWidth > 1024) usePage().props.value.modals.search = true;
+      }
     },
   },
 };
