@@ -4,7 +4,7 @@
     class="items-center justify-center fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex"
   >
     <div
-      class="flex flex-grow flex-col lg:gap-[8px] gap-[32px] max-w-[890px] w-full pb-[15px] md:overflow-hidden max-[768px]:pb-[40px] max-[768px]:pt-[40px] pt-[15px] overflow-x-hidden scrollbar overflow-y-auto md:px-[20px] px-0 h-[100%] relative"
+      class="flex flex-grow flex-col lg:gap-[8px] gap-[32px] max-w-[890px] w-full pb-[15px] md:overflow-hidden max-[768px]:pb-[40px] pt-[40px] overflow-x-hidden scrollbar overflow-y-auto md:px-[20px] px-0 h-[100%] relative"
     >
       <button
         @click="close()"

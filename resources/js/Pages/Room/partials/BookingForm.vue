@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed px-[1.625rem] pb-[1.625rem] tall:pt-[2.25rem] pt-[0.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex flex-col lg:justify-center items-center overflow-y-auto">
+    class="fixed px-[1.625rem] pb-[1.625rem] xs:pt-[2.25rem] sm:pt-[3.75rem] pt-[1.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex flex-col lg:justify-center items-center overflow-y-auto">
     <div class="max-w-[800px] flex flex-col w-full lg:mb-[160px]">
       <button @click="close()"
         class="absolute top-[12px] right-[0.85rem] lg:static lg:w-[2rem] lg:h-[2rem] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
