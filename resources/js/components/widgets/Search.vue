@@ -113,8 +113,7 @@ export default {
         onFinish: () => {
           usePage().props.value.isLoadind = false;
         },
-      });
-      this.closeFilters();
+      });      
     },
     search() {
       let data = this.filterStore.getFiltersValues();
