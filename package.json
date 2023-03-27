@@ -32,6 +32,7 @@
         "click-outside-vue3": "^4.0.1",
         "intus": "^0.0.4",
         "js-datepicker": "^5.18.2",
+        "maska": "^2.1.7",
         "mitt": "^3.0.0",
         "moment": "^2.29.4",
         "qs": "^6.11.0",

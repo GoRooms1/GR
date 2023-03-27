@@ -26,7 +26,7 @@ class BookingRequest extends FormRequest
         return [
             'room_id' => ['required', 'exists:rooms,id'],
             'client_fio' => ['required', 'string', 'min:3', 'max:190'],
-            'client_phone' => ['required', 'phone:RU'],
+            'client_phone' => ['required', 'string'],
             'from_date' => ['required', 'date'],
             'from_time' => ['required', 'string'],
             'to_date' => ['required', 'date'],

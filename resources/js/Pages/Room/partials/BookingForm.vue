@@ -5,7 +5,7 @@
       <button @click="close()"
         class="absolute top-[12px] right-[1rem] lg:static lg:w-[2rem] lg:h-[2rem] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
         <img src="/img/close.svg">
-      </button>
+      </button>      
       <div v-if="!bookingSuccess">
         <div class="flex flex-col p-6 lg:p-4 rounded-t-3xl bg-white lg:shadow-md z-[2] mx-6 lg:mx-0">
           <span
@@ -33,15 +33,9 @@
           <div class="flex flex-col lg:flex-row mt-4 text-sm text-[#515561]">
             <div class="flex">
               <div class="flex flex-col flex-[2_2_0%] lg:flex-none">
-                <span>Заезд</span>
-                <div v-if="form.errors.from_date" class="flex text-[#E1183D]">
-                  <img src="/img/attentionRed.svg" class="mx-2 w-4">
-                </div>
+                <span>Заезд</span>                
                 <DatePicker v-model="form.from_date" @update:modelValue="calculate()" />
-                <span class="mt-3">Выезд</span>
-                <div v-if="form.errors.to_date" class="flex text-[#E1183D]">
-                  <img src="/img/attentionRed.svg" class="mx-2 w-4">
-                </div>
+                <span class="mt-3">Выезд</span>                
                 <div class="w-full flex items-center mt-2 h-8 px-3 py-2 border border-[#515561] border-solid rounded-lg">
                   {{ form.to_date }}
                 </div>
@@ -71,26 +65,26 @@
                 <span>Имя</span>
                 <div v-if="form.errors.client_fio" class="flex text-[#E1183D]">
                   <img src="/img/attentionRed.svg" class="mx-2 w-4">
-                  Не верное значение
+                  Не заполнено
                 </div>
-                <div v-if="form.hasErrors == true && !form.errors.client_fio" class="flex">
+                <div v-if="!form.errors.client_fio" class="flex">
                   <img src="/img/checkcircle.svg" class="ml-2 w-4">
                 </div>
               </div>
-              <input v-model="form.client_fio" placeholder="Как к вам обращаться" name="client_fio"
+              <input v-model="form.client_fio" @input="validate()" placeholder="Как к вам обращаться"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
               <div class="flex mt-3">
                 <span>Телефон</span>
                 <div v-if="form.errors.client_phone" class="flex text-[#E1183D]">
                   <img src="/img/attentionRed.svg" class="mx-2 w-4">
-                  Не верное значение
+                  Не заполнено
                 </div>
-                <div v-if="form.hasErrors == true && !form.errors.client_phone" class="flex">
+                <div v-if="!form.errors.client_phone" class="flex">
                   <img src="/img/checkcircle.svg" class="ml-2 w-4">
                 </div>
               </div>
-              <input v-model="form.client_phone" v-mask="'+7 (###) ### ## ##'" placeholder="+7 (___) ___ __ __"
-                name="client_phone" class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
+              <input v-model="form.client_phone" @input="validate(); phoneHandle()" v-maska :data-maska="phoneMask" placeholder="+7 (___) ___ __ __"
+                class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
             </div>
             <div class="flex flex-col mt-4 lg:mt-0 lg:ml-4 flex-1">
               <span>Комментарий</span>
@@ -135,19 +129,19 @@ import TimePicker from '@/components/ui/TimePicker.vue'
 import NumSelect from '@/components/ui/NumSelect.vue'
 import _ from "lodash"
 import moment from 'moment'
-import { mask } from "vue-the-mask"
+import { vMaska } from "maska"
 import { useForm, usePage } from "@inertiajs/inertia-vue3"
 import intus from "intus"
-import { isRequired, isEmail, isMin, isMax } from "intus/rules"
+import { isRequired, isMin, isMax } from "intus/rules"
 
 export default {
   components: {
     DatePicker,
     TimePicker,
-    NumSelect,
+    NumSelect,    
   },
   directives: {
-    mask,
+    maska: vMaska,
   },
   props: {
     isActive: {
@@ -158,6 +152,7 @@ export default {
   },
   mounted() {
     this.switchCostType(1);
+    this.validate();
   }, 
   data() {
     return {
@@ -168,7 +163,7 @@ export default {
       days: 0,
       price: 0,
       amount: 0,
-      cost: null,
+      cost: null,      
       form: useForm({
         room_id: this.room.id,
         client_fio: null,
@@ -180,17 +175,19 @@ export default {
         book_comment: null,
         book_type: 'hour',
         hours_count: null,
-        days_count: null,
-        passedFields: {}
+        days_count: null,        
       }),
       bookingSuccess: false,
+      valudationRules: {
+        client_fio: [isRequired(), isMin(3), isMax(190)],        
+        client_phone: [isRequired(), isMin(18), isMax(18)],        
+      },
+      phoneMask: '+7 (###) ### ## ##',      
     }
   },
-  computed: {
+  computed: {    
     isValidated() {
-      return (
-        !_.isEmpty(this.form.client_fio) && !_.isEmpty(this.form.client_phone)
-      );
+      return !this.form.hasErrors;
     }
   },
   methods: {
@@ -208,7 +205,7 @@ export default {
         });
 
         this.cost = cost;
-        this.price = cost.value;
+        this.price = cost.value;          
 
         if (typeId == 1) {
           this.form.from_time = moment().format('HH:mm');
@@ -227,6 +224,8 @@ export default {
           this.days = this.days > 0 ? this.days : 1;
           this.form.book_type = 'day';
         }
+
+        if (cost.value == 0 && typeId < 3) this.switchCostType(typeId + 1);
 
         this.calculate();
       }
@@ -276,6 +275,25 @@ export default {
       }, []);
 
       return hours;
+    },
+    phoneHandle() {
+      let value = this.form.client_phone ?? '';
+      //Handle Ru phone number
+      if (_.isEmpty(value) || value.startsWith('+7 ')) {
+        this.phoneMask = '+7 (###) ### ## ##';
+        this.valudationRules.client_phone = [isRequired(), isMin(18), isMax(18)];        
+      }
+
+      //Handle other countries phone number
+      if (value === '+') {
+        this.phoneMask = "";              
+        this.valudationRules.client_phone = [isRequired()];
+      } 
+    },
+    validate() {
+      let validation = intus.validate(this.form.data(), this.valudationRules);      
+      this.form.clearErrors();
+      this.form.setError(validation.errors());     
     },
     submit() {
       if (this.isValidated) {
