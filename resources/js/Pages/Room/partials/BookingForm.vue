@@ -1,9 +1,9 @@
 <template>
   <div
-    class="fixed px-[1.625rem] pb-[1.625rem] pt-[3.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex flex-col lg:justify-center items-center overflow-y-auto">
+    class="fixed px-[1.625rem] pb-[1.625rem] tall:pt-[2.25rem] pt-[0.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex flex-col lg:justify-center items-center overflow-y-auto">
     <div class="max-w-[800px] flex flex-col w-full lg:mb-[160px]">
       <button @click="close()"
-        class="absolute top-[12px] right-[1rem] lg:static lg:w-[2rem] lg:h-[2rem] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
+        class="absolute top-[12px] right-[0.85rem] lg:static lg:w-[2rem] lg:h-[2rem] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
         <img src="/img/close.svg">
       </button>      
       <div v-if="!bookingSuccess">
@@ -83,13 +83,15 @@
                   <img src="/img/checkcircle.svg" class="ml-2 w-4">
                 </div>
               </div>
-              <input v-model="form.client_phone" @input="validate(); phoneHandle()" v-maska :data-maska="phoneMask" placeholder="+7 (___) ___ __ __"
+              <input v-model="form.client_phone" @input="validate(); phoneHandle()"
+                v-maska :data-maska="phoneMask" placeholder="+7 (___) ___ __ __"
+                data-maska-tokens="C:[0-9 \-\+()]"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
             </div>
-            <div class="flex flex-col mt-4 lg:mt-0 lg:ml-4 flex-1">
+            <div class="flex flex-col mt-4 lg:mt-0 lg:ml-4 lg:flex-1">
               <span>Комментарий</span>
               <textarea v-model="form.comment" placeholder="Напишите ваши пожелания"
-                class="w-full px-3 py-2 lg:!h-full mt-2 bg-white rounded-[8px] resize-none"></textarea>
+                class="w-full px-3 py-2 lg:!h-full mt-2 bg-white rounded-[8px] resize-none h-[80px]"></textarea>
             </div>
           </div>
         </div>
@@ -279,15 +281,15 @@ export default {
     phoneHandle() {
       let value = this.form.client_phone ?? '';
       //Handle Ru phone number
-      if (_.isEmpty(value) || value.startsWith('+7 ')) {
+      if (_.isEmpty(value) || value.startsWith('+7')) {
         this.phoneMask = '+7 (###) ### ## ##';
         this.valudationRules.client_phone = [isRequired(), isMin(18), isMax(18)];        
       }
 
       //Handle other countries phone number
       if (value === '+') {
-        this.phoneMask = "";              
-        this.valudationRules.client_phone = [isRequired()];
+        this.phoneMask = "C".repeat(25);          
+        this.valudationRules.client_phone = [isRequired(), isMin(7)];
       } 
     },
     validate() {

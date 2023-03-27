@@ -395,7 +395,7 @@ const closeThanks = () => {
               v-model="form.message"
               name="message"
               @input="validate"
-              class="w-full h-44 rounded-md p-2 placeholder-zinc-500"
+              class="w-full h-44 rounded-md p-2 placeholder-zinc-500 h-[160px]"
               placeholder="Опишите вопрос или предложение"
             ></textarea>
           </label>
