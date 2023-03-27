@@ -8,10 +8,12 @@ use Domain\Filter\DataTransferObjects\ParamsData;
 use Domain\Filter\Traits\FiltersParamsTrait;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\Search\Traits\SearchResultTrait;
 
 final class HomeViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
+    use SearchResultTrait;
 
     /**
      * @param  ParamsData  $params

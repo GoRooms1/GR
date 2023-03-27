@@ -13,7 +13,11 @@
         class="absolute top-0 left-0 h-full w-full -z-[1] bg-[#0018ff] opacity-60"
       ></div>
     </div>
-    <search-panel />
+    
+    <div class="relative"> 
+      <search-panel />
+    </div>
+    
   </div>
   <div class="container mx-auto">
     <div class="py-4 lg:my-16 px-2 lg:px-6">

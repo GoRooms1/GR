@@ -12,7 +12,7 @@
           stroke-linejoin="round"></path>
       </svg>
     </button>
-    <input @input="search" v-model="searchValue" type="text"
+    <input :value='searchValue' @input='evt=>searchValue=evt.target.value'  @keyup="search" type="text"
       class="bg-transparent p-[8px] grow text-[16px] leading-[19px] text-ellipsis whitespace-nowrap overflow-hidden placeholder:text-[#A7ABB7] text-[#515561] text-[1rem]"
       placeholder="Название отеля, адрес, метро, округ, район, город" />
     <div class="md:flex hidden items-center gap-[8px]">
@@ -137,7 +137,7 @@ export default {
             this.result = _.sortBy(usePage().props.value.search_result, 'sort');            
             this.result.forEach(el => {
               this.count += el?.data?.length ?? 0;
-            });            
+            });                        
           },
         });
       }, 500);
