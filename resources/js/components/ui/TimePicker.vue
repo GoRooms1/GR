@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-[5] mt-2">
+  <div class="relative z-[5] mt-2" v-click-outside="hide">
     <button @click="toggle"
       class="w-full px-[12px] min-w-[5rem] h-8 bg-white rounded-[8px] flex items-center justify-between">
       <span class="text-[0.875rem] leading-[1rem]">
@@ -93,8 +93,7 @@ export default {
       this.changeTime(this.value);
     },
     changeTime(value) {
-      this.$emit("update:modelValue", value);
-      this.hide();
+      this.$emit("update:modelValue", value);      
     }
   },
   watch: {
