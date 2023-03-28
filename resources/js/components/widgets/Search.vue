@@ -103,6 +103,7 @@ export default {
   methods: {
     getData() {
       this.$inertia.get(route("filter"), this.filterStore.getFiltersValues(), {
+        replace: true,
         preserveState: true,
         preserveScroll: true,
         only: ["hotels", "rooms"],

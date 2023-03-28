@@ -643,6 +643,7 @@ export default {
       }
 
       this.$inertia.get(route("filter"), this.filterStore.getFiltersValues(), {
+        replace: true,
         preserveState: true,
         preserveScroll: true,
         onStart: () => {
