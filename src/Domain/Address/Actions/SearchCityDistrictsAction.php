@@ -25,7 +25,7 @@ final class SearchCityDistrictsAction extends Action
         /** @var int $limit */
         $limit = config('search.limit');
         
-        return Address::distinct()->select('city_district', 'city')
+        return Address::distinct()->select('city_district', 'city_area', 'city',)
             ->where('city_district', 'LIKE', '%'.$search.'%')
             ->orderBy('city_district')->take($limit)->get();
     }
