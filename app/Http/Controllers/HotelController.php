@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Traits\Breadcrumbs;
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\ViewModels\HotelListViewModel;
 use Domain\Hotel\ViewModels\HotelViewModel;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Filter\DataTransferObjects;
+namespace Domain\Search\DataTransferObjects;
 
 use Arr;
 use Illuminate\Http\Request;

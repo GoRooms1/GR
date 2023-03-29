@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Builders;
 
-use Domain\Filter\DataTransferObjects\HotelParamsData;
+use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Hotel\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;

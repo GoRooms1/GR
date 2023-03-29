@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Domain\Hotel\ViewModels;
 
 use Arr;
-use Domain\Filter\DataTransferObjects\ParamsData;
-use Domain\Filter\Traits\FiltersParamsTrait;
+use Domain\Search\DataTransferObjects\ParamsData;
+use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Page\DataTransferObjects\PageData;

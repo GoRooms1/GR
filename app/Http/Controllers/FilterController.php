@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 use Illuminate\Http\Request;
 
 class FilterController extends Controller

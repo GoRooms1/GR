@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Room\Actions\CreateBookingFromDataAction;
 use Domain\Room\Actions\GenerateBookingMessageAction;
 use Domain\Room\DataTransferObjects\BookingData;

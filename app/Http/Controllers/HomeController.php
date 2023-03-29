@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\RatingCategory\GetRatingCategories;
 use App\Models\Article;
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Home\ViewModels\HomeViewModel;
 use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;

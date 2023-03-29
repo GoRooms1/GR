@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Room\ViewModels;
 
-use Domain\Filter\DataTransferObjects\ParamsData;
-use Domain\Filter\Traits\FiltersParamsTrait;
+use Domain\Search\DataTransferObjects\ParamsData;
+use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
