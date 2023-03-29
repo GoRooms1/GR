@@ -51,14 +51,26 @@
     <div v-for="category in result" class="w-full flex flex-col">
       <div v-if="category.data.length > 0" class="px-2.5 py-1.5 font-semibold">{{ category.title }}</div>      
       <Link v-if="!category.blank" v-for="obj in category.data" as="button" :href="obj.link"
-        class="whitespace-nowrap flex px-2 py-1.5 pl-[40px] rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] cursor-pointer relative">           
-        <img v-if="obj.img" :src="obj.img" class="absolute inset-y-[11px] left-[13px]">
+        class="whitespace-nowrap flex px-2 py-1.5 pl-[40px] rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] cursor-pointer relative">
+        <div v-if="category.title == 'Метро'" class="metro-search-icon">
+            <svg
+              width="20"
+              height="16"
+              viewBox="0 0 20 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.2343 12.231H16.3397L12.6234 3H12.6203L10.1173 8.22059L7.62034 3H7.61728L3.89485 12.231H3.00024V13H8.12586V12.231H7.1087L8.29436 9.30208L10.1173 13L11.9463 9.30208L13.1259 12.231H12.1087V13H17.2343V12.231Z"
+                :fill="'#' + obj?.color"
+              ></path>
+            </svg>
+        </div>
         <div class="whitespace-nowrap mr-auto">{{ obj.name }}</div>
         <div class="whitespace-nowrap">{{ obj?.city ?? '' }}</div>
       </Link>
       <button v-if="category.blank" v-for="obj in category.data" @click="openLinkBlank(obj.link)"
-        class="whitespace-nowrap flex px-2 py-1.5 pl-[40px] rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] cursor-pointer relative">           
-        <img v-if="obj.img" :src="obj.img" class="absolute inset-y-[11px] left-[13px]">
+        class="whitespace-nowrap flex px-2 py-1.5 pl-[40px] rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] cursor-pointer relative">
         <div class="whitespace-nowrap mr-auto">{{ obj.name }}</div>
         <div class="whitespace-nowrap">{{ obj?.city ?? '' }}</div>
     </button>
@@ -141,7 +153,7 @@ export default {
             });                        
           },
         });
-      }, 500);
+      }, 50);
 
       this.searchState();
     },

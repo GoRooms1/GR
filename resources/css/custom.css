@@ -17,6 +17,12 @@
     height: 24px;
 }
 
+.metro-search-icon {
+    position: absolute;
+    left: 13px;       
+    bottom: 30%;
+}
+
 .maxh {
     max-height: 0;
     transition: max-height 0.2s;
