@@ -13,9 +13,13 @@
       alt="lens"
     />
     <search-panel />
-  </div>  
-  <rooms-list :rooms="rooms" />
-  <info-block />
+  </div>
+
+  <rooms-list v-if="is_rooms_filter === true" :rooms="rooms" />
+  <room-info-block v-if="is_rooms_filter === true" />
+
+  <hotels-list v-if="is_rooms_filter === false" :hotels="hotels" />
+  <hotel-info-block v-if="is_rooms_filter === false"/>
 </template>
 
 <script lang="ts">
@@ -26,8 +30,10 @@ import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
-import RoomsList from "./partials/RoomsList.vue";
-import InfoBlock from "./partials/InfoBlock.vue";
+import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
+import RoomInfoBlock from "@/Pages/Room/partials/InfoBlock.vue";
+import HotelsList from "@/Pages/Hotel/partials/HotelsList.vue";
+import HotelInfoBlock from "@/Pages/Hotel/partials/InfoBlock.vue";
 export default {
   layout: SearchLayout,
   components: {
@@ -36,7 +42,9 @@ export default {
     SearchLayout,
     SearchPanel,    
     RoomsList,
-    InfoBlock,
+    RoomInfoBlock,
+    HotelsList,
+    HotelInfoBlock,
     SearchFilterModal,
   },
   props: {
@@ -44,7 +52,12 @@ export default {
       type: Object as PropType<PageInterface>,
       required: true,
     },
+    hotels: [Object],
     rooms: [Object],
-  },
+    is_rooms_filter: {
+      type: Boolean,
+      default: false,
+    }
+  },  
 };
 </script>

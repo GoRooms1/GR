@@ -326,9 +326,8 @@
       </div>
     </div>
   </div>
-  <div class="py-4"></div>
-  <filter-header custom-message="Все номера в отеле" />
-  <rooms-list :rooms="rooms" />
+  <div class="py-4"></div>  
+  <rooms-list :rooms="rooms" by-hotel/>
 </template>
 
 <script lang="ts">
@@ -339,7 +338,6 @@ import AppHead from "@/components/ui/AppHead.vue";
 import type { PropType } from "vue";
 import { PageInterface } from "../../models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
-import FilterHeader from "@/Pages/Room/partials/FilterHeader.vue";
 import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Tabs from "./partials/Tabs.vue";
@@ -357,8 +355,7 @@ export default {
     Swiper,
     SwiperSlide,
     AppHead,
-    Layout,
-    FilterHeader,
+    Layout,    
     RoomsList,
     CashbackTag,
     Tabs,

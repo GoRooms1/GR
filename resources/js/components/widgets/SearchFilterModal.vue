@@ -431,7 +431,7 @@
             <div
               class="flex items-center gap-[8px] md:justify-end justify-between md:w-initial w-full flex-wrap"
             >
-              <button
+              <button @click="getDataOnMap()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
                 <svg
@@ -466,7 +466,7 @@
                 <span class="text-white">На карте</span>
               </button>
               <button
-                @click="getData()"
+                @click="getDataOnList()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
                 <svg
@@ -577,11 +577,12 @@ export default {
       );
     });
 
-    initPromise.then((value) => {
+    initPromise.then((reload) => {
       this.inited = true;
       this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
 
-      if (value == true) this.getData();
+      //If params changed while init
+      if (reload == true) this.reloadData();
     });
   },
   destroyed() {
@@ -637,24 +638,70 @@ export default {
           this.$refs.filterContent.clientHeight <
           this.$refs.filterContent.scrollHeight;
     },
+    reloadData() {      
+      this.$inertia.get(route(route().current()), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          onStart: () => {
+            usePage().props.value.isLoadind = true;
+            this.close();
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;
+            eventBus.emit('data-received');
+          },
+      });
+    },
     getData() {
+      if (route().current() == 'search.map') {
+        this.getDataOnMap();
+      }
+      else {
+        this.getDataOnList();
+      }
+    },
+    getDataOnList() {
       if (this.isOpen == true) {
         this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
       }
 
-      this.$inertia.get(route("filter"), this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        onStart: () => {
-          usePage().props.value.isLoadind = true;
-          this.close();
-        },
-        onFinish: () => {
-          usePage().props.value.isLoadind = false;
-        },
-      });
+      this.$nextTick(() => {
+        this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          onStart: () => {
+            usePage().props.value.isLoadind = true;
+            this.close();
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;
+          },
+        });
+      });      
     },
+    getDataOnMap() {
+      if (this.isOpen == true) {
+        this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
+      }
+
+      this.$nextTick(() => {        
+        this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          onStart: () => {
+            usePage().props.value.isLoadind = true;
+            this.close();
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;            
+            eventBus.emit('data-received');      
+          },
+        });        
+      });     
+    },     
     updateFilters(only) {
       let data = this.tempFilterStore.getFiltersValues();
       this.$inertia.get(route(route().current()), data, {
@@ -714,7 +761,7 @@ export default {
           !_.isEqual(newVal, oldVal) &&
           this.isOpen == false &&
           this.inited == true
-        ) {
+        ) {          
           this.getData();
         }
       },

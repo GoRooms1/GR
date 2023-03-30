@@ -16,7 +16,7 @@
       class="bg-transparent p-[8px] grow text-[16px] leading-[19px] text-ellipsis whitespace-nowrap overflow-hidden placeholder:text-[#A7ABB7] text-[#515561] text-[1rem]"
       placeholder="Название отеля, адрес, метро, округ, район, город" />
     <div class="md:flex hidden items-center gap-[8px]">
-      <button
+      <button @click="getDataOnMap()"
         class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 3V19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -26,7 +26,7 @@
         </svg>
         <span class="text-white">На карте</span>
       </button>
-      <button @click="getData()"
+      <button @click="getDataOnList()"
         class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6.85718 7H21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -109,12 +109,11 @@ export default {
         return this.count > 0 ? 'lg:rounded-b-none lg:rounded-t-[16px] rounded-t-[24px] lg:p-[8px]' : 'lg:rounded-t-[16px] rounded-t-[24px] lg:rounded-b-none rounded-b-[24px] lg:p-[8px]';
       else
         return this.count > 0 ? 'md:rounded-b-none md:rounded-t-[16px] rounded-t-[24px] md:p-[8px]' : 'md:rounded-t-[16px] rounded-t-[24px] md:rounded-b-none rounded-b-[24px] md:p-[8px]';
-    },   
-
+    },
   },
   methods: {
-    getData() {
-      this.$inertia.get(route("filter"), this.filterStore.getFiltersValues(), {
+    getDataOnList() {
+      this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -128,6 +127,22 @@ export default {
         },
       });      
     },
+    getDataOnMap() {
+      this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+        replace: true,
+        preserveState: true,
+        preserveScroll: true,
+        only: ["hotels", "rooms"],
+        //onSuccess: () => {},
+        onStart: () => {
+          usePage().props.value.isLoadind = true;
+        },
+        onFinish: () => {
+          usePage().props.value.isLoadind = false;
+          eventBus.emit('data-received');
+        },
+      });      
+    },  
     search() {
       let data = this.filterStore.getFiltersValues();
       data.search = this.searchValue;

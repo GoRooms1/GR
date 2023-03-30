@@ -16,9 +16,6 @@ use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
-/**
- * Summary of HotelListViewModel
- */
 final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
@@ -30,7 +27,7 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
      */
     public function __construct(
         protected ParamsData $params,
-        protected string $url = '/hotels'
+        protected string $url = '/hotels'      
     ) {
     }
 

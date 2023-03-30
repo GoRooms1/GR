@@ -11,9 +11,8 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Lk;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\SearchController_V2;
 use App\Http\Controllers\SiteMapController;
+use Domain\Search\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +38,8 @@ Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.sh
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::post('/rooms/booking', [RoomController::class, 'booking'])->name('rooms.booking');
 
-Route::get('/filter', [FilterController::class, 'filter'])->name('filter');
+Route::get('/search', [SearchController::class, 'list'])->name('search.list');
+Route::get('/search_map', [SearchController::class, 'map'])->name('search.map');
 
 Route::get('/address/{city?}/{area?}/{district?}/{street?}', [AddressController::class, 'address'])->name('address');
 

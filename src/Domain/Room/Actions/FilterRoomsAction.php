@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static LengthAwarePaginator<int, Room> run(RoomParamsData $filters, HotelParamsData $hotelFilters)
+ * @method static Collection run(RoomParamsData $filters, HotelParamsData $hotelFilters)
  */
 final class FilterRoomsAction extends Action
 {
