@@ -93,16 +93,7 @@
                   (event) => filterValueHandler('rooms', true, 'attr_65', event)
                 "
               />
-            </div>
-            <!-- <div class="lg:block hidden p-[8px] bg-[#EAEFFD] rounded-b-[16px]">
-                            <button class="flex items-center gap-[16px] p-[8px]">
-                                <span class="text-[14px] leading-[16px] whitespace-nowrap">Больше фильтров</span>
-                                <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.83301 13.0002L5.99967 17.1669L10.1663 13.0002" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    <path d="M10.167 7.16692L6.00033 3.00025L1.83366 7.16692" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </button>
-                        </div> -->
+            </div>            
           </div>
           <div
             class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]"

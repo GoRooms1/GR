@@ -4,8 +4,10 @@
   >
     <div class="relative">
       <Search />      
-      <div class="md:flex justify-between hidden">
-        <div class="p-[8px] flex items-center gap-[8px]">
+      <div class="md:flex justify-between hidden ">
+        <div class="p-[8px] flex items-center gap-[8px]" 
+          :class="route().current() == 'search.map' ? 'bg-[#EAEFFD] rounded-b-[16px]' : ''"
+        >
           <filter-attr-toggle
             title="Low Cost"
             type="small"
@@ -40,8 +42,10 @@
             :model-value="filterStore.getFilterValue('rooms', 'attr_65')"
             @update:modelValue="(event) => attributeHandler('rooms', event, 65)"
           />
-        </div>
-        <div class="p-[8px]">
+        </div>        
+        <div class="p-[8px]"          
+          :class="route().current() == 'search.map' ? 'md:block hidden bg-[#EAEFFD] rounded-b-[16px]' : ''"
+        >
           <button
             @click="openFilters()"
             class="flex items-center gap-[16px] p-[8px]"
@@ -116,7 +120,7 @@ export default {
     FilterAttrToggle,
     FilterTag,
     Search,
-  },
+  },  
   mounted() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
