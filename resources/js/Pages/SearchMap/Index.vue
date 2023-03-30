@@ -1,0 +1,38 @@
+<template>
+  <AppHead :title="model.page.title" />
+  <search-filter-modal />
+  <div class="md:mt-[49px] mt-[40px] relative z-20">    
+    <search-panel />
+  </div>
+  <Map :rooms="rooms" :hotels="hotels"/>
+</template>
+
+<script lang="ts">
+import AppHead from "@/components/ui/AppHead.vue";
+import type { PropType } from "vue";
+import { PageInterface } from "../../models/pages/page.interface";
+import Layout from "@/Layouts/Layout.vue";
+import SearchLayout from "@/Layouts/SearchLayout.vue";
+import SearchPanel from "@/components/widgets/SearchPanel.vue";
+import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
+import Map from './partials/Map.vue';
+export default {
+  layout: SearchLayout,
+  components: {
+    AppHead,
+    Layout,
+    SearchLayout,
+    SearchPanel,
+    SearchFilterModal,
+    Map,
+  },
+  props: {
+    model: {
+      type: Object as PropType<PageInterface>,
+      required: true,
+    },
+    rooms: [Object],
+    hotels: [Object],
+  },
+};
+</script>
