@@ -1,7 +1,7 @@
 <template>
   <AppHead :title="model.page.title" />
   <search-filter-modal />
-  <div class="md:mt-[49px] mt-[40px] relative z-20">    
+  <div class="relative z-20 w-full">    
     <search-panel />
   </div>
   <Map :rooms="rooms" :hotels="hotels"/>

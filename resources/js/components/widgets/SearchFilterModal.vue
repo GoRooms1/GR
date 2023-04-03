@@ -614,7 +614,8 @@ export default {
     close() {
       window.history.pushState({}, this.$page.title, this.initialUrl);
       usePage().props.value.modals.filters = false;
-      document.body.classList.remove("fixed");
+      if (route().current() != 'search.map')
+        document.body.classList.remove("fixed");
     },
     handleResize() {
       if (this.isOpen) {
