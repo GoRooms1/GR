@@ -79,6 +79,7 @@
       <h3 class="mb-6 mt-10 font-semibold">Мы в социальных сетях</h3>
       <div class="grid grid-cols-2 grid-rows-2 gap-2">
         <a
+          v-if="$page.props?.contacts?.fb"
           :href="$page.props.contacts.fb"
           target="_blank"
           class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc11.svg)] hover:bg-[url(/img/soc12.svg)] pl-[42px] w-full text-left"
@@ -86,6 +87,7 @@
           Facebook
         </a>
         <a
+          v-if="$page.props?.contacts?.vk"
           :href="$page.props.contacts.vk"
           target="_blank"
           class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc31.svg)] hover:bg-[url(/img/soc32.svg)] pl-[42px] w-full text-left"
@@ -93,6 +95,7 @@
           Вконтакте
         </a>
         <a
+          v-if="$page.props?.contacts?.instagram"
           :href="$page.props.contacts.instagram"
           target="_blank"
           class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc21.svg)] hover:bg-[url(/img/soc22.svg)] pl-[42px] w-full text-left"
@@ -100,6 +103,7 @@
           Instagram
         </a>
         <a
+          v-if="$page.props?.contacts?.youtube"
           :href="$page.props.contacts.youtube"
           target="_blank"
           class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc41.svg)] hover:bg-[url(/img/soc42.svg)] pl-[42px] w-full text-left"
@@ -124,6 +128,8 @@ export default {
   created() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
+    if (!usePage().props.value.modals)
+      usePage().props.value.modals = {};
     usePage().props.value.modals.menu = false;
   },
   destroyed() {
@@ -135,17 +141,17 @@ export default {
     };
   },
   methods: {
-    show() {
+    show() {      
       usePage().props.value.modals.menu = true;
     },
     hide() {
       usePage().props.value.modals.menu = false;
     },
     isOpen() {
-      return usePage().props.value.modals.menu;
+      return usePage().props.value.modals?.menu ?? false;
     },
     handleResize() {
-      if (this.isOpen) {
+      if (this.isOpen == true) {
         this.screenWidth = window.innerWidth;
         if (this.screenWidth > 1024) this.hide();
       }
