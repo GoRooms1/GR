@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
+use Inertia\Inertia;
+use Log;
 
 class Handler extends ExceptionHandler
 {
@@ -38,22 +40,27 @@ class Handler extends ExceptionHandler
      *
      * @param  Request  $request
      * @param  Throwable  $e
-     * @return Response
-     *
-     * @throws Throwable
+     * @return Response    
      */
     public function render($request, Throwable $e): Response
-    {
-        if ($this->isHttpException($e)) {
-            /** @var HttpExceptionInterface $exc */
-            $exc = $e;
-            if ((int) $exc->getStatusCode() === 404) {
-                return redirect()->route('index');
-            }
+    {        
+        $response = parent::render($request, $e);
 
-            return $this->renderHttpException($exc);
+        if (! app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403, 401])) {
+            Log::info($response->status());
+            return Inertia::render('Error', [
+                    'status' => $response->status(),
+                    'title' => trans('error.'.$response->status().'.title'),
+                    'description' => trans('error.'.$response->status().'.description'),
+                ])
+                ->toResponse($request)
+                ->setStatusCode($response->status());
+        } elseif ($response->status() === 419) {
+            return back()->with([
+                'message' => trans('error.419.description'),
+            ]);
         }
 
-        return parent::render($request, $e);
+        return $response;
     }
 }

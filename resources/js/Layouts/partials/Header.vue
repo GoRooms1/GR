@@ -7,7 +7,7 @@
         <div>
           <Logo />
         </div>
-        <div class="text-sm ml-4 pt-1">
+        <div v-if="$page.props?.count?.hotels" class="text-sm ml-4 pt-1">
           {{ $page.props.count.hotels }} почасовых отелей
         </div>
         <navigation classes="flex ml-auto hidden lg:flex" />
