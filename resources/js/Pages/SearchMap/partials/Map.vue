@@ -1,131 +1,61 @@
-<template>
-  <div @mousedown="hideSearch" @touchstart="hideSearch" :style="'width: 100%; height: ' + windowHeight + 'px;'">
-    <YandexMap 
-      :settings="settings" 
-      :coordinates="coords" 
-      :zoom="zoom"
-      :bounds="bounds"
-      :controls="[]"      
-    >
-      <YandexClusterer
-        :options="{
-          preset: 'islands#blackClusterIcons',
-          gridSize: 128,
-          minClusterSize: 2
-        }"
-        @geo-objects-updated="
-        e => setBounds(e)
-        //Если объектов мало (1-2), после установки границ (bounds), карта зумится очень близко
-        "      
-      >
-        <YandexMarker v-for="hotel in hotels" 
-          :coordinates="[hotel.address.geo_lat, hotel.address.geo_lon]" 
-          :marker-id="hotel.id"
-          :options="{
-            balloonShadow: false,            
-            balloonPanelMaxMapArea: 0,
-            // balloonLayout: MyBalloonLayout(),            
-            // iconLayout: iconTemplate(),
-            // iconShape: {
-            //       type: 'Rectangle',                
-            //       coordinates: calculateOffset(hotel)
-            //   }
-          }" 
-          :properties="{minCost: getMinCost(hotel), }"            
-        >
-          <template #component>            
-            <hotel-card :hotel="hotel" />            
-          </template>   
-        </YandexMarker>
-      </YandexClusterer>      
-    </YandexMap>
-  </div>
+<template>  
+  <div @mousedown="hideSearch" @touchstart="hideSearch" id="search-map"></div> 
+  
+  <div class="hidden">
+    <div ref="hotel_card">
+      <hotel-card  v-if="hotel" :hotel="hotel" />
+    </div>   
+  </div>  
 </template>
 
-<style>
-/* .popover {   
-  max-width: 430px;  
-} */
-.popover .close {
-  position: absolute;
-  right: -8px;
-  top: -16px;
-  padding: 6px;
-}
-</style>
-
 <script>
+import Swiper, { Navigation, Pagination, Scrollbar } from 'swiper'
 import _ from 'lodash'
-import { YandexMap, YandexMarker, YandexClusterer } from 'vue-yandex-maps'
 import { usePage } from "@inertiajs/inertia-vue3"
 import HotelCard from "./HotelCard.vue"
+
+let searchMap = null;
+let geoObjectsClusterer = null;
+let geoObjects = [];
+let iconTemplate = null;
+let MyBalloonLayout = null;
+let MyBalloonContentLayout = null;
+let hotelSwiper = null;
 
 export default {
   components: {
     HotelCard,
-    YandexMap,
-    YandexMarker,
-    YandexClusterer,
   },
   props: {
     rooms: [Object],
     hotels: [Object], 
   },
-  created() {
-    window.addEventListener("resize", this.handleResize);
-    this.handleResize();
-  },  
   mounted() {
-    document.body.classList.add("fixed");    
+    document.body.classList.add("fixed"); 
+    ymaps.ready(this.initMap);
+    eventBus.on('data-received', e => this.drawObjects());
   },
   unmounted() {
     document.body.classList.remove("fixed");
   },
-  destroyed() {
-    window.removeEventListener("resize", this.handleResize);
-  },
   data() {
     return {
-      windowHeight: 600,
-      windowWidth: 600,
       zoom: 12,
-      coords: [55.757572, 37.825793],
-      bounds: [[55.757572, 37.825793], [55.757572, 37.825793]],         
-      settings: {
-        apiKey: '48a53e1e-0baf-46d3-a56a-6e77254c3f8b',
-        lang: 'ru_RU',
-        coordorder: 'latlong',
-        debug: false,
-        version: '2.1'
-      },      
+      hotel: null,
+      cardDisabled: true,
+      cardContainer: 'card_holder'
     }    
   },
-  computed: {   
-  },
   methods: {
-    handleResize() {
-      this.windowHeight = window.innerHeight;
-      this.windowWidth = window.innerWidth;
-    },
-    getMinCost(hotel) {
-      return _.min(_.filter(_.map(hotel.min_costs, 'value'), function(o) { return o > 0; } ));
-    },
-    calculateOffset(hotel) {
-      let label = this.getMinCost(hotel) + '';
-      let width = _.round(86 + (7.4 * label.length ));
-      return [
-        [-width, -36], [0, 0]
-      ]
-    },    
-    setBounds(geoObjects) {
-      if (geoObjects == null) 
-        this.bounds = [this.coords, this.coords];
-      else
-        this.bounds = geoObjects.getBounds();
-    },    
-    iconTemplate() {
-      //Как получить templateLayoutFactory из vue-yandex-maps и сделал свой темплэйт маркера ???
-      return ymaps.templateLayoutFactory.createClass(
+    initMap() {
+      searchMap = new ymaps.Map("search-map", {
+        center: [this.hotels[0]?.address?.geo_lat ?? 55.757572, this.hotels[0]?.address?.geo_lon ?? 37.825793],        
+        zoom: this.zoom,
+        controls: [],
+      });
+
+      //Init PlaceMark template
+      iconTemplate = ymaps.templateLayoutFactory.createClass(
         '<div class="relative w-fit">'
         + '<button class="flex items-stretch overflow-hidden absolute right-[100%] bottom-[100%]">'
         + '<div class="py-[6px] px-[12px] bg-white text-[16px] font-bold rounded-l-[8px] whitespace-nowrap">'
@@ -138,60 +68,64 @@ export default {
         + '</div>'
         + '</button>'
         + '</div>'
-      );
-    },
-    MyBalloonLayout() {
-      //Как получить templateLayoutFactory из vue-yandex-maps и сделал свой темплэйт балуна ???
-      return ymaps.templateLayoutFactory.createClass(
-        '<div class="popover top fixed md:absolute block z-20 px-4 md:px-0" style="max-width: 430px;">' +
-        '<button class="close bg-white rounded-[8px]"><img src="/img/close.svg"></button>' +
+      );      
+      
+      //Init Clasterer
+      geoObjectsClusterer = new ymaps.Clusterer({
+        preset: 'islands#blackClusterIcons',
+        gridSize: 128,
+        minClusterSize: 2                   
+      }),
+      
+      //Init Balloon template
+      MyBalloonLayout = ymaps.templateLayoutFactory.createClass(
+        '<div class="popover top fixed md:absolute block z-10 px-4 md:px-0" style="max-width: 450px; min-width: 450px;">' +
+        '<button class="close bg-white rounded-[8px] absolute top-[-20px] right-[8px] md:right-[-8px] p-[6px]"><img src="/img/close.svg"></button>' +
         '<div class="arrow absolute"></div>' +
-        '<div class="popover-inner ">' +
-        '$[[options.contentLayout]]' +        
+        '<div class="popover-inner">' +
+        '$[[options.contentLayout]]' +
         '</div>' +
-        '</div>', {        
+        '</div>', {
+        
         build: function () {
             this.constructor.superclass.build.call(this);
             this._$element = this.getParentElement().querySelector('.popover');
             this.applyElementOffset();
             this._$element.querySelector('.close')
-                .addEventListener('click', (e) => this.onCloseClick(e));
+                .addEventListener('click', (e) => this.onCloseClick(e));                                     
         },
 
         clear: function () {
-          this._$element.querySelector('.close')
-            .removeEventListener('click', (e) => this.onCloseClick(e));                        
-
-          this.constructor.superclass.clear.call(this);
+            this._$element.querySelector('.close')
+              .removeEventListener('click', (e) => this.onCloseClick(e));
+            this.constructor.superclass.clear.call(this);
         },
 
         onSublayoutSizeChange: function () {
-          this.constructor.superclass.onSublayoutSizeChange.apply(this, arguments);
+            MyBalloonLayout.superclass.onSublayoutSizeChange.apply(this, arguments);
 
-          if(!this._isElement(this._$element)) {
-              return;
-          }
+            if(!this._isElement(this._$element)) {
+                return;
+            }
 
-          this.applyElementOffset();
-
-          this.events.fire('shapechange');
+            this.applyElementOffset();
+            this.events.fire('shapechange');
         },
 
-        applyElementOffset: function () {
-          //Тут хардкод, позиция примерная. Т.к. при открытии балуна в нем еще нет реактивного контента - вычислить ширину/высоту блока не получается              
-          //На десктопе открывать в месте маркера  
+        applyElementOffset: function () {             
           if (window.innerWidth >= 768) {
-            this._$element.style.left = '-257px';
-            this._$element.style.top = '-278px';            
-            this._$element.style.maxWidth = '430px';
-          }
-          //На мобильных устройствах position fixed по центру экрана. Как отцентрировать по вертикале?
+            this._$element.style.left = -(this._$element.offsetWidth / 2) + 'px';
+            this._$element.style.top = -(this._$element.offsetHeight / 2) + 'px';            
+            this._$element.style.maxWidth = '450px';
+            this._$element.style.minWidth = '450px';
+          }            
           else {
-            let width = (window.innerWidth - 32);
-            this._$element.style.left = "16px";
-            this._$element.style.top = (window.innerHeight/4) + 'px';            
-            this._$element.style.maxWidth =  width + 'px';
-          }                                            
+            let width = window.innerWidth;
+            this._$element.style.left = "0";
+            this._$element.style.top = (window.innerHeight / 2 - this._$element.offsetHeight / 2) + 'px';            
+            this._$element.style.maxWidth = width + 'px';
+            this._$element.style.minWidth = width + 'px';
+          }                                          
         },
 
         onCloseClick: function (e) {
@@ -200,27 +134,130 @@ export default {
         },
 
         getShape: function () {
-          if(!this._isElement(this._$element)) {
-              return this.constructor.superclass.getShape.call(this);
-          }
+            if(!this._isElement(this._$element)) {
+                return MyBalloonLayout.superclass.getShape.call(this);
+            }
 
-          let position = {
-            top: this._$element.offsetTop,
-            left: this._$element.offsetLeft
-          };
+            var position = {
+              top: this._$element.offsetTop,
+              left: this._$element.offsetLeft
+            };
+            
+            let offset = [[position.left, position.top - 150], [ position.left + this._$element.offsetWidth, -position.top + 150 ]];
+            if (window.innerWidth < 768) {                      
+              offset = [[0, 0], [0,0]];
+            }
 
-          let offset = [[position.left, position.top - 50], [ position.left + 514, position.top + 650]];
-          if (window.innerWidth < 768) {
-            offset = [[position.left, position.top], [ position.left, position.top]];
-          }
-
-          return new ymaps.shape.Rectangle(new ymaps.geometry.pixel.Rectangle(offset));
+            return new ymaps.shape.Rectangle(new ymaps.geometry.pixel.Rectangle(offset));
         },
 
         _isElement: function (element) {
             return element && element.querySelector('.arrow');
         }
+      }),
+      
+      //Init balloon content template
+      MyBalloonContentLayout = ymaps.templateLayoutFactory.createClass(            
+        '<div class="popover-content">$[properties.balloonContent]</div>'
+      ),
+
+      this.drawObjects();
+    },
+    drawObjects() {
+      if (!searchMap) return;
+       
+      geoObjectsClusterer.removeAll();
+      geoObjects = [];        
+
+      //add Hotels
+      this.hotels.forEach(hotel => {
+        if (!hotel?.address?.geo_lat || !hotel?.address?.geo_lon) return;
+        
+        let minCost = _.min(_.filter(_.map(hotel.min_costs, 'value'), function(o) { return o > 0; } ));
+        let blockWidth = _.round(86 + (7.4 * (minCost + '').length ));        
+
+        let placemark = new ymaps.Placemark(
+          [hotel.address.geo_lat, hotel.address.geo_lon], 
+          {
+            balloonContent: hotel.name,
+            minCost: minCost,                     
+          },
+          {
+            balloonShadow: false,
+            balloonLayout: MyBalloonLayout,
+            balloonContentLayout: MyBalloonContentLayout,
+            balloonPanelMaxMapArea: 0,
+            iconLayout: iconTemplate,
+            iconShape: {
+              type: 'Rectangle',                
+              coordinates: [
+                  [-blockWidth, -36], [0, 0]
+              ]
+            }
+          }
+        );          
+        
+        placemark.events.add(['click'],  e => {
+          this.hotel = hotel;          
+          this.$nextTick(() => {
+            e.get('target').properties.set('balloonContent', this.$refs.hotel_card.innerHTML);                                      
+          });
+        });
+
+        //init slider
+        placemark.balloon.events.add(['open'],  e => {
+          this.$nextTick(() => {
+            let el =  document.querySelector('.popover').querySelector('.swiper-image');             
+            hotelSwiper = new Swiper(el, {
+              slidesPerView: 1,
+              modules: [Navigation, Pagination, Scrollbar],
+              pagination: {
+                el: '.swiper-pagination',
+                renderBullet: function (index, className) {
+                  return (
+                    '<span class="' +
+                    className +
+                    ' !opacity-100 w-[6px] rounded-[50%] h-[6px] mx-[2px] border-none p-0 ">' +
+                    "</span>"
+                  );
+                },
+                clickable: true,
+              },
+              navigation: {
+                nextEl: '.swiper-image-next',
+                prevEl: '.swiper-image-prev',
+              },
+              breakpoints: {
+                1024: {
+                  noSwipingClass: "swiper-slide"
+                }
+              }                    
+            });             
+          });
+        });
+        
+        geoObjects.push(placemark);
       });
+
+      //TODO add Rooms        
+      
+      if (geoObjects.length > 0) {         
+        geoObjectsClusterer.add(geoObjects);
+        searchMap.geoObjects.add(geoObjectsClusterer);      
+        searchMap.setBounds(geoObjectsClusterer.getBounds(), {checkZoomRange:true})
+        .then(() => { 
+          if(searchMap.getZoom() > this.zoom) searchMap.setZoom(this.zoom);
+        });
+      }  
+    },    
+    redrawMap() {
+      _.debounce(() => {
+        console.log("redraw");
+        searchMap?.container?.fitToViewport();
+      }, 200)();
+    },
+    closeBalloon() {
+      searchMap.balloon.close();
     },
     hideSearch() {      
       usePage().props.value.modals.search = false;

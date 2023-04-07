@@ -2,9 +2,9 @@
   <AppHead :title="model.page.title" />
   <search-filter-modal />
   <div class="relative z-20 w-full">    
-    <search-panel />
+    <search-panel />    
   </div>
-  <Map :rooms="rooms" :hotels="hotels"/>
+  <Map :rooms="rooms" :hotels="hotels"/>  
 </template>
 
 <script lang="ts">

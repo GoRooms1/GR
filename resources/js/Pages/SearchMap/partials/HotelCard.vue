@@ -1,29 +1,16 @@
 <template>
   <div class="px-4 w-full">
     <div class="my-4">
-      <swiper
-        :slides-per-view="1"
-        :loop="true"
-        :lazy="true"
-        :preloadImages="false"
-        :pagination="pagination"
-        :navigation="navigation"
-        :breakpoints="breakpoints"
-        class="swiper-image overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60"
-      >
-        <swiper-slide v-for="image in hotel.images">
-          <Image class="w-full h-full object-cover" :src="image.path" />
-        </swiper-slide>
-        <div
-          class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"
-        ></div>
-        <div
-          class="swiper-image-next max-[768px]:hidden absolute top-0 right-0 z-10 bg-transparent w-[50%] h-full"
-        ></div>
-        <div
-          class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"
-        ></div>
-      </swiper>
+      <div class="swiper-image overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60">
+        <div class="swiper-wrapper">
+            <div v-for="image in hotel.images" class="swiper-slide">
+              <Image class="w-full h-full object-cover" :src="image.path" alt="img" />
+            </div>            
+        </div>
+        <div class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"></div>
+        <div class="swiper-image-next max-[768px]:hidden absolute top-0 right-0 z-10 bg-transparent w-[50%] h-full"></div>
+        <div class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"></div>
+      </div>
       <div class="bg-white rounded-2xl p-5 shadow-xl relative z-10">
         <div class="flex mb-4">
           <button
@@ -150,12 +137,15 @@
       >
         <div class="flex justify-between text-center">
           <cost-item
-            v-for="cost in hotel.min_costs ?? []"
+            v-for="cost in hotel.min_costs ?? []"          
             :value="cost.value"
             :name="cost.name"
             :info="cost.info"
             :description="cost.description"
-          />
+          />       
+        </div>
+        <div>
+          <Button classes="show-rooms w-full" :data-hotel="hotel.id"> Показать комнаты </Button>
         </div>
       </div>
     </div>
@@ -165,27 +155,23 @@
 <script>
 import { filterStore } from "@/Store/filterStore.js";
 import _ from "lodash";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import SwiperCore, { Pagination, Navigation } from "swiper";
 import { Link } from "@inertiajs/inertia-vue3";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
 import CostItem from "@/components/ui/CostItem.vue";
 import HotelAddress from "@/components/ui/HotelAddress.vue";
 import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
+import Button from "@/components/ui/Button.vue";
 
-// install Swiper modules
-SwiperCore.use([Pagination, Navigation]);
 export default {
-  components: {
-    Swiper,
-    SwiperSlide,
+  components: {   
     Link,
     CashbackTag,
     Image,
     CostItem,
     HotelAddress,
     HotelMetroItem,
+    Button,
   },
   props: {
     hotel: Object,
