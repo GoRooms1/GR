@@ -63,6 +63,11 @@ final class HotelBuilder extends Builder
             return $k != 'attributes';
         }, ARRAY_FILTER_USE_KEY);
 
+        if ($filters->metro != null && $filters->city != null) {
+            $mainFilters['united_city'] = $mainFilters['city'];
+            unset($mainFilters['city']);
+        }
+        
         foreach ($mainFilters as $key => $value) {
             if ($value != null && Filters::tryFrom($key)) {
                 $result[] = Filters::from($key)->createFilter(strval($value));
