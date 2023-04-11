@@ -1,11 +1,7 @@
 <template>  
   <div @mousedown="hideSearch" @touchstart="hideSearch" id="search-map"></div> 
   
-  <div class="hidden">
-    <div ref="hotel_card">
-      <hotel-card  v-if="hotel" :hotel="hotel" />
-    </div>
-
+  <div class="hidden">    
     <div ref="hotel_rooms"> 
       <div class="rooms-list relative mx-auto px-4" :class="selectedRooms.length > 1 ? 'overflow-y-auto scrollbar' : ''">
         <div v-for="room in selectedRooms" class="room py-2">
@@ -20,7 +16,7 @@
 import Swiper, { Navigation, Pagination, Scrollbar } from 'swiper'
 import _ from 'lodash'
 import { usePage } from "@inertiajs/inertia-vue3"
-import HotelCard from "./HotelCard.vue"
+import { filterStore } from "@/Store/filterStore.js"
 import RoomCard from "./RoomCard.vue"
 
 let searchMap = null;
@@ -29,18 +25,14 @@ let geoObjects = [];
 let iconTemplate = null;
 let MyBalloonLayout = null;
 let MyBalloonContentLayout = null;
-let isRoomsFilter = false;
 let roomsListHeight = 0;
 
 export default {
-  components: {
-    HotelCard,
+  components: {    
     RoomCard,
   },
   props: {
     rooms: [Object],
-    hotels: [Object],
-    isRoomsFilter: Boolean
   },
   mounted() {
     document.body.classList.add("fixed"); 
@@ -52,10 +44,8 @@ export default {
   },
   data() {
     return {
+      filterStore,
       zoom: 12,
-      hotel: null,
-      cardDisabled: true,
-      cardContainer: 'card_holder',
       hotelMarkers: [],
       roomsGrouped: [],
       selectedRooms: [],
@@ -64,7 +54,7 @@ export default {
   methods: {
     initMap() {
       searchMap = new ymaps.Map("search-map", {
-        center: [this.hotels[0]?.address?.geo_lat ?? 55.757572, this.hotels[0]?.address?.geo_lon ?? 37.825793],        
+        center: [55.757572, 37.825793],        
         zoom: this.zoom,
         controls: [],
       });
@@ -127,18 +117,10 @@ export default {
             this.events.fire('shapechange');
         },
 
-        applyElementOffset: function () {
-          let width = 450;
-          let height = 0;
-          let breakpoint = isRoomsFilter == true ? 1024 : 768;
-          if (isRoomsFilter == true) {
-            width = window.innerWidth > breakpoint ? breakpoint : window.innerWidth;
-            height = roomsListHeight;
-          }
-          else {
-            width = 450;
-            height = this._$element.clientHeight;
-          }
+        applyElementOffset: function () {          
+          let breakpoint = 1024;
+          let width = window.innerWidth > breakpoint ? breakpoint : window.innerWidth;
+          let height = roomsListHeight;
 
           if (window.innerWidth >= breakpoint) {
             this._$element.style.left = -(this._$element.clientWidth / 2) + 'px';
@@ -174,8 +156,8 @@ export default {
               left: this._$element.offsetLeft
             };
            
-            let height = isRoomsFilter == true ? roomsListHeight : this._$element.clientHeight;
-            let breakpoint = isRoomsFilter == true ? 1024 : 768;
+            let height = roomsListHeight;
+            let breakpoint = 1024;
             
             let offset = [[position.left, position.top - 60], [ position.left + this._$element.clientWidth, position.top + height + 80]];            
             if (window.innerWidth < breakpoint) {                      
@@ -202,15 +184,8 @@ export default {
        
       geoObjectsClusterer.removeAll();
       geoObjects = [];
-
-      isRoomsFilter = this.isRoomsFilter;
-      if (this.isRoomsFilter == true) {        
-        this.roomsGrouped = _.groupBy(this.rooms, "hotel_id");
-        this.hotelMarkers = this.fillHotelMarkersFromRooms();
-      }        
-      else {
-        this.hotelMarkers = this.fillHotelMarkersFromHotels()
-      }
+      this.roomsGrouped = _.groupBy(this.rooms, "hotel_id");
+      this.hotelMarkers = this.fillHotelMarkersFromRooms();
       
       //Add Hotels marks
       this.hotelMarkers.forEach(hotel => {
@@ -240,55 +215,15 @@ export default {
         );          
         
         placemark.events.add(['click'],  e => {
-          if (this.isRoomsFilter == true) {
-            this.selectedRooms = this.roomsGrouped[hotel.id];
-            this.hotel = null;         
-            this.$nextTick(() => {                            
-              e.get('target').properties.set('balloonContent', this.$refs.hotel_rooms.innerHTML);                                      
-            });
-          }
-          else {
-            this.hotel = hotel;
-            this.selectedRooms = [];         
-            this.$nextTick(() => {
-              e.get('target').properties.set('balloonContent', this.$refs.hotel_card.innerHTML);                                      
-            });
-          }         
+          this.selectedRooms = this.roomsGrouped[hotel.id];                   
+          this.$nextTick(() => {                            
+            e.get('target').properties.set('balloonContent', this.$refs.hotel_rooms.innerHTML);                                      
+          });      
         });
 
-        //init slider
+        //init balloon content
         placemark.balloon.events.add(['open'],  e => {
           this.$nextTick(() => {
-            //Hotel swiper
-            let hotelEl =  document.querySelector('.popover').querySelector('.swiper-image'); 
-            if (hotelEl)  {
-              new Swiper(hotelEl, {
-                slidesPerView: 1,
-                modules: [Navigation, Pagination],
-                pagination: {
-                  el: hotelEl.querySelector('.swiper-pagination'),
-                  renderBullet: function (index, className) {
-                    return (
-                      '<span class="' +
-                      className +
-                      ' !opacity-100 w-[6px] rounded-[50%] h-[6px] mx-[2px] border-none p-0 ">' +
-                      "</span>"
-                    );
-                  },
-                  clickable: true,
-                },
-                navigation: {
-                  nextEl: hotelEl.querySelector('.swiper-image-next'),
-                  prevEl: hotelEl.querySelector('.swiper-image-prev'),
-                },
-                breakpoints: {
-                  1024: {
-                    noSwipingClass: "swiper-slide"
-                  }
-                }                    
-              });
-            }
-           
             //Rooms List
             let roomsCount = this.selectedRooms.length;
             if (roomsCount > 0) {
@@ -355,14 +290,7 @@ export default {
       _.debounce(() => {        
         searchMap?.container?.fitToViewport();
       }, 200)();
-    },
-    fillHotelMarkersFromHotels() {
-      return this.hotels.map((element, index) => {
-        let minCost = _.min(_.filter(_.map(element.min_costs, 'value'), function(o) { return o > 0; } ));
-        element.minCost = minCost;
-        return element;
-      });
-    },
+    },    
     fillHotelMarkersFromRooms() {
       let hotels = [];
 
@@ -396,7 +324,7 @@ export default {
       let room_id = btn.dataset.roomId;
       let bookingRoom = _.find(this.rooms, room => room.id == room_id);      
       eventBus.emit('booking-open', bookingRoom);
-    }
+    },    
   },
 
 };

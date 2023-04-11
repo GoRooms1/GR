@@ -9,6 +9,7 @@ use Domain\Hotel\Actions\FilterHotelsAction;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Hotel\Models\Hotel;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\FilterRoomsAction;
@@ -30,7 +31,7 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
      * @param  ParamsData  $params     
      */
     public function __construct(
-        protected ParamsData $params,        
+        protected ParamsData $params,       
     ) {
     }
 
@@ -48,46 +49,21 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
             'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/hotels')),
         ]; 
     }
-
-    /**
-     * All hotels array
-     *
-     * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
-     */
-    public function hotels(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
-    {
-        if ($this->params->isRoomsFilter == true)
-            return HotelData::collection([]);
-
-        return HotelData::collection(FilterHotelsAction::run($this->params->hotels));
-    }
-
     
     /**
      * All rooms array
      * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
      */
     public function rooms(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
-    {
-        if ($this->params->isRoomsFilter == false)
-            return RoomData::collection([]);
-
+    {       
         return RoomData::collection(FilterRoomsAction::run($this->params->rooms, $this->params->hotels));
     }
-
+    
     /**
      * @return string
      */
     public function query_string(): string
     {
         return Arr::query($this->params->toArray());
-    }
-
-    /**     
-     * @return bool
-     */
-    public function is_rooms_filter(): Bool
-    {
-        return $this->params->isRoomsFilter;
-    }
+    }    
 }

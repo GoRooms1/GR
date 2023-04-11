@@ -4,7 +4,7 @@
   <div class="relative z-20 w-full">    
     <search-panel />    
   </div>
-  <Map :rooms="rooms" :hotels="hotels" :is-rooms-filter="is_rooms_filter"/>
+  <Map :rooms="rooms"/>
   <booking-form v-if="isBookingOpen === true" :room="bookingRoom"/> 
 </template>
 
@@ -35,9 +35,7 @@ export default {
       type: Object as PropType<PageInterface>,
       required: true,
     },
-    rooms: [Object],
-    hotels: [Object],
-    is_rooms_filter: Boolean,
+    rooms: [Object],    
   },
   created() {
     eventBus.on('booking-open', e => this.openBookingModal(e));
