@@ -1,6 +1,6 @@
 <template>  
   <div v-if="$page.props.modals.search == false && route().current() == 'search.map'" @click="showSearchPanel()" 
-    class="w-[56px] absolute md:top-[114px] top-[64px] max-[832px]:left-4 left-[calc(50%-416px)]"
+    class="w-[56px] absolute md:top-[114px] top-[64px] max-[832px]:left-4 left-[calc(50%-416px)] hidden lg:block"
   >
     <div class="shadow-xl w-full bg-white rounded-t-[16px] rounded-b-none p-0 px-[8px] py-[12px] flex items-center">
       <button class="p-[8px]">
