@@ -187,7 +187,7 @@ final class Hotel extends Model
      *
      * @var string[]
      */
-    protected $with = ['rooms', 'attrs', 'address', 'ratings', 'reviews', 'metros', 'images', 'image', 'type'];
+    protected $with = ['rooms', 'attrs', 'address', 'metros', 'images', 'image', 'type'];
 
     protected $casts = [
         'moderate' => 'boolean',

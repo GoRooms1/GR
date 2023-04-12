@@ -53,6 +53,21 @@ final class HotelBuilder extends Builder
 
     /**
      * @param  HotelParamsData  $filters
+     * @return HotelBuilder
+     */
+    public function filterForRooms(HotelParamsData $filters): self
+    {
+        /** @var HotelBuilder $builder */
+        $builder = app(Pipeline::class)
+            ->send($this)
+            ->through($this->filters($filters))
+            ->thenReturn();
+
+        return $builder;
+    }
+
+    /**
+     * @param  HotelParamsData  $filters
      * @return Filter[]
      */
     private function filters(HotelParamsData $filters): array

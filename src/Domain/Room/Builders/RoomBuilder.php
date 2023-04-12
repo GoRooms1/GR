@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Domain\Room\Builders;
 
+use Domain\Hotel\Builders\HotelBuilder;
 use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Search\DataTransferObjects\RoomParamsData;
-use Domain\Hotel\Actions\FilterHotelsAction;
+use Domain\Hotel\Models\Hotel;
 use Domain\Room\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
@@ -26,7 +27,7 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
     public function moderated(): self
     {
         return $this->whereHas('hotel', function ($query) {
-            $query->where('moderate', false)->where('show', true);
+            $query->where('moderate', false)->where('show', true)->where('old_moderate', true);
         })
         ->where('moderate', false);
     }
@@ -66,13 +67,10 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
             ->send($this)
             ->through($this->filters($filters))
             ->thenReturn();
-
-        /** @var array<int> */
-        $hotel_ids = FilterHotelsAction::run($hotelFilters)->pluck('id')->toArray();
-
-        return $builder
-            ->moderated()
-            ->hotelIn($hotel_ids);
+        
+        return $builder            
+            ->whereIn('hotel_id', Hotel::filterForRooms($hotelFilters)->select('id'))
+            ->moderated();            
     }
 
     /**

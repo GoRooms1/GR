@@ -109,6 +109,7 @@ final class Room extends Model
      */
     protected $with = [
         'attrs',
+        'image',
         'images',
         'costs',
     ];
