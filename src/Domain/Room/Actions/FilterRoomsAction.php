@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
-use Domain\Filter\DataTransferObjects\HotelParamsData;
-use Domain\Filter\DataTransferObjects\RoomParamsData;
+use Domain\Search\DataTransferObjects\HotelParamsData;
+use Domain\Search\DataTransferObjects\RoomParamsData;
 use Domain\Room\Builders\RoomBuilder;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static LengthAwarePaginator<int, Room> run(RoomParamsData $filters, HotelParamsData $hotelFilters)
+ * @method static Collection run(RoomParamsData $filters, HotelParamsData $hotelFilters)
  */
 final class FilterRoomsAction extends Action
 {

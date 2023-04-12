@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Domain\Filter\Actions;
+namespace Domain\Search\Actions;
 
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Hotel\Actions\FilterHotelsCountAction;
 use Domain\Room\Actions\FilterRoomsCountAction;
 use Lorisleiva\Actions\Action;

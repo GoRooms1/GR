@@ -1,4 +1,5 @@
 <template>
+  <list-header :found="rooms?.meta?.total ?? 0" :custom-message="byHotel == true ? 'Все номера в отеле' : null"/>
   <div
     v-if="globalLoading == false"
     class="container mx-auto px-4 relative min-[1920px]:px-[10vw]"
@@ -43,9 +44,11 @@ import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
 import BookingForm from "./BookingForm.vue";
+import ListHeader from "./ListHeader.vue";
 
 export default {
   components: {
+    ListHeader,
     RoomCard,
     Loader,
     Button,
@@ -56,6 +59,10 @@ export default {
       type: [Array, Object],
       required: false,
     },
+    byHotel: {
+      type: Boolean,
+      default: false
+    }
   },
   created() {
     eventBus.on('booking-open', e => this.openBookingModal(e));

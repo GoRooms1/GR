@@ -6,7 +6,7 @@ namespace Domain\Address\DataTransferObjects;
 
 use Domain\Address\Actions\GetCityDistrictSlugAction;
 use Domain\Address\Models\Address;
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 
 final class CityDistrictSearchData extends \Parent\DataTransferObjects\Data
 {

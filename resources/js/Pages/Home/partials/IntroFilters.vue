@@ -80,7 +80,7 @@
       <div
         class="flex items-center gap-[16px] md:justify-end justify-between md:w-initial w-full flex-wrap"
       >
-        <Button disabled>
+        <Button @click="getDataOnMap()">
           <svg
             width="24"
             height="24"
@@ -112,7 +112,7 @@
           </svg>
           <span class="text-white">На карте</span>
         </Button>
-        <Button @click="getData()">
+        <Button @click="getDataOnList()">
           <svg
             width="24"
             height="24"
@@ -234,12 +234,36 @@ export default {
     low_cost: filterGetSetObj("rooms", "low_cost"),
   },
   methods: {
-    getData() {
-      this.$inertia.get(route("filter"), this.filterStore.getFiltersValues(), {
+    getDataOnList() {
+      this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
-      });
+        only: ["hotels", "rooms"],
+        //onSuccess: () => {},
+        onStart: () => {
+          usePage().props.value.isLoadind = true;
+        },
+        onFinish: () => {
+          usePage().props.value.isLoadind = false;
+        },
+      });      
+    },
+    getDataOnMap() {
+      this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+        replace: true,
+        preserveState: true,
+        preserveScroll: true,
+        only: ["hotels", "rooms"],
+        //onSuccess: () => {},
+        onStart: () => {
+          usePage().props.value.isLoadind = true;
+        },
+        onFinish: () => {
+          usePage().props.value.isLoadind = false;
+          eventBus.emit('data-received');
+        },
+      });      
     },
     updateFilters(only) {
       let data = this.filterStore.getFiltersValues();

@@ -93,16 +93,7 @@
                   (event) => filterValueHandler('rooms', true, 'attr_65', event)
                 "
               />
-            </div>
-            <!-- <div class="lg:block hidden p-[8px] bg-[#EAEFFD] rounded-b-[16px]">
-                            <button class="flex items-center gap-[16px] p-[8px]">
-                                <span class="text-[14px] leading-[16px] whitespace-nowrap">Больше фильтров</span>
-                                <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.83301 13.0002L5.99967 17.1669L10.1663 13.0002" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    <path d="M10.167 7.16692L6.00033 3.00025L1.83366 7.16692" stroke="#6171FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </button>
-                        </div> -->
+            </div>            
           </div>
           <div
             class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]"
@@ -431,7 +422,7 @@
             <div
               class="flex items-center gap-[8px] md:justify-end justify-between md:w-initial w-full flex-wrap"
             >
-              <button
+              <button @click="getDataOnMap()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
                 <svg
@@ -466,7 +457,7 @@
                 <span class="text-white">На карте</span>
               </button>
               <button
-                @click="getData()"
+                @click="getDataOnList()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
                 <svg
@@ -577,11 +568,12 @@ export default {
       );
     });
 
-    initPromise.then((value) => {
+    initPromise.then((reload) => {
       this.inited = true;
       this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
 
-      if (value == true) this.getData();
+      //If params changed while init
+      if (reload == true) this.reloadData();
     });
   },
   destroyed() {
@@ -622,7 +614,8 @@ export default {
     close() {
       window.history.pushState({}, this.$page.title, this.initialUrl);
       usePage().props.value.modals.filters = false;
-      document.body.classList.remove("fixed");
+      if (route().current() != 'search.map')
+        document.body.classList.remove("fixed");
     },
     handleResize() {
       if (this.isOpen) {
@@ -637,24 +630,70 @@ export default {
           this.$refs.filterContent.clientHeight <
           this.$refs.filterContent.scrollHeight;
     },
+    reloadData() {      
+      this.$inertia.get(route(route().current()), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          onStart: () => {
+            usePage().props.value.isLoadind = true;
+            this.close();
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;
+            eventBus.emit('data-received');
+          },
+      });
+    },
     getData() {
+      if (route().current() == 'search.map') {
+        this.getDataOnMap();
+      }
+      else {
+        this.getDataOnList();
+      }
+    },
+    getDataOnList() {
       if (this.isOpen == true) {
         this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
       }
 
-      this.$inertia.get(route("filter"), this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        onStart: () => {
-          usePage().props.value.isLoadind = true;
-          this.close();
-        },
-        onFinish: () => {
-          usePage().props.value.isLoadind = false;
-        },
-      });
+      this.$nextTick(() => {
+        this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          onStart: () => {
+            usePage().props.value.isLoadind = true;
+            this.close();
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;
+          },
+        });
+      });      
     },
+    getDataOnMap() {
+      if (this.isOpen == true) {
+        this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
+      }
+
+      this.$nextTick(() => {        
+        this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          onStart: () => {
+            usePage().props.value.isLoadind = true;
+            this.close();
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;            
+            eventBus.emit('data-received');      
+          },
+        });        
+      });     
+    },     
     updateFilters(only) {
       let data = this.tempFilterStore.getFiltersValues();
       this.$inertia.get(route(route().current()), data, {
@@ -714,7 +753,7 @@ export default {
           !_.isEqual(newVal, oldVal) &&
           this.isOpen == false &&
           this.inited == true
-        ) {
+        ) {          
           this.getData();
         }
       },

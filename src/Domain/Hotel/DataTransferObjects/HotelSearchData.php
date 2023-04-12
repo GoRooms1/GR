@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\DataTransferObjects;
 
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Hotel\Models\Hotel;
 
 final class HotelSearchData extends \Parent\DataTransferObjects\Data

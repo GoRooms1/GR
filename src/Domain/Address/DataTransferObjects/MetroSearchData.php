@@ -6,7 +6,7 @@ namespace Domain\Address\DataTransferObjects;
 
 use Domain\Address\Actions\GetMetroSlugAction;
 use Domain\Address\Models\Metro;
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 
 final class MetroSearchData extends \Parent\DataTransferObjects\Data
 {

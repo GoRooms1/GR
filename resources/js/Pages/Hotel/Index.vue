@@ -13,8 +13,7 @@
       alt="lens"
     />
     <search-panel />
-  </div>
-  <filter-header :found="hotels?.meta?.total ?? 0" />
+  </div>  
   <hotels-list :hotels="hotels" />
   <info-block />
 </template>
@@ -27,7 +26,6 @@ import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
-import FilterHeader from "./partials/FilterHeader.vue";
 import HotelsList from "./partials/HotelsList.vue";
 import InfoBlock from "./partials/InfoBlock.vue";
 export default {
@@ -36,8 +34,7 @@ export default {
     AppHead,
     Layout,
     SearchLayout,
-    SearchPanel,
-    FilterHeader,
+    SearchPanel,    
     HotelsList,
     InfoBlock,
     SearchFilterModal,

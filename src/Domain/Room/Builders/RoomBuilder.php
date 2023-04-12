@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Room\Builders;
 
-use Domain\Filter\DataTransferObjects\HotelParamsData;
-use Domain\Filter\DataTransferObjects\RoomParamsData;
+use Domain\Search\DataTransferObjects\HotelParamsData;
+use Domain\Search\DataTransferObjects\RoomParamsData;
 use Domain\Hotel\Actions\FilterHotelsAction;
 use Domain\Room\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;

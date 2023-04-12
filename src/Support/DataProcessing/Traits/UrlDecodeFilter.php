@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Support\DataProcessing\Traits;
 
-use Domain\Filter\DataTransferObjects\HotelParamsData;
+use Domain\Search\DataTransferObjects\HotelParamsData;
 use Illuminate\Support\Facades\DB;
 
 /**

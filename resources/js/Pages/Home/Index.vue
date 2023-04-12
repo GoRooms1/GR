@@ -14,28 +14,30 @@
       ></div>
     </div>
     
-    <div class="relative"> 
+    <div class="relative block md:hidden"> 
       <search-panel />
     </div>
     
   </div>
-  <div class="container mx-auto">
+  <div v-if="isMobile == true" class="container mx-auto">
     <div class="py-4 lg:my-16 px-2 lg:px-6">
       <div class="block md:hidden">
         <intro-filters />
       </div>
     </div>
-  </div>
+  </div>  
 </template>
 
 <script lang="ts">
 import AppHead from "@/components/ui/AppHead.vue";
+import { usePage } from "@inertiajs/inertia-vue3";
 import type { PropType } from "vue";
 import { PageInterface } from "../../models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
 import IntroLayout from "@/Layouts/IntroLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import IntroFilters from "./partials/IntroFilters.vue";
+import Loader from "@/components/ui/Loader.vue";
 
 export default {
   layout: IntroLayout,
@@ -44,7 +46,7 @@ export default {
     Layout,
     IntroLayout,
     SearchPanel,
-    IntroFilters,
+    IntroFilters,   
   },
   props: {
     model: {
@@ -52,5 +54,31 @@ export default {
       required: true,
     },
   },
+  created() {
+    window.addEventListener("resize", this.handleDesktop);
+    this.handleDesktop();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleDesktop);
+  },
+  data() {
+    return {
+      isMobile: false,
+    }
+  },  
+  methods: {
+    handleDesktop() {      
+      if (window.innerWidth > 767 && route().current() == 'home') {        
+        this.isMobile = false;
+        this.$inertia.get(route("search.map"), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,              
+        });
+      } else {        
+        this.isMobile = true;
+      }      
+    },
+  }
 };
 </script>

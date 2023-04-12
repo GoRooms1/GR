@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Filter\Traits;
+namespace Domain\Search\Traits;
 
 use Domain\Address\Actions\GetAllCitiesAction;
 use Domain\Address\Actions\GetAllCityMetrosAction;
@@ -16,7 +16,7 @@ use Domain\Attribute\Actions\GetFilteredAttributeCategoriesAction;
 use Domain\Attribute\Actions\GetFilteredAttributesAction;
 use Domain\Attribute\DataTransferObjects\AttributeCategoryData;
 use Domain\Attribute\DataTransferObjects\AttributeData;
-use Domain\Filter\Actions\GetNumOfFilteredObjectsAction;
+use Domain\Search\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Hotel\Actions\GetAllHotelTypesAction;
 use Domain\Hotel\DataTransferObjects\HotelTypeKeyNameData;
 use Domain\Room\Actions\GetCostTypesWithCostRangesKeyNameDataAction;

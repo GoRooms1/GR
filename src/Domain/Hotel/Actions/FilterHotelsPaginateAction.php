@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Actions;
 
-use Domain\Filter\DataTransferObjects\HotelParamsData;
+use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Hotel\Builders\HotelBuilder;
 use Domain\Hotel\Models\Hotel;
 use Illuminate\Pagination\LengthAwarePaginator;

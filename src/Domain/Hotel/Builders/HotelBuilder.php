@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Builders;
 
-use Domain\Filter\DataTransferObjects\HotelParamsData;
+use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Hotel\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
@@ -63,6 +63,11 @@ final class HotelBuilder extends Builder
             return $k != 'attributes';
         }, ARRAY_FILTER_USE_KEY);
 
+        if ($filters->metro != null && $filters->city != null) {
+            $mainFilters['united_city'] = $mainFilters['city'];
+            unset($mainFilters['city']);
+        }
+        
         foreach ($mainFilters as $key => $value) {
             if ($value != null && Filters::tryFrom($key)) {
                 $result[] = Filters::from($key)->createFilter(strval($value));

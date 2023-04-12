@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Domain\Filter\DataTransferObjects\ParamsData;
+use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Hotel\ViewModels\HotelListViewModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
