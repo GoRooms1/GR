@@ -112,6 +112,7 @@ final class Room extends Model
         'image',
         'images',
         'costs',
+        'hotel',
     ];
 
     protected static function boot(): void

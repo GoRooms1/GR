@@ -46,7 +46,7 @@ final class HotelBuilder extends Builder
             ->through($this->filters($filters))
             ->thenReturn();
 
-        return $builder
+        return $builder            
             ->moderated()
             ->withRooms();
     }

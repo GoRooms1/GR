@@ -55,7 +55,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
             'images' => $room->images,
             'attrs' => Lazy::whenLoaded('attrs', $room, fn () => AttributeData::collection($room->attrs)),
             'meta' => Lazy::whenLoaded('meta', $room, fn () => PageDescriptionData::from($room->meta)),
-            'hotel' => RoomHotelData::fromModel($room->hotel),
+            'hotel' => Lazy::whenLoaded('hotel', $room, fn () => RoomHotelData::fromModel($room->hotel)),
             'category' => $room->category ? CategoryData::fromModel($room->category) : null,
             'costs' => Lazy::whenLoaded('costs', $room, fn () => GetAllRoomCosts::run($room)),
         ]);

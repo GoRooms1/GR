@@ -40,7 +40,7 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
      */
     public function hotel(): HotelData
     {
-        return $this->hotel->getData()->include('attrs');
+        return $this->hotel->load('attrs')->getData();
     }
 
     /**

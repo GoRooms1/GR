@@ -24,10 +24,10 @@
         <div
           class="bg-[#EAEFFD] flex flex-col w-full p-6 pt-4 lg:p-4 z-[1] shadow-md lg:shadow-none rounded-3xl lg:rounded-none">
           <div class="flex">
-            <button v-for="cost in room?.costs ?? []" @click="switchCostType(cost?.period?.type?.id)"
+            <button v-for="cost in room?.costs ?? []" @click="switchCostType(cost?.id)"
               class="mr-4 flex-1 lg:flex-none text-[0.875rem] leading-[1rem] px-[19px] h-[2rem] flex items-center justify-center rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150"
-              :class="cost.value > 0 ? (cost?.period?.type?.id == costType ? 'bg-[#6170FF] text-white' : 'bg-white') : 'text-white bg-slate-400 pointer-events-none'">
-              {{ cost?.period?.type?.name }}
+              :class="cost.value > 0 ? (cost?.id == costType ? 'bg-[#6170FF] text-white' : 'bg-white') : 'text-white bg-slate-400 pointer-events-none'">
+              {{ cost?.name }}
             </button>
           </div>
           <div class="flex flex-col lg:flex-row mt-4 text-sm text-[#515561]">
@@ -203,7 +203,7 @@ export default {
         this.costType = typeId;
 
         let cost = _.find(this.room.costs, (el) => {
-          return el?.period?.cost_type_id == typeId;
+          return el?.id == typeId;
         });
 
         this.cost = cost;

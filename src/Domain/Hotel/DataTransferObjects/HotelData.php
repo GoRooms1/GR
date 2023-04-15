@@ -51,9 +51,7 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         #[DataCollectionOf(AttributeData::class)]
         public readonly null|Lazy|DataCollection $attrs,
         #[DataCollectionOf(MetroData::class)]
-        public readonly null|Lazy|DataCollection $metros,
-        #[DataCollectionOf(RoomData::class)]
-        public readonly null|Lazy|DataCollection $rooms,
+        public readonly null|Lazy|DataCollection $metros,       
         #[DataCollectionOf(MinCostsData::class)]
         public readonly null|DataCollection $min_costs,
     ) {
@@ -74,9 +72,8 @@ final class HotelData extends \Parent\DataTransferObjects\Data
             'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressData::from($hotel->address)),
             'type' => Lazy::whenLoaded('type', $hotel, fn () => HotelTypeData::from($hotel->type)),
             'meta' => Lazy::whenLoaded('meta', $hotel, fn () => PageDescriptionData::from($hotel->meta)),
-            'attrs' => Lazy::create(fn () => AttributeData::collection($hotel->attrs))->defaultIncluded(false),
-            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros)),
-            'rooms' => Lazy::create(fn () => RoomData::collection($hotel->rooms))->defaultIncluded(false),
+            'attrs' => Lazy::whenLoaded('attrs', $hotel, fn () => AttributeData::collection($hotel->attrs)),
+            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros)),            
             'min_costs' => MinimumCostsCalculation::run($hotel),
         ]);
     }
