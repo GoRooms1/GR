@@ -28,6 +28,8 @@ import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import HotelsList from "./partials/HotelsList.vue";
 import InfoBlock from "./partials/InfoBlock.vue";
+import { filterStore } from "@/Store/filterStore.js";
+import { usePage } from "@inertiajs/inertia-vue3";
 export default {
   layout: SearchLayout,
   components: {
@@ -46,5 +48,32 @@ export default {
     },
     hotels: [Object],
   },
+  data() {
+    return {
+      filterStore,
+    }
+  },  
+  mounted() {
+    eventBus.on('filters-inited', e => this.getDataOnList(route("hotels.index")));
+    eventBus.on('filters-changed', e => this.getDataOnList(route("search.list")));
+  },
+  methods: {    
+    getDataOnList(route) {     
+      this.$nextTick(() => {        
+        this.$inertia.get(route, this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          only: ['hotels', 'rooms', 'is_rooms_filter'],
+          onStart: () => {
+            usePage().props.value.isLoadind = true;            
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;
+          },
+        });
+      });      
+    },
+  }
 };
 </script>

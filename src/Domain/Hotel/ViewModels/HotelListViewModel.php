@@ -12,6 +12,7 @@ use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Search\Traits\SearchResultTrait;
+use Inertia\Inertia;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -44,11 +45,11 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
     /**
      * Paginated hotels array
      *
-     * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+     * @return \Inertia\LazyProp
      */
-    public function hotels(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+    public function hotels(): \Inertia\LazyProp
     {
-        return HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
+        return Inertia::lazy(fn() => HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels)));
     }
 
     /**

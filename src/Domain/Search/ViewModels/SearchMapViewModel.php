@@ -15,6 +15,7 @@ use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\FilterRoomsAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
+use Inertia\Inertia;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -52,11 +53,11 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
     
     /**
      * All rooms array
-     * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+     * @return \Inertia\LazyProp
      */
-    public function rooms(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+    public function rooms(): \Inertia\LazyProp
     {       
-        return RoomData::collection(FilterRoomsAction::run($this->params->rooms, $this->params->hotels));
+        return Inertia::lazy(fn() => RoomData::collection(FilterRoomsAction::run($this->params->rooms, $this->params->hotels)));
     }
     
     /**

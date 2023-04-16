@@ -32,21 +32,23 @@
           <filter-attr-toggle
             title="Low Cost"
             type="small"
-            initial-value="true"
-            v-model="low_cost"
+            initial-value="true"            
+            :model-value="filterStore.getFilterValue('rooms', 'low_cost')"
+            @update:modelValue="(event) =>filterValueHandler('rooms', false, 'low_cost', event)"
           />
           <filter-attr-toggle
             title="От 1 часа"
             type="small"
             :initial-value="68"
             :model-value="filterStore.getFilterValue('rooms', 'attr_68')"
-            @update:modelValue="(event) => attributeHandler('rooms', event, 68)"
+            @update:modelValue="(event) =>filterValueHandler('rooms', true, 'attr_68', event)"
           />
           <filter-attr-toggle
             title="Горящие"
             type="small"
             initial-value="true"
-            v-model="is_hot"
+            :model-value="filterStore.getFilterValue('rooms', 'is_hot')"
+            @update:modelValue="(event) =>filterValueHandler('rooms', false, 'is_hot', event)"
           />
           <filter-attr-toggle title="Кешбэк" type="small" disabled />
           <filter-attr-toggle
@@ -54,14 +56,14 @@
             type="small"
             :initial-value="52"
             :model-value="filterStore.getFilterValue('rooms', 'attr_52')"
-            @update:modelValue="(event) => attributeHandler('rooms', event, 52)"
+            @update:modelValue="(event) =>filterValueHandler('rooms', true, 'attr_52', event)"
           />
           <filter-attr-toggle
             title="Джакузи"
             type="small"
             :initial-value="65"
             :model-value="filterStore.getFilterValue('rooms', 'attr_65')"
-            @update:modelValue="(event) => attributeHandler('rooms', event, 65)"
+            @update:modelValue="(event) =>filterValueHandler('rooms', true, 'attr_65', event)"
           />
         </div>        
         <div class="p-[8px]"          
@@ -124,18 +126,6 @@ import FilterTag from "@/components/ui/FilterTag.vue";
 import Search from "./Search.vue";
 import _ from 'lodash';
 
-let filterGetSetObj = function (model, key) {
-  return {
-    get() {
-      return this.filterStore.getFilterValue(model, key);
-    },
-    set(val) {
-      if (val) this.filterStore.updateFilter(model, false, key, val);
-      if (val === null) this.filterStore.removeFilter(model, key);
-    },
-  };
-};
-
 export default {
   components: {
     FilterAttrToggle,
@@ -151,11 +141,7 @@ export default {
     return {
       filterStore,      
     };
-  },
-  computed: {
-    is_hot: filterGetSetObj("rooms", "is_hot"),
-    low_cost: filterGetSetObj("rooms", "low_cost"),
-  },
+  },  
   methods: {    
     openFilters() {
       usePage().props.value.modals.filters = true;
@@ -166,14 +152,18 @@ export default {
     showSearchPanel() {
       usePage().props.value.modals.search = true;
     },
-    attributeHandler(modelType, filterValue, attrID) {
-      if (filterValue == null)
-        this.filterStore.removeFilter(modelType, "attr_" + attrID);
-      else
-        this.filterStore.addFilter(modelType, true, "attr_" + attrID, attrID);
-    },
+    filterValueHandler(model, isAttr = false, key, value) {
+      if (value == null) {
+        this.filterStore.removeFilter(model, key);
+      } else {
+        this.filterStore.updateFilter(model, isAttr, key, value);
+      }
+
+      eventBus.emit('filters-changed');
+    },    
     closeTag(obj) {
       this.filterStore.removeFilter(obj.modelType, obj.key);
+      eventBus.emit('filters-changed');
     },
     handleResize() {
       if (usePage().props.value.modals.search === false) {        

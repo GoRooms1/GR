@@ -55,13 +55,12 @@ export default {
       type: [Array, Object],
       required: false,
     },
-  },
-  mounted() {},
+  }, 
   data() {
     return {
       filterStore,
       tempFilterStore,
-      allHotels: this.hotels.data ?? [],
+      allHotels: this.hotels?.data ?? [],
       isLoading: false,
     };
   },
@@ -100,7 +99,7 @@ export default {
   },
   watch: {
     hotels: function (newVal, oldVal) {
-      if (this.hotels.meta.current_page == 1) {
+      if (this.hotels?.meta?.current_page == 1) {
         this.allHotels = this.hotels.data ?? [];
       }
     },

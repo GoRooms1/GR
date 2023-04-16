@@ -568,20 +568,21 @@ export default {
       );
     });
 
-    initPromise.then((reload) => {
-      this.inited = true;
-      this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
-
-      //If params changed while init
-      if (reload == true) this.reloadData();
-    });
-  },
+    initPromise
+      .then((inited) => {      
+        this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
+        return true;      
+      })
+      .then((val) => {
+        eventBus.emit('filters-inited');
+        console.log('filters inited');      
+      });
+    },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
   },
   data() {
-    return {
-      inited: false,
+    return {      
       filterStore,
       initialUrl: usePage().url.value,
       tempFilterStore,
@@ -663,6 +664,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
+          only: ['hotels', 'rooms', 'is_rooms_filter'],
           onStart: () => {
             usePage().props.value.isLoadind = true;
             this.close();
@@ -683,6 +685,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
+          only: ['hotels', 'rooms', 'is_rooms_filter'],
           onStart: () => {
             usePage().props.value.isLoadind = true;
             this.close();
@@ -695,7 +698,7 @@ export default {
       });     
     },     
     updateFilters(only) {
-      let data = this.tempFilterStore.getFiltersValues();
+      let data = this.tempFilterStore.getFiltersValues();      
       this.$inertia.get(route(route().current()), data, {
         preserveState: true,
         preserveScroll: true,
@@ -746,19 +749,7 @@ export default {
         this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
         this.updateFilters(["total"]);
       }
-    },
-    filters: {
-      handler(newVal, oldVal) {
-        if (
-          !_.isEqual(newVal, oldVal) &&
-          this.isOpen == false &&
-          this.inited == true
-        ) {          
-          this.getData();
-        }
-      },
-      deep: true,
-    },
+    },    
   },
 };
 </script>

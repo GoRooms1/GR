@@ -11,10 +11,14 @@ use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
+use Inertia\Inertia;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
 
+/**
+ * Summary of RoomListViewModel
+ */
 final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
@@ -42,8 +46,13 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
         ];
     }
 
-    public function rooms(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+    /**
+     * All paginated rooms
+     * 
+     * @return \Inertia\LazyProp
+     */
+    public function rooms(): \Inertia\LazyProp
     {
-        return RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels));
+        return Inertia::lazy(fn() => RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels)));
     }
 }

@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       filterStore,
-      allRooms: this.rooms.data ?? [],
+      allRooms: this.rooms?.data ?? [],
       isLoading: false,
       isBookingOpen: false,
       bookingRoom: null,

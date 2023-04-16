@@ -11,19 +11,17 @@ export const filterStore = reactive({
   //Getters and Actions
   async init(url) {
     console.log("init filters");
-    this.filters = [];
-    let reloadStatus = false;
+    this.filters = [];   
     if (url.substring(url.indexOf("?") + 1).length > 2) {
       this.parceUrlParameters(url);
     }
 
     if (this.getFilterValue("hotels", "city") == null) {
       let city = await geolocationStore.locate();
-      this.updateFilter("hotels", false, "city", city);
-      //Reload if city was located
-      reloadStatus = true;
+      this.updateFilter("hotels", false, "city", city);      
     }
-    return reloadStatus;
+    
+    return true;
   },
 
   clearFilters() {

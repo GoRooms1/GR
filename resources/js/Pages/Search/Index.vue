@@ -34,6 +34,8 @@ import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
 import RoomInfoBlock from "@/Pages/Room/partials/InfoBlock.vue";
 import HotelsList from "@/Pages/Hotel/partials/HotelsList.vue";
 import HotelInfoBlock from "@/Pages/Hotel/partials/InfoBlock.vue";
+import { filterStore } from "@/Store/filterStore.js";
+import { usePage } from "@inertiajs/inertia-vue3";
 export default {
   layout: SearchLayout,
   components: {
@@ -58,6 +60,33 @@ export default {
       type: Boolean,
       default: false,
     }
-  },  
+  },
+  data() {
+    return {
+      filterStore,
+    }
+  },
+  mounted() {
+    eventBus.on('filters-inited', e => this.getDataOnList());
+    eventBus.on('filters-changed', e => this.getDataOnList());
+  },
+  methods: {
+    getDataOnList() {     
+      this.$nextTick(() => {        
+        this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          only: ['hotels', 'rooms', 'is_rooms_filter'],
+          onStart: () => {
+            usePage().props.value.isLoadind = true;            
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;
+          },
+        });
+      });      
+    },
+  }
 };
 </script>

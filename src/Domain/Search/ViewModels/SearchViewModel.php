@@ -16,6 +16,7 @@ use Domain\Room\Actions\FilterRoomsAction;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
+use Inertia\Inertia;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -54,27 +55,31 @@ final class SearchViewModel extends \Parent\ViewModels\ViewModel
     /**
      * Paginated hotels array
      *
-     * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+     * @return \Inertia\LazyProp
      */
-    public function hotels(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
-    {
-        if ($this->params->isRoomsFilter == true)
-            return HotelData::collection([]);
-
-        return HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
+    public function hotels(): \Inertia\LazyProp
+    {       
+        return Inertia::lazy(
+            fn() => $this->params->isRoomsFilter == true ? 
+            HotelData::collection([])
+                :
+            HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels))
+        );
     }
 
     
     /**
      * Paginated rooms array
-     * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+     * @return \Inertia\LazyProp
      */
-    public function rooms(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
-    {
-        if ($this->params->isRoomsFilter == false)
-            return RoomData::collection([]);
-
-        return RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels));
+    public function rooms(): \Inertia\LazyProp
+    {        
+        return  Inertia::lazy(
+            fn() => $this->params->isRoomsFilter == false ? 
+            RoomData::collection([]) 
+                : 
+            RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels))
+        );
     }
 
     /**

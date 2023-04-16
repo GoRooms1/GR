@@ -18,6 +18,8 @@ import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import Map from './partials/Map.vue';
 import BookingForm from "@/Pages/Room/partials/BookingForm.vue";
+import { filterStore } from "@/Store/filterStore.js";
+import { usePage } from "@inertiajs/inertia-vue3";
 
 export default {
   layout: SearchLayout,
@@ -37,12 +39,15 @@ export default {
     },
     rooms: [Object],    
   },
-  created() {
+  mounted() {
     eventBus.on('booking-open', e => this.openBookingModal(e));
     eventBus.on('booking-close', e => this.closeBookingModal());
+    eventBus.on('filters-inited', e => this.getDataOnMap());
+    eventBus.on('filters-changed', e => this.getDataOnMap());
   },
   data() {
-    return {      
+    return {
+      filterStore,     
       isBookingOpen: false,
       bookingRoom: null,
     };
@@ -55,6 +60,23 @@ export default {
     closeBookingModal() {      
       this.isBookingOpen = false;
       this.bookingRoom = null;
+    },
+    getDataOnMap() {      
+      this.$nextTick(() => {        
+        this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          only: ['rooms'],
+          onStart: () => {
+            usePage().props.value.isLoadind = true;            
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;            
+            eventBus.emit('data-received');      
+          },
+        });        
+      });     
     },
   },  
 };
