@@ -28,7 +28,7 @@ final class FilterRoomsPaginateAction extends Action
 
         /** @var int $perPage */
         $perPage = config('pagination.rooms_per_page');
-
+        
         return $rooms->paginate($perPage);
     }
 }

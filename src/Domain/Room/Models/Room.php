@@ -113,6 +113,7 @@ final class Room extends Model
         'images',
         'costs',
         'hotel',
+        'category',
     ];
 
     protected static function boot(): void
@@ -150,7 +151,7 @@ final class Room extends Model
     public function costs(): HasMany
     {
         return $this->hasMany(Cost::class, 'room_id', 'id');
-    }
+    }    
 
     public function meta(): HasOne
     {

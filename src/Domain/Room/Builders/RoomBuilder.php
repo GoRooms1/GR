@@ -46,6 +46,19 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
         });
     }
 
+    public function withAllCosts(): self
+    {
+        return $this->with(['costs' => function($q) {
+            return $q->selectRaw(
+                '*'
+            )->from('cost_types')       
+            ->leftJoin('periods','cost_types.id','=','periods.cost_type_id')
+            ->leftJoin('costs','costs.period_id','=','periods.id')               
+            ->orderBy('cost_types.sort','asc');
+        }]);
+    }
+
+
     /**
      * @param  array<int>  $hotels_ids
      * @return RoomBuilder
