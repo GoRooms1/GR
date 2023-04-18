@@ -95,7 +95,8 @@ export default {
             only: ["rooms"],
             onSuccess: () => {
               if (this.rooms.meta.current_page != 1)
-                this.allRooms = [...this.allRooms, ...this.rooms.data];
+                this.allRooms = [...this.allRooms, ..._.shuffle(this.rooms.data)];
+
 
               window.history.pushState({}, this.$page.title, initialUrl);
             },
@@ -121,7 +122,7 @@ export default {
   watch: {
     rooms: function (newVal, oldVal) {
       if (this.rooms?.meta?.current_page == 1) {
-        this.allRooms = this.rooms.data ?? [];
+        this.allRooms = _.shuffle(this.rooms.data ?? []);
       }
     },
   },

@@ -82,7 +82,7 @@ export default {
             only: ["hotels"],
             onSuccess: () => {
               if (this.hotels.meta.current_page != 1)
-                this.allHotels = [...this.allHotels, ...this.hotels.data];
+                this.allHotels = [...this.allHotels, ..._.shuffle(this.hotels.data)];
 
               window.history.pushState({}, this.$page.title, initialUrl);
             },
@@ -100,7 +100,7 @@ export default {
   watch: {
     hotels: function (newVal, oldVal) {
       if (this.hotels?.meta?.current_page == 1) {
-        this.allHotels = this.hotels.data ?? [];
+        this.allHotels = _.shuffle(this.hotels.data ?? []);
       }
     },
   },
