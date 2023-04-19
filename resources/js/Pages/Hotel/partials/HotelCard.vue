@@ -138,11 +138,12 @@
         </div>
         <div>
           <hotel-address :address="hotel.address" class="flex mb-2" />
-          <hotel-metro-item
-            :metro="metro"
-            :address="hotel.address"
-            class="flex mb-2"
-          />
+          <div class="grid grid-cols-[fit-content(100%)_1fr]">
+            <hotel-metro-item
+              :metro="metro"
+              :address="hotel.address"            
+            />
+          </div>         
         </div>
       </div>
       <div

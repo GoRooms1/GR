@@ -1,6 +1,6 @@
 <template>
-  <div v-if="metro" class="flex gap-[8px]">
-    <div class="w-[20px] flex-shrink-0">
+  <div v-if="metro" class="flex leading-tight text-sm">
+    <div class="flex mr-2">
       <svg
         width="20"
         height="16"
@@ -14,14 +14,14 @@
         ></path>
       </svg>
     </div>
-    <p class="text-[14px] leading-[16px]">
-      <Link
-        :href="getAddressHref(address?.city, metro?.name)"
-        class="underline text-[#6170FF]"
-        >{{ metro?.name }}</Link
-      >
-    </p>
-    <div class="w-[20px] flex-shrink-0">
+    <Link
+      :href="getAddressHref(address?.city, metro?.name)"
+      class="underline text-[#6170FF]"
+      >{{ metro?.name }}</Link
+    >
+  </div>    
+  <div v-if="metro" class="flex leading-tight text-sm">      
+    <span class="px-2">
       <svg
         width="20"
         height="16"
@@ -36,9 +36,9 @@
           fill="#515561"
         ></path>
       </svg>
-    </div>
-    <p class="text-[14px] leading-[16px]">{{ metro?.distance }}</p>
-  </div>
+    </span>
+    {{ metro?.distance }} мин
+  </div>  
 </template>
 
 <script>

@@ -300,11 +300,13 @@
           </p>
           <div class="flex flex-col gap-[8px]">
             <hotel-address :address="hotel?.address" />
-            <hotel-metro-item
-              v-for="metro in hotel?.metros"
-              :metro="metro"
-              :address="hotel?.address"
-            />
+            <div class="grid grid-cols-[fit-content(100%)_1fr] gap-[8px]">
+              <hotel-metro-item
+                v-for="metro in hotel?.metros"
+                :metro="metro"
+                :address="hotel?.address"
+              />
+            </div>            
           </div>
         </div>
         <div class="sm:bg-white bg-transparent sm:p-[24px] p-0 rounded-[24px]">

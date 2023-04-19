@@ -73,12 +73,13 @@
       </div>
       <div>
         <hotel-address :address="room.hotel.address" class="flex mb-2" />
-        <hotel-metro-item
-          v-for="metro in room.hotel.metros"
-          :address="room.hotel.address"
-          :metro="metro"
-          class="flex mb-2"
-        />
+        <div class="grid grid-cols-[fit-content(100%)_1fr]">
+          <hotel-metro-item
+            v-for="metro in room.hotel.metros"
+            :address="room.hotel.address"
+            :metro="metro"          
+          />
+        </div>        
       </div>
     </div>
     <div
