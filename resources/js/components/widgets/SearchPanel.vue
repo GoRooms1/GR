@@ -20,11 +20,11 @@
   </div>
 
   <div v-if="$page.props.modals.search !== false"
-    class="z-[11] max-w-[832px] w-full mx-auto transition"
-    :class="route().current() == 'search.map' ? 'absolute md:top-[114px] top-[64px] max-[832px]:left-0 left-[calc(50%-416px)]' : ' px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px]'"
+    class="z-[11] max-w-[832px] w-full mx-auto transition" 
+    :class="route().current() == 'search.map' ? 'absolute md:top-[114px] top-[64px] max-[832px]:left-0 left-[calc(50%-416px)]' : 'px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px] ' + panelPosition"
   >
     <div class="relative">
-      <Search />      
+      <Search />     
       <div class="md:flex justify-between hidden ">
         <div class="p-[8px] flex items-center gap-[8px]" 
           :class="route().current() == 'search.map' ? 'bg-[#EAEFFD] rounded-b-[16px]' : ''"
@@ -139,7 +139,8 @@ export default {
   },
   data() {
     return {
-      filterStore,      
+      filterStore,
+      panelPosition: 'fixed',      
     };
   },  
   methods: {    
@@ -166,9 +167,13 @@ export default {
       eventBus.emit('filters-changed');
     },
     handleResize() {
-      if (usePage().props.value.modals.search === false) {        
         if (window.innerWidth > 1024) usePage().props.value.modals.search = true;
-      }
+
+        if (window.innerWidth > 768) {          
+          this.panelPosition = '';
+        } else {
+          this.panelPosition = 'fixed';
+        };
     },
   },
 };
