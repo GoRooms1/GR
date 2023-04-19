@@ -49,11 +49,11 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
             ],
             'count' => [
-                'hotels' => GetAvailibleHotelsCountAction::run(),
-                'rooms' => GetAvailibleRoomsCountAction::run(),
-                'cities' => GetAvailibleCitiesCountAction::run(),
+                'hotels' => fn() => GetAvailibleHotelsCountAction::run(),
+                'rooms' => fn() => GetAvailibleRoomsCountAction::run(),
+                'cities' => fn() => GetAvailibleCitiesCountAction::run(),
             ],
-            'contacts' => GetContactsSettingsAction::run(),
+            'contacts' => fn() => GetContactsSettingsAction::run(),
         ]);
     }
 }

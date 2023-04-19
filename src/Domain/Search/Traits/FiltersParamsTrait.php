@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Search\Traits;
 
+use Closure;
 use Domain\Address\Actions\GetAllCitiesAction;
 use Domain\Address\Actions\GetAllCityMetrosAction;
 use Domain\Address\Actions\GetCityAreasAction;
@@ -27,83 +28,83 @@ use Spatie\LaravelData\PaginatedDataCollection;
 trait FiltersParamsTrait
 {
     /**
-     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     * @return Closure
      */
-    public function cities(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+    public function cities(): Closure
     {
-        return CityKeyNameData::collection(GetAllCitiesAction::run());
+        return fn() => CityKeyNameData::collection(GetAllCitiesAction::run());
     }
 
     /**
-     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     * @return Closure
      */
-    public function metros(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
-    {
-        $city = $this->params->hotels->city;
-
-        return MetroKeyNameData::collection(GetAllCityMetrosAction::run($city));
-    }
-
-    /**
-     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
-     */
-    public function hotel_types(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
-    {
-        return HotelTypeKeyNameData::collection(GetAllHotelTypesAction::run());
-    }
-
-    /**
-     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
-     */
-    public function city_areas(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+    public function metros(): Closure
     {
         $city = $this->params->hotels->city;
 
-        return CityAreaKeyNameData::collection(GetCityAreasAction::run($city));
+        return fn() => MetroKeyNameData::collection(GetAllCityMetrosAction::run($city));
     }
 
     /**
-     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     * @return Closure
      */
-    public function city_districts(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+    public function hotel_types(): Closure
+    {
+        return fn() => HotelTypeKeyNameData::collection(GetAllHotelTypesAction::run());
+    }
+
+    /**
+     * @return Closure
+     */
+    public function city_areas(): Closure
+    {
+        $city = $this->params->hotels->city;
+
+        return fn() => CityAreaKeyNameData::collection(GetCityAreasAction::run($city));
+    }
+
+    /**
+     * @return Closure
+     */
+    public function city_districts(): Closure
     {
         $city = $this->params->hotels->city;
         $city_area = $this->params->hotels->city_area;
 
-        return CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $city_area));
+        return fn() => CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $city_area));
     }
 
     /**
      * @return DataCollection
      */
-    public function cost_types(): DataCollection
+    public function cost_types(): Closure
     {
-        return GetCostTypesWithCostRangesKeyNameDataAction::run();
+        return fn() => GetCostTypesWithCostRangesKeyNameDataAction::run();
     }
 
     /**
      * Summary of attributes
      *
-     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     * @return Closure
      */
-    public function attributes(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+    public function attributes(): Closure
     {
-        return AttributeData::collection(GetFilteredAttributesAction::run());
+        return fn() => AttributeData::collection(GetFilteredAttributesAction::run());
     }
 
     /**
-     * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+     * @return Closure
      */
-    public function attribute_categories(): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection
+    public function attribute_categories(): Closure
     {
-        return AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run());
+        return fn() => AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run());
     }
 
     /**
-     * @return int
+     * @return Closure
      */
-    public function total(): int
+    public function total(): Closure
     {
-        return GetNumOfFilteredObjectsAction::run($this->params);
+        return fn() => GetNumOfFilteredObjectsAction::run($this->params);
     }
 }
