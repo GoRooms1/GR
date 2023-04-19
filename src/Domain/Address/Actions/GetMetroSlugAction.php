@@ -9,16 +9,17 @@ use Lorisleiva\Actions\Action;
 use Support\DataProcessing\Traits\CustomStr;
 
 /**
- * @method static string run(Metro $metro)
+ * @method static string run(String $metroName, String $cityName)
  */
 final class GetMetroSlugAction extends Action
-{
+{   
     /**     
-     * @param Metro $metro
+     * @param string $metroName
+     * @param string $cityName
      * @return string
      */
-    public function handle(Metro $metro): string
+    public function handle(String $metroName, String $cityName): string
     {
-       return '/'.CustomStr::getCustomSlug($metro->hotel->address->city).'/metro-'.CustomStr::getCustomSlug($metro->name);
+       return '/'.CustomStr::getCustomSlug($cityName).'/metro-'.CustomStr::getCustomSlug($metroName);
     }
 }

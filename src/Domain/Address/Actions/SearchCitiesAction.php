@@ -27,6 +27,7 @@ final class SearchCitiesAction extends Action
         
         return Address::distinct()->select('city')
             ->where('city', 'LIKE', '%'.$search.'%')
+            ->orderBy(\DB::raw("POSITION('".$search."' IN city)"), 'asc')
             ->orderBy('city')->take($limit)->get();
     }
 }

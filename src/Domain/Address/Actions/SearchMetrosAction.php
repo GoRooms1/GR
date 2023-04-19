@@ -25,15 +25,16 @@ final class SearchMetrosAction extends Action
         /** @var int $limit */
         $limit = config('search.limit');
 
-        return Metro::with('hotel')
-            ->where('name', 'LIKE', '%'.$search.'%')       
-            ->whereHas('hotel.address', function($q) {
-                return $q->whereNotNull('city');
-            })          
-            ->orderBy('name')            
+        return Metro::select(['metros.name', 'metros.color', 'addresses.city'])            
+            ->leftJoin('hotels', 'hotels.id', '=', 'metros.hotel_id')
+            ->leftJoin('addresses', 'hotels.id', '=', 'addresses.hotel_id')           
+            ->where('metros.name', 'LIKE', '%'.$search.'%')       
+            ->whereNotNull('addresses.city')
+            ->orderBy(\DB::raw("POSITION('".$search."' IN metros.name)"), 'asc')         
+            ->orderBy('metros.name')            
             ->get()
             ->unique(function ($item) {
-                return $item['name'].$item['hotel.address.city'];
+                return $item['name'].$item['city'];
             })
             ->take($limit)
             ->flatten();

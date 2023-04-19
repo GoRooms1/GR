@@ -20,12 +20,12 @@ final class MetroSearchData extends \Parent\DataTransferObjects\Data
     }
 
     public static function fromModel(Metro $metro): self
-    {        
+    { 
         return self::from([            
             'name' => $metro->name,
             'color' => $metro->color,            
-            'city' => !is_null($metro->hotel->address) ? ('г. '.$metro->hotel->address->city) : '',
-            'link' => route('address').GetMetroSlugAction::run($metro),
+            'city' => !is_null($metro['city']) ? ('г. '.$metro['city']) : '',
+            'link' => route('address').GetMetroSlugAction::run($metro->name, $metro['city']),
         ]);
     }
 }

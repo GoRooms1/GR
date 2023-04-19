@@ -25,9 +25,13 @@ final class SearchHotelsAction extends Action
         /** @var int $limit */
         $limit = config('search.limit');
         
-        return Hotel::where('name', 'LIKE', '%'.$search.'%')
+        return Hotel::setEagerLoads([])
+            ->with(['address'])
+            ->where('name', 'LIKE', '%'.$search.'%')
             ->moderated()
             ->withRooms()
-            ->orderBy('name')->take($limit)->get();
+            ->orderBy(\DB::raw("POSITION('".$search."' IN name)"), 'asc')         
+            ->orderBy('name')
+            ->take($limit)->get();
     }
 }
