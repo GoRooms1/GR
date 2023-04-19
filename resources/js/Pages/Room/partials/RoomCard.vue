@@ -183,10 +183,10 @@
       </div>
     </div>
     <div
-      class="relative bg-white rounded-bl-2xl rounded-br-2xl xl:rounded-bl-none xl:rounded-tr-2xl px-4 pb-4 pt-8 mx-4 xl:mx-0 xl:w-1/3 xl:h-80 xl:pb-16 xl:flex xl:items-left xl:justify-items-start xl:justify-start"
+      class="relative bg-white rounded-bl-2xl rounded-br-2xl xl:rounded-bl-none xl:rounded-tr-2xl px-4 pb-4 pt-4 mx-4 xl:mx-0 xl:w-1/3 xl:h-80 flex flex-col justify-between"
     >
       <div
-        class="flex justify-between text-center xl:flex-col xl:text-left xl:m-auto xl:w-full xl:ml-8"
+        class="flex justify-between text-center xl:flex-col lg:text-left lg:m-auto lg:w-full lg:ml-2 xl:ml-4"
       >
         <cost-item
           v-for="cost in room.costs"
@@ -196,7 +196,7 @@
           :description="cost.description"
         />
       </div>      
-      <div class="xl:absolute xl:bottom-4 xl:left-4 xl:right-4">
+      <div class="">
         <Button @click="openBookingModal()" classes="w-full"> Забронировать </Button>
       </div>      
     </div>

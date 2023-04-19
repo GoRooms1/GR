@@ -4,7 +4,7 @@
     <div>
       <div class="flex md:flex-col flex-col-reverse">
         <div
-          class="w-full flex sm:items-center items-start sm:gap-[10px] gap-[32px] justify-between flex-col sm:flex-row md:px-0 px-4 mb-[32px] md:mb-0"
+          class="w-full flex sm:items-center items-start sm:gap-[10px] gap-[32px] justify-between flex-col sm:flex-row md:px-0 px-4 md:mb-0"
         >
           <div>
             <span class="text-[16px] leading-[19px]">{{
@@ -313,7 +313,7 @@
           <p
             class="text-[22px] leading-[26px] lg:mb-[24px] mb-[16px] font-semibold"
           >
-            Стоимость проживания
+          Минимальная стоимость
           </p>
           <div class="flex gap-[10px] items-center justify-between">
             <cost-item
