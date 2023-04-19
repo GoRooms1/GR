@@ -218,8 +218,12 @@ export default {
   },
   computed: {
     foundMessage() {
+      let hotelTypePlural = ["отель", "отеля", "отелей"];
+      if (filterStore.getFilterValue('hotels', 'hotel_type') == 3) 
+        hotelTypePlural = ["аппартаменты", "аппартаментов", "аппартаментов"];
+
       return (
-        this.found + " " + numWord(this.found, ["отель", "отеля", "отелей"])
+        this.found + " " + numWord(this.found, hotelTypePlural)
       );
     },
   },
