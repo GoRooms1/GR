@@ -140,7 +140,7 @@ export default {
   data() {
     return {
       filterStore,
-      panelPosition: 'fixed',      
+      panelPosition: '',      
     };
   },  
   methods: {    
@@ -169,7 +169,7 @@ export default {
     handleResize() {
         if (window.innerWidth > 1024) usePage().props.value.modals.search = true;
 
-        if (window.innerWidth > 768) {          
+        if (window.innerWidth > 768 || route().current() == 'home') {          
           this.panelPosition = '';
         } else {
           this.panelPosition = 'fixed';

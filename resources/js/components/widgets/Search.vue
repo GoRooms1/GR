@@ -1,6 +1,6 @@
 <template>
   <div
-    class="shadow-xl w-full bg-white p-0 px-[8px] py-[12px] flex items-center"
+    class="search-box w-full bg-white p-0 px-[8px] py-[12px] flex items-center"
     :class="searchInputClasses"
   >    
     <button class="p-[8px]">
