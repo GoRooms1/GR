@@ -44,11 +44,11 @@ final class MinimumCostsCalculation extends Action
             ->get();
 
         foreach ($minCosts as $minCost) {
-            $value = $minCost->value;
+            $value = $minCost['value'];
             $result[] = new MinCostsData(
                 id: $minCost->id,
                 name: $minCost->name,
-                info: GenerateInfoDescForPeriod::run($minCost->start_at, $minCost->end_at),
+                info: GenerateInfoDescForPeriod::run($minCost['start_at'], $minCost['end_at']),
                 value: $value,
                 description: $value > 0 ? '' : 'Не предоставляется',
                 period: null,

@@ -18,6 +18,7 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
     public function __construct(
         public HotelParamsData $hotels,
         public RoomParamsData $rooms,
+        public ?int $hotel_id,
         public ?string $search,        
         public bool $isRoomsFilter = false,        
     ) {
@@ -28,7 +29,8 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
         return self::from([
             'hotels' => HotelParamsData::fromRequest($request),
             'rooms' => RoomParamsData::fromRequest($request),
-            'isRoomsFilter' => filter_var($request->get('isRoomsFilter', false), FILTER_VALIDATE_BOOLEAN),            
+            'isRoomsFilter' => filter_var($request->get('isRoomsFilter', false), FILTER_VALIDATE_BOOLEAN),
+            'hotel_id' => $request->get('hotel_id'),         
             'search' => $request->get('search'),            
         ]);
     }

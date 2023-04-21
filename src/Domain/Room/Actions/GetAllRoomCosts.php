@@ -14,13 +14,13 @@ use Lorisleiva\Actions\Action;
 use Spatie\LaravelData\DataCollection;
 
 /**
- * @method static DataCollection<CostData> run(Room $room)
+ * @method static DataCollection<MinCostsData> run(Room $room)
  */
 final class GetAllRoomCosts extends Action
 {
     /**
      * @param  Room  $room
-     * @return DataCollection<CostData>
+     * @return DataCollection<MinCostsData>
      */
     public function handle(Room $room): DataCollection
     {
@@ -41,18 +41,18 @@ final class GetAllRoomCosts extends Action
             ->get();
 
         foreach ($minCosts as $minCost) {
-            $value = $minCost->value;
+            $value = $minCost['value'];
             $result[] = new MinCostsData(
-                id: $minCost->id,
-                name: $minCost->name,
-                info: GenerateInfoDescForPeriod::run($minCost->start_at, $minCost->end_at),
+                id: $minCost['id'],
+                name: $minCost['name'],
+                info: GenerateInfoDescForPeriod::run($minCost['start_at'], $minCost['end_at']),
                 value: $value,
                 description: $value > 0 ? '' : 'Не предоставляется',
                 period: new PeriodData(
-                    id: $minCost->period_id,
-                    cost_type_id: $minCost->id,
-                    start_at: $minCost->start_at,
-                    end_at: $minCost->end_at,
+                    id: $minCost['period_id'],
+                    cost_type_id: $minCost['id'],
+                    start_at: $minCost['start_at'],
+                    end_at: $minCost['end_at'],
                     description: null,
                     created_at: null,
                     info: null,

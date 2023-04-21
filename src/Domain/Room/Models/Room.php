@@ -139,11 +139,11 @@ final class Room extends Model
     }
 
     /**
-     * @return \Illuminate\Support\Collection<\Domain\Room\DataTransferObjects\CostData>
+     * @return   \Spatie\LaravelData\DataCollection
      *
      * @deprecated Use action instead
      */
-    public function getAllCostsAttribute(): \Illuminate\Support\Collection
+    public function getAllCostsAttribute(): \Spatie\LaravelData\DataCollection
     {
         return GetAllRoomCosts::run($this);
     }

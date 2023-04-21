@@ -86,6 +86,17 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
             ->moderated();            
     }
 
+    public function filterForHotels(RoomParamsData $filters): self
+    {
+        /** @var RoomBuilder $builder */
+        $builder = app(Pipeline::class)
+            ->send($this)
+            ->through($this->filters($filters))
+            ->thenReturn();
+        
+        return $builder->where('moderate', false);       
+    }
+
     /**
      * @param  RoomParamsData  $filters
      * @return Filter[]

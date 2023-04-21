@@ -5,20 +5,16 @@ declare(strict_types=1);
 namespace Domain\Search\ViewModels;
 
 use Arr;
-use Domain\Hotel\Actions\FilterHotelsAction;
+use Domain\Hotel\Actions\FilterHotelsOnMapAction;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
-use Domain\Hotel\DataTransferObjects\HotelData;
-use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\DataTransferObjects\HotelMapData;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
-use Domain\Room\Actions\FilterRoomsAction;
+use Domain\Room\Actions\FilterRoomsInHotelAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
 use Inertia\Inertia;
-use Spatie\LaravelData\CursorPaginatedDataCollection;
-use Spatie\LaravelData\DataCollection;
-use Spatie\LaravelData\PaginatedDataCollection;
 
 /**
  * Summary of SearchMapViewModel
@@ -56,9 +52,21 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
      * @return \Inertia\LazyProp
      */
     public function rooms(): \Inertia\LazyProp
-    {       
-        return Inertia::lazy(fn() => RoomData::collection(FilterRoomsAction::run($this->params->rooms, $this->params->hotels)));
+    {  
+        if (is_null($this->params->hotel_id))
+            return Inertia::lazy(fn() => []);
+        
+        return Inertia::lazy(fn() => RoomData::collection(FilterRoomsInHotelAction::run($this->params->hotel_id, $this->params->rooms)));
     }
+
+    /**
+     * Filtered hotels array
+     * @return \Inertia\LazyProp
+     */
+    public function hotels(): \Inertia\LazyProp
+    {       
+        return Inertia::lazy(fn() => HotelMapData::fromCollectionWithFilters(FilterHotelsOnMapAction::run($this->params->hotels, $this->params->rooms), $this->params));
+    }        
     
     /**
      * @return string

@@ -75,16 +75,14 @@ trait FiltersParamsTrait
     }
 
     /**
-     * @return DataCollection
+     * @return Closure
      */
     public function cost_types(): Closure
     {
-        return fn() => GetCostTypesWithCostRangesKeyNameDataAction::run();
+        return fn(): DataCollection => GetCostTypesWithCostRangesKeyNameDataAction::run();
     }
 
-    /**
-     * Summary of attributes
-     *
+    /**    
      * @return Closure
      */
     public function attributes(): Closure
@@ -105,6 +103,6 @@ trait FiltersParamsTrait
      */
     public function total(): Closure
     {
-        return fn() => GetNumOfFilteredObjectsAction::run($this->params);
+        return fn(): int => GetNumOfFilteredObjectsAction::run($this->params);
     }
 }

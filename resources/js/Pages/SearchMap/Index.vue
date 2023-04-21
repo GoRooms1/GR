@@ -4,7 +4,7 @@
   <div class="relative z-20 w-full">    
     <search-panel />    
   </div>
-  <Map :rooms="rooms"/>
+  <Map :rooms="rooms" :hotels="hotels"/>
   <booking-form v-if="isBookingOpen === true" :room="bookingRoom"/> 
 </template>
 
@@ -37,7 +37,8 @@ export default {
       type: Object as PropType<PageInterface>,
       required: true,
     },
-    rooms: [Object],    
+    rooms: [Object],
+    hotels: [Object],   
   },
   mounted() {
     eventBus.on('booking-open', e => this.openBookingModal(e));
@@ -67,7 +68,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['rooms'],
+          only: ['rooms', 'hotels'],
           onStart: () => {
             usePage().props.value.isLoadind = true;            
           },

@@ -23,7 +23,7 @@ final class UnitedCityFilter extends \Parent\Filters\Filter
         }
 
         /** @var array<string> $unitedCities*/
-        $unitedCities = GetUnitedCities::run($value)->toArray();
+        $unitedCities = GetUnitedCities::run($value->toString())->toArray();
 
         if (count($unitedCities) == 0) {
             $builder->whereHas('address', function ($q) use ($value) {

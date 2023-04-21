@@ -33,6 +33,7 @@ export default {
   },
   props: {
     rooms: [Object],
+    hotels: [Object],
   },
   mounted() {
     document.body.classList.add("fixed"); 
@@ -46,8 +47,7 @@ export default {
     return {
       filterStore,
       zoom: 12,
-      hotelMarkers: [],
-      roomsGrouped: [],
+      hotelMarkers: [],      
       selectedRooms: [],
     }    
   },
@@ -184,20 +184,20 @@ export default {
        
       geoObjectsClusterer.removeAll();
       geoObjects = [];
-      this.roomsGrouped = _.groupBy(this.rooms, "hotel_id");
-      this.hotelMarkers = this.fillHotelMarkersFromRooms();
+
+      this.hotelMarkers = this.hotels;
       
       //Add Hotels marks
       this.hotelMarkers.forEach(hotel => {
-        if (!hotel?.address?.geo_lat || !hotel?.address?.geo_lon) return;        
+        if (!hotel?.address?.geo_lat || !hotel?.address?.geo_lon) return;
         
-        let blockWidth = _.round(86 + (7.4 * (hotel.minCost + '').length ));        
+        let minCost = hotel.min_cost_value;
+        let blockWidth = _.round(86 + (7.4 * (minCost + '').length ));        
 
         let placemark = new ymaps.Placemark(
           [hotel.address.geo_lat, hotel.address.geo_lon], 
-          {
-            balloonContent: hotel.name,
-            minCost: hotel.minCost,                     
+          {            
+            minCost: minCost,                     
           },
           {
             balloonShadow: false,
@@ -215,63 +215,78 @@ export default {
         );          
         
         placemark.events.add(['click'],  e => {
-          this.selectedRooms = this.roomsGrouped[hotel.id];                   
-          this.$nextTick(() => {                            
-            e.get('target').properties.set('balloonContent', this.$refs.hotel_rooms.innerHTML);                                      
-          });      
+          let data = this.filterStore.getFiltersValues();
+          data.hotel_id = hotel.id;
+          this.$inertia.get(route("search.map"), data, {
+            replace: true,
+            preserveState: true,
+            preserveScroll: true,
+            only: ['rooms'],
+            onStart: () => {
+              usePage().props.value.isLoadind = true;            
+            },
+            onFinish: () => {
+              usePage().props.value.isLoadind = false;
+            },
+            onSuccess: () => {
+              this.selectedRooms = this.rooms;             
+              this.$nextTick(() => {                            
+                e.get('target').properties.set('balloonContent', this.$refs.hotel_rooms.innerHTML);                
+                
+                //Rooms List
+                let roomsCount = this.selectedRooms.length;                
+                if (roomsCount > 0) {
+                  let roomsListEl = document.querySelector('.popover').querySelector('.rooms-list');
+                  let roomEl = document.querySelector('.popover').querySelector('.room');
+                  let slidesPerView = window.innerHeight - 220 > roomEl.clientHeight * 2 ? (roomsCount > 1 ? 2 : 1) : 1;
+                  roomsListHeight = roomEl.clientHeight * slidesPerView;
+                  roomsListEl.style.height = roomsListHeight + 'px';
+
+                  //Room swiper
+                  let roomSwiperEls = document.querySelector('.popover').querySelectorAll('.swiper-image2');
+                  roomSwiperEls.forEach(el => {
+                    new Swiper(el, {
+                      slidesPerView: 1,
+                      slidesPerGroup: 1,
+                      modules: [Navigation, Pagination],
+                      pagination: {
+                        el: el.querySelector('.swiper-pagination'),
+                        renderBullet: function (index, className) {
+                          return (
+                            '<span class="' +
+                            className +
+                            ' swiper-pagination-bullet !opacity-100 w-[32px] rounded-[1px] h-[2px] mx-[2px] border-none p-0 ">' +
+                            "</span>"
+                          );
+                        },
+                        clickable: true,
+                      },
+                      navigation: {
+                        nextEl: el.querySelector('.swiper-image-next'),
+                        prevEl: el.querySelector('.swiper-image-prev'),
+                      },
+                      breakpoints: {
+                        1024: {
+                          noSwipingClass: "swiper-slide"
+                        }
+                      }
+                    });
+                  });
+
+                  //Booking
+                  let bookingBtns = document.querySelector('.popover').querySelectorAll('.room-booking');
+                  bookingBtns.forEach(btn => {
+                    btn.addEventListener('click', this.openBooking);
+                  })
+                }
+              });
+            }
+          });              
         });
 
         //init balloon content
-        placemark.balloon.events.add(['open'],  e => {
-          this.$nextTick(() => {
-            //Rooms List
-            let roomsCount = this.selectedRooms.length;
-            if (roomsCount > 0) {
-              let roomsListEl = document.querySelector('.popover').querySelector('.rooms-list');
-              let roomEl = document.querySelector('.popover').querySelector('.room');
-              let slidesPerView = window.innerHeight - 220 > roomEl.clientHeight * 2 ? (roomsCount > 1 ? 2 : 1) : 1;
-              roomsListHeight = roomEl.clientHeight * slidesPerView;
-              roomsListEl.style.height = roomsListHeight + 'px';
-
-              //Room swiper
-              let roomSwiperEls = document.querySelector('.popover').querySelectorAll('.swiper-image2');
-              roomSwiperEls.forEach(el => {
-                new Swiper(el, {
-                  slidesPerView: 1,
-                  slidesPerGroup: 1,
-                  modules: [Navigation, Pagination],
-                  pagination: {
-                    el: el.querySelector('.swiper-pagination'),
-                    renderBullet: function (index, className) {
-                      return (
-                        '<span class="' +
-                        className +
-                        ' swiper-pagination-bullet !opacity-100 w-[32px] rounded-[1px] h-[2px] mx-[2px] border-none p-0 ">' +
-                        "</span>"
-                      );
-                    },
-                    clickable: true,
-                  },
-                  navigation: {
-                    nextEl: el.querySelector('.swiper-image-next'),
-                    prevEl: el.querySelector('.swiper-image-prev'),
-                  },
-                  breakpoints: {
-                    1024: {
-                      noSwipingClass: "swiper-slide"
-                    }
-                  }
-                });
-              });
-
-              //Booking
-              let bookingBtns = document.querySelector('.popover').querySelectorAll('.room-booking');
-              bookingBtns.forEach(btn => {
-                btn.addEventListener('click', this.openBooking);
-              })
-            }                        
-            
-          });
+        placemark.balloon.events.add(['close'],  e => {
+          this.selectedRooms = [];
         });
         
         geoObjects.push(placemark);
@@ -285,44 +300,17 @@ export default {
           if(searchMap.getZoom() > this.zoom) searchMap.setZoom(this.zoom);
         });
       }  
-    },    
-    redrawMap() {
-      _.debounce(() => {        
-        searchMap?.container?.fitToViewport();
-      }, 200)();
-    },    
-    fillHotelMarkersFromRooms() {
-      let hotels = [];
-
-      _.forEach(this.roomsGrouped, (val, key) => {
-        let element = val[0].hotel;
-        element.minCost = this.calculateMinCostFromRooms(val);
-        hotels.push(element);
-      });
-      
-      return hotels;
-    },
-    calculateMinCostFromRooms(rooms) {
-      let costs = [];
-
-      _.forEach(rooms, room => {
-        _.forEach(room.costs, cost => {
-          costs.push(cost);
-        })
-      });
-
-      return _.min(_.filter(_.map(costs, 'value'), function(o) { return o > 0; } ));;
     },
     closeBalloon() {
       searchMap.balloon.close();
     },
     hideSearch() {      
       usePage().props.value.modals.search = false;
-    },
+    },    
     openBooking(event) {      
       let btn = event.currentTarget;
       let room_id = btn.dataset.roomId;
-      let bookingRoom = _.find(this.rooms, room => room.id == room_id);      
+      let bookingRoom = _.find(this.selectedRooms, room => room.id == room_id);      
       eventBus.emit('booking-open', bookingRoom);
     },    
   },

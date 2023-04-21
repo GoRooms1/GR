@@ -6,6 +6,9 @@ namespace Domain\Hotel\Builders;
 
 use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Hotel\Filters\Filters;
+use Domain\Room\Builders\RoomBuilder;
+use Domain\Room\Models\Room;
+use Domain\Search\DataTransferObjects\RoomParamsData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
 use Parent\Filters\Filter;
@@ -49,6 +52,26 @@ final class HotelBuilder extends Builder
         return $builder            
             ->moderated()
             ->withRooms();
+    }
+
+    /**     
+     * @param HotelParamsData $hotelFilters
+     * @param RoomParamsData $roomFilters
+     * @return HotelBuilder
+     */
+    public function filterWithRooms(HotelParamsData $hotelFilters, RoomParamsData $roomFilters): self
+    {
+        /** @var HotelBuilder $builder */
+        $builder = app(Pipeline::class)
+            ->send($this)
+            ->through($this->filters($hotelFilters))
+            ->thenReturn();
+
+        return $builder            
+            ->whereHas('rooms', function ($query) use ($roomFilters) {
+                $query->filterForHotels($roomFilters);
+            })                                  
+            ->moderated();
     }
 
     /**
