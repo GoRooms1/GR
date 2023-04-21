@@ -185,7 +185,7 @@ export default {
       geoObjectsClusterer.removeAll();
       geoObjects = [];
 
-      this.hotelMarkers = this.hotels;
+      this.hotelMarkers = this.hotels ?? [];
       
       //Add Hotels marks
       this.hotelMarkers.forEach(hotel => {
