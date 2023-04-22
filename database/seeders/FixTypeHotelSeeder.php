@@ -13,9 +13,7 @@ class FixTypeHotelSeeder extends Seeder
      */
     public function run()
     {
-//        \Domain\Hotel\Models\HotelType::find(1)->update(["single_name" => 'Отель']);
-//        \Domain\Hotel\Models\HotelType::find(2)->update(["name" => "Апартаменты", "single_name" => 'Апартамент']);
-//        \Domain\Hotel\Models\HotelType::find(3)->update(["single_name" => 'Гостевой дом']);
-//        \Domain\Hotel\Models\HotelType::find(4)->update(["single_name" => 'Сауна']);
+       \Domain\Hotel\Models\HotelType::find(1)->update(["single_name" => 'Отель']);
+       \Domain\Hotel\Models\HotelType::find(3)->update(["name" => "Апартаменты", "single_name" => 'Апартаменты']);
     }
 }
