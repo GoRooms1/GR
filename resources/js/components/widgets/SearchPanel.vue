@@ -21,7 +21,7 @@
 
   <div v-if="$page.props.modals.search !== false"
     class="z-[11] max-w-[832px] w-full mx-auto transition" 
-    :class="route().current() == 'search.map' ? 'absolute md:top-[114px] top-[64px] max-[832px]:left-0 left-[calc(50%-416px)]' : 'px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px] ' + panelPosition"
+    :class="route().current() == 'search.map' ? 'absolute md:top-[114px] top-[64px] max-[832px]:left-0 left-[calc(50%-416px)]' : 'md:relative px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px] ' + panelPosition"
   >
     <div class="relative">
       <Search />     
@@ -134,6 +134,7 @@ export default {
   },  
   mounted() {
     window.addEventListener("resize", this.handleResize);
+    window.addEventListener("scroll", this.handleScroll);
     this.handleResize();
     usePage().props.value.modals.search = true;
   },
@@ -141,6 +142,7 @@ export default {
     return {
       filterStore,
       panelPosition: '',      
+      scrollY: 0,     
     };
   },  
   methods: {    
@@ -168,13 +170,19 @@ export default {
     },
     handleResize() {
         if (window.innerWidth > 1024) usePage().props.value.modals.search = true;
-
-        if (window.innerWidth > 768 || route().current() == 'home') {          
-          this.panelPosition = '';
-        } else {
-          this.panelPosition = 'fixed';
-        };
     },
+    handleScroll() {
+      if (route().current() != 'home' && window.innerWidth < 768) {        
+        this.scrollY = window.scrollY ?? this.scrollY;
+        
+        if (this.scrollY >= 30)
+          this.panelPosition = 'fixed';
+        else
+          this.panelPosition = '';
+      } else {
+        this.panelPosition = '';
+      };
+    }
   },
 };
 </script>
