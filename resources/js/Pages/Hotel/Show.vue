@@ -1,5 +1,14 @@
 <template>
   <AppHead :title="model.page.title" />
+  <search-filter-modal :url="route('hotels.show', hotel)"/>
+  <div v-if="$page.props.modals.search !== false"
+    class="search-panel-modal w-full mx-auto transition fixed lg:hidden px-[16px]" 
+  >
+    <div class="relative">
+      <Search for-modal :url="route('hotels.show', hotel)"/>
+    </div>
+  </div>
+  
   <div class="container mx-auto md:px-4 px-0 md:mt-[113px] mt-0">
     <div>
       <div class="flex md:flex-col flex-col-reverse">
@@ -340,6 +349,7 @@ import AppHead from "@/components/ui/AppHead.vue";
 import type { PropType } from "vue";
 import { PageInterface } from "../../models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
+import SearchLayout from "@/Layouts/SearchLayout.vue";
 import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Tabs from "./partials/Tabs.vue";
@@ -348,11 +358,15 @@ import Image from "@/components/ui/Image.vue";
 import HotelAddress from "./partials/HotelAddress.vue";
 import HotelMetroItem from "./partials/HotelMetroItem.vue";
 import CostItem from "./partials/CostItem.vue";
+import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
+import Search from "@/components/widgets/Search.vue";
+import { filterStore } from "@/Store/filterStore.js";
+import { usePage } from "@inertiajs/inertia-vue3";
 
 let myMap = null;
 SwiperCore.use([Pagination, Navigation]);
 export default {
-  layout: Layout,
+  layout: SearchLayout,
   components: {
     Swiper,
     SwiperSlide,
@@ -366,6 +380,8 @@ export default {
     HotelAddress,
     HotelMetroItem,
     CostItem,
+    SearchFilterModal,
+    Search,
   },
   props: {
     model: {
@@ -377,6 +393,7 @@ export default {
   },
   data() {
     return {
+      filterStore,
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
@@ -438,6 +455,8 @@ export default {
   },
   mounted() {
     ymaps.ready(this.initMap);
+    this.$page.props.modals.search = false;
+    eventBus.on('filters-changed', e => this.updateRooms());
   },
   methods: {
     initMap() {
@@ -470,6 +489,22 @@ export default {
         console.log("redraw");
         myMap?.container?.fitToViewport();
       }, 200)();
+    },
+    updateRooms() {     
+      this.$nextTick(() => {        
+        this.$inertia.get(route('hotels.show', this.hotel), this.filterStore.getFiltersValues(), {
+          replace: true,
+          preserveState: true,
+          preserveScroll: true,
+          only: ['rooms'],
+          onStart: () => {
+            usePage().props.value.isLoadind = true;            
+          },
+          onFinish: () => {
+            usePage().props.value.isLoadind = false;
+          },
+        });
+      });      
     },
   },
 };

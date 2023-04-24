@@ -93,6 +93,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    url: {
+      type: String,
+      default: null,
+    }
   },
   data() {
     return {
@@ -156,7 +160,7 @@ export default {
       }
       
       this.searchState = _.debounce(() => {
-        this.$inertia.get(route(route().current()), data, {
+        this.$inertia.get(this.url ?? route(route().current()), data, {
           preserveState: true,
           preserveScroll: true,
           only: ["search_result"],

@@ -48,6 +48,11 @@
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
 }
 
+.search-panel-modal {
+    z-index: 30;
+    top: 100px;
+}
+
 .maxh {
     max-height: 0;
     transition: max-height 0.2s;

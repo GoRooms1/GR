@@ -33,7 +33,7 @@
       </button>      
       <div class="max-w-[832px] w-full mx-auto px-[16px]">
         <div class="lg:block flex flex-col relative">
-          <Search for-modal/>
+          <Search for-modal :url="url ?? route(route().current())"/>
           <div class="flex justify-between ordering">
             <div
               class="lg:p-[8px] p-[24px] bg-[#EAEFFD] rounded-b-[16px] lg:rounded-t-none lg:w-[fit-content] w-full rounded-t-[16px] items-center gap-[8px] flex-wrap justify-center flex"
@@ -555,6 +555,12 @@ export default {
     RatingSelect,
     Search,
   },
+  props: {
+    url: {
+      type: String,
+      default: null,
+    }
+  },
   created() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
@@ -699,7 +705,7 @@ export default {
     },     
     updateFilters(only) {
       let data = this.tempFilterStore.getFiltersValues();      
-      this.$inertia.get(route(route().current()), data, {
+      this.$inertia.get(this.url ?? route(route().current()), data, {
         preserveState: true,
         preserveScroll: true,
         replace: true,

@@ -22,9 +22,9 @@ class HotelController extends Controller
         return Inertia::render('Hotel/Index', new HotelListViewModel(ParamsData::fromRequest($request)));
     }
 
-    public function show(Hotel $hotel): Response | ResponseFactory
+    public function show(Hotel $hotel, Request $request): Response | ResponseFactory
     {
-        return Inertia::render('Hotel/Show', new HotelViewModel($hotel));
+        return Inertia::render('Hotel/Show', new HotelViewModel($hotel, ParamsData::fromRequest($request)));
     }
 
     //Depricated
