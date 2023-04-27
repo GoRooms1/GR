@@ -9,13 +9,10 @@ use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\DataTransferObjects\HotelData;
-use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Search\Traits\SearchResultTrait;
 use Inertia\Inertia;
-use Spatie\LaravelData\CursorPaginatedDataCollection;
-use Spatie\LaravelData\DataCollection;
-use Spatie\LaravelData\PaginatedDataCollection;
 
 final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
@@ -31,15 +28,17 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
         protected string $url = '/hotels'      
     ) {
     }
-
-    /**
-     * @return array{page: PageData}
+   
+    /**     
+     * @return PageDescriptionData
      */
-    public function model(): array
-    {
-        return [
-            'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($this->url)),
-        ];
+    public function page_description(): PageDescriptionData
+    {        
+        $pageDescription = GetPageDescriptionByUrlAction::run($this->url);
+        if (is_null($pageDescription))
+            $pageDescription = GetPageDescriptionByUrlAction::run('/hotels');
+       
+        return PageDescriptionData::fromModel($pageDescription);
     }
 
     /**
