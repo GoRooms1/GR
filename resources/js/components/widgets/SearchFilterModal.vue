@@ -670,7 +670,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['hotels', 'rooms', 'is_rooms_filter'],
+          only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
           onStart: () => {
             usePage().props.value.isLoadind = true;
             this.close();
@@ -691,7 +691,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['hotels', 'rooms', 'is_rooms_filter'],
+          only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
           onStart: () => {
             usePage().props.value.isLoadind = true;
             this.close();
