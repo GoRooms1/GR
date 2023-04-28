@@ -8,17 +8,12 @@ use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
 use Inertia\Inertia;
-use Spatie\LaravelData\CursorPaginatedDataCollection;
-use Spatie\LaravelData\DataCollection;
-use Spatie\LaravelData\PaginatedDataCollection;
 
-/**
- * Summary of RoomListViewModel
- */
 final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
@@ -34,16 +29,14 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
     ) {
     }
 
-    /**
-     * @return array{page: PageData}>
+    /**     
+     * @return PageDescriptionData
      */
-    public function model(): array
-    {
-        return [
-            'page' => PageData::fromPageDescription(
-                GetPageDescriptionByUrlAction::run($this->url)
-            ),
-        ];
+    public function page_description(): PageDescriptionData
+    {        
+        $pageDescription = GetPageDescriptionByUrlAction::run($this->url);        
+       
+        return PageDescriptionData::fromModel($pageDescription);
     }
 
     /**
