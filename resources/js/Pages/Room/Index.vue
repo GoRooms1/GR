@@ -53,17 +53,20 @@ export default {
     }
   },  
   mounted() {
-    eventBus.on('filters-inited', e => this.getDataOnList(route("rooms.index")));
+    eventBus.on('filters-inited', e => this.getDataOnList(this.$page.url ?? route("rooms.index")));
     eventBus.on('filters-changed', e => this.getDataOnList(route("search.list")));
   },
   methods: {    
-    getDataOnList(route) {     
+    getDataOnList(url) {     
       this.$nextTick(() => {        
-        this.$inertia.get(route, this.filterStore.getFiltersValues(), {
+        this.$inertia.get(url, this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,
           only: ['hotels', 'rooms', 'is_rooms_filter'],
+          onSuccess: () => {
+            window.history.pushState({}, this.$page.title, window.location.pathname);              
+          },
           onStart: () => {
             usePage().props.value.isLoadind = true;            
           },

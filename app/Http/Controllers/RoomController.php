@@ -35,8 +35,15 @@ class RoomController extends Controller
         return Redirect::back()->with(['message' => GenerateBookingMessageAction::run($bookingData)]);
     }
 
+    public function hot(Request $request): Response | ResponseFactory
+    {
+        $paramsData = ParamsData::fromRequest($request);
+        $paramsData->rooms->is_hot = true;
+        return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/rooms/hot'));
+    }
+
     //Depricated
-    public function hot(): View
+    public function hot_(): View
     {
         $rooms = Room::hot()->paginate(30);
         $title = 'Горящие предложения';

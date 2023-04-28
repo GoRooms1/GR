@@ -36,6 +36,7 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+Route::get('/rooms/hot', [RoomController::class, 'hot'])->name('rooms.hot');
 Route::post('/rooms/booking', [RoomController::class, 'booking'])->name('rooms.booking');
 
 Route::get('/search', [SearchController::class, 'list'])->name('search.list');
@@ -51,19 +52,11 @@ Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'store
 
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 
-Route::get('/rooms/hot', [RoomController::class, 'hot'])->name('rooms.hot');
-
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
 
 Route::get('/blog', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/blog/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::post('/form', [FormController::class, 'store'])->name('forms.store');
-
-Route::get('/search', [SearchController_V2::class, 'index'])->name('search');
-
-Route::get('/search_map_old', SearchController::class)->name('search.map1');
-
-Route::get('/search_map', [SearchController_V2::class, 'map'])->name('search.map');
 
 Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::middleware('noDebugbar')->get('sitemap.xml', [SiteMapController::class, 'index']);

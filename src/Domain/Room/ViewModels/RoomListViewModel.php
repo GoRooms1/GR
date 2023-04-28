@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Room\ViewModels;
 
+use Arr;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
-use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
@@ -34,7 +34,9 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
      */
     public function page_description(): PageDescriptionData
     {        
-        $pageDescription = GetPageDescriptionByUrlAction::run($this->url);        
+        $pageDescription = GetPageDescriptionByUrlAction::run($this->url); 
+        if (is_null($pageDescription))
+            $pageDescription = GetPageDescriptionByUrlAction::run('/rooms');
        
         return PageDescriptionData::fromModel($pageDescription);
     }
@@ -47,5 +49,13 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
     public function rooms(): \Inertia\LazyProp
     {
         return Inertia::lazy(fn() => RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels)));
+    }
+
+    /**
+     * @return string
+     */
+    public function query_string(): string
+    {
+        return Arr::query($this->params->toArray());
     }
 }
