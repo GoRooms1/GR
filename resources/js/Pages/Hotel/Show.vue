@@ -1,5 +1,11 @@
 <template>
-  <AppHead :title="model.page.title" />
+  <AppHead 
+    :title="page_description.title"
+    :hotel="hotel"
+    :url="$page.props.app_url + page_description?.url"
+    :meta_keywords="page_description?.meta_keywords"
+    :meta_description="page_description?.meta_description"
+  />
   <search-filter-modal :url="route('hotels.show', hotel)"/>
   <div v-if="$page.props.modals.search !== false"
     class="search-panel-modal w-full mx-auto transition fixed lg:hidden px-[16px]" 
@@ -346,8 +352,6 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Pagination, Navigation } from "swiper";
 import _ from "lodash";
 import AppHead from "@/components/ui/AppHead.vue";
-import type { PropType } from "vue";
-import { PageInterface } from "../../models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
 import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
@@ -384,10 +388,7 @@ export default {
     Search,
   },
   props: {
-    model: {
-      type: Object as PropType<PageInterface>,
-      required: true,
-    },
+    page_description: Object,
     hotel: [Object],
     rooms: [Object],
   },

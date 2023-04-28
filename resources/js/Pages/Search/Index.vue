@@ -1,5 +1,8 @@
 <template>
-  <AppHead :title="model.page.title" />
+  <AppHead 
+    :title="page_description?.title"
+    :meta_description="page_description?.meta_description"
+  />  
   <search-filter-modal />
   <div class="md:mt-[49px] mt-[40px] relative" style="min-height: 160px;">
     <img
@@ -14,7 +17,7 @@
     />
     <search-panel />
   </div>
-
+  
   <rooms-list v-if="is_rooms_filter === true" :rooms="rooms" />
   <room-info-block v-if="is_rooms_filter === true" />
 
@@ -24,8 +27,6 @@
 
 <script lang="ts">
 import AppHead from "@/components/ui/AppHead.vue";
-import type { PropType } from "vue";
-import { PageInterface } from "../../models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
@@ -50,10 +51,7 @@ export default {
     SearchFilterModal,
   },
   props: {
-    model: {
-      type: Object as PropType<PageInterface>,
-      required: true,
-    },
+    page_description: Object,
     hotels: [Object],
     rooms: [Object],
     is_rooms_filter: {
@@ -77,7 +75,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['hotels', 'rooms', 'is_rooms_filter'],
+          only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
           onStart: () => {
             usePage().props.value.isLoadind = true;            
           },

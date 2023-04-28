@@ -58,6 +58,30 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
             'images' => [],
         ]);
     }
+    
+    public static function fromHotel(Hotel $hotel): self
+    {        
+        $pageDescription = $hotel->meta;
+        
+        return new self(
+            id: $pageDescription?->id, 
+            url: $pageDescription?->url ?? '/hotels/'.$hotel->slug, 
+            type: 'hotel',
+            title: $pageDescription?->title ?? sprintf('Отель "%s" - бронь номера на час ▶Gorooms', $hotel->name),
+            h1: $pageDescription?->h1 ?? $hotel->name,
+            model_type: $hotel::class,
+            meta_description: $pageDescription?->meta_description 
+                    ?? 
+                sprintf('Забронируйте номер в отеле на час (сутки) "%s" онлайн в компании Gorooms ▶ Без комиссий и посредников▶ Качественное обслуживание ▶ Низкие цены ▶ Звоните!', $hotel->name),
+            meta_keywords: $pageDescription?->meta_keywords,
+            description: $pageDescription?->description,
+            created_at: $pageDescription?->created_at ?? Carbon::now(),
+            updated_at: $pageDescription?->updated_at ?? Carbon::now(),
+            image: null,
+            images: [], 
+            model_id: $hotel->id
+        );
+    }
 
     public static function fromRequestAndHotel(HotelRequest $request, Hotel $hotel): self
     {

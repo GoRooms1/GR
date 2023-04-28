@@ -7,10 +7,8 @@ namespace Domain\Hotel\ViewModels;
 use Arr;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\Models\Hotel;
-use Domain\Page\DataTransferObjects\PageData;
-use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsInHotelPaginateAction;
-use Domain\Room\Actions\GetAllRoomsInHotelPaginatedAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
@@ -29,19 +27,17 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
 
     public function __construct(        
         public Hotel $hotel,
-        protected ParamsData $params,
-        public string $url = '/hotels'
+        protected ParamsData $params,        
     ) {
     }
 
-    /**
-     * @return array{page: PageData}
+    
+    /**     
+     * @return PageDescriptionData
      */
-    public function model(): array
+    public function page_description(): PageDescriptionData
     {
-        return [
-            'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run($this->url)),
-        ];
+        return PageDescriptionData::fromHotel($this->hotel);
     }
 
     /**

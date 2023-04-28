@@ -54,6 +54,7 @@ class HandleInertiaRequests extends Middleware
                 'cities' => fn() => GetAvailibleCitiesCountAction::run(),
             ],
             'contacts' => fn() => GetContactsSettingsAction::run(),
+            'app_url' => fn() => config('app.url'),
         ]);
     }
 }
