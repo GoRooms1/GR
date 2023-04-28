@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Domain\Address\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Lorisleiva\Actions\Action;
+use Support\DataProcessing\Traits\CustomStr;
 
 /**
  * @method static void run(string $name)
@@ -17,7 +17,7 @@ final class GenerateSlugForMetro extends Action
     {
         DB::table('address_slug')->updateOrInsert(['address' => $name], [
             'address' => $name,
-            'slug' => Str::slug($name),
+            'slug' => CustomStr::getCustomSlug($name),
         ]);
     }
 }

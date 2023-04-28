@@ -9,6 +9,7 @@ use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Support\DataProcessing\Traits\CustomStr;
 
 class SiteMapController extends Controller
 {
@@ -40,25 +41,25 @@ class SiteMapController extends Controller
             $addresses = Address::all();
             foreach ($addresses as $address) {
                 $params = [
-                    'city' => Str::slug($address->city),
+                    'city' => CustomStr::getCustomSlug($address->city),
                 ];
                 $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
                 $params = [
-                    'city' => Str::slug($address->city),
-                    'area' => 'area-'.Str::slug($address->city_area),
+                    'city' => CustomStr::getCustomSlug($address->city),
+                    'area' => 'area-'.CustomStr::getCustomSlug($address->city_area),
                 ];
                 $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
                 $params = [
-                    'city' => Str::slug($address->city),
-                    'area' => 'area-'.Str::slug($address->city_area),
-                    'district' => 'district-'.Str::slug($address->city_district),
+                    'city' => CustomStr::getCustomSlug($address->city),
+                    'area' => 'area-'.CustomStr::getCustomSlug($address->city_area),
+                    'district' => 'district-'.CustomStr::getCustomSlug($address->city_district),
                 ];
                 $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
                 if ($address->hotel) {
                     foreach ($address->hotel->metros as $metro) {
                         $params = [
-                            'city' => Str::slug($address->city),
-                            'area' => 'metro-'.Str::slug($metro->name),
+                            'city' => CustomStr::getCustomSlug($address->city),
+                            'area' => 'metro-'.CustomStr::getCustomSlug($metro->name),
                         ];
                         $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->hotel->updated_at->format('Y-m-d'));
                     }
