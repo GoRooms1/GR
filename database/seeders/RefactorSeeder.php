@@ -17,5 +17,6 @@ class RefactorSeeder extends Seeder
         $this->call(AddContactsSettingsSeeder::class);
         $this->call(FixTypeHotelSeeder::class);
         $this->call(FixPageDescriptionModels::class);
+        $this->call(FixAttributesModel::class);
     }
 }

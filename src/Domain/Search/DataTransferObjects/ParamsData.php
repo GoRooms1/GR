@@ -35,6 +35,11 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
         ]);
     }
 
+    public static function getEmptyData(): self
+    {
+        return self::from(self::empty());
+    }
+
     /**     
      * @return string
      */
