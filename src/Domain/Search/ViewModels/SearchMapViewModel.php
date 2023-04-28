@@ -9,16 +9,13 @@ use Domain\Hotel\Actions\FilterHotelsOnMapAction;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Hotel\DataTransferObjects\HotelMapData;
-use Domain\Page\DataTransferObjects\PageData;
-use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\PageDescription\Actions\GetPageDescriptionFromParamsData;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsInHotelAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
 use Inertia\Inertia;
 
-/**
- * Summary of SearchMapViewModel
- */
 final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
@@ -32,19 +29,14 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
     ) {
     }
 
-    /**
-     * @return array{page: PageData}
+    /**     
+     * @return PageDescriptionData
      */
-    public function model(): array
-    {
-        if ($this->params->isRoomsFilter == true)
-            return [
-                'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/rooms')),
-            ];
-        
-        return [
-            'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/hotels')),
-        ]; 
+    public function page_description(): PageDescriptionData
+    {        
+        $paramsData = $this->params;
+        $paramsData->isRoomsFilter = true;
+        return PageDescriptionData::fromModel(GetPageDescriptionFromParamsData::run($paramsData));   
     }
     
     /**

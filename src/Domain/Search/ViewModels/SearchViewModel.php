@@ -16,6 +16,9 @@ use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
 use Inertia\Inertia;
 
+/**
+ * Summary of SearchViewModel
+ */
 final class SearchViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
@@ -29,6 +32,9 @@ final class SearchViewModel extends \Parent\ViewModels\ViewModel
     ) {
     }
     
+    /**     
+     * @return PageDescriptionData
+     */
     public function page_description(): PageDescriptionData
     {        
         return PageDescriptionData::fromModel(GetPageDescriptionFromParamsData::run($this->params));   

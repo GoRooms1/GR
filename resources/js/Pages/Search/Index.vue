@@ -17,10 +17,7 @@
     />
     <search-panel />
   </div>
-  {{ page_description?.title }}
-  <br>
-  {{ page_description?.meta_description }}
-
+  
   <rooms-list v-if="is_rooms_filter === true" :rooms="rooms" />
   <room-info-block v-if="is_rooms_filter === true" />
 

@@ -1,5 +1,8 @@
 <template>
-  <AppHead :title="model.page.title" />
+  <AppHead 
+    :title="page_description?.title"
+    :meta_description="page_description?.meta_description"
+  /> 
   <search-filter-modal />
   <div class="relative z-20 w-full">    
     <search-panel />    
@@ -10,8 +13,6 @@
 
 <script lang="ts">
 import AppHead from "@/components/ui/AppHead.vue";
-import type { PropType } from "vue";
-import { PageInterface } from "../../models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
@@ -33,10 +34,7 @@ export default {
     BookingForm,
   },
   props: {
-    model: {
-      type: Object as PropType<PageInterface>,
-      required: true,
-    },
+    page_description: Object,
     rooms: [Object],
     hotels: [Object],   
   },
