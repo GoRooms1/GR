@@ -1,7 +1,7 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
-import { vMaska } from "maska"
+import { vMaska } from "maska";
 import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 
@@ -19,7 +19,7 @@ const submit = () => {
 const closeThanks = () => {
   delete usePage().props.flash.message;
   form.reset();
-  form.clearErrors();  
+  form.clearErrors();
   form.name = null;
   form.phone = null;
   form.email = null;
@@ -78,7 +78,7 @@ const closeThanks = () => {
         <div class="lg:w-1/2 lg:pr-2">
           <label class="block w-full mb-2 xl:mb-2">
             <span class="flex">
-              <span class="block mb-2">Имя</span>             
+              <span class="block mb-2">Имя</span>
               <span v-if="form.errors.name" class="pl-2">
                 <svg
                   width="16"
@@ -116,14 +116,14 @@ const closeThanks = () => {
             </span>
             <input
               v-model="form.name"
-              name="name"              
+              name="name"
               class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
-              placeholder="Как к вам обращаться"              
+              placeholder="Как к вам обращаться"
             />
           </label>
           <label class="block w-full mb-2 xl:mb-2">
             <span class="flex">
-              <span class="block mb-2">Телефон</span>              
+              <span class="block mb-2">Телефон</span>
               <span v-if="form.errors.phone" class="pl-2">
                 <svg
                   width="16"
@@ -161,16 +161,17 @@ const closeThanks = () => {
             </span>
             <input
               v-model="form.phone"
-              name="phone"              
-              v-maska :data-maska="'+7 (###) ### ## ##'"
+              name="phone"
+              v-maska
+              :data-maska="'+7 (###) ### ## ##'"
               type="text"
               class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
-              placeholder="+7 (___) ___ __ __"             
+              placeholder="+7 (___) ___ __ __"
             />
           </label>
           <label class="block w-full mb-2 xl:mb-2">
             <span class="flex">
-              <span class="block mb-2">Email</span>              
+              <span class="block mb-2">Email</span>
               <span v-if="form.errors.email" class="pl-2">
                 <svg
                   width="16"
@@ -208,17 +209,17 @@ const closeThanks = () => {
             </span>
             <input
               v-model="form.email"
-              name="email"              
+              name="email"
               type="text"
               class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
-              placeholder="Ваша@почта"              
+              placeholder="Ваша@почта"
             />
           </label>
         </div>
         <div class="lg:w-1/2 lg:pl-2">
           <label class="block w-full">
             <span class="flex">
-              <span class="block mb-2">Сообщение</span>              
+              <span class="block mb-2">Сообщение</span>
               <span v-if="form.errors.message" class="pl-2">
                 <svg
                   width="16"
@@ -256,7 +257,7 @@ const closeThanks = () => {
             </span>
             <textarea
               v-model="form.message"
-              name="message"             
+              name="message"
               class="w-full h-44 rounded-md p-2 placeholder-zinc-500 h-[160px]"
               placeholder="Опишите вопрос или предложение"
             ></textarea>
@@ -271,12 +272,7 @@ const closeThanks = () => {
           <a class="underline" href="#">политикой конфиденциальности</a>.
         </div>
         <div class="lg:w-1/2 lg:pl-2">
-          <Button
-            type="submit"           
-            classes="w-full"
-          >
-            Отправить
-          </Button>
+          <Button type="submit" classes="w-full"> Отправить </Button>
         </div>
       </div>
     </div>

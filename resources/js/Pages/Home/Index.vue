@@ -13,11 +13,10 @@
         class="absolute top-0 left-0 h-full w-full -z-[1] bg-[#0018ff] opacity-60"
       ></div>
     </div>
-    
-    <div class="relative block md:hidden"> 
+
+    <div class="relative block md:hidden">
       <search-panel />
     </div>
-    
   </div>
   <div v-if="isMobile == true" class="container mx-auto">
     <div class="py-4 lg:my-16 px-2 lg:px-6">
@@ -25,7 +24,7 @@
         <intro-filters />
       </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,7 +45,7 @@ export default {
     Layout,
     IntroLayout,
     SearchPanel,
-    IntroFilters,   
+    IntroFilters,
   },
   props: {
     model: {
@@ -55,32 +54,38 @@ export default {
     },
   },
   created() {
-    if (typeof window !== "undefined") window.addEventListener("resize", this.handleDesktop);
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.handleDesktop);
     this.handleDesktop();
   },
   destroyed() {
-    if (typeof window !== "undefined") window.removeEventListener("resize", this.handleDesktop);
+    if (typeof window !== "undefined")
+      window.removeEventListener("resize", this.handleDesktop);
   },
   data() {
     return {
       isMobile: false,
-    }
-  },  
+    };
+  },
   methods: {
     handleDesktop() {
       if (typeof window !== "undefined") {
-        if (window.innerWidth > 767 && (this.$page.url.split('?')[0] == '/' || this.$page.url.split('?')[0] == '')) {        
+        if (
+          window.innerWidth > 767 &&
+          (this.$page.url.split("?")[0] == "/" ||
+            this.$page.url.split("?")[0] == "")
+        ) {
           this.isMobile = false;
           this.$inertia.get("/search_map", {
             replace: true,
             preserveState: true,
-            preserveScroll: true,              
+            preserveScroll: true,
           });
-        } else {        
+        } else {
           this.isMobile = true;
         }
-      }  
+      }
     },
-  }
+  },
 };
 </script>

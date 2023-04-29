@@ -19,8 +19,8 @@
       class="underline text-[#6170FF]"
       >{{ metro?.name }}</Link
     >
-  </div>    
-  <div v-if="metro" class="flex leading-tight text-sm">      
+  </div>
+  <div v-if="metro" class="flex leading-tight text-sm">
     <span class="px-2">
       <svg
         width="20"
@@ -38,7 +38,7 @@
       </svg>
     </span>
     {{ metro?.distance }} мин
-  </div>  
+  </div>
 </template>
 
 <script>

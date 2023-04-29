@@ -30,10 +30,10 @@
             stroke-linecap="round"
           ></path>
         </svg>
-      </button>      
+      </button>
       <div class="max-w-[832px] w-full mx-auto px-[16px]">
         <div class="lg:block flex flex-col relative">
-          <Search for-modal :url="url ?? $page.url.split('?')[0]"/>
+          <Search for-modal :url="url ?? $page.url.split('?')[0]" />
           <div class="flex justify-between ordering">
             <div
               class="lg:p-[8px] p-[24px] bg-[#EAEFFD] rounded-b-[16px] lg:rounded-t-none lg:w-[fit-content] w-full rounded-t-[16px] items-center gap-[8px] flex-wrap justify-center flex"
@@ -93,7 +93,7 @@
                   (event) => filterValueHandler('rooms', true, 'attr_65', event)
                 "
               />
-            </div>            
+            </div>
           </div>
           <div
             class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]"
@@ -422,7 +422,8 @@
             <div
               class="flex items-center gap-[8px] md:justify-end justify-between md:w-initial w-full flex-wrap"
             >
-              <button @click="getDataOnMap()"
+              <button
+                @click="getDataOnMap()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
                 <svg
@@ -559,37 +560,37 @@ export default {
     url: {
       type: String,
       default: null,
-    }
+    },
   },
   created() {
-    if (typeof window !== "undefined") window.addEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.handleResize);
     this.handleResize();
   },
   mounted() {
     let initPromise = new Promise((resolve, reject) => {
       resolve(
-        this.filterStore.init(
-          usePage().props.query_string ?? usePage().url
-        )
+        this.filterStore.init(usePage().props.query_string ?? usePage().url)
       );
     });
 
     initPromise
-      .then((inited) => {      
+      .then((inited) => {
         this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
-        return true;      
+        return true;
       })
       .then((val) => {
-        eventBus.emit('filters-inited');
-        console.log('filters inited');      
+        this.$eventBus.emit("filters-inited");
+        console.log("filters inited");
       });
-      this.handleResize();
-    },
+    this.handleResize();
+  },
   destroyed() {
-    if (typeof window !== "undefined") window.removeEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined")
+      window.removeEventListener("resize", this.handleResize);
   },
   data() {
-    return {      
+    return {
       filterStore,
       initialUrl: usePage().url,
       tempFilterStore,
@@ -620,16 +621,17 @@ export default {
   },
   methods: {
     close() {
-      if (typeof window !== "undefined") window.history.pushState({}, this.$page.title, this.initialUrl);
+      if (typeof window !== "undefined")
+        window.history.pushState({}, this.$page.title, this.initialUrl);
       usePage().props.modals.filters = false;
-      if (this.$page.url.split('?')[0] != '/search_map')
+      if (this.$page.url.split("?")[0] != "/search_map")
         document.body.classList.remove("fixed");
     },
     handleResize() {
       if (this.isOpen && typeof window !== "undefined") {
         this.innerHeight = window.innerHeight;
         this.innerWidth = window.innerWidth;
-        this.filterContentResize();       
+        this.filterContentResize();
       }
     },
     filterContentResize() {
@@ -638,8 +640,11 @@ export default {
           this.$refs.filterContent.clientHeight <
           this.$refs.filterContent.scrollHeight;
     },
-    reloadData() {      
-      this.$inertia.get(this.$page.url.split('?')[0], this.filterStore.getFiltersValues(), {
+    reloadData() {
+      this.$inertia.get(
+        this.$page.url.split("?")[0],
+        this.filterStore.getFiltersValues(),
+        {
           replace: true,
           preserveState: true,
           preserveScroll: true,
@@ -649,15 +654,15 @@ export default {
           },
           onFinish: () => {
             usePage().props.isLoadind = false;
-            eventBus.emit('data-received');
+            this.$eventBus.emit("data-received");
           },
-      });
+        }
+      );
     },
     getData() {
-      if (this.$page.url.split('?')[0] == '/search_map') {
+      if (this.$page.url.split("?")[0] == "/search_map") {
         this.getDataOnMap();
-      }
-      else {
+      } else {
         this.getDataOnList();
       }
     },
@@ -671,7 +676,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
+          only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
           onStart: () => {
             usePage().props.isLoadind = true;
             this.close();
@@ -680,33 +685,33 @@ export default {
             usePage().props.isLoadind = false;
           },
         });
-      });      
+      });
     },
     getDataOnMap() {
       if (this.isOpen == true) {
         this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
       }
 
-      this.$nextTick(() => {        
+      this.$nextTick(() => {
         this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
+          only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
           onStart: () => {
             usePage().props.isLoadind = true;
             this.close();
           },
           onFinish: () => {
             usePage().props.isLoadind = false;
-            eventBus.emit('data-received');      
+            this.$eventBus.emit("data-received");
           },
-        });        
-      });     
-    },     
+        });
+      });
+    },
     updateFilters(only) {
-      let data = this.tempFilterStore.getFiltersValues();      
-      this.$inertia.get(this.url ?? this.$page.url.split('?')[0], data, {
+      let data = this.tempFilterStore.getFiltersValues();
+      this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
@@ -751,12 +756,13 @@ export default {
   watch: {
     isOpen: function (newVal, oldVal) {
       if (newVal == true && (!oldVal || oldVal == false)) {
-        if (typeof window !== "undefined") this.initialUrl = window.location.href;
+        if (typeof window !== "undefined")
+          this.initialUrl = window.location.href;
         document.body.classList.add("fixed");
         this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
         this.updateFilters(["total"]);
       }
-    },    
+    },
   },
 };
 </script>

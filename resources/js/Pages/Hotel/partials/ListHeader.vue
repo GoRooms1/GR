@@ -219,12 +219,10 @@ export default {
   computed: {
     foundMessage() {
       let hotelTypePlural = ["отель", "отеля", "отелей"];
-      if (filterStore.getFilterValue('hotels', 'hotel_type') == 3) 
+      if (filterStore.getFilterValue("hotels", "hotel_type") == 3)
         hotelTypePlural = ["апартаменты", "апартаментов", "апартаментов"];
 
-      return (
-        this.found + " " + numWord(this.found, hotelTypePlural)
-      );
+      return this.found + " " + numWord(this.found, hotelTypePlural);
     },
   },
 };

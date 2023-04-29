@@ -1,8 +1,5 @@
 <template>
-  <button
-    @click="toggle()"    
-    :class="btnClass + ' ' + activeClass"
-  >
+  <button @click="toggle()" :class="btnClass + ' ' + activeClass">
     <img :src="img" :class="imgClass + ' ' + (!value && img ? '' : 'hidden')" />
     <img
       :src="toggleImg"
@@ -81,15 +78,23 @@ export default {
           break;
         default:
           return "";
-      }    
+      }
     },
     activeClass() {
       switch (this.type) {
         case "square":
-          return this.value ? 'bg-[#6170FF] text-white' : (this.disabled ? 'btn-disabled pointer-events-none bg-slate-200' : 'bg-[#EAEFFD]');
-          break;        
+          return this.value
+            ? "bg-[#6170FF] text-white"
+            : this.disabled
+            ? "btn-disabled pointer-events-none bg-slate-200"
+            : "bg-[#EAEFFD]";
+          break;
         default:
-          return this.value ? 'bg-[#6170FF] text-white' : (this.disabled ? 'btn-disabled pointer-events-none bg-slate-200' : 'bg-white');
+          return this.value
+            ? "bg-[#6170FF] text-white"
+            : this.disabled
+            ? "btn-disabled pointer-events-none bg-slate-200"
+            : "bg-white";
       }
     },
     value() {

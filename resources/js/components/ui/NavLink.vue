@@ -21,7 +21,7 @@ export default {
   props: {
     href: {
       type: String,
-      default: '#',
+      default: "#",
     },
     title: String,
     classes: String,

@@ -45,13 +45,17 @@
         class="underline text-[#6170FF]"
         >{{ address.city_district + " район," }}
       </Link>
-      {{  }}
-      <br class="block lg:hidden"/>    
+      {{}}
+      <br class="block lg:hidden" />
       <span v-if="address.street_with_type != null">
         {{ address.street_with_type + "," }}
       </span>
       <span v-if="address.house != null">
-        {{ " д." + address.house + ( address.block != null ? (' стр ' + address.block) : '') }}
+        {{
+          " д." +
+          address.house +
+          (address.block != null ? " стр " + address.block : "")
+        }}
       </span>
     </div>
   </div>

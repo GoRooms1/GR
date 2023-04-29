@@ -3,17 +3,15 @@ import "../css/custom.css";
 import "../css/style.css";
 
 import { createSSRApp, h } from "vue";
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import FilterPagesService from "@/Services/FilterPagesService";
 import Layout from "@/Layouts/Layout.vue";
-import mitt from 'mitt';
+import mitt from "mitt";
 
-if (typeof window !== "undefined") window.eventBus = mitt();
-
-createInertiaApp({
+const app = createInertiaApp({
   progress: {
-    color: '#29d',
+    color: "#29d",
   },
   resolve: (name) => {
     const page = resolvePageComponent(
@@ -27,11 +25,9 @@ createInertiaApp({
     return page;
   },
   setup({ el, App, props, plugin }) {
-    createSSRApp({ render: () => h(App, props) })
-      .use(plugin)     
-      .mixin({ methods: {} })
-      .mount(el);
+    const VueApp = createSSRApp({ render: () => h(App, props) });
+    VueApp.config.globalProperties.$eventBus = mitt();
+    VueApp.use(plugin).mixin({ methods: {} }).mount(el);
   },
 });
-
 FilterPagesService();

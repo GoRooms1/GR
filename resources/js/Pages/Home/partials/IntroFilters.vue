@@ -247,7 +247,7 @@ export default {
         onFinish: () => {
           usePage().props.isLoadind = false;
         },
-      });      
+      });
     },
     getDataOnMap() {
       this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
@@ -261,9 +261,9 @@ export default {
         },
         onFinish: () => {
           usePage().props.isLoadind = false;
-          eventBus.emit('data-received');
+          this.$eventBus.emit("data-received");
         },
-      });      
+      });
     },
     updateFilters(only) {
       let data = this.filterStore.getFiltersValues();

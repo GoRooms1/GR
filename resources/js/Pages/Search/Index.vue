@@ -1,10 +1,10 @@
 <template>
-  <AppHead 
+  <AppHead
     :title="page_description?.title"
     :meta_description="page_description?.meta_description"
-  />  
+  />
   <search-filter-modal />
-  <div class="md:mt-[49px] mt-[40px] relative" style="min-height: 160px;">
+  <div class="md:mt-[49px] mt-[40px] relative" style="min-height: 160px">
     <img
       class="md:block hidden absolute bottom-[-50px] left-0 -z-[1]"
       src="/img/lens.svg"
@@ -17,12 +17,12 @@
     />
     <search-panel />
   </div>
-  
+
   <rooms-list v-if="is_rooms_filter === true" :rooms="rooms" />
   <room-info-block v-if="is_rooms_filter === true" />
 
   <hotels-list v-if="is_rooms_filter === false" :hotels="hotels" />
-  <hotel-info-block v-if="is_rooms_filter === false"/>
+  <hotel-info-block v-if="is_rooms_filter === false" />
 </template>
 
 <script lang="ts">
@@ -43,7 +43,7 @@ export default {
     AppHead,
     Layout,
     SearchLayout,
-    SearchPanel,    
+    SearchPanel,
     RoomsList,
     RoomInfoBlock,
     HotelsList,
@@ -57,25 +57,25 @@ export default {
     is_rooms_filter: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   data() {
     return {
       filterStore,
-    }
+    };
   },
   mounted() {
-    eventBus.on('filters-inited', e => this.getDataOnList());
-    eventBus.on('filters-changed', e => this.getDataOnList());
+    this.$eventBus.on("filters-inited", (e) => this.getDataOnList());
+    this.$eventBus.on("filters-changed", (e) => this.getDataOnList());
   },
   methods: {
-    getDataOnList() {     
-      this.$nextTick(() => {        
+    getDataOnList() {
+      this.$nextTick(() => {
         this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
+          only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
           onStart: () => {
             usePage().props.isLoadind = true;
           },
@@ -83,8 +83,8 @@ export default {
             usePage().props.isLoadind = false;
           },
         });
-      });      
+      });
     },
-  }
+  },
 };
 </script>

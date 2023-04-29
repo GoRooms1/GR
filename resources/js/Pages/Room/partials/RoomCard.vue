@@ -177,9 +177,9 @@
           <hotel-metro-item
             v-for="metro in room.hotel.metros"
             :address="room.hotel.address"
-            :metro="metro"            
+            :metro="metro"
           />
-        </div>        
+        </div>
       </div>
     </div>
     <div
@@ -195,12 +195,14 @@
           :info="cost.info"
           :description="cost.description"
         />
-      </div>      
+      </div>
       <div class="">
-        <Button @click="openBookingModal()" classes="w-full"> Забронировать </Button>
-      </div>      
+        <Button @click="openBookingModal()" classes="w-full">
+          Забронировать
+        </Button>
+      </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -214,7 +216,6 @@ import HotelAddress from "@/components/ui/HotelAddress.vue";
 import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "@/components/ui/CostItem.vue";
 
-
 // install Swiper modules
 SwiperCore.use([Pagination, Navigation]);
 export default {
@@ -226,13 +227,12 @@ export default {
     Button,
     HotelAddress,
     HotelMetroItem,
-    CostItem,    
+    CostItem,
   },
   props: {
     room: Object,
   },
-  mounted() {   
-  },
+  mounted() {},
   data() {
     return {
       pagination: {
@@ -255,16 +255,14 @@ export default {
         1024: {
           noSwipingClass: "swiper-slide",
         },
-      },      
+      },
     };
   },
   methods: {
-    openBookingModal() {          
-      eventBus.emit('booking-open', this.room);
+    openBookingModal() {
+      this.$eventBus.emit("booking-open", this.room);
     },
   },
-  watch: {
-
-  },
+  watch: {},
 };
 </script>

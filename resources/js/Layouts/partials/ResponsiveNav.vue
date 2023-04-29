@@ -126,14 +126,15 @@ export default {
     ResponsiveNavLink,
   },
   created() {
-    if (typeof window !== "undefined") window.addEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined")
+      window.addEventListener("resize", this.handleResize);
     this.handleResize();
-    if (!usePage().props.modals)
-      usePage().props.modals = {};
+    if (!usePage().props.modals) usePage().props.modals = {};
     usePage().props.modals.menu = false;
   },
   destroyed() {
-    if (typeof window !== "undefined") window.removeEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined")
+      window.removeEventListener("resize", this.handleResize);
   },
   data() {
     return {
@@ -141,7 +142,7 @@ export default {
     };
   },
   methods: {
-    show() {      
+    show() {
       usePage().props.modals.menu = true;
     },
     hide() {

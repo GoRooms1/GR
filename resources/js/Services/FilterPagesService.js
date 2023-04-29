@@ -39,7 +39,7 @@ export default function FilterPagesService() {
         let token = document
           .querySelector('meta[name="csrf-token"]')
           .getAttribute("content");
-  
+
         fetch("/admin/api/image/" + image, {
           method: "DELETE",
           headers: {
@@ -58,7 +58,7 @@ export default function FilterPagesService() {
           });
       }
     };
-  }  
+  }
 
   let image_field = document.getElementsByClassName("js-autoload")[0];
   if (image_field) {

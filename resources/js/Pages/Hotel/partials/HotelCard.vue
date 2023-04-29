@@ -129,7 +129,7 @@
         </div>
         <div class="mb-6">
           <a
-            :href="'/hotels/' +  hotel.slug"
+            :href="'/hotels/' + hotel.slug"
             target="_blank"
             class="block font-bold text-xl leading-6 text-center underline text-[#6170FF]"
           >
@@ -139,11 +139,8 @@
         <div>
           <hotel-address :address="hotel.address" class="flex mb-2" />
           <div class="grid grid-cols-[fit-content(100%)_1fr]">
-            <hotel-metro-item
-              :metro="metro"
-              :address="hotel.address"            
-            />
-          </div>         
+            <hotel-metro-item :metro="metro" :address="hotel.address" />
+          </div>
         </div>
       </div>
       <div
