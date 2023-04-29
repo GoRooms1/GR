@@ -1,9 +1,7 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
-import intus from "intus";
-import { isRequired, isEmail, isMin, isMax } from "intus/rules";
 import { usePage } from "@inertiajs/vue3";
-import { mask as vMask } from "vue-the-mask";
+// import { mask as vMask } from "vue-the-mask";
 import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 
@@ -17,10 +15,10 @@ const form = useForm({
 form.passedFields = {};
 
 const valudationRules = {
-  name: [isRequired(), isMin(3), isMax(190)],
-  email: [isRequired(), isEmail()],
-  phone: [isRequired(), isMin(18), isMax(18)],
-  message: [isRequired(), isMin(5)],
+  name: [],
+  email: [],
+  phone: [],
+  message: [],
 };
 
 const validate = _.debounce((event) => {
@@ -30,13 +28,13 @@ const validate = _.debounce((event) => {
   let fieldRules = {};
   fieldRules[event.target.name] = valudationRules[event.target.name];
 
-  let validation = intus.validate(field, fieldRules);
-  if (validation.passes()) {
+  // let validation = intus.validate(field, fieldRules);
+  if (true) {
     form.passedFields[event.target.name] = true;
     delete form.errors[event.target.name];
   } else {
-    delete form.passedFields[event.target.name];
-    form.setError(event.target.name, validation.errors());
+    /*delete form.passedFields[event.target.name];
+    form.setError(event.target.name, validation.errors());*/
   }
 }, 500);
 

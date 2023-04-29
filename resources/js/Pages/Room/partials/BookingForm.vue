@@ -133,8 +133,6 @@ import _ from "lodash"
 import moment from 'moment'
 import { vMaska } from "maska"
 import { useForm, usePage } from "@inertiajs/vue3"
-import intus from "intus"
-import { isRequired, isMin, isMax } from "intus/rules"
 
 export default {
   components: {
@@ -181,8 +179,8 @@ export default {
       }),
       bookingSuccess: false,
       valudationRules: {
-        client_fio: [isRequired(), isMin(3), isMax(190)],        
-        client_phone: [isRequired(), isMin(18), isMax(18)],        
+        client_fio: [],
+        client_phone: [],
       },
       phoneMask: '+7 (###) ### ## ##',      
     }
@@ -293,9 +291,9 @@ export default {
       } 
     },
     validate() {
-      let validation = intus.validate(this.form.data(), this.valudationRules);      
+      // let validation = intus.validate(this.form.data(), this.valudationRules);
       this.form.clearErrors();
-      this.form.setError(validation.errors());     
+      this.form.setError(null);
     },
     submit() {
       if (this.isValidated) {

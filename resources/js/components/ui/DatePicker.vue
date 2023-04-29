@@ -1,4 +1,5 @@
 <template>
+    <client-oly>
   <div v-click-outside="hide" class="relative z-[5] mt-2">
     <button @click="toggle" class="w-full px-[12px] h-8 bg-white rounded-[8px] flex items-center justify-between">
       <span class="text-[0.875rem] leading-[1rem]">
@@ -24,11 +25,13 @@
       </div>
     </div>
   </div>
+    </client-oly>
 </template>
 
 <script>
+
 import vClickOutside from "click-outside-vue3"
-import datepicker from 'js-datepicker'
+import datepicker from "js-datepicker/src/datepicker";
 
 export default {
   directives: {
