@@ -10,7 +10,7 @@ import FilterPagesService from "@/Services/FilterPagesService";
 import Layout from "@/Layouts/Layout.vue";
 import mitt from 'mitt';
 
-window.eventBus = mitt()
+if (typeof window !== "undefined") window.eventBus = mitt();
 
 createInertiaApp({
   progress: {
@@ -29,8 +29,8 @@ createInertiaApp({
   },
   setup({ el, App, props, plugin }) {
     createSSRApp({ render: () => h(App, props) })
-      .use(plugin)
-      .mixin({ methods: { route: window.route } })
+      .use(plugin)     
+      .mixin({ methods: {} })
       .mount(el);
   },
 });

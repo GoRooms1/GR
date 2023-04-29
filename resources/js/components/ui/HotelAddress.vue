@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     getAddressHref(city = null, area = null, district = null) {
-      let url = route("address");
+      let url = "/address";
       if (city) {
         url += "/" + this.getAddressSlug(city);
 

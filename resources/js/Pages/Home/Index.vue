@@ -55,11 +55,11 @@ export default {
     },
   },
   created() {
-    window.addEventListener("resize", this.handleDesktop);
+    if (typeof window !== "undefined") window.addEventListener("resize", this.handleDesktop);
     this.handleDesktop();
   },
   destroyed() {
-    window.removeEventListener("resize", this.handleDesktop);
+    if (typeof window !== "undefined") window.removeEventListener("resize", this.handleDesktop);
   },
   data() {
     return {
@@ -67,17 +67,19 @@ export default {
     }
   },  
   methods: {
-    handleDesktop() {      
-      if (window.innerWidth > 767 && route().current() == 'home') {        
-        this.isMobile = false;
-        this.$inertia.get(route("search.map"), {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,              
-        });
-      } else {        
-        this.isMobile = true;
-      }      
+    handleDesktop() {
+      if (typeof window !== "undefined") {
+        if (window.innerWidth > 767 && (this.$page.url.split('?')[0] == '/' || this.$page.url.split('?')[0] == '')) {        
+          this.isMobile = false;
+          this.$inertia.get("/search_map", {
+            replace: true,
+            preserveState: true,
+            preserveScroll: true,              
+          });
+        } else {        
+          this.isMobile = true;
+        }
+      }  
     },
   }
 };

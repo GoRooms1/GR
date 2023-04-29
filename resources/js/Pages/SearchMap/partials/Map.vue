@@ -117,27 +117,29 @@ export default {
             this.events.fire('shapechange');
         },
 
-        applyElementOffset: function () {          
-          let breakpoint = 1024;
-          let width = window.innerWidth > breakpoint ? breakpoint : window.innerWidth;
-          let height = roomsListHeight;
+        applyElementOffset: function () {
+          if (typeof window !== "undefined") {
+            let breakpoint = 1024;
+            let width = window.innerWidth > breakpoint ? breakpoint : window.innerWidth;
+            let height = roomsListHeight;
 
-          if (window.innerWidth >= breakpoint) {
-            this._$element.style.left = -(this._$element.clientWidth / 2) + 'px';
-            this._$element.style.top = -(this._$element.clientWidth / 2) + 'px';            
-            this._$element.style.maxWidth = width + 'px';
-            this._$element.style.minWidth = width + 'px';
-            this._$element.style.position = "absolute";
-            this._$element.style.padding = "0 0 0 0";
-          }            
-          else {
-            width = window.innerWidth;
-            this._$element.style.left = "0";
-            this._$element.style.top = (window.innerHeight / 2 - height / 2 + 40) + 'px';            
-            this._$element.style.maxWidth = width + 'px';
-            this._$element.style.minWidth = width + 'px';
-            this._$element.style.position = "fixed";
-            this._$element.style.padding = "0 12px 0 12px";
+            if (window.innerWidth >= breakpoint) {
+              this._$element.style.left = -(this._$element.clientWidth / 2) + 'px';
+              this._$element.style.top = -(this._$element.clientWidth / 2) + 'px';            
+              this._$element.style.maxWidth = width + 'px';
+              this._$element.style.minWidth = width + 'px';
+              this._$element.style.position = "absolute";
+              this._$element.style.padding = "0 0 0 0";
+            }            
+            else {
+              width = window.innerWidth;
+              this._$element.style.left = "0";
+              this._$element.style.top = (window.innerHeight / 2 - height / 2 + 40) + 'px';            
+              this._$element.style.maxWidth = width + 'px';
+              this._$element.style.minWidth = width + 'px';
+              this._$element.style.position = "fixed";
+              this._$element.style.padding = "0 12px 0 12px";
+            }
           }
         },
 
@@ -158,9 +160,12 @@ export default {
            
             let height = roomsListHeight;
             let breakpoint = 1024;
+
+            let winWidth = 0;
+            if (typeof window !== "undefined") winWidth = window.innerWidth;
             
             let offset = [[position.left, position.top - 60], [ position.left + this._$element.clientWidth, position.top + height + 80]];            
-            if (window.innerWidth < breakpoint) {                      
+            if (winWidth < breakpoint) {                      
               offset = [[0, 0], [0,0]];
             }
 
@@ -217,7 +222,7 @@ export default {
         placemark.events.add(['click'],  e => {
           let data = this.filterStore.getFiltersValues();
           data.hotel_id = hotel.id;
-          this.$inertia.get(route("search.map"), data, {
+          this.$inertia.get("/search_map", data, {
             replace: true,
             preserveState: true,
             preserveScroll: true,
@@ -238,7 +243,8 @@ export default {
                 if (roomsCount > 0) {
                   let roomsListEl = document.querySelector('.popover').querySelector('.rooms-list');
                   let roomEl = document.querySelector('.popover').querySelector('.room');
-                  let slidesPerView = window.innerHeight - 220 > roomEl.clientHeight * 2 ? (roomsCount > 1 ? 2 : 1) : 1;
+                  let slidesPerView = 1; 
+                  if (typeof window !== "undefined") slidesPerView = window.innerHeight - 220 > roomEl.clientHeight * 2 ? (roomsCount > 1 ? 2 : 1) : 1;
                   roomsListHeight = roomEl.clientHeight * slidesPerView;
                   roomsListEl.style.height = roomsListHeight + 'px';
 

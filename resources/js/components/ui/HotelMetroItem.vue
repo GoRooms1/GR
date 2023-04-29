@@ -55,7 +55,7 @@ export default {
   methods: {
     getAddressHref(city, metro) {
       return (
-        route("address") +
+        "/address" +
         "/" +
         this.getAddressSlug(city) +
         "/metro-" +

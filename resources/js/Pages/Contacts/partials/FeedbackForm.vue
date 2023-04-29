@@ -1,7 +1,7 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
-// import { mask as vMask } from "vue-the-mask";
+import { vMaska } from "maska"
 import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 
@@ -12,47 +12,14 @@ const form = useForm({
   message: null,
 });
 
-form.passedFields = {};
-
-const valudationRules = {
-  name: [],
-  email: [],
-  phone: [],
-  message: [],
-};
-
-const validate = _.debounce((event) => {
-  let field = {};
-  field[event.target.name] = event.target.value;
-
-  let fieldRules = {};
-  fieldRules[event.target.name] = valudationRules[event.target.name];
-
-  // let validation = intus.validate(field, fieldRules);
-  if (true) {
-    form.passedFields[event.target.name] = true;
-    delete form.errors[event.target.name];
-  } else {
-    /*delete form.passedFields[event.target.name];
-    form.setError(event.target.name, validation.errors());*/
-  }
-}, 500);
-
-let isValidated = () => {
-  return (
-    Object.keys(form.passedFields).length == Object.keys(valudationRules).length
-  );
-};
-
 const submit = () => {
-  if (isValidated()) form.post(route("contact"));
+  form.post("/contacts");
 };
 
 const closeThanks = () => {
   delete usePage().props.flash.message;
   form.reset();
-  form.clearErrors();
-  form.passedFields = {};
+  form.clearErrors();  
   form.name = null;
   form.phone = null;
   form.email = null;
@@ -111,31 +78,7 @@ const closeThanks = () => {
         <div class="lg:w-1/2 lg:pr-2">
           <label class="block w-full mb-2 xl:mb-2">
             <span class="flex">
-              <span class="block mb-2">Имя</span>
-              <span v-if="form.passedFields.name" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 6.5L7.20001 9.5L6 8.21429"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-              </span>
+              <span class="block mb-2">Имя</span>             
               <span v-if="form.errors.name" class="pl-2">
                 <svg
                   width="16"
@@ -173,40 +116,14 @@ const closeThanks = () => {
             </span>
             <input
               v-model="form.name"
-              name="name"
-              @input="validate"
+              name="name"              
               class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
-              placeholder="Как к вам обращаться"
-              wfd-id="id6"
+              placeholder="Как к вам обращаться"              
             />
           </label>
           <label class="block w-full mb-2 xl:mb-2">
             <span class="flex">
-              <span class="block mb-2">Телефон</span>
-              <span v-if="form.passedFields.phone" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 6.5L7.20001 9.5L6 8.21429"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-              </span>
+              <span class="block mb-2">Телефон</span>              
               <span v-if="form.errors.phone" class="pl-2">
                 <svg
                   width="16"
@@ -244,42 +161,16 @@ const closeThanks = () => {
             </span>
             <input
               v-model="form.phone"
-              name="phone"
-              @input="validate"
-              v-mask="'+7 (###) ### ## ##'"
+              name="phone"              
+              v-maska :data-maska="'+7 (###) ### ## ##'"
               type="text"
               class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
-              placeholder="+7 (___) ___ __ __"
-              wfd-id="id7"
+              placeholder="+7 (___) ___ __ __"             
             />
           </label>
           <label class="block w-full mb-2 xl:mb-2">
             <span class="flex">
-              <span class="block mb-2">Email</span>
-              <span v-if="form.passedFields.email" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 6.5L7.20001 9.5L6 8.21429"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-              </span>
+              <span class="block mb-2">Email</span>              
               <span v-if="form.errors.email" class="pl-2">
                 <svg
                   width="16"
@@ -317,43 +208,17 @@ const closeThanks = () => {
             </span>
             <input
               v-model="form.email"
-              name="email"
-              @input="validate"
+              name="email"              
               type="text"
               class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
-              placeholder="Ваша@почта"
-              wfd-id="id8"
+              placeholder="Ваша@почта"              
             />
           </label>
         </div>
         <div class="lg:w-1/2 lg:pl-2">
           <label class="block w-full">
             <span class="flex">
-              <span class="block mb-2">Сообщение</span>
-              <span v-if="form.passedFields.message" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 6.5L7.20001 9.5L6 8.21429"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#6170FF"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-              </span>
+              <span class="block mb-2">Сообщение</span>              
               <span v-if="form.errors.message" class="pl-2">
                 <svg
                   width="16"
@@ -391,8 +256,7 @@ const closeThanks = () => {
             </span>
             <textarea
               v-model="form.message"
-              name="message"
-              @input="validate"
+              name="message"             
               class="w-full h-44 rounded-md p-2 placeholder-zinc-500 h-[160px]"
               placeholder="Опишите вопрос или предложение"
             ></textarea>
@@ -408,8 +272,7 @@ const closeThanks = () => {
         </div>
         <div class="lg:w-1/2 lg:pl-2">
           <Button
-            type="submit"
-            v-bind:disabled="!isValidated()"
+            type="submit"           
             classes="w-full"
           >
             Отправить

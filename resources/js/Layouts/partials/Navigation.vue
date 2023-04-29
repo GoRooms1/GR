@@ -20,7 +20,7 @@
       classes="bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]"
     />
     <nav-link
-      :href="route('contact')"
+      href="/contacts"
       classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"
     />
     <nav-link

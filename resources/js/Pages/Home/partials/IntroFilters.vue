@@ -235,7 +235,7 @@ export default {
   },
   methods: {
     getDataOnList() {
-      this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+      this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -250,7 +250,7 @@ export default {
       });      
     },
     getDataOnMap() {
-      this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+      this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -267,7 +267,7 @@ export default {
     },
     updateFilters(only) {
       let data = this.filterStore.getFiltersValues();
-      this.$inertia.get(route("home"), data, {
+      this.$inertia.get("/", data, {
         preserveState: true,
         preserveScroll: true,
         replace: true,

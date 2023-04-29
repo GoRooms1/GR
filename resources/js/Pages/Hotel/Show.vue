@@ -6,12 +6,12 @@
     :meta_keywords="page_description?.meta_keywords"
     :meta_description="page_description?.meta_description"
   />
-  <search-filter-modal :url="route('hotels.show', hotel)"/>
+  <search-filter-modal :url="'/hotels/' + hotel.slug"/>
   <div v-if="$page.props.modals.search !== false"
     class="search-panel-modal w-full mx-auto transition fixed lg:hidden px-[16px]" 
   >
     <div class="relative">
-      <Search for-modal :url="route('hotels.show', hotel)"/>
+      <Search for-modal :url="'/hotels/' + hotel.slug"/>
     </div>
   </div>
   
@@ -493,7 +493,7 @@ export default {
     },
     updateRooms() {     
       this.$nextTick(() => {        
-        this.$inertia.get(route('hotels.show', this.hotel), this.filterStore.getFiltersValues(), {
+        this.$inertia.get('/hotels/' + this.hotel.slug, this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,

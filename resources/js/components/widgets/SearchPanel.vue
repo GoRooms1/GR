@@ -1,5 +1,5 @@
 <template>  
-  <div v-if="$page.props.modals.search == false && route().current() == 'search.map'" @click="showSearchPanel()" 
+  <div v-if="$page.props.modals.search == false && $page.url.split('?')[0] == '/search_map'" @click="showSearchPanel()" 
     class="w-[56px] absolute md:top-[114px] top-[64px] max-[832px]:left-4 left-[calc(50%-416px)] hidden lg:block"
   >
     <div class="shadow-xl w-full bg-white rounded-t-[16px] rounded-b-none p-0 px-[8px] py-[12px] flex items-center">
@@ -21,13 +21,13 @@
 
   <div v-if="$page.props.modals.search !== false"
     class="z-[11] max-w-[832px] w-full mx-auto transition" 
-    :class="route().current() == 'search.map' ? 'absolute md:top-[114px] top-[64px] max-[832px]:left-0 left-[calc(50%-416px)]' : 'md:relative px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px] ' + panelPosition"
+    :class="$page.url.split('?')[0] == '/search_map' ? 'absolute md:top-[114px] top-[64px] max-[832px]:left-0 left-[calc(50%-416px)]' : 'md:relative px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px] ' + panelPosition"
   >
     <div class="relative">
       <Search />     
       <div class="md:flex justify-between hidden ">
         <div class="p-[8px] flex items-center gap-[8px]" 
-          :class="route().current() == 'search.map' ? 'bg-[#EAEFFD] rounded-b-[16px]' : ''"
+          :class="$page.url.split('?')[0] == '/search_map' ? 'bg-[#EAEFFD] rounded-b-[16px]' : ''"
         >
           <filter-attr-toggle
             title="Low Cost"
@@ -67,7 +67,7 @@
           />
         </div>        
         <div class="p-[8px]"          
-          :class="route().current() == 'search.map' ? 'md:block hidden bg-[#EAEFFD] rounded-b-[16px]' : ''"
+          :class="$page.url.split('?')[0] == '/search_map' ? 'md:block hidden bg-[#EAEFFD] rounded-b-[16px]' : ''"
         >
           <button
             @click="openFilters()"
@@ -133,10 +133,13 @@ export default {
     Search,
   },  
   mounted() {
-    window.addEventListener("resize", this.handleResize);
-    window.addEventListener("scroll", this.handleScroll);
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", this.handleResize);
+      window.addEventListener("scroll", this.handleScroll);
+    }
+
     this.handleResize();
-    usePage().props.modals.search = true;
+    usePage().props.modals.search = true;    
   },
   data() {
     return {
@@ -168,20 +171,24 @@ export default {
       this.filterStore.removeFilter(obj.modelType, obj.key);
       eventBus.emit('filters-changed');
     },
-    handleResize() {
+    handleResize() {      
+      if (typeof window !== "undefined") {
         if (window.innerWidth > 1024) usePage().props.modals.search = true;
+      }      
     },
     handleScroll() {
-      if (route().current() != 'home' && window.innerWidth < 768) {        
-        this.scrollY = window.scrollY ?? this.scrollY;
-        
-        if (this.scrollY >= 30)
-          this.panelPosition = 'fixed';
-        else
+      if (typeof window !== "undefined") {
+        if (this.$page.url.split('?')[0] != '/' && this.$page.url.split('?')[0] != '' && window.innerWidth < 768) {        
+          this.scrollY = window.scrollY ?? this.scrollY;
+          
+          if (this.scrollY >= 30)
+            this.panelPosition = 'fixed';
+          else
+            this.panelPosition = '';
+        } else {
           this.panelPosition = '';
-      } else {
-        this.panelPosition = '';
-      };
+        };
+      }      
     }
   },
 };

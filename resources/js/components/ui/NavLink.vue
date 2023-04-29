@@ -19,7 +19,10 @@ export default {
     Link,
   },
   props: {
-    href: String,
+    href: {
+      type: String,
+      default: '#',
+    },
     title: String,
     classes: String,
     disabled: Boolean,

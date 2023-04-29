@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     loadMore() {
-      let initialUrl = window.location.href;
+      let initialUrl = typeof window !== "undefined" ? window.location.href : '/';
       if (this?.hotels?.meta?.next_page_url) {
         this.$inertia.get(
           this.hotels.meta.next_page_url,
@@ -84,7 +84,7 @@ export default {
               if (this.hotels.meta.current_page != 1)
                 this.allHotels = [...this.allHotels, ..._.shuffle(this.hotels.data)];
 
-              window.history.pushState({}, this.$page.title, initialUrl);
+                if (typeof window !== "undefined") window.history.pushState({}, this.$page.title, initialUrl);
             },
             onStart: () => {
               this.isLoading = true;

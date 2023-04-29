@@ -66,24 +66,18 @@
                 <div v-if="form.errors.client_fio" class="flex text-[#E1183D]">
                   <img src="/img/attentionRed.svg" class="mx-2 w-4">
                   Не заполнено
-                </div>
-                <div v-if="!form.errors.client_fio" class="flex">
-                  <img src="/img/checkcircle.svg" class="ml-2 w-4">
-                </div>
+                </div>               
               </div>
-              <input v-model="form.client_fio" @input="validate()" placeholder="Как к вам обращаться"
+              <input v-model="form.client_fio" placeholder="Как к вам обращаться"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
               <div class="flex mt-3">
                 <span>Телефон</span>
                 <div v-if="form.errors.client_phone" class="flex text-[#E1183D]">
                   <img src="/img/attentionRed.svg" class="mx-2 w-4">
                   Не заполнено
-                </div>
-                <div v-if="!form.errors.client_phone" class="flex">
-                  <img src="/img/checkcircle.svg" class="ml-2 w-4">
-                </div>
+                </div>               
               </div>
-              <input v-model="form.client_phone" @input="validate(); phoneHandle()"
+              <input v-model="form.client_phone" @input="phoneHandle()"
                 v-maska :data-maska="phoneMask" placeholder="+7 (___) ___ __ __"
                 data-maska-tokens="C:[0-9 \-\+()]"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
@@ -102,7 +96,7 @@
           <span class="mt-4 lg:ml-4 lg:mt-0">Сумма к оплате: <b class="text-sm">{{ amount }} ₽</b></span>
           <button @click="submit"
             class="mt-4 lg:ml-auto lg:mt-0 w-full flex items-center justify-center h-12 lg:w-[248px] rounded-lg text-white"
-            :class="isValidated ? 'bg-blue-500 hover:bg-blue-800' : 'bg-slate-400 pointer-events-none'">
+            :class="'bg-blue-500 hover:bg-blue-800'">
             Забронировать
           </button>
         </div>
@@ -151,8 +145,7 @@ export default {
     room: Object,
   },
   mounted() {
-    this.switchCostType(1);
-    this.validate();
+    this.switchCostType(1);    
   }, 
   data() {
     return {
@@ -177,18 +170,11 @@ export default {
         hours_count: null,
         days_count: null,        
       }),
-      bookingSuccess: false,
-      valudationRules: {
-        client_fio: [],
-        client_phone: [],
-      },
+      bookingSuccess: false,     
       phoneMask: '+7 (###) ### ## ##',      
     }
   },
-  computed: {    
-    isValidated() {
-      return !this.form.hasErrors;
-    }
+  computed: {
   },
   methods: {
     close() {
@@ -280,27 +266,18 @@ export default {
       let value = this.form.client_phone ?? '';
       //Handle Ru phone number
       if (_.isEmpty(value) || value.startsWith('+7')) {
-        this.phoneMask = '+7 (###) ### ## ##';
-        this.valudationRules.client_phone = [isRequired(), isMin(18), isMax(18)];        
+        this.phoneMask = '+7 (###) ### ## ##';              
       }
 
       //Handle other countries phone number
       if (value === '+') {
-        this.phoneMask = "C".repeat(25);          
-        this.valudationRules.client_phone = [isRequired(), isMin(7)];
+        this.phoneMask = "C".repeat(25);
       } 
-    },
-    validate() {
-      // let validation = intus.validate(this.form.data(), this.valudationRules);
-      this.form.clearErrors();
-      this.form.setError(null);
-    },
+    },    
     submit() {
-      if (this.isValidated) {
-        this.form.post(route("rooms.booking"), {
-          onSuccess: () => this.bookingSuccess = true,
-        });
-      };
+      this.form.post("/rooms/booking", {
+        onSuccess: () => this.bookingSuccess = true,
+      });
     },
   }
 };

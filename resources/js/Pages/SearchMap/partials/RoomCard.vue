@@ -47,7 +47,7 @@
         <div class="text-sm leading-4">
           {{ room.hotel.type.single_name }}
           <a
-            :href="route('hotels.index') + '/' + room.hotel.slug"
+            :href="'/hotels/' + room.hotel.slug"
             target="_blank"
             class="underline text-[#6170FF] font-bold"
             >{{ room.hotel.name }}</a

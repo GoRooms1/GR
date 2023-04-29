@@ -71,7 +71,7 @@ export default {
   methods: {
     getDataOnList() {     
       this.$nextTick(() => {        
-        this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+        this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,

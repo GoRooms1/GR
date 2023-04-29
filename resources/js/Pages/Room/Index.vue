@@ -53,8 +53,8 @@ export default {
     }
   },  
   mounted() {
-    eventBus.on('filters-inited', e => this.getDataOnList(this.$page.url ?? route("rooms.index")));
-    eventBus.on('filters-changed', e => this.getDataOnList(route("search.list")));
+    eventBus.on('filters-inited', e => this.getDataOnList(this.$page.url ?? "/rooms"));
+    eventBus.on('filters-changed', e => this.getDataOnList("/search"));
   },
   methods: {    
     getDataOnList(url) {     
@@ -65,7 +65,7 @@ export default {
           preserveScroll: true,
           only: ['hotels', 'rooms', 'is_rooms_filter'],
           onSuccess: () => {
-            window.history.pushState({}, this.$page.title, window.location.pathname);              
+            if (typeof window !== "undefined") window.history.pushState({}, this.$page.title, window.location.pathname);              
           },
           onStart: () => {
             usePage().props.isLoadind = true;

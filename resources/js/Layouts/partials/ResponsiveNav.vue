@@ -35,7 +35,7 @@
   <div
     id="menu"
     class="fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex-col justify-center items-center lg:hidden px-7"
-    v-bind:class="this.isOpen() ? 'flex' : 'hidden'"
+    v-bind:class="isOpen() ? 'flex' : 'hidden'"
   >
     <button v-on:click="hide()" class="absolute top-[12px] right-[16px]">
       <img src="/img/close.svg" />
@@ -63,7 +63,7 @@
       />
       <responsive-nav-link
         title="Контакты"
-        :href="route('contact')"
+        href="/contacts"
         classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"
       />
       <responsive-nav-link
@@ -126,18 +126,18 @@ export default {
     ResponsiveNavLink,
   },
   created() {
-    window.addEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined") window.addEventListener("resize", this.handleResize);
     this.handleResize();
     if (!usePage().props.modals)
       usePage().props.modals = {};
     usePage().props.modals.menu = false;
   },
   destroyed() {
-    window.removeEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined") window.removeEventListener("resize", this.handleResize);
   },
   data() {
     return {
-      screenWidth: window.innerWidth,
+      screenWidth: 0,
     };
   },
   methods: {
@@ -152,7 +152,7 @@ export default {
     },
     handleResize() {
       if (this.isOpen == true) {
-        this.screenWidth = window.innerWidth;
+        if (typeof window !== "undefined") this.screenWidth = window.innerWidth;
         if (this.screenWidth > 1024) this.hide();
       }
     },

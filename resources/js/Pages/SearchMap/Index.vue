@@ -62,7 +62,7 @@ export default {
     },
     getDataOnMap() {      
       this.$nextTick(() => {        
-        this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+        this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,

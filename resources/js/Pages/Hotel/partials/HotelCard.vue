@@ -129,7 +129,7 @@
         </div>
         <div class="mb-6">
           <a
-            :href="route('hotels.show', hotel)"
+            :href="'/hotels/' +  hotel.slug"
             target="_blank"
             class="block font-bold text-xl leading-6 text-center underline text-[#6170FF]"
           >

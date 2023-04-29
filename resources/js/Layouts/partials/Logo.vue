@@ -1,5 +1,5 @@
 <template>
-  <Link :href="route('home')">
+  <Link href="/">
     <svg
       width="127"
       height="21"

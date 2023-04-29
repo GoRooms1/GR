@@ -12,7 +12,7 @@
 				<div class="text-[20px]">{{ description }}</div>
 				<div class="text-[20px]">
 					Перейдите на 
-					<Link :href="route('home')" class="underline text-[#6170FF] font-bold">главную страницу!</Link>
+					<Link href="/" class="underline text-[#6170FF] font-bold">главную страницу!</Link>
 				</div>
 			</div>
 		</div>		

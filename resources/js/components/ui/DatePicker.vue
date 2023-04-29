@@ -31,7 +31,7 @@
 <script>
 
 import vClickOutside from "click-outside-vue3"
-import datepicker from "js-datepicker/src/datepicker";
+import datepicker from "js-datepicker/src/datepicker"
 
 export default {
   directives: {

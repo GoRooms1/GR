@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     getDataOnList() {
-      this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+      this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -132,7 +132,7 @@ export default {
       });      
     },
     getDataOnMap() {
-      this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+      this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
@@ -160,7 +160,7 @@ export default {
       }
       
       this.searchState = _.debounce(() => {
-        this.$inertia.get(this.url ?? route(route().current()), data, {
+        this.$inertia.get(this.url ?? this.$page.url.split('?')[0], data, {
           preserveState: true,
           preserveScroll: true,
           only: ["search_result"],
@@ -177,7 +177,7 @@ export default {
       this.searchState();
     },
     openLinkBlank(link) {
-      window.open(link, '_blank');
+      if (typeof window !== "undefined") window.open(link, '_blank');      
     },
   },
 };

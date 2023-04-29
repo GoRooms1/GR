@@ -33,30 +33,32 @@ export default function FilterPagesService() {
     });
   }
 
-  window.deleteImage = function (image) {
-    if (confirm("Вы действительно хотите удалить это изображение?")) {
-      let token = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-
-      fetch("/admin/api/image/" + image, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "X-CSRF-Token": token,
-        },
-      })
-        .then((response) => {
-          return response.json();
+  if (typeof window !== "undefined") {
+    window.deleteImage = function (image) {
+      if (confirm("Вы действительно хотите удалить это изображение?")) {
+        let token = document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute("content");
+  
+        fetch("/admin/api/image/" + image, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-Token": token,
+          },
         })
-        .then((response) => {
-          if (response.success)
-            document.getElementById("image_" + image).remove();
-        });
-    }
-  };
+          .then((response) => {
+            return response.json();
+          })
+          .then((response) => {
+            if (response.success)
+              document.getElementById("image_" + image).remove();
+          });
+      }
+    };
+  }  
 
   let image_field = document.getElementsByClassName("js-autoload")[0];
   if (image_field) {

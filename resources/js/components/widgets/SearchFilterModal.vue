@@ -33,7 +33,7 @@
       </button>      
       <div class="max-w-[832px] w-full mx-auto px-[16px]">
         <div class="lg:block flex flex-col relative">
-          <Search for-modal :url="url ?? route(route().current())"/>
+          <Search for-modal :url="url ?? $page.url.split('?')[0]"/>
           <div class="flex justify-between ordering">
             <div
               class="lg:p-[8px] p-[24px] bg-[#EAEFFD] rounded-b-[16px] lg:rounded-t-none lg:w-[fit-content] w-full rounded-t-[16px] items-center gap-[8px] flex-wrap justify-center flex"
@@ -562,7 +562,7 @@ export default {
     }
   },
   created() {
-    window.addEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined") window.addEventListener("resize", this.handleResize);
     this.handleResize();
   },
   mounted() {
@@ -583,17 +583,18 @@ export default {
         eventBus.emit('filters-inited');
         console.log('filters inited');      
       });
+      this.handleResize();
     },
   destroyed() {
-    window.removeEventListener("resize", this.handleResize);
+    if (typeof window !== "undefined") window.removeEventListener("resize", this.handleResize);
   },
   data() {
     return {      
       filterStore,
       initialUrl: usePage().url,
       tempFilterStore,
-      innerWidth: window.innerWidth,
-      innerHeight: window.innerHeight,
+      innerWidth: 0,
+      innerHeight: 0,
       filterContentScroll: false,
     };
   },
@@ -619,16 +620,16 @@ export default {
   },
   methods: {
     close() {
-      window.history.pushState({}, this.$page.title, this.initialUrl);
+      if (typeof window !== "undefined") window.history.pushState({}, this.$page.title, this.initialUrl);
       usePage().props.modals.filters = false;
-      if (route().current() != 'search.map')
+      if (this.$page.url.split('?')[0] != '/search_map')
         document.body.classList.remove("fixed");
     },
     handleResize() {
-      if (this.isOpen) {
+      if (this.isOpen && typeof window !== "undefined") {
         this.innerHeight = window.innerHeight;
         this.innerWidth = window.innerWidth;
-        this.filterContentResize();
+        this.filterContentResize();       
       }
     },
     filterContentResize() {
@@ -638,7 +639,7 @@ export default {
           this.$refs.filterContent.scrollHeight;
     },
     reloadData() {      
-      this.$inertia.get(route(route().current()), this.filterStore.getFiltersValues(), {
+      this.$inertia.get(this.$page.url.split('?')[0], this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,
@@ -653,7 +654,7 @@ export default {
       });
     },
     getData() {
-      if (route().current() == 'search.map') {
+      if (this.$page.url.split('?')[0] == '/search_map') {
         this.getDataOnMap();
       }
       else {
@@ -666,7 +667,7 @@ export default {
       }
 
       this.$nextTick(() => {
-        this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+        this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,
@@ -687,7 +688,7 @@ export default {
       }
 
       this.$nextTick(() => {        
-        this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+        this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,
@@ -705,7 +706,7 @@ export default {
     },     
     updateFilters(only) {
       let data = this.tempFilterStore.getFiltersValues();      
-      this.$inertia.get(this.url ?? route(route().current()), data, {
+      this.$inertia.get(this.url ?? this.$page.url.split('?')[0], data, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
@@ -750,7 +751,7 @@ export default {
   watch: {
     isOpen: function (newVal, oldVal) {
       if (newVal == true && (!oldVal || oldVal == false)) {
-        this.initialUrl = window.location.href;
+        if (typeof window !== "undefined") this.initialUrl = window.location.href;
         document.body.classList.add("fixed");
         this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
         this.updateFilters(["total"]);
