@@ -54,11 +54,6 @@ Route::get('/5minut', [CustomPageController::class, 'fiveMinut'])->name('custom.
 Route::get('/lowcost', [CustomPageController::class, 'lowcost'])->name('custom.lowcost');
 
 //old
-/*
-Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
-
-Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
-
 Route::get('/blog', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/blog/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::post('/form', [FormController::class, 'store'])->name('forms.store');
@@ -69,5 +64,5 @@ Route::middleware('noDebugbar')->get('sitemap.xml', [SiteMapController::class, '
 Route::get('/bonuse', [PageController::class, 'show']);
 Route::get('/rules', [PageController::class, 'show']);
 
+Route::get('lk/start', [Lk\HomeController::class, 'start'])->name('lk.start');
 Route::post('lk/object/store', [Lk\ObjectController::class, 'store'])->name('lk.object.store');
-*/

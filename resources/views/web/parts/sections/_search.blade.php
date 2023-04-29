@@ -118,40 +118,40 @@
                                         <p class="advanced-search-prices-in-label">{{ $title }}:</p>
                                         <ul class="advanced-search-prices-list">
                                             <li class="advanced-search-prices-item">
-                                                @php($value = $type.'.lte.'.App\Settings::option($type.'_cost_small'))
+                                                @php($value = $type.'.lte.'.Domain\Settings\Models\Settings::option($type.'_cost_small'))
                                                 <input id="advanced-search-prices-{{ $loop->index }}-1" name="cost"
                                                        type="radio" class="checkbox"
                                                        value="{{$value}}" @checked($value, $request?->get('cost')) >
                                                 <label for="advanced-search-prices-{{ $loop->index }}-1"
-                                                       class="checkbox-label checkbox-label-orange">до {{ App\Settings::option($type.'_cost_small') }}
+                                                       class="checkbox-label checkbox-label-orange">до {{ Domain\Settings\Models\Settings::option($type.'_cost_small') }}
                                                     р.</label>
                                             </li>
                                             <li class="advanced-search-prices-item">
-                                                @php($value = $type.'.between.'.App\Settings::option($type.'_cost_small').'-'.App\Settings::option($type.'_cost_medium'))
+                                                @php($value = $type.'.between.'.Domain\Settings\Models\Settings::option($type.'_cost_small').'-'.Domain\Settings\Models\Settings::option($type.'_cost_medium'))
                                                 <input id="advanced-search-prices-{{ $loop->index }}-2" name="cost"
                                                        type="radio" class="checkbox"
                                                        value="{{$value}}" @checked($value, $request?->get('cost')) >
                                                 <label for="advanced-search-prices-{{ $loop->index }}-2"
-                                                       class="checkbox-label checkbox-label-orange">{{ App\Settings::option($type.'_cost_small') }}
+                                                       class="checkbox-label checkbox-label-orange">{{ Domain\Settings\Models\Settings::option($type.'_cost_small') }}
                                                     р.- {{ Settings::option($type.'_cost_medium') }} р</label>
                                             </li>
                                             <li class="advanced-search-prices-item">
-                                                @php($value = $type.'.between.'.App\Settings::option($type.'_cost_medium').'-'.App\Settings::option($type.'_cost_low'))
+                                                @php($value = $type.'.between.'.Domain\Settings\Models\Settings::option($type.'_cost_medium').'-'.Domain\Settings\Models\Settings::option($type.'_cost_low'))
                                                 <input id="advanced-search-prices-{{ $loop->index }}-3" name="cost"
                                                        type="radio" class="checkbox"
                                                        value="{{$value}}" @checked($value, $request?->get('cost')) >
                                                 <label for="advanced-search-prices-{{ $loop->index }}-3"
-                                                       class="checkbox-label checkbox-label-orange">{{ App\Settings::option($type.'_cost_medium') }}
-                                                    р. - {{ App\Settings::option($type.'_cost_low') }}
+                                                       class="checkbox-label checkbox-label-orange">{{ Domain\Settings\Models\Settings::option($type.'_cost_medium') }}
+                                                    р. - {{ Domain\Settings\Models\Settings::option($type.'_cost_low') }}
                                                     р</label>
                                             </li>
                                             <li class="advanced-search-prices-item">
-                                                @php($value = $type.'.gte.'.App\Settings::option($type.'_cost_low'))
+                                                @php($value = $type.'.gte.'.Domain\Settings\Models\Settings::option($type.'_cost_low'))
                                                 <input id="advanced-search-prices-{{ $loop->index }}-4" name="cost"
                                                        type="radio" class="checkbox"
                                                        value="{{$value}}" @checked($value, $request?->get('cost')) >
                                                 <label for="advanced-search-prices-{{ $loop->index }}-4"
-                                                       class="checkbox-label checkbox-label-orange">от {{ App\Settings::option($type.'_cost_low') }}
+                                                       class="checkbox-label checkbox-label-orange">от {{ Domain\Settings\Models\Settings::option($type.'_cost_low') }}
                                                     р.</label>
                                             </li>
                                         </ul>

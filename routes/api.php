@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //old
-/*
+
 //Route::match(['GET', 'POST'], '/search', 'SearchController')->name('search');
 //Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.map');
 Route::post('search', [Api\SearchController::class, 'index'])->name('search.index');
@@ -44,4 +44,4 @@ Route::post('images/ordered', [ImageController::class, 'ordered']);
 
 //     Route::get('all', [Api\FilterController::class, 'all'])->name('all');
 // });
-*/
+

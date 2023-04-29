@@ -8,7 +8,7 @@
   <section class="home-section home-section-pt-lg">
     <div class="container">
       <div class="h2 section-title">
-        {!! html_entity_decode(App\Settings::header('seo_/')) !!}
+        {!! html_entity_decode(Domain\Settings\Models\Settings::header('seo_/')) !!}
       </div>
       <div class="row row-sm">
         @foreach ($hotels as $hotel)
@@ -52,7 +52,7 @@
     <div class="container">
       <article class="about-content">
         <div class="text-section about-text">
-          {!! html_entity_decode(App\Settings::option('seo_/')) !!}
+          {!! html_entity_decode(Domain\Settings\Models\Settings::option('seo_/')) !!}
         </div>
       </article>
     </div>

@@ -32,7 +32,7 @@
                     @csrf
                     <div class="{{ $first_col }}">Телефон</div>
                     <div class="{{ $second_col }}"><input type="text" class="form-control phone" name="phone"
-                                                          value="{{ App\Settings::option('phone') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('phone') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>
@@ -41,7 +41,7 @@
                     @csrf
                     <div class="{{ $first_col }}">Email</div>
                     <div class="{{ $second_col }}"><input type="email" class="form-control" name="email"
-                                                          value="{{ App\Settings::option('email') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('email') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>
@@ -50,7 +50,7 @@
                     @csrf
                     <div class="{{ $first_col }}">Email для сообщений</div>
                     <div class="{{ $second_col }}"><input type="email" class="form-control" name="notify"
-                                                          value="{{ App\Settings::option('notify') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('notify') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>
@@ -59,7 +59,7 @@
                     @csrf
                     <div class="{{ $first_col }}">Адрес</div>
                     <div class="{{ $second_col }}"><input type="text" class="form-control" name="address"
-                                                          value="{{ App\Settings::option('address') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('address') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>
@@ -68,7 +68,7 @@
                     @csrf
                     <div class="{{ $first_col }}">Facebook</div>
                     <div class="{{ $second_col }}"><input type="text" class="form-control" name="fb"
-                                                          value="{{ App\Settings::option('fb') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('fb') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>
@@ -77,7 +77,7 @@
                     @csrf
                     <div class="{{ $first_col }}">Instagram</div>
                     <div class="{{ $second_col }}"><input type="text" class="form-control" name="instagram"
-                                                          value="{{ App\Settings::option('instagram') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('instagram') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>
@@ -86,7 +86,7 @@
                     @csrf
                     <div class="{{ $first_col }}">ВКонтакте</div>
                     <div class="{{ $second_col }}"><input type="text" class="form-control" name="vk"
-                                                          value="{{ App\Settings::option('vk') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('vk') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>
@@ -95,7 +95,7 @@
                     @csrf
                     <div class="{{ $first_col }}">YouTube</div>
                     <div class="{{ $second_col }}"><input type="text" class="form-control" name="youtube"
-                                                          value="{{ App\Settings::option('youtube') }}"></div>
+                                                          value="{{ Domain\Settings\Models\Settings::option('youtube') }}"></div>
                     <div class="{{ $third_col }}">
                         <button class="btn btn-success">Обновить</button>
                     </div>

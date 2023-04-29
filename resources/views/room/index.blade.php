@@ -25,9 +25,9 @@
       <div class="section-header">
         <h1 class="section-title">
           @if (Request::is('rooms/hot'))
-            {!! html_entity_decode(App\Settings::header('seo_/rooms/hot')) !!}
+            {!! html_entity_decode(Domain\Settings\Models\Settings::header('seo_/rooms/hot')) !!}
           @else
-            {!! html_entity_decode(App\Settings::header('seo_/rooms')) !!}
+            {!! html_entity_decode(Domain\Settings\Models\Settings::header('seo_/rooms')) !!}
           @endif
         </h1>
         @if(!isset($hide_filter) && !$hide_filter)
@@ -89,9 +89,9 @@
       <article class="about-content">
         <div class="text-section about-text">
           @if (Request::is('rooms/hot'))
-            {!! html_entity_decode(App\Settings::option('seo_/rooms/hot')) !!}
+            {!! html_entity_decode(Domain\Settings\Models\Settings::option('seo_/rooms/hot')) !!}
           @else
-            {!! html_entity_decode(App\Settings::option('seo_/rooms')) !!}
+            {!! html_entity_decode(Domain\Settings\Models\Settings::option('seo_/rooms')) !!}
           @endif
         </div>
       </article>

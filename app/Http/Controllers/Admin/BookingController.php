@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Booking;
+use Domain\Room\Models\Booking;
 
 class BookingController extends Controller
 {
