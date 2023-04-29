@@ -34,7 +34,17 @@
             <div class="flex">
               <div class="flex flex-col flex-[2_2_0%] lg:flex-none">
                 <span>Заезд</span>                
-                <DatePicker v-model="form.from_date" @update:modelValue="calculate()" />
+                <VueDatePicker
+                  @update:model-value="calculate()" 
+                  v-model="form.from_date" 
+                  model-type="dd.MM.yyyy"
+                  :format="dateFormat"
+                  :enable-time-picker="false"
+                  position="right"
+                  locale="ru"
+                  auto-apply
+                  required
+                />
                 <span class="mt-3">Выезд</span>                
                 <div class="w-full flex items-center mt-2 h-8 px-3 py-2 border border-[#515561] border-solid rounded-lg">
                   {{ form.to_date }}
@@ -120,7 +130,8 @@
 </template>
 
 <script>
-import DatePicker from '@/components/ui/DatePicker.vue'
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 import TimePicker from '@/components/ui/TimePicker.vue'
 import NumSelect from '@/components/ui/NumSelect.vue'
 import _ from "lodash"
@@ -130,7 +141,7 @@ import { useForm, usePage } from "@inertiajs/vue3"
 
 export default {
   components: {
-    DatePicker,
+    VueDatePicker,
     TimePicker,
     NumSelect,    
   },
@@ -161,7 +172,7 @@ export default {
         room_id: this.room.id,
         client_fio: null,
         client_phone: null,
-        from_date: null,
+        from_date: moment().format('DD.MM.YYYY'),
         from_time: null,
         to_date: null,
         to_time: null,
@@ -249,6 +260,9 @@ export default {
         this.form.hours_count = 0;
         this.amount = this.price * this.days;
       }
+    },
+    dateFormat(date) {
+      return moment(date).format('DD.MM.YYYY');
     },
     getNumsRange(from, to) {
       let hours = _.transform(_.range(from, to + 1, 1), function (result, n) {

@@ -1,4 +1,3 @@
-import "js-datepicker/dist/datepicker.min.css";
 import "swiper/swiper-bundle.min.css";
 import "../css/custom.css";
 import "../css/style.css";
