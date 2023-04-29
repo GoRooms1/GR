@@ -36,7 +36,7 @@ import RoomInfoBlock from "@/Pages/Room/partials/InfoBlock.vue";
 import HotelsList from "@/Pages/Hotel/partials/HotelsList.vue";
 import HotelInfoBlock from "@/Pages/Hotel/partials/InfoBlock.vue";
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 export default {
   layout: SearchLayout,
   components: {
@@ -77,10 +77,10 @@ export default {
           preserveScroll: true,
           only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
           onStart: () => {
-            usePage().props.value.isLoadind = true;            
+            usePage().props.isLoadind = true;
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;
+            usePage().props.isLoadind = false;
           },
         });
       });      

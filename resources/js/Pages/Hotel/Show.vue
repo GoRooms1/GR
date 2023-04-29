@@ -365,7 +365,7 @@ import CostItem from "./partials/CostItem.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import Search from "@/components/widgets/Search.vue";
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 let myMap = null;
 SwiperCore.use([Pagination, Navigation]);
@@ -499,10 +499,10 @@ export default {
           preserveScroll: true,
           only: ['rooms'],
           onStart: () => {
-            usePage().props.value.isLoadind = true;            
+            usePage().props.isLoadind = true;
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;
+            usePage().props.isLoadind = false;
           },
         });
       });      

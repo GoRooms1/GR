@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import { useForm, usePage } from "@inertiajs/inertia-vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
 import FilterTag from "@/components/ui/FilterTag.vue";
@@ -136,7 +136,7 @@ export default {
     window.addEventListener("resize", this.handleResize);
     window.addEventListener("scroll", this.handleScroll);
     this.handleResize();
-    usePage().props.value.modals.search = true;
+    usePage().props.modals.search = true;
   },
   data() {
     return {
@@ -147,13 +147,13 @@ export default {
   },  
   methods: {    
     openFilters() {
-      usePage().props.value.modals.filters = true;
+      usePage().props.modals.filters = true;
     },
     closeFilters() {
-      usePage().props.value.modals.filters = false;
+      usePage().props.modals.filters = false;
     },
     showSearchPanel() {
-      usePage().props.value.modals.search = true;
+      usePage().props.modals.search = true;
     },
     filterValueHandler(model, isAttr = false, key, value) {
       if (value == null) {
@@ -169,7 +169,7 @@ export default {
       eventBus.emit('filters-changed');
     },
     handleResize() {
-        if (window.innerWidth > 1024) usePage().props.value.modals.search = true;
+        if (window.innerWidth > 1024) usePage().props.modals.search = true;
     },
     handleScroll() {
       if (route().current() != 'home' && window.innerWidth < 768) {        

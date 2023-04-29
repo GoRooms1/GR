@@ -116,9 +116,9 @@
 </template>
 
 <script>
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/components/ui/ResponsiveNavLink.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 export default {
   components: {
@@ -128,9 +128,9 @@ export default {
   created() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
-    if (!usePage().props.value.modals)
-      usePage().props.value.modals = {};
-    usePage().props.value.modals.menu = false;
+    if (!usePage().props.modals)
+      usePage().props.modals = {};
+    usePage().props.modals.menu = false;
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
@@ -142,13 +142,13 @@ export default {
   },
   methods: {
     show() {      
-      usePage().props.value.modals.menu = true;
+      usePage().props.modals.menu = true;
     },
     hide() {
-      usePage().props.value.modals.menu = false;
+      usePage().props.modals.menu = false;
     },
     isOpen() {
-      return usePage().props.value.modals?.menu ?? false;
+      return usePage().props.modals?.menu ?? false;
     },
     handleResize() {
       if (this.isOpen == true) {

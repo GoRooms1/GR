@@ -522,7 +522,7 @@
 
 <script>
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import { tempFilterStore } from "@/Store/tempFilterStore.js";
 import { numWord } from "@/Services/numWord.js";
@@ -569,7 +569,7 @@ export default {
     let initPromise = new Promise((resolve, reject) => {
       resolve(
         this.filterStore.init(
-          usePage().props.value.query_string ?? usePage().url.value
+          usePage().props.query_string ?? usePage().url
         )
       );
     });
@@ -590,7 +590,7 @@ export default {
   data() {
     return {      
       filterStore,
-      initialUrl: usePage().url.value,
+      initialUrl: usePage().url,
       tempFilterStore,
       innerWidth: window.innerWidth,
       innerHeight: window.innerHeight,
@@ -599,7 +599,7 @@ export default {
   },
   computed: {
     isOpen() {
-      return usePage().props.value.modals?.filters ?? false;
+      return usePage().props.modals?.filters ?? false;
     },
     foundMessage() {
       let objectWords;
@@ -608,9 +608,9 @@ export default {
       else objectWords = ["отель", "отеля", "отелей"];
 
       return (
-        usePage().props.value.total +
+        usePage().props.total +
         " " +
-        numWord(usePage().props.value.total, objectWords)
+        numWord(usePage().props.total, objectWords)
       );
     },
     filters() {
@@ -620,7 +620,7 @@ export default {
   methods: {
     close() {
       window.history.pushState({}, this.$page.title, this.initialUrl);
-      usePage().props.value.modals.filters = false;
+      usePage().props.modals.filters = false;
       if (route().current() != 'search.map')
         document.body.classList.remove("fixed");
     },
@@ -643,11 +643,11 @@ export default {
           preserveState: true,
           preserveScroll: true,
           onStart: () => {
-            usePage().props.value.isLoadind = true;
+            usePage().props.isLoadind = true;
             this.close();
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;
+            usePage().props.isLoadind = false;
             eventBus.emit('data-received');
           },
       });
@@ -672,11 +672,11 @@ export default {
           preserveScroll: true,
           only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
           onStart: () => {
-            usePage().props.value.isLoadind = true;
+            usePage().props.isLoadind = true;
             this.close();
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;
+            usePage().props.isLoadind = false;
           },
         });
       });      
@@ -693,11 +693,11 @@ export default {
           preserveScroll: true,
           only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
           onStart: () => {
-            usePage().props.value.isLoadind = true;
+            usePage().props.isLoadind = true;
             this.close();
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;            
+            usePage().props.isLoadind = false;
             eventBus.emit('data-received');      
           },
         });        

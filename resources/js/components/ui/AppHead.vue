@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { Head } from "@inertiajs/inertia-vue3";
+import { Head } from "@inertiajs/vue3";
 
 export default {
   name: "AppHead",

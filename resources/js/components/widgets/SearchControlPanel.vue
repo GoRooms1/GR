@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
 
@@ -67,10 +67,10 @@ export default {
         only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
         //onSuccess: () => {},
         onStart: () => {
-          usePage().props.value.isLoadind = true;
+          usePage().props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.value.isLoadind = false;
+          usePage().props.isLoadind = false;
         },
       });      
     },
@@ -82,10 +82,10 @@ export default {
         only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
         //onSuccess: () => {},
         onStart: () => {
-          usePage().props.value.isLoadind = true;
+          usePage().props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.value.isLoadind = false;
+          usePage().props.isLoadind = false;
           eventBus.emit('data-received');
         },
       });      
@@ -100,11 +100,11 @@ export default {
       eventBus.emit('filters-changed');
     },
     toggleFilters() {
-      usePage().props.value.modals.filters =
-        !usePage().props.value.modals.filters;
+      usePage().props.modals.filters =
+        !usePage().props.modals.filters;
     },
     toggleSearchPanel() {
-      usePage().props.value.modals.search = !usePage().props.value.modals.search;
+      usePage().props.modals.search = !usePage().props.modals.search;
     }
   },
 };

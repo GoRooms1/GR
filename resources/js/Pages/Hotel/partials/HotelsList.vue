@@ -36,7 +36,7 @@
 <script>
 import { filterStore } from "@/Store/filterStore.js";
 import { tempFilterStore } from "@/Store/tempFilterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import _ from "lodash";
 import HotelCard from "./HotelCard.vue";
 import Loader from "@/components/ui/Loader.vue";
@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     globalLoading() {
-      return usePage().props.value.isLoadind ?? false;
+      return usePage().props.isLoadind ?? false;
     },
   },
   methods: {

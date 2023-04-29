@@ -20,7 +20,7 @@ import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import Map from './partials/Map.vue';
 import BookingForm from "@/Pages/Room/partials/BookingForm.vue";
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 export default {
   layout: SearchLayout,
@@ -68,10 +68,10 @@ export default {
           preserveScroll: true,
           only: ['rooms', 'hotels'],
           onStart: () => {
-            usePage().props.value.isLoadind = true;            
+            usePage().props.isLoadind = true;
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;            
+            usePage().props.isLoadind = false;
             eventBus.emit('data-received');      
           },
         });        

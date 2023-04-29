@@ -38,7 +38,7 @@
 
 <script>
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import _ from "lodash";
 import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     globalLoading() {
-      return usePage().props.value.isLoadind ?? false;
+      return usePage().props.isLoadind ?? false;
     },
   },
   methods: {

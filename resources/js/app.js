@@ -4,19 +4,18 @@ import "../css/custom.css";
 import "../css/style.css";
 
 import { createApp, h } from "vue";
-import { createInertiaApp } from "@inertiajs/inertia-vue3";
+import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import FilterPagesService from "@/Services/FilterPagesService";
 import Layout from "@/Layouts/Layout.vue";
-import { InertiaProgress } from "@inertiajs/progress";
 import mitt from 'mitt';
 
 window.eventBus = mitt()
 
-InertiaProgress.init({
-  includeCSS: true,
-});
 createInertiaApp({
+  progress: {
+    color: '#29d',
+  },
   resolve: (name) => {
     const page = resolvePageComponent(
       `./Pages/${name}.vue`,

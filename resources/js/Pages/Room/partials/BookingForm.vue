@@ -132,7 +132,7 @@ import NumSelect from '@/components/ui/NumSelect.vue'
 import _ from "lodash"
 import moment from 'moment'
 import { vMaska } from "maska"
-import { useForm, usePage } from "@inertiajs/inertia-vue3"
+import { useForm, usePage } from "@inertiajs/vue3"
 import intus from "intus"
 import { isRequired, isMin, isMax } from "intus/rules"
 
@@ -194,7 +194,7 @@ export default {
   },
   methods: {
     close() {
-      usePage().props.value.flash.message = null;
+      usePage().props.flash.message = null;
       this.bookingSuccess = false;      
       eventBus.emit('booking-close');
     },

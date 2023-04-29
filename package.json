@@ -4,7 +4,7 @@
         "dev": "vite",
         "dev:ssr": "node bootstrap/ssr/ssr.mjs",
         "build": "vite build",
-        "build:ssr": "vite build --ssr"
+        "build:ssr": "vite build && vite build --ssr"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^3.1.2",
@@ -24,11 +24,8 @@
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
-        "@inertiajs/inertia": "^0.11.1",
-        "@inertiajs/inertia-vue3": "^0.6.0",
-        "@inertiajs/progress": "^0.2.7",
-        "@inertiajs/server": "^0.1.0",
-        "@vue/server-renderer": "^3.2.41",
+        "@inertiajs/vue3": "^1.0.6",
+        "@vue/server-renderer": "^3.2.47",
         "@vueuse/core": "^9.13.0",
         "autoprefixer": "^10.4.12",
         "click-outside-vue3": "^4.0.1",

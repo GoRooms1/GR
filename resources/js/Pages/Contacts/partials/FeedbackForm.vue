@@ -1,8 +1,8 @@
 <script setup>
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import intus from "intus";
 import { isRequired, isEmail, isMin, isMax } from "intus/rules";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import { mask as vMask } from "vue-the-mask";
 import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
@@ -51,7 +51,7 @@ const submit = () => {
 };
 
 const closeThanks = () => {
-  delete usePage().props.value.flash.message;
+  delete usePage().props.flash.message;
   form.reset();
   form.clearErrors();
   form.passedFields = {};

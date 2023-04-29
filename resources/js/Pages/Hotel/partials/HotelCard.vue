@@ -168,7 +168,7 @@ import { filterStore } from "@/Store/filterStore.js";
 import _ from "lodash";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Pagination, Navigation } from "swiper";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
 import CostItem from "@/components/ui/CostItem.vue";

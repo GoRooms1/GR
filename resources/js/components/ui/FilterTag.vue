@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import _ from "lodash";
 export default {
   props: {
@@ -63,7 +63,7 @@ export default {
     title() {
       let title = this.filterValue ?? this.filterKey;
       if (this.isAttribute == true) {
-        let attributes = usePage().props.value.attributes ?? [];
+        let attributes = usePage().props.attributes ?? [];
         title =
           _.find(attributes, (el) => el.id == this.filterValue)?.name ?? title;
       } else if (this.filterKey == "is_hot") {
@@ -73,7 +73,7 @@ export default {
       } else if (this.filterKey == "low_cost") {
         title = "Low Cost";
       } else if (this.filterKey == "period_cost") {
-        let costTypes = usePage().props.value.cost_types ?? [];
+        let costTypes = usePage().props.cost_types ?? [];
         let type = this.filterValue.split("_")?.[0] ?? 1;
         let costRange = this.filterValue.split("_")?.[1] ?? 0;
 
@@ -83,7 +83,7 @@ export default {
 
         title = typeObj?.name + ": " + rangeObj?.name;
       } else if (this.filterKey == "hotel_type") {
-        let hotel_types = usePage().props.value.hotel_types ?? [];
+        let hotel_types = usePage().props.hotel_types ?? [];
         title =
           _.find(hotel_types, (el) => el.key == this.filterValue)?.name ??
           title;

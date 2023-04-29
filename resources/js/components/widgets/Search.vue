@@ -79,9 +79,9 @@
 </template>
 
 <script>
-import { useForm, usePage } from "@inertiajs/inertia-vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import _ from 'lodash';
 
 export default {
@@ -124,10 +124,10 @@ export default {
         only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
         //onSuccess: () => {},
         onStart: () => {
-          usePage().props.value.isLoadind = true;
+          usePage().props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.value.isLoadind = false;
+          usePage().props.isLoadind = false;
         },
       });      
     },
@@ -139,10 +139,10 @@ export default {
         only: ['hotels', 'rooms', 'is_rooms_filter', 'page_description'],
         //onSuccess: () => {},
         onStart: () => {
-          usePage().props.value.isLoadind = true;
+          usePage().props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.value.isLoadind = false;
+          usePage().props.isLoadind = false;
           eventBus.emit('data-received');
         },
       });      
@@ -166,7 +166,7 @@ export default {
           only: ["search_result"],
           onStart: () => {this.count = 0; this.result = [] },
           onSuccess: () => {            
-            this.result = _.sortBy(usePage().props.value.search_result, 'sort');            
+            this.result = _.sortBy(usePage().props.search_result, 'sort');
             this.result.forEach(el => {
               this.count += el?.data?.length ?? 0;
             });                        

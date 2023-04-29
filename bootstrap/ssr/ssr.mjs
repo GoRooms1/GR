@@ -1,6 +1,6 @@
 import { createSSRApp, h } from "vue";
 import { renderToString } from "@vue/server-renderer";
-import { createInertiaApp } from "@inertiajs/inertia-vue3";
+import { createInertiaApp } from "@inertiajs/vue3";
 import require$$0 from "process";
 import require$$1 from "http";
 var lib = {};
@@ -98,7 +98,7 @@ default_1((page) => createInertiaApp({
     `./Pages/${name}.vue`,
     /* @__PURE__ */ Object.assign({ "./Pages/Content/Contact.vue": () => import("./assets/Contact.ee370a5f.mjs") })
   ),
-  setup: ({ app, props, plugin: inertia }) => {
-    return createSSRApp({ render: () => h(app, props) }).use(inertia);
+  setup: ({ App, props, plugin: inertia }) => {
+    return createSSRApp({ render: () => h(App, props) }).use(inertia);
   }
 }));

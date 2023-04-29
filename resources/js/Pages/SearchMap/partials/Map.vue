@@ -15,7 +15,7 @@
 <script>
 import Swiper, { Navigation, Pagination, Scrollbar } from 'swiper'
 import _ from 'lodash'
-import { usePage } from "@inertiajs/inertia-vue3"
+import { usePage } from "@inertiajs/vue3"
 import { filterStore } from "@/Store/filterStore.js"
 import RoomCard from "./RoomCard.vue"
 
@@ -223,10 +223,10 @@ export default {
             preserveScroll: true,
             only: ['rooms'],
             onStart: () => {
-              usePage().props.value.isLoadind = true;            
+              usePage().props.isLoadind = true;
             },
             onFinish: () => {
-              usePage().props.value.isLoadind = false;
+              usePage().props.isLoadind = false;
             },
             onSuccess: () => {
               this.selectedRooms = this.rooms;             
@@ -305,7 +305,7 @@ export default {
       searchMap.balloon.close();
     },
     hideSearch() {      
-      usePage().props.value.modals.search = false;
+      usePage().props.modals.search = false;
     },    
     openBooking(event) {      
       let btn = event.currentTarget;

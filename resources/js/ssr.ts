@@ -1,11 +1,10 @@
+// @ts-ignore
 import { createSSRApp, h } from "vue";
 import { renderToString } from "@vue/server-renderer";
-import { createInertiaApp } from "@inertiajs/inertia-vue3";
-import createServer from "@inertiajs/server";
+import { createInertiaApp } from "@inertiajs/vue3";
+import createServer from "@inertiajs/vue3/server";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-// import { InertiaProgress } from '@inertiajs/progress'
 
-// InertiaProgress.init()
 createServer((page) =>
   createInertiaApp({
     page,
@@ -15,8 +14,8 @@ createServer((page) =>
         `./Pages/${name}.vue`,
         import.meta.glob("./Pages/**/*.vue")
       ),
-    setup: ({ app, props, plugin: inertia }) => {
-      return createSSRApp({ render: () => h(app, props) }).use(inertia);
+    setup: ({ App, props, plugin: inertia }) => {
+      return createSSRApp({ render: () => h(App, props) }).use(inertia);
     },
   })
 );

@@ -205,7 +205,7 @@
 
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import SwiperCore, { Pagination, Navigation } from "swiper";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";

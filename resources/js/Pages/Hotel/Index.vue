@@ -32,7 +32,7 @@ import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import HotelsList from "./partials/HotelsList.vue";
 import InfoBlock from "./partials/InfoBlock.vue";
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 export default {
   layout: SearchLayout,
   components: {
@@ -69,10 +69,10 @@ export default {
             window.history.pushState({}, this.$page.title, window.location.pathname);              
           },
           onStart: () => {
-            usePage().props.value.isLoadind = true;            
+            usePage().props.isLoadind = true;
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;
+            usePage().props.isLoadind = false;
           },
         });
       });      

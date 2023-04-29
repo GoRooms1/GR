@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import AppHead from "@/components/ui/AppHead.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import type { PropType } from "vue";
 import { PageInterface } from "../../models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
