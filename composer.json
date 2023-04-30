@@ -26,6 +26,7 @@
         "spatie/data-transfer-object": "^3.9",
         "spatie/enum": "^3.13",
         "spatie/laravel-data": "^2.0",
+        "spatie/laravel-ignition": "^1.6",
         "spatie/laravel-ray": "^1.31",
         "spatie/laravel-typescript-transformer": "^2.1",
         "spatie/typescript-transformer": "^2.1"
@@ -41,8 +42,7 @@
         "nunomaduro/larastan": "^2.0",
         "overtrue/phplint": "^4.3",
         "phpunit/phpunit": "^9.5.10",
-        "roave/security-advisories": "dev-latest",
-        "spatie/laravel-ignition": "^1.4"
+        "roave/security-advisories": "dev-latest"
     },
     "config": {
         "optimize-autoloader": true,

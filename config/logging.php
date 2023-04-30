@@ -53,8 +53,11 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'flare'],
             'ignore_exceptions' => false,
+        ],
+        'flare' => [
+            'driver' => 'flare',
         ],
 
         'single' => [
