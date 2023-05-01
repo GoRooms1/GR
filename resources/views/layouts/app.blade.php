@@ -240,32 +240,32 @@
     </ul>
     <div class="footer-bottom">
       <div class="footer-contacts">
-        <a href="tel:{{ App\Settings::option('phone') }}" class="footer-contacts-item footer-contacts-item-tel">
-          <span>{{ App\Settings::option('phone') }}</span>
+        <a href="tel:{{ Domain\Settings\Models\Settings::option('phone') }}" class="footer-contacts-item footer-contacts-item-tel">
+          <span>{{ Domain\Settings\Models\Settings::option('phone') }}</span>
         </a>
-        <a href="mailto:{{ App\Settings::option('email') }}"
+        <a href="mailto:{{ Domain\Settings\Models\Settings::option('email') }}"
            class="footer-contacts-item footer-contacts-item-email">
-          <span>{{ App\Settings::option('email') }}</span>
+          <span>{{ Domain\Settings\Models\Settings::option('email') }}</span>
         </a>
-        <p class="footer-contacts-item footer-contacts-item-address">{{ App\Settings::option('address') }}</p>
+        <p class="footer-contacts-item footer-contacts-item-address">{{ Domain\Settings\Models\Settings::option('address') }}</p>
       </div>
       <div class="footer-soc">
-        @if($link = App\Settings::option('fb'))
+        @if($link = Domain\Settings\Models\Settings::option('fb'))
           <a href="{{ $link }}" rel="nofollow" target="_blank" class="footer-soc-link">
             <img src="{{ asset('img/ico-facebook.svg') }}" alt="" width="40" height="40">
           </a>
         @endif
-        @if($link = App\Settings::option('instagram'))
+        @if($link = Domain\Settings\Models\Settings::option('instagram'))
           <a href="{{ $link }}" rel="nofollow" target="_blank" class="footer-soc-link">
             <img src="{{ asset('img/ico-insta.svg') }}" alt="" width="40" height="40">
           </a>
         @endif
-        @if($link = App\Settings::option('vk'))
+        @if($link = Domain\Settings\Models\Settings::option('vk'))
           <a href="{{ $link }}" rel="nofollow" target="_blank" class="footer-soc-link">
             <img src="{{ asset('img/ico-vk.svg') }}" alt="" width="40" height="40">
           </a>
         @endif
-        @if($link = App\Settings::option('youtube'))
+        @if($link = Domain\Settings\Models\Settings::option('youtube'))
           <a href="{{ $link }}" rel="nofollow" target="_blank" class="footer-soc-link">
             <img src="{{ asset('img/ico-youtube.svg') }}" alt="" width="40" height="40">
           </a>

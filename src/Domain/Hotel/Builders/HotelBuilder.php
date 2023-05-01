@@ -49,9 +49,7 @@ final class HotelBuilder extends Builder
             ->through($this->filters($filters))
             ->thenReturn();
 
-        return $builder            
-            ->moderated()
-            ->withRooms();
+        return $builder;
     }
 
     /**     
@@ -70,8 +68,7 @@ final class HotelBuilder extends Builder
         return $builder            
             ->whereHas('rooms', function ($query) use ($roomFilters) {
                 $query->filterForHotels($roomFilters);
-            })                                  
-            ->moderated();
+            });
     }
 
     /**

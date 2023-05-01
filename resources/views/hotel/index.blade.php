@@ -25,7 +25,7 @@
     <div class="container">
       <div class="section-header">
         <h1 class="section-title">
-          {!! html_entity_decode(App\Settings::header('seo_/hotels')) !!}
+          {!! html_entity_decode(Domain\Settings\Models\Settings::header('seo_/hotels')) !!}
         </h1>
 
         <form id="search-filter" class="search-filter" method="get">
@@ -86,7 +86,7 @@
     <div class="container">
       <article class="about-content">
         <div class="text-section about-text">
-          {!! html_entity_decode(App\Settings::option('seo_/hotels')) !!}
+          {!! html_entity_decode(Domain\Settings\Models\Settings::option('seo_/hotels')) !!}
         </div>
       </article>
     </div>

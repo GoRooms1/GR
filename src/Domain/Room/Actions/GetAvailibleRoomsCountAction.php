@@ -14,6 +14,6 @@ final class GetAvailibleRoomsCountAction extends Action
 {
     public function handle(): int
     {
-        return Room::moderated()->count();
+        return Room::count();
     }
 }

@@ -8,6 +8,7 @@ use Domain\Hotel\Builders\HotelBuilder;
 use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Search\DataTransferObjects\RoomParamsData;
 use Domain\Hotel\Models\Hotel;
+use Domain\Hotel\Scopes\ModerationScope;
 use Domain\Room\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
@@ -82,8 +83,7 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
             ->thenReturn();
         
         return $builder            
-            ->whereIn('hotel_id', Hotel::filterForRooms($hotelFilters)->select('id'))
-            ->moderated();            
+            ->whereIn('hotel_id', Hotel::withoutGlobalScope(ModerationScope::class)->filterForRooms($hotelFilters)->select('id'));                        
     }
 
     public function filterForHotels(RoomParamsData $filters): self
@@ -94,7 +94,7 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
             ->through($this->filters($filters))
             ->thenReturn();
         
-        return $builder->where('moderate', false);       
+        return $builder;       
     }
 
     /**
