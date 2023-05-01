@@ -349,27 +349,27 @@
                                         </tr>
                                         <tr>
                                             <td><strong>Заезд</strong>:</td>
-                                            <td>{{ $fields['from-date'] ?? '' }} {{ $fields['from-time'] ?? '' }}</td>
+                                            <td>{{ $data->from_date ?? '' }} {{ $data->from_time ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Кол-во часов</strong>:</td>
-                                            <td>{{ $fields['book_by'] ?? '-' }}</td>
+                                            <td>{{ $data->hours_count ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Выезд</strong>:</td>
-                                            <td>{{ $fields['to-date'] ?? '' }} {{ $fields['to-time'] ?? '' }}</td>
+                                            <td>{{ $data->to_date ?? '' }} {{ $data->to_time ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Имя</strong>:</td>
-                                            <td>{{ $fields['book-name'] }}</td>
+                                            <td>{{ $data->client_fio }}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Телефон</strong>:</td>
-                                            <td>{{ $fields['book-tel'] }}</td>
+                                            <td>{{ $data->client_phone }}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Комментарий</strong>:</td>
-                                            <td>{{ $fields['book-comment'] ?? '' }}</td>
+                                            <td>{{ $data->book_comment ?? '' }}</td>
                                         </tr>
                                     </table>
                                 </td>

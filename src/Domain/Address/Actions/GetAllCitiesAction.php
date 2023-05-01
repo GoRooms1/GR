@@ -15,6 +15,6 @@ final class GetAllCitiesAction extends Action
 {
     public function handle(): Collection
     {
-        return Address::distinctCity()->select('city', 'region')->orderBy('city')->get();
+        return Address::distinctCity()->select('city', 'region')->whereNotNull('city')->orderBy('city')->get();
     }
 }
