@@ -5,7 +5,7 @@ use App\Http\Controllers\Moderator\CategoryController;
 use App\Http\Controllers\Moderator\InstructionController;
 use App\Http\Controllers\Moderator\ObjectController;
 use App\Http\Controllers\Moderator\StaffController;
-use App\Http\Controllers\RoomController;
+use App\Http\Controllers\Moderator\RoomController;
 use Illuminate\Support\Facades\Route;
 
 /*

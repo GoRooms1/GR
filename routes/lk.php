@@ -4,7 +4,7 @@ use App\Http\Controllers\Lk\CategoryController;
 use App\Http\Controllers\Lk\InstructionController;
 use App\Http\Controllers\Lk\ObjectController;
 use App\Http\Controllers\Lk\StaffController;
-use App\Http\Controllers\RoomController;
+use App\Http\Controllers\Lk\RoomController;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -17,12 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//old
-
-//Route::match(['GET', 'POST'], '/search', 'SearchController')->name('search');
-//Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.map');
-Route::post('search', [Api\SearchController::class, 'index'])->name('search.index');
-Route::post('/search_map', [Api\SearchController::class, 'map'])->name('search.map');
+// Route::match(['GET', 'POST'], '/search', 'SearchController')->name('search');
+// Route::match(['GET', 'POST'], '/search_map', 'SearchController')->name('search.map');
+// Route::post('search', [Api\SearchController::class, 'index'])->name('search.index');
+// Route::post('/search_map', [Api\SearchController::class, 'map'])->name('search.map');
 
 Route::get('/address/helper', [Api\AddressController::class, 'helper']);
 
