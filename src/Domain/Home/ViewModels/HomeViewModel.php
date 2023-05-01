@@ -8,6 +8,7 @@ use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Search\Traits\SearchResultTrait;
 
 final class HomeViewModel extends \Parent\ViewModels\ViewModel
@@ -23,13 +24,13 @@ final class HomeViewModel extends \Parent\ViewModels\ViewModel
     ) {
     }
 
-    /**
-     * @return array{page: PageData}
+    /**     
+     * @return PageDescriptionData
      */
-    public function model(): array
-    {
-        return [
-            'page' => PageData::fromPageDescription(GetPageDescriptionByUrlAction::run('/')),
-        ];
+    public function page_description(): PageDescriptionData
+    {        
+        $pageDescription = GetPageDescriptionByUrlAction::run('/');        
+       
+        return PageDescriptionData::fromModel($pageDescription);
     }
 }

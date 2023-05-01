@@ -43,6 +43,7 @@
     <div class="flex flex-col px-6 py-8 bg-white rounded-3xl w-full mb-[17%]">
       <h3 class="mb-6 font-semibold">Меню</h3>
       <responsive-nav-link
+        href="/search_map"
         title="Карта"
         classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"
       />
@@ -56,11 +57,7 @@
         title="Бонусная программа"
         classes="bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]"
       />
-      <responsive-nav-link
-        disabled
-        title="Добавить объект"
-        classes="bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]"
-      />
+      <button @click="visitPage('/lk/start')" class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)] bg-[left_10px_center] text-left mb-2">Добавить объект</button>
       <responsive-nav-link
         title="Контакты"
         href="/contacts"
@@ -71,11 +68,7 @@
         title="Избранное"
         classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
       />
-      <responsive-nav-link
-        title="Личный кабинет"
-        :href="'/login'"
-        classes="bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]"
-      />
+      <button @click="visitPage('/login')" class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left">Личный кабинет</button>
       <h3 class="mb-6 mt-10 font-semibold">Мы в социальных сетях</h3>
       <div class="grid grid-cols-2 grid-rows-2 gap-2">
         <a
@@ -157,6 +150,9 @@ export default {
         if (this.screenWidth > 1024) this.hide();
       }
     },
+    visitPage(href) {
+      if (typeof window !== "undefined") window.location=href;
+    }
   },
 };
 </script>
