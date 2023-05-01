@@ -30,7 +30,7 @@ class RoomController extends Controller
     {
         $bookingData = BookingData::fromRequest($request);
         $booking = CreateBookingFromDataAction::run($bookingData);
-        //BookRoomJob::dispatch($bookingData);
+        BookRoomJob::dispatch($bookingData);
 
         return Redirect::back()->with(['message' => GenerateBookingMessageAction::run($bookingData)]);
     }

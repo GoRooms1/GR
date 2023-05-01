@@ -1,9 +1,15 @@
 <template>
   <div class="filter h-32 xl:h-40 pt-4 -mb-20 xl:pt-8">
     <div class="container mx-auto px-4 min-[1920px]:px-[10vw]">
-      <div class="flex justify-between items-center">
-        <h1 class="text-white font-bold xl:text-3xl">
+      <div class="flex justify-between items-center">        
+        <span v-if="customMessage" class="text-white font-bold xl:text-3xl">
           {{ foundMessage }}
+        </span>
+        <h1 v-if="!customMessage" 
+          class="text-white font-bold xl:text-3xl"
+          :class="$page.props.isLoadind == true ? 'invisible' : ''"
+        >
+          {{$page.props?.page_description?.id > 0 ? $page.props.page_description.h1 : foundMessage }}
         </h1>
         <button class="xl:hidden">
           <svg
@@ -221,6 +227,7 @@ export default {
   },
   computed: {
     foundMessage() {
+      if (this.found === 0) return 'По вашему запросу ничего не нашлось';
       let message =
         this.customMessage != null
           ? this.customMessage
