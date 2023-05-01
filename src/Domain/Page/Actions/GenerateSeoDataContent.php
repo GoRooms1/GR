@@ -34,9 +34,11 @@ final class GenerateSeoDataContent extends Action
 
         $seoData->h1 = $type.': '.$seoData->hotel?->name.' на улице '.$seoData->address?->street;
         $seoData->title = $seoData->hotel?->name.' '.Str::lower($type).' с Номерами на Час Ночь Сутки ';
-        if ($seoData->hotel && $seoData->hotel->metros->count() > 0) {
+        $hotel = Hotel::find($seoData->hotel->id);
+
+        if ($seoData->hotel && $hotel->metros->count() > 0) {
             /** @var ?MetroData $metro */
-            $metro = $seoData->hotel->metros->first();
+            $metro = $hotel->metros->first();
             $seoData->title .= 'у метро '.$metro?->name;
         } else {
             $seoData->title .= 'в г. '.$seoData->address?->city;
@@ -45,7 +47,7 @@ final class GenerateSeoDataContent extends Action
             return $seoData;
         }
         $seoData->description = $type.' '.$seoData->hotel->name;
-        $minimals = MinimumCostsCalculation::run(Hotel::find($seoData->hotel->id));
+        $minimals = MinimumCostsCalculation::run($hotel);
         /** @var MinCostsData $minimal */
         foreach ($minimals as $minimal) {
             if ($minimal->name === 'На Час' && $minimal->value > 0) {
@@ -88,16 +90,12 @@ final class GenerateSeoDataContent extends Action
     }
 
     private function getHotelType(SeoData $seoData): string
-    {
+    {       
         /** @var ?HotelTypeData $hotelType */
         $hotelType = $seoData->hotel?->type;
-        $i = $hotelType?->name;
-        if ($i === 'Отели') {
-            $type = 'Отель';
-        } else {
-            $type = $hotelType?->name ?? '';
-        }
+        if (is_null($hotelType))
+            return '';       
 
-        return $type;
+        return $hotelType->single_name ?? '';
     }
 }

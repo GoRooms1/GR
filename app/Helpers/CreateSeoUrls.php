@@ -131,7 +131,7 @@ class CreateSeoUrls
         $description = $hotel->meta->description ?? null;
 
         $data = [
-            'url' => $seoData->url,
+            'url' => $url,
             'title' => $seoData->title,
             'meta_description' => $seoData->description,
             'h1' => $seoData->h1,
@@ -141,6 +141,7 @@ class CreateSeoUrls
         if ($date) {
             $data['updated_at'] = $date;
         }
+        
         $pageDescription = PageDescription::updateOrCreate(['url' => $url], $data);
         $pageDescription->model_type = Hotel::class;
         $pageDescription->save();

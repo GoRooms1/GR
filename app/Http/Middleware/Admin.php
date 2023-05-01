@@ -23,6 +23,7 @@ class Admin
 //    If logged in
             $user = User::find(auth()->id());
             if ($user->is_admin) {
+
                 return $next($request);
             }
         }
