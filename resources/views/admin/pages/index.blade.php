@@ -25,10 +25,10 @@
                             <tr>
                                 <td>{{ $page->id }}</td>
                                 <td>
-                                    <a href="{{ route('pages.show', $page) }}">{{ $page->title }}</a>
+                                    <a href="{{ '/'.$page->slug }}">{{ $page->title }}</a>
                                 </td>
                                 <td>
-                                    <a href="{{ route('pages.show', $page) }}">{{ $page->slug }}</a>
+                                    <a href="{{ '/'.$page->slug }}">{{ $page->slug }}</a>
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">

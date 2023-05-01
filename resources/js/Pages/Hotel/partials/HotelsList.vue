@@ -36,7 +36,7 @@
 <script>
 import { filterStore } from "@/Store/filterStore.js";
 import { tempFilterStore } from "@/Store/tempFilterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import _ from "lodash";
 import HotelCard from "./HotelCard.vue";
 import Loader from "@/components/ui/Loader.vue";
@@ -55,7 +55,7 @@ export default {
       type: [Array, Object],
       required: false,
     },
-  }, 
+  },
   data() {
     return {
       filterStore,
@@ -66,12 +66,13 @@ export default {
   },
   computed: {
     globalLoading() {
-      return usePage().props.value.isLoadind ?? false;
+      return usePage().props.isLoadind ?? false;
     },
   },
   methods: {
     loadMore() {
-      let initialUrl = window.location.href;
+      let initialUrl =
+        typeof window !== "undefined" ? window.location.href : "/";
       if (this?.hotels?.meta?.next_page_url) {
         this.$inertia.get(
           this.hotels.meta.next_page_url,
@@ -82,9 +83,13 @@ export default {
             only: ["hotels"],
             onSuccess: () => {
               if (this.hotels.meta.current_page != 1)
-                this.allHotels = [...this.allHotels, ..._.shuffle(this.hotels.data)];
+                this.allHotels = [
+                  ...this.allHotels,
+                  ..._.shuffle(this.hotels.data),
+                ];
 
-              window.history.pushState({}, this.$page.title, initialUrl);
+              if (typeof window !== "undefined")
+                window.history.pushState({}, this.$page.title, initialUrl);
             },
             onStart: () => {
               this.isLoading = true;

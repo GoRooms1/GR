@@ -19,9 +19,8 @@
   <link rel="canonical" href="{{ url(Request::url()) }}"/> 
   <script src="https://api-maps.yandex.ru/2.1/?apikey={{ config('services.yandex.map.key') }}&lang=ru_RU"
           type="text/javascript">
-  </script>
-   
-  @routes
+  </script>   
+ 
   @vite  
   @inertiaHead
 </head>

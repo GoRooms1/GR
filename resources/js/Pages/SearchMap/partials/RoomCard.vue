@@ -1,17 +1,29 @@
 <template>
   <div class="lg:flex lg:items-center">
-    <div class="swiper-image2 overflow-hidden relative mx-4 lg:mx-0 lg:w-full h-60 lg:h-70 lg:rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl lg:rounded-tr-none lg:max-w-[550px]">
-        <div class="swiper-wrapper">
-            <div v-for="image in room.images" class="swiper-slide">
-              <Image class="w-full h-full object-cover" :src="image.path" alt="img" />
-            </div>            
+    <div
+      class="swiper-image2 overflow-hidden relative mx-4 lg:mx-0 lg:w-full h-60 lg:h-70 lg:rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl lg:rounded-tr-none lg:max-w-[550px]"
+    >
+      <div class="swiper-wrapper">
+        <div v-for="image in room.images" class="swiper-slide">
+          <Image
+            class="w-full h-full object-cover"
+            :src="image.path"
+            alt="img"
+          />
         </div>
-        <div class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"></div>
-        <div class="swiper-image-next max-[768px]:hidden absolute top-0 right-0 z-10 bg-transparent w-[50%] h-full"></div>
-        <div class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"></div>
+      </div>
+      <div
+        class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"
+      ></div>
+      <div
+        class="swiper-image-next max-[768px]:hidden absolute top-0 right-0 z-10 bg-transparent w-[50%] h-full"
+      ></div>
+      <div
+        class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"
+      ></div>
     </div>
     <div
-      class="bg-white rounded-2xl p-3 lg:p-4 shadow-xl lg:w-full	relative z-10 lg:w-auto lg:h-86 overflow-hidden"
+      class="bg-white rounded-2xl p-3 lg:p-4 shadow-xl lg:w-full relative z-10 lg:w-auto lg:h-86 overflow-hidden"
     >
       <div class="flex mb-4">
         <button
@@ -25,7 +37,7 @@
             <b>0</b>
             (0)
           </div>
-        </button>        
+        </button>
         <button
           clck-btn=""
           class="btn-disabled flex py-1 px-2 rounded-md bg-sky-100"
@@ -47,7 +59,7 @@
         <div class="text-sm leading-4">
           {{ room.hotel.type.single_name }}
           <a
-            :href="route('hotels.index') + '/' + room.hotel.slug"
+            :href="'/hotels/' + room.hotel.slug"
             target="_blank"
             class="underline text-[#6170FF] font-bold"
             >{{ room.hotel.name }}</a
@@ -77,9 +89,9 @@
           <hotel-metro-item
             v-for="metro in room.hotel.metros"
             :address="room.hotel.address"
-            :metro="metro"          
+            :metro="metro"
           />
-        </div>        
+        </div>
       </div>
     </div>
     <div
@@ -95,12 +107,14 @@
           :info="cost.info"
           :description="cost.description"
         />
-      </div>      
+      </div>
       <div class="">
-        <Button classes="w-full room-booking" :data-room-id="room.id"> Забронировать </Button>
-      </div>      
+        <Button classes="w-full room-booking" :data-room-id="room.id">
+          Забронировать
+        </Button>
+      </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -112,16 +126,16 @@ import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "@/components/ui/CostItem.vue";
 
 export default {
-  components: {    
+  components: {
     CashbackTag,
     Image,
     Button,
     HotelAddress,
     HotelMetroItem,
-    CostItem,    
+    CostItem,
   },
   props: {
     room: Object,
-  }, 
+  },
 };
 </script>

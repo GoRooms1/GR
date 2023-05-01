@@ -55,7 +55,7 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-6">
-          <a href="{{ route('index') }}" class="logo-link">
+          <a href="{{ route('home') }}" class="logo-link">
             <img src="{{ asset('img/lk/logo.png') }}" alt="" class="logo">
           </a>
         </div>

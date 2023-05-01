@@ -1,22 +1,18 @@
-import "js-datepicker/dist/datepicker.min.css";
 import "swiper/swiper-bundle.min.css";
 import "../css/custom.css";
 import "../css/style.css";
 
-import { createApp, h } from "vue";
-import { createInertiaApp } from "@inertiajs/inertia-vue3";
+import { createSSRApp, h } from "vue";
+import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import FilterPagesService from "@/Services/FilterPagesService";
 import Layout from "@/Layouts/Layout.vue";
-import { InertiaProgress } from "@inertiajs/progress";
-import mitt from 'mitt';
+import mitt from "mitt";
 
-window.eventBus = mitt()
-
-InertiaProgress.init({
-  includeCSS: true,
-});
-createInertiaApp({
+const app = createInertiaApp({
+  progress: {
+    color: "#29d",
+  },
   resolve: (name) => {
     const page = resolvePageComponent(
       `./Pages/${name}.vue`,
@@ -29,11 +25,9 @@ createInertiaApp({
     return page;
   },
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .mixin({ methods: { route: window.route } })
-      .mount(el);
+    const VueApp = createSSRApp({ render: () => h(App, props) });
+    VueApp.config.globalProperties.$eventBus = mitt();
+    VueApp.use(plugin).mixin({ methods: {} }).mount(el);
   },
 });
-
 FilterPagesService();

@@ -14,7 +14,7 @@
         "arrilot/laravel-widgets": "^3.13",
         "fomvasss/laravel-dadata": "^2.2",
         "guzzlehttp/guzzle": "^7.2",
-        "inertiajs/inertia-laravel": "^0.6.3",
+        "inertiajs/inertia-laravel": "^0.6.9",
         "innocenzi/laravel-vite": "0.2.*",
         "intervention/image": "^2.5",
         "laravel/framework": "^9.35",
@@ -26,10 +26,10 @@
         "spatie/data-transfer-object": "^3.9",
         "spatie/enum": "^3.13",
         "spatie/laravel-data": "^2.0",
+        "spatie/laravel-ignition": "^1.6",
         "spatie/laravel-ray": "^1.31",
         "spatie/laravel-typescript-transformer": "^2.1",
-        "spatie/typescript-transformer": "^2.1",
-        "tightenco/ziggy": "^1.5"
+        "spatie/typescript-transformer": "^2.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -42,8 +42,7 @@
         "nunomaduro/larastan": "^2.0",
         "overtrue/phplint": "^4.3",
         "phpunit/phpunit": "^9.5.10",
-        "roave/security-advisories": "dev-latest",
-        "spatie/laravel-ignition": "^1.4"
+        "roave/security-advisories": "dev-latest"
     },
     "config": {
         "optimize-autoloader": true,

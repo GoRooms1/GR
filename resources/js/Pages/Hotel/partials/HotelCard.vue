@@ -129,7 +129,7 @@
         </div>
         <div class="mb-6">
           <a
-            :href="route('hotels.show', hotel)"
+            :href="'/hotels/' + hotel.slug"
             target="_blank"
             class="block font-bold text-xl leading-6 text-center underline text-[#6170FF]"
           >
@@ -139,11 +139,8 @@
         <div>
           <hotel-address :address="hotel.address" class="flex mb-2" />
           <div class="grid grid-cols-[fit-content(100%)_1fr]">
-            <hotel-metro-item
-              :metro="metro"
-              :address="hotel.address"            
-            />
-          </div>         
+            <hotel-metro-item :metro="metro" :address="hotel.address" />
+          </div>
         </div>
       </div>
       <div
@@ -168,7 +165,7 @@ import { filterStore } from "@/Store/filterStore.js";
 import _ from "lodash";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Pagination, Navigation } from "swiper";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
 import CostItem from "@/components/ui/CostItem.vue";

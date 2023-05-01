@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\HotelTypeController;
 use App\Http\Controllers\Admin\ImageController;
+use App\Http\Controllers\Admin\InstructionController;
 use App\Http\Controllers\Admin\MenuCostsController;
 use App\Http\Controllers\Admin\ModeratorController;
 use App\Http\Controllers\Admin\PageController;
@@ -85,6 +86,6 @@ Route::post('/periods/updateByJson', [PeriodController::class, 'updateByJson'])-
 
 Route::resource('moderators', ModeratorController::class);
 
-Route::resource('instructions', 'InstructionController');
+Route::resource('instructions', InstructionController::class);
 
 Route::resource('united_cities', UnitedCityController::class);

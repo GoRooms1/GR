@@ -1,20 +1,21 @@
 <template>
-  <AppHead 
+  <AppHead
     :title="page_description.title"
     :hotel="hotel"
     :url="$page.props.app_url + page_description?.url"
     :meta_keywords="page_description?.meta_keywords"
     :meta_description="page_description?.meta_description"
   />
-  <search-filter-modal :url="route('hotels.show', hotel)"/>
-  <div v-if="$page.props.modals.search !== false"
-    class="search-panel-modal w-full mx-auto transition fixed lg:hidden px-[16px]" 
+  <search-filter-modal :url="'/hotels/' + hotel.slug" />
+  <div
+    v-if="$page.props.modals.search !== false"
+    class="search-panel-modal w-full mx-auto transition fixed lg:hidden px-[16px]"
   >
     <div class="relative">
-      <Search for-modal :url="route('hotels.show', hotel)"/>
+      <Search for-modal :url="'/hotels/' + hotel.slug" />
     </div>
   </div>
-  
+
   <div class="container mx-auto md:px-4 px-0 md:mt-[113px] mt-0">
     <div>
       <div class="flex md:flex-col flex-col-reverse">
@@ -321,14 +322,14 @@
                 :metro="metro"
                 :address="hotel?.address"
               />
-            </div>            
+            </div>
           </div>
         </div>
         <div class="sm:bg-white bg-transparent sm:p-[24px] p-0 rounded-[24px]">
           <p
             class="text-[22px] leading-[26px] lg:mb-[24px] mb-[16px] font-semibold"
           >
-          Минимальная стоимость
+            Минимальная стоимость
           </p>
           <div class="flex gap-[10px] items-center justify-between">
             <cost-item
@@ -343,8 +344,8 @@
       </div>
     </div>
   </div>
-  <div class="py-4"></div>  
-  <rooms-list :rooms="rooms" by-hotel/>
+  <div class="py-4"></div>
+  <rooms-list :rooms="rooms" by-hotel />
 </template>
 
 <script lang="ts">
@@ -365,7 +366,7 @@ import CostItem from "./partials/CostItem.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import Search from "@/components/widgets/Search.vue";
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 let myMap = null;
 SwiperCore.use([Pagination, Navigation]);
@@ -375,7 +376,7 @@ export default {
     Swiper,
     SwiperSlide,
     AppHead,
-    Layout,    
+    Layout,
     RoomsList,
     CashbackTag,
     Tabs,
@@ -457,7 +458,7 @@ export default {
   mounted() {
     ymaps.ready(this.initMap);
     this.$page.props.modals.search = false;
-    eventBus.on('filters-changed', e => this.updateRooms());
+    this.$eventBus.on("filters-changed", (e) => this.updateRooms());
   },
   methods: {
     initMap() {
@@ -491,21 +492,25 @@ export default {
         myMap?.container?.fitToViewport();
       }, 200)();
     },
-    updateRooms() {     
-      this.$nextTick(() => {        
-        this.$inertia.get(route('hotels.show', this.hotel), this.filterStore.getFiltersValues(), {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          only: ['rooms'],
-          onStart: () => {
-            usePage().props.value.isLoadind = true;            
-          },
-          onFinish: () => {
-            usePage().props.value.isLoadind = false;
-          },
-        });
-      });      
+    updateRooms() {
+      this.$nextTick(() => {
+        this.$inertia.get(
+          "/hotels/" + this.hotel.slug,
+          this.filterStore.getFiltersValues(),
+          {
+            replace: true,
+            preserveState: true,
+            preserveScroll: true,
+            only: ["rooms"],
+            onStart: () => {
+              usePage().props.isLoadind = true;
+            },
+            onFinish: () => {
+              usePage().props.isLoadind = false;
+            },
+          }
+        );
+      });
     },
   },
 };

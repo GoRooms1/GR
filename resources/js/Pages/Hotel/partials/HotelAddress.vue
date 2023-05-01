@@ -45,20 +45,24 @@
         class="underline text-[#6170FF]"
         >{{ address.city_district + " район," }}
       </Link>
-      {{  }}
-      <br class="block md:hidden"/>
+      {{}}
+      <br class="block md:hidden" />
       <span v-if="address.street_with_type != null">
         {{ address.street_with_type + "," }}
       </span>
       <span v-if="address.house != null">
-        {{ " д." + address.house + ( address.block != null ? (' стр ' + address.block) : '') }}
+        {{
+          " д." +
+          address.house +
+          (address.block != null ? " стр " + address.block : "")
+        }}
       </span>
     </p>
   </div>
 </template>
 
 <script>
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import _ from "lodash";
 export default {
   components: {
@@ -69,7 +73,7 @@ export default {
   },
   methods: {
     getAddressHref(city = null, area = null, district = null) {
-      let url = route("address");
+      let url = "/address";
       if (city) {
         url += "/" + this.getAddressSlug(city);
 

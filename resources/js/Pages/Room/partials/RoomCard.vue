@@ -147,7 +147,7 @@
         <div class="text-sm leading-4">
           {{ room.hotel.type.single_name }}
           <a
-            :href="route('hotels.index') + '/' + room.hotel.slug"
+            :href="'/hotels/' + room.hotel.slug"
             target="_blank"
             class="underline text-[#6170FF] font-bold"
             >{{ room.hotel.name }}</a
@@ -177,9 +177,9 @@
           <hotel-metro-item
             v-for="metro in room.hotel.metros"
             :address="room.hotel.address"
-            :metro="metro"            
+            :metro="metro"
           />
-        </div>        
+        </div>
       </div>
     </div>
     <div
@@ -195,17 +195,19 @@
           :info="cost.info"
           :description="cost.description"
         />
-      </div>      
+      </div>
       <div class="">
-        <Button @click="openBookingModal()" classes="w-full"> Забронировать </Button>
-      </div>      
+        <Button @click="openBookingModal()" classes="w-full">
+          Забронировать
+        </Button>
+      </div>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import SwiperCore, { Pagination, Navigation } from "swiper";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
@@ -213,7 +215,6 @@ import Button from "@/components/ui/Button.vue";
 import HotelAddress from "@/components/ui/HotelAddress.vue";
 import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "@/components/ui/CostItem.vue";
-
 
 // install Swiper modules
 SwiperCore.use([Pagination, Navigation]);
@@ -226,13 +227,12 @@ export default {
     Button,
     HotelAddress,
     HotelMetroItem,
-    CostItem,    
+    CostItem,
   },
   props: {
     room: Object,
   },
-  mounted() {   
-  },
+  mounted() {},
   data() {
     return {
       pagination: {
@@ -255,16 +255,14 @@ export default {
         1024: {
           noSwipingClass: "swiper-slide",
         },
-      },      
+      },
     };
   },
   methods: {
-    openBookingModal() {          
-      eventBus.emit('booking-open', this.room);
+    openBookingModal() {
+      this.$eventBus.emit("booking-open", this.room);
     },
   },
-  watch: {
-
-  },
+  watch: {},
 };
 </script>

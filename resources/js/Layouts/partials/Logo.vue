@@ -1,5 +1,5 @@
 <template>
-  <Link :href="route('home')">
+  <Link href="/">
     <svg
       width="127"
       height="21"
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 export default {
   components: {
     Link,

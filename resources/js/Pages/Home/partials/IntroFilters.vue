@@ -171,7 +171,7 @@
 </template>
 
 <script>
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import { numWord } from "@/Services/numWord.js";
 import _ from "lodash";
@@ -201,7 +201,7 @@ export default {
   },
   props: {},
   created() {
-    this.filterStore.init(usePage().url.value);
+    this.filterStore.init(usePage().url);
   },
   data() {
     return {
@@ -215,9 +215,9 @@ export default {
         objectWords = ["номер", "номера", "номеров"];
       else objectWords = ["отель", "отеля", "отелей"];
       return (
-        usePage().props.value.total +
+        usePage().props.total +
         " " +
-        numWord(usePage().props.value.total, objectWords)
+        numWord(usePage().props.total, objectWords)
       );
     },
     attributes() {
@@ -235,39 +235,39 @@ export default {
   },
   methods: {
     getDataOnList() {
-      this.$inertia.get(route("search.list"), this.filterStore.getFiltersValues(), {
+      this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
         only: ["hotels", "rooms"],
         //onSuccess: () => {},
         onStart: () => {
-          usePage().props.value.isLoadind = true;
+          usePage().props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.value.isLoadind = false;
+          usePage().props.isLoadind = false;
         },
-      });      
+      });
     },
     getDataOnMap() {
-      this.$inertia.get(route("search.map"), this.filterStore.getFiltersValues(), {
+      this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
         replace: true,
         preserveState: true,
         preserveScroll: true,
         only: ["hotels", "rooms"],
         //onSuccess: () => {},
         onStart: () => {
-          usePage().props.value.isLoadind = true;
+          usePage().props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.value.isLoadind = false;
-          eventBus.emit('data-received');
+          usePage().props.isLoadind = false;
+          this.$eventBus.emit("data-received");
         },
-      });      
+      });
     },
     updateFilters(only) {
       let data = this.filterStore.getFiltersValues();
-      this.$inertia.get(route("home"), data, {
+      this.$inertia.get("/", data, {
         preserveState: true,
         preserveScroll: true,
         replace: true,

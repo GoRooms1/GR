@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Str;
+use Support\DataProcessing\Traits\CustomStr;
 
 class PageDescriptionController extends Controller
 {
@@ -22,23 +23,23 @@ class PageDescriptionController extends Controller
         }
 
         if ($city = $request->get('city')) {
-            $descriptions = $descriptions->where('url', 'like', '%/'.Str::slug($city).'%');
+            $descriptions = $descriptions->where('url', 'like', '%/'.CustomStr::getCustomSlug($city).'%');
         }
 
         if ($area = $request->get('area')) {
-            $descriptions = $descriptions->where('url', 'like', '%/area-'.Str::slug($area).'%');
+            $descriptions = $descriptions->where('url', 'like', '%/area-'.CustomStr::getCustomSlug($area).'%');
         }
 
         if ($district = $request->get('district')) {
-            $descriptions = $descriptions->where('url', 'like', '%/district-'.Str::slug($district).'%');
+            $descriptions = $descriptions->where('url', 'like', '%/district-'.CustomStr::getCustomSlug($district).'%');
         }
 
         if ($street = $request->get('street')) {
-            $descriptions = $descriptions->where('url', 'like', '%/street-'.Str::slug($street).'%');
+            $descriptions = $descriptions->where('url', 'like', '%/street-'.CustomStr::getCustomSlug($street).'%');
         }
 
         if ($metro = $request->get('metro')) {
-            $descriptions = $descriptions->where('url', 'like', '%/metro-'.Str::slug($metro).'%');
+            $descriptions = $descriptions->where('url', 'like', '%/metro-'.CustomStr::getCustomSlug($metro).'%');
         }
 
         $descriptions = $descriptions->paginate(15);

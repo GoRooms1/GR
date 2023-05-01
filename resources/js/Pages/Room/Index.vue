@@ -1,11 +1,11 @@
 <template>
-   <AppHead 
+  <AppHead
     :title="page_description.title"
     :meta_keywords="page_description?.meta_keywords"
     :meta_description="page_description?.meta_description"
   />
   <search-filter-modal />
-  <div class="md:mt-[49px] mt-[40px] relative" style="min-height: 160px;">
+  <div class="md:mt-[49px] mt-[40px] relative" style="min-height: 160px">
     <img
       class="md:block hidden absolute bottom-[-50px] left-0 -z-[1]"
       src="/img/lens.svg"
@@ -17,7 +17,7 @@
       alt="lens"
     />
     <search-panel />
-  </div>  
+  </div>
   <rooms-list :rooms="rooms" />
   <info-block />
 </template>
@@ -31,14 +31,14 @@ import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import RoomsList from "./partials/RoomsList.vue";
 import InfoBlock from "./partials/InfoBlock.vue";
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 export default {
   layout: SearchLayout,
   components: {
     AppHead,
     Layout,
     SearchLayout,
-    SearchPanel,    
+    SearchPanel,
     RoomsList,
     InfoBlock,
     SearchFilterModal,
@@ -50,32 +50,39 @@ export default {
   data() {
     return {
       filterStore,
-    }
-  },  
-  mounted() {
-    eventBus.on('filters-inited', e => this.getDataOnList(this.$page.url ?? route("rooms.index")));
-    eventBus.on('filters-changed', e => this.getDataOnList(route("search.list")));
+    };
   },
-  methods: {    
-    getDataOnList(url) {     
-      this.$nextTick(() => {        
+  mounted() {
+    this.$eventBus.on("filters-inited", (e) =>
+      this.getDataOnList(this.$page.url ?? "/rooms")
+    );
+    this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));
+  },
+  methods: {
+    getDataOnList(url) {
+      this.$nextTick(() => {
         this.$inertia.get(url, this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ['hotels', 'rooms', 'is_rooms_filter'],
+          only: ["hotels", "rooms", "is_rooms_filter"],
           onSuccess: () => {
-            window.history.pushState({}, this.$page.title, window.location.pathname);              
+            if (typeof window !== "undefined")
+              window.history.pushState(
+                {},
+                this.$page.title,
+                window.location.pathname
+              );
           },
           onStart: () => {
-            usePage().props.value.isLoadind = true;            
+            usePage().props.isLoadind = true;
           },
           onFinish: () => {
-            usePage().props.value.isLoadind = false;
+            usePage().props.isLoadind = false;
           },
         });
-      });      
+      });
     },
-  }
+  },
 };
 </script>

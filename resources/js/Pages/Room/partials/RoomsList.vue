@@ -1,5 +1,8 @@
 <template>
-  <list-header :found="rooms?.meta?.total ?? 0" :custom-message="byHotel == true ? 'Все номера в отеле' : null"/>
+  <list-header
+    :found="rooms?.meta?.total ?? 0"
+    :custom-message="byHotel == true ? 'Все номера в отеле' : null"
+  />
   <div
     v-if="globalLoading == false"
     class="container mx-auto px-4 relative min-[1920px]:px-[10vw]"
@@ -33,12 +36,12 @@
   <div v-if="globalLoading == true" class="text-center py-8">
     <Loader />
   </div>
-  <booking-form v-if="isBookingOpen === true" :room="bookingRoom"/>
+  <booking-form v-if="isBookingOpen === true" :room="bookingRoom" />
 </template>
 
 <script>
 import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import _ from "lodash";
 import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
@@ -61,12 +64,12 @@ export default {
     },
     byHotel: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  created() {
-    eventBus.on('booking-open', e => this.openBookingModal(e));
-    eventBus.on('booking-close', e => this.closeBookingModal());
+  mounted() {
+    this.$eventBus.on("booking-open", (e) => this.openBookingModal(e));
+    this.$eventBus.on("booking-close", (e) => this.closeBookingModal());
   },
   data() {
     return {
@@ -79,12 +82,13 @@ export default {
   },
   computed: {
     globalLoading() {
-      return usePage().props.value.isLoadind ?? false;
+      return usePage().props.isLoadind ?? false;
     },
   },
   methods: {
     loadMore() {
-      let initialUrl = window.location.href;
+      let initialUrl =
+        typeof window !== "undefined" ? window.location.href : "";
       if (this?.rooms?.meta?.next_page_url) {
         this.$inertia.get(
           this.rooms.meta.next_page_url,
@@ -95,10 +99,13 @@ export default {
             only: ["rooms"],
             onSuccess: () => {
               if (this.rooms.meta.current_page != 1)
-                this.allRooms = [...this.allRooms, ..._.shuffle(this.rooms.data)];
+                this.allRooms = [
+                  ...this.allRooms,
+                  ..._.shuffle(this.rooms.data),
+                ];
 
-
-              window.history.pushState({}, this.$page.title, initialUrl);
+              if (typeof window !== "undefined")
+                window.history.pushState({}, this.$page.title, initialUrl);
             },
             onStart: () => {
               this.isLoading = true;
@@ -114,10 +121,10 @@ export default {
       this.bookingRoom = e;
       this.isBookingOpen = true;
     },
-    closeBookingModal() {      
+    closeBookingModal() {
       this.isBookingOpen = false;
       this.bookingRoom = null;
-    }
+    },
   },
   watch: {
     rooms: function (newVal, oldVal) {

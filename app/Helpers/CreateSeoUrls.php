@@ -12,6 +12,7 @@ use Domain\Page\Actions\GenerateSeoDataContent;
 use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\Models\PageDescription;
 use Str;
+use Support\DataProcessing\Traits\CustomStr;
 
 class CreateSeoUrls
 {
@@ -30,7 +31,7 @@ class CreateSeoUrls
             while ($i < $max) {
                 $seoData = new SeoData();
                 $seoData->address = AddressData::from($address);
-                $seoData->url = '/address/'.Str::slug($address->city);
+                $seoData->url = '/address/'.CustomStr::getCustomSlug($address->city);
                 $seoData->lastOfType = 'city';
                 $seo[$i] = $seoData;
                 $i++;
@@ -40,7 +41,7 @@ class CreateSeoUrls
         if ($address->city_area) {
             $i = 0;
             while ($i < $max - 1) {
-                $seo[$i]->url .= '/area-'.Str::slug($address->city_area);
+                $seo[$i]->url .= '/area-'.CustomStr::getCustomSlug($address->city_area);
                 $seo[$i]->lastOfType = 'area';
                 $i++;
             }
@@ -51,7 +52,7 @@ class CreateSeoUrls
         if ($address->city_district) {
             $i = 0;
             while ($i < $max - 2) {
-                $seo[$i]->url .= '/district-'.Str::slug($address->city_district);
+                $seo[$i]->url .= '/district-'.CustomStr::getCustomSlug($address->city_district);
                 $seo[$i]->lastOfType = 'district';
                 $i++;
             }
@@ -71,7 +72,7 @@ class CreateSeoUrls
                 $metros_name = $hotel->metros()->pluck('name');
                 foreach ($metros_name as $j => $name) {
                     $seo[$j + 3] = new SeoData($address);
-                    $seo[$j + 3]->url = '/address/'.Str::slug($address->city).'/metro-'.Str::slug($name);
+                    $seo[$j + 3]->url = '/address/'.CustomStr::getCustomSlug($address->city).'/metro-'.CustomStr::getCustomSlug($name);
                     $seo[$j + 3]->metro = $name;
                     $seo[$j + 3]->lastOfType = 'metro';
                 }
@@ -160,7 +161,7 @@ class CreateSeoUrls
     public function deleteSeoFromAddress(Address $address): CreateSeoUrls
     {
         if (Address::where('city', $address->city)->count() <= 1) {
-            PageDescription::where('url', '/address/'.Str::slug($address->city))->delete();
+            PageDescription::where('url', '/address/'.CustomStr::getCustomSlug($address->city))->delete();
         }
 
         if ($address->city_area) {
@@ -168,7 +169,7 @@ class CreateSeoUrls
               ->where('city_area', $address->city_area)
               ->count();
             if ($count <= 1) {
-                $url = '/address/'.Str::slug($address->city).'/area-'.Str::slug($address->city_area);
+                $url = '/address/'.CustomStr::getCustomSlug($address->city).'/area-'.CustomStr::getCustomSlug($address->city_area);
                 PageDescription::where('url', $url)->delete();
             }
         }
@@ -180,9 +181,9 @@ class CreateSeoUrls
                   ->where('city_district', $address->city_district)
                   ->count();
                 if ($count <= 1) {
-                    $url = '/address/'.Str::slug($address->city)
-                      .'/area-'.Str::slug($address->city_area)
-                      .'/district-'.Str::slug($address->city_district);
+                    $url = '/address/'.CustomStr::getCustomSlug($address->city)
+                      .'/area-'.CustomStr::getCustomSlug($address->city_area)
+                      .'/district-'.CustomStr::getCustomSlug($address->city_district);
                     PageDescription::where('url', $url)->delete();
                 }
             } else {
@@ -190,7 +191,7 @@ class CreateSeoUrls
                   ->where('city_district', $address->city_district)
                   ->count();
                 if ($count <= 1) {
-                    $url = '/address/'.Str::slug($address->city).'/district-'.Str::slug($address->city_district);
+                    $url = '/address/'.CustomStr::getCustomSlug($address->city).'/district-'.CustomStr::getCustomSlug($address->city_district);
                     PageDescription::where('url', $url)->delete();
                 }
             }
@@ -205,7 +206,7 @@ class CreateSeoUrls
         if ($hotel) {
             $address = $hotel->address;
             $seo = new SeoData($address);
-            $seo->url = '/address/'.Str::slug($address->city).'/metro-'.Str::slug($metro->name);
+            $seo->url = '/address/'.CustomStr::getCustomSlug($address->city).'/metro-'.CustomStr::getCustomSlug($metro->name);
             $seo->metro = $metro->name;
             $seo->lastOfType = 'metro';
 
