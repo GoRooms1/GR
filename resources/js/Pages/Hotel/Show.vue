@@ -460,6 +460,9 @@ export default {
     this.$page.props.modals.search = false;
     this.$eventBus.on("filters-changed", (e) => this.updateRooms());
   },
+  unmounted() {
+    this.$eventBus.off("filters-changed");
+  },
   methods: {
     initMap() {
       myMap = new ymaps.Map("map", {

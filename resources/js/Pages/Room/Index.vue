@@ -53,10 +53,13 @@ export default {
     };
   },
   mounted() {   
-    this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));
+    this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));   
+  },
+  unmounted() {   
+    this.$eventBus.off("filters-changed");   
   },
   methods: {
-    getDataOnList(url) {
+    getDataOnList(url) {      
       this.$nextTick(() => {
         this.$inertia.get(url, this.filterStore.getFiltersValues(), {
           replace: true,

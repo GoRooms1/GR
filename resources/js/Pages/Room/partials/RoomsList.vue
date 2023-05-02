@@ -71,6 +71,10 @@ export default {
     this.$eventBus.on("booking-open", (e) => this.openBookingModal(e));
     this.$eventBus.on("booking-close", (e) => this.closeBookingModal());
   },
+  unmounted() {
+    this.$eventBus.off("booking-open");
+    this.$eventBus.off("booking-close");
+  },
   data() {
     return {
       filterStore,
