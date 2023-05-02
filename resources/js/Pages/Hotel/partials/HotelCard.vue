@@ -162,12 +162,12 @@
             :description="cost.description"
           />
         </div>
-        <div v-if="hotel?.moderate === true" class="w-full">
+        <div v-if="$page.props?.is_moderator === true" class="w-full">
           <a :href="'/moderator/hotel/' + hotel?.id"
             target="_blank"
             class="w-full h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 bg-blue-500 hover:bg-blue-800"
           >
-            Перейти в ЛК
+            {{hotel?.moderate === true ? 'Перейти в ЛК' : 'Редактировать'}}
         </a>
         </div>        
       </div>

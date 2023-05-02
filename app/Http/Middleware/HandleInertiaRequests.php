@@ -6,6 +6,7 @@ use Domain\Address\Actions\GetAvailibleCitiesCountAction;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
+use Domain\User\Actions\GetLoggedUserModeratorStatusAction;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -55,6 +56,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'contacts' => fn() => GetContactsSettingsAction::run(),
             'app_url' => fn() => config('app.url'),
+            'is_moderator' => fn() => GetLoggedUserModeratorStatusAction::run(),
         ]);
     }
 }
