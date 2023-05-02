@@ -72,6 +72,8 @@ export default {
         title = "Кэшбэк";
       } else if (this.filterKey == "low_cost") {
         title = "Low Cost";
+      }  else if (this.filterKey == "moderate") {
+        title = "На модерации";
       } else if (this.filterKey == "period_cost") {
         let costTypes = usePage().props.cost_types ?? [];
         let type = this.filterValue.split("_")?.[0] ?? 1;

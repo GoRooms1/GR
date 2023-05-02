@@ -285,6 +285,20 @@
               </div>
             </div>
             <filter-collapse title="Детально об отеле">
+              <div v-if="$page.props?.is_moderator === true">
+                <span class="inline-block md:pt-[16px] pt-0 md:px-[16px] px-[24px] text-[16px] leading-[19px]">Модерация</span>
+                <div class="flex flex-wrap md:p-[8px] p-[16px] m-[8px]">
+                  <filter-attr-toggle
+                    title="На модерации"
+                    type="small"
+                    initial-value="true"
+                    :model-value="tempFilterStore.getFilterValue('hotels', 'moderate')"
+                    @update:modelValue="
+                      (event) => filterValueHandler('hotels', false, 'moderate', event)
+                    "
+                  />
+                </div>
+              </div>
               <div v-for="category in $page.props.attribute_categories">
                 <div
                   v-if="

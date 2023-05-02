@@ -28,6 +28,7 @@ final class HotelParamsData extends \Parent\DataTransferObjects\Data
         public ?string $city_district,
         public ?string $street,
         public ?int $hotel_type,
+        public ?bool $moderate,
     ) {
     }
 
@@ -39,7 +40,7 @@ final class HotelParamsData extends \Parent\DataTransferObjects\Data
     {
         /** @var array<string, array<int>|string|int|bool|null> $data */
         $data = $request->get('hotels', []);
-
+        
         return self::from([
             'attributes' => $data['attributes'] ?? [],
             'city' => $data['city'] ?? null,
@@ -48,6 +49,7 @@ final class HotelParamsData extends \Parent\DataTransferObjects\Data
             'city_district' => $data['city_district'] ?? null,
             'street' => $data['street'] ?? null,
             'hotel_type' => $data['hotel_type'] ?? null,
+            'moderate' => $data['moderate'] ?? null,
         ]);
     }
 }

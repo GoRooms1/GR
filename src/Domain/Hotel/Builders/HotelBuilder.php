@@ -29,11 +29,6 @@ final class HotelBuilder extends Builder
         return $this->where('moderate', false)->where('show', true)->where('old_moderate', true);
     }
 
-    // public function orderByModerate(): self
-    // {
-    //     return $this->where('moderate', false);
-    // }
-
     public function withRooms(): self
     {
         return $this->withCount(['rooms' => function ($query) {
