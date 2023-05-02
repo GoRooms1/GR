@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Hotel\ViewModels;
 
 use Arr;
+use Closure;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
@@ -44,11 +45,11 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
     /**
      * Paginated hotels array
      *
-     * @return \Inertia\LazyProp
+     * @return Closure
      */
-    public function hotels(): \Inertia\LazyProp
+    public function hotels(): Closure
     {
-        return Inertia::lazy(fn() => HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels)));
+        return fn() => HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
     }
 
     /**

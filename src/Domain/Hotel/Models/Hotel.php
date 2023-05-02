@@ -20,6 +20,7 @@ use Domain\Hotel\Casts\PhoneNumberCast;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\DataTransferObjects\MinCostsData;
 use Domain\Hotel\Factories\HotelFactory;
+use Domain\Hotel\Scopes\HotelOrderingScope;
 use Domain\Hotel\Scopes\ModerationScope;
 use Domain\Hotel\ValueObjects\PhoneNumberValueObject;
 use Domain\Image\Traits\UseImages;
@@ -122,8 +123,7 @@ use Support\DataProcessing\Traits\ClearValidated;
 final class Hotel extends Model
 {
     use UseImages;
-    use ClearValidated;
-    use CreatedAtOrdered;
+    use ClearValidated;   
     use HasFactory;
     use WithData;
 
@@ -215,6 +215,7 @@ final class Hotel extends Model
         parent::boot();
 
         static::addGlobalScope(new ModerationScope);
+        static::addGlobalScope(new HotelOrderingScope);
     }
 
     /**

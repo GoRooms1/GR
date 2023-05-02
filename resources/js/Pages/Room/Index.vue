@@ -52,10 +52,7 @@ export default {
       filterStore,
     };
   },
-  mounted() {
-    this.$eventBus.on("filters-inited", (e) =>
-      this.getDataOnList(this.$page.url ?? "/rooms")
-    );
+  mounted() {   
     this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));
   },
   methods: {

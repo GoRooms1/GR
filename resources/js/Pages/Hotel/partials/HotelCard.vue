@@ -1,7 +1,14 @@
 <template>
   <div class="px-4 w-full xl:w-1/3">
-    <div class="my-4">
-      <swiper
+    <div class="my-4">      
+      <div
+        v-if="hotel?.moderate === true"
+        class="overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60"
+      >
+        <img class="w-full h-full object-cover" src="/img/hotel-moderate.jpg" />
+      </div>
+      <swiper 
+        v-if="hotel?.moderate !== true"
         :slides-per-view="1"
         :loop="true"
         :lazy="true"
@@ -144,9 +151,9 @@
         </div>
       </div>
       <div
-        class="relative bg-white rounded-bl-2xl rounded-br-2xl px-4 pb-4 pt-6 mx-4"
+        class="relative bg-white rounded-bl-2xl rounded-br-2xl px-4 pb-4 pt-6 mx-4 flex flex-col"
       >
-        <div class="flex justify-between text-center">
+        <div class="flex justify-between text-center w-full">
           <cost-item
             v-for="cost in hotel.min_costs ?? []"
             :value="cost.value"
@@ -155,6 +162,14 @@
             :description="cost.description"
           />
         </div>
+        <div v-if="hotel?.moderate === true" class="w-full">
+          <a :href="'/moderator/hotel/' + hotel?.id"
+            target="_blank"
+            class="w-full h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 bg-blue-500 hover:bg-blue-800"
+          >
+            Перейти в ЛК
+        </a>
+        </div>        
       </div>
     </div>
   </div>
@@ -183,7 +198,7 @@ export default {
     Image,
     CostItem,
     HotelAddress,
-    HotelMetroItem,
+    HotelMetroItem,    
   },
   props: {
     hotel: Object,
@@ -223,5 +238,10 @@ export default {
       );
     },
   },
+  methods: {
+    visitPage(href) {
+      if (typeof window !== "undefined") window.location=href;
+    },
+  }
 };
 </script>

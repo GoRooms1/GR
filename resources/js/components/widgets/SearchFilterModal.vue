@@ -600,10 +600,7 @@ export default {
         " " +
         numWord(usePage().props.total, objectWords)
       );
-    },
-    filters() {
-      return _.cloneDeep(this.filterStore.filters);
-    },
+    },    
   },
   methods: {
     close() {
@@ -625,27 +622,8 @@ export default {
         this.filterContentScroll =
           this.$refs.filterContent.clientHeight <
           this.$refs.filterContent.scrollHeight;
-    },
-    reloadData() {
-      this.$inertia.get(
-        this.$page.url.split("?")[0],
-        this.filterStore.getFiltersValues(),
-        {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          onStart: () => {
-            usePage().props.isLoadind = true;
-            this.close();
-          },
-          onFinish: () => {
-            usePage().props.isLoadind = false;
-            this.$eventBus.emit("data-received");
-          },
-        }
-      );
-    },
-    getData() {
+    },    
+    getData() {      
       if (this.$page.url.split("?")[0] == "/search_map") {
         this.getDataOnMap();
       } else {
@@ -657,7 +635,7 @@ export default {
         this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
       }
 
-      this.$nextTick(() => {
+      this.$nextTick(() => {        
         this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
@@ -695,7 +673,7 @@ export default {
         });
       });
     },
-    updateFilters(only) {
+    updateFilters(only) {      
       let data = this.tempFilterStore.getFiltersValues();
       data.filter = true;     
       this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {       

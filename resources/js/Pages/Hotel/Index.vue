@@ -53,14 +53,11 @@ export default {
       filterStore,
     };
   },
-  mounted() {
-    this.$eventBus.on("filters-inited", (e) =>
-      this.getDataOnList(this.$page.url ?? "/hotels")
-    );
+  mounted() {   
     this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));
   },
   methods: {
-    getDataOnList(url) {
+    getDataOnList(url) {      
       this.$nextTick(() => {
         this.$inertia.get(url, this.filterStore.getFiltersValues(), {
           replace: true,
