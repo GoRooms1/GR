@@ -32,7 +32,8 @@ trait UrlDecodeFilter
                 city_area: null,
                 city_district: null,
                 street: null,
-                hotel_type: null
+                hotel_type: null,
+                moderate: null,
             );
         }
 
@@ -112,7 +113,8 @@ trait UrlDecodeFilter
             city_area: $area,
             city_district: $district,
             street: $street,
-            hotel_type: null
+            hotel_type: null,
+            moderate: null
         );
     }
 }
