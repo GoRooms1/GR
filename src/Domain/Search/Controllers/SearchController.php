@@ -21,5 +21,5 @@ class SearchController extends Controller
     public function map(Request $request): Response | ResponseFactory
     {
         return Inertia::render('SearchMap/Index', new SearchMapViewModel(ParamsData::fromRequest($request)));
-    }    
+    }
 }

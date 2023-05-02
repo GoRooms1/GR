@@ -15,44 +15,60 @@ class CustomPageController extends Controller
 { 
     public function jacuzzi(Request $request): Response | ResponseFactory
     {        
-        $paramsData = ParamsData::getEmptyData();
-        $paramsData->isRoomsFilter = true;
-        $paramsData->hotels->city = 'Москва';
-        $paramsData->rooms->attributes = [
-            optional(Attribute::forRooms()->where('name', 'Джакузи')->first())->id ?? 0
-        ];
+        $paramsData = ParamsData::fromRequest($request);
+        
+        if (!$paramsData->filter) {
+            $paramsData = ParamsData::getEmptyData();
+            $paramsData->isRoomsFilter = true;
+            $paramsData->hotels->city = 'Москва';
+            $paramsData->rooms->attributes = [
+                optional(Attribute::forRooms()->where('name', 'Джакузи')->first())->id ?? 0
+            ];            
+        }
 
         return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/jacuzzi'));
     }
 
     public function centre(Request $request): Response | ResponseFactory
     {        
-        $paramsData = ParamsData::getEmptyData();
-        $paramsData->isRoomsFilter = false;
-        $paramsData->hotels->city = 'Москва';
-        $paramsData->hotels->city_area = 'Центральный';       
+        $paramsData = ParamsData::fromRequest($request);
+        
+        if (!$paramsData->filter) {
+            $paramsData = ParamsData::getEmptyData();
+            $paramsData->isRoomsFilter = false;
+            $paramsData->hotels->city = 'Москва';
+            $paramsData->hotels->city_area = 'Центральный';
+        }               
         
         return Inertia::render('Hotel/Index', new HotelListViewModel($paramsData, '/centre'));
     }
 
     public function fiveMinut(Request $request): Response | ResponseFactory
     {        
-        $paramsData = ParamsData::getEmptyData();
-        $paramsData->isRoomsFilter = false;
-        $paramsData->hotels->city = 'Москва';
-        $paramsData->hotels->attributes = [
-            optional(Attribute::forHotels()->where('name', '5 минут до метро')->first())->id ?? 0
-        ];     
+        $paramsData = ParamsData::fromRequest($request);
+        
+        if (!$paramsData->filter) {
+            $paramsData = ParamsData::getEmptyData();
+            $paramsData->isRoomsFilter = false;
+            $paramsData->hotels->city = 'Москва';
+            $paramsData->hotels->attributes = [
+                optional(Attribute::forHotels()->where('name', '5 минут до метро')->first())->id ?? 0
+            ];
+        }   
         
         return Inertia::render('Hotel/Index', new HotelListViewModel($paramsData, '/5minut'));
     }
 
     public function lowcost(Request $request): Response | ResponseFactory
     {        
-        $paramsData = ParamsData::getEmptyData();
-        $paramsData->isRoomsFilter = true;
-        $paramsData->hotels->city = 'Москва';
-        $paramsData->rooms->low_cost = true;
+        $paramsData = ParamsData::fromRequest($request);
+        
+        if (!$paramsData->filter) {
+            $paramsData = ParamsData::getEmptyData();
+            $paramsData->isRoomsFilter = true;
+            $paramsData->hotels->city = 'Москва';
+            $paramsData->rooms->low_cost = true;
+        }        
 
         return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/lowcost'));
     }

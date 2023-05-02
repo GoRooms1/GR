@@ -153,14 +153,7 @@
                     img="/img/flash.svg"
                     toggle-img="/img/flash2.svg"
                     type="vertical"
-                    initial-value="true"
-                    :model-value="
-                      tempFilterStore.getFilterValue('rooms', 'is_hot')
-                    "
-                    @update:modelValue="
-                      (event) =>
-                        filterValueHandler('rooms', false, 'is_hot', event)
-                    "
+                    disabled
                   />
                 </div>
               </div>
@@ -287,14 +280,7 @@
                   img="/img/flash.svg"
                   toggle-img="/img/flash2.svg"
                   type="small"
-                  initial-value="true"
-                  :model-value="
-                    tempFilterStore.getFilterValue('rooms', 'is_hot')
-                  "
-                  @update:modelValue="
-                    (event) =>
-                      filterValueHandler('rooms', false, 'is_hot', event)
-                  "
+                  disabled
                 />
               </div>
             </div>
@@ -711,7 +697,8 @@ export default {
     },
     updateFilters(only) {
       let data = this.tempFilterStore.getFiltersValues();
-      this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {
+      data.filter = true;     
+      this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {       
         preserveState: true,
         preserveScroll: true,
         replace: true,
@@ -760,7 +747,7 @@ export default {
           this.initialUrl = window.location.href;
         document.body.classList.add("fixed");
         this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
-        this.updateFilters(["total"]);
+        this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
       }
     },
   },

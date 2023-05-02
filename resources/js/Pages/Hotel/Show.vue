@@ -511,7 +511,7 @@ export default {
           }
         );
       });
-    },
+    },    
   },
 };
 </script>
