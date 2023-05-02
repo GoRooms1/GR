@@ -50,8 +50,8 @@
         <div
           class="flex items-start justify-between md:flex-row flex-col-reverse gap-[32px] md:mt-[56px] mt-0 md:mb-[64px] mb-[48px] w-full"
         >
-          <div
-            v-html="hotel?.description"
+          <div            
+            v-html="hotel?.description ?? ''"
             class="sm:block hidden md:w-[30%] w-full md:px-0 px-4"
           ></div>
           <tabs @changed="redrawMap">
@@ -86,7 +86,7 @@
             >
               <div id="map" class="w-full" style="height: 416px"></div>
             </tab>
-            <tab title="Отзывы">
+            <tab title="Отзывы" disabled="true">
               <div
                 class="min-h-[416px] rounded-[24px] overflow-hidden bg-[#6170FF] sm:pt-[41px] pb-[41px] pt-[90px] sm:px-[20px] px-[10px]"
               >

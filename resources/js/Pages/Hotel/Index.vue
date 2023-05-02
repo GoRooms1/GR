@@ -19,8 +19,8 @@
     />
     <search-panel />
   </div>
-  <hotels-list :hotels="hotels" />
-  <info-block />
+  <hotels-list :hotels="hotels" />  
+  <info-block :description="page_description?.description ?? ''"/>
 </template>
 
 <script lang="ts">

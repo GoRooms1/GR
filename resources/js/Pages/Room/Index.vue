@@ -19,7 +19,7 @@
     <search-panel />
   </div>
   <rooms-list :rooms="rooms" />
-  <info-block />
+  <info-block :description="page_description?.description ?? ''"/>
 </template>
 
 <script lang="ts">

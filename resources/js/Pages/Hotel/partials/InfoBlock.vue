@@ -1,5 +1,11 @@
-<template>
-  <div class="container mx-auto px-4 min-[1920px]:px-[10vw]">
+<template>  
+  <article 
+    v-if="description || description.trim().length > 0" 
+    class="container mx-auto px-4 min-[1920px]:px-[10vw]"
+    v-html="description"  
+  >
+  </article>
+  <article v-if="!description || description.trim().length == 0" class="container mx-auto px-4 min-[1920px]:px-[10vw]">
     <div class="py-4 xl:flex">
       <div class="xl:w-1/3 pr-2">
         <h3 class="font-bold mb-4">Основные нюансы выбора гостиницы на час</h3>
@@ -157,9 +163,16 @@
         </div>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    description: {
+      type: String,
+      default: null,
+    }
+  }
+};
 </script>

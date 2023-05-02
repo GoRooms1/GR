@@ -1,5 +1,5 @@
 <template>
-  <div class="filter h-32 xl:h-40 pt-4 -mb-20 xl:pt-8">
+  <div class="filter h-32 xl:h-40 pt-4 -mb-16 xl:pt-8">
     <div class="container mx-auto px-4 min-[1920px]:px-[10vw]">
       <div class="flex justify-between items-center">        
         <span v-if="customMessage" class="text-white font-bold xl:text-3xl">
