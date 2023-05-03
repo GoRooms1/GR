@@ -1,4 +1,5 @@
 <template>
+  <Responsive-nav/>
   <Header />
   <main class="pb-[104px]">
     <slot />
@@ -10,7 +11,7 @@
       <privacy-policy class="mr-12 pt-1 hidden lg:flex" />
       <Navigation simple classes="hidden lg:flex" />
     </Footer>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -21,6 +22,7 @@ import SocialLinks from "./partials/SocialLinks.vue";
 import SearchControlPanel from "@/components/widgets/SearchControlPanel.vue";
 import Copyright from "./partials/Copyright.vue";
 import PrivacyPolicy from "./partials/PrivacyPolicy.vue";
+import ResponsiveNav from "./partials/ResponsiveNav.vue";
 
 export default {
   components: {
@@ -31,6 +33,7 @@ export default {
     SearchControlPanel,
     Copyright,
     PrivacyPolicy,
+    ResponsiveNav,
   },
 };
 </script>
