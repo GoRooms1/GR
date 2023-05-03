@@ -40,6 +40,7 @@
         type="horizontal"
         initial-value="true"
         v-model="is_hot"
+        disabled
       />
       <filter-attr-toggle
         title="Кешбэк"

@@ -69,6 +69,7 @@
                 @update:modelValue="
                   (event) => filterValueHandler('rooms', false, 'is_hot', event)
                 "
+                disabled
               />
               <filter-attr-toggle title="Кешбэк" type="small" disabled />
               <filter-attr-toggle

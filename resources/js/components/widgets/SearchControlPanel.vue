@@ -67,6 +67,7 @@
       @update:modelValue="
         (event) => filterValueHandler('rooms', false, 'is_hot', event)
       "
+      disabled
     />
     <button
       class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
