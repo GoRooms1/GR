@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Moderator\ImageController;
 use App\Http\Controllers\Moderator\CategoryController;
 use App\Http\Controllers\Moderator\InstructionController;
 use App\Http\Controllers\Moderator\ObjectController;
