@@ -31,7 +31,7 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public int $user_id,
         public ?Carbon $created_at,
         public ?Carbon $updated_at,
-        public bool $is_popular,
+        public ?bool $is_popular,
         public ?int $type_id,
         public ?string $route,
         public bool $old_moderate,
