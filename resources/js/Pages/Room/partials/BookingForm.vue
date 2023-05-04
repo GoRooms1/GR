@@ -261,7 +261,7 @@ export default {
   },
   computed: {},
   methods: {
-    close() {
+    close() {      
       usePage().props.flash.message = null;
       this.bookingSuccess = false;
       this.$eventBus.emit("booking-close");

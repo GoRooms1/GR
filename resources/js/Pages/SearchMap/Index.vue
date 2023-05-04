@@ -61,10 +61,14 @@ export default {
     openBookingModal(e) {
       this.bookingRoom = e;
       this.isBookingOpen = true;
+      this.$page.props.modals.booking = true;
     },
     closeBookingModal() {
       this.isBookingOpen = false;
       this.bookingRoom = null;
+      setTimeout(() => {
+        this.$page.props.modals.booking = false;
+      }, 50);      
     },
     getDataOnMap() {      
       this.$nextTick(() => {
