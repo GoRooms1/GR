@@ -741,6 +741,7 @@ export default {
         document.body.classList.add("fixed");
         this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
         this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
+        this.handleResize();
       }
     },
   },
