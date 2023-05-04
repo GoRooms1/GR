@@ -43,25 +43,25 @@ class SiteMapController extends Controller
                 $params = [
                     'city' => CustomStr::getCustomSlug($address->city),
                 ];
-                $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
+                $links[] = $this->makeLink(route('address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
                 $params = [
                     'city' => CustomStr::getCustomSlug($address->city),
                     'area' => 'area-'.CustomStr::getCustomSlug($address->city_area),
                 ];
-                $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
+                $links[] = $this->makeLink(route('address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
                 $params = [
                     'city' => CustomStr::getCustomSlug($address->city),
                     'area' => 'area-'.CustomStr::getCustomSlug($address->city_area),
                     'district' => 'district-'.CustomStr::getCustomSlug($address->city_district),
                 ];
-                $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
+                $links[] = $this->makeLink(route('address', $params), 'monthly', 0.8, $address->updated_at->format('Y-m-d'));
                 if ($address->hotel) {
                     foreach ($address->hotel->metros as $metro) {
                         $params = [
                             'city' => CustomStr::getCustomSlug($address->city),
                             'area' => 'metro-'.CustomStr::getCustomSlug($metro->name),
                         ];
-                        $links[] = $this->makeLink(route('search.address', $params), 'monthly', 0.8, $address->hotel->updated_at->format('Y-m-d'));
+                        $links[] = $this->makeLink(route('address', $params), 'monthly', 0.8, $address->hotel->updated_at->format('Y-m-d'));
                     }
                 }
             }
