@@ -731,7 +731,7 @@ input[type="radio"]:checked + label {
 	justify-content: center;
 	position: relative;
 	cursor: pointer;
-    background: #f5f5f5 url('/public/img/lk/upload.png') no-repeat center center;
+    background: #f5f5f5 url('/img/lk/upload.png') no-repeat center center;
 	transition: all 1s;
 }
 
@@ -1387,7 +1387,7 @@ main {
 	width: 360px;
     height: 260px;
     background-color: #f5f5f5;
-    background-image: url('/public/img/lk/upload.png');
+    background-image: url('/img/lk/upload.png');
     background-position: center center;
     background-repeat: no-repeat;
     cursor: pointer;

@@ -31,7 +31,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         public int $hotel_id,
         public ?Carbon $created_at,
         public ?Carbon $updated_at,
-        public bool $is_hot,
+        public ?bool $is_hot,
         #[DataCollectionOf(AttributeData::class)]
         public readonly null|Lazy|DataCollection $attrs,
         public Image $image,
