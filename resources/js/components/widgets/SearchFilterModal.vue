@@ -69,6 +69,7 @@
                 @update:modelValue="
                   (event) => filterValueHandler('rooms', false, 'is_hot', event)
                 "
+                disabled
               />
               <filter-attr-toggle title="Кешбэк" type="small" disabled />
               <filter-attr-toggle
@@ -153,14 +154,7 @@
                     img="/img/flash.svg"
                     toggle-img="/img/flash2.svg"
                     type="vertical"
-                    initial-value="true"
-                    :model-value="
-                      tempFilterStore.getFilterValue('rooms', 'is_hot')
-                    "
-                    @update:modelValue="
-                      (event) =>
-                        filterValueHandler('rooms', false, 'is_hot', event)
-                    "
+                    disabled
                   />
                 </div>
               </div>
@@ -287,18 +281,25 @@
                   img="/img/flash.svg"
                   toggle-img="/img/flash2.svg"
                   type="small"
-                  initial-value="true"
-                  :model-value="
-                    tempFilterStore.getFilterValue('rooms', 'is_hot')
-                  "
-                  @update:modelValue="
-                    (event) =>
-                      filterValueHandler('rooms', false, 'is_hot', event)
-                  "
+                  disabled
                 />
               </div>
             </div>
             <filter-collapse title="Детально об отеле">
+              <div v-if="$page.props?.is_moderator === true">
+                <span class="inline-block md:pt-[16px] pt-0 md:px-[16px] px-[24px] text-[16px] leading-[19px]">Модерация</span>
+                <div class="flex flex-wrap md:p-[8px] p-[16px] m-[8px]">
+                  <filter-attr-toggle
+                    title="На модерации"
+                    type="small"
+                    initial-value="true"
+                    :model-value="tempFilterStore.getFilterValue('hotels', 'moderate')"
+                    @update:modelValue="
+                      (event) => filterValueHandler('hotels', false, 'moderate', event)
+                    "
+                  />
+                </div>
+              </div>
               <div v-for="category in $page.props.attribute_categories">
                 <div
                   v-if="
@@ -614,10 +615,7 @@ export default {
         " " +
         numWord(usePage().props.total, objectWords)
       );
-    },
-    filters() {
-      return _.cloneDeep(this.filterStore.filters);
-    },
+    },    
   },
   methods: {
     close() {
@@ -639,27 +637,8 @@ export default {
         this.filterContentScroll =
           this.$refs.filterContent.clientHeight <
           this.$refs.filterContent.scrollHeight;
-    },
-    reloadData() {
-      this.$inertia.get(
-        this.$page.url.split("?")[0],
-        this.filterStore.getFiltersValues(),
-        {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          onStart: () => {
-            usePage().props.isLoadind = true;
-            this.close();
-          },
-          onFinish: () => {
-            usePage().props.isLoadind = false;
-            this.$eventBus.emit("data-received");
-          },
-        }
-      );
-    },
-    getData() {
+    },    
+    getData() {      
       if (this.$page.url.split("?")[0] == "/search_map") {
         this.getDataOnMap();
       } else {
@@ -671,7 +650,7 @@ export default {
         this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
       }
 
-      this.$nextTick(() => {
+      this.$nextTick(() => {        
         this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
           replace: true,
           preserveState: true,
@@ -709,9 +688,10 @@ export default {
         });
       });
     },
-    updateFilters(only) {
+    updateFilters(only) {      
       let data = this.tempFilterStore.getFiltersValues();
-      this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {
+      data.filter = true;     
+      this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {       
         preserveState: true,
         preserveScroll: true,
         replace: true,
@@ -760,7 +740,8 @@ export default {
           this.initialUrl = window.location.href;
         document.body.classList.add("fixed");
         this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
-        this.updateFilters(["total"]);
+        this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
+        this.handleResize();
       }
     },
   },

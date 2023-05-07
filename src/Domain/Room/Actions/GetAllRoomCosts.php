@@ -38,8 +38,10 @@ final class GetAllRoomCosts extends Action
             ->leftJoin('costs','costs.period_id','=','periods.id')
             ->where('costs.room_id', $room->id)        
             ->orderBy('cost_types.sort','asc')
+            ->orderBy('costs.created_at','desc')
             ->get();
-
+        
+        $minCosts = $minCosts->unique('id');
         foreach ($minCosts as $minCost) {
             $value = $minCost['value'];
             $result[] = new MinCostsData(

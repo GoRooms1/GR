@@ -1,4 +1,5 @@
 import "swiper/swiper-bundle.min.css";
+import "@vuepic/vue-datepicker/dist/main.css";
 import "../css/custom.css";
 import "../css/style.css";
 

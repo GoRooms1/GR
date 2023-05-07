@@ -42,7 +42,13 @@ export default {
     this.$eventBus.on("booking-open", (e) => this.openBookingModal(e));
     this.$eventBus.on("booking-close", (e) => this.closeBookingModal());
     this.$eventBus.on("filters-inited", (e) => this.getDataOnMap());
-    this.$eventBus.on("filters-changed", (e) => this.getDataOnMap());
+    this.$eventBus.on("filters-changed", (e) => this.getDataOnMap());    
+  },
+  unmounted() {
+    this.$eventBus.off("filters-inited");
+    this.$eventBus.off("filters-changed");
+    this.$eventBus.off("booking-open");
+    this.$eventBus.off("booking-close"); 
   },
   data() {
     return {
@@ -55,12 +61,16 @@ export default {
     openBookingModal(e) {
       this.bookingRoom = e;
       this.isBookingOpen = true;
+      this.$page.props.modals.booking = true;
     },
     closeBookingModal() {
       this.isBookingOpen = false;
       this.bookingRoom = null;
+      setTimeout(() => {
+        this.$page.props.modals.booking = false;
+      }, 50);      
     },
-    getDataOnMap() {
+    getDataOnMap() {      
       this.$nextTick(() => {
         this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
           replace: true,

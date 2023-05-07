@@ -26,11 +26,11 @@ class HotelController extends Controller
      */
     public function index(Request $request): View
     {
-        $hotels = Hotel::query();
+        $hotels = Hotel::query()->withoutGlobalScope(HotelOrderingScope::class);
         if ($q = $request->get('q', null)) {
             $hotels = $hotels->where('name', 'like', '%'.$q.'%');
         }
-        $hotels = $hotels->paginate(15);
+        $hotels = $hotels->orderBy('created_at', 'desc')->paginate(15);
 
         return view('admin.hotel.index', compact('hotels', 'q'));
     }

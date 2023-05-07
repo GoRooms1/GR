@@ -66,10 +66,14 @@ export default {
   },
   mounted() {
     this.$eventBus.on("filters-inited", (e) => this.getDataOnList());
-    this.$eventBus.on("filters-changed", (e) => this.getDataOnList());
+    this.$eventBus.on("filters-changed", (e) => this.getDataOnList());    
+  },
+  unmounted() {
+    this.$eventBus.off("filters-inited");
+    this.$eventBus.off("filters-changed");    
   },
   methods: {
-    getDataOnList() {
+    getDataOnList() {      
       this.$nextTick(() => {
         this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
           replace: true,

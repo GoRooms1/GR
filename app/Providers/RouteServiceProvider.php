@@ -59,7 +59,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::prefix('api')
-          ->middleware(['api', 'noDebugbar'])
+          ->middleware(['api'])
           ->name('api.')
           ->group(base_path('routes/api.php'));
     }
@@ -78,7 +78,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapRenderRoutes(): void
     {
         Route::prefix('render')
-          ->middleware(['web', 'noDebugbar'])
+          ->middleware(['web'])
           ->name('render.')
           ->group(base_path('routes/render.php'));
     }

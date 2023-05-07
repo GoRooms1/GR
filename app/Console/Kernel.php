@@ -15,8 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('update:slugs')->daily();
-        $schedule->command('update:addresses_slugs')->hourly();
+        //$schedule->command('update:slugs')->daily();
+        //$schedule->command('update:addresses_slugs')->hourly();
     }
 
     /**

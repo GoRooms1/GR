@@ -33,17 +33,14 @@
     <button class="flex">
       <a href="/login" class="flex items-center w-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]"></a>
     </button>
-  </div>
-  <Responsive-nav v-if="!simple" />
+  </div>  
 </template>
 
 <script>
-import ResponsiveNav from "./ResponsiveNav.vue";
 import NavLink from "@/components/ui/NavLink.vue";
 export default {
   components: {
-    NavLink,
-    ResponsiveNav,
+    NavLink,    
   },
   props: {
     simple: Boolean,

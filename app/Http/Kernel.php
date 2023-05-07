@@ -8,7 +8,6 @@ use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\Lk;
 use App\Http\Middleware\Moderator;
-use App\Http\Middleware\noDebugbar;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\SecureRedirectMiddleware;
 use App\Http\Middleware\SetCityCoords;
@@ -92,8 +91,7 @@ class Kernel extends HttpKernel
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
-        'verified' => EnsureEmailIsVerified::class,
-        'noDebugbar' => noDebugbar::class,
+        'verified' => EnsureEmailIsVerified::class,        
         'admin' => Admin::class,
         'lk' => Lk::class,
         'moderator' => Moderator::class,

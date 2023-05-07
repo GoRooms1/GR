@@ -9,12 +9,7 @@ use Domain\Hotel\DataTransferObjects\MinCostsData;
 use Domain\Hotel\Models\Hotel;
 use Domain\Room\Actions\GenerateInfoDescForPeriod;
 use Domain\Room\DataTransferObjects\CostData;
-use Domain\Room\DataTransferObjects\CostTypeData;
-use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
-use Domain\Room\Models\Room;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Action;
 use Spatie\LaravelData\DataCollection;
 
@@ -31,20 +26,27 @@ final class MinimumCostsCalculation extends Action
     {
         $result = [];
 
-        $minCosts = CostType::selectRaw('cost_types.id, cost_types.name, min(periods.start_at) as start_at, min(periods.end_at) as end_at, min(IFNULL(costs.value, 0)) as value')
-            ->leftJoin('periods','cost_types.id','=','periods.cost_type_id')
-            ->leftJoin('costs','costs.period_id','=','periods.id')
+        $minCosts = CostType::selectRaw('cost_types.id, cost_types.name, periods.start_at as start_at, periods.end_at as end_at, costs.value AS value')
+        ->leftJoin('periods','cost_types.id','=','periods.cost_type_id')
+        ->leftJoin('costs', function($join) use ($hotel) {
+            $join->on('costs.period_id','=', DB::raw('periods.id AND costs.value > 0'))
             ->whereIn('costs.room_id', (function ($query) use ($hotel) {
                 $query->from('rooms')
                     ->select('id')
                     ->where('hotel_id','=', $hotel->id);
-            }))
-            ->groupBy('cost_types.id','cost_types.name')
-            ->orderBy('cost_types.sort','asc')
-            ->get();
+            }));                
+        })
+        ->orderBy('cost_types.sort','asc')
+        ->get();
 
+        $minCosts = $minCosts->unique(function ($item) {
+              return $item['id'] . $item['value'];
+        })->groupBy('id')->map(function($group) {
+            return $group->firstWhere('value', $group->min('value'));
+        });
+        
         foreach ($minCosts as $minCost) {
-            $value = $minCost['value'];
+            $value = $minCost['value'] ?? 0;
             $result[] = new MinCostsData(
                 id: $minCost->id,
                 name: $minCost->name,

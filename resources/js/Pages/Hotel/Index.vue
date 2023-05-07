@@ -19,8 +19,8 @@
     />
     <search-panel />
   </div>
-  <hotels-list :hotels="hotels" />
-  <info-block />
+  <hotels-list :hotels="hotels" />  
+  <info-block :description="page_description?.description ?? ''"/>
 </template>
 
 <script lang="ts">
@@ -53,14 +53,14 @@ export default {
       filterStore,
     };
   },
-  mounted() {
-    this.$eventBus.on("filters-inited", (e) =>
-      this.getDataOnList(this.$page.url ?? "/hotels")
-    );
-    this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));
+  mounted() {   
+    this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));    
+  },
+  unmounted() {    
+    this.$eventBus.off("filters-changed");    
   },
   methods: {
-    getDataOnList(url) {
+    getDataOnList(url) {         
       this.$nextTick(() => {
         this.$inertia.get(url, this.filterStore.getFiltersValues(), {
           replace: true,

@@ -1,5 +1,11 @@
 <template>
-  <div
+  <article 
+    v-if="description || description?.length > 0" 
+    class="container mx-auto px-4 min-[1920px]:px-[10vw]"
+    v-html="description"  
+  >
+  </article>
+  <article v-if="!description || description?.length == 0"
     class="container mx-auto px-4 min-[1920px]:px-[10vw] min-[1920px]:px-[10vw]"
   >
     <div class="py-4 xl:flex">
@@ -82,9 +88,16 @@
         </div>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    description: {
+      type: String,
+      default: null,
+    }
+  }
+};
 </script>

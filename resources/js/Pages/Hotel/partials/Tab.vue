@@ -2,6 +2,9 @@
 import { defineComponent, inject, watch, ref, onBeforeMount } from "vue";
 export default defineComponent({
   name: "Tab",
+  props: {
+    disabled: String,
+  },
   setup() {
     const index = ref(0);
     const isActive = ref(false);

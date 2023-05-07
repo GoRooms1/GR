@@ -46,6 +46,14 @@ class LoginController extends Controller
             return redirect()->route('lk.start');
         }
 
+        if ($user->is_admin) {                              
+            return redirect(route('admin.index'));
+        }
+
+        if ($user->is_moderate) {                              
+            return redirect(route('hotels.index'));
+        }
+
         return redirect($this->redirectTo);
     }
 }

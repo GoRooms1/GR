@@ -37,6 +37,6 @@ class Lk
             }
         }
 
-        return redirect()->route('index');
+        return redirect()->route('home');
     }
 }

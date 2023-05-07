@@ -16,6 +16,7 @@ enum Filters: string
     case Metro = 'metro';
     case HotelAttributes = 'attributes';
     case Type = 'hotel_type';
+    case Moderate = 'moderate';
 
     /**
      * @param  non-empty-string  $value
@@ -32,6 +33,7 @@ enum Filters: string
             self::Type => new TypeFilter($value),
             self::CityArea => new CityAreaFilter($value),
             self::CityDistrict => new CityDistrictFilter($value),
+            self::Moderate => new ModerateFilter($value),
         };
     }
 }

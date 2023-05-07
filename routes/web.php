@@ -59,9 +59,9 @@ Route::get('/blog/{article}', [ArticleController::class, 'show'])->name('article
 Route::post('/form', [FormController::class, 'store'])->name('forms.store');
 
 Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
-Route::middleware('noDebugbar')->get('sitemap.xml', [SiteMapController::class, 'index']);
+Route::get('sitemap.xml', [SiteMapController::class, 'index']);
 
-Route::get('/bonuse', [PageController::class, 'show']);
+Route::get('/bonuse', [PageController::class, 'show'])->name('pages.show');
 Route::get('/rules', [PageController::class, 'show']);
 
 Route::get('lk/start', [Lk\HomeController::class, 'start'])->name('lk.start');

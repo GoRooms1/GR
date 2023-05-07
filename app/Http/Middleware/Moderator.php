@@ -29,12 +29,12 @@ class Moderator
                     return $next($request);
                 }
 
-                return redirect()->route('index');
+                return redirect()->route('home');
             } catch (ModelNotFoundException $e) {
                 abort(404, 'Пользователь не найден');
             }
         }
 
-        return redirect()->route('index');
+        return redirect()->route('home');
     }
 }

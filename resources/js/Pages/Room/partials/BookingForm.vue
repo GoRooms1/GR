@@ -51,16 +51,9 @@
             <div class="flex">
               <div class="flex flex-col flex-[2_2_0%] lg:flex-none">
                 <span>Заезд</span>
-                <VueDatePicker
-                  @update:model-value="calculate()"
-                  v-model="form.from_date"
-                  model-type="dd.MM.yyyy"
-                  :format="dateFormat"
-                  :enable-time-picker="false"
-                  position="right"
-                  locale="ru"
-                  auto-apply
-                  required
+                <DatePicker 
+                  @update:modelValue="e => changeDateFrom(e)"
+                  :model-value="form.from_date"
                 />
                 <span class="mt-3">Выезд</span>
                 <div
@@ -110,30 +103,37 @@
             </div>
             <div class="flex flex-col mt-4 lg:mt-0 lg:ml-4">
               <div class="flex">
-                <span>Имя</span>
-                <div v-if="form.errors.client_fio" class="flex text-[#E1183D]">
+                <span>Имя</span>                
+                <div v-if="form.errors.client_fio || v$.form.client_fio.$errors.length > 0" class="flex text-[#E1183D]">
                   <img src="/img/attentionRed.svg" class="mx-2 w-4" />
                   Не заполнено
+                </div>
+                <div v-if="!form.errors.client_fio && v$.form.client_fio.$errors.length == 0" class="flex">
+                  <img src="/img/checkcircle.svg" class="ml-2 w-4">
                 </div>
               </div>
               <input
                 v-model="form.client_fio"
+                @input="v$.form.client_fio.$touch; delete form.errors.client_fio;"
                 placeholder="Как к вам обращаться"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]"
               />
               <div class="flex mt-3">
                 <span>Телефон</span>
                 <div
-                  v-if="form.errors.client_phone"
+                  v-if="form.errors.client_phone || v$.form.client_phone.$errors.length > 0"
                   class="flex text-[#E1183D]"
                 >
                   <img src="/img/attentionRed.svg" class="mx-2 w-4" />
                   Не заполнено
                 </div>
+                <div v-if="!form.errors.client_phone && v$.form.client_phone.$errors.length == 0" class="flex">
+                  <img src="/img/checkcircle.svg" class="ml-2 w-4">
+                </div>
               </div>
               <input
                 v-model="form.client_phone"
-                @input="phoneHandle()"
+                @input="phoneHandle(); v$.form.client_phone.$touch"
                 v-maska
                 :data-maska="phoneMask"
                 placeholder="+7 (___) ___ __ __"
@@ -168,10 +168,11 @@
           <button
             @click="submit"
             class="mt-4 lg:ml-auto lg:mt-0 w-full flex items-center justify-center h-12 lg:w-[248px] rounded-lg text-white"
-            :class="'bg-blue-500 hover:bg-blue-800'"
+            :class="form.errors.length > 0 || v$.$errors.length > 0 ?
+               'bg-slate-400 pointer-events-none' : 'bg-blue-500 hover:bg-blue-800'"
           >
             Забронировать
-          </button>
+          </button>          
         </div>
       </div>
       <div
@@ -204,8 +205,9 @@
 </template>
 
 <script>
-import VueDatePicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, maxLength } from '@vuelidate/validators'
+import DatePicker from "@/components/ui/DatePicker.vue";
 import TimePicker from "@/components/ui/TimePicker.vue";
 import NumSelect from "@/components/ui/NumSelect.vue";
 import _ from "lodash";
@@ -214,8 +216,11 @@ import { vMaska } from "maska";
 import { useForm, usePage } from "@inertiajs/vue3";
 
 export default {
-  components: {
-    VueDatePicker,
+  setup () {
+    return { v$: useVuelidate() }
+  },
+  components: {    
+    DatePicker,
     TimePicker,
     NumSelect,
   },
@@ -231,6 +236,7 @@ export default {
   },
   mounted() {
     this.switchCostType(1);
+    this.v$.$validate();
   },
   data() {
     return {
@@ -259,9 +265,21 @@ export default {
       phoneMask: "+7 (###) ### ## ##",
     };
   },
+  validations () {
+    return {
+      form: { 
+        client_fio: { required, minLengthValue: minLength(3), maxLengthValue: maxLength(190) },
+        client_phone: { required, phoneValidator: this.phoneValidator },
+      },      
+    }
+  },
   computed: {},
   methods: {
-    close() {
+    phoneValidator(value) {
+      if (this.phoneMask === '+7 (###) ### ## ##') return value.length == this.phoneMask.length;
+      return value.length >= 7;
+    },
+    close() {      
       usePage().props.flash.message = null;
       this.bookingSuccess = false;
       this.$eventBus.emit("booking-close");
@@ -308,6 +326,10 @@ export default {
       this.days = days;
       this.calculate();
     },
+    changeDateFrom(e) {      
+      this.form.from_date = e;
+      this.calculate();
+    },
     calculate() {
       if (this.costType == 1) {
         let momentToDateTime = moment(
@@ -344,10 +366,7 @@ export default {
         this.form.hours_count = 0;
         this.amount = this.price * this.days;
       }
-    },
-    dateFormat(date) {
-      return moment(date).format("DD.MM.YYYY");
-    },
+    },    
     getNumsRange(from, to) {
       let hours = _.transform(
         _.range(from, to + 1, 1),

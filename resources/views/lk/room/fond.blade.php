@@ -20,8 +20,8 @@
           <div class="col-6">
             <input type="radio"
                    name="fond"
-                   value="{{ \App\Models\Hotel::ROOMS_TYPE }}"
-                   id="everyRoom" {{ $hotel->type_fond === \App\Models\Hotel::ROOMS_TYPE || $hotel->type_fond === null ? 'checked' : '' }}
+                   value="{{ \Domain\Hotel\Models\Hotel::ROOMS_TYPE }}"
+                   id="everyRoom" {{ $hotel->type_fond === \Domain\Hotel\Models\Hotel::ROOMS_TYPE || $hotel->type_fond === null ? 'checked' : '' }}
             >
             <label for="everyRoom"
                    class="long-label">
@@ -31,8 +31,8 @@
           <div class="col-6">
             <input type="radio"
                    name="fond"
-                   value="{{ \App\Models\Hotel::CATEGORIES_TYPE }}"
-                   id="quote" {{ $hotel->type_fond === \App\Models\Hotel::CATEGORIES_TYPE ? 'checked' : '' }}
+                   value="{{ \Domain\Hotel\Models\Hotel::CATEGORIES_TYPE }}"
+                   id="quote" {{ $hotel->type_fond === \Domain\Hotel\Models\Hotel::CATEGORIES_TYPE ? 'checked' : '' }}
             >
             <label for="quote"
                    class="long-label">

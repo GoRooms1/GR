@@ -1,41 +1,8 @@
 <template>
-  <div class="pt-1 lg:hidden">
-    <button @click="show()">
-      <svg
-        width="24"
-        height="16"
-        viewBox="0 0 24 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M1.3335 14.6665H22.6668"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-        <path
-          d="M1.3335 8H22.6668"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-        <path
-          d="M1.3335 1.33325H22.6668"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
-    </button>
-  </div>
   <div
     id="menu"
-    class="fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex-col justify-center items-center lg:hidden px-7"
-    v-bind:class="isOpen() ? 'flex' : 'hidden'"
+    v-if="isOpen === true"
+    class="flex fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex-col justify-center items-center lg:hidden px-7"      
   >
     <button v-on:click="hide()" class="absolute top-[12px] right-[16px]">
       <img src="/img/close.svg" />
@@ -116,7 +83,7 @@ import { usePage } from "@inertiajs/vue3";
 export default {
   components: {
     Link,
-    ResponsiveNavLink,
+    ResponsiveNavLink,    
   },
   created() {
     if (typeof window !== "undefined")
@@ -134,25 +101,27 @@ export default {
       screenWidth: 0,
     };
   },
+  computed: {
+    isOpen() {
+      return usePage().props.modals?.menu ?? false;
+    }
+  },
   methods: {
     show() {
       usePage().props.modals.menu = true;
     },
     hide() {
-      usePage().props.modals.menu = false;
-    },
-    isOpen() {
-      return usePage().props.modals?.menu ?? false;
-    },
-    handleResize() {
-      if (this.isOpen == true) {
-        if (typeof window !== "undefined") this.screenWidth = window.innerWidth;
+      usePage().props.modals.menu = false;      
+    },    
+    handleResize() {      
+      if (typeof window !== "undefined") this.screenWidth = window.innerWidth;
+      if (this.isOpen == true) {        
         if (this.screenWidth > 1024) this.hide();
       }
     },
     visitPage(href) {
       if (typeof window !== "undefined") window.location=href;
     }
-  },
+  },  
 };
 </script>

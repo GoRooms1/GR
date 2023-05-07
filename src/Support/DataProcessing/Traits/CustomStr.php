@@ -19,11 +19,14 @@ final class CustomStr
     /**
      * Generate slug from string with custom char replace
      *
-     * @param  string  $str
+     * @param  string|null  $str
      * @return string
      */
-    public static function getCustomSlug(string $str): string
+    public static function getCustomSlug(string|null $str): string
     {
+        if (is_null($str))
+            return '';
+            
         /** @var string */
         $str = Str::lower($str);
 

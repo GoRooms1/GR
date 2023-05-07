@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Room\ViewModels;
 
 use Arr;
+use Closure;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
@@ -44,11 +45,11 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
     /**
      * All paginated rooms
      * 
-     * @return \Inertia\LazyProp
+     * @return Closure
      */
-    public function rooms(): \Inertia\LazyProp
+    public function rooms(): Closure
     {
-        return Inertia::lazy(fn() => RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels)));
+        return fn() => RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels));
     }
 
     /**

@@ -23,10 +23,11 @@ class Admin
 //    If logged in
             $user = User::find(auth()->id());
             if ($user->is_admin) {
+
                 return $next($request);
             }
         }
 
-        return redirect()->route('index');
+        return redirect()->route('home');
     }
 }

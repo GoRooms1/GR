@@ -1,13 +1,13 @@
 <template>
   <div @mousedown="hideSearch" @touchstart="hideSearch" id="search-map"></div>
 
-  <div class="hidden">
-    <div ref="hotel_rooms">
-      <div
-        class="rooms-list relative mx-auto px-4"
-        :class="selectedRooms.length > 1 ? 'overflow-y-auto scrollbar' : ''"
-      >
-        <div v-for="room in selectedRooms" class="room py-2">
+  <div v-if="isOpen == true" class="rooms-list fixed mx-auto h-[100%] lg:h-[100vh] top-0 left-0 z-50 w-full flex flex-col justify-center items-center"> 
+    <div class="w-full flex flex-col" style="max-width: 1024px;">
+      <button @click="closeModal()" class="w-[32px] h-[32px] p-2 bg-white rounded-lg ml-auto xl:mr-[-32px]">
+        <img src="/img/close.svg">
+      </button>
+      <div v-click-outside="closeModal" class="mt-2 mx-[0.5rem] overflow-y-auto scrollbar pr-3 lg:mx-0 flex flex-col" :style="'max-height:' + listHeight + 'px;'">
+        <div class="room" v-for="room in selectedRooms">
           <room-card :room="room" />
         </div>
       </div>
@@ -16,22 +16,22 @@
 </template>
 
 <script>
-import Swiper, { Navigation, Pagination, Scrollbar } from "swiper";
+import vClickOutside from "click-outside-vue3";
 import _ from "lodash";
 import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
-import RoomCard from "./RoomCard.vue";
+import RoomCard from "@/Pages/Room/partials/RoomCard.vue";
 
 let searchMap = null;
 let geoObjectsClusterer = null;
 let geoObjects = [];
 let iconTemplate = null;
-let MyBalloonLayout = null;
-let MyBalloonContentLayout = null;
-let roomsListHeight = 0;
 
 export default {
-  components: {
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
+  components: {      
     RoomCard,
   },
   props: {
@@ -39,12 +39,14 @@ export default {
     hotels: [Object],
   },
   mounted() {
+    this.$page.props.modals.booking = false;
     document.body.classList.add("fixed");
     ymaps.ready(this.initMap);
-    this.$eventBus.on("data-received", (e) => this.drawObjects());
+    this.$eventBus.on("data-received", (e) => this.drawObjects());    
   },
   unmounted() {
     document.body.classList.remove("fixed");
+    this.$eventBus.off("data-received");
   },
   data() {
     return {
@@ -52,6 +54,8 @@ export default {
       zoom: 12,
       hotelMarkers: [],
       selectedRooms: [],
+      isOpen: false,
+      listHeight: 768,
     };
   },
   methods: {
@@ -79,133 +83,15 @@ export default {
       );
 
       //Init Clasterer
-      (geoObjectsClusterer = new ymaps.Clusterer({
+      geoObjectsClusterer = new ymaps.Clusterer({
         preset: "islands#blackClusterIcons",
         gridSize: 128,
         minClusterSize: 2,
-      })),
-        //Init Balloon template
-        (MyBalloonLayout = ymaps.templateLayoutFactory.createClass(
-          '<div class="popover top block z-10" style="max-width: 450px; min-width: 450px;">' +
-            '<button class="close bg-white rounded-[8px] absolute p-[6px]" style="top: -40px; right: 0;"><img src="/img/close.svg"></button>' +
-            '<div class="arrow absolute"></div>' +
-            '<div class="popover-inner">' +
-            "$[[options.contentLayout]]" +
-            "</div>" +
-            "</div>",
-          {
-            build: function () {
-              this.constructor.superclass.build.call(this);
-              this._$element =
-                this.getParentElement().querySelector(".popover");
-              this.applyElementOffset();
-              this._$element
-                .querySelector(".close")
-                .addEventListener("click", (e) => this.onCloseClick(e));
-            },
-
-            clear: function () {
-              this._$element
-                .querySelector(".close")
-                .removeEventListener("click", (e) => this.onCloseClick(e));
-              this.constructor.superclass.clear.call(this);
-            },
-
-            onSublayoutSizeChange: function () {
-              MyBalloonLayout.superclass.onSublayoutSizeChange.apply(
-                this,
-                arguments
-              );
-
-              if (!this._isElement(this._$element)) {
-                return;
-              }
-
-              this.applyElementOffset();
-              this.events.fire("shapechange");
-            },
-
-            applyElementOffset: function () {
-              if (typeof window !== "undefined") {
-                let breakpoint = 1024;
-                let width =
-                  window.innerWidth > breakpoint
-                    ? breakpoint
-                    : window.innerWidth;
-                let height = roomsListHeight;
-
-                if (window.innerWidth >= breakpoint) {
-                  this._$element.style.left =
-                    -(this._$element.clientWidth / 2) + "px";
-                  this._$element.style.top =
-                    -(this._$element.clientWidth / 2) + "px";
-                  this._$element.style.maxWidth = width + "px";
-                  this._$element.style.minWidth = width + "px";
-                  this._$element.style.position = "absolute";
-                  this._$element.style.padding = "0 0 0 0";
-                } else {
-                  width = window.innerWidth;
-                  this._$element.style.left = "0";
-                  this._$element.style.top =
-                    window.innerHeight / 2 - height / 2 + 40 + "px";
-                  this._$element.style.maxWidth = width + "px";
-                  this._$element.style.minWidth = width + "px";
-                  this._$element.style.position = "fixed";
-                  this._$element.style.padding = "0 12px 0 12px";
-                }
-              }
-            },
-
-            onCloseClick: function (e) {
-              e.preventDefault();
-              this.events.fire("userclose");
-            },
-
-            getShape: function () {
-              if (!this._isElement(this._$element)) {
-                return MyBalloonLayout.superclass.getShape.call(this);
-              }
-
-              var position = {
-                top: this._$element.offsetTop,
-                left: this._$element.offsetLeft,
-              };
-
-              let height = roomsListHeight;
-              let breakpoint = 1024;
-
-              let winWidth = 0;
-              if (typeof window !== "undefined") winWidth = window.innerWidth;
-
-              let offset = [
-                [position.left, position.top - 60],
-                [
-                  position.left + this._$element.clientWidth,
-                  position.top + height + 80,
-                ],
-              ];
-              if (winWidth < breakpoint) {
-                offset = [
-                  [0, 0],
-                  [0, 0],
-                ];
-              }
-
-              return new ymaps.shape.Rectangle(
-                new ymaps.geometry.pixel.Rectangle(offset)
-              );
-            },
-
-            _isElement: function (element) {
-              return element && element.querySelector(".arrow");
-            },
-          }
-        )),
-        //Init balloon content template
-        (MyBalloonContentLayout = ymaps.templateLayoutFactory.createClass(
-          '<div class="popover-content">$[properties.balloonContent]</div>'
-        )),
-        this.drawObjects();
+        useMapMargin: true,
+        zoomMargin: [85, 50, 90, 50],
+      }),        
+       
+      this.drawObjects();
     },
     drawObjects() {
       if (!searchMap) return;
@@ -222,17 +108,25 @@ export default {
         let minCost = hotel.min_cost_value;
         let blockWidth = _.round(86 + 7.4 * (minCost + "").length);
 
+        //Fix same coordinates markers
+        let sameCoordsHotel = _.find(this.hotelMarkers, (el) => {
+          return el.address.geo_lat == hotel.address.geo_lat && el.address.geo_lon == hotel.address.geo_lon && el.id != hotel.id;
+        });
+
+        if (sameCoordsHotel) {          
+          hotel.address.geo_lon = parseFloat(hotel.address.geo_lon) + 0.0001;
+          this.hotelMarkers[_.findIndex(this.hotelMarkers, ['id', hotel.id])].address.geo_lon = hotel.address.geo_lon;
+        }
+
         let placemark = new ymaps.Placemark(
           [hotel.address.geo_lat, hotel.address.geo_lon],
-          {
+          {            
             minCost: minCost,
           },
-          {
-            balloonShadow: false,
-            balloonLayout: MyBalloonLayout,
-            balloonContentLayout: MyBalloonContentLayout,
+          {            
+            balloonShadow: false,           
             balloonPanelMaxMapArea: 0,
-            iconLayout: iconTemplate,
+            iconLayout: iconTemplate,            
             iconShape: {
               type: "Rectangle",
               coordinates: [
@@ -259,81 +153,22 @@ export default {
             },
             onSuccess: () => {
               this.selectedRooms = this.rooms;
+              this.openModal();
+
               this.$nextTick(() => {
-                e.get("target").properties.set(
-                  "balloonContent",
-                  this.$refs.hotel_rooms.innerHTML
-                );
-
-                //Rooms List
-                let roomsCount = this.selectedRooms.length;
-                if (roomsCount > 0) {
-                  let roomsListEl = document
-                    .querySelector(".popover")
-                    .querySelector(".rooms-list");
-                  let roomEl = document
-                    .querySelector(".popover")
-                    .querySelector(".room");
-                  let slidesPerView = 1;
-                  if (typeof window !== "undefined")
-                    slidesPerView =
-                      window.innerHeight - 220 > roomEl.clientHeight * 2
-                        ? roomsCount > 1
-                          ? 2
-                          : 1
-                        : 1;
-                  roomsListHeight = roomEl.clientHeight * slidesPerView;
-                  roomsListEl.style.height = roomsListHeight + "px";
-
-                  //Room swiper
-                  let roomSwiperEls = document
-                    .querySelector(".popover")
-                    .querySelectorAll(".swiper-image2");
-                  roomSwiperEls.forEach((el) => {
-                    new Swiper(el, {
-                      slidesPerView: 1,
-                      slidesPerGroup: 1,
-                      modules: [Navigation, Pagination],
-                      pagination: {
-                        el: el.querySelector(".swiper-pagination"),
-                        renderBullet: function (index, className) {
-                          return (
-                            '<span class="' +
-                            className +
-                            ' swiper-pagination-bullet !opacity-100 w-[32px] rounded-[1px] h-[2px] mx-[2px] border-none p-0 ">' +
-                            "</span>"
-                          );
-                        },
-                        clickable: true,
-                      },
-                      navigation: {
-                        nextEl: el.querySelector(".swiper-image-next"),
-                        prevEl: el.querySelector(".swiper-image-prev"),
-                      },
-                      breakpoints: {
-                        1024: {
-                          noSwipingClass: "swiper-slide",
-                        },
-                      },
-                    });
-                  });
-
-                  //Booking
-                  let bookingBtns = document
-                    .querySelector(".popover")
-                    .querySelectorAll(".room-booking");
-                  bookingBtns.forEach((btn) => {
-                    btn.addEventListener("click", this.openBooking);
-                  });
-                }
-              });
+                this.handleResize();
+              });                         
+            },
+            onError: errors => {
+              this.closeModal();
             },
           });
         });
 
-        //init balloon content
         placemark.balloon.events.add(["close"], (e) => {
-          this.selectedRooms = [];
+          this.$page.props.modals.booking = false;
+          this.isOpen = false;
+          this.selectedRooms = [];          
         });
 
         geoObjects.push(placemark);
@@ -349,21 +184,35 @@ export default {
           });
       }
     },
-    closeBalloon() {
-      searchMap.balloon.close();
+    openModal() {
+      this.isOpen = true;
+    },
+    closeModal() {      
+      if (this.$page.props.modals.booking !== true && this.isOpen === true) {
+        searchMap.balloon.close();
+        this.isOpen = false;
+        this.selectedRooms = [];
+      }      
     },
     hideSearch() {
       usePage().props.modals.search = false;
-    },
-    openBooking(event) {
-      let btn = event.currentTarget;
-      let room_id = btn.dataset.roomId;
-      let bookingRoom = _.find(
-        this.selectedRooms,
-        (room) => room.id == room_id
-      );
-      this.$eventBus.emit("booking-open", bookingRoom);
-    },
+    }, 
+    handleResize() {
+      if (typeof window !== "undefined") {
+        let windowHeight = window.innerHeight;
+        let windowWidth = window.innerWidth;
+        let roomEl = document
+          .querySelector('.rooms-list')
+          .querySelector('.room');
+        
+        if (roomEl) {
+          let elHeight = roomEl.clientHeight;
+          this.listHeight = windowWidth > 1024 ? elHeight * 2 : elHeight;
+
+          if (windowHeight < this.listHeight) this.listHeight = elHeight;
+        }                
+      }
+    },  
   },
 };
 </script>
