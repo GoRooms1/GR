@@ -20,6 +20,7 @@ import vClickOutside from "click-outside-vue3";
 import _ from "lodash";
 import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
+import { geolocationStore } from "@/Store/geolocationStore.js";
 import RoomCard from "@/Pages/Room/partials/RoomCard.vue";
 
 let searchMap = null;
@@ -41,17 +42,19 @@ export default {
   mounted() {
     this.$page.props.modals.booking = false;
     document.body.classList.add("fixed");
-    ymaps.ready(this.initMap);
-    this.$eventBus.on("data-received", (e) => this.drawObjects());    
+    this.$eventBus.on("filters-inited", (e) => ymaps.ready(this.initMap)); 
+    this.$eventBus.on("data-received", (e) => this.drawObjects());     
   },
   unmounted() {
     document.body.classList.remove("fixed");
     this.$eventBus.off("data-received");
+    this.$eventBus.off("filters-inited");
   },
   data() {
     return {
       filterStore,
-      zoom: 12,
+      geolocationStore,
+      zoom: 10,
       hotelMarkers: [],
       selectedRooms: [],
       isOpen: false,
@@ -59,9 +62,9 @@ export default {
     };
   },
   methods: {
-    initMap() {
+    initMap() {      
       searchMap = new ymaps.Map("search-map", {
-        center: [55.757572, 37.825793],
+        center: this.geolocationStore.coordiantes,
         zoom: this.zoom,
         controls: [],
       });
@@ -91,9 +94,9 @@ export default {
         zoomMargin: [85, 50, 90, 50],
       }),        
        
-      this.drawObjects();
+      this.drawObjects(true);
     },
-    drawObjects() {
+    drawObjects(isFirst = false) {
       if (!searchMap) return;
 
       geoObjectsClusterer.removeAll();
@@ -178,9 +181,9 @@ export default {
         geoObjectsClusterer.add(geoObjects);
         searchMap.geoObjects.add(geoObjectsClusterer);
         searchMap
-          .setBounds(geoObjectsClusterer.getBounds(), { checkZoomRange: true })
+          .setBounds(geoObjectsClusterer.getBounds(), { checkZoomRange: true, duration: 500 })
           .then(() => {
-            if (searchMap.getZoom() > this.zoom) searchMap.setZoom(this.zoom);
+            if (searchMap.getZoom() > 13 && !isFirst) searchMap.setZoom(13);
           });
       }
     },
@@ -208,8 +211,8 @@ export default {
         if (roomEl) {
           let elHeight = roomEl.clientHeight;
           this.listHeight = windowWidth > 1024 ? elHeight * 2 : elHeight;
-
-          if (windowHeight < this.listHeight) this.listHeight = elHeight;
+          
+          if (( windowHeight - 130) < this.listHeight) this.listHeight = elHeight;         
         }                
       }
     },  

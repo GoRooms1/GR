@@ -12,6 +12,7 @@ use Domain\Attribute\Model\AttributeCategory;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Models\HotelType;
 use Domain\Image\Traits\UploadImage;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
@@ -67,7 +68,13 @@ class ObjectController extends Controller
 
             Auth::loginUsingId($user->id, true);
         }
-        $user->notify(new NotificationCreateHotel($user, $request->password));
+        
+        try {
+            $user->notify(new NotificationCreateHotel($user, $request->password));
+        } catch (Exception $e) {
+            
+        }
+        
         $hotel = new Hotel();
         $hotel->name = $request->get('hotel')['name'];
         $hotel->type()->associate($request->get('hotel')['type']);

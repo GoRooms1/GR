@@ -3,10 +3,11 @@ import { useStorage } from "@vueuse/core";
 
 export const geolocationStore = reactive({
   //State
-  geolocation: [],
-  //city: useStorage('city', null),
-  city: "Москва",
   defaultCity: "Москва",
+  defaultCoordinates: [55.75399400, 37.62209300],
+  //city: null,
+  city: useStorage('city', null),  
+  coordiantes: useStorage('coordinates', [55.75399400, 37.62209300]),
 
   //Getters and Actions
   async locate() {
@@ -14,21 +15,31 @@ export const geolocationStore = reactive({
       try {
         let ymapsReady = ymaps
           .ready()
-          .then((value) => {
+          .then((value) => {           
             return ymaps.geolocation.get({
               provider: "auto",
               autoReverseGeocode: true,
             });
           })
           .then((result) => {
-            let loc = result.geoObjects.get(0).properties;
-            this.geolocation =
-              loc.get(
-                "metaDataProperty"
-              )?.GeocoderMetaData?.Address?.Components;
-            let city = this.geolocation?.find(
+            //Get address
+            let address = result.geoObjects.get(0).properties
+              .get("metaDataProperty")?.GeocoderMetaData?.Address?.Components;
+            
+            let city = address?.find(
               (el) => el.kind == "locality"
             )?.name;
+            
+            //Get Cordinates
+            let coords = result.geoObjects.get(0).geometry.getCoordinates();
+            
+            if (coords)
+              this.coordiantes = [coords[0], coords[1]];
+            else
+              this.coordiantes = this.defaultCoordinates;                     
+            
+            console.log('geolocation', city, this.coordiantes.toString());
+
             return city;
           });
 
@@ -38,9 +49,10 @@ export const geolocationStore = reactive({
       } catch (error) {
         console.log("Ymaps error");
         this.city = this.defaultCity;
+        this.coordiantes = this.defaultCoordinates;        
         return this.defaultCity;
       }
-    }
+    }    
 
     return this.city;
   },
