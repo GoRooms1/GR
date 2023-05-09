@@ -4,7 +4,7 @@
       <div class="flex justify-between items-center">
         <h1 class="text-white font-bold xl:text-3xl"
           :class="$page.props.isLoadind == true ? 'invisible' : ''">
-          {{$page.props?.page_description?.id > 0 ? $page.props.page_description.h1 : 'Мы нашли для вас ' + foundMessage }}
+          {{$page.props?.page_description?.id > 0 ? $page.props.page_description.h1 : foundMessage }}
         </h1>
         <button class="xl:hidden">
           <svg
@@ -224,7 +224,7 @@ export default {
       if (filterStore.getFilterValue("hotels", "hotel_type") == 3)
         hotelTypePlural = ["апартаменты", "апартаментов", "апартаментов"];
 
-      return this.found + " " + numWord(this.found, hotelTypePlural);
+      return 'Мы нашли для вас ' + this.found + " " + numWord(this.found, hotelTypePlural);
     },
   },
 };
