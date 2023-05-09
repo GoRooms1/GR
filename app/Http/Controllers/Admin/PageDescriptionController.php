@@ -40,9 +40,9 @@ class PageDescriptionController extends Controller
 
         if ($metro = $request->get('metro')) {
             $descriptions = $descriptions->where('url', 'like', '%/metro-'.CustomStr::getCustomSlug($metro).'%');
-        }
-
-        $descriptions = $descriptions->paginate(15);
+        }       
+        
+        $descriptions = $descriptions->paginate(15);        
         $cities = Address::pluck('city')->unique();
 
         return view('admin.descriptions.index', compact('descriptions', 'cities'));

@@ -85,6 +85,8 @@ class PageDescription extends Model
         'updated_at' => 'datetime:Y-m-d\Th:i:sP',
     ];
 
+    static string $orderDirection = "DESC";
+
     protected static function boot(): void
     {
         parent::boot();

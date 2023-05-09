@@ -33,13 +33,13 @@ Route::post('room/order/down/{id}', [Lk\OrderRoomController::class, 'downOrder']
 // Для изменения порядка фотографий в комнате и отеле, ЛК
 Route::post('images/ordered', [ImageController::class, 'ordered']);
 
-// Route::prefix('/filter')->name('filter.')->group(function () {
-//     Route::get('cities', [Api\FilterController::class, 'cities'])->name('cities');
-//     Route::get('city-area', [Api\FilterController::class, 'city_area'])->name('city_area');
-//     Route::get('count-city-area', [Api\FilterController::class, 'count_city_area'])->name('count_city_area');
-//     Route::get('district', [Api\FilterController::class, 'district'])->name('district');
-//     Route::get('metro', [Api\FilterController::class, 'metro'])->name('metro');
+Route::prefix('/filter')->name('filter.')->group(function () {
+    Route::get('cities', [Api\FilterController::class, 'cities'])->name('cities');
+    Route::get('city-area', [Api\FilterController::class, 'city_area'])->name('city_area');
+    Route::get('count-city-area', [Api\FilterController::class, 'count_city_area'])->name('count_city_area');
+    Route::get('district', [Api\FilterController::class, 'district'])->name('district');
+    Route::get('metro', [Api\FilterController::class, 'metro'])->name('metro');
 
-//     Route::get('all', [Api\FilterController::class, 'all'])->name('all');
-// });
+    Route::get('all', [Api\FilterController::class, 'all'])->name('all');
+});
 
