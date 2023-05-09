@@ -1,8 +1,10 @@
 <template>
   <AppHead
     :title="page_description?.title"
+    :meta_keywords="page_description?.meta_keywords"
     :meta_description="page_description?.meta_description"
   />
+  <h1 class="hidden">{{ page_description?.h1}}</h1>
   <search-filter-modal />
   <div class="relative z-20 w-full">
     <search-panel />

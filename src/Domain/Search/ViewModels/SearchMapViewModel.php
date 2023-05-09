@@ -9,6 +9,7 @@ use Domain\Hotel\Actions\FilterHotelsOnMapAction;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Hotel\DataTransferObjects\HotelMapData;
+use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\Actions\GetPageDescriptionFromParamsData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsInHotelAction;
@@ -36,7 +37,12 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
     {        
         $paramsData = $this->params;
         $paramsData->isRoomsFilter = true;
-        return PageDescriptionData::fromModel(GetPageDescriptionFromParamsData::run($paramsData));   
+        $pageDescription = PageDescriptionData::fromModel(GetPageDescriptionFromParamsData::run($paramsData));
+
+        if ($pageDescription->title == '' || is_null($pageDescription->title))
+            $pageDescription = PageDescriptionData::from(GetPageDescriptionByUrlAction::run('/'));
+
+        return $pageDescription;
     }
     
     /**
