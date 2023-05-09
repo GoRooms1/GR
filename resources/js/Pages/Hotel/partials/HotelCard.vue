@@ -211,10 +211,10 @@ export default {
         clickable: true,
         renderBullet: function (index, className) {
           return (
-            '<span class="' +
+            '<button class="' +
             className +
             ' !opacity-100 w-[6px] rounded-[50%] h-[6px] mx-[2px] border-none p-0 ">' +
-            "</span>"
+            "</button>"
           );
         },
       },

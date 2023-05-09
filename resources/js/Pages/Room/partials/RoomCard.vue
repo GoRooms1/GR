@@ -240,10 +240,10 @@ export default {
         clickable: true,
         renderBullet: function (index, className) {
           return (
-            '<span class="' +
+            '<button class="' +
             className +
-            ' swiper-pagination-bullet !opacity-100 w-[32px] rounded-[1px] h-[2px] mx-[2px] border-none p-0 ">' +
-            "</span>"
+            ' swiper-pagination-bullet !opacity-100 w-[32px] rounded-[1px] h-[2px] mx-[2px] border-none p-0">' +
+            "</button>"
           );
         },
       },
