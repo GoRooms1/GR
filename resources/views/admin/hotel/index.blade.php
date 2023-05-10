@@ -43,10 +43,9 @@
                        style="max-width: 100px">
                 </td>
                 <td>
-                  @if ($hotel)
-                  <a href="{{ route('admin.hotels.show', $hotel) }}"
-                     class="{{ $hotel->description === null ? 'text-danger' : '' }}">{{ $hotel->name }}</a>                  
-                  @endif                  
+                     <a href="{{ '/admin/hotels/'.$hotel->slug }}"
+                     class="{{ $hotel->description === null ? 'text-danger' : '' }}">{{ $hotel->name }}</a>               
+                                    
                 </td>
                 <td>
                   <div class="btn-group btn-group-sm">
