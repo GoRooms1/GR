@@ -26,7 +26,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         public ?int $number,
         public ?int $order,
         public ?int $category_id,
-        public bool $moderate,
+        public ?bool $moderate,
         public ?string $description,
         public int $hotel_id,
         public ?Carbon $created_at,

@@ -17,6 +17,7 @@ use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
+
 class CategoryController extends Controller
 {
     public function update(CategoryRequest $request): JsonResponse
@@ -53,18 +54,18 @@ class CategoryController extends Controller
 
                     $room->order = $roomLastOrder->order + 1;
                 }
-                $room->save();                
-
+                $room->save(); 
+                
                 return response()->json([
                     'status' => 'success',
                     'category' => $category,
-                    'room' => RoomData::fromModel($room)->except('hotel'),
+                    'room' => $room,
                 ]);
             }
-
+            
             return response()->json([
                 'status' => 'success',
-                'category' => CategoryData::fromModel($category),
+                'category' => $category,
             ]);
         }
 
