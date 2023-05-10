@@ -42,20 +42,21 @@
                   <img src="{{ asset($hotel->image->path) }}" alt="" class="img-fluid"
                        style="max-width: 100px">
                 </td>
-                <td>
-                     <a href="{{ '/admin/hotels/'.$hotel->slug }}"
-                     class="{{ $hotel->description === null ? 'text-danger' : '' }}">{{ $hotel->name }}</a>               
-                                    
+                @if ($hotel->slug != null && $hotel->slug != '')
+                <td>                  
+                  <a href="{{ route('admin.hotels.show', $hotel) }}"
+                     class="{{ $hotel->description === null ? 'text-danger' : '' }}">{{ $hotel->name }}</a>
                 </td>
                 <td>
                   <div class="btn-group btn-group-sm">
-                    <a href="{{ '/admin/hotels/'.$hotel->slug.'/edit' }}" class="btn btn-success">Изменить</a>
-                    <a href="{{ '/rooms/create/'.$hotel->slug }}" class="btn btn-primary">Создать номер</a>
-                    <button type="button" data-action="{{ '/admin/hotels/'.$hotel->slug }}"
+                    <a href="{{ route('admin.hotels.edit', $hotel) }}" class="btn btn-success">Изменить</a>
+                    <a href="{{ route('admin.rooms.create', $hotel) }}" class="btn btn-primary">Создать номер</a>
+                    <button type="button" data-action="{{ route('admin.hotels.destroy', $hotel) }}"
                             class="btn btn-danger js-delete">Удалить
                     </button>
                   </div>
                 </td>
+                @endif
               </tr>
             @endforeach
             </tbody>
