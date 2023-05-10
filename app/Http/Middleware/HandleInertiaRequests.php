@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
+use Domain\Address\Actions\GetLocationByIp;
+use Domain\Address\Actions\GetLocationFromSession;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
@@ -43,7 +45,7 @@ class HandleInertiaRequests extends Middleware
      * @return array
      */
     public function share(Request $request): array
-    {
+    {        
         return array_merge(parent::share($request), [
             'modals' => [],
             'flash' => [
@@ -54,6 +56,7 @@ class HandleInertiaRequests extends Middleware
                 'rooms' => fn() => GetAvailibleRoomsCountAction::run(),
                 'cities' => fn() => GetAvailibleCitiesCountAction::run(),
             ],
+            'location' => fn() => GetLocationFromSession::run($request->ip),
             'contacts' => fn() => GetContactsSettingsAction::run(),
             'app_url' => fn() => config('app.url'),
             'is_moderator' => fn() => GetLoggedUserModeratorStatusAction::run(),

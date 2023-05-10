@@ -20,7 +20,6 @@ import vClickOutside from "click-outside-vue3";
 import _ from "lodash";
 import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
-import { geolocationStore } from "@/Store/geolocationStore.js";
 import RoomCard from "@/Pages/Room/partials/RoomCard.vue";
 
 let searchMap = null;
@@ -52,8 +51,7 @@ export default {
   },
   data() {
     return {
-      filterStore,
-      geolocationStore,
+      filterStore,      
       zoom: 10,
       hotelMarkers: [],
       selectedRooms: [],
@@ -62,9 +60,19 @@ export default {
     };
   },
   methods: {
-    initMap() {      
+    initMap() {
+      let center = [];
+      if (this.$page.props?.map_center?.geo_lat && this.$page.props?.map_center?.geo_lon) {
+        center[0] = this.$page.props.map_center.geo_lat;
+        center[1] = this.$page.props.map_center.geo_lon;
+      }      
+      else {
+        center[0] = this.$page.props?.location?.geo_lat ?? 55.75399400;
+        center[1] = this.$page.props?.location?.geo_lon ?? 37.62209300;
+      }
+      
       searchMap = new ymaps.Map("search-map", {
-        center: this.geolocationStore.coordiantes,
+        center: center,
         zoom: this.zoom,
         controls: [],
       });

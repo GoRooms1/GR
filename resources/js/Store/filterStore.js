@@ -1,15 +1,13 @@
 import { reactive } from "vue";
-import { useStorage } from "@vueuse/core";
 import _ from "lodash";
 import qs from "qs";
-import { geolocationStore } from "./geolocationStore.js";
 
 export const filterStore = reactive({
   //State
   filters: [],
 
   //Getters and Actions
-  async init(url) {
+  async init(url, location) {
     console.log("init filters");
     this.filters = [];
     if (url.substring(url.indexOf("?") + 1).length > 2) {
@@ -17,7 +15,7 @@ export const filterStore = reactive({
     }
 
     if (this.getFilterValue("hotels", "city") == null) {
-      let city = await geolocationStore.locate();
+      let city = location?.city ?? 'Москва';
       this.updateFilter("hotels", false, "city", city);
     }
 

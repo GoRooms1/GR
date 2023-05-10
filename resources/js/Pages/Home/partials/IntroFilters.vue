@@ -202,7 +202,7 @@ export default {
   },
   props: {},
   created() {
-    this.filterStore.init(usePage().url);
+    this.filterStore.init(usePage().url, this.$page.props.location);
   },
   data() {
     return {

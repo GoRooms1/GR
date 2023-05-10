@@ -571,7 +571,7 @@ export default {
   mounted() {
     let initPromise = new Promise((resolve, reject) => {
       resolve(
-        this.filterStore.init(usePage().props.query_string ?? usePage().url)
+        this.filterStore.init(usePage().props.query_string ?? usePage().url, this.$page.props.location)
       );
     });
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Domain\Search\ViewModels;
 
 use Arr;
+use Domain\Address\Actions\GetMapCenterByCityAction;
+use Domain\Address\DataTransferObjects\GeolocationData;
 use Domain\Hotel\Actions\FilterHotelsOnMapAction;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
@@ -72,5 +74,10 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
     public function query_string(): string
     {
         return Arr::query($this->params->toArray());
-    }    
+    }
+    
+    public function map_center(): GeolocationData | null
+    {
+        return GetMapCenterByCityAction::run($this->params->hotels->city);
+    }
 }

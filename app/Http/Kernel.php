@@ -10,7 +10,6 @@ use App\Http\Middleware\Lk;
 use App\Http\Middleware\Moderator;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\SecureRedirectMiddleware;
-use App\Http\Middleware\SetCityCoords;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -63,8 +62,7 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
-            SubstituteBindings::class,
-            SetCityCoords::class,
+            SubstituteBindings::class,            
             \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 

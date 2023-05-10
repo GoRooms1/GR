@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Json;
-use App\Http\Middleware\SetCityCoords;
 use App\Models\Search;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
@@ -232,8 +231,7 @@ class SearchController extends Controller
 
         try {
             if ($address['city'] && ! $request->is('api/*')) {
-                @$request->session()->put('city', $address['city']);
-                @SetCityCoords::set($request);
+                @$request->session()->put('city', $address['city']);               
             }
         } catch (Exception $exception) {
             // @phpstan-ignore-next-line
