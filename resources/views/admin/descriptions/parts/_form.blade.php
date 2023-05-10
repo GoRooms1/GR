@@ -2,9 +2,9 @@
     <label for="title">Заголовок</label>
     <input type="text" name="title" id="title" value="{{ old('title') ?? @$description->title ?? '' }}" class="form-control " required/>
 </div>
-<div class="form-group {{ ($description->type === 'metro' || $description->type === 'street' || $description->type === 'district' || $description->type === 'area' || $description->type === 'city') ? 'required' : ''  }}">
+<div class="form-group {{ ($description?->type === 'metro' || $description?->type === 'street' || $description->type === 'district' || $description->type === 'area' || $description->type === 'city') ? 'required' : ''  }}">
     <label for="h1">H1</label>
-    <input type="text" name="h1" id="h1" value="{{ old('h1') ?? @$description->h1 ?? '' }}" class="form-control" {{ ($description->type === 'metro' || $description->type === 'street' || $description->type === 'district' || $description->type === 'area' || $description->type === 'city') ? 'required' : ''  }}/>
+    <input type="text" name="h1" id="h1" value="{{ old('h1') ?? @$description->h1 ?? '' }}" class="form-control" {{ ($description?->type === 'metro' || $description?->type === 'street' || $description?->type === 'district' || $description?->type === 'area' || $description?->type === 'city') ? 'required' : ''  }}/>
 </div>
 <div class="form-group required">
     <label for="url">Ссылка</label>

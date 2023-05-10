@@ -55,7 +55,8 @@ class PageDescriptionController extends Controller
 
     public function create(): View
     {
-        return view('admin.descriptions.create');
+        $description = new PageDescription();
+        return view('admin.descriptions.create', compact('description'));
     }
 
     public function store(Request $request): RedirectResponse

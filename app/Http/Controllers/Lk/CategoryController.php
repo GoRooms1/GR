@@ -9,8 +9,10 @@ namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LK\CategoryRequest;
+use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Category\Models\Category;
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -32,11 +34,11 @@ class CategoryController extends Controller
     {
         $category = new Category();
 
-        if ($this->save($category, $request->all())) {
+        if ($this->save($category, $request->all())) {            
             if ($category->hotel->type_fond === Hotel::CATEGORIES_TYPE) {
                 $room = new Room();
-                $room->hotel()->associate($category->hotel->id);
-                $room->category()->associate($category->id);
+                $room->hotel()->associate($category->hotel->id);               
+                $room->category()->associate($category->id);                
                 $hotel = $category->hotel;
 
                 $count = $hotel->rooms()->count();
@@ -51,18 +53,18 @@ class CategoryController extends Controller
 
                     $room->order = $roomLastOrder->order + 1;
                 }
-                $room->save();
+                $room->save();                
 
                 return response()->json([
                     'status' => 'success',
                     'category' => $category,
-                    'room' => $room,
+                    'room' => RoomData::fromModel($room)->except('hotel'),
                 ]);
             }
 
             return response()->json([
                 'status' => 'success',
-                'category' => $category,
+                'category' => CategoryData::fromModel($category),
             ]);
         }
 
@@ -83,7 +85,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function save(&$category, $data): bool
+    public function save($category, $data): bool
     {
         try {
             $category->name = $data['name'];
