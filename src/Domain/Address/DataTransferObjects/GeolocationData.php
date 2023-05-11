@@ -25,12 +25,8 @@ final class GeolocationData extends \Parent\DataTransferObjects\Data
         );
     }
     public static function fromDaData(array $data, ?string $ip): self
-    {           
-        $defaultData =  self::default(); 
-        if (!isset($data['location']['data']))
-            return $defaultData;
-       
-        return new self(           
+    {
+        return new self(      
             city: $data['location']['data']['city'],           
             geo_lat: floatval($data['location']['data']['geo_lat']),
             geo_lon: floatval($data['location']['data']['geo_lon']),

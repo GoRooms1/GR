@@ -58,6 +58,9 @@ final class GetLocationByIp extends Action
             if ($data['location'] == null || $data['location'] == 'null')
                 return null;
             
+            if (!isset($data['location']['data']))
+                return null;
+            
             $geoLocationData = GeolocationData::fromDaData($data, $ip);
             self::saveResultInDB($geoLocationData);
 

@@ -56,7 +56,7 @@ class HandleInertiaRequests extends Middleware
                 'rooms' => fn() => GetAvailibleRoomsCountAction::run(),
                 'cities' => fn() => GetAvailibleCitiesCountAction::run(),
             ],
-            'location' => fn() => GetLocationFromSession::run($request->ip),
+            'location' => fn() => GetLocationFromSession::run($request->ip()),
             'contacts' => fn() => GetContactsSettingsAction::run(),
             'app_url' => fn() => config('app.url'),
             'is_moderator' => fn() => GetLoggedUserModeratorStatusAction::run(),
