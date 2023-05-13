@@ -37,7 +37,7 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
      */
     public function page_description(): PageDescriptionData
     {        
-        $paramsData = $this->params;
+        $paramsData = clone $this->params;
         $paramsData->isRoomsFilter = true;
         $pageDescription = PageDescriptionData::fromModel(GetPageDescriptionFromParamsData::run($paramsData));
 
