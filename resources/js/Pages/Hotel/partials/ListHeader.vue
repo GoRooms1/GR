@@ -51,10 +51,7 @@
             <div
               class="flex items-center border border-white rounded-lg overflow-hidden"
             >
-              <button
-                clck-btn="filterUp"
-                clck-btn-class="text-blue-500 bg-white"
-                clck-btn-wth="filterDown"
+              <button                
                 class="text-white h-8 pt-1 px-4 cursor-pointer text-blue-500 bg-white"
               >
                 <svg
@@ -90,10 +87,7 @@
                   ></path>
                 </svg>
               </button>
-              <button
-                clck-btn="filterDown"
-                clck-btn-class="text-blue-500 bg-white"
-                clck-btn-wth="filterUp"
+              <button                
                 class="text-white h-8 pt-1 px-4 cursor-pointer"
               >
                 <svg
@@ -154,42 +148,27 @@
             <div
               class="flex items-center border border-white rounded-lg overflow-hidden"
             >
-              <button
-                clck-btn="filterAparts1"
-                clck-btn-wth="filterAparts2 filterAparts3 filterAparts4 filterAparts5"
-                clck-btn-class="bg-white text-[#6170FF]"
+              <button                
                 class="text-white h-8 leading-8 px-4 border-r border-white hover:bg-white hover:text-[#6170FF] bg-white text-[#6170FF]"
               >
                 Любой
               </button>
-              <button
-                clck-btn="filterAparts2"
-                clck-btn-wth="filterAparts1 filterAparts3 filterAparts4 filterAparts5"
-                clck-btn-class="bg-white text-[#6170FF]"
+              <button                
                 class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
               >
                 6+
               </button>
-              <button
-                clck-btn="filterAparts3"
-                clck-btn-wth="filterAparts1 filterAparts2 filterAparts4 filterAparts5"
-                clck-btn-class="bg-white text-[#6170FF]"
+              <button                
                 class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
               >
                 7+
               </button>
-              <button
-                clck-btn="filterAparts4"
-                clck-btn-wth="filterAparts1 filterAparts2 filterAparts3 filterAparts5"
-                clck-btn-class="bg-white text-[#6170FF]"
+              <button                
                 class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
               >
                 8+
               </button>
-              <button
-                clck-btn="filterAparts5"
-                clck-btn-wth="filterAparts1 filterAparts2 filterAparts3 filterAparts4"
-                clck-btn-class="bg-white text-[#6170FF]"
+              <button                
                 class="text-white px-2 h-8 leading-8 px-4 cursor-pointer hover:bg-white hover:text-[#6170FF]"
               >
                 9+

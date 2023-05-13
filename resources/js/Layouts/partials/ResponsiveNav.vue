@@ -5,7 +5,7 @@
     class="flex fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex-col justify-center items-center lg:hidden px-7"      
   >
     <button v-on:click="hide()" class="absolute top-[12px] right-[16px]">
-      <img src="/img/close.svg" />
+      <img src="/img/close.svg" alt="close"/>
     </button>
     <div class="flex flex-col px-6 py-8 bg-white rounded-3xl w-full mb-[17%]">
       <h3 class="mb-6 font-semibold">Меню</h3>

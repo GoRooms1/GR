@@ -1,9 +1,10 @@
 <template>
   <button @click="toggle()" :class="btnClass + ' ' + activeClass">
-    <img :src="img" :class="imgClass + ' ' + (!value && img ? '' : 'hidden')" />
-    <img
+    <img v-if="!value && img" :src="img" :class="imgClass" :alt="title"/>
+    <img v-if="value && toggleImg"
       :src="toggleImg"
-      :class="imgClass + ' ' + (value && toggleImg ? '' : 'hidden')"
+      :class="imgClass"
+      :alt="title"
     />
     <span :class="titleClass">{{ title }}</span>
     <slot />

@@ -1,8 +1,6 @@
 <template>
   <div class="relative z-[5]">
-    <button
-      select-data="rating"
-      data="button-tab"
+    <button      
       class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between"
     >
       <div class="flex items-center gap-[8px]">

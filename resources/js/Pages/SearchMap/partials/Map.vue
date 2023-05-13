@@ -4,7 +4,7 @@
   <div v-if="isOpen == true" class="rooms-list fixed mx-auto h-[100%] lg:h-[100vh] top-0 left-0 z-50 w-full flex flex-col justify-center items-center"> 
     <div class="w-full flex flex-col" style="max-width: 1024px;">
       <button @click="closeModal()" class="w-[32px] h-[32px] p-2 bg-white rounded-lg ml-auto xl:mr-[-32px]">
-        <img src="/img/close.svg">
+        <img src="/img/close.svg" alt="close">
       </button>
       <div v-click-outside="closeModal" class="mt-2 mx-[0.5rem] overflow-y-auto scrollbar pr-3 lg:mx-0 flex flex-col" :style="'max-height:' + listHeight + 'px;'">
         <div class="room" v-for="room in selectedRooms">

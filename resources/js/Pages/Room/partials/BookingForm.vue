@@ -7,7 +7,7 @@
         @click="close()"
         class="absolute top-[12px] right-[0.85rem] lg:static lg:w-[2rem] lg:h-[2rem] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]"
       >
-        <img src="/img/close.svg" />
+        <img src="/img/close.svg" alt="close"/>
       </button>
       <div v-if="!bookingSuccess">
         <div

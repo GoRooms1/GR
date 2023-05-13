@@ -6,6 +6,7 @@
       :class="class"
       alt="img"
       @error="loadError"
+      loading="lazy"
     />
   </div>
 </template>
@@ -14,7 +15,7 @@
 export default {
   props: {
     src: String,
-    class: String,
+    class: String,    
   },
   data() {
     return {

@@ -37,7 +37,7 @@
               <span class="text-[14px] leading-[16px] font-semibold"
                 >Рейтинг</span
               >
-              <img src="/img/star2.svg" />
+              <img src="/img/star2.svg" alt="star"/>
               <p class="text-[14px] leading-[16px]">
                 <span class="font-semibold">0</span>
                 (0)
@@ -57,9 +57,7 @@
           <tabs @changed="redrawMap">
             <tab title="Фотогалерея">
               <swiper
-                :slides-per-view="1"
-                :loop="true"
-                :lazy="true"
+                :slides-per-view="1"                
                 :preloadImages="false"
                 :pagination="pagination"
                 :navigation="navigation"

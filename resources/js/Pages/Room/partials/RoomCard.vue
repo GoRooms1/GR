@@ -1,9 +1,7 @@
 <template>
   <div class="my-4 xl:flex xl:items-center">
     <swiper
-      slides-per-view="1"
-      :loop="true"
-      :lazy="true"
+      slides-per-view="1"      
       :preloadImages="false"
       :pagination="pagination"
       :navigation="navigation"
@@ -27,110 +25,19 @@
       class="bg-white rounded-2xl p-5 xl:p-6 shadow-xl relative z-10 xl:w-full xl:h-96 overflow-hidden"
     >
       <div class="flex mb-4">
-        <button
-          data="rating-open"
+        <button         
           class="btn-disabled flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"
         >
-          <div class="mr-2">
-            <img src="/img/star.svg" />
-          </div>
+          <img class="mr-2 block" src="/img/star.svg" alt="star"/>
           <div>
             <b>0</b>
             (0)
           </div>
-        </button>
-        <div
-          data="rating-modal"
-          class="absolute bg-white rounded-2xl p-5 xl:p-6 z-20 xl:h-96 left-0 top-0 w-full h-full hidden"
-        >
-          <div class="flex justify-center mb-6">
-            <button
-              data="rating-close"
-              class="btn-disabled flex text-sm py-1 px-2 rounded-md mr-2"
-            >
-              <div class="mr-2">
-                <img src="/img/star2.svg" />
-              </div>
-              <div>
-                <b>9.5</b>
-                (14)
-              </div>
-            </button>
-            <button
-              class="ml-auto flex py-1.5 px-3 rounded-lg text-white bg-[#6170FF] text-sm"
-            >
-              Прочитать отзывы
-            </button>
-          </div>
-          <h4 class="text-xl font-semibold mb-6">Рейтинг</h4>
-          <div class="grid grid-cols-2 grid-rows-3 gap-[24px]">
-            <div class="flex h-[26px] justify-between relative">
-              <div class="text-xs">Расположение</div>
-              <div class="text-xs">10</div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"
-              ></div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#6170FF] rounded-[2px]"
-              ></div>
-            </div>
-            <div class="flex h-[26px] justify-between relative">
-              <div class="text-xs">Персонал</div>
-              <div class="text-xs">10</div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"
-              ></div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#6170FF] rounded-[2px]"
-              ></div>
-            </div>
-            <div class="flex h-[26px] justify-between relative">
-              <div class="text-xs">Чистота</div>
-              <div class="text-xs">10</div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"
-              ></div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#6170FF] rounded-[2px]"
-              ></div>
-            </div>
-            <div class="flex h-[26px] justify-between relative">
-              <div class="text-xs">Wi-Fi</div>
-              <div class="text-xs">10</div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"
-              ></div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#6170FF] rounded-[2px]"
-              ></div>
-            </div>
-            <div class="flex h-[26px] justify-between relative">
-              <div class="text-xs">Комфорт</div>
-              <div class="text-xs">9</div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"
-              ></div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-[90%] bg-[#6170FF] rounded-[2px]"
-              ></div>
-            </div>
-            <div class="flex h-[26px] justify-between relative">
-              <div class="text-xs">Цена</div>
-              <div class="text-xs">9</div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"
-              ></div>
-              <div
-                class="absolute bottom-0 left-0 h-[4px] w-[90%] bg-[#6170FF] rounded-[2px]"
-              ></div>
-            </div>
-          </div>
-        </div>
-        <button
-          clck-btn=""
+        </button>        
+        <button          
           class="btn-disabled flex py-1 px-2 rounded-md bg-sky-100"
         >
-          <img src="/img/heartCard.svg" />
+          <img src="/img/heartCard.svg" alt="heart"/>
         </button>
         <cashback-tag />
       </div>
