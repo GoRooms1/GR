@@ -15,13 +15,14 @@
       :title="simple ? '' : 'Бонусная программа'"
       classes="bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]"
     />
-    <button class="flex">
-      <a href="/lk/start" class="flex items-center mr-4 pl-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]">
+    <form class="flex" action="/lk/start" method="get">
+      <button class="flex  items-center mr-4 pl-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]">      
         <span class="pl-2">
-          {{simple ? '' : 'Добавить объект'}}
-        </span>
-      </a>
-    </button>    
+            {{simple ? '' : 'Добавить объект'}}
+          </span>
+      </button> 
+    </form>
+       
     <nav-link
       href="/contacts"
       classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"
@@ -30,9 +31,10 @@
       disabled
       classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
     />
-    <button class="flex">
-      <a href="/login" class="flex items-center w-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]"></a>
-    </button>
+    <form class="flex" action="/login" method="get">
+      <button class="flex items-center w-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]">
+      </button> 
+    </form>    
   </div>  
 </template>
 

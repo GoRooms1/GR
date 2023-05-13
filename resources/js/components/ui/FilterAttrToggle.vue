@@ -4,7 +4,7 @@
     <img v-if="value && toggleImg"
       :src="toggleImg"
       :class="imgClass"
-      :alt="title"
+      :alt="title ?? 'img'"
     />
     <span :class="titleClass">{{ title }}</span>
     <slot />

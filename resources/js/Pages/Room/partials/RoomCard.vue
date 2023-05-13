@@ -29,10 +29,10 @@
           class="btn-disabled flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"
         >
           <img class="mr-2 block" src="/img/star.svg" alt="star"/>
-          <div>
+          <span>
             <b>0</b>
             (0)
-          </div>
+          </span>
         </button>        
         <button          
           class="btn-disabled flex py-1 px-2 rounded-md bg-sky-100"

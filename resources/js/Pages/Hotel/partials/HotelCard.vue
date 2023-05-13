@@ -35,7 +35,7 @@
             class="btn-disabled flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"
           >
             <img class="mr-2 block" src="/img/star.svg" alt="star"/>
-            <div><b>0</b> (0)</div>
+            <span><b>0</b> (0)</span>
           </button>          
           <cashback-tag :with-chashback="hotel.is_cashback ?? false" />
         </div>
