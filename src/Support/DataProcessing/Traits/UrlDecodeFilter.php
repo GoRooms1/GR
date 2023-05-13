@@ -87,6 +87,10 @@ trait UrlDecodeFilter
 
         foreach ($data as $key => $item) {
             $slug = DB::table('address_slug')->where('slug', $item)->first();
+            
+            if (is_null($slug) && !is_null($item))
+                abort(404);
+
             switch ($key) {
                 case 'city':
                     $city = $slug->address ?? null;
