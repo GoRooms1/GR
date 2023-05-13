@@ -41,8 +41,10 @@ trait FiltersParamsTrait
     public function metros(): Closure
     {
         $city = $this->params->hotels->city;
+        $area = $this->params->hotels->city_area;
+        $district = $this->params->hotels->city_district;
 
-        return fn() => MetroKeyNameData::collection(GetAllCityMetrosAction::run($city));
+        return fn() => MetroKeyNameData::collection(GetAllCityMetrosAction::run($city, $area, $district));
     }
 
     /**

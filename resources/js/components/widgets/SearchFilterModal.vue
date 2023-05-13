@@ -718,7 +718,11 @@ export default {
 
       if (key == "city_area") {
         this.tempFilterStore.removeFilter("hotels", "city_district");
-        propsToUpdate = _.union(propsToUpdate, ["total", "city_districts"]);
+        propsToUpdate = _.union(propsToUpdate, ["total", "city_districts", "metros"]);
+      }
+
+      if (key == "city_district") {       
+        propsToUpdate = _.union(propsToUpdate, ["total", "metros"]);
       }
 
       if (value == null) {
