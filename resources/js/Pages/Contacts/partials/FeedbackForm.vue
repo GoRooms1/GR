@@ -79,35 +79,7 @@ const closeThanks = () => {
             <span class="flex">
               <span class="block mb-2">Имя</span>
               <span v-if="form.errors.name" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8 10.5002L8 10.5068"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 5.5L8 8"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
+                <img src="/img/attentionRed.svg"/>
               </span>
               <span v-if="form.errors.name" class="pl-2 text-red-500">
                 Не заполнено
@@ -124,35 +96,7 @@ const closeThanks = () => {
             <span class="flex">
               <span class="block mb-2">Телефон</span>
               <span v-if="form.errors.phone" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8 10.5002L8 10.5068"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 5.5L8 8"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
+                <img src="/img/attentionRed.svg"/>
               </span>
               <span v-if="form.errors.phone" class="pl-2 text-red-500">
                 Не заполнено
@@ -172,35 +116,7 @@ const closeThanks = () => {
             <span class="flex">
               <span class="block mb-2">Email</span>
               <span v-if="form.errors.email" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8 10.5002L8 10.5068"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 5.5L8 8"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
+                <img src="/img/attentionRed.svg"/>
               </span>
               <span v-if="form.errors.email" class="pl-2 text-red-500">
                 Не заполнено
@@ -220,35 +136,7 @@ const closeThanks = () => {
             <span class="flex">
               <span class="block mb-2">Сообщение</span>
               <span v-if="form.errors.message" class="pl-2">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8 10.5002L8 10.5068"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 5.5L8 8"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-                    stroke="#E1183D"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
+                <img src="/img/attentionRed.svg"/>
               </span>
               <span v-if="form.errors.message" class="pl-2 text-red-500">
                 Не заполнено

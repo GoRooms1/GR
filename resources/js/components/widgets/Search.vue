@@ -3,29 +3,8 @@
     class="search-box w-full bg-white p-0 px-[8px] py-[12px] flex items-center"
     :class="searchInputClasses"
   >
-    <button class="p-[8px]">
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-        <path
-          d="M19.9999 20L15.8032 15.8033"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
+    <button class="p-[8px]">      
+      <img src="/img/search.svg" alt="search"/>
     </button>
     <input
       :value="searchValue"
@@ -40,91 +19,14 @@
         @click="getDataOnMap()"
         class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M15 3V19"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M9 5V21"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M3 3L9 5L15 3L21 5V21L15 19L9 21L3 19V3Z"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
+        <img src="/img/map2.svg" alt="map"/>
         <span class="text-white">На карте</span>
       </button>
       <button
         @click="getDataOnList()"
         class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.85718 7H21"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M6.85718 12.143H21"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M6.85718 17.2857H21"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M3 7V7.01284"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M3 12.143V12.1558"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-          <path
-            d="M3 17.2857V17.2985"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
+        <img src="/img/listpointers2.svg" alt="list"/>
         <span class="text-white">Списком</span>
       </button>
     </div>

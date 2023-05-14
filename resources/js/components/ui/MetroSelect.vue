@@ -9,40 +9,12 @@
       class="w-full px-[12px] h-[32px] flex items-center bg-white justify-between rounded-[8px]"
     >
       <div class="flex items-center gap-[8px]">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M17.2344 14.231H16.3398L12.6235 5H12.6205L10.1174 10.2206L7.62046 5H7.6174L3.89497 14.231H3.00037V15H8.12598V14.231H7.10882L8.29448 11.3021L10.1174 15L11.9464 11.3021L13.126 14.231H12.1088V15H17.2344V14.231Z"
-            fill="#6170FF"
-          ></path>
-        </svg>
+        <MetroIcon color="6170FF"/>        
         <span class="flex items-center text-sm leading-[16px]">{{
           selectedOption ? selectedOption : placeholder
         }}</span>
       </div>
-      <svg
-        v-if="!selectedOption"
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="block"
-        :class="collapsed ? '' : 'rotate-180'"
-      >
-        <path
-          d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
+      <img v-if="selectedOption == null" src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'"/> 
     </button>
     <div v-if="selectedOption" class="relative">
       <button
@@ -50,33 +22,7 @@
         @click="clear()"
         class="px-[12px] h-[32px] select-clear"
       >
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g clip-path="url(#clip0_790_13114)">
-            <path
-              d="M0.999146 0.999203L10.9999 11"
-              stroke="#6170FF"
-              stroke-width="2"
-              stroke-linecap="round"
-            ></path>
-            <path
-              d="M0.999146 11L10.9999 0.999203"
-              stroke="#6170FF"
-              stroke-width="2"
-              stroke-linecap="round"
-            ></path>
-          </g>
-          <defs>
-            <clipPath id="clip0_790_13114">
-              <rect width="12" height="12" fill="white"></rect>
-            </clipPath>
-          </defs>
-        </svg>
+        <img src="/img/select_clear.svg" alt="clear"/>
       </button>
     </div>
     <div
