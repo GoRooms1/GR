@@ -2,7 +2,6 @@
 import { useForm } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 import { vMaska } from "maska";
-import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 
 const form = useForm({

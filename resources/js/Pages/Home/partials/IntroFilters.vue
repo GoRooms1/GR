@@ -175,7 +175,6 @@
 import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import { numWord } from "@/Services/numWord.js";
-import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 import CitySelectIntro from "@/components/ui/CitySelectIntro.vue";
 import MetroSelectIntro from "@/components/ui/MetroSelectIntro.vue";
@@ -220,15 +219,7 @@ export default {
         " " +
         numWord(usePage().props.total, objectWords)
       );
-    },
-    attributes() {
-      return _.cloneDeep(
-        _.filter(
-          this.filterStore.filters,
-          (el) => !nonAtrributes.includes(el.key)
-        )
-      );
-    },
+    },    
     city: filterGetSetObj("hotels", "city"),
     metro: filterGetSetObj("hotels", "metro"),
     is_hot: filterGetSetObj("rooms", "is_hot"),
@@ -255,7 +246,7 @@ export default {
         replace: true,
         preserveState: true,
         preserveScroll: true,
-        only: ["hotels", "rooms"],
+        only: ["hotels", "rooms", "map_center"],
         //onSuccess: () => {},
         onStart: () => {
           usePage().props.isLoadind = true;

@@ -17,7 +17,6 @@
 
 <script>
 import vClickOutside from "click-outside-vue3";
-import _ from "lodash";
 import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import RoomCard from "@/Pages/Room/partials/RoomCard.vue";
@@ -102,9 +101,9 @@ export default {
         zoomMargin: [85, 50, 90, 50],
       }),        
        
-      this.drawObjects(true);
+      this.drawObjects();
     },
-    drawObjects(isFirst = false) {
+    drawObjects() {
       if (!searchMap) return;
 
       geoObjectsClusterer.removeAll();
@@ -117,16 +116,16 @@ export default {
         if (!hotel?.address?.geo_lat || !hotel?.address?.geo_lon) return;
 
         let minCost = hotel.min_cost_value;
-        let blockWidth = _.round(86 + 7.4 * (minCost + "").length);
+        let blockWidth =  Math.round(86 + 7.4 * (minCost + "").length);
 
         //Fix same coordinates markers
-        let sameCoordsHotel = _.find(this.hotelMarkers, (el) => {
-          return el.address.geo_lat == hotel.address.geo_lat && el.address.geo_lon == hotel.address.geo_lon && el.id != hotel.id;
-        });
+        let sameCoordsHotel = this.hotelMarkers.find(el => 
+          el.address.geo_lat == hotel.address.geo_lat && el.address.geo_lon == hotel.address.geo_lon && el.id != hotel.id
+        );
 
         if (sameCoordsHotel) {          
           hotel.address.geo_lon = parseFloat(hotel.address.geo_lon) + 0.0001;
-          this.hotelMarkers[_.findIndex(this.hotelMarkers, ['id', hotel.id])].address.geo_lon = hotel.address.geo_lon;
+          this.hotelMarkers[this.hotelMarkers.findIndex(el => el.id == hotel.id)].address.geo_lon = hotel.address.geo_lon;
         }
 
         let placemark = new ymaps.Placemark(
@@ -188,11 +187,19 @@ export default {
       if (geoObjects.length > 0) {
         geoObjectsClusterer.add(geoObjects);
         searchMap.geoObjects.add(geoObjectsClusterer);
-        searchMap
-          .setBounds(geoObjectsClusterer.getBounds(), { checkZoomRange: true, duration: 500 })
+      }
+
+      if (this.$page.props?.map_center?.geo_lat && this.$page.props?.map_center?.geo_lon) {         
+          searchMap.setCenter([this.$page.props?.map_center?.geo_lat, this.$page.props?.map_center?.geo_lon], 10);
+      }      
+      else {        
+        if (geoObjects.length > 0) {
+          searchMap
+          .setBounds(geoObjectsClusterer.getBounds(), { checkZoomRange: true})
           .then(() => {
-            if (searchMap.getZoom() > 13 && !isFirst) searchMap.setZoom(13);
+            if (searchMap.getZoom() > 13) searchMap.setZoom(10);
           });
+        }             
       }
     },
     openModal() {

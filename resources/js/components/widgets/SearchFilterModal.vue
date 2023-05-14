@@ -528,7 +528,8 @@ import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import { tempFilterStore } from "@/Store/tempFilterStore.js";
 import { numWord } from "@/Services/numWord.js";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import union from "lodash/union";
 import FilterSelect from "@/components/ui/FilterSelect.vue";
 import Button from "@/components/ui/Button.vue";
 import CitySelect from "@/components/ui/CitySelect.vue";
@@ -577,7 +578,7 @@ export default {
 
     initPromise
       .then((inited) => {
-        this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
+        this.tempFilterStore.filters = cloneDeep(this.filterStore.filters);
         return true;
       })
       .then((val) => {
@@ -647,7 +648,7 @@ export default {
     },
     getDataOnList() {
       if (this.isOpen == true) {
-        this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
+        this.filterStore.filters = cloneDeep(this.tempFilterStore.filters);
       }
 
       this.$nextTick(() => {        
@@ -668,7 +669,7 @@ export default {
     },
     getDataOnMap() {
       if (this.isOpen == true) {
-        this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
+        this.filterStore.filters = cloneDeep(this.tempFilterStore.filters);
       }
 
       this.$nextTick(() => {
@@ -676,7 +677,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
+          only: ["hotels", "rooms", "is_rooms_filter", "page_description", "map_center"],
           onStart: () => {
             usePage().props.isLoadind = true;
             this.close();
@@ -708,7 +709,7 @@ export default {
         this.tempFilterStore.removeFilter("hotels", "city_area");
         this.tempFilterStore.removeFilter("hotels", "city_district");
         this.tempFilterStore.removeFilter("hotels", "metro");
-        propsToUpdate = _.union(propsToUpdate, [
+        propsToUpdate = union(propsToUpdate, [
           "total",
           "metros",
           "city_areas",
@@ -718,11 +719,11 @@ export default {
 
       if (key == "city_area") {
         this.tempFilterStore.removeFilter("hotels", "city_district");
-        propsToUpdate = _.union(propsToUpdate, ["total", "city_districts", "metros"]);
+        propsToUpdate = union(propsToUpdate, ["total", "city_districts", "metros"]);
       }
 
       if (key == "city_district") {       
-        propsToUpdate = _.union(propsToUpdate, ["total", "metros"]);
+        propsToUpdate = union(propsToUpdate, ["total", "metros"]);
       }
 
       if (value == null) {
@@ -743,7 +744,7 @@ export default {
         if (typeof window !== "undefined")
           this.initialUrl = window.location.href;
         document.body.classList.add("fixed");
-        this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
+        this.tempFilterStore.filters = cloneDeep(this.filterStore.filters);
         this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
         this.handleResize();
       }

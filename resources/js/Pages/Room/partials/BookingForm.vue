@@ -210,7 +210,8 @@ import { required, minLength, maxLength } from '@vuelidate/validators'
 import DatePicker from "@/components/ui/DatePicker.vue";
 import TimePicker from "@/components/ui/TimePicker.vue";
 import NumSelect from "@/components/ui/NumSelect.vue";
-import _ from "lodash";
+import range from "lodash/range";
+import transform from "lodash/transform";
 import moment from "moment";
 import { vMaska } from "maska";
 import { useForm, usePage } from "@inertiajs/vue3";
@@ -288,9 +289,7 @@ export default {
       if (typeId) {
         this.costType = typeId;
 
-        let cost = _.find(this.room.costs, (el) => {
-          return el?.id == typeId;
-        });
+        let cost = this.room.costs.find(el => el?.id == typeId);
 
         this.cost = cost;
         this.price = cost.value;
@@ -368,8 +367,8 @@ export default {
       }
     },    
     getNumsRange(from, to) {
-      let hours = _.transform(
-        _.range(from, to + 1, 1),
+      let hours = transform(
+        range(from, to + 1, 1),
         function (result, n) {
           let obj = {
             key: n,
@@ -386,7 +385,7 @@ export default {
     phoneHandle() {
       let value = this.form.client_phone ?? "";
       //Handle Ru phone number
-      if (_.isEmpty(value) || value.startsWith("+7")) {
+      if (value == null || value == '' || value.startsWith("+7")) {
         this.phoneMask = "+7 (###) ### ## ##";
       }
 

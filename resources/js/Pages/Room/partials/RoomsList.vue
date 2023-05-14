@@ -42,7 +42,7 @@
 <script>
 import { filterStore } from "@/Store/filterStore.js";
 import { usePage } from "@inertiajs/vue3";
-import _ from "lodash";
+import shuffle from "lodash/shuffle";
 import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
@@ -105,7 +105,7 @@ export default {
               if (this.rooms.meta.current_page != 1)
                 this.allRooms = [
                   ...this.allRooms,
-                  ..._.shuffle(this.rooms.data),
+                  ...shuffle(this.rooms.data),
                 ];
 
               if (typeof window !== "undefined")
@@ -133,7 +133,7 @@ export default {
   watch: {
     rooms: function (newVal, oldVal) {
       if (this.rooms?.meta?.current_page == 1) {
-        this.allRooms = _.shuffle(this.rooms.data ?? []);
+        this.allRooms = shuffle(this.rooms.data ?? []);
       }
     },
   },

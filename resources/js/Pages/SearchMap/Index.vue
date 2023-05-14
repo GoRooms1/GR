@@ -78,7 +78,7 @@ export default {
           replace: true,
           preserveState: true,
           preserveScroll: true,
-          only: ["rooms", "hotels"],
+          only: ["rooms", "hotels", "map_center"],
           onStart: () => {
             usePage().props.isLoadind = true;
           },

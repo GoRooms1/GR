@@ -37,7 +37,7 @@
 import { filterStore } from "@/Store/filterStore.js";
 import { tempFilterStore } from "@/Store/tempFilterStore.js";
 import { usePage } from "@inertiajs/vue3";
-import _ from "lodash";
+import shuffle from "lodash/shuffle";
 import HotelCard from "./HotelCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
@@ -85,7 +85,7 @@ export default {
               if (this.hotels.meta.current_page != 1)
                 this.allHotels = [
                   ...this.allHotels,
-                  ..._.shuffle(this.hotels.data),
+                  ...shuffle(this.hotels.data),
                 ];
 
               if (typeof window !== "undefined")
@@ -105,7 +105,7 @@ export default {
   watch: {
     hotels: function (newVal, oldVal) {
       if (this.hotels?.meta?.current_page == 1) {
-        this.allHotels = _.shuffle(this.hotels.data ?? []);
+        this.allHotels = shuffle(this.hotels.data ?? []);
       }
     },
   },

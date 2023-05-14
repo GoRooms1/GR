@@ -178,7 +178,6 @@ import { filterStore } from "@/Store/filterStore.js";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
 import FilterTag from "@/components/ui/FilterTag.vue";
 import Search from "./Search.vue";
-import _ from "lodash";
 
 export default {
   components: {

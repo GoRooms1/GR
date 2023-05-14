@@ -85,7 +85,6 @@
 
 <script>
 import { filterStore } from "@/Store/filterStore.js";
-import _ from "lodash";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Pagination, Navigation } from "swiper";
 import { Link } from "@inertiajs/vue3";
@@ -142,7 +141,7 @@ export default {
       let filterMetro = this.filterStore.getFilterValue("hotels", "metro");
 
       return (
-        _.find(this.hotel.metros, { name: filterMetro }) ?? this.hotel.metros[0]
+        this.hotel.metros.find(el => el.name == filterMetro) ?? this.hotel.metros[0]
       );
     },
   },

@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import _ from "lodash";
+import reject from "lodash/reject";
 import qs from "qs";
 
 export const filterStore = reactive({
@@ -27,10 +27,7 @@ export const filterStore = reactive({
   },
 
   findFilter(modelType, filterKey) {
-    return _.find(this.filters, {
-      modelType: modelType,
-      key: filterKey,
-    });
+    return this.filters.find( el => el.modelType == modelType && el.key == filterKey);
   },
   getFilterValue(modelType, filterKey) {
     return this.findFilter(modelType, filterKey)?.value ?? null;
@@ -55,7 +52,7 @@ export const filterStore = reactive({
 
   removeFilter(modelType, filterKey) {
     if (this.findFilter(modelType, filterKey)) {
-      this.filters = _.reject(this.filters, {
+      this.filters = reject(this.filters, {
         modelType: modelType,
         key: filterKey,
       });

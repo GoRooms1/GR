@@ -117,7 +117,7 @@ export default {
         replace: true,
         preserveState: true,
         preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
+        only: ["hotels", "rooms", "is_rooms_filter", "page_description", "map_center"],
         //onSuccess: () => {},
         onStart: () => {
           usePage().props.isLoadind = true;

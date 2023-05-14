@@ -314,7 +314,7 @@
           </p>
           <div class="flex flex-col gap-[8px]">
             <hotel-address :address="hotel?.address" />
-            <div class="grid grid-cols-[fit-content(100%)_1fr] gap-[8px]">
+            <div class="grid grid-cols-[fit-content(100%)_1fr]">
               <hotel-metro-item
                 v-for="metro in hotel?.metros"
                 :metro="metro"
@@ -349,7 +349,6 @@
 <script lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Pagination, Navigation } from "swiper";
-import _ from "lodash";
 import AppHead from "@/components/ui/AppHead.vue";
 import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
@@ -359,7 +358,7 @@ import Tabs from "./partials/Tabs.vue";
 import Tab from "./partials/Tab.vue";
 import Image from "@/components/ui/Image.vue";
 import HotelAddress from "./partials/HotelAddress.vue";
-import HotelMetroItem from "./partials/HotelMetroItem.vue";
+import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "./partials/CostItem.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import Search from "@/components/widgets/Search.vue";
@@ -488,10 +487,10 @@ export default {
       myMap.geoObjects.add(orgGeoObject);
     },
     redrawMap() {
-      _.debounce(() => {
+      setTimeout(() => {
         console.log("redraw");
         myMap?.container?.fitToViewport();
-      }, 200)();
+      }, 200);
     },
     updateRooms() {
       this.$nextTick(() => {

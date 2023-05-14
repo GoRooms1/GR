@@ -146,18 +146,7 @@
         class="whitespace-nowrap flex px-2 py-1.5 pl-[40px] rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] cursor-pointer relative"
       >
         <div v-if="category.title == 'Метро'" class="metro-search-icon">
-          <svg
-            width="20"
-            height="16"
-            viewBox="0 0 20 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M17.2343 12.231H16.3397L12.6234 3H12.6203L10.1173 8.22059L7.62034 3H7.61728L3.89485 12.231H3.00024V13H8.12586V12.231H7.1087L8.29436 9.30208L10.1173 13L11.9463 9.30208L13.1259 12.231H12.1087V13H17.2343V12.231Z"
-              :fill="'#' + obj?.color"
-            ></path>
-          </svg>
+          <MetroIcon :color="obj?.color"/>         
         </div>
         <div class="whitespace-nowrap mr-auto">{{ obj.name }}</div>
         <div class="whitespace-nowrap">{{ obj?.city ?? "" }}</div>
@@ -176,14 +165,15 @@
 </template>
 
 <script>
-import { useForm, usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import { Link } from "@inertiajs/vue3";
-import _ from "lodash";
+import sortBy from "lodash/sortBy";
+import MetroIcon from "@/components/ui/MetroIcon.vue";
 
 export default {
   components: {
     Link,
+    MetroIcon
   },
   props: {
     forModal: {
@@ -222,13 +212,12 @@ export default {
         replace: true,
         preserveState: true,
         preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-        //onSuccess: () => {},
+        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],        
         onStart: () => {
-          usePage().props.isLoadind = true;
+          this.$page.props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.isLoadind = false;
+          this.$page.props.isLoadind = false;
         },
       });
     },
@@ -237,13 +226,12 @@ export default {
         replace: true,
         preserveState: true,
         preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-        //onSuccess: () => {},
+        only: ["hotels", "rooms", "is_rooms_filter", "page_description", "map_center"],        
         onStart: () => {
-          usePage().props.isLoadind = true;
+          this.$page.props.isLoadind = true;
         },
         onFinish: () => {
-          usePage().props.isLoadind = false;
+          this.$page.props.isLoadind = false;
           this.$eventBus.emit("data-received");
         },
       });
@@ -251,8 +239,8 @@ export default {
     search() {
       let data = this.filterStore.getFiltersValues();
       data.search = this.searchValue;
-
-      if (this.searchState) this.searchState.cancel();
+      
+      if (this.searchState) clearTimeout(this.searchState);
 
       if (!this.searchValue) {
         this.count = 0;
@@ -260,7 +248,7 @@ export default {
         return null;
       }
 
-      this.searchState = _.debounce(() => {
+      this.searchState = setTimeout(() => {
         this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {
           preserveState: true,
           preserveScroll: true,
@@ -270,15 +258,13 @@ export default {
             this.result = [];
           },
           onSuccess: () => {
-            this.result = _.sortBy(usePage().props.search_result, "sort");
+            this.result = sortBy(this.$page.props.search_result, "sort");
             this.result.forEach((el) => {
               this.count += el?.data?.length ?? 0;
             });
           },
         });
       }, 50);
-
-      this.searchState();
     },
     openLinkBlank(link) {
       if (typeof window !== "undefined") window.open(link, "_blank");
