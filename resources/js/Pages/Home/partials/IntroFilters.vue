@@ -115,7 +115,7 @@ export default {
   },
   props: {},
   mounted() {    
-    this.$eventBus.on("filters-inited", (e) => this.updateFilters(["total"]));
+    this.$eventBus.on("filters-inited", (e) => this.updateFilters(["total", "metros"]));
     let initPromise = new Promise((resolve, reject) => {
       resolve(
         this.filterStore.init(usePage().url, this.$page.props.location)
