@@ -1,11 +1,11 @@
 <template>
-  <AppHead :title="model.page.title" />
+  <AppHead :title="page.title" />
   <div class="container mx-auto">
     <div class="py-4 lg:my-16 px-2 lg:px-6">
-      <div v-html="model.page.header"></div>
+      <div v-html="page.header"></div>
       <div class="mb-4 flex flex-col lg:flex-row">
         <div
-          v-html="model.page.content"
+          v-html="page.content"
           class="flex flex-col lg:flex-row lg:w-1/2 text-sm leading-4 mb-8"
         ></div>
         <div class="flex lg:pl-12 justify-center lg:w-1/2">
@@ -184,15 +184,13 @@
           <FeedbackForm />
         </div>
       </div>
-      <div v-html="model.page.footer"></div>
+      <div v-html="page.footer"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import AppHead from "@/components/ui/AppHead.vue";
-import type { PropType } from "vue";
-import { PageInterface } from "@/models/pages/page.interface";
 import Layout from "@/Layouts/Layout.vue";
 import FeedbackForm from "./partials/FeedbackForm.vue";
 import Button from "@/components/ui/Button.vue";
@@ -206,10 +204,7 @@ export default {
   },
   created() {},
   props: {
-    model: {
-      type: Object as PropType<PageInterface>,
-      required: true,
-    },
+    page: Object,
   },
   data: () => ({
     coords: [55.757572, 37.825793],

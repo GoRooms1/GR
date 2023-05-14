@@ -5,15 +5,17 @@
     >
       <city-select-intro
         searchable
-        placeholder="Город"
-        v-model="city"
+        placeholder="Город"        
         :options-array="$page.props.cities ?? []"
+        :model-value="filterStore.getFilterValue('hotels', 'city')"
+        @update:modelValue="(event) => filterValueHandler('hotels', false, 'city', event)"
       />
       <metro-select-intro
         searchable
-        placeholder="Станция метро"
-        v-model="metro"
+        placeholder="Станция метро"        
         :options-array="$page.props.metros ?? []"
+        :model-value="filterStore.getFilterValue('hotels', 'metro')"
+        @update:modelValue="(event) => filterValueHandler('hotels', false, 'metro', event)"
       />
 
       <filter-attr-toggle
@@ -22,7 +24,8 @@
         toggle-img="img/low-cost2.svg"
         type="horizontal"
         initial-value="true"
-        v-model="low_cost"
+        :model-value="filterStore.getFilterValue('rooms', 'low_cost')"
+        @update:modelValue="(event) => filterValueHandler('rooms', false, 'low_cost', event)"
       />
       <filter-attr-toggle
         title="От 1 часа"
@@ -31,15 +34,14 @@
         type="horizontal"
         :initial-value="68"
         :model-value="filterStore.getFilterValue('rooms', 'attr_68')"
-        @update:modelValue="(event) => attributeHandler('rooms', event, 68)"
+        @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_68', event)"
       />
       <filter-attr-toggle
         title="Горящие предложения"
         img="img/flash.svg"
         toggle-img="img/flash2.svg"
         type="horizontal"
-        initial-value="true"
-        v-model="is_hot"
+        initial-value="true"        
         disabled
       />
       <filter-attr-toggle
@@ -56,7 +58,7 @@
         type="horizontal"
         :initial-value="52"
         :model-value="filterStore.getFilterValue('rooms', 'attr_52')"
-        @update:modelValue="(event) => attributeHandler('rooms', event, 52)"
+        @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_52', event)"
       />
       <filter-attr-toggle
         title="Джакузи"
@@ -65,7 +67,7 @@
         type="horizontal"
         :initial-value="65"
         :model-value="filterStore.getFilterValue('rooms', 'attr_65')"
-        @update:modelValue="(event) => attributeHandler('rooms', event, 65)"
+        @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_65', event)"
       />
     </div>
     <div
@@ -98,22 +100,11 @@
 import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import { numWord } from "@/Services/numWord.js";
+import union from "lodash/union";
 import Button from "@/components/ui/Button.vue";
 import CitySelectIntro from "@/components/ui/CitySelectIntro.vue";
 import MetroSelectIntro from "@/components/ui/MetroSelectIntro.vue";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
-
-let filterGetSetObj = function (model, key) {
-  return {
-    get() {
-      return this.filterStore.getFilterValue(model, key);
-    },
-    set(val) {
-      if (val) this.filterStore.updateFilter(model, false, key, val);
-      if (val === null) this.filterStore.removeFilter(model, key);
-    },
-  };
-};
 
 export default {
   components: {
@@ -123,8 +114,22 @@ export default {
     FilterAttrToggle,
   },
   props: {},
-  created() {
-    this.filterStore.init(usePage().url, this.$page.props.location);
+  mounted() {    
+    this.$eventBus.on("filters-inited", (e) => this.updateFilters(["total"]));
+    let initPromise = new Promise((resolve, reject) => {
+      resolve(
+        this.filterStore.init(usePage().url, this.$page.props.location)
+      );
+    });
+
+    initPromise
+      .then((inited) => {
+        this.$eventBus.emit("filters-inited");
+        console.log("filters inited");
+      });          
+  },
+  unmounted() {
+    this.$eventBus.off("filters-inited");    
   },
   data() {
     return {
@@ -142,11 +147,7 @@ export default {
         " " +
         numWord(usePage().props.total, objectWords)
       );
-    },    
-    city: filterGetSetObj("hotels", "city"),
-    metro: filterGetSetObj("hotels", "metro"),
-    is_hot: filterGetSetObj("rooms", "is_hot"),
-    low_cost: filterGetSetObj("rooms", "low_cost"),
+    },
   },
   methods: {
     getDataOnList() {
@@ -189,43 +190,26 @@ export default {
         only: only ?? [],
       });
     },
-    attributeHandler(modelType, filterValue, attrID) {
-      if (filterValue == null)
-        this.filterStore.removeFilter(modelType, "attr_" + attrID);
-      else
-        this.filterStore.addFilter(modelType, true, "attr_" + attrID, attrID);
+    filterValueHandler(model, isAttr = false, key, value) {
+      let propsToUpdate = ["total"];
+      if (key == "city") {
+        this.filterStore.removeFilter("hotels", "city_area");
+        this.filterStore.removeFilter("hotels", "city_district");
+        this.filterStore.removeFilter("hotels", "metro");
+        propsToUpdate = union(propsToUpdate, [
+          "total",
+          "metros",          
+        ]);
+      }      
 
-      this.updateFilters(["total"]);
-    },
-  },
-  watch: {
-    city: {
-      handler(newVal, oldVal) {
-        if (oldVal != newVal) {
-          this.metro = null;
-          this.updateFilters(["total", "metros"]);
-        }
-      },
-    },
-    metro: function (newVal, oldVal) {
-      if (oldVal != newVal && newVal != null) {
-        this.updateFilters(["total"]);
+      if (value == null) {
+        this.filterStore.removeFilter(model, key);
+      } else {
+        this.filterStore.updateFilter(model, isAttr, key, value);
       }
 
-      if (oldVal != null && newVal == null) {
-        this.updateFilters(["total", "metros"]);
-      }
-    },
-    is_hot: function (newVal, oldVal) {
-      if (oldVal != newVal) {
-        this.updateFilters(["total"]);
-      }
-    },
-    low_cost: function (newVal, oldVal) {
-      if (oldVal != newVal) {
-        this.updateFilters(["total"]);
-      }
-    },
-  },
+      this.updateFilters(propsToUpdate);
+    },    
+  },  
 };
 </script>

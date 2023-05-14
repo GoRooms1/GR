@@ -51,12 +51,12 @@ export default {
   props: {
     page_description: Object,
   },
-  created() {
+  mounted() {
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.handleDesktop);
-    this.handleDesktop();
+    this.handleDesktop();    
   },
-  destroyed() {
+  unmounted() {
     if (typeof window !== "undefined")
       window.removeEventListener("resize", this.handleDesktop);
   },
