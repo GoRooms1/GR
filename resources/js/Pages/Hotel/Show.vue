@@ -65,7 +65,7 @@
                 class="swiper-image relative h-[416px] md:rounded-[24px] rounded-none overflow-hidden swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
               >
                 <swiper-slide v-for="image in hotel?.images">
-                  <Image class="w-full h-full object-cover" :src="image.path" />
+                  <Image class="w-full h-full object-cover" :src="image.path + '?w=800&fit=crop&fm=webp'" />
                 </swiper-slide>
                 <div
                   class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"
