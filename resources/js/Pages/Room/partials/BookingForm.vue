@@ -1,7 +1,8 @@
 <template>
   <div
-    class="fixed px-[1.625rem] pb-[1.625rem] xs:pt-[2.25rem] sm:pt-[3.75rem] pt-[1.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex flex-col lg:justify-center items-center overflow-y-auto"
-  >
+    class="fixed px-[1.625rem] pb-[1.625rem] xs:pt-[2.25rem] sm:pt-[3.75rem] pt-[1.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex-col lg:justify-center items-center overflow-y-auto"
+    :class="room != null ? 'flex' : 'hidden'"
+    >
     <div class="max-w-[800px] flex flex-col w-full lg:mb-[160px]">
       <button
         @click="close()"
@@ -9,7 +10,7 @@
       >
         <img src="/img/close.svg" alt="close"/>
       </button>
-      <div v-if="!bookingSuccess">
+      <form v-if="!bookingSuccess" @submit.prevent="">
         <div
           class="flex flex-col p-6 lg:p-4 rounded-t-3xl bg-white lg:shadow-md z-[2] mx-6 lg:mx-0"
         >
@@ -18,12 +19,12 @@
             >Бронирование</span
           >
           <span class="text-sm text-center lg:text-left mt-4 lg:mt-2">
-            {{ room.hotel.type.single_name }} <b>{{ room.hotel.name }}</b
-            >, Номер {{ room.number ? room.number + " / " : "" }}
-            {{ room?.name?.length > 1 ? room.name : "" }}
+            {{ room?.hotel?.type?.single_name }} <b>{{ room?.hotel?.name }}</b
+            >, Номер {{ room?.number ? room?.number + " / " : "" }}
+            {{ room?.name?.length > 1 ? room?.name : "" }}
             {{
-              room.category?.name?.length > 1
-                ? "(" + room.category.name + ")"
+              room?.category?.name?.length > 1
+                ? "(" + room?.category?.name + ")"
                 : ""
             }}
           </span>
@@ -37,7 +38,7 @@
               @click="switchCostType(cost?.id)"
               class="mr-4 flex-1 lg:flex-none text-[0.875rem] leading-[1rem] px-[19px] h-[2rem] flex items-center justify-center rounded-[8px] md:hover:outline outline-solid outline-[#6170FF] transition duration-150"
               :class="
-                cost.value > 0
+                cost?.value > 0
                   ? cost?.id == costType
                     ? 'bg-[#6170FF] text-white'
                     : 'bg-white'
@@ -133,7 +134,7 @@
               </div>
               <input
                 v-model="form.client_phone"
-                @input="phoneHandle(); v$.form.client_phone.$touch"
+                @input="phoneHandle(); v$.form.client_phone.$touch; delete form.errors.client_phone;"
                 v-maska
                 :data-maska="phoneMask"
                 placeholder="+7 (___) ___ __ __"
@@ -144,7 +145,7 @@
             <div class="flex flex-col mt-4 lg:mt-0 lg:ml-4 lg:flex-1">
               <span>Комментарий</span>
               <textarea
-                v-model="form.comment"
+                v-model="form.book_comment"
                 placeholder="Напишите ваши пожелания"
                 class="w-full px-3 py-2 lg:!h-full mt-2 bg-white rounded-[8px] resize-none h-[80px]"
               ></textarea>
@@ -174,7 +175,7 @@
             Забронировать
           </button>          
         </div>
-      </div>
+      </form>
       <div
         v-if="bookingSuccess"
         class="mt-[20vh] lg:m-0 lg:w-[800px] lg:h-[374px] flex flex-col relative items-center justify-center bg-white rounded-3xl p-6 overflow-hidden"
@@ -228,17 +229,9 @@ export default {
   directives: {
     maska: vMaska,
   },
-  props: {
-    isActive: {
-      type: Boolean,
-      default: false,
-    },
+  props: {    
     room: Object,
-  },
-  mounted() {
-    this.switchCostType(1);
-    this.v$.$validate();
-  },
+  },   
   data() {
     return {
       costType: 1,
@@ -250,7 +243,7 @@ export default {
       amount: 0,
       cost: null,
       form: useForm({
-        room_id: this.room.id,
+        room_id: this.room?.id,
         client_fio: null,
         client_phone: null,
         from_date: moment().format("DD.MM.YYYY"),
@@ -400,5 +393,36 @@ export default {
       });
     },
   },
+  watch: {
+    room: function (newVal, oldVal) {
+      if (newVal != null && oldVal == null) {
+        
+        this.costType = 1;
+        this.startAtHours = 1;
+        this.endAtHours = 6;
+        this.hours = 0;
+        this.days = 0;
+        this.price = 0;
+        this.amount = 0;
+        this.cost = null;
+        this.form.room_id = this.room?.id;
+        this.form.client_fio = null;
+        this.form.client_phone = null;
+        this.form.from_date = moment().format("DD.MM.YYYY");
+        this.form.from_time = null;
+        this.form.to_date = null;
+        this.form.to_time = null;
+        this.form.book_comment = null;
+        this.form.book_type = "hour";
+        this.form.hours_count = null;
+        this.form.days_count = null;
+        this.form.bookingSuccess = false;
+        this.form.phoneMask = "+7 (###) ### ## ##";
+        
+        this.switchCostType(1);
+        this.v$.$validate();
+      }
+    },
+  }
 };
 </script>

@@ -10,7 +10,7 @@
     <search-panel />
   </div>
   <Map :rooms="rooms" :hotels="hotels" />
-  <booking-form v-if="isBookingOpen === true" :room="bookingRoom" />
+  <booking-form :room="bookingRoom" />
 </template>
 
 <script lang="ts">
@@ -54,19 +54,16 @@ export default {
   },
   data() {
     return {
-      filterStore,
-      isBookingOpen: false,
+      filterStore,      
       bookingRoom: null,
     };
   },
   methods: {
     openBookingModal(e) {
-      this.bookingRoom = e;
-      this.isBookingOpen = true;
+      this.bookingRoom = e;      
       this.$page.props.modals.booking = true;
     },
-    closeBookingModal() {
-      this.isBookingOpen = false;
+    closeBookingModal() {     
       this.bookingRoom = null;
       setTimeout(() => {
         this.$page.props.modals.booking = false;

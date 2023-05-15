@@ -6,7 +6,7 @@
   <div
     v-if="globalLoading == false"
     class="container mx-auto px-4 relative min-[1920px]:px-[10vw]"
-    :class="isBookingOpen === true ? 'z-20' : 'z-10'"
+    :class="bookingRoom != null ? 'z-20' : 'z-10'"
   >
     <room-card v-for="room in allRooms" :room="room" classes="my-4"/>
   </div>
@@ -36,7 +36,7 @@
   <div v-if="globalLoading == true" class="text-center py-8">
     <Loader />
   </div>
-  <booking-form v-if="isBookingOpen === true" :room="bookingRoom" />
+  <booking-form :room="bookingRoom" />
 </template>
 
 <script>
@@ -83,8 +83,7 @@ export default {
     return {
       filterStore,
       allRooms: this.rooms?.data ?? [],
-      isLoading: false,
-      isBookingOpen: false,
+      isLoading: false,      
       bookingRoom: null,
     };
   },
@@ -127,11 +126,11 @@ export default {
     },
     openBookingModal(e) {
       this.bookingRoom = e;
-      this.isBookingOpen = true;
+      this.$page.props.modals.booking = true;    
     },
-    closeBookingModal() {
-      this.isBookingOpen = false;
+    closeBookingModal() {      
       this.bookingRoom = null;
+      this.$page.props.modals.booking = false;
     },
   },
   watch: {
