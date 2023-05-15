@@ -63,7 +63,7 @@
                 :breakpoints="breakpoints"
                 class="swiper-image relative h-[416px] md:rounded-[24px] rounded-none overflow-hidden swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
               >
-                <swiper-slide v-for="image in hotel?.images">
+                <swiper-slide v-for="image in (hotel?.images ?? []).filter(el => el.moderate === false)">
                   <Image class="w-full h-full object-cover" :src="image.path + '?w=800&fit=crop&fm=webp'" />
                 </swiper-slide>
                 <div

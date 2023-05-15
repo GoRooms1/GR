@@ -2,13 +2,13 @@
   <div class="px-4 w-full xl:w-1/3">
     <div class="my-4">      
       <div
-        v-if="hotel?.moderate === true"
+        v-if="hotel?.moderate === true || hasImagesToModerate"
         class="overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60"
-      >
-        <img class="w-full h-full object-cover" src="/img/hotel-moderate.jpg" alt="moderate"/>
+      >      
+        <img class="w-full h-full object-cover" src="/img/hotel-moderate.jpg" alt="moderate"/>               
       </div>
       <swiper 
-        v-if="hotel?.moderate !== true"
+        v-if="hotel?.moderate !== true && !hasImagesToModerate"
         :slides-per-view="1"
         :loop="true"        
         :pagination="pagination"
@@ -16,7 +16,7 @@
         :breakpoints="breakpoints"
         class="swiper-image overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60"
       >
-        <swiper-slide v-for="image in hotel.images">
+        <swiper-slide v-for="image in (hotel?.images ?? []).filter(el => el.moderate === false)">
           <Image class="w-full h-full object-cover" :src="image.path + '?w=640&fit=crop&fm=webp'" />          
         </swiper-slide>
         <div
@@ -75,7 +75,7 @@
             target="_blank"
             class="w-full h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 bg-blue-500 hover:bg-blue-800"
           >
-            {{hotel?.moderate === true ? 'Перейти в ЛК' : 'Редактировать'}}
+            {{ (hotel?.moderate === true || hasImagesToModerate) ? 'Перейти в ЛК' : 'Редактировать'}}
         </a>
         </div>        
       </div>
@@ -144,6 +144,9 @@ export default {
         this.hotel.metros.find(el => el.name == filterMetro) ?? this.hotel.metros[0]
       );
     },
+    hasImagesToModerate() {
+      return (this.hotel?.images ?? []).filter(el => el.moderate === true).length > 0;
+    }
   },
   methods: {
     visitPage(href) {
