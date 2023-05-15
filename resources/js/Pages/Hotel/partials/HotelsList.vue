@@ -55,6 +55,10 @@ export default {
       type: [Array, Object],
       required: false,
     },
+    ignoreFilters: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -76,7 +80,7 @@ export default {
       if (this?.hotels?.meta?.next_page_url) {
         this.$inertia.get(
           this.hotels.meta.next_page_url,
-          this.filterStore.getFiltersValues(),
+          this.ignoreFilters ? {} : this.filterStore.getFiltersValues(),          
           {
             preserveState: true,
             preserveScroll: true,

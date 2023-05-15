@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    ignoreFilters: {
+      type: Boolean,
+      default: false,
+    },
   },
   mounted() {
     this.$eventBus.on("booking-open", (e) => this.openBookingModal(e));
@@ -96,7 +100,7 @@ export default {
       if (this?.rooms?.meta?.next_page_url) {
         this.$inertia.get(
           this.rooms.meta.next_page_url,
-          this.filterStore.getFiltersValues(),
+          this.ignoreFilters ? {} : this.filterStore.getFiltersValues(),
           {
             preserveState: true,
             preserveScroll: true,

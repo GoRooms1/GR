@@ -19,7 +19,7 @@
     />
     <search-panel />
   </div>
-  <hotels-list :hotels="hotels" />  
+  <hotels-list :hotels="hotels" ignoreFilters/>  
   <info-block :description="page_description?.description ?? ''"/>
 </template>
 
