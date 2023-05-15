@@ -103,7 +103,7 @@
               </div>
             </div>
             <div class="flex flex-col mt-4 lg:mt-0 lg:ml-4">
-              <div class="flex">
+              <div v-if="room != null" class="flex">
                 <span>Имя</span>                
                 <div v-if="form.errors.client_fio || v$.form.client_fio.$errors.length > 0" class="flex text-[#E1183D]">
                   <img src="/img/attentionRed.svg" class="mx-2 w-4" />
@@ -119,7 +119,7 @@
                 placeholder="Как к вам обращаться"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]"
               />
-              <div class="flex mt-3">
+              <div v-if="room != null" class="flex mt-3">
                 <span>Телефон</span>
                 <div
                   v-if="form.errors.client_phone || v$.form.client_phone.$errors.length > 0"
@@ -169,7 +169,7 @@
           <button
             @click="submit"
             class="mt-4 lg:ml-auto lg:mt-0 w-full flex items-center justify-center h-12 lg:w-[248px] rounded-lg text-white"
-            :class="form.errors.length > 0 || v$.$errors.length > 0 ?
+            :class="(form.errors ?? []).length > 0 || (v$.$errors ?? []).length > 0 ?
                'bg-slate-400 pointer-events-none' : 'bg-blue-500 hover:bg-blue-800'"
           >
             Забронировать
@@ -231,7 +231,10 @@ export default {
   },
   props: {    
     room: Object,
-  },   
+  }, 
+  mounted() {
+    this.v$.$validate();
+  }, 
   data() {
     return {
       costType: 1,
