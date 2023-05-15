@@ -14,7 +14,7 @@
         name
       }}
     </div>
-    <div class="text-sm xs:text-base !leading-6">
+    <div class="text-xs xs:text-sm !leading-6">
       {{ info }}
     </div>
   </div>
