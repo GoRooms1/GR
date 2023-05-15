@@ -37,7 +37,7 @@
         @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_68', event)"
       />
       <filter-attr-toggle
-        title="Горящие предложения"
+        title="Горящие"
         img="img/flash.svg"
         toggle-img="img/flash2.svg"
         type="horizontal"
@@ -76,7 +76,7 @@
       <div
         class="flex items-center justify-center md:gap-[54px] gap-[10px] md:w-initial w-full"
       >
-        <span class="text-[0.875rem] leading-[16px]"
+        <span class="text-sm leading-[16px]"
           >Найдено {{ foundMessage }}</span
         >
       </div>

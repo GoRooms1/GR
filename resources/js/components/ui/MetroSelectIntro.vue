@@ -9,7 +9,7 @@
       class="w-full px-[12px] h-[32px] flex items-center bg-white justify-between rounded-[8px]"
     >
       <div class="flex items-center gap-[8px]">
-        <span class="flex items-center text-sm leading-[16px]">{{
+        <span class="flex items-center text-[14px] leading-[16px]">{{
           selectedOption ? selectedOption : placeholder
         }}</span>
       </div>
@@ -44,7 +44,7 @@
             type="text"
             :placeholder="placeholder"
             v-model="searchValue"
-            class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-sm leading-[16px]"
+            class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-[14px] leading-[16px]"
           />
         </div>
         <div class="flex flex-col gap-[8px] rounded-[8px] bg-white">
@@ -52,7 +52,7 @@
             v-for="option in options"
             @click="choose"
             :data-key="option.name"
-            class="text-sm leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150"
+            class="text-[14px] leading-[16px] w-full px-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150"
           >
             <MetroIcon :color="option.color"/>
             <span class="p-[16px]">{{ option.name }}</span>
