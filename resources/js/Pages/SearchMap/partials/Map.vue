@@ -1,14 +1,16 @@
 <template>
   <div @mousedown="hideSearch" @touchstart="hideSearch" id="search-map"></div>
 
-  <div v-if="isOpen == true" class="rooms-list fixed mx-auto h-[100%] lg:h-[100vh] top-0 left-0 z-50 w-full flex flex-col justify-center items-center"> 
+  <div v-if="isOpen == true" class="rooms-list fixed mx-auto h-[100%] lg:h-[100vh] top-0 left-0 z-50 w-full flex flex-col justify-center items-center"
+    :class="blurBackground ? 'bg-[#D2DAF0B3] backdrop-blur-[2.5px] ' : ''"
+  > 
     <div class="w-full flex flex-col" style="max-width: 1024px;">
-      <button @click="closeModal()" class="w-[32px] h-[32px] p-2 bg-white rounded-lg ml-auto xl:mr-[-32px]">
+      <button @click="closeModal()" class="w-[32px] h-[32px] p-2 bg-white rounded-lg ml-auto xl:mr-[-32px]" style="margin-bottom: 1rem;">
         <img src="/img/close.svg" alt="close">
       </button>
-      <div v-click-outside="closeModal" class="mt-2 mx-[0.5rem] overflow-y-auto scrollbar pr-3 lg:mx-0 flex flex-col" :style="'max-height:' + listHeight + 'px;'">
-        <div class="room" v-for="room in selectedRooms">
-          <room-card :room="room" />
+      <div v-click-outside="closeModal" class="mx-[0.5rem] overflow-y-auto scrollbar pr-3 lg:mx-0 flex flex-col" :style="'max-height:' + listHeight + 'px;'">
+        <div v-for="room in selectedRooms">
+          <room-card :room="room" class="room room-map"/>
         </div>
       </div>
     </div>
@@ -56,6 +58,7 @@ export default {
       selectedRooms: [],
       isOpen: false,
       listHeight: 768,
+      blurBackground: false,
     };
   },
   methods: {
@@ -225,9 +228,18 @@ export default {
         
         if (roomEl) {
           let elHeight = roomEl.clientHeight;
-          this.listHeight = windowWidth > 1024 ? elHeight * 2 : elHeight;
-          
-          if (( windowHeight - 130) < this.listHeight) this.listHeight = elHeight;         
+          this.listHeight = windowWidth > 1024 ? (elHeight + 16) * 2 : elHeight;
+
+          let headerHeigth = document.getElementsByTagName('header')[0]?.clientHeight ?? 0;
+          let footerHeight = document.getElementsByTagName('footer')[0]?.clientHeight ?? 0;
+          let usefullHeight = windowHeight - headerHeigth - footerHeight - 52;
+
+          if (usefullHeight <= this.listHeight) this.listHeight = elHeight;          
+
+          if (usefullHeight <= this.listHeight) 
+            this.blurBackground = true;
+          else
+            this.blurBackground = false;
         }                
       }
     },  

@@ -8,7 +8,7 @@
     class="container mx-auto px-4 relative min-[1920px]:px-[10vw]"
     :class="isBookingOpen === true ? 'z-20' : 'z-10'"
   >
-    <room-card v-for="room in allRooms" :room="room" />
+    <room-card v-for="room in allRooms" :room="room" classes="my-4"/>
   </div>
   <div
     v-if="allRooms.length > 0 && globalLoading == false"

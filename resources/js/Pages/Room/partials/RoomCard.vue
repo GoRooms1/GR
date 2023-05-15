@@ -1,5 +1,5 @@
 <template>
-  <div class="my-4 xl:flex xl:items-center">
+  <div class="xl:flex xl:items-center" :class="classes">
     <swiper
       slides-per-view="1"
       :pagination="pagination"
@@ -137,6 +137,7 @@ export default {
   },
   props: {
     room: Object,
+    classes: String,
   },
   mounted() {},
   data() {
