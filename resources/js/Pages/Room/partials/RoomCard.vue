@@ -1,8 +1,7 @@
 <template>
   <div class="my-4 xl:flex xl:items-center">
     <swiper
-      slides-per-view="1"      
-      :preloadImages="false"
+      slides-per-view="1"
       :pagination="pagination"
       :navigation="navigation"
       :breakpoints="breakpoints"

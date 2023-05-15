@@ -1,6 +1,6 @@
 <template>
   <button @click="toggle()" :class="btnClass + ' ' + activeClass">
-    <img v-if="!value && img" :src="img" :class="imgClass" :alt="title"/>
+    <img v-if="!value && img" :src="img" :class="imgClass" :alt="title ?? 'img'"/>
     <img v-if="value && toggleImg"
       :src="toggleImg"
       :class="imgClass"

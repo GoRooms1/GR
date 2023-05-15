@@ -57,8 +57,7 @@
           <tabs @changed="redrawMap">
             <tab title="Фотогалерея">
               <swiper
-                :slides-per-view="1"                
-                :preloadImages="false"
+                :slides-per-view="1"
                 :pagination="pagination"
                 :navigation="navigation"
                 :breakpoints="breakpoints"
