@@ -5,10 +5,10 @@
     :class="blurBackground ? 'bg-[#D2DAF0B3] backdrop-blur-[2.5px] ' : ''"
   > 
     <div class="w-full flex flex-col" style="max-width: 1024px;">
-      <button @click="closeModal()" class="w-[32px] h-[32px] p-2 bg-white rounded-lg ml-auto xl:mr-[-32px]" style="margin-bottom: 1rem;">
+      <button @click="closeModal()" class="w-[32px] h-[32px] p-2 bg-white rounded-lg ml-auto xl:mr-[-32px]" style="margin-bottom: 1rem; margin-right: 0.2rem;">
         <img src="/img/close.svg" alt="close">
       </button>
-      <div v-click-outside="closeModal" class="mx-[0.5rem] overflow-y-auto scrollbar pr-3 lg:mx-0 flex flex-col" :style="'max-height:' + listHeight + 'px;'">
+      <div v-click-outside="clickOutside" class="mx-[0.5rem] overflow-y-auto scrollbar pr-3 lg:mx-0 flex flex-col" :style="'max-height:' + listHeight + 'px;'">
         <div v-for="room in selectedRooms">
           <room-card :room="room" class="room room-map"/>
         </div>
@@ -210,10 +210,13 @@ export default {
     },
     closeModal() {      
       if (this.$page.props.modals.booking !== true && this.isOpen === true) {
-        searchMap.balloon.close();
-        this.isOpen = false;
+        searchMap.balloon.close();        
         this.selectedRooms = [];
+        this.isOpen = false;
       }      
+    },
+    clickOutside() {
+      if (this.blurBackground === false) this.closeModal();
     },
     hideSearch() {
       usePage().props.modals.search = false;
@@ -234,12 +237,14 @@ export default {
           let footerHeight = document.getElementsByTagName('footer')[0]?.clientHeight ?? 0;
           let usefullHeight = windowHeight - headerHeigth - footerHeight - 52;
 
-          if (usefullHeight <= this.listHeight) this.listHeight = elHeight;          
+          if (usefullHeight <= this.listHeight) this.listHeight = elHeight;        
 
           if (usefullHeight <= this.listHeight) 
             this.blurBackground = true;
           else
             this.blurBackground = false;
+          
+          if( (windowHeight - 52) <= this.listHeight) this.listHeight = windowHeight - 52;
         }                
       }
     },  
