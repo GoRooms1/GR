@@ -5,7 +5,50 @@
     :url="$page.props.app_url + page_description?.url"
     :meta_keywords="page_description?.meta_keywords"
     :meta_description="page_description?.meta_description"
-  />
+  >
+  <component is="script" type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "{{ hotel?.name }}",
+      "image": {{ (hotel?.images ?? []).flatMap( img => $page.props.app_url + img.path) }},
+      "description": "{{ (hotel?.description ?? '').replace(/(<([^>]+)>)/gi, "")}}",
+      "review": {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "worstRating":"0",
+          "ratingValue": "0",
+          "bestRating": "0"
+        },
+        "author": {
+          "@type": "Person",
+          "name": ""
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "bestRating":"0",
+          "worstRating":"0",
+          "ratingValue": "0",
+          "reviewCount": "1"            
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Услуги отеля",
+          "itemListElement": {{ (hotel?.attrs ?? []).flatMap( attr =>  JSON.stringify({
+                type: "Offer", 
+                itemOffered: {
+                  type: "Service",
+                  name: attr.name
+                }
+              }).replace("type", "@type")
+            )
+          }}
+        }
+      }    
+    }
+  </component>
+  </AppHead>
   <search-filter-modal :url="'/hotels/' + hotel.slug" />
   <div
     v-if="$page.props.modals.search !== false"
