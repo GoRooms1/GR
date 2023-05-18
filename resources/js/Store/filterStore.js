@@ -14,7 +14,7 @@ export const filterStore = reactive({
       this.parceUrlParameters(url);
     }
 
-    if (this.getFilterValue("hotels", "city") == null) {
+    if (this.getFilterValue("hotels", "city") == null && location?.city) {
       let city = location?.city ?? 'Москва';
       this.updateFilter("hotels", false, "city", city);
     }

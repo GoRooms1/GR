@@ -474,9 +474,10 @@ export default {
     this.handleResize();
   },
   mounted() {
+    let location = this.$page.props?.is_moderator === true ? null : this.$page.props.location;
     let initPromise = new Promise((resolve, reject) => {
       resolve(
-        this.filterStore.init(usePage().props.query_string ?? usePage().url, this.$page.props.location)
+        this.filterStore.init(usePage().props.query_string ?? usePage().url, location)
       );
     });
 
