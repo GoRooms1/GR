@@ -21,6 +21,15 @@ final class ModerateFilter extends \Parent\Filters\Filter
                 $q->where('moderate', true)
                 ->orWhereHas('images', function($q) {
                     $q->where('moderate', true);
+                })
+                ->orWhereHas('rooms', function($q) {
+                    $q->where('moderate', true);
+                })
+                ->orDoesnthave('rooms')
+                ->orWhereHas('rooms', function($q) {
+                    $q->whereHas('images', function($q) {
+                        $q->where('moderate', true);
+                    });
                 });
             });            
 
