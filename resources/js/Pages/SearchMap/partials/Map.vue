@@ -42,11 +42,13 @@ export default {
   mounted() {
     this.$page.props.modals.booking = false;
     document.body.classList.add("fixed");
+    document.documentElement.classList.add("max-[390px]:text-[12px]");
     this.$eventBus.on("filters-inited", (e) => ymaps.ready(this.initMap)); 
     this.$eventBus.on("data-received", (e) => this.drawObjects());     
   },
   unmounted() {
     document.body.classList.remove("fixed");
+    document.documentElement.classList.remove("max-[390px]:text-[12px]");
     this.$eventBus.off("data-received");
     this.$eventBus.off("filters-inited");
   },
