@@ -60,6 +60,7 @@ class HandleInertiaRequests extends Middleware
             'contacts' => fn() => GetContactsSettingsAction::run(),
             'app_url' => fn() => config('app.url'),
             'is_moderator' => fn() => GetLoggedUserModeratorStatusAction::run(),
+            'yandex_api_key' => fn() => config('services.yandex.map.key'),
         ]);
     }
 }

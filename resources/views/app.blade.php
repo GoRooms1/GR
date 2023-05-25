@@ -16,10 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">  
-  <link rel="canonical" href="{{ url(Request::url()) }}"/> 
-  <script src="https://api-maps.yandex.ru/2.1/?apikey={{ config('services.yandex.map.key') }}&lang=ru_RU"
-          type="text/javascript">
-  </script>   
+  <link rel="canonical" href="{{ url(Request::url()) }}"/>
  
   @vite  
   @inertiaHead

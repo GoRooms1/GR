@@ -406,6 +406,7 @@ import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import Search from "@/components/widgets/Search.vue";
 import { filterStore } from "@/Store/filterStore.js";
 import { usePage } from "@inertiajs/vue3";
+import { loadYandexMap } from "@/Services/loadYandexMap.js";
 
 let myMap = null;
 SwiperCore.use([Pagination, Navigation]);
@@ -495,7 +496,7 @@ export default {
     };
   },
   mounted() {
-    ymaps.ready(this.initMap);
+    loadYandexMap(this.$page.props.yandex_api_key, 3000, this.initMap);
     this.$page.props.modals.search = false;
     this.$eventBus.on("filters-changed", (e) => this.updateRooms());
   },

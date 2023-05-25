@@ -194,6 +194,7 @@ import AppHead from "@/components/ui/AppHead.vue";
 import Layout from "@/Layouts/Layout.vue";
 import FeedbackForm from "./partials/FeedbackForm.vue";
 import Button from "@/components/ui/Button.vue";
+import { loadYandexMap } from "@/Services/loadYandexMap.js";
 
 export default {
   components: {
@@ -211,6 +212,9 @@ export default {
     isMapVisible: false,
     showMapBtnText: "Посмотреть на карте",
   }),
+  mounded() {
+    loadYandexMap(this.$page.props.yandex_api_key, 3000, this.initMap);
+  },
   methods: {
     formatPhoneLink(phone) {
       return phone.replace(/[^0-9+]/g, "");
@@ -219,7 +223,7 @@ export default {
       this.isMapVisible = !this.isMapVisible;
       if (this.isMapVisible) {
         this.showMapBtnText = "Скрыть карту";
-        ymaps.ready(this.initMap);
+        loadYandexMap(this.$page.props.yandex_api_key, 50, this.initMap);
       } else {
         this.showMapBtnText = "Посмотреть на карте";
       }
