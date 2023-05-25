@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="preload" as="style">  
   <link rel="canonical" href="{{ url(Request::url()) }}"/>
  
   @vite  
