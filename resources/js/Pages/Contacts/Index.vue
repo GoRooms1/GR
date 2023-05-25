@@ -196,6 +196,7 @@ import FeedbackForm from "./partials/FeedbackForm.vue";
 import Button from "@/components/ui/Button.vue";
 import { loadYandexMap } from "@/Services/loadYandexMap.js";
 
+let myMap = null;
 export default {
   components: {
     AppHead,
@@ -212,10 +213,20 @@ export default {
     isMapVisible: false,
     showMapBtnText: "Посмотреть на карте",
   }),
-  mounded() {
-    loadYandexMap(this.$page.props.yandex_api_key, 3000, this.initMap);
+  mounted() {
+    this.loadMapLazy();
   },
   methods: {
+    loadMapLazy() {
+      let mapInitDelay = 3000;
+      if (typeof window !== "undefined") {
+        if (window.innerWidth < 768) mapInitDelay = 5100;
+      }
+      loadYandexMap(this.$page.props.yandex_api_key, mapInitDelay, () => {});
+    },
+    loadMapImmediate() {      
+      loadYandexMap(this.$page.props.yandex_api_key, 10, this.initMap);
+    },
     formatPhoneLink(phone) {
       return phone.replace(/[^0-9+]/g, "");
     },
@@ -223,13 +234,13 @@ export default {
       this.isMapVisible = !this.isMapVisible;
       if (this.isMapVisible) {
         this.showMapBtnText = "Скрыть карту";
-        loadYandexMap(this.$page.props.yandex_api_key, 50, this.initMap);
+        this.loadMapImmediate();
       } else {
         this.showMapBtnText = "Посмотреть на карте";
       }
     },
     initMap() {
-      let myMap = new ymaps.Map("map", {
+      myMap = new ymaps.Map("map", {
         center: this.coords,
         zoom: 15,
         controls: ["zoomControl"],

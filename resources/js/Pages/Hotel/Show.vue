@@ -59,7 +59,7 @@
     </div>
   </div>
 
-  <div class="container mx-auto md:px-4 px-0 md:mt-[113px] mt-0">
+  <div class="container mx-auto md:px-4 px-0 md:mt-[113px] mt-0" @mousedown="loadMapImmediate()" @touchstart="loadMapImmediate()">
     <div>
       <div class="flex md:flex-col flex-col-reverse">
         <div
@@ -496,7 +496,7 @@ export default {
     };
   },
   mounted() {
-    loadYandexMap(this.$page.props.yandex_api_key, 3000, this.initMap);
+    this.loadMapLazy();
     this.$page.props.modals.search = false;
     this.$eventBus.on("filters-changed", (e) => this.updateRooms());
   },
@@ -504,6 +504,17 @@ export default {
     this.$eventBus.off("filters-changed");
   },
   methods: {
+    loadMapLazy() {
+      let mapInitDelay = 3000;
+      if (typeof window !== "undefined") {
+        if (window.innerWidth < 768) mapInitDelay = 5100;
+      }
+      loadYandexMap(this.$page.props.yandex_api_key, mapInitDelay, this.initMap)
+    },
+    loadMapImmediate() {
+      if (typeof ymaps !== "undefined") return;
+      loadYandexMap(this.$page.props.yandex_api_key, 10, this.initMap);
+    },
     initMap() {
       myMap = new ymaps.Map("map", {
         center: [this.hotel.address.geo_lat, this.hotel.address.geo_lon],

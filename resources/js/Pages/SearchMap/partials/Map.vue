@@ -1,5 +1,5 @@
 <template>
-  <div @mousedown="hideSearch" @touchstart="hideSearch" id="search-map"></div>
+  <div @mousedown="hideSearch(); loadMapImmediate()" @touchstart="hideSearch(); loadMapImmediate()" id="search-map"></div>
 
   <div v-if="isOpen == true" class="rooms-list fixed mx-auto h-[100%] lg:h-[100vh] top-0 left-0 z-50 w-full flex flex-col justify-center items-center"
     :class="blurBackground ? 'bg-[#D2DAF0B3] backdrop-blur-[2.5px] ' : ''"
@@ -45,12 +45,9 @@ export default {
     document.body.classList.add("fixed");
     document.documentElement.classList.add("max-[390px]:text-[12px]");
 
-    let mapInitDelay = 3000;
-    if (typeof window !== "undefined") {
-      if (window.innerWidth < 768) mapInitDelay = 5100;
-    }
     
-    this.$eventBus.on("filters-inited", (e) => loadYandexMap(this.$page.props.yandex_api_key, mapInitDelay, this.initMap));
+    
+    this.$eventBus.on("filters-inited", (e) => this.loadMapLazy());
     
     this.$eventBus.on("data-received", (e) => this.drawObjects());     
   },
@@ -71,7 +68,18 @@ export default {
       blurBackground: false,
     };
   },
-  methods: { 
+  methods: {
+    loadMapLazy() {
+      let mapInitDelay = 3000;
+      if (typeof window !== "undefined") {
+        if (window.innerWidth < 768) mapInitDelay = 5100;
+      }
+      loadYandexMap(this.$page.props.yandex_api_key, mapInitDelay, this.initMap)
+    },
+    loadMapImmediate() {
+      if (typeof ymaps !== "undefined") return;
+      loadYandexMap(this.$page.props.yandex_api_key, 10, this.initMap);
+    },   
     initMap() {
       let center = [];
       if (this.$page.props?.map_center?.geo_lat && this.$page.props?.map_center?.geo_lon) {
