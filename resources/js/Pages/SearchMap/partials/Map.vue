@@ -44,7 +44,7 @@ export default {
     this.$page.props.modals.booking = false;
     document.body.classList.add("fixed");
     document.documentElement.classList.add("max-[390px]:text-[12px]");
-    this.$eventBus.on("filters-inited", (e) => loadYandexMap(this.$page.props.yandex_api_key, 3000, this.initMap)); 
+    this.$eventBus.on("filters-inited", (e) => loadYandexMap(this.$page.props.yandex_api_key, 4000, this.initMap)); 
     this.$eventBus.on("data-received", (e) => this.drawObjects());     
   },
   unmounted() {
