@@ -24,7 +24,7 @@ class SearchController extends Controller
         $attributes = $request->get('attributes', ['hotel' => [], 'room' => []]);
         $city = '';
         if (! $request->is('api/*')) {
-            $city = $request->session()->get('city', Settings::option('city_default', false));
+            $city = $request->session()->get('city', Settings::option('city_default', null));
         }
         $address = $request->get('address', ['city' => $city, 'city_district' => '', 'region' => '']);
         $hotel_type = $request->get('hotel_type', false);

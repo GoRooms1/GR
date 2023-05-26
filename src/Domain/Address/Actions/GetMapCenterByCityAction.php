@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static GeolocationData run(string $ip)
+ * @method static GeolocationData run(?string $city)
  */
 final class GetMapCenterByCityAction extends Action
 {
     
     /**     
-     * @param ?string $ip
+     * @param ?string $city
      * @return GeolocationData | null
      */
     public function handle(?string $city): GeolocationData | null
@@ -24,7 +24,7 @@ final class GetMapCenterByCityAction extends Action
         if (is_null($city))
             return null;
         
-        $cityCoords = DB::table('city_coords')->select()->where('query', 'г. '.$city)->get()->first();
+        $cityCoords = DB::table('city_coords')->select()->where('query', 'г. '.$city)->first();
         if (is_null($cityCoords))
             return null;
         

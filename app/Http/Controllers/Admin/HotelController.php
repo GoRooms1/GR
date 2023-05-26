@@ -8,6 +8,7 @@ use Domain\Address\Models\Metro;
 use Domain\Attribute\Model\Attribute;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\Models\HotelType;
+use Domain\Hotel\Scopes\HotelOrderingScope;
 use Domain\Image\Actions\UploadImageAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;

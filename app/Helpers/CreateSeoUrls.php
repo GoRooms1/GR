@@ -211,7 +211,7 @@ class CreateSeoUrls
             $seo->metro = $metro->name;
             $seo->lastOfType = 'metro';
             if ($address)
-                $seo->address = $address->getData();
+                $seo->address = AddressData::fromModel($address);
 
             $seo = GenerateSeoDataContent::run($seo);
             $pageDescription = PageDescription::updateOrCreate(['url' => $seo->url], [
