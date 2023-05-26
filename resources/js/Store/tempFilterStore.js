@@ -1,4 +1,4 @@
-import cloneDeep from "lodash/cloneDeep";
+import _ from "lodash";
 import { filterStore } from "./filterStore.js";
 
-export const tempFilterStore = cloneDeep(filterStore);
+export const tempFilterStore = _.cloneDeep(filterStore);

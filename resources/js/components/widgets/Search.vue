@@ -69,7 +69,7 @@
 <script>
 import { filterStore } from "@/Store/filterStore.js";
 import { Link } from "@inertiajs/vue3";
-import sortBy from "lodash/sortBy";
+import _ from "lodash";
 import MetroIcon from "@/components/ui/MetroIcon.vue";
 
 export default {
@@ -160,7 +160,7 @@ export default {
             this.result = [];
           },
           onSuccess: () => {
-            this.result = sortBy(this.$page.props.search_result, "sort");
+            this.result = _.sortBy(this.$page.props.search_result, "sort");
             this.result.forEach((el) => {
               this.count += el?.data?.length ?? 0;
             });

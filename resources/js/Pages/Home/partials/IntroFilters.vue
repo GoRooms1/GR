@@ -100,7 +100,7 @@
 import { usePage } from "@inertiajs/vue3";
 import { filterStore } from "@/Store/filterStore.js";
 import { numWord } from "@/Services/numWord.js";
-import union from "lodash/union";
+import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 import CitySelectIntro from "@/components/ui/CitySelectIntro.vue";
 import MetroSelectIntro from "@/components/ui/MetroSelectIntro.vue";
@@ -196,7 +196,7 @@ export default {
         this.filterStore.removeFilter("hotels", "city_area");
         this.filterStore.removeFilter("hotels", "city_district");
         this.filterStore.removeFilter("hotels", "metro");
-        propsToUpdate = union(propsToUpdate, [
+        propsToUpdate = _.union(propsToUpdate, [
           "total",
           "metros",          
         ]);

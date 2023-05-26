@@ -211,8 +211,7 @@ import { required, minLength, maxLength } from '@vuelidate/validators'
 import DatePicker from "@/components/ui/DatePicker.vue";
 import TimePicker from "@/components/ui/TimePicker.vue";
 import NumSelect from "@/components/ui/NumSelect.vue";
-import range from "lodash/range";
-import transform from "lodash/transform";
+import _ from "lodash";
 import moment from "moment";
 import { vMaska } from "maska";
 import { useForm, usePage } from "@inertiajs/vue3";
@@ -363,8 +362,8 @@ export default {
       }
     },    
     getNumsRange(from, to) {
-      let hours = transform(
-        range(from, to + 1, 1),
+      let hours = _.transform(
+        _.range(from, to + 1, 1),
         function (result, n) {
           let obj = {
             key: n,

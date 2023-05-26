@@ -53,8 +53,7 @@
 
 <script>
 import vClickOutside from "click-outside-vue3";
-import transform from "lodash/transform";
-import range from "lodash/range";
+import _ from "lodash";
 import moment from "moment";
 
 export default {
@@ -65,8 +64,8 @@ export default {
     modelValue: String,
   },
   mounted() {
-    this.hours = transform(
-      range(0, 24, 1),
+    this.hours = _.transform(
+      _.range(0, 24, 1),
       function (result, n) {
         let val = n;
         if (val < 10) val = "0" + val;
@@ -75,8 +74,8 @@ export default {
       },
       []
     );
-    this.minutes = transform(
-      range(0, 46, 15),
+    this.minutes = _.transform(
+      _.range(0, 46, 15),
       function (result, n) {
         let val = n;
         if (val < 10) val = "0" + val;
