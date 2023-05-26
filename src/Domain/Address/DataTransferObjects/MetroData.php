@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Address\DataTransferObjects;
 
+use Domain\Address\Actions\GetMetroSlugAction;
 use Domain\Address\Models\Metro;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Spatie\LaravelData\Lazy;
@@ -19,19 +20,17 @@ final class MetroData extends \Parent\DataTransferObjects\Data
         public int $distance,
         public int $hotel_id,
         public bool $custom,
-        public string $slug,
-        public Lazy|HotelData|null $hotel,
+        public string $slug,        
     ) {
     }
 
     public static function fromModel(Metro $metro): self
     {
-        $slug = CustomStr::getCustomSlug($metro->name);
+        $slug = route('address').GetMetroSlugAction::run($metro->name, $metro->hotel->address->city);
 
         return self::from([
             ...$metro->toArray(),
-            'slug' => $slug,
-            'hotel' => Lazy::whenLoaded('hotel', $metro, fn () => HotelData::fromModel($metro->hotel)),
+            'slug' => $slug,            
         ]);
     }
 }

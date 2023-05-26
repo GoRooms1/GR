@@ -19,10 +19,10 @@ import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
-import Map from "./partials/Map.vue";
 import BookingForm from "@/Pages/Room/partials/BookingForm.vue";
 import { filterStore } from "@/Store/filterStore.js";
 import { usePage } from "@inertiajs/vue3";
+import Map from "./partials/Map.vue";
 
 export default {
   layout: SearchLayout,
@@ -32,8 +32,8 @@ export default {
     SearchLayout,
     SearchPanel,
     SearchFilterModal,
-    Map,
     BookingForm,
+    Map,    
   },
   props: {
     page_description: Object,

@@ -44,11 +44,7 @@ export default {
     this.$page.props.modals.booking = false;
     document.body.classList.add("fixed");
     document.documentElement.classList.add("max-[390px]:text-[12px]");
-
-    
-    
-    this.$eventBus.on("filters-inited", (e) => this.loadMapLazy());
-    
+    this.$eventBus.on("filters-inited", (e) => this.loadMapLazy());    
     this.$eventBus.on("data-received", (e) => this.drawObjects());     
   },
   unmounted() {

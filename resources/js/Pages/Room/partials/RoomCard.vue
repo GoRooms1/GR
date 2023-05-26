@@ -81,8 +81,7 @@
         <hotel-address :address="room.hotel.address" class="flex mb-2" />
         <div class="grid grid-cols-[fit-content(100%)_1fr]">
           <hotel-metro-item
-            v-for="metro in room.hotel.metros"
-            :address="room.hotel.address"
+            v-for="metro in room.hotel.metros"            
             :metro="metro"
           />
         </div>
@@ -112,28 +111,28 @@
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from "swiper/vue";
 import { usePage } from "@inertiajs/vue3";
-import SwiperCore, { Pagination, Navigation } from "swiper";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
 import Button from "@/components/ui/Button.vue";
 import HotelAddress from "@/components/ui/HotelAddress.vue";
 import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "@/components/ui/CostItem.vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import SwiperCore, { Pagination, Navigation } from "swiper";
 
 // install Swiper modules
 SwiperCore.use([Pagination, Navigation]);
 export default {
-  components: {
-    Swiper,
-    SwiperSlide,
+  components: {    
     CashbackTag,
     Image,
     Button,
     HotelAddress,
     HotelMetroItem,
     CostItem,
+    Swiper,
+    SwiperSlide,
   },
   props: {
     room: Object,

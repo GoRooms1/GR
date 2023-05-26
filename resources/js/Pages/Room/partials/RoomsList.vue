@@ -51,11 +51,11 @@ import ListHeader from "./ListHeader.vue";
 
 export default {
   components: {
+    BookingForm,
     ListHeader,
     RoomCard,
     Loader,
-    Button,
-    BookingForm,
+    Button,    
   },
   props: {
     rooms: {

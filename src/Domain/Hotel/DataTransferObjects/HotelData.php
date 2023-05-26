@@ -73,7 +73,7 @@ final class HotelData extends \Parent\DataTransferObjects\Data
             'type' => Lazy::whenLoaded('type', $hotel, fn () => HotelTypeData::from($hotel->type)),
             'meta' => Lazy::whenLoaded('meta', $hotel, fn () => PageDescriptionData::from($hotel->meta)),
             'attrs' => Lazy::whenLoaded('attrs', $hotel, fn () => AttributeData::collection($hotel->attrs)),
-            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros)),            
+            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros->load('hotel'))),            
             'min_costs' => MinimumCostsCalculation::run($hotel),
         ]);
     }

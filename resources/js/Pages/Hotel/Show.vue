@@ -389,8 +389,6 @@
 </template>
 
 <script lang="ts">
-import { Swiper, SwiperSlide } from "swiper/vue";
-import SwiperCore, { Pagination, Navigation } from "swiper";
 import AppHead from "@/components/ui/AppHead.vue";
 import Layout from "@/Layouts/Layout.vue";
 import SearchLayout from "@/Layouts/SearchLayout.vue";
@@ -407,14 +405,14 @@ import Search from "@/components/widgets/Search.vue";
 import { filterStore } from "@/Store/filterStore.js";
 import { usePage } from "@inertiajs/vue3";
 import { loadYandexMap } from "@/Services/loadYandexMap.js";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import SwiperCore, { Pagination, Navigation } from "swiper";
 
 let myMap = null;
 SwiperCore.use([Pagination, Navigation]);
 export default {
   layout: SearchLayout,
-  components: {
-    Swiper,
-    SwiperSlide,
+  components: {    
     AppHead,
     Layout,
     RoomsList,
@@ -427,6 +425,8 @@ export default {
     CostItem,
     SearchFilterModal,
     Search,
+    Swiper,
+    SwiperSlide,
   },
   props: {
     page_description: Object,
