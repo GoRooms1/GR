@@ -19,29 +19,6 @@ use Inertia\ResponseFactory;
 
 class HomeController extends Controller
 {
-    public function index_(Request $request): View
-    {
-        $city = session('city', 'null');
-        $auth = auth()->check() ? auth()->id() : 'user';
-        $hotels = Cache::remember('hotels_city.'.$auth.'.'.$city, 60 * 60 * 24 * 12, function () use ($city) {
-            return Hotel::popular()->whereHas('address', function (Builder $builder) use ($city) {
-                $builder->where('city', $city);
-            })->get();
-        });
-        $rooms = Cache::remember('rooms_city.'.$auth.'.'.$city, 60 * 60 * 24 * 12, function () use ($city) {
-            return Room::with('hotel.ratings')->hot()->whereHas('hotel.address', function (Builder $builder) use ($city) {
-                $builder->where('city', $city);
-            })->get();
-        });
-        $articles = Cache::remember('articles_home', 60 * 60 * 24 * 12, function () {
-            return Article::orderBy('created_at', 'DESC')->limit(4)->get();
-        });
-        $pages = Page::all()->keyBy('slug');
-        $rating_categories = GetRatingCategories::run();
-
-        return view('home', compact('hotels', 'rooms', 'articles', 'pages', 'rating_categories'));
-    }
-
     public function index(Request $request): Response | ResponseFactory
     {
         return Inertia::render('Home/Index', new HomeViewModel(ParamsData::fromRequest($request)));

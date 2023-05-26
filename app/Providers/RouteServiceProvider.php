@@ -43,8 +43,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
         $this->mapAdminRoutes();
-        $this->mapLkRoutes();
-        $this->mapRenderRoutes();
+        $this->mapLkRoutes();       
         $this->mapWebRoutes();
         $this->mapModeratorRoutes();
     }
@@ -73,14 +72,6 @@ class RouteServiceProvider extends ServiceProvider
           ->prefix('admin')
           ->name('admin.')
           ->group(base_path('routes/admin.php'));
-    }
-
-    protected function mapRenderRoutes(): void
-    {
-        Route::prefix('render')
-          ->middleware(['web'])
-          ->name('render.')
-          ->group(base_path('routes/render.php'));
     }
 
     /**

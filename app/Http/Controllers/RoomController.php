@@ -41,37 +41,4 @@ class RoomController extends Controller
         $paramsData->rooms->is_hot = true;
         return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/rooms/hot'));
     }
-
-    //Depricated
-    public function hot_(): View
-    {
-        $rooms = Room::hot()->paginate(30);
-        $title = 'Горящие предложения';
-        $hide_filter = true;
-
-        return view('room.index', compact('rooms', 'title', 'hide_filter'));
-    }
-
-    public function show(Room $room): View
-    {
-        $pageAbout = $room->meta;
-
-        return view('room.show', compact('room', 'pageAbout'));
-    }
-
-    /**
-     * Получить по api информацию о номере
-     *
-     * @param  int  $id
-     * @return JsonResponse
-     */
-    public function getRoomInfo(int $id): JsonResponse
-    {
-        $room = Room::where('id', $id)->with(['hotel', 'category'/*, 'costs'*/])->first();
-
-        return \response()->json([
-            'room_info' => $room,
-            'costs' => $room->costs->pluck('period'),
-        ]);
-    }
 }
