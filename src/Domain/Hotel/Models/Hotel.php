@@ -38,8 +38,12 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Spatie\Image\Manipulations;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\WithData;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Support\DataProcessing\Traits\ClearValidated;
 
 /**
@@ -120,9 +124,10 @@ use Support\DataProcessing\Traits\ClearValidated;
  * @method static Builder|Hotel whereCheckedTypeFond($value)
  * @method HotelData getData()
  */
-final class Hotel extends Model
+final class Hotel extends Model implements HasMedia
 {
     use UseImages;
+    use InteractsWithMedia;
     use ClearValidated;   
     use HasFactory;
     use WithData;
@@ -458,5 +463,18 @@ final class Hotel extends Model
     public function newEloquentBuilder($query): HotelBuilder
     {
         return new HotelBuilder($query);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('show')
+            ->format(Manipulations::FORMAT_WEBP)
+            ->crop(Manipulations::CROP_CENTER, 800, 416)
+            ->nonQueued();
+              
+        $this->addMediaConversion('card')
+            ->format(Manipulations::FORMAT_WEBP)
+            ->crop(Manipulations::CROP_CENTER, 624, 306)
+            ->nonQueued();
     }
 }

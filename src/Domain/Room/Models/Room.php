@@ -25,7 +25,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Spatie\Image\Manipulations;
 use Spatie\LaravelData\WithData;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Domain\Room\Models\Room
@@ -75,9 +79,10 @@ use Spatie\LaravelData\WithData;
  * @method static Builder|Room whereUpdatedAt($value)
  * @mixin Eloquent
  */
-final class Room extends Model
+final class Room extends Model implements HasMedia
 {
     use UseImages;
+    use InteractsWithMedia;
     use CreatedAtOrdered;
     use HasFactory;
     use WithData;
@@ -187,5 +192,13 @@ final class Room extends Model
     public function newEloquentBuilder($query): RoomBuilder
     {
         return new RoomBuilder($query);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {       
+        $this->addMediaConversion('card')
+            ->format(Manipulations::FORMAT_WEBP)
+            ->crop(Manipulations::CROP_CENTER, 624, 306)
+            ->nonQueued();
     }
 }
