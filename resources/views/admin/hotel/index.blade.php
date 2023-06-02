@@ -39,7 +39,7 @@
               <tr>
                 <td>{{ $hotel->id }}</td>
                 <td>
-                  <img src="{{ asset($hotel->image->path) }}" alt="" class="img-fluid"
+                  <img src="{{ asset($hotel->getFirstMediaUrl('images', 'card')) }}" alt="" class="img-fluid"
                        style="max-width: 100px">
                 </td>
                 @if ($hotel->slug != null && $hotel->slug != '')

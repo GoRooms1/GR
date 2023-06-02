@@ -19,16 +19,20 @@ final class ModerateFilter extends \Parent\Filters\Filter
         if ($this->value != false)
             $builder->where(function($q) {
                 $q->where('moderate', true)
-                ->orWhereHas('images', function($q) {
-                    $q->where('moderate', true);
+                ->orWhereHas('media', function($q) {
+                    $q
+                        ->where('collection_name', 'images')
+                        ->where('custom_properties->moderate', true);
                 })
                 ->orWhereHas('rooms', function($q) {
                     $q->where('moderate', true);
                 })
                 ->orDoesnthave('rooms')
                 ->orWhereHas('rooms', function($q) {
-                    $q->whereHas('images', function($q) {
-                        $q->where('moderate', true);
+                    $q->whereHas('media', function($q) {
+                        $q
+                            ->where('collection_name', 'images')
+                            ->where('custom_properties->moderate', true);
                     });
                 });
             });            

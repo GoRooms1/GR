@@ -82,6 +82,7 @@ export default function FilterPagesService() {
         .then((response) => response.json())
         .then((response) => {
           if (response.success) {
+            console.log(response.payload.images);
             let container = document.querySelector(".images");
             for (let i = 0; i < response.payload.images.length; i++) {
               let image = response.payload.images[i],
@@ -90,7 +91,7 @@ export default function FilterPagesService() {
                 btn_group = document.createElement("div");
               col.classList.add("col-12", "col-md-4", "mb-3");
               col.id = "image_" + image.id;
-              img.src = "\\" + image.path;
+              img.src = "\\" + image.url;
               img.classList.add("img-fluid", "img-thumbnail");
               btn_group.classList.add(
                 "btn-group",

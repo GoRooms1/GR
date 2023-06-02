@@ -17,7 +17,7 @@
         class="swiper-image overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60"
       >
         <swiper-slide v-for="image in (hotel?.images ?? []).filter(el => el.moderate === false)">
-          <Image class="w-full h-full object-cover" :src="image.path + '?w=640&fit=crop&fm=webp'" />          
+          <Image class="w-full h-full object-cover" :src="image?.conversions?.card ?? image.url" />          
         </swiper-slide>
         <div
           class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"

@@ -37636,8 +37636,7 @@ if (image_field) {
       return response.json();
     }).then(function (response) {
       if (response.success) {
-        var container = document.querySelector('.images');
-
+        var container = document.querySelector('.images');        
         for (var _i2 = 0; _i2 < response.payload.images.length; _i2++) {
           var image = response.payload.images[_i2],
               col = document.createElement('div'),
@@ -37645,7 +37644,7 @@ if (image_field) {
               btn_group = document.createElement('div');
           col.classList.add('col-12', 'col-md-4', 'mb-3');
           col.id = 'image_' + image.id;
-          img.src = '\\' + image.path;
+          img.src = image.url;
           img.classList.add('img-fluid', 'img-thumbnail');
           btn_group.classList.add('btn-group', 'btn-group-sm', 'w-100', 'mt-1');
           btn_group.innerHTML = "\n                    <button type=\"button\" class=\"btn btn-danger\" onclick=\"window.deleteImage(".concat(image.id, ")\">\n                        <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                    </button>");

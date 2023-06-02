@@ -3,7 +3,6 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CustomPageController;
-use App\Http\Controllers\FilterController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
@@ -58,7 +57,7 @@ Route::get('/blog', [ArticleController::class, 'index'])->name('articles.index')
 Route::get('/blog/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::post('/form', [FormController::class, 'store'])->name('forms.store');
 
-Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
+//Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::get('sitemap.xml', [SiteMapController::class, 'index']);
 
 Route::get('/bonuse', [PageController::class, 'show'])->name('pages.show');

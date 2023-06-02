@@ -17,7 +17,7 @@
     @if($images)
         @foreach($images AS $image)
             <div class="col-12 col-md-4 mb-3" id="image_{{ $image->id }}">
-                <img src="{{ asset($image->path) }}" class="img-fluid img-thumbnail"
+                <img src="{{ asset($image->getUrl()) }}" class="img-fluid img-thumbnail"
                      @if($image->default) style="border: 2px solid black" @endif alt="">
                 <div class="btn-group btn-group-sm w-100 mt-1">
                     <button type="button" class="btn btn-danger" onclick="window.deleteImage({{ $image->id }})">

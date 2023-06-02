@@ -195,8 +195,7 @@ final class Hotel extends Model implements HasMedia
     protected $with = [       
         'address',
         'metros',
-        'images',
-        'image',
+        'media',
         'type'
     ];
 
@@ -468,13 +467,13 @@ final class Hotel extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('show')
-            ->format(Manipulations::FORMAT_WEBP)
-            ->crop(Manipulations::CROP_CENTER, 800, 416)
-            ->nonQueued();
+            ->nonQueued()
+            ->format(Manipulations::FORMAT_WEBP)            
+            ->crop(Manipulations::CROP_CENTER, 800, 416);            
               
         $this->addMediaConversion('card')
+            ->nonQueued()
             ->format(Manipulations::FORMAT_WEBP)
-            ->crop(Manipulations::CROP_CENTER, 624, 306)
-            ->nonQueued();
+            ->crop(Manipulations::CROP_CENTER, 624, 306);
     }
 }

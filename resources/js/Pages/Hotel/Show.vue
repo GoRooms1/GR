@@ -11,7 +11,7 @@
       "@context": "https://schema.org/",
       "@type": "Product",
       "name": "{{ hotel?.name }}",
-      "image": {{ (hotel?.images ?? []).flatMap( img => $page.props.app_url + img.path) }},
+      "image": {{ (hotel?.images ?? []).flatMap( img => img.url) }},
       "description": "{{ (hotel?.description ?? '').replace(/(<([^>]+)>)/gi, "")}}",
       "review": {
         "@type": "Review",
@@ -107,7 +107,7 @@
                 class="swiper-image relative h-[416px] md:rounded-[24px] rounded-none overflow-hidden swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
               >
                 <swiper-slide v-for="image in (hotel?.images ?? []).filter(el => el.moderate === false)">
-                  <Image class="w-full h-full object-cover" :src="image.path + '?w=800&fit=crop&fm=webp'" />
+                  <Image class="w-full h-full object-cover" :src="image?.conversions?.show ?? image.url" />
                 </swiper-slide>
                 <div
                   class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"

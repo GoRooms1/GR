@@ -114,8 +114,7 @@ final class Room extends Model implements HasMedia
      */
     protected $with = [
         'attrs',
-        'image',
-        'images',
+        'media',
         'costs',
         'hotel',
         'category',
@@ -197,8 +196,8 @@ final class Room extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {       
         $this->addMediaConversion('card')
+            ->nonQueued()
             ->format(Manipulations::FORMAT_WEBP)
-            ->crop(Manipulations::CROP_CENTER, 624, 306)
-            ->nonQueued();
+            ->crop(Manipulations::CROP_CENTER, 624, 306);
     }
 }

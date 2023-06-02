@@ -169,7 +169,7 @@
             <div class="row">
               <div class="col-12 mt-3">
                 <ul class="uploud visualizacao all-slides">
-                  @foreach($room->images as $image)
+                  @foreach($room->getMedia('images') as $image)
                     <li class="uploud__item"
                         data-image-id="{{ $image->id }}"
                         data-image-delete="{{ route('moderator.image.delete', '') }}"
@@ -179,7 +179,7 @@
                            style="background-image: url('{{ url($image->path) }}'); background-size: cover;"
                            id="upload{{$image->id}}">
                         <span class="upload_number">№ {{ $loop->index + 1 }}</span>
-                        @if($image->moderate)
+                        @if($image->getCustomProperty('moderate'))
                           <div class="moderate">
                             <img src="{{ asset('img/lk/arrow-top.png') }}" alt="">
                           </div>
@@ -188,8 +188,8 @@
                           <i class="fa fa-trash" aria-hidden="true"></i>
                         </div>
                       </div>
-                      <p class="uploud__status {{ !$image->moderate ? 'uploud__status_good' : '' }}">
-                        {{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}
+                      <p class="uploud__status {{ !$image->getCustomProperty('moderate') ? 'uploud__status_good' : '' }}">
+                        {{ $image->getCustomProperty('moderate') ? 'Проверка модератором' : 'Опубликовано' }}
                       </p>
                     </li>
                   @endforeach

@@ -412,17 +412,17 @@
         <div class="col-12">
           <ul class="uploud all-slides">
 
-            @foreach($hotel->images as $image)
+            @foreach($hotel->getMedia('images') as $image)
               <li class="uploud__item"
                   data-image-id="{{ $image->id }}"
                   data-image-delete="{{ route('moderator.image.delete', '') }}"
                   data-image-moderate="{{ route('moderator.image.moderate', '') }}"
               >
                 <div class="uploud__thumb uploud__thumb_admin"
-                     style="background-image: url('{{ url($image->path) }}'); background-size: cover;"
+                     style="background-image: url('{{ $image->getUrl() }}'); background-size: cover;"
                      id="upload{{$image->id}}">
                   <span class="upload_number">№ {{ $loop->index + 1 }}</span>
-                  @if($image->moderate)
+                  @if($image->getCustomProperty('moderate'))
                     <div class="moderate">
                       <img src="{{ asset('img/lk/arrow-top.png') }}" alt="">
                     </div>
@@ -432,7 +432,7 @@
                   </div>
                 </div>
                 <p class="uploud__status {{ !$image->moderate ? 'uploud__status_good' : '' }}">
-                  {{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}
+                  {{ $image->getCustomProperty('moderate') ? 'Проверка модератором' : 'Опубликовано' }}
                 </p>
               </li>
             @endforeach

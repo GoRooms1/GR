@@ -8,11 +8,10 @@ use Domain\Attribute\DataTransferObjects\AttributeData;
 use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Hotel\DataTransferObjects\MinCostsData;
 use Domain\Hotel\DataTransferObjects\RoomHotelData;
-use Domain\Image\Models\Image;
+use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\GetAllRoomCosts;
 use Domain\Room\Models\Room;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
@@ -34,9 +33,8 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         public ?bool $is_hot,
         #[DataCollectionOf(AttributeData::class)]
         public readonly null|Lazy|DataCollection $attrs,
-        public Image $image,
-        /** @var Collection<Image>|\Domain\Image\Models\Image[] */
-        public Collection|array $images,
+        #[DataCollectionOf(MediaImageData::class)]     
+        public null|Lazy|DataCollection $images,
         public Lazy|PageDescriptionData|null $meta,
         public Lazy|RoomHotelData|null $hotel,
         public Lazy|CategoryData|null $category,
@@ -50,9 +48,8 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         return self::from([
             ...$room->toArray(),
             'created_at' => $room->created_at,
-            'updated_at' => $room->updated_at,
-            'image' => $room->image,
-            'images' => $room->images,
+            'updated_at' => $room->updated_at,           
+            'images' =>MediaImageData::collection($room->getMedia('images')),
             'attrs' => Lazy::whenLoaded('attrs', $room, fn () => AttributeData::collection($room->attrs)),
             'meta' => Lazy::whenLoaded('meta', $room, fn () => PageDescriptionData::from($room->meta)),
             'hotel' => Lazy::whenLoaded('hotel', $room, fn () => RoomHotelData::fromModel($room->hotel)),
