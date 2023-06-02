@@ -66,11 +66,11 @@ export default {
   },
   methods: {
     loadMapLazy() {
-      let mapInitDelay = 3000;
-      if (typeof window !== "undefined") {
-        if (window.innerWidth < 768) mapInitDelay = 5100;
-      }
-      loadYandexMap(this.$page.props.yandex_api_key, mapInitDelay, this.initMap)
+      // let mapInitDelay = 3000;
+      // if (typeof window !== "undefined") {
+      //   if (window.innerWidth < 768) mapInitDelay = 5100;
+      // }
+      loadYandexMap(this.$page.props.yandex_api_key, 10, this.initMap)
     },
     loadMapImmediate() {
       if (typeof ymaps !== "undefined") return;
