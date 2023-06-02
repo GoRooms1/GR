@@ -7,8 +7,8 @@
       :breakpoints="breakpoints"
       class="swiper-image2 overflow-hidden relative mx-4 xl:mx-0 xl:w-full h-60 xl:h-80 xl:rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl xl:rounded-tr-none xl:max-w-[550px] swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
     >
-      <swiper-slide v-for="image in (room?.images ?? []).filter(el => el.moderate === false)">
-        <Image class="w-full h-full object-cover" :src="image?.conversions?.card ?? image.url" />
+      <swiper-slide v-for="(image, index) in (room?.images ?? []).filter(el => el.moderate === false)">
+        <Image class="w-full h-full object-cover" :src="image?.conversions?.card ?? image.url" :lazy="index > 0"/>
       </swiper-slide>
       <div
         class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"

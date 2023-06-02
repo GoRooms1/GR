@@ -6,7 +6,7 @@
       :class="class"
       alt="img"
       @error="loadError"
-      loading="lazy"
+      :loading="lazy ? 'lazy' : 'eager'"
     />
   </div>
 </template>
@@ -15,7 +15,8 @@
 export default {
   props: {
     src: String,
-    class: String,    
+    class: String, 
+    lazy: Boolean,   
   },
   data() {
     return {
