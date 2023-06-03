@@ -36,7 +36,7 @@
         <button          
           class="btn-disabled flex py-1 px-2 rounded-md bg-sky-100"
         >
-          <img src="/img/heartCard.svg" alt="heart"/>
+          <img src="/img/heartCard.svg" alt="heart" width="20" height="20"/>
         </button>
         <cashback-tag />
       </div>
