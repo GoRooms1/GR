@@ -11,7 +11,7 @@
   </div>
   <div v-if="metro" class="flex leading-tight text-sm">
     <span class="px-2">
-      <img src="/img/walk.svg" alt="walk"/>
+      <img src="/img/walk.svg" alt="walk" width="20" height="16"/>
     </span>
     {{ metro?.distance }} мин
   </div>

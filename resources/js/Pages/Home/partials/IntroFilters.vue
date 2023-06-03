@@ -88,7 +88,7 @@
           <span class="text-white">На карте</span>
         </Button>
         <Button @click="getDataOnList()">
-          <img src="/img/listpointers2.svg" alt="list"/>
+          <img src="/img/listpointers2.svg" alt="list" width="24" height="24"/>
           <span class="text-white">Списком</span>
         </Button>
       </div>

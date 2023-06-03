@@ -13,7 +13,7 @@
         <navigation classes="flex ml-auto hidden lg:flex" />
         <div class="pt-1 lg:hidden">
         <button @click="$page.props.modals.menu = true">
-          <img src="/img/menu.svg" alt="menu"/>       
+          <img src="/img/menu.svg" alt="menu" width="24" height="16"/>       
         </button>
       </div>         
       </div>

@@ -16,6 +16,8 @@
             : '/img/map.svg'
         "
         alt="map"
+        width="24"
+        height="24"
       />
     </button>
     <button
@@ -34,6 +36,7 @@
             : '/img/listpointers.svg'
         "
         alt="listpointers"
+        width="24" height="24"
       />
     </button>
     <button
@@ -50,13 +53,14 @@
             : '/img/search2.svg'
         "
         alt="search"
+        width="24" height="24"
       />
     </button>
     <button
       @click="toggleFilters()"
       class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
     >
-      <img src="/img/filters.svg" alt="filters" />
+      <img src="/img/filters.svg" alt="filters" width="24" height="24"/>
     </button>
     <filter-attr-toggle
       type="square"
@@ -72,12 +76,12 @@
     <button
       class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
     >
-      <img src="/img/footer-cashback.svg" alt="footer-cashback" />
+      <img src="/img/footer-cashback.svg" alt="footer-cashback" width="24" height="24"/>
     </button>
     <button
       class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
     >
-      <img src="/img/heart.svg" alt="heart" />
+      <img src="/img/heart.svg" alt="heart" width="24" height="24"/>
     </button>
   </div>
 </template>

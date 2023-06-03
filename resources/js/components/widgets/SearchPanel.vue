@@ -11,7 +11,7 @@
       class="shadow-xl w-full bg-white rounded-t-[16px] rounded-b-none p-0 px-[8px] py-[12px] flex items-center"
     >
       <button class="p-[8px]">
-       <img src="/img/search.svg" alt="search"/>
+       <img src="/img/search.svg" alt="search" width="24" height="24"/>
       </button>
     </div>
     <div class="">

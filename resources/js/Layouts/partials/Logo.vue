@@ -1,6 +1,6 @@
 <template>
   <Link href="/">
-    <img src="/img/logo.svg" alt="logo">
+    <img src="/img/logo.svg" alt="logo" width="127" height="21">
   </Link>
 </template>
 

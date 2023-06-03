@@ -1,7 +1,7 @@
 <template>
   <div v-bind="$attrs">
     <div class="pt-1 mr-2">
-      <img src="/img/location.svg" alt="location"/>
+      <img src="/img/location.svg" alt="location" width="20" height="16"/>
     </div>
     <div class="leading-tight text-sm">
       <Link

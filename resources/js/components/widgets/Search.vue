@@ -4,7 +4,7 @@
     :class="searchInputClasses"
   >
     <button class="p-[8px]">      
-      <img src="/img/search.svg" alt="search"/>
+      <img src="/img/search.svg" alt="search" width="24" height="24"/>
     </button>
     <input
       :value="searchValue"
@@ -19,14 +19,14 @@
         @click="getDataOnMap()"
         class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
       >
-        <img src="/img/map2.svg" alt="map"/>
+        <img src="/img/map2.svg" alt="map" width="24" height="24"/>
         <span class="text-white">На карте</span>
       </button>
       <button
         @click="getDataOnList()"
         class="flex items-center gap-[8px] bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
       >
-        <img src="/img/listpointers2.svg" alt="list"/>
+        <img src="/img/listpointers2.svg" alt="list" width="24" height="24"/>
         <span class="text-white">Списком</span>
       </button>
     </div>
