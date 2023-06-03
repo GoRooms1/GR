@@ -19,7 +19,7 @@
         class="p-[8px] flex items-center gap-[8px] bg-[#EAEFFD] rounded-b-[16px]"
       >
         <button class="p-[8px]">
-          <img src="/img/chevronsmalldown.svg" />
+          <img src="/img/chevronsmalldown.svg" alt="chevronsmalldown" width="20" height="12"/>
         </button>
       </div>
     </div>

@@ -27,7 +27,7 @@
         <button         
           class="btn-disabled flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"
         >
-          <img class="mr-2 block" src="/img/star.svg" alt="star"/>
+          <img class="mr-2 block" src="/img/star.svg" alt="star" width="20" height="20"/>
           <span>
             <b>0</b>
             (0)
