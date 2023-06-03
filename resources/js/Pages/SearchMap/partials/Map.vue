@@ -77,6 +77,7 @@ export default {
       loadYandexMap(this.$page.props.yandex_api_key, 10, this.initMap);
     },   
     initMap() {
+      console.log('init map');
       let center = [];
       if (this.$page.props?.map_center?.geo_lat && this.$page.props?.map_center?.geo_lon) {
         center[0] = this.$page.props.map_center.geo_lat;
@@ -107,7 +108,7 @@ export default {
           "</div>" +
           "</button>" +
           "</div>"
-      );
+      );      
 
       //Init Clasterer
       geoObjectsClusterer = new ymaps.Clusterer({
@@ -116,9 +117,9 @@ export default {
         minClusterSize: 2,
         useMapMargin: true,
         zoomMargin: [85, 50, 90, 50],
-      }),        
-       
-      this.drawObjects();
+      });
+      
+      this.drawObjects();      
     },
     drawObjects() {
       if (!searchMap) return;
@@ -144,7 +145,7 @@ export default {
           hotel.address.geo_lon = parseFloat(hotel.address.geo_lon) + 0.0001;
           this.hotelMarkers[this.hotelMarkers.findIndex(el => el.id == hotel.id)].address.geo_lon = hotel.address.geo_lon;
         }
-
+       
         let placemark = new ymaps.Placemark(
           [hotel.address.geo_lat, hotel.address.geo_lon],
           {            

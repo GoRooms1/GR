@@ -359,8 +359,7 @@
             <div class="grid grid-cols-[fit-content(100%)_1fr]">
               <hotel-metro-item
                 v-for="metro in hotel?.metros"
-                :metro="metro"
-                :address="hotel?.address"
+                :metro="metro"                
               />
             </div>
           </div>
@@ -518,24 +517,11 @@ export default {
     initMap() {
       myMap = new ymaps.Map("map", {
         center: [this.hotel.address.geo_lat, this.hotel.address.geo_lon],
-        zoom: 15,
-        controls: ["zoomControl"],
+        zoom: 15,       
       });
 
-      let orgGeoObject = new ymaps.GeoObject(
-        {
-          geometry: {
-            type: "Point",
-            coordinates: [
-              this.hotel.address.geo_lat,
-              this.hotel.address.geo_lon,
-            ],
-          },
-        },
-        {
-          preset: "islands#icon",
-          draggable: false,
-        }
+      let orgGeoObject = new ymaps.Placemark(
+        [this.hotel.address.geo_lat, this.hotel.address.geo_lon]
       );
 
       myMap.geoObjects.add(orgGeoObject);

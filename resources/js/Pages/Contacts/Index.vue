@@ -242,27 +242,20 @@ export default {
     initMap() {
       myMap = new ymaps.Map("map", {
         center: this.coords,
-        zoom: 15,
-        controls: ["zoomControl"],
+        zoom: 15,        
       });
 
-      let orgGeoObject = new ymaps.GeoObject(
+      let orgGeoObject = new ymaps.Placemark(
+        this.coords,
         {
-          geometry: {
-            type: "Point",
-            coordinates: this.coords,
-          },
-          properties: {
-            iconCaption: "GoRooms",
-            balloonContent: "Россия, Москва, Напольный проезд, 10",
-          },
+          balloonContent: 'Россия, Москва, Напольный проезд, 10',
+          iconCaption: 'GoRooms'
         },
         {
           preset: "islands#icon",
-          draggable: false,
         }
       );
-
+      
       myMap.geoObjects.add(orgGeoObject);
     },
   },
