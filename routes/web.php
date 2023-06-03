@@ -30,7 +30,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-//New
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 
@@ -52,12 +51,10 @@ Route::get('/centre', [CustomPageController::class, 'centre'])->name('custom.cen
 Route::get('/5minut', [CustomPageController::class, 'fiveMinut'])->name('custom.5minut');
 Route::get('/lowcost', [CustomPageController::class, 'lowcost'])->name('custom.lowcost');
 
-//old
 Route::get('/blog', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/blog/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::post('/form', [FormController::class, 'store'])->name('forms.store');
 
-//Route::get('/image/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::get('sitemap.xml', [SiteMapController::class, 'index']);
 
 Route::get('/bonuse', [PageController::class, 'show'])->name('pages.show');
@@ -65,3 +62,9 @@ Route::get('/rules', [PageController::class, 'show']);
 
 Route::get('lk/start', [Lk\HomeController::class, 'start'])->name('lk.start');
 Route::post('lk/object/store', [Lk\ObjectController::class, 'store'])->name('lk.object.store');
+
+//Test routes
+Route::prefix('/test')->name('test.')->group(function () {
+    Route::get('/hotels', [\App\Http\Controllers\Test\HotelController::class, 'index'])->name('hotels.index');
+    Route::get('/rooms', [\App\Http\Controllers\Test\RoomController::class, 'index'])->name('rooms.index');
+});
