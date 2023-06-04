@@ -54,7 +54,7 @@
         <div>
           <hotel-address :address="hotel.address" class="flex mb-2" />
           <div class="grid grid-cols-[fit-content(100%)_1fr]">
-            <hotel-metro-item :metro="metro" />
+            <hotel-metro-item v-if="metro" :metro="metro" />
           </div>
         </div>
       </div>
@@ -138,6 +138,9 @@ export default {
   },
   computed: {
     metro() {
+      let metros = this.hotel?.metros ?? [];
+      if (metros.length === 0) return null;
+
       let filterMetro = this.filterStore.getFilterValue("hotels", "metro");
 
       return (
