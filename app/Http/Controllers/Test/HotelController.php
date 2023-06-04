@@ -15,6 +15,7 @@ use Domain\Attribute\Actions\GetFilteredAttributeCategoriesAction;
 use Domain\Attribute\DataTransferObjects\AttributeCategoryData;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\Actions\GetAllHotelTypesAction;
+use Domain\Hotel\DataTransferObjects\HotelCardData;
 use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\DataTransferObjects\HotelTypeKeyNameData;
 use Domain\Search\DataTransferObjects\ParamsData;
@@ -50,7 +51,7 @@ class HotelController extends Controller
             'cost_types' => GetCostTypesWithCostRangesKeyNameDataAction::run(),
             'attributes' => AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run()),
             'total' => GetNumOfFilteredObjectsAction::run($params),
-            'hotels' => HotelData::collection(FilterHotelsPaginateAction::run($params->hotels)),
+            'hotels' => HotelCardData::collection(FilterHotelsPaginateAction::run($params->hotels)),
         ]);
     }
 }
