@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Domain\Hotel\ViewModels;
 
 use Arr;
-use Closure;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
-use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Hotel\DataTransferObjects\HotelCardData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Search\Traits\SearchResultTrait;
-use Inertia\Inertia;
 
 final class HotelListViewModel extends \Parent\ViewModels\ViewModel
 {
@@ -45,11 +43,11 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
     /**
      * Paginated hotels array
      *
-     * @return Closure
+     * @return mixed
      */
-    public function hotels(): Closure
+    public function hotels()
     {
-        return fn() => HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
+        return fn() => HotelCardData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
     }
 
     /**

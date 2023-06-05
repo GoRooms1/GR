@@ -25,7 +25,7 @@
 <body class="text-zinc-600">
   @inertia
 
-  @if (config('app.env') === 'production1')
+  @if (config('app.env') === 'production')
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
     (function() {

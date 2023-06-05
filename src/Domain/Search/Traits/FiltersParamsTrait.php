@@ -81,7 +81,7 @@ trait FiltersParamsTrait
      */
     public function cost_types(): Closure
     {
-        return fn(): DataCollection => GetCostTypesWithCostRangesKeyNameDataAction::run();
+        return fn() => GetCostTypesWithCostRangesKeyNameDataAction::run();
     }
 
     /**    
