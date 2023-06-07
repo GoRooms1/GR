@@ -38,7 +38,7 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
     public function page_description(): PageDescriptionData
     {        
         $paramsData = clone $this->params;
-        $paramsData->isRoomsFilter = true;
+        $paramsData->room_filter = true;
         $pageDescription = PageDescriptionData::fromModel(GetPageDescriptionFromParamsData::run($paramsData));
 
         if ($pageDescription->title == '' || is_null($pageDescription->title))
@@ -66,14 +66,6 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
     public function hotels(): \Inertia\LazyProp
     {       
         return Inertia::lazy(fn() => HotelMapData::fromCollectionWithFilters(FilterHotelsOnMapAction::run($this->params->hotels, $this->params->rooms), $this->params));
-    }        
-    
-    /**
-     * @return string
-     */
-    public function query_string(): string
-    {
-        return Arr::query($this->params->toArray());
     }
     
     public function map_center(): GeolocationData | null

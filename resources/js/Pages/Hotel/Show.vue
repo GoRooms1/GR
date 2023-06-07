@@ -401,9 +401,8 @@ import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "./partials/CostItem.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import Search from "@/components/widgets/Search.vue";
-import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/vue3";
 import { loadYandexMap } from "@/Services/loadYandexMap.js";
+import {_getFiltersData} from "@/Services/filterUtils.js";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Pagination, Navigation } from "swiper";
 
@@ -433,8 +432,7 @@ export default {
     rooms: [Object],
   },
   data() {
-    return {
-      filterStore,
+    return {      
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
@@ -536,7 +534,7 @@ export default {
       this.$nextTick(() => {
         this.$inertia.get(
           "/hotels/" + this.hotel.slug,
-          this.filterStore.getFiltersValues(),
+          _getFiltersData.call(this),
           {
             replace: true,
             preserveState: true,

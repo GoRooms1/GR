@@ -7,14 +7,14 @@
         searchable
         placeholder="Город"        
         :options-array="$page.props.cities ?? []"
-        :model-value="filterStore.getFilterValue('hotels', 'city')"
+        :model-value="$page.props?.filters?.hotels?.city ?? null"
         @update:modelValue="(event) => filterValueHandler('hotels', false, 'city', event)"
       />
       <metro-select-intro
         searchable
         placeholder="Станция метро"        
         :options-array="$page.props.metros ?? []"
-        :model-value="filterStore.getFilterValue('hotels', 'metro')"
+        :model-value="$page.props?.filters?.hotels?.metro ?? null"
         @update:modelValue="(event) => filterValueHandler('hotels', false, 'metro', event)"
       />
 
@@ -24,7 +24,7 @@
         toggle-img="img/low-cost2.svg"
         type="horizontal"
         initial-value="true"
-        :model-value="filterStore.getFilterValue('rooms', 'low_cost')"
+        :model-value="$page.props?.filters?.rooms?.low_cost ?? null"
         @update:modelValue="(event) => filterValueHandler('rooms', false, 'low_cost', event)"
       />
       <filter-attr-toggle
@@ -33,7 +33,7 @@
         toggle-img="img/hour2.svg"
         type="horizontal"
         :initial-value="68"
-        :model-value="filterStore.getFilterValue('rooms', 'attr_68')"
+        :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 68)"
         @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_68', event)"
       />
       <filter-attr-toggle
@@ -57,7 +57,7 @@
         toggle-img="img/art2.svg"
         type="horizontal"
         :initial-value="52"
-        :model-value="filterStore.getFilterValue('rooms', 'attr_52')"
+        :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 52)"
         @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_52', event)"
       />
       <filter-attr-toggle
@@ -66,7 +66,7 @@
         toggle-img="img/jacuzzi2.svg"
         type="horizontal"
         :initial-value="65"
-        :model-value="filterStore.getFilterValue('rooms', 'attr_65')"
+        :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 65)"
         @update:modelValue="(event) => filterValueHandler('rooms', true, 'attr_65', event)"
       />
     </div>
@@ -77,7 +77,7 @@
         class="flex items-center justify-center md:gap-[54px] gap-[10px] md:w-initial w-full"
       >
         <span class="text-sm leading-[16px]"
-          >Найдено {{ foundMessage }}</span
+          >{{ foundMessage }}</span
         >
       </div>
       <div
@@ -97,14 +97,13 @@
 </template>
 
 <script>
-import { usePage } from "@inertiajs/vue3";
-import { filterStore } from "@/Store/filterStore.js";
 import { numWord } from "@/Services/numWord.js";
 import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 import CitySelectIntro from "@/components/ui/CitySelectIntro.vue";
 import MetroSelectIntro from "@/components/ui/MetroSelectIntro.vue";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
+import {_updateFilterValue, _getFiltersData, _getData} from "@/Services/filterUtils.js";
 
 export default {
   components: {
@@ -112,103 +111,61 @@ export default {
     CitySelectIntro,
     MetroSelectIntro,
     FilterAttrToggle,
-  },
-  props: {},
-  mounted() {    
-    this.$eventBus.on("filters-inited", (e) => this.updateFilters(["total", "metros"]));
-    let initPromise = new Promise((resolve, reject) => {
-      resolve(
-        this.filterStore.init(usePage().url, this.$page.props.location)
-      );
-    });
-
-    initPromise
-      .then((inited) => {
-        this.$eventBus.emit("filters-inited");
-        console.log("filters inited");
-      });          
-  },
-  unmounted() {
-    this.$eventBus.off("filters-inited");    
-  },
+  }, 
+  mounted() {
+    this.updateFoundMessage();
+  },  
   data() {
-    return {
-      filterStore,
+    return {      
+      foundMessage: "",
     };
-  },
-  computed: {
-    foundMessage() {
-      let objectWords;
-      if (this.filterStore.getFiltersValues().isRoomsFilter == true)
-        objectWords = ["номер", "номера", "номеров"];
-      else objectWords = ["отель", "отеля", "отелей"];
-      return (
-        usePage().props.total +
-        " " +
-        numWord(usePage().props.total, objectWords)
-      );
-    },
-  },
+  },  
   methods: {
+    updateFoundMessage() {
+      let total = this.$page.props?.total ?? 0;
+
+      if (total === 0) {
+        this.foundMessage = "По вашему запросу ничего не нашлось";
+        return;
+      }
+
+      let objectWords = ["отель", "отеля", "отелей"];
+      if (this.$page.props.filters?.room_filter === true) objectWords = ["номер", "номера", "номеров"];
+      this.foundMessage = numWord(total, ["Найден", "Найдено", "Найдено"]) + " " + total + " " + numWord(total, objectWords);
+    },
     getDataOnList() {
-      this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms"],
-        //onSuccess: () => {},
-        onStart: () => {
-          usePage().props.isLoadind = true;
-        },
-        onFinish: () => {
-          usePage().props.isLoadind = false;
-        },
-      });
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search', data);      
     },
-    getDataOnMap() {
-      this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms", "map_center"],
-        //onSuccess: () => {},
-        onStart: () => {
-          usePage().props.isLoadind = true;
-        },
-        onFinish: () => {
-          usePage().props.isLoadind = false;
-          this.$eventBus.emit("data-received");
-        },
-      });
+    getDataOnMap() { 
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});      
     },
-    updateFilters(only) {
-      let data = this.filterStore.getFiltersValues();
-      this.$inertia.get("/", data, {
+    updateFilters(props) {
+      let data = _getFiltersData.call(this);
+      this.$inertia.get("/", data, {     
         preserveState: true,
         preserveScroll: true,
         replace: true,
-        only: only ?? [],
+        only: props ?? [],
+        onFinish: () => {       
+          this.updateFoundMessage();          
+        },
       });
     },
     filterValueHandler(model, isAttr = false, key, value) {
-      let propsToUpdate = ["total"];
-      if (key == "city") {
-        this.filterStore.removeFilter("hotels", "city_area");
-        this.filterStore.removeFilter("hotels", "city_district");
-        this.filterStore.removeFilter("hotels", "metro");
-        propsToUpdate = _.union(propsToUpdate, [
+      _updateFilterValue.call(this, model, isAttr, key, value);
+
+      let props = ["total", "filters", 'filter_tags'];
+      if (key == "city") {        
+        this.$page.props.filters.hotels.metro = null;
+        props = _.union(props, [
           "total",
           "metros",          
         ]);
-      }      
-
-      if (value == null) {
-        this.filterStore.removeFilter(model, key);
-      } else {
-        this.filterStore.updateFilter(model, isAttr, key, value);
       }
 
-      this.updateFilters(propsToUpdate);
+      this.updateFilters(props);
     },    
   },  
 };

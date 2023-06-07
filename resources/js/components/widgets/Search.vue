@@ -67,10 +67,10 @@
 </template>
 
 <script>
-import { filterStore } from "@/Store/filterStore.js";
 import { Link } from "@inertiajs/vue3";
 import _ from "lodash";
 import MetroIcon from "@/components/ui/MetroIcon.vue";
+import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 
 export default {
   components: {
@@ -88,8 +88,7 @@ export default {
     },
   },
   data() {
-    return {
-      filterStore,
+    return {      
       searchValue: null,
       searchState: null,
       result: [],
@@ -110,36 +109,17 @@ export default {
   },
   methods: {
     getDataOnList() {
-      this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],        
-        onStart: () => {
-          this.$page.props.isLoadind = true;
-        },
-        onFinish: () => {
-          this.$page.props.isLoadind = false;
-        },
-      });
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search', data);
+      this.$eventBus.emit("filters-close");
     },
     getDataOnMap() {
-      this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description", "map_center"],        
-        onStart: () => {
-          this.$page.props.isLoadind = true;
-        },
-        onFinish: () => {
-          this.$page.props.isLoadind = false;
-          this.$eventBus.emit("data-received");
-        },
-      });
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});
+      this.$eventBus.emit("filters-close");    
     },
     search() {
-      let data = this.filterStore.getFiltersValues();
+      let data = _getFiltersData.call(this);
       data.search = this.searchValue;
       
       if (this.searchState) clearTimeout(this.searchState);

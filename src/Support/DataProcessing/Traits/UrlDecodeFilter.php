@@ -26,13 +26,13 @@ trait UrlDecodeFilter
 
         if (count($arrayParams) == 0) {
             return new HotelParamsData(
-                attributes: [],
+                attrs: [],
                 city: null,
                 metro: null,
-                city_area: null,
-                city_district: null,
+                area: null,
+                district: null,
                 street: null,
-                hotel_type: null,
+                type: null,
                 moderate: null,
             );
         }
@@ -111,13 +111,13 @@ trait UrlDecodeFilter
         }
 
         return new HotelParamsData(
-            attributes: [],
+            attrs: [],
             city: $city,
             metro: $metro,
-            city_area: $area,
-            city_district: $district,
+            area: $area,
+            district: $district,
             street: $street,
-            hotel_type: null,
+            type: null,
             moderate: null
         );
     }

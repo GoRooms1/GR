@@ -84,7 +84,6 @@
 </template>
 
 <script>
-import { filterStore } from "@/Store/filterStore.js";
 import { Link } from "@inertiajs/vue3";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
@@ -111,8 +110,7 @@ export default {
     hotel: Object,
   },
   data() {
-    return {
-      filterStore,
+    return {     
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
@@ -141,7 +139,7 @@ export default {
       let metros = this.hotel?.metros ?? [];
       if (metros.length === 0) return null;
 
-      let filterMetro = this.filterStore.getFilterValue("hotels", "metro");
+      let filterMetro = this.$page?.props?.filters?.hotels?.metro;
 
       return (
         this.hotel.metros.find(el => el.name == filterMetro) ?? this.hotel.metros[0]

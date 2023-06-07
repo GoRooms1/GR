@@ -34,14 +34,12 @@
 </template>
 
 <script>
-import { filterStore } from "@/Store/filterStore.js";
-import { tempFilterStore } from "@/Store/tempFilterStore.js";
-import { usePage } from "@inertiajs/vue3";
 import _ from "lodash";
 import HotelCard from "./HotelCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
 import ListHeader from "./ListHeader.vue";
+import {_getFiltersData} from "@/Services/filterUtils.js"
 
 export default {
   components: {
@@ -61,16 +59,14 @@ export default {
     },
   },
   data() {
-    return {
-      filterStore,
-      tempFilterStore,
+    return {      
       allHotels: this.hotels?.data ?? [],
       isLoading: false,
     };
   },
   computed: {
     globalLoading() {
-      return usePage().props.isLoadind ?? false;
+      return this.$page.props.isLoadind ?? false;
     },
   },
   methods: {
@@ -80,7 +76,7 @@ export default {
       if (this?.hotels?.meta?.next_page_url) {
         this.$inertia.get(
           this.hotels.meta.next_page_url,
-          this.ignoreFilters ? {} : this.filterStore.getFiltersValues(),          
+          this.ignoreFilters ? {} : _getFiltersData.call(this),        
           {
             preserveState: true,
             preserveScroll: true,

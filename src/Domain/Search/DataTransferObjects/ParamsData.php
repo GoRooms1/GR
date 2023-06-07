@@ -13,7 +13,7 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
      * @param HotelParamsData $hotels
      * @param RoomParamsData $rooms     
      * @param string|null $search
-     * @param bool $isRoomsFilter
+     * @param bool $room_filter
      */
     public function __construct(
         public HotelParamsData $hotels,
@@ -21,17 +21,21 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
         public ?int $hotel_id,        
         public ?string $search,
         public ?bool $filter,        
-        public bool $isRoomsFilter = false,    
+        public bool $room_filter = false,
     ) {
     }
 
     public static function fromRequest(Request $request): self
     {
+        $hotels = HotelParamsData::fromRequest($request);
+        $rooms = RoomParamsData::fromRequest($request);
+        $isRoomsFilter = !$rooms->isEmpty();
+
         return self::from([
-            'hotels' => HotelParamsData::fromRequest($request),
-            'rooms' => RoomParamsData::fromRequest($request),
-            'isRoomsFilter' => filter_var($request->get('isRoomsFilter', false), FILTER_VALIDATE_BOOLEAN),
-            'hotel_id' => $request->get('hotel_id'),         
+            'hotels' => $hotels,
+            'rooms' => $rooms,
+            'room_filter' => $isRoomsFilter,
+            'hotel_id' => $request->get('hotel_id'),     
             'search' => $request->get('search'),
             'filter' => filter_var($request->get('filter', false), FILTER_VALIDATE_BOOLEAN),           
         ]);

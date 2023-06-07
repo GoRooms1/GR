@@ -45,7 +45,20 @@ class HandleInertiaRequests extends Middleware
      * @return array
      */
     public function share(Request $request): array
-    {        
+    {
+        $isModerator = GetLoggedUserModeratorStatusAction::run();
+        $geoLocation = null;
+        $city = $request->get('hotels', [])['city'] ?? null;   
+             
+        if (is_null($city) && !$isModerator) {
+            $geoLocation = GetLocationFromSession::run($request->ip());
+            $request->merge([
+                'hotels' => [
+                    'city' => $geoLocation->city,
+                ]
+            ]);
+        }
+
         return array_merge(parent::share($request), [
             'modals' => [],
             'flash' => [
@@ -59,7 +72,7 @@ class HandleInertiaRequests extends Middleware
             'location' => fn() => GetLocationFromSession::run($request->ip()),
             'contacts' => fn() => GetContactsSettingsAction::run(),
             'app_url' => fn() => config('app.url'),
-            'is_moderator' => fn() => GetLoggedUserModeratorStatusAction::run(),
+            'is_moderator' => fn() => $isModerator,
             'yandex_api_key' => fn() => config('services.yandex.map.key'),
         ]);
     }

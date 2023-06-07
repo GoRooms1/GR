@@ -188,7 +188,6 @@
 </template>
 
 <script>
-import { filterStore } from "@/Store/filterStore.js";
 import { numWord } from "@/Services/numWord.js";
 export default {
   props: {
@@ -199,12 +198,7 @@ export default {
     customMessage: {
       type: String,
     },
-  },
-  data() {
-    return {
-      filterStore,
-    };
-  },
+  }, 
   computed: {
     foundMessage() {
       if (this.found === 0) return 'По вашему запросу ничего не нашлось';

@@ -19,9 +19,9 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = true;
+            $paramsData->room_filter = true;
             $paramsData->hotels->city = 'Москва';
-            $paramsData->rooms->attributes = [
+            $paramsData->rooms->attrs = [
                 optional(Attribute::forRooms()->where('name', 'Джакузи')->first())->id ?? 0
             ];            
         }
@@ -35,9 +35,9 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = false;
+            $paramsData->room_filter = false;
             $paramsData->hotels->city = 'Москва';
-            $paramsData->hotels->city_area = 'Центральный';
+            $paramsData->hotels->area = 'Центральный';
         }               
         
         return Inertia::render('Hotel/Index', new HotelListViewModel($paramsData, '/centre'));
@@ -49,9 +49,9 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = false;
+            $paramsData->room_filter = false;
             $paramsData->hotels->city = 'Москва';
-            $paramsData->hotels->attributes = [
+            $paramsData->hotels->attrs = [
                 optional(Attribute::forHotels()->where('name', '5 минут до метро')->first())->id ?? 0
             ];
         }   
@@ -65,7 +65,7 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = true;
+            $paramsData->room_filter = true;
             $paramsData->hotels->city = 'Москва';
             $paramsData->rooms->low_cost = true;
         }        

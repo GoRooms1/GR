@@ -80,8 +80,8 @@ class Filter extends AbstractWidget
 
             $this->city = $data->city;
             $this->metro = $data->metro;
-            $this->area = $data->city_area;
-            $this->district = $data->city_district;
+            $this->area = $data->area;
+            $this->district = $data->district;
             $this->street = $data->street;
         } else {
             if ($metro_req = Request::get('metro')) {

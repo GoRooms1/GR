@@ -30,8 +30,7 @@ import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import RoomsList from "./partials/RoomsList.vue";
 import InfoBlock from "./partials/InfoBlock.vue";
-import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/vue3";
+import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 export default {
   layout: SearchLayout,
   components: {
@@ -47,41 +46,16 @@ export default {
     page_description: Object,
     rooms: [Object],
   },
-  data() {
-    return {
-      filterStore,
-    };
-  },
-  mounted() {   
+  mounted() {    
     this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));   
   },
   unmounted() {   
-    this.$eventBus.off("filters-changed");   
+    this.$eventBus.off("filters-changed");
   },
   methods: {
-    getDataOnList(url) {      
-      this.$nextTick(() => {
-        this.$inertia.get(url, this.filterStore.getFiltersValues(), {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          only: ["hotels", "rooms", "is_rooms_filter"],
-          onSuccess: () => {
-            if (typeof window !== "undefined")
-              window.history.pushState(
-                {},
-                this.$page.title,
-                window.location.pathname
-              );
-          },
-          onStart: () => {
-            usePage().props.isLoadind = true;
-          },
-          onFinish: () => {
-            usePage().props.isLoadind = false;
-          },
-        });
-      });
+    getDataOnList(url) {
+      let data = _getFiltersData.call(this);
+      _getData.call(this, url, data);      
     },
   },
 };

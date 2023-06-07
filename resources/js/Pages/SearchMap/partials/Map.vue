@@ -19,10 +19,9 @@
 
 <script>
 import vClickOutside from "click-outside-vue3";
-import { usePage } from "@inertiajs/vue3";
-import { filterStore } from "@/Store/filterStore.js";
 import { loadYandexMap } from "@/Services/loadYandexMap.js";
 import RoomCard from "@/Pages/Room/partials/RoomCard.vue";
+import {_getFiltersData} from "@/Services/filterUtils.js";
 
 let searchMap = null;
 let geoObjectsClusterer = null;
@@ -41,21 +40,19 @@ export default {
     hotels: [Object],
   },
   mounted() {
+    this.loadMapLazy();
     this.$page.props.modals.booking = false;
     document.body.classList.add("fixed");
-    document.documentElement.classList.add("max-[390px]:text-[12px]");
-    this.$eventBus.on("filters-inited", (e) => this.loadMapLazy());    
+    document.documentElement.classList.add("max-[390px]:text-[12px]");        
     this.$eventBus.on("data-received", (e) => this.drawObjects());     
   },
   unmounted() {
     document.body.classList.remove("fixed");
     document.documentElement.classList.remove("max-[390px]:text-[12px]");
-    this.$eventBus.off("data-received");
-    this.$eventBus.off("filters-inited");
+    this.$eventBus.off("data-received");   
   },
   data() {
-    return {
-      filterStore,      
+    return {          
       zoom: 10,
       hotelMarkers: [],
       selectedRooms: [],
@@ -166,7 +163,7 @@ export default {
         );
 
         placemark.events.add(["click"], (e) => {
-          let data = this.filterStore.getFiltersValues();
+          let data = _getFiltersData.call(this);
           data.hotel_id = hotel.id;
           this.$inertia.get("/search_map", data, {
             replace: true,
@@ -174,10 +171,10 @@ export default {
             preserveScroll: true,
             only: ["rooms"],
             onStart: () => {
-              usePage().props.isLoadind = true;
+              this.$page.props.isLoadind = true;
             },
             onFinish: () => {
-              usePage().props.isLoadind = false;
+              this.$page.props.isLoadind = false;
             },
             onSuccess: () => {
               this.selectedRooms = this.rooms;
@@ -234,7 +231,7 @@ export default {
       if (this.blurBackground === false) this.closeModal();
     },
     hideSearch() {
-      usePage().props.modals.search = false;
+      this.$page.props.modals.search = false;
     }, 
     handleResize() {
       if (typeof window !== "undefined") {

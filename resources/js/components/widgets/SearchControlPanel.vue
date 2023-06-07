@@ -57,7 +57,7 @@
       />
     </button>
     <button
-      @click="toggleFilters()"
+      @click="openFilters()"
       class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
     >
       <img src="/img/filters.svg" alt="filters" width="24" height="24"/>
@@ -67,10 +67,7 @@
       img="/img/bolt.svg"
       toggle-img="/img/bolt2.svg"
       initial-value="true"
-      :model-value="filterStore.getFilterValue('rooms', 'is_hot')"
-      @update:modelValue="
-        (event) => filterValueHandler('rooms', false, 'is_hot', event)
-      "
+      :model-value="null"     
       disabled
     />
     <button
@@ -87,65 +84,27 @@
 </template>
 
 <script>
-import { usePage } from "@inertiajs/vue3";
-import { filterStore } from "@/Store/filterStore.js";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
+import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 
 export default {
   components: {
     FilterAttrToggle,
-  },
-  data() {
-    return {
-      filterStore,
-    };
-  },
+  },  
   methods: {
     getDataOnList() {
-      this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-        //onSuccess: () => {},
-        onStart: () => {
-          usePage().props.isLoadind = true;
-        },
-        onFinish: () => {
-          usePage().props.isLoadind = false;
-        },
-      });
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search', data);   
     },
     getDataOnMap() {
-      this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description", "map_center"],
-        //onSuccess: () => {},
-        onStart: () => {
-          usePage().props.isLoadind = true;
-        },
-        onFinish: () => {
-          usePage().props.isLoadind = false;
-          this.$eventBus.emit("data-received");
-        },
-      });
-    },
-    filterValueHandler(model, isAttr = false, key, value) {
-      if (value == null) {
-        this.filterStore.removeFilter(model, key);
-      } else {
-        this.filterStore.updateFilter(model, isAttr, key, value);
-      }
-
-      this.$eventBus.emit("filters-changed");
-    },
-    toggleFilters() {
-      usePage().props.modals.filters = !usePage().props.modals.filters;
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});       
+    },    
+    openFilters() {
+      this.$eventBus.emit("filters-open");
     },
     toggleSearchPanel() {
-      usePage().props.modals.search = !usePage().props.modals.search;
+      this.$page.props.modals.search = !this.$page.props.modals.search;
     },
   },
 };

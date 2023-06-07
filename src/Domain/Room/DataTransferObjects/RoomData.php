@@ -6,8 +6,8 @@ namespace Domain\Room\DataTransferObjects;
 
 use Domain\Attribute\DataTransferObjects\AttributeData;
 use Domain\Category\DataTransferObjects\CategoryData;
+use Domain\Hotel\DataTransferObjects\HotelCardData;
 use Domain\Hotel\DataTransferObjects\MinCostsData;
-use Domain\Hotel\DataTransferObjects\RoomHotelData;
 use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\GetAllRoomCosts;
@@ -36,7 +36,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         #[DataCollectionOf(MediaImageData::class)]     
         public null|Lazy|DataCollection $images,
         public Lazy|PageDescriptionData|null $meta,
-        public Lazy|RoomHotelData|null $hotel,
+        public Lazy|HotelCardData|null $hotel,
         public Lazy|CategoryData|null $category,
         #[DataCollectionOf(MinCostsData::class)]
         public readonly null|Lazy|DataCollection $costs,
@@ -52,7 +52,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
             'images' =>MediaImageData::collection($room->getMedia('images')),
             'attrs' => Lazy::whenLoaded('attrs', $room, fn () => AttributeData::collection($room->attrs)),
             'meta' => Lazy::whenLoaded('meta', $room, fn () => PageDescriptionData::from($room->meta)),
-            'hotel' => Lazy::whenLoaded('hotel', $room, fn () => RoomHotelData::fromModel($room->hotel)),
+            'hotel' => Lazy::whenLoaded('hotel', $room, fn () => HotelCardData::fromModel($room->hotel)),
             'category' => $room->category ? CategoryData::fromModel($room->category) : null,
             'costs' => Lazy::whenLoaded('costs', $room, fn () => GetAllRoomCosts::run($room)),
         ]);

@@ -48,7 +48,7 @@ final class SearchViewModel extends \Parent\ViewModels\ViewModel
     public function hotels(): \Inertia\LazyProp
     {       
         return Inertia::lazy(
-            fn() => $this->params->isRoomsFilter == true ? 
+            fn() => $this->params->room_filter == true ? 
             HotelData::collection([])
                 :
             HotelData::collection(FilterHotelsPaginateAction::run($this->params->hotels))
@@ -63,26 +63,10 @@ final class SearchViewModel extends \Parent\ViewModels\ViewModel
     public function rooms(): \Inertia\LazyProp
     {        
         return  Inertia::lazy(
-            fn() => $this->params->isRoomsFilter == false ? 
+            fn() => $this->params->room_filter == false ? 
             RoomData::collection([]) 
                 : 
             RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels))
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function query_string(): string
-    {
-        return Arr::query($this->params->toArray());
-    }
-
-    /**    
-     * @return bool
-     */
-    public function is_rooms_filter(): Bool
-    {
-        return $this->params->isRoomsFilter;
     }
 }

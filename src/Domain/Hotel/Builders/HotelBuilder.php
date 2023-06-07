@@ -95,7 +95,7 @@ final class HotelBuilder extends Builder
         $result = [];
         /** @var array<string, string|int|bool|null> */
         $mainFilters = array_filter($filters->toArray(), function ($k) {
-            return $k != 'attributes';
+            return $k != 'attrs';
         }, ARRAY_FILTER_USE_KEY);
 
         if ($filters->metro != null && $filters->city != null) {
@@ -110,10 +110,10 @@ final class HotelBuilder extends Builder
         }
 
         /** @var array<int> */
-        $filterAttrs = $filters->attributes;
+        $filterAttrs = $filters->attrs;
         foreach ($filterAttrs as $value) {
-            if ($value != null && Filters::tryFrom('attributes')) {
-                $result[] = Filters::from('attributes')->createFilter(strval($value));
+            if ($value != null && Filters::tryFrom('attrs')) {
+                $result[] = Filters::from('attrs')->createFilter(strval($value));
             }
         }
 

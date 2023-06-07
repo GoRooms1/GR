@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Search\Traits;
 
+use Arr;
 use Closure;
 use Domain\Address\Actions\GetAllCitiesAction;
 use Domain\Address\Actions\GetAllCityMetrosAction;
@@ -21,6 +22,8 @@ use Domain\Search\Actions\GetNumOfFilteredObjectsAction;
 use Domain\Hotel\Actions\GetAllHotelTypesAction;
 use Domain\Hotel\DataTransferObjects\HotelTypeKeyNameData;
 use Domain\Room\Actions\GetCostTypesWithCostRangesKeyNameDataAction;
+use Domain\Search\Actions\GetFilterTagTitleAction;
+use Domain\Search\DataTransferObjects\FilterTagData;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -41,8 +44,8 @@ trait FiltersParamsTrait
     public function metros(): Closure
     {
         $city = $this->params->hotels->city;
-        $area = $this->params->hotels->city_area;
-        $district = $this->params->hotels->city_district;
+        $area = $this->params->hotels->area;
+        $district = $this->params->hotels->district;
 
         return fn() => MetroKeyNameData::collection(GetAllCityMetrosAction::run($city, $area, $district));
     }
@@ -71,7 +74,7 @@ trait FiltersParamsTrait
     public function city_districts(): Closure
     {
         $city = $this->params->hotels->city;
-        $city_area = $this->params->hotels->city_area;
+        $city_area = $this->params->hotels->area;
 
         return fn() => CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $city_area));
     }
@@ -106,5 +109,35 @@ trait FiltersParamsTrait
     public function total(): Closure
     {
         return fn(): int => GetNumOfFilteredObjectsAction::run($this->params);
+    }
+
+    public function filters() {
+        return $this->params;
+    }
+
+    public function filter_tags() {
+        $tags = [];
+        $srcTags = array_merge(
+            Arr::dot(['hotels' => $this->params->hotels->toArray()]), 
+            Arr::dot(['rooms' => $this->params->rooms->toArray()])
+        );
+        
+        foreach($srcTags as $key => $value) {
+            if (empty($value)) 
+                continue;
+
+            $keys = explode(".", $key);
+            $tagKey = $keys[1] == 'attrs' ? 'attr_'.$value : $keys[1];
+
+            $tags[] =  new FilterTagData(
+                title: GetFilterTagTitleAction::run($tagKey, $value),
+                modelType: $keys[0],
+                key: $tagKey,
+                isAttribute: $keys[1] == 'attrs',
+                value: $value,
+            );
+        }
+
+        return $tags;
     }
 }

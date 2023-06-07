@@ -50,7 +50,7 @@
             title="Low Cost"
             type="small"
             initial-value="true"
-            :model-value="filterStore.getFilterValue('rooms', 'low_cost')"
+            :model-value="$page.props?.filters?.rooms?.low_cost ?? null"
             @update:modelValue="
               (event) => filterValueHandler('rooms', false, 'low_cost', event)
             "
@@ -59,7 +59,7 @@
             title="От 1 часа"
             type="small"
             :initial-value="68"
-            :model-value="filterStore.getFilterValue('rooms', 'attr_68')"
+            :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 68)"
             @update:modelValue="
               (event) => filterValueHandler('rooms', true, 'attr_68', event)
             "
@@ -68,7 +68,7 @@
             title="Горящие"
             type="small"
             initial-value="true"
-            :model-value="filterStore.getFilterValue('rooms', 'is_hot')"
+            :model-value="null"
             @update:modelValue="
               (event) => filterValueHandler('rooms', false, 'is_hot', event)
             "
@@ -79,7 +79,7 @@
             title="Арт дизайн"
             type="small"
             :initial-value="52"
-            :model-value="filterStore.getFilterValue('rooms', 'attr_52')"
+            :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 52)"
             @update:modelValue="
               (event) => filterValueHandler('rooms', true, 'attr_52', event)
             "
@@ -88,7 +88,7 @@
             title="Джакузи"
             type="small"
             :initial-value="65"
-            :model-value="filterStore.getFilterValue('rooms', 'attr_65')"
+            :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 65)"
             @update:modelValue="
               (event) => filterValueHandler('rooms', true, 'attr_65', event)
             "
@@ -138,7 +138,8 @@
         class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap"
       >
         <filter-tag
-          v-for="tag in filterStore.filters"
+          v-for="tag in ($page.props?.filter_tags ?? [])" v-bind:key="tag.key + '_' + tag.value"
+          :title="tag.title"
           :filter-model="tag.modelType"
           :filter-key="tag.key"
           :is-attribute="tag.isAttribute"
@@ -152,11 +153,10 @@
 </template>
 
 <script>
-import { useForm, usePage } from "@inertiajs/vue3";
-import { filterStore } from "@/Store/filterStore.js";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
 import FilterTag from "@/components/ui/FilterTag.vue";
 import Search from "./Search.vue";
+import {_updateFilterValue} from "@/Services/filterUtils.js";
 
 export default {
   components: {
@@ -167,45 +167,35 @@ export default {
   mounted() {
     if (typeof window !== "undefined") {
       window.addEventListener("resize", this.handleResize);
-      window.addEventListener("scroll", this.handleScroll);
+      window.addEventListener("scroll", this.handleScroll, {passive: true});
     }
 
     this.handleResize();
-    usePage().props.modals.search = true;
+    this.$page.props.modals.search = true;
   },
   data() {
-    return {
-      filterStore,
+    return {      
       panelPosition: "",
       scrollY: 0,
     };
   },
   methods: {
     openFilters() {
-      usePage().props.modals.filters = true;
-    },
-    closeFilters() {
-      usePage().props.modals.filters = false;
-    },
+      this.$eventBus.emit("filters-open");
+    },    
     showSearchPanel() {
-      usePage().props.modals.search = true;
-    },
+      this.$page.props.modals.search = true;
+    }, 
     filterValueHandler(model, isAttr = false, key, value) {
-      if (value == null) {
-        this.filterStore.removeFilter(model, key);
-      } else {
-        this.filterStore.updateFilter(model, isAttr, key, value);
-      }
-
+      _updateFilterValue.call(this, model, isAttr, key, value);
       this.$eventBus.emit("filters-changed");
-    },
+    },   
     closeTag(obj) {
-      this.filterStore.removeFilter(obj.modelType, obj.key);
-      this.$eventBus.emit("filters-changed");
+      this.filterValueHandler(obj.modelType, obj.isAttribute, obj.key, null);
     },
     handleResize() {
       if (typeof window !== "undefined") {
-        if (window.innerWidth > 1024) usePage().props.modals.search = true;
+        if (window.innerWidth > 1024) this.$page.props.modals.search = true;
       }
     },
     handleScroll() {

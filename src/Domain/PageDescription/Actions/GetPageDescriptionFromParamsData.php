@@ -19,13 +19,13 @@ final class GetPageDescriptionFromParamsData extends Action
     {
         $pageDescription = $this->seo(
             $paramsData->hotels->city,
-            $paramsData->hotels->city_district,
-            $paramsData->hotels->city_area,
+            $paramsData->hotels->district,
+            $paramsData->hotels->area,
             null,
             $paramsData->hotels->metro,
-            array_merge($paramsData->hotels->attributes, $paramsData->rooms->attributes),
-            $paramsData->isRoomsFilter,
-            $paramsData->hotels->hotel_type
+            array_merge($paramsData->hotels->attrs, $paramsData->rooms->attrs),
+            $paramsData->room_filter,
+            $paramsData->hotels->type
         );
 
         return $pageDescription;

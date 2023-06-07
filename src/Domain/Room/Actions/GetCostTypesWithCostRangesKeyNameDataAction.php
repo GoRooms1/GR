@@ -30,8 +30,7 @@ final class GetCostTypesWithCostRangesKeyNameDataAction extends Action
             /** @var FilterCost[] $filterCosts */
             $filterCosts = $costType->filterCosts->sortBy('cost');
             $from = 0;
-            // @todo second foreach in separate function
-            // $ranges[] = [...$filterCosts]
+                        
             foreach ($filterCosts as $cost) {
                 /** @var int $to */
                 $to = $cost->cost ?? 0;

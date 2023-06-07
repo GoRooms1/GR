@@ -11,7 +11,7 @@ class InertiaResponseCacheHasher extends DefaultHasher
     {
         $baseHash = parent::getHashFor($request);
 
-        $contentType = $request->getContentTypeFormat();
+        $contentType = $request->getContentType();
 
         return "{$baseHash}-{$contentType}";
     }

@@ -13,7 +13,6 @@ use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
-use Inertia\Inertia;
 
 final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
@@ -50,13 +49,5 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
     public function rooms(): Closure
     {
         return fn() => RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels));
-    }
-
-    /**
-     * @return string
-     */
-    public function query_string(): string
-    {
-        return Arr::query($this->params->toArray());
-    }
+    }   
 }

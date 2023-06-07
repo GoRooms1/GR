@@ -22,7 +22,9 @@ use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\GetCostTypesWithCostRangesKeyNameDataAction;
+use Domain\Search\Actions\GetFilterTagTitleAction;
 use Domain\Search\Actions\GetNumOfFilteredObjectsAction;
+use Domain\Search\DataTransferObjects\FilterTagData;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -34,11 +36,37 @@ class HotelController extends Controller
     public function index(Request $request): Response | ResponseFactory
     {
         $params = ParamsData::fromRequest($request);
+       
+        if (!$params->filter) {
+            $params->hotels->city = 'Москва';            
+        }
 
         $city = $params->hotels->city;
-        $area = $params->hotels->city_area;
-        $district = $params->hotels->city_district;
-        $city_area = $params->hotels->city_area;
+        $area = $params->hotels->area;
+        $district = $params->hotels->district;
+        $city_area = $params->hotels->area;
+
+        $tags = [];
+        $srcTags = array_merge(
+            Arr::dot(['hotels' => $params->hotels->toArray()]), 
+            Arr::dot(['rooms' => $params->rooms->toArray()])
+        );
+        
+        foreach($srcTags as $key => $value) {
+            if (empty($value)) 
+                continue;
+
+            $keys = explode(".", $key);
+            $tagKey = $keys[1] == 'attrs' ? 'attr_'.$value : $keys[1];
+
+            $tags[] =  new FilterTagData(
+                title: GetFilterTagTitleAction::run($tagKey, $value),
+                modelType: $keys[0],
+                key: $tagKey,
+                isAttribute: $keys[1] == 'attrs',
+                value: $value,
+            );
+        }
 
         return Inertia::render('Hotel/Index', [
             'page_description' => PageDescriptionData::fromModel(GetPageDescriptionByUrlAction::run('/hotels')),
@@ -52,6 +80,8 @@ class HotelController extends Controller
             'attributes' => AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run()),
             'total' => GetNumOfFilteredObjectsAction::run($params),
             'hotels' => HotelCardData::collection(FilterHotelsPaginateAction::run($params->hotels)),
+            'filters' => $params,            
+            'filter_tags' => $tags,
         ]);
     }
 }

@@ -20,8 +20,7 @@ import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import BookingForm from "@/Pages/Room/partials/BookingForm.vue";
-import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/vue3";
+import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 import Map from "./partials/Map.vue";
 
 export default {
@@ -41,20 +40,18 @@ export default {
     hotels: [Object],
   },
   mounted() {
+    this.getDataOnMap();
     this.$eventBus.on("booking-open", (e) => this.openBookingModal(e));
-    this.$eventBus.on("booking-close", (e) => this.closeBookingModal());
-    this.$eventBus.on("filters-inited", (e) => this.getDataOnMap());
+    this.$eventBus.on("booking-close", (e) => this.closeBookingModal());   
     this.$eventBus.on("filters-changed", (e) => this.getDataOnMap());    
   },
-  unmounted() {
-    this.$eventBus.off("filters-inited");
+  unmounted() {    
     this.$eventBus.off("filters-changed");
     this.$eventBus.off("booking-open");
     this.$eventBus.off("booking-close"); 
   },
   data() {
-    return {
-      filterStore,      
+    return {       
       bookingRoom: null,
     };
   },
@@ -69,22 +66,9 @@ export default {
         this.$page.props.modals.booking = false;
       }, 50);      
     },
-    getDataOnMap() {      
-      this.$nextTick(() => {
-        this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          only: ["rooms", "hotels", "map_center"],
-          onStart: () => {
-            usePage().props.isLoadind = true;
-          },
-          onFinish: () => {
-            usePage().props.isLoadind = false;
-            this.$eventBus.emit("data-received");
-          },
-        });
-      });
+    getDataOnMap() { 
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});      
     },
   },
 };

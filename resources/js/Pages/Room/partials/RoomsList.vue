@@ -40,14 +40,13 @@
 </template>
 
 <script>
-import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/vue3";
 import _ from "lodash";
 import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
 import BookingForm from "./BookingForm.vue";
 import ListHeader from "./ListHeader.vue";
+import {_getFiltersData} from "@/Services/filterUtils.js"
 
 export default {
   components: {
@@ -80,16 +79,15 @@ export default {
     this.$eventBus.off("booking-close");
   },
   data() {
-    return {
-      filterStore,
+    return {      
       allRooms: this.rooms?.data ?? [],
-      isLoading: false,      
+      isLoading: false,    
       bookingRoom: null,
     };
   },
   computed: {
     globalLoading() {
-      return usePage().props.isLoadind ?? false;
+      return this.$page.props.isLoadind ?? false;
     },
   },
   methods: {
@@ -99,7 +97,7 @@ export default {
       if (this?.rooms?.meta?.next_page_url) {
         this.$inertia.get(
           this.rooms.meta.next_page_url,
-          this.ignoreFilters ? {} : this.filterStore.getFiltersValues(),
+          this.ignoreFilters ? {} : _getFiltersData.call(this),
           {
             preserveState: true,
             preserveScroll: true,

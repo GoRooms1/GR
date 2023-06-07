@@ -49,12 +49,4 @@ final class HotelListViewModel extends \Parent\ViewModels\ViewModel
     {
         return fn() => HotelCardData::collection(FilterHotelsPaginateAction::run($this->params->hotels));
     }
-
-    /**
-     * @return string
-     */
-    public function query_string(): string
-    {
-        return Arr::query($this->params->toArray());
-    }
 }

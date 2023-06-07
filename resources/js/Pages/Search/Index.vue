@@ -18,11 +18,11 @@
     <search-panel />
   </div>
 
-  <rooms-list v-if="is_rooms_filter === true" :rooms="rooms" />
-  <room-info-block v-if="is_rooms_filter === true" />
+  <rooms-list v-if="(rooms?.data ?? []).length > 0" :rooms="rooms" />
+  <room-info-block v-if="(rooms?.data ?? []).length > 0" />
 
-  <hotels-list v-if="is_rooms_filter === false" :hotels="hotels" />
-  <hotel-info-block v-if="is_rooms_filter === false" />
+  <hotels-list v-if="(hotels?.data ?? []).length > 0 || (rooms?.data ?? []).length == 0" :hotels="hotels" />
+  <hotel-info-block v-if="(hotels?.data ?? []).length > 0 || (rooms?.data ?? []).length == 0" />
 </template>
 
 <script lang="ts">
@@ -35,8 +35,7 @@ import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
 import RoomInfoBlock from "@/Pages/Room/partials/InfoBlock.vue";
 import HotelsList from "@/Pages/Hotel/partials/HotelsList.vue";
 import HotelInfoBlock from "@/Pages/Hotel/partials/InfoBlock.vue";
-import { filterStore } from "@/Store/filterStore.js";
-import { usePage } from "@inertiajs/vue3";
+import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 export default {
   layout: SearchLayout,
   components: {
@@ -54,40 +53,19 @@ export default {
     page_description: Object,
     hotels: [Object],
     rooms: [Object],
-    is_rooms_filter: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      filterStore,
-    };
-  },
+    filters: Object,
+  },  
   mounted() {
-    this.$eventBus.on("filters-inited", (e) => this.getDataOnList());
-    this.$eventBus.on("filters-changed", (e) => this.getDataOnList());    
+    this.getDataOnList();  
+    this.$eventBus.on("filters-changed", (e) => this.getDataOnList()); 
   },
-  unmounted() {
-    this.$eventBus.off("filters-inited");
-    this.$eventBus.off("filters-changed");    
+  unmounted() {    
+    this.$eventBus.off("filters-changed");   
   },
   methods: {
     getDataOnList() {      
-      this.$nextTick(() => {
-        this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-          onStart: () => {
-            usePage().props.isLoadind = true;
-          },
-          onFinish: () => {
-            usePage().props.isLoadind = false;
-          },
-        });
-      });
+      let data = _getFiltersData.call(this);      
+      _getData.call(this, '/search', data);
     },
   },
 };

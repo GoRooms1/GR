@@ -11,11 +11,11 @@ enum Filters: string
     case Name = 'name';
     case City = 'city';
     case UnitedCity = 'united_city';
-    case CityArea = 'city_area';
-    case CityDistrict = 'city_district';
+    case CityArea = 'area';
+    case CityDistrict = 'district';
     case Metro = 'metro';
-    case HotelAttributes = 'attributes';
-    case Type = 'hotel_type';
+    case HotelAttributes = 'attrs';
+    case Type = 'type';
     case Moderate = 'moderate';
 
     /**

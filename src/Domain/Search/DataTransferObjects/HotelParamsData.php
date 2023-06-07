@@ -11,24 +11,24 @@ use Illuminate\Http\Request;
  */
 final class HotelParamsData extends \Parent\DataTransferObjects\Data
 {
-    /**
-     * @param  array<int>|null  $attributes
+    /**     
      * @param  string|null  $city
      * @param  string|null  $metro
-     * @param  string|null  $city_area
-     * @param  string|null  $city_district
+     * @param  string|null  $area
+     * @param  string|null  $district
      * @param  string|null  $street
-     * @param  int|null  $hotel_type
+     * @param  int|null  $type
+     * @param  array<int>|null  $attrs
      */
-    public function __construct(
-        public ?array $attributes,
+    public function __construct(        
         public ?string $city,
-        public ?string $metro,
-        public ?string $city_area,
-        public ?string $city_district,
+        public ?int $type,      
+        public ?string $area,
+        public ?string $district,
         public ?string $street,
-        public ?int $hotel_type,
+        public ?string $metro,        
         public ?bool $moderate,
+        public ?array $attrs,
     ) {
     }
 
@@ -41,15 +41,15 @@ final class HotelParamsData extends \Parent\DataTransferObjects\Data
         /** @var array<string, array<int>|string|int|bool|null> $data */
         $data = $request->get('hotels', []);
         
-        return self::from([
-            'attributes' => $data['attributes'] ?? [],
+        return self::from([            
             'city' => $data['city'] ?? null,
             'metro' => $data['metro'] ?? null,
-            'city_area' => $data['city_area'] ?? null,
-            'city_district' => $data['city_district'] ?? null,
+            'area' => $data['area'] ?? null,
+            'district' => $data['district'] ?? null,
             'street' => $data['street'] ?? null,
-            'hotel_type' => $data['hotel_type'] ?? null,
+            'type' => $data['type'] ?? null,
             'moderate' => $data['moderate'] ?? null,
+            'attrs' => $data['attrs'] ?? [],
         ]);
     }
 }
