@@ -98,7 +98,6 @@
 
 <script>
 import { numWord } from "@/Services/numWord.js";
-import _ from "lodash";
 import Button from "@/components/ui/Button.vue";
 import CitySelectIntro from "@/components/ui/CitySelectIntro.vue";
 import MetroSelectIntro from "@/components/ui/MetroSelectIntro.vue";
@@ -159,10 +158,7 @@ export default {
       let props = ["total", "filters", 'filter_tags'];
       if (key == "city") {        
         this.$page.props.filters.hotels.metro = null;
-        props = _.union(props, [
-          "total",
-          "metros",          
-        ]);
+        props.push("metros");
       }
 
       this.updateFilters(props);

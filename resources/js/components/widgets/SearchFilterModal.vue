@@ -397,7 +397,6 @@
 <script>
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import { numWord } from "@/Services/numWord.js";
-import _ from "lodash";
 import {_updateFilterValue, _getFiltersData, _getData} from "@/Services/filterUtils.js";
 import FilterSelect from "@/components/ui/FilterSelect.vue";
 import Button from "@/components/ui/Button.vue";
@@ -457,8 +456,8 @@ export default {
     close(resoreState = false) {
       if (resoreState === true) {
         if (typeof window !== "undefined") window.history.pushState({}, this.$page.title, this.initialUrl);
-        this.$page.props.filters = _.cloneDeep(this.initialFilters);
-        this.$page.props.filter_tags = _.cloneDeep(this.initialTags);
+        this.$page.props.filters = JSON.parse(JSON.stringify(this.initialFilters));
+        this.$page.props.filter_tags = JSON.parse(JSON.stringify(this.initialTags));
       }
 
       if (typeof window !== "undefined") {
@@ -476,8 +475,8 @@ export default {
         this.initialUrl = window.location.href;
       }
 
-      this.initialFilters = _.cloneDeep(this.$page.props.filters);
-      this.initialTags = _.cloneDeep(this.$page.props.filter_tags);
+      this.initialFilters = JSON.parse(JSON.stringify(this.$page.props.filters));
+      this.initialTags = JSON.parse(JSON.stringify(this.$page.props.filter_tags));
 
       this.isOpen = true;
       document.body.classList.add("fixed");  
@@ -549,20 +548,16 @@ export default {
         this.$page.props.filters.hotels.area = null;
         this.$page.props.filters.hotels.district = null;
         this.$page.props.filters.hotels.metro = null;        
-        props = _.union(props, [          
-          "metros",
-          "city_areas",
-          "city_districts",
-        ]);
+        props.push("metros", "city_areas", "city_districts");
       }
 
       if (key == "area") {
-        this.$page.props.filters.hotels.district = null;        
-        props = _.union(props, ["city_districts", "metros"]);
+        this.$page.props.filters.hotels.district = null;  
+        props.push("metros", "city_districts");
       }
 
-      if (key == "district") {  
-        props = _.union(props, ["metros"]);
+      if (key == "district") {
+        props.push("metros");        
       }
 
       this.updateFilters(props);

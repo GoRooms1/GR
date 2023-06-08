@@ -3,7 +3,6 @@
 * Example
 * _getFiltersData.call(this, true)
 */
-import _ from "lodash";
 
 function _updateFilterValue(model, isAttr = false, key, value) {      
     if (!isAttr) {
@@ -12,14 +11,17 @@ function _updateFilterValue(model, isAttr = false, key, value) {
       if (value == null) 
         this.$page.props.filters[model].attrs = this.$page.props.filters[model].attrs.filter(e => ('attr_' + e) != key);
       else
-        this.$page.props.filters[model].attrs = _.union(this.$page.props.filters[model].attrs, [value]);
-    }      
+        this.$page.props.filters[model].attrs.indexOf(value) && this.$page.props.filters[model].attrs.push(value);
+    }     
 };
 
 function _getFiltersData(isFilter = false) {
-    let data = {};
-    data.hotels = _.pickBy(this.$page.props.filters.hotels);
-    data.rooms = _.pickBy(this.$page.props.filters.rooms);
+    let data = {
+      hotels: {},
+      rooms: {},
+    };
+    copyNotEmptyPropsFromObject(this.$page.props.filters.hotels, data.hotels);
+    copyNotEmptyPropsFromObject(this.$page.props.filters.rooms, data.rooms);
     data.filter = isFilter;
     return data;
 };
@@ -44,5 +46,16 @@ function _getData(url, data, onFinish, onSuccess) {
       });
     });
   };
+
+  function copyNotEmptyPropsFromObject(srcObfect, dstObject) {
+    for (var key in srcObfect) {
+        if (srcObfect.hasOwnProperty(key)) {
+            var value = srcObfect[key];
+            if (value !== null && value !== undefined && value !== '') {
+              dstObject[key] = value;
+            }
+        }
+    }
+  }
 
 export {_updateFilterValue, _getFiltersData, _getData}
