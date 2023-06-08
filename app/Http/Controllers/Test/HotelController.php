@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Test;
 
 use Arr;
+use Cache;
 use Domain\Address\Actions\GetAllCitiesAction;
 use Domain\Address\Actions\GetAllCityMetrosAction;
 use Domain\Address\Actions\GetCityAreasAction;
@@ -30,9 +31,11 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Parent\Controllers\Controller;
+use Support\DataProcessing\Traits\ResultsCaching;
 
 class HotelController extends Controller
 {   
+    use ResultsCaching;
     public function index(Request $request): Response | ResponseFactory
     {
         $params = ParamsData::fromRequest($request);
@@ -67,6 +70,8 @@ class HotelController extends Controller
                 value: $value,
             );
         }
+        
+        $page = request()->get("page", 1);        
 
         return Inertia::render('Hotel/Index', [
             'page_description' => PageDescriptionData::fromModel(GetPageDescriptionByUrlAction::run('/hotels')),
@@ -79,7 +84,9 @@ class HotelController extends Controller
             'cost_types' => GetCostTypesWithCostRangesKeyNameDataAction::run(),
             'attributes' => AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run()),
             'total' => GetNumOfFilteredObjectsAction::run($params),
-            'hotels' => HotelCardData::collection(FilterHotelsPaginateAction::run($params->hotels)),
+            'hotels' => Cache::remember($this->getHashFor($params, $page, 'hotels'), now()->addDays(7), function () use($params) {            
+                return HotelCardData::collection(FilterHotelsPaginateAction::run($params->hotels));
+            }),
             'filters' => $params,            
             'filter_tags' => $tags,
         ]);

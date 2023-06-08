@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Actions;
 
+use Cache;
 use Domain\Hotel\Models\Hotel;
 use Lorisleiva\Actions\Action;
 
@@ -19,6 +20,10 @@ final class GetAvailibleHotelsCountAction extends Action
      */
     public function handle(): int
     {
-        return Hotel::count();
+        $count = Cache::remember('hotels_count', now()->addDays(7), function () {            
+            return Hotel::count();
+        });
+
+        return intval($count);
     }
 }

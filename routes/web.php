@@ -66,6 +66,6 @@ Route::post('lk/object/store', [Lk\ObjectController::class, 'store'])->name('lk.
 
 //Test routes
 Route::prefix('/test')->name('test.')->group(function () {
-    Route::get('/hotels', [\App\Http\Controllers\Test\HotelController::class, 'index'])->middleware(CacheResponse::class)->name('hotels.index');
+    Route::get('/hotels', [\App\Http\Controllers\Test\HotelController::class, 'index'])->name('hotels.index');
     Route::get('/rooms', [\App\Http\Controllers\Test\RoomController::class, 'index'])->name('rooms.index');
 });

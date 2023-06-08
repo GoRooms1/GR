@@ -21,11 +21,11 @@ final class HotelCardData extends \Parent\DataTransferObjects\Data
         public bool $moderate,        
         public ?string $slug,
         #[DataCollectionOf(MediaImageData::class)]     
-        public null|Lazy|DataCollection $images,
-        public Lazy|AddressSimpleData|null $address,
-        public Lazy|HotelTypeSimpleData|null $type,
+        public null|DataCollection $images,
+        public AddressSimpleData|null $address,
+        public HotelTypeSimpleData|null $type,
         #[DataCollectionOf(MetroSimpleData::class)]
-        public readonly null|Lazy|DataCollection $metros,       
+        public readonly null|DataCollection $metros,       
         #[DataCollectionOf(MinCostsData::class)]
         public readonly null|DataCollection $min_costs,
     ) {
@@ -39,9 +39,9 @@ final class HotelCardData extends \Parent\DataTransferObjects\Data
             'moderate' => $hotel->moderate,
             'slug' => $hotel->slug,            
             'images' => MediaImageData::collection($hotel->getMedia('images')),
-            'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressSimpleData::from($hotel->address)),
-            'type' => Lazy::whenLoaded('type', $hotel, fn () => HotelTypeSimpleData::from($hotel->type)),                        
-            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroSimpleData::collectionWithAddressSlug($hotel->metros, $hotel->address)),            
+            'address' => AddressSimpleData::from($hotel->address),
+            'type' => HotelTypeSimpleData::from($hotel->type),                        
+            'metros' => MetroSimpleData::collectionWithAddressSlug($hotel->metros, $hotel->address),            
             'min_costs' => MinimumCostsCalculation::run($hotel),
         ]);
     }

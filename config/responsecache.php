@@ -85,7 +85,7 @@ return [
      * This class is responsible for generating a hash for a request. This hash
      * is used to look up an cached response.
      */
-    'hasher' => \Spatie\ResponseCache\Hasher\DefaultHasher::class,
+    'hasher' => Support\ResponseCache\InertiaResponseCacheHasher::class,
 
     /*
      * This class is responsible for serializing responses.

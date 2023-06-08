@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
+use Cache;
 use Domain\Room\Models\Room;
 use Lorisleiva\Actions\Action;
 
@@ -13,7 +14,11 @@ use Lorisleiva\Actions\Action;
 final class GetAvailibleRoomsCountAction extends Action
 {
     public function handle(): int
-    {
-        return Room::count();
+    {        
+        $count = Cache::remember('rooms_count', now()->addDays(7), function () {            
+            return Room::count();
+        });
+        
+        return intval($count);
     }
 }
