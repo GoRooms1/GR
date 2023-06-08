@@ -88,19 +88,7 @@
     <div><img src="https://mc.yandex.ru/watch/72285235" style="position:absolute; left:-9999px;" alt="" /></div>
   </noscript>
   <!-- /Yandex.Metrika counter -->
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-73NM6845XT"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'G-73NM6845XT');
-  </script> -->
-
+  <!-- Global site tag (gtag.js) - Google Analytics -->  
   <script type="text/javascript">
     (function() {
       'use strict';
@@ -117,7 +105,7 @@
         timerId = setTimeout(loadGtag, 5100);
       }
 
-      function loadMetrica(e) {
+      function loadGtag(e) {
         if (e && e.type) {
           console.log(e.type);
         } else {
