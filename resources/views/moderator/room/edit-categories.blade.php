@@ -176,7 +176,7 @@
                         data-image-moderate="{{ route('moderator.image.moderate', '') }}"
                     >
                       <div class="uploud__thumb uploud__thumb_admin"
-                           style="background-image: url('{{ url($image->path) }}'); background-size: cover;"
+                           style="background-image: url('{{ $image->getUrl() }}'); background-size: cover;"
                            id="upload{{$image->id}}">
                         <span class="upload_number">№ {{ $loop->index + 1 }}</span>
                         @if($image->getCustomProperty('moderate'))
