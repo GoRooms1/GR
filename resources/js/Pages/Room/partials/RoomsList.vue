@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import _ from "lodash";
 import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
@@ -106,7 +105,7 @@ export default {
               if (this.rooms.meta.current_page != 1)
                 this.allRooms = [
                   ...this.allRooms,
-                  ..._.shuffle(this.rooms.data),
+                  ...this.rooms.data,
                 ];
 
               if (typeof window !== "undefined")
@@ -134,7 +133,7 @@ export default {
   watch: {
     rooms: function (newVal, oldVal) {
       if (this.rooms?.meta?.current_page == 1) {
-        this.allRooms = _.shuffle(this.rooms.data ?? []);
+        this.allRooms = (this.rooms.data ?? []);
       }
     },
   },
