@@ -59,7 +59,7 @@
         if (loadedMetrica) {
           return;
         }
-
+        
         (function(m, e, t, r, i, k, a) {
           m[i] = m[i] || function() {
             (m[i].a = m[i].a || []).push(arguments)
@@ -89,7 +89,7 @@
   </noscript>
   <!-- /Yandex.Metrika counter -->
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73NM6845XT"></script>
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-73NM6845XT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -99,6 +99,54 @@
 
     gtag('js', new Date());
     gtag('config', 'G-73NM6845XT');
+  </script> -->
+
+  <script type="text/javascript">
+    (function() {
+      'use strict';
+      var loadedGTag = false, timerId;
+
+      window.addEventListener('scroll', loadGtag, {
+        passive: true
+      });
+      window.addEventListener('touchstart', loadGtag);
+      document.addEventListener('mouseenter', loadGtag);
+      document.addEventListener('click', loadGtag);
+      document.addEventListener('DOMContentLoaded', loadGtagFallback);
+      function loadGtagFallback() {
+        timerId = setTimeout(loadGtag, 5100);
+      }
+
+      function loadMetrica(e) {
+        if (e && e.type) {
+          console.log(e.type);
+        } else {
+          console.log('DOMContentLoaded');
+        }
+        if (loadedGTag) {
+          return;
+        }
+        
+        // Global site tag (gtag.js) - Google Analytics
+				var GTMObject = document.createElement("script");
+				GTMObject.src = 'https://www.googletagmanager.com/gtag/js?id=G-73NM6845XT';
+				GTMObject.async = true;
+				document.getElementsByTagName('head')[0].appendChild(GTMObject);
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('config', 'G-73NM6845XT');
+
+        loadedGTag = true;
+        clearTimeout(timerId);
+
+        window.removeEventListener('scroll', loadGtag);
+        window.removeEventListener('touchstart', loadGtag);
+        document.removeEventListener('mouseenter', loadGtag);
+        document.removeEventListener('click', loadGtag);
+        document.removeEventListener('DOMContentLoaded', loadGtagFallback);
+      }
+    })()
   </script>
   @endif
 </body>
