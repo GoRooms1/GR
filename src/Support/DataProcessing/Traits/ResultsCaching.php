@@ -8,7 +8,7 @@ use Domain\Search\DataTransferObjects\ParamsData;
 
 trait ResultsCaching
 {   
-    public function getHashFor(ParamsData $paramsData, int $page = 1, $prefix = "search"): string
+    private function getHashFor(ParamsData $paramsData, int|String $page = 1, String $prefix = "search"): string
     {
         $paramsDataTmp = clone $paramsData;
         $paramsDataTmp->search = null;
