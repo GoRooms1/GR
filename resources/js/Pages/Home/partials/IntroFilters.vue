@@ -84,7 +84,7 @@
         class="flex items-center gap-[16px] md:justify-end justify-between md:w-initial w-full flex-wrap"
       >
         <Button @click="getDataOnMap()">
-          <img src="/img/map2.svg" alt="map"/>
+          <img src="/img/map2.svg" alt="map" width="24" height="24"/>
           <span class="text-white">На карте</span>
         </Button>
         <Button @click="getDataOnList()">

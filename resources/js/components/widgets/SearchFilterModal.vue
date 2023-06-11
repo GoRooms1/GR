@@ -376,7 +376,7 @@
                 @click="getDataOnMap()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
-                <img src="/img/map2.svg" alt="map"/>
+                <img src="/img/map2.svg" alt="map" width="24" height="24"/>
                 <span class="text-white">На карте</span>
               </button>
               <button

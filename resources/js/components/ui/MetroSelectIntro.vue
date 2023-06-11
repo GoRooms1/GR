@@ -13,7 +13,7 @@
           selectedOption ? selectedOption : placeholder
         }}</span>
       </div>
-        <img v-if="selectedOption == null" src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'"/>
+        <img v-if="selectedOption == null" src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'" width="12" height="12"/>
     </button>
     <div v-if="selectedOption" class="relative">
       <button

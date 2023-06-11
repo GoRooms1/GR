@@ -11,7 +11,7 @@
       <span class="text-[14px] leading-[16px]">{{
         selectedOption ? selectedOption : placeholder
       }}</span>
-      <img src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'"/>
+      <img src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'" width="12" height="12"/>
     </button>
     <div
       v-if="!collapsed"

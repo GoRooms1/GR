@@ -16,7 +16,7 @@
       <span class="text-sm leading-[16px]">{{
         getOptionName(selectedOption) ?? placeholder
       }}</span>
-      <img v-if="selectedOption == null || notNull == true" src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'"/>      
+      <img v-if="selectedOption == null || notNull == true" src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'" width="12" height="12"/>      
     </button>
     <div v-if="selectedOption && notNull == false" class="relative">
       <button

@@ -7,7 +7,7 @@
         <img src="/img/star.svg" alt="star"/>
         <span select-text="" class="text-[14px] leading-[16px]">Любой</span>
       </div>
-      <img src="/img/select_arrow.svg" alt="arrow"/>    
+      <img src="/img/select_arrow.svg" alt="arrow" width="12" height="12"/>    
     </button>
     <div
       class="absolute top-[32px] sm:left-0 right-[-16px] z-10 sm:w-full w-[calc(200%+48px)] hidden"

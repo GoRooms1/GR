@@ -3,16 +3,16 @@
     <img v-if="!value && img" 
       :src="img" :class="imgClass" 
       :alt="title ?? 'img'"
-      :width="type == 'square' ? 24 : ''"
-      :height="type == 'square' ? 24 : ''"
+      :width="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
+      :height="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
     />
     
     <img v-if="value && toggleImg"
       :src="toggleImg"
       :class="imgClass"
       :alt="title ?? 'img'"
-      :width="type == 'square' ? 24 : ''"
-      :height="type == 'square' ? 24 : ''"
+      :width="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
+      :height="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
     />
     <span :class="titleClass">{{ title }}</span>
     <slot />
