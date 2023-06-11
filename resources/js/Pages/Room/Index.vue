@@ -18,7 +18,7 @@
     />
     <search-panel />
   </div>
-  <rooms-list :rooms="rooms" ignoreFilters/>
+  <rooms-list :rooms="rooms"/>
   <info-block :description="page_description?.description ?? ''"/>
 </template>
 

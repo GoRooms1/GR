@@ -397,7 +397,7 @@
 <script>
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import { numWord } from "@/Services/numWord.js";
-import {_updateFilterValue, _getFiltersData, _getData} from "@/Services/filterUtils.js";
+import {_updateFilterValue, _getFiltersData, _getData, getFoundMessage} from "@/Services/filterUtils.js";
 import FilterSelect from "@/components/ui/FilterSelect.vue";
 import Button from "@/components/ui/Button.vue";
 import CitySelect from "@/components/ui/CitySelect.vue";
@@ -485,15 +485,10 @@ export default {
     },
     updateFoundMessage() {
       let total = this.$page.props?.total ?? 0;
+      let type = this.$page.props.filters?.room_filter === true ? 
+        'rooms' : this.$page.props.filters?.hotels?.type == 3 ? 'appartments' : 'hotels';
 
-      if (total === 0) {
-        this.foundMessage = "По вашему запросу ничего не нашлось";
-        return;
-      }
-
-      let objectWords = ["отель", "отеля", "отелей"];
-      if (this.$page.props.filters?.room_filter === true) objectWords = ["номер", "номера", "номеров"];
-      this.foundMessage = numWord(total, ["Найден", "Найдено", "Найдено"]) + " " + total + " " + numWord(total, objectWords);
+      this.foundMessage = getFoundMessage(total, type);
     },
     handleResize() {
       if (this.isOpen && typeof window !== "undefined") {
@@ -522,8 +517,8 @@ export default {
       data = data !== null ? data : _getFiltersData.call(this, true);
       this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {     
         preserveState: true,
-        preserveScroll: true,
-        replace: true,
+        //preserveScroll: true,
+        //replace: true,
         only: props ?? [],
         onFinish: () => {       
           this.updateFoundMessage();          

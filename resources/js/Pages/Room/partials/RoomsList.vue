@@ -1,7 +1,7 @@
 <template>
   <list-header
-    :found="rooms?.meta?.total ?? 0"
-    :custom-message="byHotel == true ? 'Все номера в отеле' : null"
+    :h1="hotelId  > 0 ? null : h1"
+    :title="hotelId > 0 ? 'Все номера в отеле' : null"
   />
   <div
     v-if="globalLoading == false"
@@ -44,8 +44,8 @@ import RoomCard from "./RoomCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
 import BookingForm from "./BookingForm.vue";
-import ListHeader from "./ListHeader.vue";
-import {_getFiltersData} from "@/Services/filterUtils.js"
+import ListHeader from "@/components/ui/ListHeader.vue";
+import {_getFiltersData, getFoundMessage} from "@/Services/filterUtils.js"
 
 export default {
   components: {
@@ -60,13 +60,9 @@ export default {
       type: [Array, Object],
       required: false,
     },
-    byHotel: {
-      type: Boolean,
-      default: false,
-    },
-    ignoreFilters: {
-      type: Boolean,
-      default: false,
+    hotelId: {
+      type: Number,
+      default: 0,
     },
   },
   mounted() {
@@ -88,15 +84,25 @@ export default {
     globalLoading() {
       return this.$page.props.isLoadind ?? false;
     },
+    h1() {
+      if (this.$page.props?.page_description?.id > 0) 
+        return this.$page.props.page_description.h1;
+      else 
+        return getFoundMessage(this.rooms?.meta?.total ?? 0, 'rooms');
+    },
   },
-  methods: {
+  methods: {   
     loadMore() {
       let initialUrl =
         typeof window !== "undefined" ? window.location.href : "";
-      if (this?.rooms?.meta?.next_page_url) {
+
+      let currentPage = this.rooms?.meta?.current_page ?? 1;
+      let nextPage = currentPage + 1;      
+
+      if (this.rooms?.meta?.next_page_url) {
         this.$inertia.get(
-          this.rooms.meta.next_page_url,
-          this.ignoreFilters ? {} : _getFiltersData.call(this),
+          this.$page.url.split("?")[0] + "?page=" + nextPage,
+          _getFiltersData.call(this),
           {
             preserveState: true,
             preserveScroll: true,

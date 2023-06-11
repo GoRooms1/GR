@@ -4,6 +4,8 @@
 * _getFiltersData.call(this, true)
 */
 
+import { numWord } from "@/Services/numWord.js";
+
 function _updateFilterValue(model, isAttr = false, key, value) {
   if (!isAttr) {
     this.$page.props.filters[model][key] = value;
@@ -58,4 +60,17 @@ function copyNotEmptyPropsFromObject(srcObfect, dstObject) {
   }
 }
 
-export { _updateFilterValue, _getFiltersData, _getData }
+function getFoundMessage(total = 0, type = 'hotels') {
+  if (total === 0)
+    return "По вашему запросу ничего не нашлось";
+
+  let objectWords = ["отель", "отеля", "отелей"];
+  if (type === 'rooms') 
+    objectWords = ["номер", "номера", "номеров"];
+  else if (type === 'appartments') 
+    objectWords = ["апартаменты", "апартаментов", "апартаментов"];
+
+  return numWord(total, ["Найден", "Найдено", "Найдено"]) + " " + total + " " + numWord(total, objectWords);
+}
+
+export { _updateFilterValue, _getFiltersData, _getData, getFoundMessage }

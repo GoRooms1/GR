@@ -1,5 +1,5 @@
 <template>
-  <list-header :found="hotels?.meta?.total ?? 0" />
+  <list-header :h1="h1" />
   <div class="container mx-auto px-4 min-[1920px]:px-[10vw] relative z-10">
     <div v-if="globalLoading == false" class="flex flex-wrap -mx-4 mb-4">
       <hotel-card v-for="hotel in allHotels" :hotel="hotel" />
@@ -37,8 +37,8 @@
 import HotelCard from "./HotelCard.vue";
 import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
-import ListHeader from "./ListHeader.vue";
-import {_getFiltersData} from "@/Services/filterUtils.js"
+import ListHeader from "@/components/ui/ListHeader.vue";
+import {_getFiltersData, getFoundMessage} from "@/Services/filterUtils.js"
 
 export default {
   components: {
@@ -51,11 +51,7 @@ export default {
     hotels: {
       type: [Array, Object],
       required: false,
-    },
-    ignoreFilters: {
-      type: Boolean,
-      default: false,
-    },
+    },    
   },
   data() {
     return {      
@@ -67,15 +63,25 @@ export default {
     globalLoading() {
       return this.$page.props.isLoadind ?? false;
     },
+    h1() {      
+      if (this.$page.props?.page_description?.id > 0) 
+        return this.$page.props.page_description.h1;
+      else        
+        return getFoundMessage(this.hotels?.meta?.total ?? 0, this.$page.props?.filters?.hotels?.type == 3 ? 'appartments' : 'hotels');
+    },
   },
   methods: {
     loadMore() {
       let initialUrl =
         typeof window !== "undefined" ? window.location.href : "/";
-      if (this?.hotels?.meta?.next_page_url) {
+      
+      let currentPage = this.hotels?.meta?.current_page ?? 1;
+      let nextPage = currentPage + 1;     
+
+      if (this.hotels?.meta?.next_page_url) {
         this.$inertia.get(
-          this.hotels.meta.next_page_url,
-          this.ignoreFilters ? {} : _getFiltersData.call(this),        
+          this.$page.url.split("?")[0] + "?page=" + nextPage,
+          _getFiltersData.call(this),        
           {
             preserveState: true,
             preserveScroll: true,

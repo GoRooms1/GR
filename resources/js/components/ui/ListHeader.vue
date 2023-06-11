@@ -1,10 +1,15 @@
 <template>
   <div class="filter h-32 xl:h-40 pt-4 -mb-16 xl:pt-8">
     <div class="container mx-auto px-4 min-[1920px]:px-[10vw]">
-      <div class="flex justify-between items-center">
-        <h1 class="text-white font-bold xl:text-3xl"
-          :class="$page.props.isLoadind == true ? 'invisible' : ''">
-          {{ $page.props?.page_description?.id > 0 ? $page.props.page_description.h1 : foundMessage }}
+      <div class="flex justify-between items-center">        
+        <span v-if="title" class="text-white font-bold xl:text-3xl">
+          {{ title }}
+        </span>
+        <h1 v-else-if="h1" 
+          class="text-white font-bold xl:text-3xl"
+          :class="$page.props.isLoadind == true ? 'invisible' : ''"
+        >
+          {{ h1 }}
         </h1>
         <button class="xl:hidden">
           <svg
@@ -51,7 +56,8 @@
             <div
               class="flex items-center border border-white rounded-lg overflow-hidden"
             >
-              <button                
+              <button
+                
                 class="text-white h-8 pt-1 px-4 cursor-pointer text-blue-500 bg-white"
               >
                 <svg
@@ -158,12 +164,12 @@
               >
                 6+
               </button>
-              <button                
+              <button               
                 class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
               >
                 7+
               </button>
-              <button                
+              <button               
                 class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
               >
                 8+
@@ -182,22 +188,15 @@
 </template>
 
 <script>
-import { numWord } from "@/Services/numWord.js";
 export default {
-  props: {
-    found: {
-      type: Number,
-      default: 0,
+  props: {    
+    title: {
+      type: String,
+      default: null,
     },
-  }, 
-  computed: {
-    foundMessage() {
-      if (this.found === 0) return 'По вашему запросу ничего не нашлось';
-      let hotelTypePlural = ["отель", "отеля", "отелей"];
-      if (this.$page.props?.filters?.hotels?.type == 3)
-        hotelTypePlural = ["апартаменты", "апартаментов", "апартаментов"];
-
-      return 'Мы нашли для вас ' + this.found + " " + numWord(this.found, hotelTypePlural);
+    h1: {
+      type: String,
+      default: null,
     },
   },
 };

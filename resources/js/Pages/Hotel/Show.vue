@@ -384,7 +384,7 @@
     </div>
   </div>
   <div class="py-4"></div>
-  <rooms-list :rooms="rooms" by-hotel />
+  <rooms-list :rooms="rooms" :hotel-id="hotel?.id ?? 0" />
 </template>
 
 <script lang="ts">
