@@ -517,8 +517,8 @@ export default {
       data = data !== null ? data : _getFiltersData.call(this, true);
       this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {     
         preserveState: true,
-        //preserveScroll: true,
-        //replace: true,
+        preserveScroll: true,
+        replace: true,
         only: props ?? [],
         onFinish: () => {       
           this.updateFoundMessage();          
