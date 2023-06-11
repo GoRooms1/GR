@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Domain\Room\DataTransferObjects;
 
 use Domain\Attribute\DataTransferObjects\AttributeData;
+use Domain\Attribute\DataTransferObjects\AttributeSimpleData;
 use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Hotel\DataTransferObjects\HotelCardData;
-use Domain\Hotel\DataTransferObjects\HotelData;
 use Domain\Hotel\DataTransferObjects\MinCostsData;
+use Domain\Hotel\DataTransferObjects\RoomHotelData;
 use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\GetAllRoomCosts;
@@ -18,7 +19,7 @@ use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
 
-final class RoomData extends \Parent\DataTransferObjects\Data
+final class RoomCardData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
         public ?int $id,
@@ -28,16 +29,13 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         public ?int $category_id,
         public ?bool $moderate,
         public ?string $description,
-        public int $hotel_id,
-        public ?Carbon $created_at,
-        public ?Carbon $updated_at,
+        public int $hotel_id,        
         public ?bool $is_hot,
-        #[DataCollectionOf(AttributeData::class)]
+        #[DataCollectionOf(AttributeSimpleData::class)]
         public readonly null|Lazy|DataCollection $attrs,
-        #[DataCollectionOf(MediaImageData::class)]     
-        public null|Lazy|DataCollection $images,
-        public Lazy|PageDescriptionData|null $meta,
-        public Lazy|HotelCardData|null $hotel,
+        #[DataCollectionOf(MediaImageData::class)]
+        public null|Lazy|DataCollection $images,        
+        public Lazy|RoomHotelData|null $hotel,
         public Lazy|CategoryData|null $category,
         #[DataCollectionOf(MinCostsData::class)]
         public readonly null|Lazy|DataCollection $costs,
@@ -50,12 +48,11 @@ final class RoomData extends \Parent\DataTransferObjects\Data
             ...$room->toArray(),
             'created_at' => $room->created_at,
             'updated_at' => $room->updated_at,           
-            'images' =>MediaImageData::collection($room->getMedia('images')),
-            'attrs' => Lazy::whenLoaded('attrs', $room, fn () => AttributeData::collection($room->attrs)),
-            'meta' => Lazy::whenLoaded('meta', $room, fn () => PageDescriptionData::from($room->meta)),
-            'hotel' => Lazy::whenLoaded('hotel', $room, fn () => HotelData::fromModel($room->hotel)),
+            'images' => MediaImageData::collection($room->getMedia('images')),
+            'attrs' => AttributeSimpleData::collection($room->attrs),            
+            'hotel' => RoomHotelData::fromModel($room->hotel),
             'category' => $room->category ? CategoryData::fromModel($room->category) : null,
-            'costs' => Lazy::whenLoaded('costs', $room, fn () => GetAllRoomCosts::run($room)),
+            'costs' => GetAllRoomCosts::run($room),
         ]);
     }
 }

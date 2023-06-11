@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Domain\Room\ViewModels;
 
-use Arr;
 use Closure;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
-use Domain\Room\DataTransferObjects\RoomData;
+use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Search\Traits\SearchResultTrait;
+use Support\DataProcessing\Traits\ResultsCaching;
 
 final class RoomListViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
     use SearchResultTrait;
+    use ResultsCaching;
 
     /**
      * @param  ParamsData  $params
@@ -30,15 +31,12 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
     }
 
     /**     
-     * @return PageDescriptionData
+     * @return Closure
      */
-    public function page_description(): PageDescriptionData
-    {        
-        $pageDescription = GetPageDescriptionByUrlAction::run($this->url); 
-        if (is_null($pageDescription))
-            $pageDescription = GetPageDescriptionByUrlAction::run('/rooms');
-       
-        return PageDescriptionData::fromModel($pageDescription);
+    public function page_description(): Closure
+    {
+        return fn () => $this->params->filter ? null :
+            PageDescriptionData::fromModel(GetPageDescriptionByUrlAction::run($this->url) ?? GetPageDescriptionByUrlAction::run('/rooms'));
     }
 
     /**
@@ -48,6 +46,9 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
      */
     public function rooms(): Closure
     {
-        return fn() => RoomData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels));
+        $params = $this->params;
+        $page = request()->get("page", 1);
+       
+        return fn() => $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels)));
     }   
 }

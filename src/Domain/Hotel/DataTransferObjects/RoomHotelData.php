@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\DataTransferObjects;
 
-use Domain\Address\DataTransferObjects\AddressData;
-use Domain\Address\DataTransferObjects\MetroData;
+use Domain\Address\DataTransferObjects\AddressSimpleData;
+use Domain\Address\DataTransferObjects\MetroSimpleData;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\ValueObjects\PhoneNumberValueObject;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -21,9 +21,9 @@ final class RoomHotelData extends \Parent\DataTransferObjects\Data
         public ?string $phone_2,
         public ?string $email,
         public ?string $slug,
-        public Lazy|HotelTypeData|null $type,
-        public Lazy|AddressData|null $address,
-        #[DataCollectionOf(MetroData::class)]
+        public Lazy|HotelTypeSimpleData|null $type,
+        public Lazy|AddressSimpleData|null $address,
+        #[DataCollectionOf(MetroSimpleData::class)]
         public readonly null|Lazy|DataCollection $metros
     ) {
     }
@@ -33,9 +33,9 @@ final class RoomHotelData extends \Parent\DataTransferObjects\Data
         return self::from([
             ...$hotel->toArray(),
             'phone' => $hotel->phone,
-            'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressData::from($hotel->address)),
-            'type' => Lazy::whenLoaded('type', $hotel, fn () => HotelTypeData::from($hotel->type)),
-            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros)),
+            'address' => AddressSimpleData::from($hotel->address),
+            'type' => HotelTypeSimpleData::from($hotel->type),
+            'metros' => MetroSimpleData::collectionWithAddressSlug($hotel->metros, $hotel->address),
         ]);
     }
 }

@@ -83,10 +83,8 @@ class HotelController extends Controller
             'city_districts' => CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $city_area)),
             'cost_types' => GetCostTypesWithCostRangesKeyNameDataAction::run(),
             'attributes' => AttributeCategoryData::collection(GetFilteredAttributeCategoriesAction::run()),
-            'total' => GetNumOfFilteredObjectsAction::run($params),
-            'hotels' => Cache::remember($this->getHashFor($params, $page, 'hotels'), now()->addDays(7), function () use($params) {            
-                return HotelCardData::collection(FilterHotelsPaginateAction::run($params->hotels));
-            }),
+            'total' => GetNumOfFilteredObjectsAction::run($params),            
+            'hotels' => fn() => $this->getCahchedData($params, $page, 'hotels', fn() => HotelCardData::collection(FilterHotelsPaginateAction::run($params->hotels))),
             'filters' => $params,            
             'filter_tags' => $tags,
         ]);

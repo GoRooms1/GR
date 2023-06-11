@@ -18,11 +18,11 @@
     <search-panel />
   </div>
 
-  <rooms-list v-if="(rooms?.data ?? []).length > 0" :rooms="rooms" />
-  <room-info-block v-if="(rooms?.data ?? []).length > 0" />
+  <rooms-list v-if="objects_type == 'rooms'" :rooms="rooms" />
+  <room-info-block v-if="objects_type == 'rooms'" />
 
-  <hotels-list v-if="(hotels?.data ?? []).length > 0 || (rooms?.data ?? []).length == 0" :hotels="hotels" />
-  <hotel-info-block v-if="(hotels?.data ?? []).length > 0 || (rooms?.data ?? []).length == 0" />
+  <hotels-list v-if="objects_type == 'hotels'" :hotels="hotels" />
+  <hotel-info-block v-if="objects_type == 'hotels'" />
 </template>
 
 <script lang="ts">
@@ -54,6 +54,7 @@ export default {
     hotels: [Object],
     rooms: [Object],
     filters: Object,
+    objects_type: String,
   },  
   mounted() {
     this.getDataOnList();  

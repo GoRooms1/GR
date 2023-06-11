@@ -25,9 +25,9 @@ final class MetroSimpleData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             'color' => $metro->color,
-            'name' => $metro->color,
+            'name' => $metro->name,
             'distance' => $metro->distance,
-            'slug' => CustomStr::getCustomSlug($metro->name),       
+            'slug' => CustomStr::getCustomSlug($metro->name),     
         ]);
     }
 

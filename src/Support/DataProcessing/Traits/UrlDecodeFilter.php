@@ -85,8 +85,8 @@ trait UrlDecodeFilter
         $district = null;
         $street = null;
 
-        foreach ($data as $key => $item) {
-            $slug = DB::table('address_slug')->where('slug', $item)->first();
+        foreach ($data as $key => $item) {           
+            $slug = is_null($item) ? null : DB::table('address_slug')->where('slug', $item)->first();
             
             if (is_null($slug) && !is_null($item))
                 abort(404);
@@ -110,15 +110,13 @@ trait UrlDecodeFilter
             }
         }
 
-        return new HotelParamsData(
-            attrs: [],
-            city: $city,
-            metro: $metro,
-            area: $area,
-            district: $district,
-            street: $street,
-            type: null,
-            moderate: null
-        );
+        $hotelParamsData = HotelParamsData::from(HotelParamsData::empty());
+        $hotelParamsData->city = $city;
+        $hotelParamsData->metro = $metro;
+        $hotelParamsData->area = $area;
+        $hotelParamsData->district = $district;
+        $hotelParamsData->street = $street;
+
+        return $hotelParamsData;
     }
 }
