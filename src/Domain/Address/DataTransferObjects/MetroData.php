@@ -40,7 +40,7 @@ final class MetroData extends \Parent\DataTransferObjects\Data
         foreach ($metros as $metro) {           
             $collection[] = MetroData::from([
                 ...$metro->toArray(),
-                'slug' => route('address').GetMetroSlugAction::run($metro->name, $address->city),          
+                'slug' => GetMetroSlugAction::run($metro->name, $address->city),     
             ]);       
         }
 

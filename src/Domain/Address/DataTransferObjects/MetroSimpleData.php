@@ -40,7 +40,7 @@ final class MetroSimpleData extends \Parent\DataTransferObjects\Data
                 'color' => $metro->color,
                 'name' => $metro->name,
                 'distance' => $metro->distance,
-                'slug' => route('address').GetMetroSlugAction::run($metro->name, $address->city),          
+                'slug' => GetMetroSlugAction::run($metro->name, $address->city),          
             ]);       
         }
 

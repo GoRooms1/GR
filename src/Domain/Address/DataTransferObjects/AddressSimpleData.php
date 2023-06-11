@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Address\DataTransferObjects;
 
-use Domain\Address\Actions\GetSlugFromAddress;
 use Domain\Address\Models\Address;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
-use Spatie\LaravelData\DataCollection;
 
 final class AddressSimpleData extends \Parent\DataTransferObjects\Data
 {
@@ -19,9 +16,8 @@ final class AddressSimpleData extends \Parent\DataTransferObjects\Data
         public ?string $city_area,        
         public ?string $street_with_type,
         public ?string $geo_lat,
-        public ?string $geo_lon,     
-        #[DataCollectionOf(AddressSlugData::class)]
-        public readonly null|DataCollection $slugs,
+        public ?string $geo_lon,
+        public ?AddressSlugsData $slugs,
     ) {
     }
 
@@ -29,7 +25,7 @@ final class AddressSimpleData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$address->toArray(),
-            'slugs' => GetSlugFromAddress::run($address),
+            'slugs' => AddressSlugsData::fromAddress($address),
         ]);
     }
 }
