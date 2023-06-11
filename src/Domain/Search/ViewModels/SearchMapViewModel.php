@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Search\ViewModels;
 
-use Arr;
+use Closure;
 use Domain\Address\Actions\GetMapCenterByCityAction;
-use Domain\Address\DataTransferObjects\GeolocationData;
 use Domain\Hotel\Actions\FilterHotelsOnMapAction;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
@@ -15,14 +14,16 @@ use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\Actions\GetPageDescriptionFromParamsData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsInHotelAction;
-use Domain\Room\DataTransferObjects\RoomData;
+use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Search\Traits\SearchResultTrait;
 use Inertia\Inertia;
+use Support\DataProcessing\Traits\ResultsCaching;
 
 final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
 {
     use FiltersParamsTrait;
     use SearchResultTrait;
+    use ResultsCaching;
 
     /**
      * @param  ParamsData  $params     
@@ -33,10 +34,13 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
     }
 
     /**     
-     * @return PageDescriptionData
+     * @return PageDescriptionData | null
      */
-    public function page_description(): PageDescriptionData
+    public function page_description(): PageDescriptionData | null
     {        
+        if ( $this->params->filter)
+            return null;
+
         $paramsData = clone $this->params;
         $paramsData->room_filter = true;
         $pageDescription = PageDescriptionData::fromModel(GetPageDescriptionFromParamsData::run($paramsData));
@@ -56,7 +60,7 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
         if (is_null($this->params->hotel_id))
             return Inertia::lazy(fn() => []);
         
-        return Inertia::lazy(fn() => RoomData::collection(FilterRoomsInHotelAction::run($this->params->hotel_id, $this->params->rooms)));
+        return Inertia::lazy(fn() => RoomCardData::collection(FilterRoomsInHotelAction::run($this->params->hotel_id, $this->params->rooms)));
     }
 
     /**
@@ -65,11 +69,21 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
      */
     public function hotels(): \Inertia\LazyProp
     {       
-        return Inertia::lazy(fn() => HotelMapData::fromCollectionWithFilters(FilterHotelsOnMapAction::run($this->params->hotels, $this->params->rooms), $this->params));
+        $params = $this->params;
+        $page = "all";
+
+        return Inertia::lazy(
+            fn() => $this->getCahchedData(
+                $params, 
+                $page, 
+                'map', 
+                fn() => HotelMapData::fromCollectionWithFilters(FilterHotelsOnMapAction::run($this->params->hotels, $this->params->rooms), $this->params)
+            )
+        );
     }
     
-    public function map_center(): GeolocationData | null
+    public function map_center(): Closure
     {
-        return GetMapCenterByCityAction::run($this->params->hotels->city);
+        return fn() => GetMapCenterByCityAction::run($this->params->hotels->city);
     }
 }

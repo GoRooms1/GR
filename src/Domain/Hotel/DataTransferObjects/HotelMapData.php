@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\DataTransferObjects;
 
-use Domain\Address\DataTransferObjects\AddressData;
+use Domain\Address\DataTransferObjects\AddressSimpleData;
 use Domain\Hotel\Actions\MinimumCostFilteredValueCalculation;
 use Domain\Hotel\Models\Hotel;
 use Domain\Search\DataTransferObjects\ParamsData;
@@ -15,7 +15,7 @@ final class HotelMapData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
         public ?int $id,        
-        public Lazy|AddressData|null $address,
+        public Lazy|AddressSimpleData|null $address,
         public float $min_cost_value,
     ) {
     }
@@ -24,7 +24,7 @@ final class HotelMapData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$hotel->toArray(),           
-            'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressData::from($hotel->address)),
+            'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressSimpleData::from($hotel->address)),
             'min_cost_value' => MinimumCostFilteredValueCalculation::run($hotel, ParamsData::from(ParamsData::empty())),
         ]);
     }
@@ -41,7 +41,7 @@ final class HotelMapData extends \Parent\DataTransferObjects\Data
         foreach ($hotels as $hotel) {
             $dataCollection[] = HotelMapData::from([
                 ...$hotel->toArray(),
-                'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressData::from($hotel->address)),
+                'address' => AddressSimpleData::from($hotel->address),
                 'min_cost_value' => MinimumCostFilteredValueCalculation::run($hotel, $paramsData),
             ]);
         }

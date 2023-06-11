@@ -509,12 +509,12 @@ export default {
           this.$refs.filterContent.scrollHeight;
     },
     getDataOnList() {
-      let data = _getFiltersData.call(this, true);
+      let data = _getFiltersData.call(this);
       _getData.call(this, '/search', data);
       this.close();
     },
     getDataOnMap() { 
-      let data = _getFiltersData.call(this, true);
+      let data = _getFiltersData.call(this);
       _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});
       this.close();
     },

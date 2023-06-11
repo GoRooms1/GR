@@ -17,7 +17,9 @@ final class AddressSimpleData extends \Parent\DataTransferObjects\Data
         public ?string $block,
         public ?string $city_district,
         public ?string $city_area,        
-        public ?string $street_with_type,        
+        public ?string $street_with_type,
+        public ?string $geo_lat,
+        public ?string $geo_lon,     
         #[DataCollectionOf(AddressSlugData::class)]
         public readonly null|DataCollection $slugs,
     ) {
@@ -26,12 +28,7 @@ final class AddressSimpleData extends \Parent\DataTransferObjects\Data
     public static function fromModel(Address $address): self
     {
         return self::from([
-            'city' => $address->city,
-            'house' => $address->house,
-            'block' => $address->block,
-            'city_district' => $address->city_district,
-            'city_area' => $address->city_area,
-            'street_with_type' => $address->street_with_type,
+            ...$address->toArray(),
             'slugs' => GetSlugFromAddress::run($address),
         ]);
     }
