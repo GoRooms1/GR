@@ -60,7 +60,16 @@ final class SearchMapViewModel extends \Parent\ViewModels\ViewModel
         if (is_null($this->params->hotel_id))
             return Inertia::lazy(fn() => []);
         
-        return Inertia::lazy(fn() => RoomCardData::collection(FilterRoomsInHotelAction::run($this->params->hotel_id, $this->params->rooms)));
+        $params = $this->params;            
+        $page = 'all';
+        
+        return Inertia::lazy(fn() => $this->getCahchedData(
+                $params,
+                $page, 
+                'rooms-hotel-'.$this->params->hotel_id.'-', 
+                fn() => RoomCardData::collection(FilterRoomsInHotelAction::run($this->params->hotel_id, $this->params->rooms))
+            )
+        );
     }
 
     /**
