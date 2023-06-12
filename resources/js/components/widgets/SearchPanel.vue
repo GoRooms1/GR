@@ -173,6 +173,12 @@ export default {
     this.handleResize();
     this.$page.props.modals.search = true;
   },
+  unmounted() {
+    if (typeof window !== "undefined") {
+      window.removeEventListener("resize", this.handleResize);
+      window.removeEventListener("scroll", this.handleScroll);
+    }
+  },
   data() {
     return {      
       panelPosition: "",

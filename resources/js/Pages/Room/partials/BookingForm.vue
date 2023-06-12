@@ -213,7 +213,7 @@ import TimePicker from "@/components/ui/TimePicker.vue";
 import NumSelect from "@/components/ui/NumSelect.vue";
 import moment from "moment";
 import { vMaska } from "maska";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 
 export default {
   setup () {
@@ -275,7 +275,7 @@ export default {
       return value.length >= 7;
     },
     close() {      
-      usePage().props.flash.message = null;
+      this.$page.props.flash.message = null;
       this.bookingSuccess = false;
       this.$eventBus.emit("booking-close");
     },

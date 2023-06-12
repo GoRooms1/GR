@@ -78,7 +78,6 @@
 <script>
 import { Link } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/components/ui/ResponsiveNavLink.vue";
-import { usePage } from "@inertiajs/vue3";
 
 export default {
   components: {
@@ -89,8 +88,8 @@ export default {
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.handleResize);
     this.handleResize();
-    if (!usePage().props.modals) usePage().props.modals = {};
-    usePage().props.modals.menu = false;
+    if (!this.$page.props.modals) this.$page.props.modals = {};
+    this.$page.props.modals.menu = false;
   },
   destroyed() {
     if (typeof window !== "undefined")
@@ -103,15 +102,15 @@ export default {
   },
   computed: {
     isOpen() {
-      return usePage().props.modals?.menu ?? false;
+      return this.$page.props.modals?.menu ?? false;
     }
   },
   methods: {
     show() {
-      usePage().props.modals.menu = true;
+      this.$page.props.modals.menu = true;
     },
     hide() {
-      usePage().props.modals.menu = false;      
+      this.$page.props.modals.menu = false;      
     },    
     handleResize() {      
       if (typeof window !== "undefined") this.screenWidth = window.innerWidth;

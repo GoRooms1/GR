@@ -111,7 +111,6 @@
 </template>
 
 <script>
-import { usePage } from "@inertiajs/vue3";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
 import Button from "@/components/ui/Button.vue";

@@ -1,6 +1,5 @@
 <script setup>
-import { useForm } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { vMaska } from "maska";
 import Button from "@/components/ui/Button.vue";
 
