@@ -18,11 +18,10 @@
     <search-panel />
   </div>
 
-  <rooms-list v-if="objects_type == 'rooms'" :rooms="rooms" />
-  <room-info-block v-if="objects_type == 'rooms'" />
-
+  <rooms-list v-if="objects_type == 'rooms'" :rooms="rooms" /> 
   <hotels-list v-if="objects_type == 'hotels'" :hotels="hotels" />
-  <hotel-info-block v-if="objects_type == 'hotels'" />
+  <article class="container mx-auto px-4 min-[1920px]:px-[10vw] min-[1920px]:px-[10vw]" v-html="default_description"></article>
+
 </template>
 
 <script lang="ts">
@@ -32,9 +31,7 @@ import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
-import RoomInfoBlock from "@/Pages/Room/partials/InfoBlock.vue";
 import HotelsList from "@/Pages/Hotel/partials/HotelsList.vue";
-import HotelInfoBlock from "@/Pages/Hotel/partials/InfoBlock.vue";
 import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 export default {
   layout: SearchLayout,
@@ -43,10 +40,8 @@ export default {
     Layout,
     SearchLayout,
     SearchPanel,
-    RoomsList,
-    RoomInfoBlock,
-    HotelsList,
-    HotelInfoBlock,
+    RoomsList,    
+    HotelsList,    
     SearchFilterModal,
   },
   props: {
@@ -55,6 +50,7 @@ export default {
     rooms: [Object],
     filters: Object,
     objects_type: String,
+    default_description: String,
   },  
   mounted() {
     this.getDataOnList();  

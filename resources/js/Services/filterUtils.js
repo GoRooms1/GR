@@ -34,7 +34,7 @@ function _getData(url, data, onFinish, onSuccess) {
       replace: true,
       preserveState: true,
       preserveScroll: true,
-      only: ["hotels", "rooms", "page_description", "map_center", "filters", "filter_tags", "objects_type"],
+      only: ["hotels", "rooms", "page_description", "map_center", "filters", "filter_tags", "objects_type", "default_description"],
       onStart: () => {
         this.$page.props.isLoadind = true;
       },

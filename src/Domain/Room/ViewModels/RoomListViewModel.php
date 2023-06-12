@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Room\ViewModels;
 
+use Cache;
 use Closure;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
@@ -12,6 +13,7 @@ use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Search\Traits\SearchResultTrait;
+use Domain\Settings\Models\Settings;
 use Support\DataProcessing\Traits\ResultsCaching;
 
 final class RoomListViewModel extends \Parent\ViewModels\ViewModel
@@ -50,5 +52,10 @@ final class RoomListViewModel extends \Parent\ViewModels\ViewModel
         $page = request()->get("page", 1);
        
         return fn() => $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($this->params->rooms, $this->params->hotels)));
-    }   
+    }
+    
+    public function default_description(): Closure 
+    {
+        return fn() => Cache::remember('seo_/rooms', now()->addDays(365), fn() => optional(Settings::where('option', 'seo_/rooms')->get()->first())->value);
+    }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Search\ViewModels;
 
+use Cache;
 use Closure;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\DataTransferObjects\HotelCardData;
@@ -16,6 +17,7 @@ use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Room\DataTransferObjects\RoomData;
 use Domain\Search\Traits\SearchResultTrait;
+use Domain\Settings\Models\Settings;
 use Inertia\Inertia;
 use Support\DataProcessing\Traits\ResultsCaching;
 
@@ -85,5 +87,12 @@ final class SearchViewModel extends \Parent\ViewModels\ViewModel
      */
     public function objects_type(): Closure {        
         return fn() => $this->params->room_filter ? 'rooms' : 'hotels';
+    }
+
+    public function default_description(): Closure 
+    {     
+        $option = $this->params->room_filter == true ? 'seo_/rooms' : 'seo_/hotels';
+        
+        return fn() => Cache::remember($option, now()->addDays(365), fn() => optional(Settings::where('option', $option)->get()->first())->value);
     }
 }

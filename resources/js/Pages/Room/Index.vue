@@ -19,7 +19,11 @@
     <search-panel />
   </div>
   <rooms-list :rooms="rooms"/>
-  <info-block :description="page_description?.description ?? ''"/>
+  <article 
+    class="container mx-auto px-4 min-[1920px]:px-[10vw]"
+    v-html="page_description?.description ?? default_description"
+  >
+  </article>
 </template>
 
 <script lang="ts">
@@ -29,7 +33,6 @@ import SearchLayout from "@/Layouts/SearchLayout.vue";
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
 import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
 import RoomsList from "./partials/RoomsList.vue";
-import InfoBlock from "./partials/InfoBlock.vue";
 import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 export default {
   layout: SearchLayout,
@@ -38,13 +41,13 @@ export default {
     Layout,
     SearchLayout,
     SearchPanel,
-    RoomsList,
-    InfoBlock,
+    RoomsList,    
     SearchFilterModal,
   },
   props: {
     page_description: Object,
     rooms: [Object],
+    default_description: String,
   },
   mounted() {    
     this.$eventBus.on("filters-changed", (e) => this.getDataOnList("/search"));   
