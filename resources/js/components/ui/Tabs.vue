@@ -1,5 +1,4 @@
-<template>
-  <div class="md:w-[70%] w-full overflow-hidden">
+<template>  
     <div class="max-w-[800px] mx-auto">
       <div class="overflow-hidden">
         <slot />
@@ -41,8 +40,7 @@
           </button>
         </div>
       </div>
-    </div>
-  </div>
+    </div> 
 </template>
 
 <script lang="ts">

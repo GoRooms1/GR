@@ -97,39 +97,42 @@
             v-html="hotel?.description ?? ''"
             class="sm:block hidden md:w-[30%] w-full md:px-0 px-4"
           ></div>
-          <tabs @changed="redrawMap">
-            <tab title="Фотогалерея">
-              <swiper
-                :slides-per-view="1"
-                :pagination="pagination"
-                :navigation="navigation"
-                :breakpoints="breakpoints"
-                class="swiper-image relative h-[416px] md:rounded-[24px] rounded-none overflow-hidden swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
+          <div class="md:w-[70%] w-full overflow-hidden" height="480">
+            <tabs @changed="redrawMap">
+              <tab title="Фотогалерея">
+                <swiper
+                  :slides-per-view="1"
+                  :pagination="pagination"
+                  :navigation="navigation"
+                  :breakpoints="breakpoints"
+                  class="swiper-image relative h-[416px] md:rounded-[24px] rounded-none overflow-hidden swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
+                >
+                  <swiper-slide v-for="(image, index) in (hotel?.images ?? []).filter(el => el.moderate === false)">
+                    <Image class="w-full h-full object-cover" height="416" :src="image?.conversions?.show ?? image.url" :lazy="index > 0"/>
+                  </swiper-slide>
+                  <div
+                    class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"
+                  ></div>
+                  <div
+                    class="swiper-image-next max-[768px]:hidden absolute top-0 right-0 z-10 bg-transparent w-[50%] h-full"
+                  ></div>
+                  <div
+                    class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"
+                  ></div>
+                </swiper>
+              </tab>
+              <tab
+                title="На карте"
+                class="min-h-[416px] rounded-[24px] overflow-hidden"
               >
-                <swiper-slide v-for="(image, index) in (hotel?.images ?? []).filter(el => el.moderate === false)">
-                  <Image class="w-full h-full object-cover" :src="image?.conversions?.show ?? image.url" :lazy="index > 0"/>
-                </swiper-slide>
-                <div
-                  class="swiper-image-prev max-[768px]:hidden absolute top-0 left-0 z-10 bg-transparent w-[50%] h-full"
-                ></div>
-                <div
-                  class="swiper-image-next max-[768px]:hidden absolute top-0 right-0 z-10 bg-transparent w-[50%] h-full"
-                ></div>
-                <div
-                  class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"
-                ></div>
-              </swiper>
-            </tab>
-            <tab
-              title="На карте"
-              class="min-h-[416px] rounded-[24px] overflow-hidden"
-            >
-              <div id="map" class="w-full" style="height: 416px"></div>
-            </tab>
-            <tab title="Отзывы" disabled="true">
-              
-            </tab>
-          </tabs>
+                <div id="map" class="w-full" style="height: 416px"></div>
+              </tab>
+              <tab title="Отзывы" disabled="true">
+                
+              </tab>
+            </tabs>
+          </div>
+          
         </div>
       </div>
 

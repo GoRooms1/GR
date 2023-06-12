@@ -5,6 +5,8 @@
       :class="class"
       alt="img"      
       :loading="lazy ? 'lazy' : 'eager'"
+      :width="width"
+      :height="height"
     />
   </div>
 </template>
@@ -14,7 +16,9 @@ export default {
   props: {
     src: String,
     class: String, 
-    lazy: Boolean, 
+    lazy: Boolean,
+    width: [String, Number],
+    height: [String, Number],
   },
 };
 </script>
