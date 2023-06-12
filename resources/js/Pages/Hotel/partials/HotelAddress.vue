@@ -1,7 +1,7 @@
 <template>
   <div class="flex gap-[8px]">
     <div class="w-[20px] flex-shrink-0">
-      <img src="/img/location.svg" alt="location"/>
+      <img src="/img/location.svg" alt="location" width="20" height="20"/>
     </div>
     <p class="text-[14px] leading-[16px]">
       <Link

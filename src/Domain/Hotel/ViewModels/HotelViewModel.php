@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\ViewModels;
 
-use Arr;
-use Domain\Hotel\DataTransferObjects\HotelData;
+use Domain\Hotel\DataTransferObjects\HotelShowData;
 use Domain\Hotel\Models\Hotel;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsInHotelPaginateAction;
-use Domain\Room\DataTransferObjects\RoomData;
+use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Search\Traits\SearchResultTrait;
@@ -41,11 +40,11 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
     }
 
     /**
-     * @return HotelData
+     * @return HotelShowData
      */
-    public function hotel(): HotelData
+    public function hotel(): HotelShowData
     {
-        return $this->hotel->load('attrs')->getData();
+        return HotelShowData::fromModel($this->hotel->load('attrs'));
     }
 
     /**
@@ -53,11 +52,6 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
      */
     public function rooms(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
     {
-        return RoomData::collection(FilterRoomsInHotelPaginateAction::run($this->hotel->id, $this->params->rooms));
-    }
-
-    public function query_string(): string
-    {
-        return Arr::query($this->params->toArray());
+        return RoomCardData::collection(FilterRoomsInHotelPaginateAction::run($this->hotel->id, $this->params->rooms));
     }
 }

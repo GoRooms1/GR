@@ -80,7 +80,7 @@
               <span class="text-[14px] leading-[16px] font-semibold"
                 >Рейтинг</span
               >
-              <img src="/img/star2.svg" alt="star"/>
+              <img src="/img/star2.svg" alt="star" width="20" height="20"/>
               <p class="text-[14px] leading-[16px]">
                 <span class="font-semibold">0</span>
                 (0)
