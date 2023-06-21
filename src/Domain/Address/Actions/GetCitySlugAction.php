@@ -19,6 +19,6 @@ final class GetCitySlugAction extends Action
      */
     public function handle(Address $address): string
     {
-       return '/'.CustomStr::getCustomSlug($address->city);
+       return route('address').'/'.CustomStr::getCustomSlug($address->city);
     }
 }

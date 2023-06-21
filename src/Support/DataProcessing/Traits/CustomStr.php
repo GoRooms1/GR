@@ -14,6 +14,7 @@ final class CustomStr
     const CUSTOM_SLUG_RULES = [
         'ю' => 'yu',
         'я' => 'ya',
+        'ё' => 'yo'
     ];
 
     /**

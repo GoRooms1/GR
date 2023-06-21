@@ -20,6 +20,6 @@ final class GetMetroSlugAction extends Action
      */
     public function handle(String $metroName, String $cityName): string
     {
-       return '/'.CustomStr::getCustomSlug($cityName).'/metro-'.CustomStr::getCustomSlug($metroName);
+       return route('address').'/'.CustomStr::getCustomSlug($cityName).'/metro-'.CustomStr::getCustomSlug($metroName);
     }
 }

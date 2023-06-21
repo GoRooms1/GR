@@ -4,36 +4,39 @@
       @click="getDataOnMap()"
       class="p-2.5 rounded-l-lg"
       :class="
-        $page.url.split('?')[0] == '/search_map'
+        $page.props?.is_map === true
           ? 'bg-[#6170FF]'
           : 'bg-[#EAEFFD]'
       "
     >
       <img
         :src="
-          $page.url.split('?')[0] == '/search_map'
+          $page.props?.is_map === true
             ? '/img/map2.svg'
             : '/img/map.svg'
         "
         alt="map"
+        width="24"
+        height="24"
       />
     </button>
     <button
       @click="getDataOnList()"
       class="p-2.5 rounded-r-lg mr-[10%]"
       :class="
-        $page.url.split('?')[0] != '/search_map'
+        $page.props?.is_map !== true
           ? 'bg-[#6170FF]'
           : 'bg-[#EAEFFD]'
       "
     >
       <img
         :src="
-          $page.url.split('?')[0] != '/search_map'
+          $page.props?.is_map !== true
             ? '/img/listpointers2.svg'
             : '/img/listpointers.svg'
         "
         alt="listpointers"
+        width="24" height="24"
       />
     </button>
     <button
@@ -50,98 +53,60 @@
             : '/img/search2.svg'
         "
         alt="search"
+        width="24" height="24"
       />
     </button>
     <button
-      @click="toggleFilters()"
+      @click="openFilters()"
       class="p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
     >
-      <img src="/img/filters.svg" alt="filters" />
+      <img src="/img/filters.svg" alt="filters" width="24" height="24"/>
     </button>
     <filter-attr-toggle
       type="square"
       img="/img/bolt.svg"
       toggle-img="/img/bolt2.svg"
       initial-value="true"
-      :model-value="filterStore.getFilterValue('rooms', 'is_hot')"
-      @update:modelValue="
-        (event) => filterValueHandler('rooms', false, 'is_hot', event)
-      "
+      :model-value="null"     
       disabled
     />
     <button
       class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
     >
-      <img src="/img/footer-cashback.svg" alt="footer-cashback" />
+      <img src="/img/footer-cashback.svg" alt="footer-cashback" width="24" height="24"/>
     </button>
     <button
       class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
     >
-      <img src="/img/heart.svg" alt="heart" />
+      <img src="/img/heart.svg" alt="heart" width="24" height="24"/>
     </button>
   </div>
 </template>
 
 <script>
-import { usePage } from "@inertiajs/vue3";
-import { filterStore } from "@/Store/filterStore.js";
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
+import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
 
 export default {
   components: {
     FilterAttrToggle,
-  },
-  data() {
-    return {
-      filterStore,
-    };
-  },
+  },  
   methods: {
     getDataOnList() {
-      this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-        //onSuccess: () => {},
-        onStart: () => {
-          usePage().props.isLoadind = true;
-        },
-        onFinish: () => {
-          usePage().props.isLoadind = false;
-        },
-      });
+      let data = _getFiltersData.call(this);
+      data.as = null;
+      _getData.call(this, this.$page.props.path, data);   
     },
     getDataOnMap() {
-      this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-        //onSuccess: () => {},
-        onStart: () => {
-          usePage().props.isLoadind = true;
-        },
-        onFinish: () => {
-          usePage().props.isLoadind = false;
-          this.$eventBus.emit("data-received");
-        },
-      });
-    },
-    filterValueHandler(model, isAttr = false, key, value) {
-      if (value == null) {
-        this.filterStore.removeFilter(model, key);
-      } else {
-        this.filterStore.updateFilter(model, isAttr, key, value);
-      }
-
-      this.$eventBus.emit("filters-changed");
-    },
-    toggleFilters() {
-      usePage().props.modals.filters = !usePage().props.modals.filters;
+      let data = _getFiltersData.call(this);
+      data.as = 'map';
+      _getData.call(this, this.$page.props.path, data, () => {this.$eventBus.emit("data-received")});       
+    },    
+    openFilters() {
+      this.$eventBus.emit("filters-open");
     },
     toggleSearchPanel() {
-      usePage().props.modals.search = !usePage().props.modals.search;
+      this.$page.props.modals.search = !this.$page.props.modals.search;
     },
   },
 };

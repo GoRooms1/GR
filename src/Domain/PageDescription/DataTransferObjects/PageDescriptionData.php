@@ -61,6 +61,7 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
     
     public static function fromHotel(Hotel $hotel): self
     {        
+        /** @var PageDescription|null  $pageDescription*/
         $pageDescription = $hotel->meta;
         
         return new self(

@@ -1,39 +1,19 @@
 <template>
-  <div
-    v-if="isOpen"
+  <div    
     class="items-center justify-center fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex"
   >
     <div
       class="flex flex-grow flex-col lg:gap-[8px] gap-[32px] max-w-[890px] w-full pb-[15px] md:overflow-hidden max-[768px]:pb-[40px] pt-[40px] overflow-x-hidden scrollbar overflow-y-auto md:px-[20px] px-0 h-[100%] relative"
     >
       <button
-        @click="close()"
+        @click="close(true)"
         class="absolute right-0 max-[768px]:right-[10px] top-[15px] max-[768px]:top-0 w-[32px] h-[32px] md:bg-white bg-transparent rounded-[8px] flex items-center justify-center"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1 1L15 15"
-            stroke="#6170FF"
-            stroke-width="2"
-            stroke-linecap="round"
-          ></path>
-          <path
-            d="M1 15L15 1"
-            stroke="#6170FF"
-            stroke-width="2"
-            stroke-linecap="round"
-          ></path>
-        </svg>
+        <img src="/img/close.svg" alt="close"/>     
       </button>
       <div class="max-w-[832px] w-full mx-auto px-[16px]">
         <div class="lg:block flex flex-col relative">
-          <Search for-modal :url="url ?? $page.url.split('?')[0]" />
+          <Search for-modal />
           <div class="flex justify-between ordering">
             <div
               class="lg:p-[8px] p-[24px] bg-[#EAEFFD] rounded-b-[16px] lg:rounded-t-none lg:w-[fit-content] w-full rounded-t-[16px] items-center gap-[8px] flex-wrap justify-center flex"
@@ -42,9 +22,7 @@
                 title="Low Cost"
                 type="small"
                 initial-value="true"
-                :model-value="
-                  tempFilterStore.getFilterValue('rooms', 'low_cost')
-                "
+                :model-value="$page.props?.filters?.rooms?.low_cost ?? null"
                 @update:modelValue="
                   (event) =>
                     filterValueHandler('rooms', false, 'low_cost', event)
@@ -54,9 +32,7 @@
                 title="От 1 часа"
                 type="small"
                 :initial-value="68"
-                :model-value="
-                  tempFilterStore.getFilterValue('rooms', 'attr_68')
-                "
+                :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 68)"
                 @update:modelValue="
                   (event) => filterValueHandler('rooms', true, 'attr_68', event)
                 "
@@ -65,10 +41,7 @@
                 title="Горящие"
                 type="small"
                 initial-value="true"
-                :model-value="tempFilterStore.getFilterValue('rooms', 'is_hot')"
-                @update:modelValue="
-                  (event) => filterValueHandler('rooms', false, 'is_hot', event)
-                "
+                :model-value="null"                
                 disabled
               />
               <filter-attr-toggle title="Кешбэк" type="small" disabled />
@@ -76,9 +49,7 @@
                 title="Арт дизайн"
                 type="small"
                 :initial-value="52"
-                :model-value="
-                  tempFilterStore.getFilterValue('rooms', 'attr_52')
-                "
+                :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 52)"
                 @update:modelValue="
                   (event) => filterValueHandler('rooms', true, 'attr_52', event)
                 "
@@ -87,9 +58,7 @@
                 title="Джакузи"
                 type="small"
                 :initial-value="65"
-                :model-value="
-                  tempFilterStore.getFilterValue('rooms', 'attr_65')
-                "
+                :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == 65)"
                 @update:modelValue="
                   (event) => filterValueHandler('rooms', true, 'attr_65', event)
                 "
@@ -100,7 +69,8 @@
             class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]"
           >
             <filter-tag
-              v-for="tag in tempFilterStore.filters ?? []"
+              v-for="tag in ($page.props?.filter_tags ?? [])" v-bind:key="tag.key + '_' + tag.value"
+              :title="tag.title"
               :filter-model="tag.modelType"
               :filter-key="tag.key"
               :is-attribute="tag.isAttribute"
@@ -140,12 +110,10 @@
                 <filter-select
                   :options-array="$page.props.hotel_types ?? []"
                   placeholder="Все"
-                  :model-value="
-                    tempFilterStore.getFilterValue('hotels', 'hotel_type')
-                  "
+                  :model-value="$page.props?.filters?.hotels?.type ?? null"
                   @update:modelValue="
                     (event) =>
-                      filterValueHandler('hotels', false, 'hotel_type', event)
+                      filterValueHandler('hotels', false, 'type', event)
                   "
                 />
                 <div class="hidden md:flex w-full">
@@ -177,9 +145,7 @@
                   <city-select
                     searchable
                     placeholder="Город"
-                    :model-value="
-                      tempFilterStore.getFilterValue('hotels', 'city')
-                    "
+                    :model-value="$page.props?.filters?.hotels?.city ?? null"
                     :options-array="$page.props.cities ?? []"
                     :position="
                       filterContentScroll == true
@@ -194,9 +160,7 @@
 
                   <city-area-select
                     placeholder="Округ"
-                    :model-value="
-                      tempFilterStore.getFilterValue('hotels', 'city_area')
-                    "
+                    :model-value="$page.props?.filters?.hotels?.area ?? null"
                     searchable
                     :options-array="$page.props.city_areas ?? []"
                     :position="
@@ -206,15 +170,13 @@
                     "
                     @update:modelValue="
                       (event) =>
-                        filterValueHandler('hotels', false, 'city_area', event)
+                        filterValueHandler('hotels', false, 'area', event)
                     "
                   />
 
                   <city-area-select
                     placeholder="Район"
-                    :model-value="
-                      tempFilterStore.getFilterValue('hotels', 'city_district')
-                    "
+                    :model-value="$page.props?.filters?.hotels?.district ?? null"
                     searchable
                     :options-array="$page.props.city_districts ?? []"
                     :position="
@@ -227,7 +189,7 @@
                         filterValueHandler(
                           'hotels',
                           false,
-                          'city_district',
+                          'district',
                           event
                         )
                     "
@@ -237,9 +199,7 @@
                     type="form"
                     searchable
                     placeholder="Станция метро"
-                    :model-value="
-                      tempFilterStore.getFilterValue('hotels', 'metro')
-                    "
+                    :model-value="$page.props?.filters?.hotels?.metro ?? null"
                     :options-array="$page.props.metros ?? []"
                     :position="
                       filterContentScroll == true
@@ -259,9 +219,7 @@
                 <p class="text-[14px] leading-[16px] mb-[8px]">Период</p>
                 <period-cost-select
                   :options="$page.props.cost_types"
-                  :model-value="
-                    tempFilterStore.getFilterValue('rooms', 'period_cost')
-                  "
+                  :model-value="$page.props?.filters?.rooms?.period_cost ?? null"
                   @update:modelValue="
                     (event) =>
                       filterValueHandler('rooms', false, 'period_cost', event)
@@ -293,7 +251,7 @@
                     title="На модерации"
                     type="small"
                     initial-value="true"
-                    :model-value="tempFilterStore.getFilterValue('hotels', 'moderate')"
+                    :model-value="$page.props?.filters?.hotel?.moderate ?? null"
                     @update:modelValue="
                       (event) => filterValueHandler('hotels', false, 'moderate', event)
                     "
@@ -328,12 +286,7 @@
                         :title="attribute.name"
                         type="small"
                         :initial-value="attribute.id"
-                        :model-value="
-                          tempFilterStore.getFilterValue(
-                            'hotels',
-                            'attr_' + attribute.id
-                          )
-                        "
+                        :model-value="($page.props?.filters?.hotels?.attrs ?? []).find(e => e == attribute.id)"
                         @update:modelValue="
                           (event) =>
                             filterValueHandler(
@@ -378,12 +331,7 @@
                         :title="attribute.name"
                         type="small"
                         :initial-value="attribute.id"
-                        :model-value="
-                          tempFilterStore.getFilterValue(
-                            'rooms',
-                            'attr_' + attribute.id
-                          )
-                        "
+                        :model-value="($page.props?.filters?.rooms?.attrs ?? []).find(e => e == attribute.id)"
                         @update:modelValue="
                           (event) =>
                             filterValueHandler(
@@ -411,7 +359,7 @@
               class="flex items-center justify-between md:gap-[54px] gap-[10px] md:w-initial w-full"
             >
               <span class="text-[14px] leading-[16px] font-semibold"
-                >Найдено {{ foundMessage ?? 0 }}</span
+                >{{ foundMessage }}</span
               >
               <button
                 @click="clearFilters()"
@@ -427,91 +375,14 @@
                 @click="getDataOnMap()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M15 3V19"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M9 5V21"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M3 3L9 5L15 3L21 5V21L15 19L9 21L3 19V3Z"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
+                <img src="/img/map2.svg" alt="map" width="24" height="24"/>
                 <span class="text-white">На карте</span>
               </button>
               <button
                 @click="getDataOnList()"
                 class="flex items-center justify-center gap-[8px] xs:flex-grow-0 flex-grow bg-[#6171FF] h-[48px] px-[16px] rounded-[8px] md:hover:bg-[#3B24C6] transition duration-150"
               >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M6.85718 7H21"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M6.85718 12.143H21"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M6.85718 17.2857H21"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M3 7V7.01284"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M3 12.143V12.1558"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M3 17.2857V17.2985"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
+                <img src="/img/listpointers2.svg" alt="list" width="24" height="24"/>
                 <span class="text-white">Списком</span>
               </button>
             </div>
@@ -524,11 +395,8 @@
 
 <script>
 import SearchPanel from "@/components/widgets/SearchPanel.vue";
-import { usePage } from "@inertiajs/vue3";
-import { filterStore } from "@/Store/filterStore.js";
-import { tempFilterStore } from "@/Store/tempFilterStore.js";
 import { numWord } from "@/Services/numWord.js";
-import _ from "lodash";
+import {_updateFilterValue, _getFiltersData, _getData, getFoundMessage} from "@/Services/filterUtils.js";
 import FilterSelect from "@/components/ui/FilterSelect.vue";
 import Button from "@/components/ui/Button.vue";
 import CitySelect from "@/components/ui/CitySelect.vue";
@@ -556,74 +424,53 @@ export default {
     FilterCollapse,
     RatingSelect,
     Search,
-  },
-  props: {
-    url: {
-      type: String,
-      default: null,
-    },
-  },
-  created() {
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.handleResize);
-    this.handleResize();
-  },
-  mounted() {
-    let initPromise = new Promise((resolve, reject) => {
-      resolve(
-        this.filterStore.init(usePage().props.query_string ?? usePage().url)
-      );
-    });
-
-    initPromise
-      .then((inited) => {
-        this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
-        return true;
-      })
-      .then((val) => {
-        this.$eventBus.emit("filters-inited");
-        console.log("filters inited");
-      });
-    this.handleResize();
-  },
-  destroyed() {
-    if (typeof window !== "undefined")
-      window.removeEventListener("resize", this.handleResize);
-  },
+  }, 
   data() {
-    return {
-      filterStore,
-      initialUrl: usePage().url,
-      tempFilterStore,
+    return {     
+      foundMessage: "",
+      initialUrl: this.$page.url, 
+      initialFilters: {},
+      initialTags: [],  
       innerWidth: 0,
       innerHeight: 0,
       filterContentScroll: false,
     };
   },
-  computed: {
-    isOpen() {
-      return usePage().props.modals?.filters ?? false;
-    },
-    foundMessage() {
-      let objectWords;
-      if (this.tempFilterStore.getFiltersValues().isRoomsFilter == true)
-        objectWords = ["номер", "номера", "номеров"];
-      else objectWords = ["отель", "отеля", "отелей"];
+  mounted() {   
+    if (typeof window !== "undefined") {
+        window.addEventListener("resize", this.handleResize);
+        this.initialUrl = window.location.href;
+      }
 
-      return (
-        usePage().props.total +
-        " " +
-        numWord(usePage().props.total, objectWords)
-      );
-    },    
-  },
+      this.initialFilters = JSON.parse(JSON.stringify(this.$page.props.filters));
+      this.initialTags = JSON.parse(JSON.stringify(this.$page.props.filter_tags));
+        
+      this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
+      this.handleResize();
+  },  
   methods: {
-    close() {
-      if (typeof window !== "undefined")
-        window.history.pushState({}, this.$page.title, this.initialUrl);
-      usePage().props.modals.filters = false;
-      if (this.$page.url.split("?")[0] != "/search_map")
+    close(resoreState = false) {      
+      if (resoreState === true) {
+        if (typeof window !== "undefined") window.history.pushState({}, this.$page.title, this.initialUrl);
+        this.$page.props.filters = JSON.parse(JSON.stringify(this.initialFilters));
+        this.$page.props.filter_tags = JSON.parse(JSON.stringify(this.initialTags));
+      }
+
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", this.handleResize);        
+      }
+      
+      if (this.$page.props?.filters?.as != 'map')
         document.body.classList.remove("fixed");
+      
+      this.$page.props.modals.filters = false;    
+    },    
+    updateFoundMessage() {
+      let total = this.$page.props?.total ?? 0;
+      let type = this.$page.props.filters?.room_filter === true ? 
+        'rooms' : this.$page.props.filters?.hotels?.type == 3 ? 'appartments' : 'hotels';
+
+      this.foundMessage = getFoundMessage(total, type);
     },
     handleResize() {
       if (this.isOpen && typeof window !== "undefined") {
@@ -637,114 +484,66 @@ export default {
         this.filterContentScroll =
           this.$refs.filterContent.clientHeight <
           this.$refs.filterContent.scrollHeight;
-    },    
-    getData() {      
-      if (this.$page.url.split("?")[0] == "/search_map") {
-        this.getDataOnMap();
-      } else {
-        this.getDataOnList();
-      }
     },
     getDataOnList() {
-      if (this.isOpen == true) {
-        this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
-      }
-
-      this.$nextTick(() => {        
-        this.$inertia.get("/search", this.filterStore.getFiltersValues(), {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-          onStart: () => {
-            usePage().props.isLoadind = true;
-            this.close();
-          },
-          onFinish: () => {
-            usePage().props.isLoadind = false;
-          },
-        });
-      });
+      let data = _getFiltersData.call(this);
+      _getData.call(this, '/search', data);
+      this.close();
     },
-    getDataOnMap() {
-      if (this.isOpen == true) {
-        this.filterStore.filters = _.cloneDeep(this.tempFilterStore.filters);
-      }
-
-      this.$nextTick(() => {
-        this.$inertia.get("/search_map", this.filterStore.getFiltersValues(), {
-          replace: true,
-          preserveState: true,
-          preserveScroll: true,
-          only: ["hotels", "rooms", "is_rooms_filter", "page_description"],
-          onStart: () => {
-            usePage().props.isLoadind = true;
-            this.close();
-          },
-          onFinish: () => {
-            usePage().props.isLoadind = false;
-            this.$eventBus.emit("data-received");
-          },
-        });
-      });
+    getDataOnMap() { 
+      let data = _getFiltersData.call(this);
+      data.as = 'map';
+      _getData.call(this, '/search', data, () => {this.$eventBus.emit("data-received")});
+      this.close();
     },
-    updateFilters(only) {      
-      let data = this.tempFilterStore.getFiltersValues();
-      data.filter = true;     
-      this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {       
+    updateFilters(props, data = null) {
+      data = data !== null ? data : _getFiltersData.call(this, true);
+      this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {     
         preserveState: true,
         preserveScroll: true,
         replace: true,
-        only: only ?? [],
+        only: props ?? [],
+        onFinish: () => {       
+          this.updateFoundMessage();          
+        },
       });
-    },
+    },  
     clearFilters() {
-      this.tempFilterStore.clearFilters();
-      this.updateFilters(["total"]);
+      let data = {};
+
+      if (this.$page.props?.filters?.hotels?.city) {
+        data.hotels = {};
+        data.hotels.city = this.$page.props?.filters?.hotels?.city;
+      }
+        
+      this.updateFilters(["total", "filters", "filter_tags"], data);
     },
     filterValueHandler(model, isAttr = false, key, value) {
-      let propsToUpdate = ["total"];
+      _updateFilterValue.call(this, model, isAttr, key, value);
+
+      let props = ["total", "filters", 'filter_tags'];
       if (key == "city") {
-        this.tempFilterStore.removeFilter("hotels", "city_area");
-        this.tempFilterStore.removeFilter("hotels", "city_district");
-        this.tempFilterStore.removeFilter("hotels", "metro");
-        propsToUpdate = _.union(propsToUpdate, [
-          "total",
-          "metros",
-          "city_areas",
-          "city_districts",
-        ]);
+        this.$page.props.filters.hotels.area = null;
+        this.$page.props.filters.hotels.district = null;
+        this.$page.props.filters.hotels.metro = null;        
+        props.push("metros", "city_areas", "city_districts");
       }
 
-      if (key == "city_area") {
-        this.tempFilterStore.removeFilter("hotels", "city_district");
-        propsToUpdate = _.union(propsToUpdate, ["total", "city_districts"]);
+      if (key == "area") {
+        this.$page.props.filters.hotels.district = null;  
+        props.push("metros", "city_districts");
       }
 
-      if (value == null) {
-        this.tempFilterStore.removeFilter(model, key);
-      } else {
-        this.tempFilterStore.updateFilter(model, isAttr, key, value);
+      if (key == "district") {
+        props.push("metros");        
       }
 
-      this.updateFilters(propsToUpdate);
+      this.updateFilters(props);
     },
     closeTag(obj) {
-      this.filterValueHandler(obj.modelType, false, obj.key, null);
+      this.filterValueHandler(obj.modelType, obj.isAttribute, obj.key, null);
     },
-  },
-  watch: {
-    isOpen: function (newVal, oldVal) {
-      if (newVal == true && (!oldVal || oldVal == false)) {
-        if (typeof window !== "undefined")
-          this.initialUrl = window.location.href;
-        document.body.classList.add("fixed");
-        this.tempFilterStore.filters = _.cloneDeep(this.filterStore.filters);
-        this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
-        this.handleResize();
-      }
-    },
-  },
+  },  
 };
 </script>
 

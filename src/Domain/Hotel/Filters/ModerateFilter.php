@@ -17,7 +17,25 @@ final class ModerateFilter extends \Parent\Filters\Filter
     public function handle(Builder $builder, \Closure $next): Builder
     {        
         if ($this->value != false)
-            $builder->where('moderate', true);
+            $builder->where(function($q) {
+                $q->where('moderate', true)
+                ->orWhereHas('media', function($q) {
+                    $q
+                        ->where('collection_name', 'images')
+                        ->where('custom_properties->moderate', true);
+                })
+                ->orWhereHas('rooms', function($q) {
+                    $q->where('moderate', true);
+                })
+                ->orDoesnthave('rooms')
+                ->orWhereHas('rooms', function($q) {
+                    $q->whereHas('media', function($q) {
+                        $q
+                            ->where('collection_name', 'images')
+                            ->where('custom_properties->moderate', true);
+                    });
+                });
+            });            
 
         return $next($builder);
     }

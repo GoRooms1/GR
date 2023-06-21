@@ -9,9 +9,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Json;
 use App\Http\Controllers\Controller;
-use Domain\Image\Models\Image;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ImageController extends Controller
 {
@@ -19,14 +19,14 @@ class ImageController extends Controller
     {
         $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'exists:images,id',
+            'ids.*' => 'exists:media,id',
         ]);
 
         $i = 1;
         $ids = $request->get('ids');
         foreach ($ids as $id) {
-            $image = Image::findOrFail($id);
-            $image->order = $i;
+            $image = Media::findOrFail($id);
+            $image->order_column = $i;
             $image->save();
             $i++;
         }

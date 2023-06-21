@@ -6,7 +6,6 @@ import "../css/style.css";
 import { createSSRApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-import FilterPagesService from "@/Services/FilterPagesService";
 import Layout from "@/Layouts/Layout.vue";
 import mitt from "mitt";
 
@@ -17,10 +16,10 @@ const app = createInertiaApp({
   resolve: (name) => {
     const page = resolvePageComponent(
       `./Pages/${name}.vue`,
-      import.meta.glob("./Pages/**/*.vue")
+      import.meta.glob("./Pages/*/*.vue")
     );
     page.then((module) => {
-      module.default.layout = module.default.layout || Layout;
+      module.default.layout = Layout;
     });
 
     return page;
@@ -31,4 +30,3 @@ const app = createInertiaApp({
     VueApp.use(plugin).mixin({ methods: {} }).mount(el);
   },
 });
-FilterPagesService();

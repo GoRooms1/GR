@@ -21,7 +21,7 @@
                             <tbody>
                             @foreach ($hotel->rooms as $room)
                                 <tr>
-                                    <td><img src="{{ asset($room->image->path) }}" class="img-fluid img-thumbnail"
+                                    <td><img src="{{ asset($room->getFirstMediaUrl('images', 'card')) }}" class="img-fluid img-thumbnail"
                                              style="max-width: 100px"></td>
                                     <td>{{ $room->name }}</td>
                                     <td>
@@ -40,7 +40,7 @@
                 @endif
             </div>
             <div class="col-5">
-                <img class="img-fluid" src="{{ asset($hotel->image->path) }}" alt="">
+                <img class="img-fluid" src="{{ asset($hotel->getFirstMediaUrl('images', 'card')) }}" alt="">
                 <div class="pt-3">
                     <div class="h4">Категории</div>
                     @if($hotel->categories()->count())

@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Domain\Attribute\Model\Attribute;
-use Domain\Hotel\ViewModels\HotelListViewModel;
-use Domain\Room\ViewModels\RoomListViewModel;
+use Domain\Object\ViewModels\ObjectsViewModel;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,14 +18,14 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = true;
+            $paramsData->room_filter = true;
             $paramsData->hotels->city = 'Москва';
-            $paramsData->rooms->attributes = [
+            $paramsData->rooms->attrs = [
                 optional(Attribute::forRooms()->where('name', 'Джакузи')->first())->id ?? 0
             ];            
         }
 
-        return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/jacuzzi'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/jacuzzi'));
     }
 
     public function centre(Request $request): Response | ResponseFactory
@@ -35,12 +34,12 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = false;
+            $paramsData->room_filter = false;
             $paramsData->hotels->city = 'Москва';
-            $paramsData->hotels->city_area = 'Центральный';
+            $paramsData->hotels->area = 'Центральный';
         }               
         
-        return Inertia::render('Hotel/Index', new HotelListViewModel($paramsData, '/centre'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/centre'));
     }
 
     public function fiveMinut(Request $request): Response | ResponseFactory
@@ -49,14 +48,14 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = false;
+            $paramsData->room_filter = false;
             $paramsData->hotels->city = 'Москва';
-            $paramsData->hotels->attributes = [
+            $paramsData->hotels->attrs = [
                 optional(Attribute::forHotels()->where('name', '5 минут до метро')->first())->id ?? 0
             ];
         }   
         
-        return Inertia::render('Hotel/Index', new HotelListViewModel($paramsData, '/5minut'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/5minut'));
     }
 
     public function lowcost(Request $request): Response | ResponseFactory
@@ -65,11 +64,11 @@ class CustomPageController extends Controller
         
         if (!$paramsData->filter) {
             $paramsData = ParamsData::getEmptyData();
-            $paramsData->isRoomsFilter = true;
+            $paramsData->room_filter = true;
             $paramsData->hotels->city = 'Москва';
             $paramsData->rooms->low_cost = true;
         }        
 
-        return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/lowcost'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/lowcost'));
     }
 }

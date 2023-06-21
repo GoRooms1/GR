@@ -12,36 +12,8 @@
         </div>
         <navigation classes="flex ml-auto hidden lg:flex" />
         <div class="pt-1 lg:hidden">
-        <button @click="$page.props.modals.menu = true">
-          <svg
-            width="24"
-            height="16"
-            viewBox="0 0 24 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1.3335 14.6665H22.6668"
-              stroke="#6170FF"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-            <path
-              d="M1.3335 8H22.6668"
-              stroke="#6170FF"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-            <path
-              d="M1.3335 1.33325H22.6668"
-              stroke="#6170FF"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </svg>
+        <button @click="openMenu()">
+          <img src="/img/menu.svg" alt="menu" width="24" height="16"/>       
         </button>
       </div>         
       </div>
@@ -58,5 +30,11 @@ export default {
     Navigation,
     Logo,
   },
+  methods: {
+    openMenu() {
+      this.$page.props.modals.menu = true;
+      document.body.classList.add("fixed");
+    }
+  }
 };
 </script>

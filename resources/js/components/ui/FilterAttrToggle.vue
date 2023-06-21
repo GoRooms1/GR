@@ -1,9 +1,18 @@
 <template>
   <button @click="toggle()" :class="btnClass + ' ' + activeClass">
-    <img :src="img" :class="imgClass + ' ' + (!value && img ? '' : 'hidden')" />
-    <img
+    <img v-if="!value && img" 
+      :src="img" :class="imgClass" 
+      :alt="title ?? 'img'"
+      :width="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
+      :height="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
+    />
+    
+    <img v-if="value && toggleImg"
       :src="toggleImg"
-      :class="imgClass + ' ' + (value && toggleImg ? '' : 'hidden')"
+      :class="imgClass"
+      :alt="title ?? 'img'"
+      :width="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
+      :height="(type == 'square' ? 24 : '') + (type == 'horizontal' ? 56 : '')"
     />
     <span :class="titleClass">{{ title }}</span>
     <slot />

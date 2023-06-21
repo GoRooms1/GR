@@ -19,7 +19,7 @@ final class GetCityDistrictSlugAction extends Action
      */
     public function handle(Address $address): string
     {       
-        return '/'.CustomStr::getCustomSlug($address->city)
+        return route('address').'/'.CustomStr::getCustomSlug($address->city)
             .(isset($address->city_area) ? '/area-'.CustomStr::getCustomSlug($address->city_area) : '')
             .'/district-'.CustomStr::getCustomSlug($address->city_district);
     }

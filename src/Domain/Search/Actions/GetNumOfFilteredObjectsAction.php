@@ -20,7 +20,7 @@ final class GetNumOfFilteredObjectsAction extends Action
      */
     public function handle(ParamsData $filters): int
     {
-        if ($filters->isRoomsFilter == true) {
+        if ($filters->room_filter == true) {
             return FilterRoomsCountAction::run($filters->rooms, $filters->hotels);
         } else {
             return FilterHotelsCountAction::run($filters->hotels);

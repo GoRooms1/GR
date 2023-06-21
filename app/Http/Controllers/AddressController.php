@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Domain\Search\DataTransferObjects\ParamsData;
-use Domain\Hotel\ViewModels\HotelListViewModel;
+use Domain\Object\ViewModels\ObjectsViewModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,6 +23,6 @@ class AddressController extends Controller
             $params->hotels = $this->decodeUrl($request->url());            
         }
 
-        return Inertia::render('Hotel/Index', new HotelListViewModel($params, Str::start($request->path(), '/')));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($params, Str::start($request->path(), '/')));
     }
 }

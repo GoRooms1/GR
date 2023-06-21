@@ -47,7 +47,7 @@ final class GenerateSeoDataContent extends Action
         if (! $hotel) {
             return $seoData;
         }
-        $seoData->description = $type.' '.$hotel?->name;
+        $seoData->description = $type.' '.$hotel->name;
         $minimals = MinimumCostsCalculation::run($hotel);
         /** @var MinCostsData $minimal */
         foreach ($minimals as $minimal) {

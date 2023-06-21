@@ -5,12 +5,12 @@
     class="flex fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex-col justify-center items-center lg:hidden px-7"      
   >
     <button v-on:click="hide()" class="absolute top-[12px] right-[16px]">
-      <img src="/img/close.svg" />
+      <img src="/img/close.svg" alt="close"/>
     </button>
     <div class="flex flex-col px-6 py-8 bg-white rounded-3xl w-full mb-[17%]">
       <h3 class="mb-6 font-semibold">Меню</h3>
       <responsive-nav-link
-        href="/search_map"
+        href="/?as=map"
         title="Карта"
         classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"
       />
@@ -78,7 +78,6 @@
 <script>
 import { Link } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/components/ui/ResponsiveNavLink.vue";
-import { usePage } from "@inertiajs/vue3";
 
 export default {
   components: {
@@ -89,8 +88,8 @@ export default {
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.handleResize);
     this.handleResize();
-    if (!usePage().props.modals) usePage().props.modals = {};
-    usePage().props.modals.menu = false;
+    if (!this.$page.props.modals) this.$page.props.modals = {};
+    this.$page.props.modals.menu = false;
   },
   destroyed() {
     if (typeof window !== "undefined")
@@ -103,15 +102,15 @@ export default {
   },
   computed: {
     isOpen() {
-      return usePage().props.modals?.menu ?? false;
+      return this.$page.props.modals?.menu ?? false;
     }
   },
-  methods: {
-    show() {
-      usePage().props.modals.menu = true;
-    },
+  methods: {    
     hide() {
-      usePage().props.modals.menu = false;      
+      this.$page.props.modals.menu = false;
+
+      if (this.$page.props?.filters?.as != 'map')
+        document.body.classList.remove("fixed");     
     },    
     handleResize() {      
       if (typeof window !== "undefined") this.screenWidth = window.innerWidth;

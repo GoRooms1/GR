@@ -210,6 +210,8 @@ class CreateSeoUrls
             $seo->url = '/address/'.CustomStr::getCustomSlug($address->city).'/metro-'.CustomStr::getCustomSlug($metro->name);
             $seo->metro = $metro->name;
             $seo->lastOfType = 'metro';
+            if ($address)
+                $seo->address = AddressData::fromModel($address);
 
             $seo = GenerateSeoDataContent::run($seo);
             $pageDescription = PageDescription::updateOrCreate(['url' => $seo->url], [

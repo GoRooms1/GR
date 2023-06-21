@@ -71,10 +71,6 @@ final class Image extends Model
      */
     public function getPathAttribute(string $value): string|array
     {
-        //TODO optimisate with spatie medialibrary package
-        //return str_replace('storage', 'storage', $value);
-        $value = Str::start($value, '/');
-
-        return $value;
+        return Str::start(str_replace('storage', 'image', $value), '/');
     }
 }

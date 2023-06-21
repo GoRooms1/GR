@@ -3,7 +3,7 @@
     v-click-outside="hide"
     :class="(collapsed ? 'z-[1]' : 'z-[4]') + ' ' + position"
   >
-    <button
+    <button      
       @click="toggle()"
       type="button"
       class="w-full px-[12px] h-[32px] bg-white rounded-[8px] flex items-center justify-between"
@@ -11,24 +11,17 @@
       <span class="text-[14px] leading-[16px]">{{
         selectedOption ? selectedOption : placeholder
       }}</span>
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="block"
-        :class="collapsed ? '' : 'rotate-180'"
-      >
-        <path
-          d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
+      <img v-if="!selectedOption || $page.props?.is_moderator === false" src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'" width="12" height="12"/>
     </button>
+    <div v-if="selectedOption && $page.props?.is_moderator === true" class="relative">
+      <button
+        type="button"
+        @click="clear()"
+        class="px-[12px] h-[32px] select-clear"
+      >
+        <img src="/img/select_clear.svg" alt="clear"/>
+      </button>
+    </div>
     <div
       v-if="!collapsed"
       class="absolute max-[768px]:top-[32px] max-[768px]:right-[-16px] z-10 md:w-[376px] w-[calc(200%+48px)]"

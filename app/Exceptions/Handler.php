@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 use Inertia\Inertia;
 use Log;
@@ -46,16 +45,15 @@ class Handler extends ExceptionHandler
     {        
         $response = parent::render($request, $e);
 
-        if (! app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403, 401])) {
-            Log::info($response->status());
-            return Inertia::render('Error', [
-                    'status' => $response->status(),
-                    'title' => trans('error.'.$response->status().'.title'),
-                    'description' => trans('error.'.$response->status().'.description'),
+        if (! app()->environment(['local', 'testing']) && in_array($response->getStatusCode(), [500, 503, 404, 403, 401])) {           
+            return Inertia::render('Error/Error', [
+                    'status' => $response->getStatusCode(),
+                    'title' => trans('error.'.$response->getStatusCode().'.title'),
+                    'description' => trans('error.'.$response->getStatusCode().'.description'),
                 ])
                 ->toResponse($request)
-                ->setStatusCode($response->status());
-        } elseif ($response->status() === 419) {
+                ->setStatusCode($response->getStatusCode());
+        } elseif ($response->getStatusCode() === 419) {
             return back()->with([
                 'message' => trans('error.419.description'),
             ]);

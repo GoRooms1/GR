@@ -1,11 +1,12 @@
 <template>
   <div class="bg-slate-200 w-full h-full">
-    <img
-      v-if="!noImage"
+    <img      
       :src="src"
       :class="class"
-      alt="img"
-      @error="loadError"
+      alt="img"      
+      :loading="lazy ? 'lazy' : 'eager'"
+      :width="width"
+      :height="height"
     />
   </div>
 </template>
@@ -14,17 +15,10 @@
 export default {
   props: {
     src: String,
-    class: String,
-  },
-  data() {
-    return {
-      noImage: false,
-    };
-  },
-  methods: {
-    loadError(e) {
-      this.noImage = true;
-    },
+    class: String, 
+    lazy: Boolean,
+    width: [String, Number],
+    height: [String, Number],
   },
 };
 </script>

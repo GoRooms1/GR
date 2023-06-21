@@ -15,9 +15,7 @@ class ContactController extends Controller
 {
     public function index(GetContactPageAction $action): Response | ResponseFactory
     {
-        return Inertia::render('Contacts/Index', [
-            'model' => new PageDetailViewModel($action->handle()),
-        ]);
+        return Inertia::render('Contacts/Index', new PageDetailViewModel($action->handle()));
     }
 
     public function store(FeedbackData $feedbackData): \Illuminate\Http\RedirectResponse

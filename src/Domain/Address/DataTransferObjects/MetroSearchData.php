@@ -25,7 +25,7 @@ final class MetroSearchData extends \Parent\DataTransferObjects\Data
             'name' => $metro->name,
             'color' => $metro->color,            
             'city' => !is_null($metro['city']) ? ('г. '.$metro['city']) : '',
-            'link' => route('address').GetMetroSlugAction::run($metro->name, $metro['city']),
+            'link' => GetMetroSlugAction::run($metro->name, $metro['city']),
         ]);
     }
 }

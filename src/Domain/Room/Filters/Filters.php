@@ -8,7 +8,7 @@ use Parent\Filters\Filter;
 
 enum Filters: string
 {
-    case RoomAttributes = 'attributes';
+    case RoomAttributes = 'attrs';
     case IsHot = 'is_hot';
     case LowCost = 'low_cost';
     case PeriodCost = 'period_cost';

@@ -53,7 +53,6 @@
 
 <script>
 import vClickOutside from "click-outside-vue3";
-import _ from "lodash";
 import moment from "moment";
 
 export default {
@@ -63,35 +62,15 @@ export default {
   props: {
     modelValue: String,
   },
-  mounted() {
-    this.hours = _.transform(
-      _.range(0, 24, 1),
-      function (result, n) {
-        let val = n;
-        if (val < 10) val = "0" + val;
-        result.push(val.toString());
-        return val.toString();
-      },
-      []
-    );
-    this.minutes = _.transform(
-      _.range(0, 46, 15),
-      function (result, n) {
-        let val = n;
-        if (val < 10) val = "0" + val;
-        result.push(val.toString());
-        return val.toString();
-      },
-      []
-    );
+  mounted() {    
     this.$emit("update:modelValue", this.value);
   },
   data() {
     return {
       isActive: false,
       value: this.modelValue ?? moment().format("HH:mm"),
-      hours: ["00"],
-      minutes: ["00"],
+      hours: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"],
+      minutes: ["00", "15", "30", "45"],
     };
   },
   computed: {

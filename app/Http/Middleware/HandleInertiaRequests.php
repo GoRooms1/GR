@@ -3,12 +3,15 @@
 namespace App\Http\Middleware;
 
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
+use Domain\Address\Actions\GetLocationByIp;
+use Domain\Address\Actions\GetLocationFromSession;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
 use Domain\User\Actions\GetLoggedUserModeratorStatusAction;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Str;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -44,7 +47,20 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return array_merge(parent::share($request), [
+        $isModerator = GetLoggedUserModeratorStatusAction::run();
+        $geoLocation = null;
+        $city = $request->get('hotels', [])['city'] ?? null;   
+             
+        if (is_null($city) && !$isModerator) {
+            $geoLocation = GetLocationFromSession::run($request->ip());
+            $request->merge([
+                'hotels' => [
+                    'city' => $geoLocation->city,
+                ]
+            ]);
+        }
+
+        return array_merge(parent::share($request), [            
             'modals' => [],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
@@ -54,9 +70,12 @@ class HandleInertiaRequests extends Middleware
                 'rooms' => fn() => GetAvailibleRoomsCountAction::run(),
                 'cities' => fn() => GetAvailibleCitiesCountAction::run(),
             ],
+            'location' => fn() => GetLocationFromSession::run($request->ip()),
             'contacts' => fn() => GetContactsSettingsAction::run(),
+            'path' => Str::start($request->path(), '/'),
             'app_url' => fn() => config('app.url'),
-            'is_moderator' => fn() => GetLoggedUserModeratorStatusAction::run(),
+            'is_moderator' => fn() => $isModerator,
+            'yandex_api_key' => fn() => config('services.yandex.map.key'),
         ]);
     }
 }

@@ -8,9 +8,9 @@ use App\Helpers\Json;
 use App\Parents\Model;
 use Carbon\Carbon;
 use Domain\Image\Actions\UploadImageAction;
-use Domain\Image\Models\Image;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Support\Enums\ModelNamesEnum;
 
 trait UploadImage
@@ -33,10 +33,10 @@ trait UploadImage
     /**
      * Delete Image
      *
-     * @param  Image  $image
+     * @param  Media  $image
      * @return JsonResponse
      */
-    public function delete(Image $image): JsonResponse
+    public function delete(Media $image): JsonResponse
     {
         try {
             if ($this->checkLastImage($image)) {
@@ -78,12 +78,12 @@ trait UploadImage
         }
     }
 
-    private function checkLastImage(Image $image): bool
+    private function checkLastImage(Media $image): bool
     {
         /** @var class-string<Model> $model */
         $model = $image->model_type;
         $object = $model::find($image->model_id);
 
-        return $object->images()->count() === 1;
+        return $object->getMedia()->count() === 1;
     }
 }

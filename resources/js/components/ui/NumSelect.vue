@@ -16,24 +16,7 @@
       <span class="text-[0.875rem] leading-[1rem]">{{
         getOptionName(selectedOption) ?? placeholder
       }}</span>
-      <svg
-        v-if="selectedOption == null || notNull == true"
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="block"
-        :class="collapsed ? '' : 'rotate-180'"
-      >
-        <path
-          d="M1.83337 4.33333L6.00004 8.5L10.1667 4.33333"
-          stroke="#6170FF"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
+      <img v-if="selectedOption == null || notNull == true" src="/img/select_arrow.svg" alt="arrow" class="block"  :class="collapsed ? '' : 'rotate-180'" width="12" height="12"/>     
     </button>
     <div
       v-if="!collapsed"

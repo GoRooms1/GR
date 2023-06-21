@@ -20,7 +20,7 @@ final class CitySearchData extends \Parent\DataTransferObjects\Data
     {       
         return self::from([            
             'name' => $address->city,
-            'link' => route('address').GetCitySlugAction::run($address),
+            'link' => GetCitySlugAction::run($address),
         ]);
     }
 }

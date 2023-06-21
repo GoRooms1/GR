@@ -78,11 +78,11 @@ class Filter extends AbstractWidget
 
             $data = $this->decodeUrl($url);
 
-            $this->city = $data['city'];
-            $this->metro = $data['metro'];
-            $this->area = $data['area'];
-            $this->district = $data['district'];
-            $this->street = $data['street'];
+            $this->city = $data->city;
+            $this->metro = $data->metro;
+            $this->area = $data->area;
+            $this->district = $data->district;
+            $this->street = $data->street;
         } else {
             if ($metro_req = Request::get('metro')) {
                 $metro = Metro::where('name', $metro_req)->first();

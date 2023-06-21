@@ -39,10 +39,11 @@
               <tr>
                 <td>{{ $hotel->id }}</td>
                 <td>
-                  <img src="{{ asset($hotel->image->path) }}" alt="" class="img-fluid"
+                  <img src="{{ asset($hotel->getFirstMediaUrl('images', 'card')) }}" alt="" class="img-fluid"
                        style="max-width: 100px">
                 </td>
-                <td>
+                @if ($hotel->slug != null && $hotel->slug != '')
+                <td>                  
                   <a href="{{ route('admin.hotels.show', $hotel) }}"
                      class="{{ $hotel->description === null ? 'text-danger' : '' }}">{{ $hotel->name }}</a>
                 </td>
@@ -55,6 +56,7 @@
                     </button>
                   </div>
                 </td>
+                @endif
               </tr>
             @endforeach
             </tbody>

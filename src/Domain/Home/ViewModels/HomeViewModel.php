@@ -6,7 +6,6 @@ namespace Domain\Home\ViewModels;
 
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
-use Domain\Page\DataTransferObjects\PageData;
 use Domain\PageDescription\Actions\GetPageDescriptionByUrlAction;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Search\Traits\SearchResultTrait;

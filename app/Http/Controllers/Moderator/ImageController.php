@@ -9,9 +9,9 @@ namespace App\Http\Controllers\Moderator;
 
 use App\Helpers\Json;
 use App\Http\Controllers\Controller;
-use Domain\Image\Models\Image;
 use Domain\Image\Traits\UploadImage;
 use Illuminate\Http\JsonResponse;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Image
@@ -21,13 +21,13 @@ class ImageController extends Controller
     use UploadImage;
 
     /**
-     * @param  \Domain\Image\Models\Image  $image
+     * @param  Media $image
      * @return JsonResponse
      */
-    public function moderate(Image $image): JsonResponse
+    public function moderate(Media $image): JsonResponse
     {
         try {
-            $image->moderate = false;
+            $image->setCustomProperty('moderate', false);
             $image->save();
 
             return Json::good(['image' => $image]);

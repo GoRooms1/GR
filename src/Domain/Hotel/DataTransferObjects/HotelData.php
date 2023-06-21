@@ -11,6 +11,7 @@ use Domain\Hotel\Actions\MinimumCostsCalculation;
 use Domain\Hotel\Models\Hotel;
 use Domain\Hotel\ValueObjects\PhoneNumberValueObject;
 use Domain\Image\Models\Image;
+use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\DataTransferObjects\RoomData;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,6 +19,7 @@ use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 final class HotelData extends \Parent\DataTransferObjects\Data
 {
@@ -41,10 +43,9 @@ final class HotelData extends \Parent\DataTransferObjects\Data
         public ?string $slug,
         public bool $hide_phone,
         public ?string $email,
-        public bool $checked_type_fond,
-        public Image $image,
-        /** @var Collection<Image>|Image[] */
-        public Collection|array $images,
+        public bool $checked_type_fond,        
+        #[DataCollectionOf(MediaImageData::class)]     
+        public null|Lazy|DataCollection $images,
         public Lazy|AddressData|null $address,
         public Lazy|HotelTypeData|null $type,
         public Lazy|PageDescriptionData|null $meta,
@@ -66,14 +67,13 @@ final class HotelData extends \Parent\DataTransferObjects\Data
             'route_title' => $hotel->route_title,
             'hide_phone' => (bool) $hotel->hide_phone,
             'checked_type_fond' => (bool) $hotel->checked_type_fond,
-            'phone' => $hotel->phone,
-            'image' => $hotel->image,
-            'images' => $hotel->images,
+            'phone' => $hotel->phone,            
+            'images' => MediaImageData::collection($hotel->getMedia('images')),
             'address' => Lazy::whenLoaded('address', $hotel, fn () => AddressData::from($hotel->address)),
             'type' => Lazy::whenLoaded('type', $hotel, fn () => HotelTypeData::from($hotel->type)),
             'meta' => Lazy::whenLoaded('meta', $hotel, fn () => PageDescriptionData::from($hotel->meta)),
             'attrs' => Lazy::whenLoaded('attrs', $hotel, fn () => AttributeData::collection($hotel->attrs)),
-            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collection($hotel->metros)),            
+            'metros' => Lazy::whenLoaded('metros', $hotel, fn () => MetroData::collectionWithAddressSlug($hotel->metros, $hotel->address)),            
             'min_costs' => MinimumCostsCalculation::run($hotel),
         ]);
     }

@@ -22,7 +22,7 @@ final class CityAreaSearchData extends \Parent\DataTransferObjects\Data
         return self::from([            
             'name' => $address->city_area,           
             'city' => 'г. '.$address->city,
-            'link' => route('address').GetCityAreaSlugAction::run($address),
+            'link' => GetCityAreaSlugAction::run($address),
         ]);
     }
 }

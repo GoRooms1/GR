@@ -545,7 +545,7 @@
             let word = 'image'
             existFile.push({
               id: image.id,
-              path: "{{ url('/') }}" + "/" + image.path,
+              path: image.url,
               name: image.name,
               moderate_text: image.moderate ? 'Проверка модератором' : 'Опубликовано',
               moderate: image.moderate
@@ -567,8 +567,8 @@
             if (existFile.length === 1) {
               if (file.xhr) {
                 let image = JSON.parse(file.xhr.response).payload.images[0]
-                console.log("{{ url('/') }}" + "/" + image.path)
-                mockFile = {name: file.name, dataURL: "{{ url('/') }}" + "/" + image.path, size: 0};
+                console.log(image.url)
+                mockFile = {name: file.name, dataURL: image.url, size: 0};
               } else {
                 mockFile = {name: file.name, dataURL: file.dataURL, size: 0};
               }
@@ -627,25 +627,25 @@
         }
       });
 
-      let mockFile
+      let mockFile;
 
-      @foreach($hotel->images as $image)
+      @foreach($hotel->getMedia('images') as $image)
 
         existFile.push({
           id: "{{ $image->id }}",
           name: "{{ $image->name }}",
-          path: "{{ url($image->path) }}",
-          moderate_text: "{{ $image->moderate ? 'Проверка модератором' : 'Опубликовано' }}",
-          moderate: {!! $image->moderate ? 'true' : 'false' !!}
+          path: "{{ $image->getUrl() }}",
+          moderate_text: "{{ $image->getCustomProperty('moderate') ? 'Проверка модератором' : 'Опубликовано' }}",
+          moderate: "{{ $image->getCustomProperty('moderate')}}"
         })
 
         mockFile = {
           name: '{{ $image->name }}',
-          dataURL: '{{ url($image->path) }}',
-          size: {{ File::exists($image->getRawOriginal('path')) ? File::size($image->getRawOriginal('path')) : 0 }}
+          dataURL: '{{ $image->getUrl() }}',
+          size: '{{ $image->size }}'
         };
         uploader.emit("addedfile", mockFile);
-        uploader.emit("thumbnail", mockFile, '{{ url($image->path) }}');
+        uploader.emit("thumbnail", mockFile, '{{ $image->getUrl() }}');
         uploader.emit("complete", mockFile);
         uploader.files.push(mockFile)
       @endforeach

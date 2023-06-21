@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Domain\Address\DataTransferObjects;
 
+use Domain\Address\Actions\GetMetroSlugAction;
+use Domain\Address\Models\Address;
 use Domain\Address\Models\Metro;
-use Domain\Hotel\DataTransferObjects\HotelData;
-use Spatie\LaravelData\Lazy;
+use Illuminate\Database\Eloquent\Collection;
+use Spatie\LaravelData\DataCollection;
 use Support\DataProcessing\Traits\CustomStr;
 
 final class MetroData extends \Parent\DataTransferObjects\Data
@@ -19,19 +21,30 @@ final class MetroData extends \Parent\DataTransferObjects\Data
         public int $distance,
         public int $hotel_id,
         public bool $custom,
-        public string $slug,
-        public Lazy|HotelData|null $hotel,
+        public string $slug,        
     ) {
     }
 
     public static function fromModel(Metro $metro): self
     {
-        $slug = CustomStr::getCustomSlug($metro->name);
-
         return self::from([
             ...$metro->toArray(),
-            'slug' => $slug,
-            'hotel' => Lazy::whenLoaded('hotel', $metro, fn () => HotelData::fromModel($metro->hotel)),
+            'slug' => CustomStr::getCustomSlug($metro->name),          
         ]);
     }
+
+    public static function collectionWithAddressSlug(Collection $metros, Address $address): DataCollection
+    {        
+        $collection = [];
+
+        foreach ($metros as $metro) {           
+            $collection[] = MetroData::from([
+                ...$metro->toArray(),
+                'slug' => GetMetroSlugAction::run($metro->name, $address->city),     
+            ]);       
+        }
+
+        return new DataCollection(MetroData::class, $collection);
+    }
+
 }

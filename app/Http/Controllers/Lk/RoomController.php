@@ -178,7 +178,7 @@ class RoomController extends Controller
      */
     public function getAttributes(int $id): JsonResponse
     {
-        $room = Room::findOrFail($id);
+        $room = Room::without('hotel')->findOrFail($id);
 
         return response()->json(['attrs' => $room->attrs, 'room' => $room]);
     }

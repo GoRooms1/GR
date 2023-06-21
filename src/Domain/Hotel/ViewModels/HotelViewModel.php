@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\ViewModels;
 
-use Arr;
-use Domain\Hotel\DataTransferObjects\HotelData;
+use Cache;
+use Domain\Hotel\DataTransferObjects\HotelShowData;
 use Domain\Hotel\Models\Hotel;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\FilterRoomsInHotelPaginateAction;
-use Domain\Room\DataTransferObjects\RoomData;
+use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Search\Traits\FiltersParamsTrait;
 use Domain\Search\Traits\SearchResultTrait;
 use Spatie\LaravelData\CursorPaginatedDataCollection;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\PaginatedDataCollection;
+use Support\DataProcessing\Traits\ResultsCaching;
 
 /**
  * Summary of HotelViewModel
@@ -24,6 +25,7 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
 {
     use SearchResultTrait;
     use FiltersParamsTrait;
+    use ResultsCaching;
 
     public function __construct(        
         public Hotel $hotel,
@@ -36,28 +38,29 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
      * @return PageDescriptionData
      */
     public function page_description(): PageDescriptionData
-    {
-        return PageDescriptionData::fromHotel($this->hotel);
+    {        
+        return Cache::remember('hotel-'.$this->hotel->id.'-pd', now()->addDays(7), fn() => PageDescriptionData::fromHotel($this->hotel));
     }
 
     /**
-     * @return HotelData
+     * @return HotelShowData
      */
-    public function hotel(): HotelData
-    {
-        return $this->hotel->load('attrs')->getData();
+    public function hotel(): HotelShowData
+    {        
+        return Cache::remember('hotel-'.$this->hotel->id, now()->addDays(7), fn() => HotelShowData::fromModel($this->hotel->load('attrs')));
     }
-
-    /**
-     * @return DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
-     */
-    public function rooms(): DataCollection|CursorPaginatedDataCollection|PaginatedDataCollection
+    
+    public function rooms()
     {
-        return RoomData::collection(FilterRoomsInHotelPaginateAction::run($this->hotel->id, $this->params->rooms));
-    }
+        $params = $this->params;
+        $params->hotel_id = $this->hotel->id;
+        $page = request()->get("page", 1);
 
-    public function query_string(): string
-    {
-        return Arr::query($this->params->toArray());
+        return $this->getCahchedData(
+            $params,
+            $page,
+            'rooms-hotel-'.$this->hotel->id.'-',
+            fn() => RoomCardData::collection(FilterRoomsInHotelPaginateAction::run($this->hotel->id, $this->params->rooms))
+        );
     }
 }
