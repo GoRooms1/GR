@@ -20,7 +20,8 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
         public RoomParamsData $rooms,
         public ?int $hotel_id,        
         public ?string $search,
-        public ?bool $filter,        
+        public ?bool $filter,
+        public ?string $as,
         public bool $room_filter = false,
     ) {
     }
@@ -37,7 +38,8 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
             'room_filter' => $isRoomsFilter,
             'hotel_id' => $request->get('hotel_id'),     
             'search' => $request->get('search'),
-            'filter' => filter_var($request->get('filter', false), FILTER_VALIDATE_BOOLEAN),           
+            'filter' => filter_var($request->get('filter', false), FILTER_VALIDATE_BOOLEAN),
+            'as' => $request->get('as'),         
         ]);
     }
 

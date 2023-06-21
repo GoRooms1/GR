@@ -6,56 +6,55 @@
     :meta_keywords="page_description?.meta_keywords"
     :meta_description="page_description?.meta_description"
   >
-  <component is="script" type="application/ld+json">
-    {
-      "@context": "https://schema.org/",
-      "@type": "Product",
-      "name": "{{ hotel?.name }}",
-      "image": {{ (hotel?.images ?? []).flatMap( img => img.url) }},
-      "description": "{{ (hotel?.description ?? '').replace(/(<([^>]+)>)/gi, "")}}",
-      "review": {
-        "@type": "Review",
-        "reviewRating": {
-          "@type": "Rating",
-          "worstRating":"0",
-          "ratingValue": "0",
-          "bestRating": "0"
-        },
-        "author": {
-          "@type": "Person",
-          "name": ""
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "bestRating":"0",
-          "worstRating":"0",
-          "ratingValue": "0",
-          "reviewCount": "1"            
-        },
-        "hasOfferCatalog": {
-          "@type": "OfferCatalog",
-          "name": "Услуги отеля",
-          "itemListElement": {{ (hotel?.attrs ?? []).flatMap( attr =>  JSON.stringify({
-                type: "Offer", 
-                itemOffered: {
-                  type: "Service",
-                  name: attr.name
-                }
-              }).replace("type", "@type")
-            )
-          }}
-        }
-      }    
-    }
-  </component>
-  </AppHead>
-  <search-filter-modal :url="'/hotels/' + hotel.slug" />
+    <component is="script" type="application/ld+json">
+      {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": "{{ hotel?.name }}",
+        "image": {{ (hotel?.images ?? []).flatMap( img => img.url) }},
+        "description": "{{ (hotel?.description ?? '').replace(/(<([^>]+)>)/gi, "")}}",
+        "review": {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "worstRating":"0",
+            "ratingValue": "0",
+            "bestRating": "0"
+          },
+          "author": {
+            "@type": "Person",
+            "name": ""
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "bestRating":"0",
+            "worstRating":"0",
+            "ratingValue": "0",
+            "reviewCount": "1"            
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Услуги отеля",
+            "itemListElement": {{ (hotel?.attrs ?? []).flatMap( attr =>  JSON.stringify({
+                  type: "Offer", 
+                  itemOffered: {
+                    type: "Service",
+                    name: attr.name
+                  }
+                }).replace("type", "@type")
+              )
+            }}
+          }
+        }    
+      }
+    </component>
+  </AppHead> 
   <div
-    v-if="$page.props.modals.search !== false"
+    v-if="$page.props.modals.search === true"
     class="search-panel-modal w-full mx-auto transition fixed lg:hidden px-[16px]"
   >
     <div class="relative">
-      <Search for-modal :url="'/hotels/' + hotel.slug" />
+      <Search v-if="$page.props.modals.search === true" for-modal/>
     </div>
   </div>
 
@@ -190,14 +189,16 @@
     </div>
   </div>
   <div class="py-4"></div>
-  <rooms-list :rooms="rooms" :hotel-id="hotel?.id ?? 0" />
+  <list-header title="Все номера отеля" />
+  <object-list type="rooms" :objects="rooms"/>
 </template>
 
 <script lang="ts">
+import { defineAsyncComponent } from 'vue'
 import AppHead from "@/components/ui/AppHead.vue";
 import Layout from "@/Layouts/Layout.vue";
-import SearchLayout from "@/Layouts/SearchLayout.vue";
-import RoomsList from "@/Pages/Room/partials/RoomsList.vue";
+import ListHeader from '@/components/ui/ListHeader.vue';
+import ObjectList from "@/Pages/Objects/partials/ObjectList.vue";
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Tabs from "@/components/ui/Tabs.vue";
 import Tab from "@/components/ui/Tab.vue";
@@ -205,8 +206,6 @@ import Image from "@/components/ui/Image.vue";
 import HotelAddress from "./partials/HotelAddress.vue";
 import HotelMetroItem from "@/components/ui/HotelMetroItem.vue";
 import CostItem from "./partials/CostItem.vue";
-import SearchFilterModal from "@/components/widgets/SearchFilterModal.vue";
-import Search from "@/components/widgets/Search.vue";
 import { loadYandexMap } from "@/Services/loadYandexMap.js";
 import {_getFiltersData} from "@/Services/filterUtils.js";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -214,12 +213,12 @@ import SwiperCore, { Pagination, Navigation } from "swiper";
 
 let myMap = null;
 SwiperCore.use([Pagination, Navigation]);
-export default {
-  layout: SearchLayout,
+export default {  
   components: {    
     AppHead,
     Layout,
-    RoomsList,
+    ObjectList,
+    ListHeader,
     CashbackTag,
     Tabs,
     Tab,
@@ -227,10 +226,11 @@ export default {
     HotelAddress,
     HotelMetroItem,
     CostItem,
-    SearchFilterModal,
-    Search,
     Swiper,
     SwiperSlide,
+    Search: defineAsyncComponent(() =>
+      import('@/components/widgets/Search.vue')
+    ),
   },
   props: {
     page_description: Object,
@@ -311,10 +311,10 @@ export default {
             preserveScroll: true,
             only: ["rooms"],
             onStart: () => {
-              this.$page.props.isLoadind = true;
+              this.$page.props.isLoading = true;
             },
             onFinish: () => {
-              this.$page.props.isLoadind = false;
+              this.$page.props.isLoading = false;
             },
           }
         );

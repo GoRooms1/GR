@@ -1,7 +1,7 @@
 <template>
   <div class="flex" :class="classes">
     <nav-link
-      href="/search_map"
+      href="/?as=map"
       :title="simple ? '' : 'Карта'"
       classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"
     />

@@ -10,7 +10,7 @@
     <div class="flex flex-col px-6 py-8 bg-white rounded-3xl w-full mb-[17%]">
       <h3 class="mb-6 font-semibold">Меню</h3>
       <responsive-nav-link
-        href="/search_map"
+        href="/?as=map"
         title="Карта"
         classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"
       />
@@ -105,12 +105,12 @@ export default {
       return this.$page.props.modals?.menu ?? false;
     }
   },
-  methods: {
-    show() {
-      this.$page.props.modals.menu = true;
-    },
+  methods: {    
     hide() {
-      this.$page.props.modals.menu = false;      
+      this.$page.props.modals.menu = false;
+
+      if (this.$page.props?.filters?.as != 'map')
+        document.body.classList.remove("fixed");     
     },    
     handleResize() {      
       if (typeof window !== "undefined") this.screenWidth = window.innerWidth;

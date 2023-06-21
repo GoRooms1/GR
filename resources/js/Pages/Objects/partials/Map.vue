@@ -20,7 +20,7 @@
 <script>
 import vClickOutside from "click-outside-vue3";
 import { loadYandexMap } from "@/Services/loadYandexMap.js";
-import RoomCard from "@/Pages/Room/partials/RoomCard.vue";
+import RoomCard from "@/components/ui/RoomCard.vue";
 import {_getFiltersData} from "@/Services/filterUtils.js";
 
 let searchMap = null;
@@ -62,11 +62,7 @@ export default {
     };
   },
   methods: {
-    loadMapLazy() {
-      // let mapInitDelay = 3000;
-      // if (typeof window !== "undefined") {
-      //   if (window.innerWidth < 768) mapInitDelay = 5100;
-      // }
+    loadMapLazy() {      
       loadYandexMap(this.$page.props.yandex_api_key, 10, this.initMap)
     },
     loadMapImmediate() {
@@ -165,16 +161,17 @@ export default {
         placemark.events.add(["click"], (e) => {
           let data = _getFiltersData.call(this);
           data.hotel_id = hotel.id;
-          this.$inertia.get("/search_map", data, {
+          data.as = 'map';
+          this.$inertia.get(this.$page.props.path, data, {
             replace: true,
             preserveState: true,
             preserveScroll: true,
             only: ["rooms"],
             onStart: () => {
-              this.$page.props.isLoadind = true;
+              this.$page.props.isLoading = true;
             },
             onFinish: () => {
-              this.$page.props.isLoadind = false;
+              this.$page.props.isLoading = false;
             },
             onSuccess: () => {
               this.selectedRooms = this.rooms;

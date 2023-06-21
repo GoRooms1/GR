@@ -38,8 +38,7 @@ Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/hot', [RoomController::class, 'hot'])->name('rooms.hot');
 Route::post('/rooms/booking', [RoomController::class, 'booking'])->name('rooms.booking');
 
-Route::get('/search', [SearchController::class, 'list'])->name('search.list');
-Route::get('/search_map', [SearchController::class, 'map'])->name('search.map');
+Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
 Route::get('/address/{city?}/{area?}/{district?}/{street?}', [AddressController::class, 'address'])->name('address');
 
@@ -63,9 +62,3 @@ Route::get('/rules', [PageController::class, 'show']);
 
 Route::get('lk/start', [Lk\HomeController::class, 'start'])->name('lk.start');
 Route::post('lk/object/store', [Lk\ObjectController::class, 'store'])->name('lk.object.store');
-
-//Test routes
-Route::prefix('/test')->name('test.')->group(function () {
-    Route::get('/hotels', [\App\Http\Controllers\Test\HotelController::class, 'index'])->name('hotels.index');
-    Route::get('/rooms', [\App\Http\Controllers\Test\RoomController::class, 'index'])->name('rooms.index');
-});

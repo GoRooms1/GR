@@ -158,4 +158,9 @@ trait FiltersParamsTrait
 
         return $tags;
     }
+
+    public function has_filters(): bool 
+    {
+        return true;
+    }
 }

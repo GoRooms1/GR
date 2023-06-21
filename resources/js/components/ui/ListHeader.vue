@@ -7,7 +7,7 @@
         </span>
         <h1 v-else-if="h1" 
           class="text-white font-bold xl:text-3xl"
-          :class="$page.props.isLoadind == true ? 'invisible' : ''"
+          :class="$page.props.isLoading == true ? 'invisible' : ''"
         >
           {{ h1 }}
         </h1>

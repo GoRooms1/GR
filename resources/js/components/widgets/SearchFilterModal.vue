@@ -1,6 +1,5 @@
 <template>
-  <div
-    v-if="isOpen === true"
+  <div    
     class="items-center justify-center fixed top-0 left-0 z-40 bg-[#D2DAF0B3] w-full h-[100vh] overflow-hidden backdrop-blur-[2.5px] flex"
   >
     <div
@@ -14,7 +13,7 @@
       </button>
       <div class="max-w-[832px] w-full mx-auto px-[16px]">
         <div class="lg:block flex flex-col relative">
-          <Search for-modal :url="url ?? $page.url.split('?')[0]" />
+          <Search for-modal />
           <div class="flex justify-between ordering">
             <div
               class="lg:p-[8px] p-[24px] bg-[#EAEFFD] rounded-b-[16px] lg:rounded-t-none lg:w-[fit-content] w-full rounded-t-[16px] items-center gap-[8px] flex-wrap justify-center flex"
@@ -425,24 +424,9 @@ export default {
     FilterCollapse,
     RatingSelect,
     Search,
-  },
-  props: {
-    url: {
-      type: String,
-      default: null,
-    },
-  },
-  mounted() {    
-    this.$eventBus.on("filters-open", (e) => this.open());
-    this.$eventBus.on("filters-close", (e) => this.close());
-  },
-  unmounted() {
-    this.$eventBus.off("filters-open");
-    this.$eventBus.off("filters-close");
-  },
+  }, 
   data() {
-    return {
-      isOpen: false,
+    return {     
       foundMessage: "",
       initialUrl: this.$page.url, 
       initialFilters: {},
@@ -451,9 +435,21 @@ export default {
       innerHeight: 0,
       filterContentScroll: false,
     };
+  },
+  mounted() {   
+    if (typeof window !== "undefined") {
+        window.addEventListener("resize", this.handleResize);
+        this.initialUrl = window.location.href;
+      }
+
+      this.initialFilters = JSON.parse(JSON.stringify(this.$page.props.filters));
+      this.initialTags = JSON.parse(JSON.stringify(this.$page.props.filter_tags));
+        
+      this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
+      this.handleResize();
   },  
   methods: {
-    close(resoreState = false) {
+    close(resoreState = false) {      
       if (resoreState === true) {
         if (typeof window !== "undefined") window.history.pushState({}, this.$page.title, this.initialUrl);
         this.$page.props.filters = JSON.parse(JSON.stringify(this.initialFilters));
@@ -463,26 +459,12 @@ export default {
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", this.handleResize);        
       }
-
-      if (this.$page.url.split("?")[0] != "/search_map")
+      
+      if (this.$page.props?.filters?.as != 'map')
         document.body.classList.remove("fixed");
       
-      this.isOpen = false;
-    },
-    open() {
-      if (typeof window !== "undefined") {
-        window.addEventListener("resize", this.handleResize);
-        this.initialUrl = window.location.href;
-      }
-
-      this.initialFilters = JSON.parse(JSON.stringify(this.$page.props.filters));
-      this.initialTags = JSON.parse(JSON.stringify(this.$page.props.filter_tags));
-
-      this.isOpen = true;
-      document.body.classList.add("fixed");  
-      this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
-      this.handleResize();
-    },
+      this.$page.props.modals.filters = false;    
+    },    
     updateFoundMessage() {
       let total = this.$page.props?.total ?? 0;
       let type = this.$page.props.filters?.room_filter === true ? 
@@ -510,7 +492,8 @@ export default {
     },
     getDataOnMap() { 
       let data = _getFiltersData.call(this);
-      _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});
+      data.as = 'map';
+      _getData.call(this, '/search', data, () => {this.$eventBus.emit("data-received")});
       this.close();
     },
     updateFilters(props, data = null) {

@@ -12,7 +12,7 @@
         </div>
         <navigation classes="flex ml-auto hidden lg:flex" />
         <div class="pt-1 lg:hidden">
-        <button @click="$page.props.modals.menu = true">
+        <button @click="openMenu()">
           <img src="/img/menu.svg" alt="menu" width="24" height="16"/>       
         </button>
       </div>         
@@ -30,5 +30,11 @@ export default {
     Navigation,
     Logo,
   },
+  methods: {
+    openMenu() {
+      this.$page.props.modals.menu = true;
+      document.body.classList.add("fixed");
+    }
+  }
 };
 </script>

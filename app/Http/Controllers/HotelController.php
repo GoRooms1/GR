@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Hotel\Models\Hotel;
-use Domain\Hotel\ViewModels\HotelListViewModel;
 use Domain\Hotel\ViewModels\HotelViewModel;
+use Domain\Object\ViewModels\ObjectsViewModel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,7 +20,7 @@ class HotelController extends Controller
             $params->hotels->city = 'Москва';            
         }
 
-        return Inertia::render('Hotel/Index', new HotelListViewModel($params));
+        return Inertia::render('Objects/Index',  new ObjectsViewModel($params, '/hotels'));
     }
 
     public function show(Hotel $hotel, Request $request): Response | ResponseFactory

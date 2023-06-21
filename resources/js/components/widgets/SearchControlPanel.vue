@@ -4,14 +4,14 @@
       @click="getDataOnMap()"
       class="p-2.5 rounded-l-lg"
       :class="
-        $page.url.split('?')[0] == '/search_map'
+        $page.props?.is_map === true
           ? 'bg-[#6170FF]'
           : 'bg-[#EAEFFD]'
       "
     >
       <img
         :src="
-          $page.url.split('?')[0] == '/search_map'
+          $page.props?.is_map === true
             ? '/img/map2.svg'
             : '/img/map.svg'
         "
@@ -24,14 +24,14 @@
       @click="getDataOnList()"
       class="p-2.5 rounded-r-lg mr-[10%]"
       :class="
-        $page.url.split('?')[0] != '/search_map'
+        $page.props?.is_map !== true
           ? 'bg-[#6170FF]'
           : 'bg-[#EAEFFD]'
       "
     >
       <img
         :src="
-          $page.url.split('?')[0] != '/search_map'
+          $page.props?.is_map !== true
             ? '/img/listpointers2.svg'
             : '/img/listpointers.svg'
         "
@@ -94,11 +94,13 @@ export default {
   methods: {
     getDataOnList() {
       let data = _getFiltersData.call(this);
-      _getData.call(this, '/search', data);   
+      data.as = null;
+      _getData.call(this, this.$page.props.path, data);   
     },
     getDataOnMap() {
       let data = _getFiltersData.call(this);
-      _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});       
+      data.as = 'map';
+      _getData.call(this, this.$page.props.path, data, () => {this.$eventBus.emit("data-received")});       
     },    
     openFilters() {
       this.$eventBus.emit("filters-open");

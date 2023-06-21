@@ -80,11 +80,7 @@ export default {
     forModal: {
       type: Boolean,
       default: false,
-    },
-    url: {
-      type: String,
-      default: null,
-    },
+    },    
   },
   data() {
     return {      
@@ -109,12 +105,15 @@ export default {
   methods: {
     getDataOnList() {
       let data = _getFiltersData.call(this);
-      _getData.call(this, '/search', data);
+      let dataUrl = this.forModal ? '/search' : this.$page.props.path;
+      _getData.call(this, dataUrl, data);
       this.$eventBus.emit("filters-close");
     },
     getDataOnMap() {
       let data = _getFiltersData.call(this);
-      _getData.call(this, '/search_map', data, () => {this.$eventBus.emit("data-received")});
+      data.as = 'map';
+      let dataUrl = this.forModal ? '/search' : this.$page.props.path;
+      _getData.call(this, dataUrl, data, () => {this.$eventBus.emit("data-received")});
       this.$eventBus.emit("filters-close");    
     },
     search() {
@@ -130,7 +129,7 @@ export default {
       }
 
       this.searchState = setTimeout(() => {
-        this.$inertia.get(this.url ?? this.$page.url.split("?")[0], data, {
+        this.$inertia.get(this.$page.props.path, data, {
           preserveState: true,
           preserveScroll: true,
           only: ["search_result"],

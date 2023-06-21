@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Domain\Object\ViewModels\ObjectsViewModel;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Room\Actions\CreateBookingFromDataAction;
 use Domain\Room\Actions\GenerateBookingMessageAction;
 use Domain\Room\DataTransferObjects\BookingData;
 use Domain\Room\Jobs\BookRoomJob;
 use Domain\Room\Requests\BookingRequest;
-use Domain\Room\ViewModels\RoomListViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -22,10 +22,11 @@ class RoomController extends Controller
     {
         $params = ParamsData::fromRequest($request);
         if (!$params->filter) {
-            $params->hotels->city = 'Москва';            
+            $params->hotels->city = 'Москва';
+            $params->room_filter = true;           
         }
 
-        return Inertia::render('Room/Index', new RoomListViewModel($params));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($params, '/rooms'));
     }
 
     public function booking(BookingRequest $request): RedirectResponse
@@ -41,6 +42,6 @@ class RoomController extends Controller
     {
         $paramsData = ParamsData::fromRequest($request);
         $paramsData->rooms->is_hot = true;
-        return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/rooms/hot'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/rooms/hot'));
     }
 }

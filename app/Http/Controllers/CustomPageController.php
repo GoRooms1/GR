@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Domain\Attribute\Model\Attribute;
-use Domain\Hotel\ViewModels\HotelListViewModel;
-use Domain\Room\ViewModels\RoomListViewModel;
+use Domain\Object\ViewModels\ObjectsViewModel;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,7 +25,7 @@ class CustomPageController extends Controller
             ];            
         }
 
-        return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/jacuzzi'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/jacuzzi'));
     }
 
     public function centre(Request $request): Response | ResponseFactory
@@ -40,7 +39,7 @@ class CustomPageController extends Controller
             $paramsData->hotels->area = 'Центральный';
         }               
         
-        return Inertia::render('Hotel/Index', new HotelListViewModel($paramsData, '/centre'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/centre'));
     }
 
     public function fiveMinut(Request $request): Response | ResponseFactory
@@ -56,7 +55,7 @@ class CustomPageController extends Controller
             ];
         }   
         
-        return Inertia::render('Hotel/Index', new HotelListViewModel($paramsData, '/5minut'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/5minut'));
     }
 
     public function lowcost(Request $request): Response | ResponseFactory
@@ -70,6 +69,6 @@ class CustomPageController extends Controller
             $paramsData->rooms->low_cost = true;
         }        
 
-        return Inertia::render('Room/Index', new RoomListViewModel($paramsData, '/lowcost'));
+        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/lowcost'));
     }
 }

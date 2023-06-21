@@ -11,6 +11,7 @@ use Domain\Settings\Actions\GetContactsSettingsAction;
 use Domain\User\Actions\GetLoggedUserModeratorStatusAction;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Str;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -59,7 +60,7 @@ class HandleInertiaRequests extends Middleware
             ]);
         }
 
-        return array_merge(parent::share($request), [
+        return array_merge(parent::share($request), [            
             'modals' => [],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
@@ -71,6 +72,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'location' => fn() => GetLocationFromSession::run($request->ip()),
             'contacts' => fn() => GetContactsSettingsAction::run(),
+            'path' => Str::start($request->path(), '/'),
             'app_url' => fn() => config('app.url'),
             'is_moderator' => fn() => $isModerator,
             'yandex_api_key' => fn() => config('services.yandex.map.key'),

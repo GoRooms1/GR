@@ -2,7 +2,7 @@
   <div
     v-if="
       $page.props.modals.search == false &&
-      $page.url.split('?')[0] == '/search_map'
+      $page.props?.is_map === true
     "
     @click="showSearchPanel()"
     class="w-[56px] absolute md:top-[114px] top-[64px] max-[832px]:left-4 left-[calc(50%-416px)] hidden lg:block"
@@ -29,7 +29,7 @@
     v-if="$page.props.modals.search !== false"
     class="z-[11] max-w-[832px] w-full mx-auto transition"
     :class="
-      $page.url.split('?')[0] == '/search_map'
+      $page.props?.is_map === true
         ? 'absolute md:top-[114px] top-[64px] max-[832px]:left-0 left-[calc(50%-416px)]'
         : 'md:relative px-[16px] md:pt-[64px] pt-[32px] md:pb-[52px] pb-[24px] ' +
           panelPosition
@@ -41,7 +41,7 @@
         <div
           class="p-[8px] flex items-center gap-[8px]"
           :class="
-            $page.url.split('?')[0] == '/search_map'
+            $page.props?.is_map === true
               ? 'bg-[#EAEFFD] rounded-b-[16px]'
               : ''
           "
@@ -97,7 +97,7 @@
         <div
           class="p-[8px]"
           :class="
-            $page.url.split('?')[0] == '/search_map'
+            $page.props?.is_map === true
               ? 'md:block hidden bg-[#EAEFFD] rounded-b-[16px]'
               : ''
           "
@@ -206,11 +206,7 @@ export default {
     },
     handleScroll() {
       if (typeof window !== "undefined") {
-        if (
-          this.$page.url.split("?")[0] != "/" &&
-          this.$page.url.split("?")[0] != "" &&
-          window.innerWidth < 768
-        ) {
+        if (window.innerWidth < 768) {
           this.scrollY = window.scrollY ?? this.scrollY;
 
           if (this.scrollY >= 30) this.panelPosition = "fixed";

@@ -23,6 +23,7 @@ trait ResultsCaching
         $paramsDataTmp->search = null;
         $paramsDataTmp->filter = false;
         $paramsDataTmp->hotel_id = null;
+        $paramsDataTmp->as = null;
 
         $paramsHash = md5(serialize($paramsDataTmp));      
 

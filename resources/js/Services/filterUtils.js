@@ -21,7 +21,7 @@ function _getFiltersData(isFilter = false) {
   let data = {
     hotels: {},
     rooms: {},
-  };
+  };  
   copyNotEmptyPropsFromObject(this.$page.props.filters.hotels, data.hotels);
   copyNotEmptyPropsFromObject(this.$page.props.filters.rooms, data.rooms);
   data.filter = isFilter;
@@ -34,12 +34,12 @@ function _getData(url, data, onFinish, onSuccess) {
       replace: true,
       preserveState: true,
       preserveScroll: true,
-      only: ["hotels", "rooms", "page_description", "map_center", "filters", "filter_tags", "objects_type", "default_description"],
+      only: ["hotels", "rooms", "page_description", "map_center", "filters", "filter_tags", "list_type", "is_map", "default_description"],
       onStart: () => {
-        this.$page.props.isLoadind = true;
+        this.$page.props.isLoading = true;
       },
       onFinish: () => {
-        this.$page.props.isLoadind = false;
+        this.$page.props.isLoading = false;
         if (onFinish) onFinish();
       },
       onSuccess: () => {
