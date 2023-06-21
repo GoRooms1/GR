@@ -27,6 +27,15 @@ final class FilterHotelsPaginateAction extends Action
         /** @var int */
         $perPage = config('pagination.hotels_per_page');
 
+        if (!empty($filters->city)) {
+            $city = $filters->city == 'Москва и МО' ? 'Москва' : $filters->city;
+
+            $hotels = $hotels->withCount(['address as city_position' => function($query) use ($city) {
+                $query->select(\DB::raw("POSITION('".$city."' IN city)"));
+            }])
+            ->orderByDesc('city_position');
+        }        
+
         return $hotels->paginate($perPage);
     }
 }
