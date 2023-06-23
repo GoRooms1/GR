@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\SeoPathRedirect;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
@@ -93,5 +94,6 @@ class Kernel extends HttpKernel
         'admin' => Admin::class,
         'lk' => Lk::class,
         'moderator' => Moderator::class,
+        'seo' => SeoPathRedirect::class, 
     ];
 }

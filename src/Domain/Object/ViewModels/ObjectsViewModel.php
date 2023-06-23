@@ -21,6 +21,7 @@ use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Search\Traits\SearchResultTrait;
 use Domain\Settings\Models\Settings;
+use Str;
 use Support\DataProcessing\Traits\ResultsCaching;
 
 /**
@@ -104,6 +105,11 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
     public function is_map() 
     {
         return $this->isMap();
+    }
+
+    public function path(): string 
+    {
+        return Str::start(request()->path(), '/');
     }
 
     private function isMap(): bool 

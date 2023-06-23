@@ -104,16 +104,14 @@ export default {
   },
   methods: {
     getDataOnList() {
-      let data = _getFiltersData.call(this);
-      let dataUrl = this.forModal ? '/search' : this.$page.props.path;
-      _getData.call(this, dataUrl, data);
+      let data = _getFiltersData.call(this);     
+      _getData.call(this, '/search', data);
       this.$eventBus.emit("filters-close");
     },
     getDataOnMap() {
       let data = _getFiltersData.call(this);
-      data.as = 'map';
-      let dataUrl = this.forModal ? '/search' : this.$page.props.path;
-      _getData.call(this, dataUrl, data, () => {this.$eventBus.emit("data-received")});
+      data.as = 'map';      
+      _getData.call(this, '/search', data, () => {this.$eventBus.emit("data-received")});
       this.$eventBus.emit("filters-close");    
     },
     search() {
