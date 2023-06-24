@@ -95,7 +95,8 @@ export default {
     getDataOnList() {
       let data = _getFiltersData.call(this);
       data.as = null;
-      _getData.call(this, '/search', data);   
+      _getData.call(this, '/search', data);
+      this.$page.props.modals.search = true;  
     },
     getDataOnMap() {
       let data = _getFiltersData.call(this);

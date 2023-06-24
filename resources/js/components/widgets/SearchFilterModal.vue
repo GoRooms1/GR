@@ -488,6 +488,7 @@ export default {
     getDataOnList() {
       let data = _getFiltersData.call(this);
       _getData.call(this, '/search', data);
+      this.$page.props.modals.search = true;
       this.close();
     },
     getDataOnMap() { 
