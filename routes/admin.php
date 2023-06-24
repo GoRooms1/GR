@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageDescriptionController;
 use App\Http\Controllers\Admin\PageDescriptionPageController;
 use App\Http\Controllers\Admin\RatingCategoryController;
+use App\Http\Controllers\Admin\RegionalCenterController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UnitedCityController;
@@ -89,3 +90,5 @@ Route::resource('moderators', ModeratorController::class);
 Route::resource('instructions', InstructionController::class);
 
 Route::resource('united_cities', UnitedCityController::class);
+
+Route::resource('regional_centers', RegionalCenterController::class)->except('show');
