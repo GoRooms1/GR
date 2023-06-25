@@ -31,7 +31,10 @@ final class CityFilter extends \Parent\Filters\Filter
         }
 
         $builder->whereHas('address', function ($q) use ($value) {
-            $q->where('city', $value);
+            $q->where('city', $value)
+                ->orWhereIn('region', function($q) use ($value) {
+                    $q->select('region')->from('regional_centers')->where('city', $value);
+                });
         });
 
         return $next($builder);
