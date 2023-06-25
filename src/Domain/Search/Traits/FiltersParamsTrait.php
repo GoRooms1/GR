@@ -7,8 +7,8 @@ namespace Domain\Search\Traits;
 use Arr;
 use Cache;
 use Closure;
-use Domain\Address\Actions\GetAllCitiesAction;
 use Domain\Address\Actions\GetAllCityMetrosAction;
+use Domain\Address\Actions\GetAvailibleCitiesAction;
 use Domain\Address\Actions\GetCityAreasAction;
 use Domain\Address\Actions\GetCityDistrictsAction;
 use Domain\Address\DataTransferObjects\CityAreaKeyNameData;
@@ -38,7 +38,7 @@ trait FiltersParamsTrait
     public function cities(): Closure
     {
         return fn() => Cache::remember('params_cities', now()->addDays(30), function () {            
-            return CityKeyNameData::collection(GetAllCitiesAction::run());
+            return CityKeyNameData::collection(GetAvailibleCitiesAction::run());
         });
     }
 
