@@ -28,14 +28,7 @@ class RegionalCenterRedirect
         if ($isFilter)
             return $next($request);
         
-        $geoLocation = GetLocationFromSession::run($request->ip());
-        $geoLocation = new GeolocationData(
-            city: 'Жуковский',
-            region: 'Московская',            
-            geo_lat: 55.75399400,
-            geo_lon: 37.62209300,
-            ip: null,
-        );
+        $geoLocation = GetLocationFromSession::run($request->ip());        
         
         /**Skip for Moscow */
         if ($geoLocation->city == 'Москва' || $geoLocation->region == 'Московская')
