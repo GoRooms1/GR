@@ -16,7 +16,7 @@ final class GetAvailibleCitiesAction extends Action
     public function handle(): Collection
     {
         return Address::distinctCity()
-            ->select('city', 'region')
+            ->select('city')
             ->whereHas('hotel')            
             ->whereNotNull('city')
             ->orderBy('city')

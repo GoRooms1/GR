@@ -137,6 +137,11 @@
       <div
         class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap"
       >
+        <city-filter-tag
+          v-if="$page.props?.filters?.hotels?.city"
+          :title="$page.props?.filters?.hotels?.city"
+          :cities="$page.props?.cities ?? []"        
+        />
         <filter-tag
           v-for="tag in ($page.props?.filter_tags ?? [])" v-bind:key="tag.key + '_' + tag.value"
           :title="tag.title"
@@ -144,7 +149,7 @@
           :filter-key="tag.key"
           :is-attribute="tag.isAttribute"
           :filter-value="tag.value"
-          :removable="tag.key == 'city' ? false : true"
+          :removable="true"
           @tag-closed="(event) => closeTag(event)"
         />
       </div>
@@ -155,6 +160,7 @@
 <script>
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
 import FilterTag from "@/components/ui/FilterTag.vue";
+import CityFilterTag from "@/components/ui/CityFilterTag.vue";
 import Search from "./Search.vue";
 import {_updateFilterValue} from "@/Services/filterUtils.js";
 
@@ -162,6 +168,7 @@ export default {
   components: {
     FilterAttrToggle,
     FilterTag,
+    CityFilterTag,
     Search,
   },
   mounted() {

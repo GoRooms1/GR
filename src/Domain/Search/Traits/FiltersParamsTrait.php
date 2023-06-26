@@ -38,7 +38,15 @@ trait FiltersParamsTrait
     public function cities(): Closure
     {
         return fn() => Cache::remember('params_cities', now()->addDays(30), function () {            
-            return CityKeyNameData::collection(GetAvailibleCitiesAction::run());
+            $cities = collect([]);
+            $cities->push(new CityKeyNameData(
+                key: 'Москва и МО',
+                name: 'Москва и МО',
+                slug: route('home')
+            ));
+            $cities = $cities->merge(CityKeyNameData::collection(GetAvailibleCitiesAction::run())->toArray());    
+
+            return $cities;
         });
     }
 
@@ -142,6 +150,9 @@ trait FiltersParamsTrait
         
         foreach($srcTags as $key => $value) {
             if (empty($value)) 
+                continue;
+                
+            if ($key == 'hotels.city')
                 continue;
 
             $keys = explode(".", $key);
