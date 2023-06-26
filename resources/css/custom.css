@@ -314,3 +314,8 @@
     display: flex;
     left: 22%;
 }
+
+.nav-link:active {
+    transform: scale(.95);
+    transition: .1s;
+}

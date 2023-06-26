@@ -1,8 +1,7 @@
 <template>
-  <Link
-    as="button"
+  <Link    
     :href="href"
-    class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[left_10px_center] text-left mb-2"
+    class="nav-link hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[left_10px_center] text-left mb-2"
     :class="classes + (disabled ? ' btn-disabled pointer-events-none' : '')"
   >
     {{ title }}
