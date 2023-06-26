@@ -309,7 +309,7 @@
 .select-tail {
     width: 28px;
     height: 16px;
-    background: url("../img/select-tail.svg") no-repeat;
+    background: url("/img/select-tail.svg") no-repeat;
     position: relative;
     display: flex;
     left: 22%;
