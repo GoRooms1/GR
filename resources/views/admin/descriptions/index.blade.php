@@ -6,7 +6,10 @@
       <div class="card-header">
         <div class="d-flex w-100 justify-content-between align-items-center">
           <div class="h4 p-0 m-0">Список страниц</div>
-          <a href="{{ route('admin.descriptions.create') }}" class="btn btn-primary btn-sm">Новая страница</a>
+          <div class="d-flex">
+            <a href="{{ route('admin.update-address-slugs') }}" class="btn btn-primary btn-sm mx-1">Обновить слаги</a>
+            <a href="{{ route('admin.descriptions.create') }}" class="btn btn-primary btn-sm">Новая страница</a>
+          </div>          
         </div>
       </div>
       <div class="card-body">

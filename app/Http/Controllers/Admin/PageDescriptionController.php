@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Artisan;
 use Domain\Address\Models\Address;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Http\RedirectResponse;
@@ -95,5 +96,13 @@ class PageDescriptionController extends Controller
         $description->delete();
 
         return redirect()->back();
+    }
+
+    public function updateAddressSlugs(): RedirectResponse
+    {
+        Artisan::call('seo:create-slug-metro');
+        Artisan::call('seo:create-slug-address');
+
+        return back();
     }
 }
