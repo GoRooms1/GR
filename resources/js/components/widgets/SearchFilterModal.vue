@@ -66,6 +66,7 @@
             </div>
           </div>
           <div
+            ref="tags"
             class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]"
           >
             <city-filter-tag
@@ -96,7 +97,7 @@
           class="scrollbar overflow-y-auto max-h-auto bg-transparent"
           :class="innerWidth < 860 ? 'w-full' : 'w-[820px]'"
           :style="
-            innerWidth > 768 ? 'max-height: ' + (innerHeight - 300) + 'px;' : ''
+            innerWidth > 768 ? 'max-height: ' + (innerHeight - 250 - tagsHeight) + 'px;' : ''
           "
         >
           <div
@@ -440,6 +441,7 @@ export default {
       initialTags: [],  
       innerWidth: 0,
       innerHeight: 0,
+      tagsHeight: 48,
       filterContentScroll: false,
     };
   },
@@ -454,7 +456,10 @@ export default {
         
       this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
       this.handleResize();
-  },  
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleResize);
+  },
   methods: {
     close(resoreState = false) {      
       if (resoreState === true) {
@@ -479,10 +484,11 @@ export default {
 
       this.foundMessage = getFoundMessage(total, type);
     },
-    handleResize() {
-      if (this.isOpen && typeof window !== "undefined") {
+    handleResize() {      
+      if (this.$page.props?.modals?.filters === true && typeof window !== "undefined") {
         this.innerHeight = window.innerHeight;
         this.innerWidth = window.innerWidth;
+        this.tagsHeight = this.$refs.tags.clientHeight;
         this.filterContentResize();
       }
     },
@@ -512,7 +518,8 @@ export default {
         replace: true,
         only: props ?? [],
         onFinish: () => {       
-          this.updateFoundMessage();          
+          this.updateFoundMessage();
+          this.handleResize();          
         },
       });
     },  
