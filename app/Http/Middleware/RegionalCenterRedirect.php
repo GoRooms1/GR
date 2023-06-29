@@ -28,6 +28,10 @@ class RegionalCenterRedirect
         if ($isFilter)
             return $next($request);
         
+        /** Skip if location was found */
+        if (session()->get('location', false))
+            return $next($request);
+        
         $geoLocation = GetLocationFromSession::run($request->ip());        
         
         /**Skip for Moscow */
