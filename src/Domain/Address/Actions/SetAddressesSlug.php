@@ -8,6 +8,7 @@ use Domain\Address\Models\Address;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Action;
+use Support\DataProcessing\Traits\CustomStr;
 
 /**
  * @method static void run(Address $model)
@@ -28,7 +29,10 @@ final class SetAddressesSlug extends Action
             $attribute = $model->getAttribute($column);
             
             if (! empty($attribute)) {
-                GenerateAddressSlug::run($attribute);
+                DB::table('address_slug')->updateOrInsert(['slug' => CustomStr::getCustomSlug($attribute)], [
+                    'address' => $attribute,
+                    'slug' => CustomStr::getCustomSlug($attribute),
+                ]);
             }            
         }
     }
