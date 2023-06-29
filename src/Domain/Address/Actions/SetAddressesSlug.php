@@ -20,10 +20,16 @@ final class SetAddressesSlug extends Action
      */
     public function handle(Address $model): void
     {
-        $slugs = GetSlugFromAddress::run($model);
+        $columns = ['region', 'area', 'city', 'city_district', 'street', 'city_area'];
         Cache::forget('sitemap.2g');
-        foreach ($slugs as $slug) {
-            DB::table('address_slug')->updateOrInsert(['address' => $slug->address], $slug->toArray());
+
+        foreach ($columns as $column) {
+            /** @var ?string $attribute */
+            $attribute = $model->getAttribute($column);
+            
+            if (! empty($attribute)) {
+                GenerateAddressSlug::run($attribute);
+            }            
         }
     }
 }
