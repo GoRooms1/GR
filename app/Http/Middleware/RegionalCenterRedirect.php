@@ -4,11 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Domain\Address\Actions\GetLocationFromSession;
-use Domain\Address\DataTransferObjects\GeolocationData;
 use Domain\Address\Models\RegionalCenter;
 use Domain\Hotel\Models\Hotel;
 use Illuminate\Http\Request;
-use Support\Actions\GetSeoUrlAction;
 use Support\DataProcessing\Traits\CustomStr;
 
 class RegionalCenterRedirect
@@ -21,7 +19,7 @@ class RegionalCenterRedirect
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
-    {
+    {       
         $isFilter = filter_var( $request->query('filter'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         
         /** Skip if filter */

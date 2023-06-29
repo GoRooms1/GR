@@ -7,6 +7,7 @@ namespace Domain\Object\ViewModels;
 use Cache;
 use Closure;
 use Domain\Address\Actions\GetMapCenterByCityAction;
+use Domain\Address\Traits\GeolocationTrait;
 use Domain\Hotel\Actions\FilterHotelsOnMapAction;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\DataTransferObjects\HotelCardData;
@@ -32,6 +33,7 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
     use FiltersParamsTrait;
     use SearchResultTrait;
     use ResultsCaching;
+    use GeolocationTrait;
 
     /**
      * @param  ParamsData  $params     
