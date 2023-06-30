@@ -16,7 +16,7 @@
           <input type="text" placeholder="Город" v-model="searchValue"
             class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-sm leading-[16px]" />
         </div>
-        <Link v-for="city in filteredCities" :href="city?.slug"
+        <Link v-for="city in filteredCities" :href="city?.slug + ($page?.props?.filters?.as == 'map' ? '?as=map' : '')"
           class="text-[14px] leading-[16px] w-full p-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
         {{ city.name }}
         </Link>
