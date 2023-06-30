@@ -8,6 +8,7 @@ use Domain\Address\Models\Address;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Action;
+use Support\DataProcessing\Traits\CustomStr;
 
 /**
  * @method static void run(Address $model)
@@ -20,10 +21,19 @@ final class SetAddressesSlug extends Action
      */
     public function handle(Address $model): void
     {
-        $slugs = GetSlugFromAddress::run($model);
+        $columns = ['region', 'area', 'city', 'city_district', 'street', 'city_area'];
         Cache::forget('sitemap.2g');
-        foreach ($slugs as $slug) {
-            DB::table('address_slug')->updateOrInsert(['address' => $slug->address], $slug->toArray());
+
+        foreach ($columns as $column) {
+            /** @var ?string $attribute */
+            $attribute = $model->getAttribute($column);
+            
+            if (! empty($attribute)) {
+                DB::table('address_slug')->updateOrInsert(['slug' => CustomStr::getCustomSlug($attribute)], [
+                    'address' => $attribute,
+                    'slug' => CustomStr::getCustomSlug($attribute),
+                ]);
+            }            
         }
     }
 }
