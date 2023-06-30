@@ -11,13 +11,14 @@ use Domain\User\Actions\GetLoggedUserModeratorStatusAction;
 
 trait ResultsCaching
 {   
-    /**    
+    
+    /**   
      * @param \Domain\Search\DataTransferObjects\ParamsData $paramsData
-     * @param | $page
-     * @param mixed $prefix
+     * @param int|string $page
+     * @param string $prefix
      * @return string
      */
-    private function getHashFor(ParamsData $paramsData, int|String $page = 1, String $prefix = "search"): string
+    private function getHashFor(ParamsData $paramsData, int|string $page = 1, String $prefix = "search"): string
     {
         $paramsDataTmp = clone $paramsData;
         $paramsDataTmp->search = null;
@@ -30,15 +31,15 @@ trait ResultsCaching
         return "{$prefix}-{$paramsHash}-{$page}";
     }
 
-    /**
-     * 
+    
+    /**    
      * @param \Domain\Search\DataTransferObjects\ParamsData $paramsData
-     * @param | $page
-     * @param mixed $prefix
+     * @param int|string $page
+     * @param string $prefix
      * @param \Closure $callback
      * @return mixed
      */
-    private function getCahchedData(ParamsData $paramsData, int|String $page, String $prefix, Closure $callback)
+    private function getCahchedData(ParamsData $paramsData, int|string $page, String $prefix, Closure $callback)
     {        
         if ($paramsData->filter === true)
             return [];

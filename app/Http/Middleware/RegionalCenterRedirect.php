@@ -36,7 +36,7 @@ class RegionalCenterRedirect
         if ($geoLocation->city == 'Москва' || $geoLocation->region == 'Московская')
             return $next($request);
 
-        $regionalCenter = RegionalCenter::where('region', $geoLocation->region)->get()->first();
+        $regionalCenter = RegionalCenter::where('region', $geoLocation->region)->first();
        
         /** Skip if regional center not defined */
         if (is_null($regionalCenter))
