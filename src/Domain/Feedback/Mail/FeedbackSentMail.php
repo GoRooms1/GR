@@ -14,15 +14,7 @@ class FeedbackSentMail extends Mailable
         public FeedbackData $feedbackData
     ) {
     }
-
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            from: new Address('no-reply@walfter.ru', 'Walfer'),
-            subject: 'New message from contact form '.$this->feedbackData->name
-        );
-    }
-
+    
     public function content(): Content
     {
         return new Content(
