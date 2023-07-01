@@ -64,7 +64,7 @@ final class GetSeoUrlAction extends Action
         
         $queryParamsString = $paramsData->toQueryString();   
         
-        return $url.'?'.$queryParamsString;
+        return $url.(empty($queryParamsString) ? '' : '?'.$queryParamsString);
     }
     private function checkSlug(string $slug): bool
     {
