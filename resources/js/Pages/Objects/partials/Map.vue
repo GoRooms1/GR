@@ -168,10 +168,10 @@ export default {
             preserveScroll: true,
             only: ["rooms"],
             onStart: () => {
-              this.$page.props.isLoading = true;
+              this.$page.props.is_loading = true;
             },
             onFinish: () => {
-              this.$page.props.isLoading = false;
+              this.$page.props.is_loading = false;
             },
             onSuccess: () => {
               this.selectedRooms = this.rooms;

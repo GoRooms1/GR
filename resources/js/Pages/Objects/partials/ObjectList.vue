@@ -1,11 +1,11 @@
-<template>
-  <div v-if="$page.props.isLoading !== true" class="container mx-auto px-4 relative min-[1920px]:px-[10vw] z-10">
+<template> 
+  <div v-if="$page.props?.is_loading !== true" class="container mx-auto px-4 relative min-[1920px]:px-[10vw] z-10">
     <room-card v-if="type == 'rooms'" v-for="room in objectList" :room="room" classes="my-4" />    
     <div v-if="type == 'hotels'" class="flex flex-wrap -mx-4 mb-4">
       <hotel-card v-for="hotel in objectList" :hotel="hotel" classes="my-4" />
     </div>   
   </div>
-  <div v-if="objectList.length > 0 && $page.props.isLoading !== true"
+  <div v-if="objectList.length > 0 && $page.props?.is_loading !== true"
     class="container mx-auto px-4 min-[1920px]:px-[10vw] mt-8 mb-12">
     <div v-if="isLoading" class="text-center">
       <Loader />
@@ -22,10 +22,10 @@
       </div>
     </div>
   </div>
-  <div v-if="objectList.length == 0 || $page.props.isLoading === true" class="w-full py-8"></div>
-  <div v-if="$page.props.isLoading === true" class="text-center py-8">
+  <div v-if="objectList.length == 0 || $page.props?.is_loading === true" class="w-full py-8"></div>
+  <div v-if="$page.props?.is_loading === true" class="text-center py-8">
     <Loader />
-  </div>
+  </div>  
 </template>
 
 <script>
@@ -48,6 +48,7 @@ export default {
   props: {
     objects: {
       type: [Array, Object],
+      default: [],
       required: false,
     },    
     type: {

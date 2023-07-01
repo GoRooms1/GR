@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
-use Domain\Address\Actions\GetLocationByIp;
-use Domain\Address\Actions\GetLocationFromSession;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
@@ -62,7 +60,8 @@ class HandleInertiaRequests extends Middleware
             'contacts' => fn() => GetContactsSettingsAction::run(),            
             'app_url' => fn() => config('app.url'),
             'is_moderator' => fn() => $isModerator,
-            'yandex_api_key' => fn() => config('services.yandex.map.key'),
+            'yandex_api_key' => fn() => config('services.yandex.map.key'),      
+            'is_loading' => false,   
         ]);
     }
 }

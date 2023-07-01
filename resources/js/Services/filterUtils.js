@@ -38,10 +38,10 @@ function _getData(url, data, onFinish, onSuccess) {
       preserveScroll: true,
       only: props,
       onStart: () => {
-        this.$page.props.isLoading = true;
+        this.$page.props.is_loading = true;
       },
       onFinish: () => {
-        this.$page.props.isLoading = false;
+        this.$page.props.is_loading = false;
         if (onFinish) onFinish();
       },
       onSuccess: () => {
