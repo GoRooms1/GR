@@ -23,7 +23,8 @@ final class GetSeoUrlAction extends Action
         $metro = $paramsData->hotels->metro;
 
         if ($city == 'Москва и МО') {
-            return '/?'.$paramsData->toQueryString();
+            $paramsData->hotels->city = null;           
+            return empty($paramsData->toQueryString()) ? '/' : '/?'.$paramsData->toQueryString();
         }
 
         if (!empty($city)) {
