@@ -21,7 +21,7 @@
         {{ city.name }}
         </Link>
         <div v-if="filteredCities.length == 0">
-          <span class="text-[14px]">Совпаденйи не найдено</span>
+          <span class="text-[14px]">Совпадений не найдено</span>
         </div>
       </div>
     </div>

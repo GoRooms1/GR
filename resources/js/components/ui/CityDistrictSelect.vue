@@ -59,7 +59,7 @@
           {{ option.name }}
         </button>
         <div v-if="options.length == 0 && searchable">
-          <span class="p-[16px]">Совпаденйи не найдено</span>
+          <span class="p-[16px]">Совпадений не найдено</span>
         </div>
       </div>
     </div>
