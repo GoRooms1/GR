@@ -19,7 +19,7 @@ final class GetContactsSettingsAction extends Action
      */
     public function handle(): Collection
     {
-        $data = Cache::store('file')->rememberForever('contacts', function (): Collection {
+        $data = Cache::store('redis')->rememberForever('contacts', function (): Collection {
             /** @var Collection */
             return Settings::whereIn('option', [
                 'notify',

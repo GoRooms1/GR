@@ -53,7 +53,7 @@ class Settings extends Model
      */
     public static function header(string $option = null, string $default = null): mixed
     {
-        $setting = Cache::store('file')->rememberForever('setting.'.$option, function () use ($option) {
+        $setting = Cache::store('redis')->rememberForever('setting.'.$option, function () use ($option) {
             return Settings::where('option', $option)->first();
         });
         if ($setting) {
@@ -88,7 +88,7 @@ class Settings extends Model
      */
     public static function option($option = null, $default = null): mixed
     {
-        $setting = Cache::store('file')->rememberForever('setting.'.$option, function () use ($option) {
+        $setting = Cache::store('redis')->rememberForever('setting.'.$option, function () use ($option) {
             return Settings::where('option', $option)->first();
         });
         if ($setting) {
