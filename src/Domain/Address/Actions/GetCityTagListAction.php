@@ -77,9 +77,6 @@ final class GetCityTagListAction extends Action
             is_center: true,   
         ));
 
-        if ($city == 'Москва')
-            $cities = $cities->merge($this->getCitiesInRegionData('Московская'));
-        
         if ($regionalCenter)
             $cities = $cities->merge($this->getCitiesInRegionData($regionalCenter->region));
         
@@ -94,6 +91,12 @@ final class GetCityTagListAction extends Action
         $otherCities->push(new CityTagListData(                    
             name: 'Москва и МО',
             slug: route('home'),
+            is_center: true,      
+        ));
+
+        $otherCities->push(new CityTagListData(                    
+            name: 'Москва',
+            slug: $this->getCitySlug('Москва'),
             is_center: true,      
         ));
 
