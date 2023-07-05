@@ -22,28 +22,33 @@ final class GetSeoUrlAction extends Action
         $district = $paramsData->hotels->district;
         $metro = $paramsData->hotels->metro;
 
+        
+        if (empty($city))
+            return null;
+
         if ($city == 'Москва и МО') {
             $paramsData->hotels->city = null;           
             return empty($paramsData->toQueryString()) ? '/' : '/?'.$paramsData->toQueryString();
         }
 
-        if (!empty($city)) {
-            if (!$this->checkSlug($city))
-                return null;
+        /** City slug */
+        if (!$this->checkSlug($city))
+            return null;
 
-            $url .= '/address/'.CustomStr::getCustomSlug($city);
-            $paramsData->hotels->city = null;            
-        }            
+        $url .= '/address/'.CustomStr::getCustomSlug($city);
+        $paramsData->hotels->city = null;
         
-        if (!empty($city) && empty($area) && empty($district) && !empty($metro)) {
+        /** Metro slug */        
+        if (!empty($metro)) {
             if (!$this->checkSlug($metro))
                 return null;
 
             $url .= '/metro-'.CustomStr::getCustomSlug($metro);
             $paramsData->hotels->metro = null;
-        }            
+        }
         
-        if (!empty($city) && !empty($area)) {
+        /** Area slug */
+        if (!empty($area) && empty($metro)) {
             if (!$this->checkSlug($area))
                 return null;
 
@@ -51,20 +56,19 @@ final class GetSeoUrlAction extends Action
             $paramsData->hotels->area = null;
         }           
         
-        if (!empty($city) && !empty($area) && !empty($district)) {
+        /** District slug */
+        if (!empty($area) && !empty($district) && empty($metro)) {
             if (!$this->checkSlug($district))
                 return null;
 
             $url .= '/district-'.CustomStr::getCustomSlug($district);
             $paramsData->hotels->district = null;
         }
-
-        if ($url == "")
-            return null;
         
-        $queryParamsString = $paramsData->toQueryString();   
+        $queryParamsString = $paramsData->toQueryString();
+        $queryParamsString = empty($queryParamsString) ? '' : '?'.$queryParamsString;
         
-        return $url.(empty($queryParamsString) ? '' : '?'.$queryParamsString);
+        return $url.$queryParamsString;
     }
     private function checkSlug(string $slug): bool
     {
