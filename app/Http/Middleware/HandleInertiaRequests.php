@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
-use Domain\Address\Actions\GetLocationByIp;
-use Domain\Address\Actions\GetLocationFromSession;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
@@ -46,20 +44,9 @@ class HandleInertiaRequests extends Middleware
      * @return array
      */
     public function share(Request $request): array
-    {
+    {        
         $isModerator = GetLoggedUserModeratorStatusAction::run();
-        $geoLocation = null;
-        $city = $request->get('hotels', [])['city'] ?? null;   
-             
-        if (is_null($city) && !$isModerator) {
-            $geoLocation = GetLocationFromSession::run($request->ip());
-            $request->merge([
-                'hotels' => [
-                    'city' => $geoLocation->city,
-                ]
-            ]);
-        }
-
+        
         return array_merge(parent::share($request), [            
             'modals' => [],
             'flash' => [
@@ -69,13 +56,12 @@ class HandleInertiaRequests extends Middleware
                 'hotels' => fn() => GetAvailibleHotelsCountAction::run(),
                 'rooms' => fn() => GetAvailibleRoomsCountAction::run(),
                 'cities' => fn() => GetAvailibleCitiesCountAction::run(),
-            ],
-            'location' => fn() => GetLocationFromSession::run($request->ip()),
-            'contacts' => fn() => GetContactsSettingsAction::run(),
-            'path' => Str::start($request->path(), '/'),
+            ],            
+            'contacts' => fn() => GetContactsSettingsAction::run(),            
             'app_url' => fn() => config('app.url'),
             'is_moderator' => fn() => $isModerator,
-            'yandex_api_key' => fn() => config('services.yandex.map.key'),
+            'yandex_api_key' => fn() => config('services.yandex.map.key'),      
+            'is_loading' => false,   
         ]);
     }
 }

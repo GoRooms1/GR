@@ -305,3 +305,17 @@
 .dp__arrow_top {
     display: none;
 }
+
+.select-tail {
+    width: 28px;
+    height: 16px;
+    background: url("/img/select-tail.svg") no-repeat;
+    position: relative;
+    display: flex;
+    left: 22%;
+}
+
+.nav-link:active {
+    transform: scale(.95);
+    transition: .1s;
+}

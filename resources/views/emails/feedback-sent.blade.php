@@ -1,4 +1,3 @@
-@component('mail::message')
 # New email from contact form
 
 Content of email form:
@@ -10,4 +9,3 @@ Content of email form:
 
 Thanks,<br>
 {{ config('app.name') }}
-@endcomponent

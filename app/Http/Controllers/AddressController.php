@@ -9,18 +9,16 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 use Str;
-use Support\DataProcessing\Traits\UrlDecodeFilter;
+use Support\Actions\DecodeRequestUrlAction;
 
 class AddressController extends Controller
-{
-    use UrlDecodeFilter;
-
+{   
     public function address(Request $request): Response | ResponseFactory
     {
         $params = ParamsData::fromRequest($request);
         
         if ($request->path() !== 'address' && !$params->filter) {
-            $params->hotels = $this->decodeUrl($request->url());            
+            $params->hotels = DecodeRequestUrlAction::run($request);            
         }
 
         return Inertia::render('Objects/Index', new ObjectsViewModel($params, Str::start($request->path(), '/')));

@@ -6,7 +6,6 @@ use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Lk;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoomController;
@@ -14,7 +13,6 @@ use App\Http\Controllers\SiteMapController;
 use Domain\Search\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Spatie\ResponseCache\Middlewares\CacheResponse;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +25,7 @@ use Spatie\ResponseCache\Middlewares\CacheResponse;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('regional_center');
 
 Auth::routes();
 
@@ -38,7 +36,7 @@ Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/hot', [RoomController::class, 'hot'])->name('rooms.hot');
 Route::post('/rooms/booking', [RoomController::class, 'booking'])->name('rooms.booking');
 
-Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+Route::get('/search', [SearchController::class, 'index'])->name('search.index')->middleware('seo');
 
 Route::get('/address/{city?}/{area?}/{district?}/{street?}', [AddressController::class, 'address'])->name('address');
 

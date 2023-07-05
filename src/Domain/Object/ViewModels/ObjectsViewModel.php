@@ -7,6 +7,7 @@ namespace Domain\Object\ViewModels;
 use Cache;
 use Closure;
 use Domain\Address\Actions\GetMapCenterByCityAction;
+use Domain\Address\Traits\GeolocationTrait;
 use Domain\Hotel\Actions\FilterHotelsOnMapAction;
 use Domain\Hotel\Actions\FilterHotelsPaginateAction;
 use Domain\Hotel\DataTransferObjects\HotelCardData;
@@ -21,6 +22,7 @@ use Domain\Room\Actions\FilterRoomsPaginateAction;
 use Domain\Room\DataTransferObjects\RoomCardData;
 use Domain\Search\Traits\SearchResultTrait;
 use Domain\Settings\Models\Settings;
+use Str;
 use Support\DataProcessing\Traits\ResultsCaching;
 
 /**
@@ -31,6 +33,7 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
     use FiltersParamsTrait;
     use SearchResultTrait;
     use ResultsCaching;
+    use GeolocationTrait;
 
     /**
      * @param  ParamsData  $params     
@@ -93,7 +96,7 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
         
         $option = $this->params->room_filter ? 'seo_/rooms' : 'seo_/hotels';
         
-        return fn() => Cache::remember($option, now()->addDays(365), fn() => optional(Settings::where('option', $option)->get()->first())->value);
+        return fn() => Cache::remember($option, now()->addDays(365), fn() => optional(Settings::where('option', $option)->first())->value);
     }
 
     public function map_center(): Closure
@@ -104,6 +107,11 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
     public function is_map() 
     {
         return $this->isMap();
+    }
+
+    public function path(): string 
+    {
+        return Str::start(request()->path(), '/');
     }
 
     private function isMap(): bool 

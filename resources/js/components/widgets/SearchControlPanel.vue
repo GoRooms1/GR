@@ -95,12 +95,13 @@ export default {
     getDataOnList() {
       let data = _getFiltersData.call(this);
       data.as = null;
-      _getData.call(this, this.$page.props.path, data);   
+      _getData.call(this, '/search', data);
+      this.$page.props.modals.search = true;  
     },
     getDataOnMap() {
       let data = _getFiltersData.call(this);
       data.as = 'map';
-      _getData.call(this, this.$page.props.path, data, () => {this.$eventBus.emit("data-received")});       
+      _getData.call(this, '/search', data, () => {this.$eventBus.emit("data-received")});       
     },    
     openFilters() {
       this.$eventBus.emit("filters-open");

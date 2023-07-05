@@ -14,8 +14,8 @@ use Support\DataProcessing\Traits\CustomStr;
 final class GenerateSlugForMetro extends Action
 {
     public function handle(string $name): void
-    {
-        DB::table('address_slug')->updateOrInsert(['address' => $name], [
+    {       
+        DB::table('address_slug')->updateOrInsert(['slug' => CustomStr::getCustomSlug($name)], [
             'address' => $name,
             'slug' => CustomStr::getCustomSlug($name),
         ]);

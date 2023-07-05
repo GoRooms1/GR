@@ -52,6 +52,13 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
      * @return string
      */
     public function toQueryString(): string {
-        return Arr::query($this->toArray());
+        $queryArray = $this->toArray();
+        
+        foreach ($queryArray as $key => $value) {
+           if (empty($value))
+            unset($queryArray[$key]);
+        }
+
+        return Arr::query($queryArray);
     }
 }

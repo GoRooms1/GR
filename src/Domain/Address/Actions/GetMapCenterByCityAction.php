@@ -30,6 +30,7 @@ final class GetMapCenterByCityAction extends Action
         
         return new GeolocationData(
             city: $city,
+            region: null,
             geo_lat: $cityCoords->lat,
             geo_lon: $cityCoords->lon,
             ip: null,

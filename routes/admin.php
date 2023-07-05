@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageDescriptionController;
 use App\Http\Controllers\Admin\PageDescriptionPageController;
 use App\Http\Controllers\Admin\RatingCategoryController;
+use App\Http\Controllers\Admin\RegionalCenterController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UnitedCityController;
@@ -81,6 +82,7 @@ Route::match(['GET', 'POST'], '/upload', [ImageController::class, 'upload']);
 Route::match(['GET', 'POST'], '/upload_for/', [ImageController::class, 'uploadFor']);
 
 Route::get('/clear-cache', [SettingsController::class, 'clearCache'])->name('clear-cache');
+Route::get('/update-address-slugs', [PageDescriptionController::class, 'updateAddressSlugs'])->name('update-address-slugs');
 
 Route::post('/periods/updateByJson', [PeriodController::class, 'updateByJson'])->name('periods.update.json');
 
@@ -89,3 +91,5 @@ Route::resource('moderators', ModeratorController::class);
 Route::resource('instructions', InstructionController::class);
 
 Route::resource('united_cities', UnitedCityController::class);
+
+Route::resource('regional_centers', RegionalCenterController::class)->except('show');

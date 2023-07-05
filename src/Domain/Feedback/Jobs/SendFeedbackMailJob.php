@@ -25,7 +25,7 @@ final class SendFeedbackMailJob implements ShouldQueue
 
     public function handle(): void
     {
-        $email = Settings::option('notify') ?? Settings::option('notify', 'gorooms@walfter.ru');
-        Mail::to(config('app.admin_email', $email))->send(new FeedbackSentMail($this->feedbackData));
+        $email = Settings::option('notify', 'gorooms@walfter.ru');       
+        Mail::to($email)->send(new FeedbackSentMail($this->feedbackData));
     }
 }

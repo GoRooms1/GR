@@ -24,7 +24,12 @@
         title="Бонусная программа"
         classes="bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]"
       />
-      <button @click="visitPage('/lk/start')" class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)] bg-[left_10px_center] text-left mb-2">Добавить объект</button>
+      <a 
+        href="/lk/start"
+        class="nav-link hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)] bg-[left_10px_center] text-left mb-2"
+      >
+        Добавить объект
+      </a>
       <responsive-nav-link
         title="Контакты"
         href="/contacts"
@@ -35,7 +40,12 @@
         title="Избранное"
         classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
       />
-      <button @click="visitPage('/login')" class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left">Личный кабинет</button>
+      <a 
+        href="/login"
+        class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left"
+      >
+        Личный кабинет
+      </a>
       <h3 class="mb-6 mt-10 font-semibold">Мы в социальных сетях</h3>
       <div class="grid grid-cols-2 grid-rows-2 gap-2">
         <a
@@ -117,10 +127,7 @@ export default {
       if (this.isOpen == true) {        
         if (this.screenWidth > 1024) this.hide();
       }
-    },
-    visitPage(href) {
-      if (typeof window !== "undefined") window.location=href;
-    }
+    },    
   },  
 };
 </script>

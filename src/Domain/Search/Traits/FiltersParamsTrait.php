@@ -7,10 +7,11 @@ namespace Domain\Search\Traits;
 use Arr;
 use Cache;
 use Closure;
-use Domain\Address\Actions\GetAllCitiesAction;
 use Domain\Address\Actions\GetAllCityMetrosAction;
+use Domain\Address\Actions\GetAvailibleCitiesAction;
 use Domain\Address\Actions\GetCityAreasAction;
 use Domain\Address\Actions\GetCityDistrictsAction;
+use Domain\Address\Actions\GetCityTagListAction;
 use Domain\Address\DataTransferObjects\CityAreaKeyNameData;
 use Domain\Address\DataTransferObjects\CityDistrictKeyNameData;
 use Domain\Address\DataTransferObjects\CityKeyNameData;
@@ -38,7 +39,23 @@ trait FiltersParamsTrait
     public function cities(): Closure
     {
         return fn() => Cache::remember('params_cities', now()->addDays(30), function () {            
-            return CityKeyNameData::collection(GetAllCitiesAction::run());
+            $cities = collect([]);
+            $cities->push(new CityKeyNameData(
+                key: 'Москва и МО',
+                name: 'Москва и МО',               
+            ));
+            $cities = $cities->merge(CityKeyNameData::collection(GetAvailibleCitiesAction::run())->toArray());    
+
+            return $cities;
+        });
+    }
+
+    public function city_tag_list(): Closure
+    {
+        $city = $this->params->hotels->city;
+
+        return fn() => Cache::remember('city_tag_list_'.$city, now()->addDays(30), function () use ($city) {
+            return GetCityTagListAction::run($city);
         });
     }
 
@@ -50,6 +67,9 @@ trait FiltersParamsTrait
         $city = $this->params->hotels->city;
         $area = $this->params->hotels->area;
         $district = $this->params->hotels->district;
+
+        if ($city == 'Москва и МО')
+            $city = 'Москва';
       
         return fn() => Cache::remember('params_metros_'.Str::slug($city).'_'.Str::slug($area).'_'.Str::slug($district), now()->addDays(30), function () use ($city, $area, $district) {            
             return MetroKeyNameData::collection(GetAllCityMetrosAction::run($city, $area, $district));
@@ -72,6 +92,9 @@ trait FiltersParamsTrait
     public function city_areas(): Closure
     {
         $city = $this->params->hotels->city;
+
+        if ($city == 'Москва и МО')
+            $city = 'Москва';
         
         return fn() => Cache::remember('params_areas_'.Str::slug($city), now()->addDays(30), function () use ($city) {            
             return CityAreaKeyNameData::collection(GetCityAreasAction::run($city));
@@ -85,6 +108,9 @@ trait FiltersParamsTrait
     {
         $city = $this->params->hotels->city;
         $area = $this->params->hotels->area;
+
+        if ($city == 'Москва и МО')
+            $city = 'Москва';
         
         return fn() => Cache::remember('params_districts_'.Str::slug($city).'_'.Str::slug($area), now()->addDays(30), function () use ($city, $area) {            
             return CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $area));
@@ -142,6 +168,9 @@ trait FiltersParamsTrait
         
         foreach($srcTags as $key => $value) {
             if (empty($value)) 
+                continue;
+                
+            if ($key == 'hotels.city')
                 continue;
 
             $keys = explode(".", $key);

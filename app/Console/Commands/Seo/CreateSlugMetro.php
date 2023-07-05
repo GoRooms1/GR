@@ -13,7 +13,7 @@ final class CreateSlugMetro extends Command
     protected $signature = 'seo:create-slug-metro';
 
     public function handle(): int
-    {
+    {        
         $this->withProgressBar(Metro::all(), function (Metro $metro) {
             GenerateSlugForMetro::run($metro->name);
         });

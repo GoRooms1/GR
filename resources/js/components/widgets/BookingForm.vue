@@ -231,7 +231,9 @@ export default {
     room: Object,
   }, 
   mounted() {
-    this.v$.$validate();
+    this.setDefaultValues();        
+    this.switchCostType(1);
+    this.v$.$validate();    
   }, 
   data() {
     return {
@@ -267,8 +269,7 @@ export default {
         client_phone: { required, phoneValidator: this.phoneValidator },
       },      
     }
-  },
-  computed: {},
+  },  
   methods: {
     phoneValidator(value) {
       if (this.phoneMask === '+7 (###) ### ## ##') return value.length == this.phoneMask.length;
@@ -387,37 +388,29 @@ export default {
         onSuccess: () => (this.bookingSuccess = true),
       });
     },
-  },
-  watch: {
-    room: function (newVal, oldVal) {
-      if (newVal != null && oldVal == null) {
-        
-        this.costType = 1;
-        this.startAtHours = 1;
-        this.endAtHours = 6;
-        this.hours = 0;
-        this.days = 0;
-        this.price = 0;
-        this.amount = 0;
-        this.cost = null;
-        this.form.room_id = this.room?.id;
-        this.form.client_fio = null;
-        this.form.client_phone = null;
-        this.form.from_date = moment().format("DD.MM.YYYY");
-        this.form.from_time = null;
-        this.form.to_date = null;
-        this.form.to_time = null;
-        this.form.book_comment = null;
-        this.form.book_type = "hour";
-        this.form.hours_count = null;
-        this.form.days_count = null;
-        this.form.bookingSuccess = false;
-        this.form.phoneMask = "+7 (###) ### ## ##";
-        
-        this.switchCostType(1);
-        this.v$.$validate();
-      }
+    setDefaultValues() {
+      this.costType = 1;
+      this.startAtHours = 1;
+      this.endAtHours = 6;
+      this.hours = 0;
+      this.days = 0;
+      this.price = 0;
+      this.amount = 0;
+      this.cost = null;
+      this.form.room_id = this.room?.id;
+      this.form.client_fio = null;
+      this.form.client_phone = null;
+      this.form.from_date = moment().format("DD.MM.YYYY");
+      this.form.from_time = null;
+      this.form.to_date = null;
+      this.form.to_time = null;
+      this.form.book_comment = null;
+      this.form.book_type = "hour";
+      this.form.hours_count = null;
+      this.form.days_count = null;
+      this.form.bookingSuccess = false;
+      this.form.phoneMask = "+7 (###) ### ## ##";       
     },
-  }
+  },  
 };
 </script>

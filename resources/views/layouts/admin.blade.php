@@ -171,6 +171,9 @@
             <li class="nav-item">
               <a href="{{ route('admin.united_cities.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.united_cities.*') ? 'active' : '' }}">Обьединение городов</a>
             </li>
+            <li class="nav-item">
+              <a href="{{ route('admin.regional_centers.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.regional_centers.*') ? 'active' : '' }}">Региональные центры</a>
+            </li>
           </ul>
         @endauth
       <!-- Right Side Of Navbar -->

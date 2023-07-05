@@ -57,7 +57,7 @@
           </button>
         </div>
         <div v-if="options.length == 0">
-          <span class="p-[16px]">Совпаденйи не найдено</span>
+          <span class="p-[16px]">Совпадений не найдено</span>
         </div>
       </div>
     </div>

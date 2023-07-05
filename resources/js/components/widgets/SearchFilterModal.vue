@@ -66,8 +66,14 @@
             </div>
           </div>
           <div
+            ref="tags"
             class="md:p-[8px] p-0 pt-[8px] flex items-center gap-[8px] flex-wrap lg:mb-0 mb-[32px]"
           >
+            <city-filter-tag
+              v-if="$page.props?.filters?.hotels?.city"
+              :title="$page.props?.filters?.hotels?.city"
+              :cities="$page.props?.city_tag_list ?? []"        
+            />
             <filter-tag
               v-for="tag in ($page.props?.filter_tags ?? [])" v-bind:key="tag.key + '_' + tag.value"
               :title="tag.title"
@@ -75,7 +81,7 @@
               :filter-key="tag.key"
               :is-attribute="tag.isAttribute"
               :filter-value="tag.value"
-              :removable="tag.key == 'city' ? false : true"
+              :removable="true"
               @tag-closed="(event) => closeTag(event)"
             />
           </div>
@@ -91,7 +97,7 @@
           class="scrollbar overflow-y-auto max-h-auto bg-transparent"
           :class="innerWidth < 860 ? 'w-full' : 'w-[820px]'"
           :style="
-            innerWidth > 768 ? 'max-height: ' + (innerHeight - 300) + 'px;' : ''
+            innerWidth > 768 ? 'max-height: ' + (innerHeight - 250 - tagsHeight) + 'px;' : ''
           "
         >
           <div
@@ -409,6 +415,7 @@ import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
 import FilterTag from "@/components/ui/FilterTag.vue";
 import FilterCollapse from "@/components/ui/FilterCollapse.vue";
 import Search from "./Search.vue";
+import CityFilterTag from "@/components/ui/CityFilterTag.vue";
 
 export default {
   components: {
@@ -424,6 +431,7 @@ export default {
     FilterCollapse,
     RatingSelect,
     Search,
+    CityFilterTag,
   }, 
   data() {
     return {     
@@ -433,6 +441,7 @@ export default {
       initialTags: [],  
       innerWidth: 0,
       innerHeight: 0,
+      tagsHeight: 48,
       filterContentScroll: false,
     };
   },
@@ -447,7 +456,10 @@ export default {
         
       this.updateFilters(["total", "metros", "city_areas", "city_districts"]);
       this.handleResize();
-  },  
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleResize);
+  },
   methods: {
     close(resoreState = false) {      
       if (resoreState === true) {
@@ -472,10 +484,11 @@ export default {
 
       this.foundMessage = getFoundMessage(total, type);
     },
-    handleResize() {
-      if (this.isOpen && typeof window !== "undefined") {
+    handleResize() {      
+      if (this.$page.props?.modals?.filters === true && typeof window !== "undefined") {
         this.innerHeight = window.innerHeight;
         this.innerWidth = window.innerWidth;
+        this.tagsHeight = this.$refs.tags.clientHeight;
         this.filterContentResize();
       }
     },
@@ -488,6 +501,7 @@ export default {
     getDataOnList() {
       let data = _getFiltersData.call(this);
       _getData.call(this, '/search', data);
+      this.$page.props.modals.search = true;
       this.close();
     },
     getDataOnMap() { 
@@ -504,7 +518,8 @@ export default {
         replace: true,
         only: props ?? [],
         onFinish: () => {       
-          this.updateFoundMessage();          
+          this.updateFoundMessage();
+          this.handleResize();          
         },
       });
     },  
@@ -521,7 +536,7 @@ export default {
     filterValueHandler(model, isAttr = false, key, value) {
       _updateFilterValue.call(this, model, isAttr, key, value);
 
-      let props = ["total", "filters", 'filter_tags'];
+      let props = ["total", "filters", 'filter_tags', 'city_tag_list'];
       if (key == "city") {
         this.$page.props.filters.hotels.area = null;
         this.$page.props.filters.hotels.district = null;
