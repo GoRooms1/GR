@@ -69,7 +69,7 @@ final class GetCityTagListAction extends Action
         }
 
         /** Other city */
-        $regionalCenter = RegionalCenter::where('region', $region)->first();
+        $regionalCenter = RegionalCenter::where('region', $region)->orWhere('city', $city)->first();        
 
         $cities->push(new CityTagListData(                    
             name: $regionalCenter ? $regionalCenter->city : $city,
@@ -79,7 +79,9 @@ final class GetCityTagListAction extends Action
 
         if ($city == 'Москва')
             $cities = $cities->merge($this->getCitiesInRegionData('Московская'));
-
+        
+        if ($regionalCenter)
+            $cities = $cities->merge($this->getCitiesInRegionData($regionalCenter->region));
         
         /** Add Other regional centers */
         $regionalCenters = RegionalCenter::distinct('city')
