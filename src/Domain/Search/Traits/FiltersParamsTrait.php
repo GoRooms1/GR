@@ -58,6 +58,9 @@ trait FiltersParamsTrait
         $city = $this->params->hotels->city;
         $area = $this->params->hotels->area;
         $district = $this->params->hotels->district;
+
+        if ($city == 'Москва и МО')
+            $city = 'Москва';
       
         return fn() => Cache::remember('params_metros_'.Str::slug($city).'_'.Str::slug($area).'_'.Str::slug($district), now()->addDays(30), function () use ($city, $area, $district) {            
             return MetroKeyNameData::collection(GetAllCityMetrosAction::run($city, $area, $district));
@@ -80,6 +83,9 @@ trait FiltersParamsTrait
     public function city_areas(): Closure
     {
         $city = $this->params->hotels->city;
+
+        if ($city == 'Москва и МО')
+            $city = 'Москва';
         
         return fn() => Cache::remember('params_areas_'.Str::slug($city), now()->addDays(30), function () use ($city) {            
             return CityAreaKeyNameData::collection(GetCityAreasAction::run($city));
@@ -93,6 +99,9 @@ trait FiltersParamsTrait
     {
         $city = $this->params->hotels->city;
         $area = $this->params->hotels->area;
+
+        if ($city == 'Москва и МО')
+            $city = 'Москва';
         
         return fn() => Cache::remember('params_districts_'.Str::slug($city).'_'.Str::slug($area), now()->addDays(30), function () use ($city, $area) {            
             return CityDistrictKeyNameData::collection(GetCityDistrictsAction::run($city, $area));
