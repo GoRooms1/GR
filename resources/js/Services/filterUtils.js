@@ -29,7 +29,7 @@ function _getFiltersData(isFilter = false) {
 };
 
 function _getData(url, data, onFinish, onSuccess) {
-  let props = ["hotels", "rooms", "page_description", "map_center", "filters", "filter_tags", "list_type", "is_map", "default_description", "path"];
+  let props = ["hotels", "rooms", "page_description", "map_center", "filters", "filter_tags", "list_type", "is_map", "default_description", "path", "city_tag_list"];
 
   this.$nextTick(() => {
     this.$inertia.get(url, data, {

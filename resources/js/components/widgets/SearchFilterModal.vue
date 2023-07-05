@@ -72,7 +72,7 @@
             <city-filter-tag
               v-if="$page.props?.filters?.hotels?.city"
               :title="$page.props?.filters?.hotels?.city"
-              :cities="$page.props?.cities ?? []"        
+              :cities="$page.props?.city_tag_list ?? []"        
             />
             <filter-tag
               v-for="tag in ($page.props?.filter_tags ?? [])" v-bind:key="tag.key + '_' + tag.value"
@@ -536,7 +536,7 @@ export default {
     filterValueHandler(model, isAttr = false, key, value) {
       _updateFilterValue.call(this, model, isAttr, key, value);
 
-      let props = ["total", "filters", 'filter_tags'];
+      let props = ["total", "filters", 'filter_tags', 'city_tag_list'];
       if (key == "city") {
         this.$page.props.filters.hotels.area = null;
         this.$page.props.filters.hotels.district = null;

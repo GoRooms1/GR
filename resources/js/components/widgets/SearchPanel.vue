@@ -140,7 +140,7 @@
         <city-filter-tag
           v-if="$page.props?.filters?.hotels?.city"
           :title="$page.props?.filters?.hotels?.city"
-          :cities="$page.props?.cities ?? []"        
+          :cities="$page.props?.city_tag_list ?? []"       
         />
         <filter-tag
           v-for="tag in ($page.props?.filter_tags ?? [])" v-bind:key="tag.key + '_' + tag.value"

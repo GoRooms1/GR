@@ -11,6 +11,7 @@ use Domain\Address\Actions\GetAllCityMetrosAction;
 use Domain\Address\Actions\GetAvailibleCitiesAction;
 use Domain\Address\Actions\GetCityAreasAction;
 use Domain\Address\Actions\GetCityDistrictsAction;
+use Domain\Address\Actions\GetCityTagListAction;
 use Domain\Address\DataTransferObjects\CityAreaKeyNameData;
 use Domain\Address\DataTransferObjects\CityDistrictKeyNameData;
 use Domain\Address\DataTransferObjects\CityKeyNameData;
@@ -41,12 +42,20 @@ trait FiltersParamsTrait
             $cities = collect([]);
             $cities->push(new CityKeyNameData(
                 key: 'Москва и МО',
-                name: 'Москва и МО',
-                slug: route('home')
+                name: 'Москва и МО',               
             ));
             $cities = $cities->merge(CityKeyNameData::collection(GetAvailibleCitiesAction::run())->toArray());    
 
             return $cities;
+        });
+    }
+
+    public function city_tag_list(): Closure
+    {
+        $city = $this->params->hotels->city;
+
+        return fn() => Cache::remember('city_tag_list_'.$city, now()->addDays(30), function () use ($city) {
+            return GetCityTagListAction::run($city);
         });
     }
 

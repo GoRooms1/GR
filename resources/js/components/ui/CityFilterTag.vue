@@ -17,7 +17,9 @@
             class="placeholder:text-[#A7ABB7] px-[10px] h-[32px] w-full bg-[#EAEFFD] rounded-[8px] text-sm leading-[16px]" />
         </div>
         <Link v-for="city in filteredCities" :href="city?.slug + ($page?.props?.filters?.as == 'map' ? '?as=map' : '')"
-          class="text-[14px] leading-[16px] w-full p-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150">
+          class="text-[14px] leading-[16px] w-full p-[8px] h-[32px] flex items-center justify-start rounded-[8px] md:hover:border border-solid border-[#6170FF] transition duration-150"
+          :class="city?.is_center === true ? 'font-bold' : ''"
+        >
         {{ city.name }}
         </Link>
         <div v-if="filteredCities.length == 0">

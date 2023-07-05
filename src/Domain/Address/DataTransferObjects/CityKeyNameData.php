@@ -11,8 +11,7 @@ final class CityKeyNameData extends \Parent\DataTransferObjects\Data
 {
     public function __construct(
         public ?string $key,
-        public ?string $name,
-        public ?string $slug,
+        public ?string $name,        
     ) {
     }
 
@@ -20,8 +19,7 @@ final class CityKeyNameData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             'key' => $address->city,
-            'name' => $address->city,
-            'slug' => GetCitySlugAction::run($address)
+            'name' => $address->city,           
         ]);
     }
 }
