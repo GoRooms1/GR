@@ -2,13 +2,13 @@
   <div class="px-4 w-full xl:w-1/3">
     <div class="my-4">      
       <div
-        v-if="hotel?.moderate === true || hasImagesToModerate"
+        v-if="(hotel?.moderate === true || hasImagesToModerate) && $page.props?.is_moderator === true"
         class="overflow-hidden object-cover rounded-tl-2xl rounded-tr-2xl relative mx-4 h-60"
       >      
         <img class="w-full h-full object-cover" src="/img/hotel-moderate.jpg" alt="moderate"/>               
       </div>
       <swiper 
-        v-if="hotel?.moderate !== true && !hasImagesToModerate"
+        v-if="!((hotel?.moderate === true || hasImagesToModerate) && $page.props?.is_moderator === true)"
         :slides-per-view="1"
         :loop="true"        
         :pagination="pagination"
