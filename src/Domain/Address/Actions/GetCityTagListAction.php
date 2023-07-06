@@ -74,10 +74,10 @@ final class GetCityTagListAction extends Action
         }
 
         /** Other city */
-        $regionalCenters = RegionalCenter::where('region', $region)->orWhere('city', $city)->get();
+        $regionalCenters = RegionalCenter::where('region', $region)->orWhere('city', $region)->get();
         
         if ($regionalCenters->count() > 0) 
-        {
+        {           
             $regionalCenter = $regionalCenters->first();            
             
             $cities->push(new CityTagListData(                    
@@ -92,32 +92,33 @@ final class GetCityTagListAction extends Action
         /** Add Other regional centers */
         $regionalCenters = RegionalCenter::distinct('city')
             ->select('city')
-            ->whereNot('city', $city)           
+            ->whereNot('city', $city)
+            ->orderBy('city')           
             ->get();
         
         $otherCities = collect([]);
 
-        $otherCities->push(new CityTagListData(                    
+        $otherCities->push(new CityTagListData(
+            name: 'Москва',
+            slug: $this->getCitySlug('Москва'),
+            is_center: true,      
+        ));
+        
+        $otherCities->push(new CityTagListData(
             name: 'Москва и МО',
             slug: route('home'),
             is_center: true,      
         ));
 
-        $otherCities->push(new CityTagListData(                    
-            name: 'Москва',
-            slug: $this->getCitySlug('Москва'),
-            is_center: true,      
-        ));
-
         foreach ($regionalCenters as $center) {
-            $cities->push(new CityTagListData(                    
+            $otherCities->push(new CityTagListData(
                 name: $center->city,
                 slug: $this->getCitySlug($center->city),
                 is_center: true,          
             ));
         }
 
-        $cities = $cities->merge($otherCities->sortBy('name'));        
+        $cities = $cities->merge($otherCities);        
         
         return $cities;
     }
