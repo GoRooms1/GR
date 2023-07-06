@@ -59,7 +59,7 @@ final class GetCityTagListAction extends Action
                 is_center: true,      
             ));
 
-            $cities = $cities->merge($this->getCitiesInRegionData(['Московская', 'Москва']));
+            $cities = $cities->merge($this->getCitiesInRegionData(['Московская', 'Москва'], 'Москва'));
             $regionalCenters = RegionalCenter::distinct('city')->select('city')->orderBy('city')->get();
 
             foreach ($regionalCenters as $center) {
@@ -86,7 +86,7 @@ final class GetCityTagListAction extends Action
                 is_center: true,   
             ));
 
-            $cities = $cities->merge($this->getCitiesInRegionData($regionalCenters->pluck('region')->all()));
+            $cities = $cities->merge($this->getCitiesInRegionData($regionalCenters->pluck('region')->all(), $regionalCenter->city));
         }
         
         /** Add Other regional centers */
@@ -122,7 +122,7 @@ final class GetCityTagListAction extends Action
         return $cities;
     }
 
-    private function getCitiesInRegionData(array $regions): \Illuminate\Support\Collection
+    private function getCitiesInRegionData(array $regions, string $city): \Illuminate\Support\Collection
     {
         $citiesData = collect([]);
         $cities = Address::distinctCity()
@@ -130,7 +130,8 @@ final class GetCityTagListAction extends Action
             ->whereHas('hotel')           
             ->whereNotNull('city')
             ->whereIn('region', $regions)
-            ->whereNotIn('city', $regions)
+            ->whereRaw('city != region')
+            ->where('city', '!=', $city)
             ->orderBy('city')
             ->get();
 
