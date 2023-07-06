@@ -123,16 +123,17 @@ final class GetCityTagListAction extends Action
         return $cities;
     }
 
-    private function getCitiesInRegionData(array $regions, string $city): \Illuminate\Support\Collection
+    private function getCitiesInRegionData(array $regions, string $center): \Illuminate\Support\Collection
     {
         $citiesData = collect([]);
+        $regions[] = $center;
         $cities = Address::distinctCity()
             ->select('city', 'region')            
             ->whereHas('hotel')           
             ->whereNotNull('city')
             ->whereIn('region', $regions)
             ->whereRaw('city != region')
-            ->where('city', '!=', $city)
+            ->where('city', '!=', $center)
             ->orderBy('city')
             ->get();
 
