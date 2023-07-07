@@ -14,10 +14,10 @@ use Support\Actions\DecodeRequestUrlAction;
 class AddressController extends Controller
 {   
     public function address(Request $request): Response | ResponseFactory
-    {
+    {        
         $params = ParamsData::fromRequest($request);
         
-        if ($request->path() !== 'address' && !$params->filter) {
+        if (!$params->filter) {            
             $params->hotels = DecodeRequestUrlAction::run($request);            
         }
 

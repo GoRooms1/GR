@@ -20,30 +20,31 @@ final class DecodeRequestUrlAction extends Action
         $array = explode('/', $url);
         $addressIndex = array_search('address', $array, true);
         $arrayParams = array_slice($array, $addressIndex + 1);
-
+        
         if (count($arrayParams) == 0)
-            return $hotelPramsData;
+            abort(404);
         
         $slugs = [];
         $slugs['city'] = $arrayParams[0];
 
-        array_map(static function ($item) use (&$slugs) {
+        array_map(static function ($item) use (&$slugs) {            
             if (false !== strpos($item, 'metro-')) {
                 $metro_url = explode('metro-', $item)[1];
                 $slugs['metro'] = $metro_url;           
             }
-
-            if (false !== strpos($item, 'area-')) {
+            else if (false !== strpos($item, 'area-')) {
                 $area_url = explode('area-', $item)[1];
                 $slugs['area'] = $area_url;
             }
-
-            if (false !== strpos($item, 'district-')) {
+            else if (false !== strpos($item, 'district-')) {
                 $district_url = explode('district-', $item)[1];
                 $slugs['district'] = $district_url;
             }
+            else {
+                abort(404);
+            }
 
-        }, $arrayParams);
+        }, array_slice($arrayParams, 1));
 
         foreach ($slugs as $key => $item) {
             $hotelPramsData->$key = $this->decodeSlug($item);
