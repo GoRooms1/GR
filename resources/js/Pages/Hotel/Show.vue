@@ -5,6 +5,7 @@
     :url="$page.props.app_url + page_description?.url"
     :meta_keywords="page_description?.meta_keywords"
     :meta_description="page_description?.meta_description"
+    :canonical="$page.props?.app_url + $page.props?.path"
   >
     <component is="script" type="application/ld+json">
       {

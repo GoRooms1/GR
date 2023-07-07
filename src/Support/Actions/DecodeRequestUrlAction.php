@@ -56,8 +56,8 @@ final class DecodeRequestUrlAction extends Action
         $addressSlug = DB::table('address_slug')->where('slug', $slug)->first();
 
         if (is_null($addressSlug))
-            return $slug;
+            abort(404);
 
-        return $addressSlug->address ?? $slug;
+        return $addressSlug->address;
     }    
 }

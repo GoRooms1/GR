@@ -107,13 +107,7 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
     public function is_map() 
     {
         return $this->isMap();
-    }
-
-    public function path(): string 
-    {
-        return Str::start(request()->path(), '/');
-    }
-
+    }   
     private function isMap(): bool 
     {
         return $this->params->as == 'map';

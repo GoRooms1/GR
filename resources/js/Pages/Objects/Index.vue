@@ -1,6 +1,8 @@
 <template>
   <AppHead :title="page_description?.title" :url="$page.props.app_url + page_description?.url"
-    :meta_keywords="page_description?.meta_keywords" :meta_description="page_description?.meta_description" />
+    :meta_keywords="page_description?.meta_keywords" :meta_description="page_description?.meta_description" 
+    :canonical="$page.props?.app_url + $page.props?.path"
+  />
   
   <div :class="is_map ? 'relative z-20 w-full' : 'md:mt-[49px] mt-[40px] relative'"
     :style="is_map ? '' : 'min-height: 160px'">
