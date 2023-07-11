@@ -24,6 +24,14 @@ final class UnitedCityFilter extends \Parent\Filters\Filter
         
         $city = explode(';', $value->toString())[0];
         $metro = explode(';', $value->toString())[1];
+
+        if ($city == 'Москва и МО') {
+            $builder->whereHas('address', function ($q) {
+                $q->where('city', 'Москва')->orWhere('region', 'Московская');
+            });            
+
+            return $next($builder);
+        }
         
         /** @var array<string> $unitedCities*/
         $unitedCities = GetUnitedCities::run($city)->toArray();
