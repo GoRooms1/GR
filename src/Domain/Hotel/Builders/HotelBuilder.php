@@ -99,7 +99,7 @@ final class HotelBuilder extends Builder
         }, ARRAY_FILTER_USE_KEY);
 
         if ($filters->metro != null && $filters->city != null) {
-            $mainFilters['united_city'] = $mainFilters['city'];
+            $mainFilters['united_city'] = $mainFilters['city'].';'.$filters->metro;
             unset($mainFilters['city']);
         }
         
