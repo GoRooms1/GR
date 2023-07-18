@@ -48,7 +48,7 @@ class HandleInertiaRequests extends Middleware
         $isModerator = GetLoggedUserModeratorStatusAction::run();
         
         return array_merge(parent::share($request), [            
-            'modals' => [],
+            'modals' => fn() => [],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
             ],

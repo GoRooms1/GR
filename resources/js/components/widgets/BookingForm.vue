@@ -10,7 +10,7 @@
       >
         <img src="/img/close.svg" alt="close"/>
       </button>
-      <form v-if="!bookingSuccess" @submit.prevent="">
+      <form v-if="bookingSuccess !== true" @submit.prevent="">
         <div
           class="flex flex-col p-6 lg:p-4 rounded-t-3xl bg-white lg:shadow-md z-[2] mx-6 lg:mx-0"
         >
@@ -177,7 +177,7 @@
         </div>
       </form>
       <div
-        v-if="bookingSuccess"
+        v-if="bookingSuccess === true"
         class="mt-[20vh] lg:m-0 lg:w-[800px] lg:h-[374px] flex flex-col relative items-center justify-center bg-white rounded-3xl p-6 overflow-hidden"
       >
         <img
@@ -385,7 +385,10 @@ export default {
     },
     submit() {
       this.form.post("/rooms/booking", {
-        onSuccess: () => (this.bookingSuccess = true),
+        preserveState: true,
+        preserveScroll: true,
+        only: ['flash'],
+        onSuccess: () => {this.bookingSuccess = true;},        
       });
     },
     setDefaultValues() {
