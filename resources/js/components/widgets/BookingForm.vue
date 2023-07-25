@@ -1,8 +1,7 @@
 <template>
   <div
-    class="fixed px-[1.625rem] pb-[1.625rem] xs:pt-[2.25rem] sm:pt-[3.75rem] pt-[1.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex-col lg:justify-center items-center overflow-y-auto"
-    :class="room != null ? 'flex' : 'hidden'"
-    >
+    class="flex fixed px-[1.625rem] pb-[1.625rem] xs:pt-[2.25rem] sm:pt-[3.75rem] pt-[1.75rem] lg:p-0 lg:fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] lg:h-[100vh] backdrop-blur-[2.5px] flex-col lg:justify-center items-center overflow-y-auto"
+  >
     <div class="max-w-[800px] flex flex-col w-full lg:mb-[160px]">
       <button
         @click="close()"
@@ -229,12 +228,7 @@ export default {
   },
   props: {    
     room: Object,
-  }, 
-  mounted() {
-    this.setDefaultValues();        
-    this.switchCostType(1);
-    this.v$.$validate();    
-  }, 
+  },  
   data() {
     return {
       costType: 1,
@@ -271,6 +265,11 @@ export default {
     }
   },  
   methods: {
+    init() {
+      this.setDefaultValues();      
+      this.switchCostType(1);
+      this.v$.$validate(); 
+    },
     phoneValidator(value) {
       if (this.phoneMask === '+7 (###) ### ## ##') return value.length == this.phoneMask.length;
       return value.length >= 7;
@@ -414,6 +413,12 @@ export default {
       this.form.bookingSuccess = false;
       this.form.phoneMask = "+7 (###) ### ## ##";       
     },
-  },  
+  },
+  watch: {
+    room(newVal, oldVal) {
+      if (newVal != null && oldVal == null)
+        this.init();
+    } 
+  }  
 };
 </script>
