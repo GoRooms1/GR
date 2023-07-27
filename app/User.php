@@ -99,7 +99,7 @@ class User extends Authenticatable
      */
     public const POSITIONS_LANGUAGE = [self::POSITION_STAFF => 'STAFF', self::POSITION_GENERAL => 'GENERAL'];
 
-    protected $fillable = ['name', 'email', 'password', 'is_admin', 'phone', 'position', 'code', 'position', 'is_moderate'];
+    protected $fillable = ['name', 'email', 'password', 'is_admin', 'phone', 'position', 'code', 'position', 'is_moderate', 'telegram_id'];
 
     protected $hidden = ['password', 'remember_token'];
 

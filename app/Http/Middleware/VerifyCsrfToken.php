@@ -13,5 +13,8 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/admin/upload',
+        //'/6091688920_AAGn3jtD0UmKVKs2xftY46_EJANNV8oGNfM/webhook'
+        '/*/webhook',
+        '*/webhook',
     ];
 }

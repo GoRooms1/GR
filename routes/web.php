@@ -10,6 +10,7 @@ use App\Http\Controllers\Lk;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SiteMapController;
+use Domain\Bot\Controllers\BotController;
 use Domain\Search\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -60,3 +61,7 @@ Route::get('/rules', [PageController::class, 'show']);
 
 Route::get('lk/start', [Lk\HomeController::class, 'start'])->name('lk.start');
 Route::post('lk/object/store', [Lk\ObjectController::class, 'store'])->name('lk.object.store');
+
+//Telegram Webhook
+Route::post('/'.Str::replace(':', '_', config('telegram.bots.mybot.token')).'/webhook', [BotController::class, 'index'])->name('webhook-win');
+Route::post('/'.config('telegram.bots.mybot.token').'/webhook', [BotController::class, 'index'])->name('webhook');
