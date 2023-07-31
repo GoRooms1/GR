@@ -54,13 +54,17 @@
   <div class="header__top">
     <div class="container">
       <div class="row align-items-center">
-        <div class="col-6">
+        <div class="col-4">
           <a href="{{ route('lk.index') }}" class="logo-link">
             <img src="{{ asset('img/lk/logo.png') }}" alt="" class="logo">
 
           </a>
+          {{ isset($hotel) ? $hotel->id : '' }}
         </div>
-        <div class="col-6 text-right">
+        <div class="col-4">
+        {{ isset($hotel) ? 'ID Отеля '.$hotel->id : '' }}
+        </div>
+        <div class="col-4 text-right">
           @if (auth()->check())
             <button type="button"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
