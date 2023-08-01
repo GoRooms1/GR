@@ -25,7 +25,7 @@ final class BookingData extends \Parent\DataTransferObjects\Data
         public ?Carbon $updated_at,
         public ?int $room_id,
         public int $on_show,
-
+        public ?float $amount,
     ) {
     }
 
@@ -47,6 +47,7 @@ final class BookingData extends \Parent\DataTransferObjects\Data
             'days_count' => $request->get('days_count', null),
             'room_id' => $request->get('room_id', null),
             'on_show' => 0,
+            'amount' => floatval($request->get('amount', 0)),
         ]);
     }
 }

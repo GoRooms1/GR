@@ -251,6 +251,7 @@ export default {
         book_type: "hour",
         hours_count: null,
         days_count: null,
+        amount: 0,
       }),
       bookingSuccess: false,
       phoneMask: "+7 (###) ### ## ##",
@@ -359,6 +360,8 @@ export default {
         this.form.hours_count = 0;
         this.amount = this.price * this.days;
       }
+
+      this.form.amount = this.amount;
     },    
     getNumsRange(from, to) {
       let hours = [];
@@ -411,7 +414,8 @@ export default {
       this.form.hours_count = null;
       this.form.days_count = null;
       this.form.bookingSuccess = false;
-      this.form.phoneMask = "+7 (###) ### ## ##";       
+      this.form.phoneMask = "+7 (###) ### ## ##";
+      this.form.amount = 0;    
     },
   },
   watch: {

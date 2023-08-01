@@ -34,6 +34,8 @@ class BookingRequest extends FormRequest
             'comment' => ['nullable'],
             'book_type' => ['required', 'string'],
             'hours_count' => ['nullable', 'int'],
+            'days_count' => ['nullable', 'int'],
+            'amount' => ['nullable', 'numeric'],
         ];
     }
 }
