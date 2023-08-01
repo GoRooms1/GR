@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static Collection run(int $hotel_id)
+ * @method static Collection run(int $telegram_id)
  */
 final class GetSubscribedHotelsAction extends Action
 {
