@@ -10,6 +10,7 @@ final class BotMessageData extends \Parent\DataTransferObjects\Data
         public int $chat_id,
         public ?string $text,
         public string $parse_mode = 'html',
+        public bool $disable_web_page_preview = true,
     ) {
     }
 }

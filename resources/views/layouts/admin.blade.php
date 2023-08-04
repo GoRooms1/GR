@@ -174,6 +174,9 @@
             <li class="nav-item">
               <a href="{{ route('admin.regional_centers.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.regional_centers.*') ? 'active' : '' }}">Региональные центры</a>
             </li>
+            <li class="nav-item">
+              <a href="{{ route('admin.bot_message_templates.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.bot_message_templates.*') ? 'active' : '' }}">Telegram бот</a>
+            </li>
           </ul>
         @endauth
       <!-- Right Side Of Navbar -->

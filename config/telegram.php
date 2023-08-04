@@ -214,4 +214,6 @@ return [
         // 'stop' => Acme\Project\Commands\StopCommand::class,
         // 'status' => Acme\Project\Commands\StatusCommand::class,
     ],
+
+    'job_delay' => env('TELEGRAM_NOTIFICATION_DELAY', 0),
 ];

@@ -2,6 +2,7 @@
 
 namespace Domain\Room\Jobs;
 
+use Domain\Bot\Actions\BotMessageTeplatesDispatchAction;
 use Domain\Bot\Actions\GetSubscribedUsersOnHotelAction;
 use Domain\Bot\DataTransferObjects\BotMessageData;
 use Domain\Bot\Jobs\BotNotificationJob;
@@ -60,15 +61,19 @@ class BookRoomJob implements ShouldQueue
           $text = GenerateBookingNotificationTextAction::run($this->data);
 
           foreach ($users as $user) {
-          $message = new BotMessageData(
-            chat_id: $user->telegram_id,
-            text: $text,
-          );
+            $message = new BotMessageData(
+              chat_id: $user->telegram_id,
+              text: $text,
+            );
 
-          BotNotificationJob::dispatch($message);
-        }
+            BotNotificationJob::dispatch($message);
+          }
+          
         } catch (\Exception $e) {
           \Log::error($e);
         }
+
+        //Dispatch bot notifications from bot
+        BotMessageTeplatesDispatchAction::run($room->hotel_id);
     }
 }

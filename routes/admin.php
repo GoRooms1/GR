@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AttributeCategoriesController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\BotMessageTemplateController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CostTypeController;
 use App\Http\Controllers\Admin\HomeController;
@@ -93,3 +94,7 @@ Route::resource('instructions', InstructionController::class);
 Route::resource('united_cities', UnitedCityController::class);
 
 Route::resource('regional_centers', RegionalCenterController::class)->except('show');
+
+Route::resource('bot_message_templates', BotMessageTemplateController::class)->except('show');;
+Route::post('bot_message_templates/{botMessageTemplate}/send_test', [BotMessageTemplateController::class, 'sendTest'])->name('bot_message_templates.send-test');
+Route::post('bot_message_templates/{botMessageTemplate}/send_onetime', [BotMessageTemplateController::class, 'sendOnetime'])->name('bot_message_templates.send-onetime');
