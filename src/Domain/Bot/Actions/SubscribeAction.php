@@ -6,6 +6,7 @@ namespace Domain\Bot\Actions;
 
 use App\User;
 use Domain\Hotel\Models\Hotel;
+use Illuminate\Support\Facades\Redis;
 use Lorisleiva\Actions\Action;
 
 /**
@@ -22,7 +23,7 @@ final class SubscribeAction extends Action
             ->first();
 
         if (!$user)
-            return 'Не удалось найти сотрудника отеля с указанным номером телефона!';
+            return 'Во время подписки произошла ошибка! Попробуйте начать заново с команды /sub';
 
         if (!password_verify($pass, $user->password))
             return 'Неверный пароль!';
@@ -31,6 +32,7 @@ final class SubscribeAction extends Action
         $user->save();
         
         $hotel = Hotel::withoutGlobalScopes()->where('id', $hotel_id)->first();
+        Redis::del('bot:'.$telegram_id.':sub');
 
         return sprintf('Вы успешно подписались на уведомления отеля <b>%s</b>'.PHP_EOL, $hotel->name);
     }
