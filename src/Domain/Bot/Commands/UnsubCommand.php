@@ -11,7 +11,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class UnsubCommand extends Command
 {
-    protected string $name = 'unsub';
+    protected string $name = '2';
     protected string $pattern = '{hotel: \d+}';
     protected string $description = 'Отписаться от уведомлений';
 

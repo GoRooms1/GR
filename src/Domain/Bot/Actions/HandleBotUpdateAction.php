@@ -32,9 +32,7 @@ final class HandleBotUpdateAction extends Action
     private function handleSubscribe(int $telegram_id, string|null $message) 
     {
         $key = 'bot:'.$telegram_id.':sub';
-        $subscribeData = SubscribeData::from(json_decode(Redis::get($key), true));
-
-        \Log::info($subscribeData);
+        $subscribeData = SubscribeData::from(json_decode(Redis::get($key), true));        
 
         //Fill hotel_id
         if ($subscribeData->hotel_id === null) {
@@ -54,7 +52,7 @@ final class HandleBotUpdateAction extends Action
 
             Telegram::sendMessage([
                 'chat_id' => $telegram_id,
-                'text' => 'Узнал Ваш отель, теперь укажите Ваш номер телефона:',
+                'text' => 'Узнал Ваш отель, теперь укажите Ваш номер телефона, начиная с +7:',
             ]);
 
             return;

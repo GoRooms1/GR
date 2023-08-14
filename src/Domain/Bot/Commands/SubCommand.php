@@ -9,7 +9,7 @@ use Telegram\Bot\Commands\Command;
 
 class SubCommand extends Command
 {
-    protected string $name = 'sub';   
+    protected string $name = '1'; 
     protected string $description = 'Подписаться на уведомления нового отеля';
 
     public function handle()

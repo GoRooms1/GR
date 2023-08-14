@@ -8,7 +8,7 @@ use Telegram\Bot\Commands\Command;
 
 class HotelsCommand extends Command
 {
-    protected string $name = 'hotels';    
+    protected string $name = '3';    
     protected string $description = 'Список отелей, на которые Вы подписаны';
 
     public function handle()

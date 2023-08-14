@@ -12,7 +12,7 @@ use Lorisleiva\Actions\Action;
 /**
  * @method static string run(BookingData $bookingData)
  */
-final class GenerateBookingNotificationTextAction extends Action
+final class GenerateBookingBotNotificationTextAction extends Action
 {
     /**
      * @param  BookingData  $bookingData
@@ -46,6 +46,8 @@ final class GenerateBookingNotificationTextAction extends Action
             .$room->name
             .(strlen($room->category->name ?? '') > 1 ? ' ('.$room->category->name.')' : '');
 
+        $phone = '+'.preg_replace('/\D/', '', $bookingData->client_phone);
+
         /** @var string $text */        
         $text = '<b>Бронирование № '.$bookingData->book_number.PHP_EOL;
         $text .= 'Отель "'.$room->hotel->name.'" id '.$room->hotel_id.':</b>'.PHP_EOL;
@@ -57,7 +59,7 @@ final class GenerateBookingNotificationTextAction extends Action
         $text .= 'Сумма - '.$bookingData->amount.' р.'.PHP_EOL;
         $text .= ' '.PHP_EOL;
         $text .= 'Имя: '.$bookingData->client_fio.PHP_EOL;
-        $text .= 'Телефон: '.$bookingData->client_phone.PHP_EOL;
+        $text .= 'Телефон: '.$phone.PHP_EOL;
         $text .= 'Комментарий: '.$bookingData->book_comment.PHP_EOL;
 
         return $text;

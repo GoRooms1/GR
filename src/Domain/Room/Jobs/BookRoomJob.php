@@ -6,7 +6,7 @@ use Domain\Bot\Actions\BotMessageTeplatesDispatchAction;
 use Domain\Bot\Actions\GetSubscribedUsersOnHotelAction;
 use Domain\Bot\DataTransferObjects\BotMessageData;
 use Domain\Bot\Jobs\BotNotificationJob;
-use Domain\Room\Actions\GenerateBookingNotificationTextAction;
+use Domain\Room\Actions\GenerateBookingBotNotificationTextAction;
 use Domain\Room\DataTransferObjects\BookingData;
 use Domain\Room\Mails\RoomBookingMail;
 use Domain\Room\Models\Room;
@@ -58,7 +58,7 @@ class BookRoomJob implements ShouldQueue
         //Telegram notification
         try {
           $users = GetSubscribedUsersOnHotelAction::run($room->hotel_id);
-          $text = GenerateBookingNotificationTextAction::run($this->data);
+          $text = GenerateBookingBotNotificationTextAction::run($this->data);
 
           foreach ($users as $user) {
             $message = new BotMessageData(

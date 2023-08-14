@@ -39,7 +39,7 @@ class StartCommand extends Command
             'text' => 'Список доступных команд:',
         ]);
 
-        $commands = Arr::only($this->telegram->getCommandBus()->getCommands(), ['sub', 'unsub', 'hotels']);
+        $commands = Arr::only($this->telegram->getCommandBus()->getCommands(), ['1', '2', '3']);
 
         $text = '';
         foreach ($commands as $name => $handler) {
