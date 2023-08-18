@@ -48,7 +48,7 @@ class HandleInertiaRequests extends Middleware
         $isModerator = GetLoggedUserModeratorStatusAction::run();
         
         return array_merge(parent::share($request), [            
-            'modals' => [],
+            'modals' => fn() => [],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
             ],
@@ -57,11 +57,12 @@ class HandleInertiaRequests extends Middleware
                 'rooms' => fn() => GetAvailibleRoomsCountAction::run(),
                 'cities' => fn() => GetAvailibleCitiesCountAction::run(),
             ],            
-            'contacts' => fn() => GetContactsSettingsAction::run(),            
-            'app_url' => fn() => config('app.url'),
+            'contacts' => fn() => GetContactsSettingsAction::run(),       
+            'app_url' => fn() => $request->root(),
+            'path' => rtrim(Str::start($request->path(), '/'), '/'),
             'is_moderator' => fn() => $isModerator,
             'yandex_api_key' => fn() => config('services.yandex.map.key'),      
-            'is_loading' => false,   
+            'is_loading' => false,            
         ]);
     }
 }

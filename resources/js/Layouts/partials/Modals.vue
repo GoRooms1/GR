@@ -1,19 +1,15 @@
 <template> 
  <!-- Modals -->
- <booking-form v-if="$page?.props?.modals?.booking === true" :room="bookingRoom" />
- <booking-form-fake v-if="$page?.props?.modals?.booking !== true" />
+ <booking-form ref="booking" v-show="$page?.props?.modals?.booking === true" :room="bookingRoom" />
  <search-filter-modal ref="filters" v-if="$page.props?.has_filters && $page.props?.modals?.filters === true"/>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import BookingFormFake from '@/components/ui/BookingFormFake.vue'
+import BookingForm from '@/components/widgets/BookingForm.vue'
 export default {
-  components: {
-    BookingFormFake,
-    BookingForm: defineAsyncComponent(() =>
-      import('@/components/widgets/BookingForm.vue')
-    ),
+  components: {    
+    BookingForm,    
     SearchFilterModal: defineAsyncComponent(() =>
       import('@/components/widgets/SearchFilterModal.vue')
     ),
@@ -48,7 +44,7 @@ export default {
     openBookingModal(e) {
       this.setFixed();
       this.bookingRoom = e;      
-      this.$page.props.modals.booking = true;
+      this.$page.props.modals.booking = true;      
     },
     closeBookingModal() {
       this.removeFixed();    

@@ -22,7 +22,7 @@
       property="og:site_name"
       :content="$page.props.app_url + '/'"
     />
-    <link v-if="meta_keywords" rel="canonical" :href="meta_keywords" />
+    <link v-if="canonical" rel="canonical" :href="canonical" />
     <slot />
   </Head>
 </template>
@@ -40,6 +40,7 @@ export default {
     url: String,
     meta_description: String,
     meta_keywords: String,
+    canonical: String,
     hotel: {
       type: Object,
       default: null,

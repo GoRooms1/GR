@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Support\Actions;
 
 use DB;
+use Domain\PageDescription\Models\PageDescription;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Action;
@@ -40,29 +41,24 @@ final class GetSeoUrlAction extends Action
         
         /** Metro slug */        
         if (!empty($metro)) {
-            if (!$this->checkSlug($metro))
-                return null;
-
             $url .= '/metro-'.CustomStr::getCustomSlug($metro);
             $paramsData->hotels->metro = null;
         }
         
         /** Area slug */
         if (!empty($area) && empty($metro)) {
-            if (!$this->checkSlug($area))
-                return null;
-
             $url .= '/area-'.CustomStr::getCustomSlug($area);
             $paramsData->hotels->area = null;
         }           
         
         /** District slug */
-        if (!empty($area) && !empty($district) && empty($metro)) {
-            if (!$this->checkSlug($district))
-                return null;
-
+        if (!empty($area) && !empty($district) && empty($metro)) {          
             $url .= '/district-'.CustomStr::getCustomSlug($district);
             $paramsData->hotels->district = null;
+        }
+
+        if (! PageDescription::where('url', $url)->exists()) {
+            return null;
         }
         
         $queryParamsString = $paramsData->toQueryString();

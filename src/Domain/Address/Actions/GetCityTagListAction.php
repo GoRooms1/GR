@@ -59,7 +59,7 @@ final class GetCityTagListAction extends Action
                 is_center: true,      
             ));
 
-            $cities = $cities->merge($this->getCitiesInRegionData(['Московская', 'Москва']));
+            $cities = $cities->merge($this->getCitiesInRegionData(['Московская', 'Москва'], 'Москва'));
             $regionalCenters = RegionalCenter::distinct('city')->select('city')->orderBy('city')->get();
 
             foreach ($regionalCenters as $center) {
@@ -74,10 +74,10 @@ final class GetCityTagListAction extends Action
         }
 
         /** Other city */
-        $regionalCenters = RegionalCenter::where('region', $region)->orWhere('city', $city)->get();
+        $regionalCenters = RegionalCenter::where('region', $region)->orWhere('city', $region)->get();
         
         if ($regionalCenters->count() > 0) 
-        {
+        {           
             $regionalCenter = $regionalCenters->first();            
             
             $cities->push(new CityTagListData(                    
@@ -86,51 +86,54 @@ final class GetCityTagListAction extends Action
                 is_center: true,   
             ));
 
-            $cities = $cities->merge($this->getCitiesInRegionData($regionalCenters->pluck('region')->all()));
+            $cities = $cities->merge($this->getCitiesInRegionData($regionalCenters->pluck('region')->all(), $regionalCenter->city));
         }
         
         /** Add Other regional centers */
         $regionalCenters = RegionalCenter::distinct('city')
             ->select('city')
-            ->whereNot('city', $city)           
+            ->whereNot('city', $city)
+            ->orderBy('city')           
             ->get();
         
         $otherCities = collect([]);
 
-        $otherCities->push(new CityTagListData(                    
+        $otherCities->push(new CityTagListData(
+            name: 'Москва',
+            slug: $this->getCitySlug('Москва'),
+            is_center: true,      
+        ));
+        
+        $otherCities->push(new CityTagListData(
             name: 'Москва и МО',
             slug: route('home'),
             is_center: true,      
         ));
 
-        $otherCities->push(new CityTagListData(                    
-            name: 'Москва',
-            slug: $this->getCitySlug('Москва'),
-            is_center: true,      
-        ));
-
         foreach ($regionalCenters as $center) {
-            $cities->push(new CityTagListData(                    
+            $otherCities->push(new CityTagListData(
                 name: $center->city,
                 slug: $this->getCitySlug($center->city),
                 is_center: true,          
             ));
         }
 
-        $cities = $cities->merge($otherCities->sortBy('name'));        
+        $cities = $cities->merge($otherCities);        
         
         return $cities;
     }
 
-    private function getCitiesInRegionData(array $regions): \Illuminate\Support\Collection
+    private function getCitiesInRegionData(array $regions, string $center): \Illuminate\Support\Collection
     {
         $citiesData = collect([]);
+        $regions[] = $center;
         $cities = Address::distinctCity()
             ->select('city', 'region')            
             ->whereHas('hotel')           
             ->whereNotNull('city')
             ->whereIn('region', $regions)
-            ->whereNotIn('city', $regions)
+            ->whereRaw('city != region')
+            ->where('city', '!=', $center)
             ->orderBy('city')
             ->get();
 
