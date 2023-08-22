@@ -37653,6 +37653,9 @@ if (image_field) {
           container.prepend(col);
         }
       }
+      else {
+        alert(response.payload.error);
+      } 
     });
   });
 }

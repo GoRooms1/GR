@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Domain\Image\Actions;
 
 use App\Models\Article;
+use Domain\AdBanner\Models\AdBanner;
 use Domain\Hotel\Models\Hotel;
 use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\Room\Models\Room;
@@ -27,7 +28,7 @@ final class UploadImageAction extends Action
      * @param  string  $attr_name
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection|array
      */
-    public function handle(Request $request, Hotel|Room|Article $uploadTo, string $attr_name = 'image'): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection|array
+    public function handle(Request $request, Hotel|Room|Article|AdBanner $uploadTo, string $attr_name = 'image'): CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection|array
     {
         if (! $request->hasFile($attr_name)) {
             return [];

@@ -7,6 +7,7 @@ namespace Domain\Image\Traits;
 use App\Helpers\Json;
 use App\Parents\Model;
 use Carbon\Carbon;
+use Domain\AdBanner\Models\AdBanner;
 use Domain\Image\Actions\UploadImageAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -60,16 +61,25 @@ trait UploadImage
         try {
             /** @var class-string<Model> $modelName */
             $modelName = '\\App\\Models\\'.$modelShort;
+
             if (! class_exists($modelName)) {
                 $modelEnum = ModelNamesEnum::fromName($modelShort);
                 /** @var class-string<Model> $modelName */
+              
                 $modelName = $modelEnum->getClassName();
             }
+
             $model = $modelName::findOrFail($modelID);
+
             if ($model->updated_at) {
                 $model->updated_at = Carbon::now();
                 $model->save();
             }
+
+            if ($this->checkLimit($model)) {                
+                return Json::answer(['error' => 'Нельзя добавить больше!'], false, 200);
+            }
+            
             $images = UploadImageAction::run($request, $model);
 
             return Json::good(['images' => $images]);
@@ -82,8 +92,20 @@ trait UploadImage
     {
         /** @var class-string<Model> $model */
         $model = $image->model_type;
+
+        if ($model == AdBanner::class)
+            return false;
+
         $object = $model::find($image->model_id);
 
-        return $object->getMedia()->count() === 1;
+        return $object->getMedia('images')->count() === 1;
+    }
+
+    private function checkLimit($model): bool 
+    {
+        if (get_class($model) != AdBanner::class)
+            return false;
+
+        return $model->getMedia('images')->count() >= 3;
     }
 }
