@@ -48,7 +48,7 @@ class AdBannerController extends Controller
 
     public function update(AdBannerUpdateRequest $request, AdBanner $ad_banner): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
-        $adBannerData = AdBannerData::fromRequest($request);
+        $adBannerData = AdBannerData::fromRequest($request);        
         $ad_banner->update($adBannerData->toArray());        
         $cities = Address::distinct('city')->whereNotNull('city')->orderBy('city')->pluck('city');
 

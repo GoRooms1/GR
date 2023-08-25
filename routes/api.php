@@ -42,4 +42,3 @@ Route::prefix('/filter')->name('filter.')->group(function () {
 
     Route::get('all', [Api\FilterController::class, 'all'])->name('all');
 });
-

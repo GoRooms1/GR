@@ -6,6 +6,8 @@ namespace Domain\Object\ViewModels;
 
 use Cache;
 use Closure;
+use Domain\AdBanner\DataTransferObjects\AdBannerData;
+use Domain\AdBanner\Models\AdBanner;
 use Domain\Address\Actions\GetMapCenterByCityAction;
 use Domain\Address\Traits\GeolocationTrait;
 use Domain\Hotel\Actions\FilterHotelsOnMapAction;
@@ -40,7 +42,7 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
      */
     public function __construct(
         protected ParamsData $params,
-        protected string $url,      
+        protected string $url,        
     ) {
     }
     
@@ -107,7 +109,22 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
     public function is_map() 
     {
         return $this->isMap();
-    }   
+    }
+
+    public function ad_params() 
+    {
+        $city = $this->params->hotels->city;
+        $page_type = $this->list_type();
+
+        if ($this->url == '/rooms/hot')
+            $page_type = 'hot';
+
+        return [
+            'city' => $city,
+            'page_type' => $page_type,
+        ];
+    }
+    
     private function isMap(): bool 
     {
         return $this->params->as == 'map';
