@@ -15,8 +15,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('update:slugs')->daily();
-        //$schedule->command('update:addresses_slugs')->hourly();
+        $schedule->command('ad-banner:delete-inactive')
+            ->dailyAt('10:00')
+            ->runInBackground();
+
+        $schedule->command('ad-banner:notify-ending')
+            ->dailyAt('10:00')
+            ->runInBackground();
     }
 
     /**
