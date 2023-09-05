@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdBannerController;
+use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\AttributeCategoriesController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BookingController;
@@ -22,7 +23,6 @@ use App\Http\Controllers\Admin\RegionalCenterController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UnitedCityController;
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\RoomController;
