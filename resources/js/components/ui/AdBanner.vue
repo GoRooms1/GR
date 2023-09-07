@@ -1,7 +1,7 @@
 <template>   
   <div class="overflow-hidden rounded-2xl" :class="classes" v-intersection-observer="onIntersectionObserver">   
     <a :href="banner?.url">
-      <Transition name="zoom"  @after-enter="onAfterEnter">     
+      <Transition name="zoom">     
           <img :src="image.url" :key="key" class="w-full rounded-2xl"/>       
       </Transition>
     </a>    
@@ -57,10 +57,7 @@ export default {
       if (isIntersecting && (this.banner?.images ?? []).length == 1) {
         this.changeKey();
       }     
-    },
-    onAfterEnter(el) {      
-      el.classList.add('zommed');
-    }
+    },   
   },
 };
 </script>
