@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdBannerController;
+use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\AttributeCategoriesController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BookingController;
@@ -21,7 +23,6 @@ use App\Http\Controllers\Admin\RegionalCenterController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UnitedCityController;
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\RoomController;
@@ -95,6 +96,8 @@ Route::resource('united_cities', UnitedCityController::class);
 
 Route::resource('regional_centers', RegionalCenterController::class)->except('show');
 
-Route::resource('bot_message_templates', BotMessageTemplateController::class)->except('show');;
+Route::resource('bot_message_templates', BotMessageTemplateController::class)->except('show');
 Route::post('bot_message_templates/{botMessageTemplate}/send_test', [BotMessageTemplateController::class, 'sendTest'])->name('bot_message_templates.send-test');
 Route::post('bot_message_templates/{botMessageTemplate}/send_onetime', [BotMessageTemplateController::class, 'sendOnetime'])->name('bot_message_templates.send-onetime');
+
+Route::resource('ad_banners', AdBannerController::class)->except('show');

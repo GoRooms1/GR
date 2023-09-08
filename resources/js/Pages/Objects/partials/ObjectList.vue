@@ -1,9 +1,14 @@
-<template> 
-  <div v-if="$page.props?.is_loading !== true" class="container mx-auto px-4 relative min-[1920px]:px-[10vw] z-10">
-    <room-card v-if="type == 'rooms'" v-for="room in objectList" :room="room" classes="my-4" />    
-    <div v-if="type == 'hotels'" class="flex flex-wrap -mx-4 mb-4">
-      <hotel-card v-for="hotel in objectList" :hotel="hotel" classes="my-4" />
-    </div>   
+<template>  
+  <div v-if="$page.props?.is_loading !== true" class="container mx-auto px-4 relative min-[1920px]:px-[10vw] z-10" >
+    <div :class="type == 'hotels' ? 'flex flex-wrap -mx-4 mb-4' : ''">
+      <template v-for="(object, index) in objectList">
+        <room-card v-if="type == 'rooms'" :room="object" :key="object.id" classes="my-4" />
+        <hotel-card v-if="type == 'hotels'" :hotel="object" :key="object.id" classes="my-4" />
+        <div class="w-full justify-between flex" :class="type == 'hotels' ? 'mx-4' : ''" v-if="isBannerPosition(index) && ad_banners.length > 0">
+          <AdBanner v-for="banner in ad_banners" :banner="banner" :key="banner.id" :classes="ad_banners.length > 1 ? 'w-full w-[49%]' : 'w-full'"/>
+        </div>
+      </template>
+    </div>           
   </div>
   <div v-if="objectList.length > 0 && $page.props?.is_loading !== true"
     class="container mx-auto px-4 min-[1920px]:px-[10vw] mt-8 mb-12">
@@ -33,6 +38,8 @@ import Loader from "@/components/ui/Loader.vue";
 import Button from "@/components/ui/Button.vue";
 import { _getFiltersData } from "@/Services/filterUtils.js"
 import { defineAsyncComponent } from 'vue'
+import AdBanner from "@/components/ui/AdBanner.vue";
+import axios from 'axios';
 
 export default {
   components: {
@@ -43,7 +50,9 @@ export default {
       import('@/components/ui/HotelCard.vue')
     ),
     Loader,
-    Button,       
+    Button,
+    AdBanner,
+    axios,      
   },
   props: {
     objects: {
@@ -60,8 +69,20 @@ export default {
     return {      
       objectList: this.objects?.data ?? [],
       isLoading: false,
+      isMobile: false,
+      ad_banners: [],
     };
-  }, 
+  },
+  mounted() {
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", this.handleResize);      
+    }
+    this.handleResize();
+    this.loadBanners();   
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleResize);
+  },
   methods: {   
     loadMore() {
       let initialUrl =
@@ -97,12 +118,52 @@ export default {
           }
         );
       }
-    },    
+    },
+    handleResize() {
+      if (typeof window !== "undefined") {
+        let windowHeight = window.innerHeight;
+        let windowWidth = window.innerWidth;
+
+        if (windowWidth >= 1280)
+          this.isMobile = false;
+        else
+          this.isMobile = true;
+      }
+    },
+    isBannerPosition(index) {
+      let length = (this.objectList ?? []).length;      
+      let rows = this.type == 'rooms' ? 3 : (this.isMobile ? 3 : 6);
+
+      if (rows - 1 == index || (length < rows && index == length - 1))
+        return true;
+
+      return false;
+    },
+    loadBanners() {
+      let data = { 
+        num: this.isMobile ? 1 : 2,
+        city: this.$page.props?.ad_params?.city,
+        page_type: this.$page.props?.ad_params?.page_type,        
+      };
+
+      axios
+        .get('/api/ad_banners', {
+          params: data,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })        
+        .then(response => {        
+          let data = response?.data?.payload?.ad_banners;
+          if (data) this.ad_banners = data;
+        });
+    }    
   },
   watch: {
     objects: function (newVal, oldVal) {
       if (this.objects?.meta?.current_page == 1) {
         this.objectList = this.objects?.data ?? [];
+        this.loadBanners();
       }
     },
   },  

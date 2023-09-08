@@ -19,6 +19,7 @@
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="{{ asset('css/jquery.uploader.css') }}" rel="stylesheet">
 
   @if(config('app.debug'))
     <script src="{{ asset('js/vue-dev.js') }}"></script>
@@ -30,6 +31,7 @@
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
 </head>
 <body>
 <div id="app">
@@ -177,6 +179,9 @@
             <li class="nav-item">
               <a href="{{ route('admin.bot_message_templates.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.bot_message_templates.*') ? 'active' : '' }}">Telegram бот</a>
             </li>
+            <li class="nav-item">
+              <a href="{{ route('admin.ad_banners.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.ad_banners.*') ? 'active' : '' }}">Рекламные баннеры</a>
+            </li>
           </ul>
         @endauth
       <!-- Right Side Of Navbar -->
@@ -267,7 +272,6 @@
         referrerpolicy="origin"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ru.js" defer></script>
-
 
 <script>
   $("#address").suggestions({

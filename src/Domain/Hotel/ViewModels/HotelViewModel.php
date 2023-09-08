@@ -63,4 +63,14 @@ final class HotelViewModel extends \Parent\ViewModels\ViewModel
             fn() => RoomCardData::collection(FilterRoomsInHotelPaginateAction::run($this->hotel->id, $this->params->rooms))
         );
     }
+
+    public function ad_params() 
+    {
+        $city = $this->hotel->address->city;
+
+        return [
+            'city' => $city,
+            'page_type' => 'hotel',
+        ];
+    }
 }

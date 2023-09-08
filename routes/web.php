@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Api\AdBannerController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
@@ -65,3 +66,5 @@ Route::post('lk/object/store', [Lk\ObjectController::class, 'store'])->name('lk.
 //Telegram Webhook
 Route::post('/'.Str::replace(':', '_', config('telegram.bots.mybot.token')).'/webhook', [BotController::class, 'index'])->name('webhook-win');
 Route::post('/'.config('telegram.bots.mybot.token').'/webhook', [BotController::class, 'index'])->name('webhook');
+
+Route::get('/api/ad_banners', [AdBannerController::class, 'getBanners']);

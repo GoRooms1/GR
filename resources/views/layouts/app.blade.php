@@ -156,7 +156,7 @@
           <a href="{{ route('rooms.index') }}" class="header-menu-link">Номера</a>
         </li>
         <li class="header-menu-item">
-          <a href="{{ route('search.map') }}" class="header-menu-link">Поиск по карте <img
+          <a href="{{ route('search.index') }}" class="header-menu-link">Поиск<img
                     src="{{ asset('img/ico-search.svg') }}" alt=""></a>
         </li>
         <li class="header-menu-item">
@@ -226,7 +226,7 @@
         <a href="{{ route('rooms.index') }}" class="footer-menu-link">Номера</a>
       </li>
       <li class="footer-menu-item">
-        <a href="{{ route('search.map') }}" class="footer-menu-link">Поиск по карте</a>
+        <a href="{{ route('search.index') }}" class="footer-menu-link">Поиск</a>
       </li>
       <li class="footer-menu-item">
         <a href="/rules" class="footer-menu-link">Правила бронирования</a>
