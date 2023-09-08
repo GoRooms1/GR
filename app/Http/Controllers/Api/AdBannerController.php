@@ -46,6 +46,7 @@ class AdBannerController extends Controller
         }
         
         $adBannersQuery = AdBanner::inRandomOrder()
+            ->has('media')
             ->where(function($q) {
                 $q->where('is_show_always', true)
                     ->orWhere(function ($q) {
@@ -70,7 +71,16 @@ class AdBannerController extends Controller
             $num = $adBanners->count();
             
         $adBanners = $adBanners->random($num);
-        session()->put('last_ad', $adBanners->pluck('id'));        
+        session()->put('last_ad', $adBanners->pluck('id'));   
+        
+        if ($num > 1 && $adBanners->count() < $num)
+        {
+            $banner = $adBanners->first();
+            
+            while ($adBanners->count() < $num) {
+                $adBanners->push($banner);
+            }
+        }
 
         return Json::good(['ad_banners' => new DataCollection(AdBannerSimpleData::class, $adBanners)]);
     }
