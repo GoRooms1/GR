@@ -64,15 +64,23 @@ export default {
 
 <style scoped>  
   .zoom-enter-active {
-    transition: transform 1s ease-in-out;
-  }  
-  .zoom-enter-to {
-    transform: scale(1.05);
+    animation: zoom-in-zoom-out 2s ease;
   }
+
   .w-\[49\%\] {
     width: 49%;
   }
-  .zommed {
-    transform: scale(1.05);
+
+  @keyframes zoom-in-zoom-out {
+    0% {
+      transform: scale(1, 1);
+    }
+    50% {
+      transform: scale(1.05, 1.05);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
   }
+
 </style>
