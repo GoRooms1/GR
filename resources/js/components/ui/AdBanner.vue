@@ -1,10 +1,8 @@
 <template>   
   <div class="overflow-hidden rounded-2xl" :class="classes" v-intersection-observer="onIntersectionObserver">   
     <a :href="banner?.url">
-      <Transition name="zoom">     
-          <img :src="image.url" :key="key" class="w-full rounded-2xl"/>       
-      </Transition>
-    </a>    
+      <img :src="image?.conversions?.show ?? image.url" :key="key" class="w-full rounded-2xl zoom-infinity"/>
+    </a>   
   </div>  
 </template>
 
@@ -40,10 +38,10 @@ export default {
       if (this.position < length - 1) 
         this.position++;
       else if (this.position == length - 1)
-        this.position = 0;     
+        this.position = 0;
       
       this.image = this.banner?.images[this.position];
-      this.changeKey();     
+      this.changeKey();    
     },    
     play() {      
       setInterval(() => {              
@@ -62,9 +60,9 @@ export default {
 };
 </script>
 
-<style scoped>  
-  .zoom-enter-active {
-    animation: zoom-in-zoom-out 2s ease;
+<style scoped>
+  .zoom-infinity {
+    animation: zoom-in-zoom-out 2s ease-in-out;
   }
 
   .w-\[49\%\] {

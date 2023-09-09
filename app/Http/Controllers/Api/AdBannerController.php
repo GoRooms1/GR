@@ -67,11 +67,8 @@ class AdBannerController extends Controller
 
         $adBanners = $adBannersQuery->get();
 
-        if ($adBanners->count() < $num)
-            $num = $adBanners->count();
-            
-        $adBanners = $adBanners->random($num);
-        session()->put('last_ad', $adBanners->pluck('id'));   
+        $adBanners = $adBanners->random($adBanners->count() < $num ? $adBanners->count() : $num);
+        session()->put('last_ad', $adBanners->pluck('id'));
         
         if ($num > 1 && $adBanners->count() < $num)
         {
@@ -80,6 +77,7 @@ class AdBannerController extends Controller
             while ($adBanners->count() < $num) {
                 $adBanners->push($banner);
             }
+            
         }
 
         return Json::good(['ad_banners' => new DataCollection(AdBannerSimpleData::class, $adBanners)]);
