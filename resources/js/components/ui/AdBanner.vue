@@ -1,5 +1,5 @@
 <template>   
-  <div class="overflow-hidden rounded-2xl" :class="classes" v-intersection-observer="onIntersectionObserver">   
+  <div v-if="image" class="overflow-hidden rounded-2xl" :class="classes" v-intersection-observer="onIntersectionObserver">   
     <a :href="banner?.url" target="_blank">
       <img :src="image?.conversions?.show ?? image.url" :key="key" class="w-full rounded-2xl zoom-infinity"/>
     </a>   
@@ -8,26 +8,30 @@
 
 <script>
 import { vIntersectionObserver } from '@vueuse/components'
+import axios from 'axios';
 
 export default {
+  components: {
+    axios,
+  },
   directives: {
     intersectionObserver: vIntersectionObserver,
-  },
-  props: {
-    banner: Object,
+  },  
+  props: {   
     classes: String,
   },
   data() {
     return {
+      banner: {},
       position: 0,
-      image: this.banner?.images[0],
+      image: null,
       delay: 2000,
       visible: false,
       key: 1,     
     }
   },
-  mounted() {    
-    this.play();
+  mounted() {   
+    this.loadBanner();
   },
   methods: {
     changeSlide() {      
@@ -42,7 +46,34 @@ export default {
       
       this.image = this.banner?.images[this.position];
       this.changeKey();    
-    },    
+    },
+    loadBanner() {
+      let data = { 
+        num: 1,
+        city: this.$page.props?.ad_params?.city,
+        page_type: this.$page.props?.ad_params?.page_type,        
+      };
+
+      axios
+        .get('/api/ad_banners', {
+          params: data,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })        
+        .then(response => {        
+          let data = response?.data?.payload?.ad_banners;
+          if (data) { 
+            this.banner = data[0];
+            this.image = this.banner?.images[0];
+
+            return this.banner;
+          }          
+        })
+        .then(e => {
+          this.play();
+        });
+    },     
     play() {      
       setInterval(() => {              
         this.changeSlide();
