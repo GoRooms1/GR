@@ -132,9 +132,10 @@ export default {
     },
     isBannerPosition(index) {
       let length = (this.objectList ?? []).length;      
-      let rows = this.type == 'rooms' ? 3 : (this.isMobile ? 3 : 6);
+      let rows = this.type == 'rooms' ? 3 : (this.isMobile ? 3 : 6);     
+      let position = (index + 1) % rows;
 
-      if (rows - 1 == index || (length < rows && index == length - 1))
+      if ( position === 0 || (length < rows && index === length - 1) )
         return true;
 
       return false;

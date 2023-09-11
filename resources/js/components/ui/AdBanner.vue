@@ -1,6 +1,6 @@
 <template>   
   <div class="overflow-hidden rounded-2xl" :class="classes" v-intersection-observer="onIntersectionObserver">   
-    <a :href="banner?.url">
+    <a :href="banner?.url" target="_blank">
       <img :src="image?.conversions?.show ?? image.url" :key="key" class="w-full rounded-2xl zoom-infinity"/>
     </a>   
   </div>  
