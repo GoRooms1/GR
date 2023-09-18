@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Support\DataProcessing\Traits\ClearValidated;
 use Support\Dates\Traits\RusMonth;
 
@@ -47,9 +49,10 @@ use Support\Dates\Traits\RusMonth;
  * @method static Builder|Article whereUserId($value)
  * @mixin Eloquent
  */
-class Article extends Model
-{
+class Article extends Model implements HasMedia
+{   
     use UseImages;
+    use InteractsWithMedia;
     use RusMonth;
     use ClearValidated;
     use CreatedAtOrdered;

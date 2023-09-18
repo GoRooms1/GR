@@ -7,9 +7,11 @@ use Domain\AdBanner\DataTransferObjects\AdBannerData;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Image\Manipulations;
 use Spatie\LaravelData\WithData;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AdBanner extends Model implements HasMedia
 {    
@@ -50,4 +52,12 @@ class AdBanner extends Model implements HasMedia
         'created_at' => 'datetime:Y-m-d\TH:i:sP',
         'updated_at' => 'datetime:Y-m-d\TH:i:sP',      
     ];
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('show')
+            ->nonQueued()
+            ->format(Manipulations::FORMAT_WEBP)         
+            ->width(970);
+    }
 }

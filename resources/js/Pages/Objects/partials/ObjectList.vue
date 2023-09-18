@@ -4,8 +4,8 @@
       <template v-for="(object, index) in objectList">
         <room-card v-if="type == 'rooms'" :room="object" :key="object.id" classes="my-4" />
         <hotel-card v-if="type == 'hotels'" :hotel="object" :key="object.id" classes="my-4" />
-        <div class="w-full justify-between flex" :class="type == 'hotels' ? 'mx-4' : ''" v-if="isBannerPosition(index) && ad_banners.length > 0">
-          <AdBanner v-for="banner in ad_banners" :banner="banner" :key="banner.id" :classes="ad_banners.length > 1 ? 'w-full w-[49%]' : 'w-full'"/>
+        <div class="w-full justify-between flex" :class="type == 'hotels' ? 'mx-4' : ''" v-if="isBannerPosition(index)">
+          <AdBanner v-for="index in bannersInRow" :classes="bannersInRow > 1 ? 'w-full w-[49%]' : 'w-full'"/>
         </div>
       </template>
     </div>           
@@ -39,7 +39,6 @@ import Button from "@/components/ui/Button.vue";
 import { _getFiltersData } from "@/Services/filterUtils.js"
 import { defineAsyncComponent } from 'vue'
 import AdBanner from "@/components/ui/AdBanner.vue";
-import axios from 'axios';
 
 export default {
   components: {
@@ -51,8 +50,7 @@ export default {
     ),
     Loader,
     Button,
-    AdBanner,
-    axios,      
+    AdBanner,   
   },
   props: {
     objects: {
@@ -70,15 +68,14 @@ export default {
       objectList: this.objects?.data ?? [],
       isLoading: false,
       isMobile: false,
-      ad_banners: [],
+      bannersInRow: 1,
     };
   },
   mounted() {
     if (typeof window !== "undefined") {
       window.addEventListener("resize", this.handleResize);      
     }
-    this.handleResize();
-    this.loadBanners();   
+    this.handleResize();    
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
@@ -128,42 +125,25 @@ export default {
           this.isMobile = false;
         else
           this.isMobile = true;
+
+        this.bannersInRow = this.isMobile ? 1 : 2;
       }
     },
     isBannerPosition(index) {
       let length = (this.objectList ?? []).length;      
-      let rows = this.type == 'rooms' ? 3 : (this.isMobile ? 3 : 6);
+      let rows = this.type == 'rooms' ? 3 : (this.isMobile ? 3 : 6);     
+      let position = (index + 1) % rows;
 
-      if (rows - 1 == index || (length < rows && index == length - 1))
+      if ( position === 0 || (length < rows && index === length - 1) )
         return true;
 
       return false;
-    },
-    loadBanners() {
-      let data = { 
-        num: this.isMobile ? 1 : 2,
-        city: this.$page.props?.ad_params?.city,
-        page_type: this.$page.props?.ad_params?.page_type,        
-      };
-
-      axios
-        .get('/api/ad_banners', {
-          params: data,
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })        
-        .then(response => {        
-          let data = response?.data?.payload?.ad_banners;
-          if (data) this.ad_banners = data;
-        });
-    }    
+    },      
   },
   watch: {
     objects: function (newVal, oldVal) {
       if (this.objects?.meta?.current_page == 1) {
         this.objectList = this.objects?.data ?? [];
-        this.loadBanners();
       }
     },
   },  
