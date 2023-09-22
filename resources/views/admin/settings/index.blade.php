@@ -100,6 +100,21 @@
                         <button class="btn btn-success">Обновить</button>
                     </div>
                 </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">Показывать номера телефонов {{Domain\Settings\Models\Settings::option('show_phones_booking')}}</div>
+                    <div class="{{ $second_col }} form-check">
+                        <input type="hidden" name="show_phones_booking" value="0">
+                        <input type="checkbox"
+                            name="show_phones_booking"
+                            value="1"                         
+                            @if (Domain\Settings\Models\Settings::option('show_phones_booking')) checked @endif
+                        >
+                    </div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
                 @foreach( $pages as $page)
                     <form class="row" action="{{ route('admin.settings.seo.update', $page) }}" method="POST" enctype="multipart/form-data">
                         @csrf

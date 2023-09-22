@@ -25,7 +25,7 @@ class SettingsController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $all = $request->all();
+        $all = $request->all();        
 
         foreach ($all as $option => $value) {
             \Cache::forget('setting.'.$option);
