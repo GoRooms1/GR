@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Domain\Room\Actions;
 
 use Domain\Address\Models\Address;
+use Domain\Hotel\Models\Hotel;
 use Domain\Room\DataTransferObjects\BookingData;
 use Domain\Room\Models\Room;
+use Domain\Settings\Models\Settings;
 use Lang;
 use Lorisleiva\Actions\Action;
 
@@ -24,11 +26,14 @@ final class GenerateBookingMessageAction extends Action
         /** @var Room $room */
         $room = Room::where('id', $bookingData->room_id)->with(['hotel', 'category'])->first();
 
+        /** @var Hotel $hotel */
+        $hotel = $room->hotel;
+
         /** @var string $title */
         $title = 'Бронирование № '.$bookingData->book_number;
 
-        /** @var string $label */
-        $label = $room->name ?? $room->id;
+        /** @var string $roomName */
+        $roomName = GetRoomFullNameAction::run($room);
 
         /** @var Address $address */
         $address = $room->hotel->address;
@@ -42,35 +47,43 @@ final class GenerateBookingMessageAction extends Action
         $addressStr .= isset($address->block) ? ' стр '.$address->block : '';
 
         /** @var string $orderedOn */
-        $orderedOn = '';
-        if ($bookingData->book_type == 'hour') {
-            /** @var int $hoursCount */
-            $hoursCount = $bookingData->hours_count;
-            $orderedOn = $bookingData->hours_count.' '.Lang::choice('час|часа|часов', $hoursCount, [], 'ru');
+        $orderedOn = GenerateOrderedOnTextAction::run($bookingData->book_type, $bookingData->hours_count, $bookingData->days_count);
+
+        /** @var string $phones */
+        $phones = '';
+        $isShowPhones = Settings::option('show_phones_booking');
+
+        if ($isShowPhones && isset($hotel)) {           
+            $phonesArray = array();
+            
+            if (!empty($hotel->phone))
+                array_push($phonesArray, $hotel->phone);
+
+            if (!empty($hotel->phone_2))
+                array_push($phonesArray, $hotel->phone_2);
+
+            if(count($phonesArray) > 0)
+                $phones = 'Тел.: '.implode(', ', $phonesArray);        
         }
 
-        if ($bookingData->book_type == 'night') {
-            $orderedOn = ' ночь';
-        }
+        /** @var string $body */        
+        $body = 'Вы отправили заявку в '.($hotel?->type?->single_name ?? 'Отель').' «'.$hotel->name.'» номер '.$roomName.' на '.$orderedOn.'<br>';
+        $body .= 'Пожалуйста, дождитесь подтверждения от отеля в течение 10-15 минут.'.'<br>';
+        $body .= '<br>';
+        $body .= 'Дата заезда: '.$bookingData->from_date->format('d.m.Y H:i').'<br>';
+        $body .= 'Дата выезда: '.$bookingData->to_date->format('d.m.Y H:i').'<br>';
+        $body .= 'По адресу: '.$addressStr.'<br>';
+        $body .= $phones;
 
-        if ($bookingData->book_type == 'day') {
-            /** @var int $daysCount */
-            $daysCount = $bookingData->days_count;
-            $orderedOn = $bookingData->days_count.' '.Lang::choice('сутки|суток|суток', $daysCount, [], 'ru');
-        }
-
-        /** @var string $body */
-        $body = 'Поздравляем!<br>';
-        $body .= 'Вы забронировали '.($room->hotel?->type?->single_name ?? 'Отель').' «'.$room->hotel->name.'» номер '.$label.' на '.$orderedOn.'<br>';
-        $body .= 'Дата заезда: '.$bookingData->from_date->format('d.m.Y H:i').'.<br>';
-        $body .= 'Дата выезда: '.$bookingData->to_date->format('d.m.Y H:i').'.<br>';
-        $body .= 'По адресу: '.$addressStr;
-        $body .= '<br>Администратор «'.$room->hotel->name.'» свяжется с Вами для подтверждения бронирования.
-                    <br>Ждем Вас и приятного отдыха!';
+        /** @var string $notice */
+        $notice = 'В случае если отель с Вами не связался для подтверждения бронирования,<br>';
+        $notice .= 'рекомендуем Вам выбрать другой отель. А данный отель будет помечен как отель с<br>';
+        $notice .= 'низкой клиентоориентиорованностью.<br>';
 
         return [
             'title' => $title,
             'body' => $body,
+            'notice' => $notice,
         ];
     }
 }
