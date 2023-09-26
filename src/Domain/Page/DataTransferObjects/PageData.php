@@ -37,7 +37,7 @@ final class PageData extends \Parent\DataTransferObjects\Data
         public readonly ?string $header,
         public readonly ?string $footer,
         public readonly ?Image $image,
-        public readonly Collection|array $images,
+        public readonly Collection|array|null $images,
         public readonly ?int $user_id,
         public readonly ?Carbon $created_at,
         public readonly null|Lazy|PageDescriptionData $meta,
