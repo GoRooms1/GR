@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Article\Models;
 
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
