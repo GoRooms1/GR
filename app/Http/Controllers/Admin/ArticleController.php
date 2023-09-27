@@ -46,7 +46,12 @@ class ArticleController extends Controller
         $article = Article::create(Article::getFillableData($validated));
         $article->user()->associate(Auth::user()->id);
         $article->save();
-        UploadImageAction::run($request, $article);
+
+        if ($request->file('image')) {
+            $article->clearMediaCollection('images');
+            $article->addMediaFromRequest('image')
+                ->toMediaCollection('images');
+        }        
 
         return redirect()->route('admin.articles.index');
     }
@@ -75,7 +80,11 @@ class ArticleController extends Controller
         $validated = Article::getFillableData($validated);
         $article->update($validated);
 
-        UploadImageAction::run($request, $article);
+        if ($request->file('image')) {
+            $article->clearMediaCollection('images');
+            $article->addMediaFromRequest('image')
+                ->toMediaCollection('images');
+        }
 
         return redirect()->route('admin.articles.index');
     }

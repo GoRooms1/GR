@@ -12,7 +12,7 @@
                 <a href="{{ route('admin.hotels.show', $article) }}" class="btn btn-warning">Отмена</a>
             </div>
             <div class="col-4">
-                @include('admin.parts._images', ['images' => $article->getMedia('images')])
+                @include('admin.parts._images-single', ['image' => $article->getFirstMedia('images')])                
             </div>
         </form>
     </div>
