@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use Domain\Article\Models\Article;
+use Domain\Article\ViewModels\ArticleListViewModel;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class ArticleController extends Controller
 {
-    public function index(): View
+    public function index(): Response | ResponseFactory
     {
-        $articles = Article::orderBy('created_at', 'DESC')->paginate(10);
-
-        return view('web.articles.index', compact('articles'));
+        return Inertia::render('Article/Index', new ArticleListViewModel());
     }
 
     public function show(Article $article): View

@@ -19,8 +19,10 @@
       <span v-if="!simple"  class="pl-2">
           {{simple ? '' : 'Добавить объект'}}
       </span>
-    </a> 
-       
+    </a>
+    <Link v-if="!simple" href="/blog" class="nav-link flex items-center mr-4 h-[24px]">      
+      Статьи
+    </Link>       
     <nav-link
       href="/contacts"
       classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"
@@ -36,9 +38,11 @@
 
 <script>
 import NavLink from "@/components/ui/NavLink.vue";
+import { Link } from "@inertiajs/vue3";
 export default {
   components: {
-    NavLink,    
+    NavLink,
+    Link,   
   },
   props: {
     simple: Boolean,

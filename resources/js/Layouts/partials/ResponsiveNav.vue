@@ -42,10 +42,15 @@
       />
       <a 
         href="/login"
-        class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left"
+        class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left mb-2"
       >
         Личный кабинет
       </a>
+      <responsive-nav-link        
+        title="Статьи"
+        href="/blog"
+        classes=""
+      />
       <h3 class="mb-6 mt-10 font-semibold">Мы в социальных сетях</h3>
       <div class="grid grid-cols-2 grid-rows-2 gap-2">
         <a
