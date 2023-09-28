@@ -8,7 +8,7 @@
             <div class="col-8">
                 @include('admin.articles.parts._form')
                 <button class="btn btn-success">Создать</button>
-                <a href="{{ route('admin.pages.index') }}" class="btn btn-warning">Отмена</a>
+                <a href="{{ route('admin.articles.index') }}" class="btn btn-warning">Отмена</a>
             </div>
             <div class="col-4">
                 @include('admin.parts._images-single')                
