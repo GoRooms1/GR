@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Domain\Article\Models\Article;
 use Domain\Article\ViewModels\ArticleListViewModel;
-use Illuminate\View\View;
+use Domain\Article\ViewModels\ArticleViewModel;
 use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -16,8 +16,8 @@ class ArticleController extends Controller
         return Inertia::render('Article/Index', new ArticleListViewModel());
     }
 
-    public function show(Article $article): View
+    public function show(Article $article): Response | ResponseFactory
     {
-        return view('web.articles.show', compact('article'));
+        return Inertia::render('Article/Show', new ArticleViewModel($article));
     }
 }
