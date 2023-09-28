@@ -16,6 +16,9 @@ final class ArticleData extends \Parent\DataTransferObjects\Data
         public ?string $notice,
         public ?string $content,
         public ?string $slug,
+        public string $meta_title,
+        public ?string $meta_description,
+        public ?string $meta_keywords,
         public ?int $user_id,
         public ?Carbon $deleted_at,        
         public ?Carbon $updated_at,
@@ -30,6 +33,7 @@ final class ArticleData extends \Parent\DataTransferObjects\Data
     {
         return self::from([
             ...$article->toArray(), 
+            'meta_title' => $article->meta_title ?? $article->title,
             'day' => $article->created_at->format('d'),
             'month' => $article->getCreateMonthName(),        
             'image' => $article->getFirstMedia('images') ? MediaImageData::fromModel($article->getFirstMedia('images')) : null,            

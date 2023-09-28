@@ -28,7 +28,10 @@ class ArticleRequest extends FormRequest
             'slug' => ['required', 'alpha_dash'],
             'notice' => ['required', 'string', 'max:1000'],
             'content' => ['required'],
-            'image' => ['image'],            
+            'image' => ['image'],
+            'meta_title' => ['required', 'string'],
+            'meta_description' => ['string'],
+            'meta_keywords' => ['string'],
         ];
     }
 }

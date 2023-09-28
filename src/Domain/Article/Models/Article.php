@@ -64,6 +64,9 @@ class Article extends Model implements HasMedia
         'content',
         'slug',
         'user_id',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ];
 
     protected $casts = [
