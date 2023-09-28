@@ -284,11 +284,24 @@
     images_upload_url: '/admin/upload',
     automatic_uploads: true,
     block_unsupported_drop: false,
-    plugins: "lists table image imagetools code",
+    plugins: "lists table image imagetools code link fullscreen media preview",
     table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | code',
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | image link media code fullscreen preview clearBackgroundButton',    
     height: 400,
-    extended_valid_elements: "script[*]"
+    language: 'ru',       
+    extended_valid_elements: "script[*]",
+    setup: function (editor) {
+      editor.ui.registry.addButton('clearBackgroundButton', {
+      icon: 'color-swatch-remove-color',      
+      tooltip: 'Очистить фон',
+      onAction: function (_) {
+        let content = editor.getContent() ?? '';
+        let pattern = new RegExp("background-color: #(.){3,6}(;)?", "g");
+        content = content.replaceAll(pattern, "");
+        editor.setContent(content);
+      }
+    });
+    }
   });
   $(function () {
     // Multiple images preview in browser
