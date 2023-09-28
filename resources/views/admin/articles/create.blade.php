@@ -11,7 +11,7 @@
                 <a href="{{ route('admin.pages.index') }}" class="btn btn-warning">Отмена</a>
             </div>
             <div class="col-4">
-                @include('admin.parts._images', ['images' => false])
+                @include('admin.parts._images-single')                
             </div>
         </form>
     </div>
