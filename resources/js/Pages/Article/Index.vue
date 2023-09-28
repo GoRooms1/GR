@@ -13,24 +13,10 @@
         </h1>
     </div>
     <div class="flex flex-wrap w-full">
-      <ArticleCard v-for="article in articlesList" :key="article.id" :article="article"/>
+      <ArticleCard v-for="article in articles.data" :key="article.id" :article="article"/>
     </div>
-    <div v-if="articlesList.length > 0 && $page.props?.is_loading !== true"
-      class="container mx-auto px-4 min-[1920px]:px-[10vw] mt-8 mb-12">
-      <div v-if="isLoading" class="text-center">
-        <Loader />
-      </div>
-      <div v-if="!isLoading" class="text-center">
-        <div class="text-xs xs:text-sm">
-          Показано {{ articlesList.length }} из
-          {{ articles?.meta?.total ?? articlesList.length }}
-        </div>
-        <div v-if="articles?.meta?.next_page_url">
-          <Button @click="loadMore()" classes="mx-auto mt-3">
-            Показать ещё
-          </Button>
-        </div>
-      </div>
+    <div class="mx-auto mt-8 mb-12 w-full text-center"> 
+      <Pagination :links="articles.links" :meta="articles.meta"/>
     </div>
   </div>  
 </template>
@@ -39,70 +25,18 @@
 import AppHead from "@/components/ui/AppHead.vue";
 import Layout from "@/Layouts/Layout.vue";
 import ArticleCard from "@/components/ui/ArticleCard.vue";
-import Loader from "@/components/ui/Loader.vue";
-import Button from "@/components/ui/Button.vue";
+import Pagination from "@/components/ui/Pagination.vue";
 
 export default {  
   components: {
     AppHead,
     Layout,
-    ArticleCard,
-    Loader,
-    Button,
+    ArticleCard,    
+    Pagination,
   },
   props: {
     page: Object,
     articles: [Object],  
-  },
-  data() {
-    return {      
-      articlesList: this.articles?.data ?? [],
-      isLoading: false,
-    };
-  }, 
-  methods: {
-    loadMore() {
-      let initialUrl =
-        typeof window !== "undefined" ? window.location.href : "";
-
-      let currentPage = this.articles?.meta?.current_page ?? 1;
-      let nextPage = currentPage + 1;      
-
-      if (this.articles?.meta?.next_page_url) {
-        this.$inertia.get(
-          this.$page.props.path + "?page=" + nextPage,
-          {},
-          {
-            preserveState: true,
-            preserveScroll: true,
-            only: [this.type],
-            onSuccess: () => {
-              if (this.articles.meta.current_page != 1)
-                this.articlesList = [
-                  ...this.articlesList,
-                  ...this.articles.data,
-                ];
-
-              if (typeof window !== "undefined")
-                window.history.pushState({}, this.$page.title, initialUrl);
-            },
-            onStart: () => {
-              this.isLoading = true;
-            },
-            onFinish: () => {
-              this.isLoading = false;
-            },
-          }
-        );
-      }
-    },
-  },
-  watch: {
-    articles: function (newVal, oldVal) {
-      if (this.articles?.meta?.current_page == 1) {
-        this.articlesList = this.articles?.data ?? [];
-      }
-    },
-  }, 
+  },  
 };
 </script>

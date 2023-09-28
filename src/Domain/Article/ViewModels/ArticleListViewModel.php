@@ -8,6 +8,7 @@ use Domain\Article\DataTransferObjects\ArticleData;
 use Domain\Article\Models\Article;
 use Domain\Page\DataTransferObjects\PageData;
 use Domain\Page\Models\Page;
+use Inertia\Inertia;
 
 final class ArticleListViewModel extends \Parent\ViewModels\ViewModel
 {    
@@ -23,6 +24,7 @@ final class ArticleListViewModel extends \Parent\ViewModels\ViewModel
 
     public function articles()
     {
-        return fn() => ArticleData::collection(Article::orderBy('created_at', 'DESC')->paginate(config('pagination.articles_per_page')));
+        $articles = Article::orderBy('created_at', 'DESC')->paginate(config('pagination.articles_per_page'));
+        return ArticleData::collection($articles);
     }
 }
