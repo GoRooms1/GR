@@ -23,6 +23,6 @@ final class ArticleListViewModel extends \Parent\ViewModels\ViewModel
 
     public function articles()
     {
-        return fn() => ArticleData::collection(Article::orderBy('created_at', 'DESC')->paginate(1));
+        return fn() => ArticleData::collection(Article::orderBy('created_at', 'DESC')->paginate(config('pagination.articles_per_page')));
     }
 }
