@@ -34,11 +34,13 @@
         title="Контакты"
         href="/contacts"
         classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"
+        v-on:click="hide()"
       />
       <responsive-nav-link
         disabled
         title="Избранное"
         classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
+        
       />
       <a 
         href="/login"
@@ -50,6 +52,7 @@
         title="Статьи"
         href="/blog"
         classes=""
+        v-on:click="hide()"
       />
       <h3 class="mb-6 mt-10 font-semibold">Мы в социальных сетях</h3>
       <div class="grid grid-cols-2 grid-rows-2 gap-2">
