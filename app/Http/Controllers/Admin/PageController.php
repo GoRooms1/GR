@@ -54,7 +54,7 @@ class PageController extends Controller
         $data['meta_description'] = $request->get('meta_description');
         $data['meta_keywords'] = $request->get('meta_keywords');
         $data['url'] = '/'.$page->slug;
-        $data['h1'] = $request->get('meta_title');
+        $data['h1'] = $request->get('title');
         $data['type'] = 'page';
         AttachMetaAction::run($page, PageDescriptionData::from($data));
 
@@ -89,7 +89,7 @@ class PageController extends Controller
         $data['meta_description'] = $request->get('meta_description');
         $data['meta_keywords'] = $request->get('meta_keywords');
         $data['url'] = '/'.$page->slug;
-        $data['h1'] = $request->get('meta_title');
+        $data['h1'] = $request->get('title');
         $data['type'] = 'page';
         AttachMetaAction::run($page, PageDescriptionData::from($data));
 

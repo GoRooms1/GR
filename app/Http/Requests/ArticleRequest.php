@@ -30,8 +30,8 @@ class ArticleRequest extends FormRequest
             'content' => ['required'],
             'image' => ['image'],
             'meta_title' => ['required', 'string'],
-            'meta_description' => ['string'],
-            'meta_keywords' => ['string'],
+            'meta_description' => ['nullable', 'string'],
+            'meta_keywords' => ['nullable', 'string'],
         ];
     }
 }

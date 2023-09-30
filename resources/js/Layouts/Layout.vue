@@ -1,7 +1,7 @@
 <template>
   <Responsive-nav/>
   <Header />
-  <main class="pb-[104px]">
+  <main :class="has_filters ? 'pb-[104px]' : 'pb-2'">
     <slot />
   </main>  
   <Footer>
