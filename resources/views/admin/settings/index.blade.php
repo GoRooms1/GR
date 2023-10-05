@@ -102,6 +102,105 @@
                 </form>
                 <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
                     @csrf
+                    <div class="{{ $first_col }}">Telegram</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="telegram"
+                                                          value="{{ Domain\Settings\Models\Settings::option('telegram') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">Яндекс Дзен</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="zen"
+                                                          value="{{ Domain\Settings\Models\Settings::option('zen') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">ОГРН</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="ogrn"
+                                                          value="{{ Domain\Settings\Models\Settings::option('ogrn') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">ИНН</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="inn"
+                                                          value="{{ Domain\Settings\Models\Settings::option('inn') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">КПП</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="kpp"
+                                                          value="{{ Domain\Settings\Models\Settings::option('kpp') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">Наименование банка</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="bank_name"
+                                                          value="{{ Domain\Settings\Models\Settings::option('bank_name') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">Расчетный счет</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="bank_acc"
+                                                          value="{{ Domain\Settings\Models\Settings::option('bank_acc') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">Кор. счет</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="bank_сorr_acc"
+                                                          value="{{ Domain\Settings\Models\Settings::option('bank_сorr_acc') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">БИК</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="bank_bik"
+                                                          value="{{ Domain\Settings\Models\Settings::option('bank_bik') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">ИНН Банка</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="bank_inn"
+                                                          value="{{ Domain\Settings\Models\Settings::option('bank_inn') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">КПП Банка</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="bank_kpp"
+                                                          value="{{ Domain\Settings\Models\Settings::option('bank_kpp') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
                     <div class="{{ $first_col }}">Показывать номера телефонов</div>
                     <div class="{{ $second_col }} form-check">
                         <input type="hidden" name="show_phones_booking" value="0">

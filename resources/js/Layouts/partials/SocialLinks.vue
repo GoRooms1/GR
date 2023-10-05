@@ -1,15 +1,15 @@
 <template>
   <div class="hidden lg:flex py-2">
     <a
-      v-if="$page.props?.contacts?.fb"
-      :href="$page.props.contacts.fb"
+      v-if="$page.props?.contacts?.telegram"
+      :href="$page.props.contacts.telegram"
       target="_blank"
       class="mr-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/soc11.svg)] hover:bg-[url(/img/soc12.svg)]"
     >
     </a>
     <a
-      v-if="$page.props?.contacts?.instagram"
-      :href="$page.props.contacts.instagram"
+      v-if="$page.props?.contacts?.zen"
+      :href="$page.props.contacts.zen"
       target="_blank"
       class="mr-4 w-[24px] h-[24px] bg-no-repeat bg-contain bg-[url(/img/soc21.svg)] hover:bg-[url(/img/soc22.svg)]"
     >

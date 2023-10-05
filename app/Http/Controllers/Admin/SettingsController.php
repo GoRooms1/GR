@@ -27,6 +27,8 @@ class SettingsController extends Controller
     {
         $all = $request->all();        
 
+        \Cache::forget('contacts');
+
         foreach ($all as $option => $value) {
             \Cache::forget('setting.'.$option);
             Settings::updateOrCreate(['option' => $option], ['option' => $option, 'value' => $value]);

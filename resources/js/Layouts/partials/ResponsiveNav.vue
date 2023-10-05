@@ -57,12 +57,12 @@
       <h3 class="mb-6 mt-10 font-semibold">Мы в социальных сетях</h3>
       <div class="grid grid-cols-2 grid-rows-2 gap-2">
         <a
-          v-if="$page.props?.contacts?.fb"
-          :href="$page.props.contacts.fb"
+          v-if="$page.props?.contacts?.telegram"
+          :href="$page.props.contacts.telegram"
           target="_blank"
           class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc11.svg)] hover:bg-[url(/img/soc12.svg)] pl-[42px] w-full text-left"
         >
-          Facebook
+          Telegram
         </a>
         <a
           v-if="$page.props?.contacts?.vk"
@@ -73,12 +73,12 @@
           Вконтакте
         </a>
         <a
-          v-if="$page.props?.contacts?.instagram"
-          :href="$page.props.contacts.instagram"
+          v-if="$page.props?.contacts?.zen"
+          :href="$page.props.contacts.zen"
           target="_blank"
           class="h-[24px] bg-no-repeat bg-contain bg-[left_10px_center] bg-[url(/img/soc21.svg)] hover:bg-[url(/img/soc22.svg)] pl-[42px] w-full text-left"
         >
-          Instagram
+          Яндекс Дзен
         </a>
         <a
           v-if="$page.props?.contacts?.youtube"

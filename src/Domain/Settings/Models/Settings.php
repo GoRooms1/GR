@@ -92,8 +92,8 @@ class Settings extends Model
             return Settings::where('option', $option)->first();
         });
         if ($setting) {
-            try {
-                return json_decode($setting->value, true, 512, JSON_THROW_ON_ERROR);
+            try {               
+                return json_decode($setting->value, true, 512, JSON_THROW_ON_ERROR | JSON_BIGINT_AS_STRING);
             } catch (JsonException $e) {
                 return $setting->value;
             }
