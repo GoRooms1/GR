@@ -296,8 +296,10 @@
       tooltip: 'Очистить фон',
       onAction: function (_) {
         let content = editor.getContent() ?? '';
-        let pattern = new RegExp("background-color: #(.){3,6}(;)?", "g");
-        content = content.replaceAll(pattern, "");
+        let bgrColorPattern = new RegExp("background-color: #(.){3,6}(;)?", "g");
+        let bgrPattern = new RegExp("background: #(.){3,6}(;)?", "g");
+        content = content.replaceAll(bgrColorPattern, "");
+        content = content.replaceAll(bgrPattern, "");
         editor.setContent(content);
       }
     });
