@@ -76,8 +76,8 @@ final class GenerateBookingMessageAction extends Action
         $body .= $phones;
 
         /** @var string $notice */
-        $notice = 'В случае если отель с Вами не связался для подтверждения бронирования,<br>';
-        $notice .= 'рекомендуем Вам выбрать другой отель. А данный отель будет помечен как отель с<br>';
+        $notice = 'В случае если отель с Вами не связался для подтверждения бронирования, <br class="hidden md:block">';
+        $notice .= 'рекомендуем Вам выбрать другой отель. А данный отель будет помечен как отель с <br class="hidden md:block">';
         $notice .= 'низкой клиентоориентиорованностью.<br>';
 
         return [
