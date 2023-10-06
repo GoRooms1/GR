@@ -172,7 +172,7 @@
                 Наименование банка:<br />
                 {{ $page.props.contacts.bank_name }}<br />
                 Р/c: {{ $page.props.contacts.bank_acc }}<br />
-                К/c: {{ $page.props.contacts.bank_corr_acc }}<br />
+                К/c: {{ $page.props.contacts.bank_сorr_acc }}<br />
                 БИК: {{ $page.props.contacts.bank_bik }}<br />
                 ИНН: {{ $page.props.contacts.bank_inn }}<br />
                 КПП: {{ $page.props.contacts.bank_kpp }}

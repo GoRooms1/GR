@@ -9,10 +9,10 @@
             <div class="col-8">
                 @include('admin.articles.parts._form')
                 <button class="btn btn-success">Обновить</button>
-                <a href="{{ route('admin.hotels.show', $article) }}" class="btn btn-warning">Отмена</a>
+                <a href="{{ route('admin.articles.index') }}" class="btn btn-warning">Отмена</a>
             </div>
             <div class="col-4">
-                @include('admin.parts._images', ['images' => $article->getMedia('images')])
+                @include('admin.parts._images-single', ['image' => $article->getFirstMedia('images')])                
             </div>
         </form>
     </div>

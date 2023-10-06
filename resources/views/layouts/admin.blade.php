@@ -284,11 +284,38 @@
     images_upload_url: '/admin/upload',
     automatic_uploads: true,
     block_unsupported_drop: false,
-    plugins: "lists table image imagetools code",
+    plugins: "lists table image imagetools code link fullscreen media preview",
     table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | code',
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | fontsizeselect | image link media code fullscreen preview clearBackgroundButton',    
     height: 400,
-    extended_valid_elements: "script[*]"
+    language: 'ru',       
+    extended_valid_elements: "script[*]",
+    setup: function (editor) {
+      editor.ui.registry.addButton('clearBackgroundButton', {
+      icon: 'color-swatch-remove-color',      
+      tooltip: 'Очистить фон',
+      onAction: function (_) {
+        let content = editor.getContent() ?? '';
+        let bgrColorPattern = new RegExp("background-color: #(.){3,6}(;)?", "g");
+        let bgrPattern = new RegExp("background: #(.){3,6}(;)?", "g");
+        content = content.replaceAll(bgrColorPattern, "");
+        content = content.replaceAll(bgrPattern, "");
+        editor.setContent(content);
+      }      
+    });
+    },
+    style_formats_merge: true,
+    content_css: '/css/editor-style.css',   
+    formats: {    
+      h1: { block: 'h1', classes: 'font-semibold text-xl lg:text-3xl' },
+      h2: { block: 'h2', classes: 'font-semibold text-xl' },
+      h3: { block: 'h3', classes: 'font-semibold text-base' }, 
+      h4: { block: 'h4', classes: 'font-semibold text-sm' },  
+    }, 
+    style_formats: [
+      {title: 'Список с точкой', selector: 'ul', styles: { 'list-style-type' : 'disc', 'margin-left' : '2rem' } },
+      {title: 'Список с нумерацией', selector: 'ol', styles: { 'list-style-type' : 'decimal', 'margin-left' : '2rem' } },
+    ],
   });
   $(function () {
     // Multiple images preview in browser

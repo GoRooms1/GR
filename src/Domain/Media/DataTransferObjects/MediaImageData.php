@@ -27,7 +27,7 @@ final class MediaImageData extends \Parent\DataTransferObjects\Data
             'name' => $media->name,
             'url' => $media->getUrl(),          
             'order' => $media->order_column,
-            'moderate' => $media->getCustomProperty("moderate"),
+            'moderate' => $media->getCustomProperty("moderate", false),
             'conversions' => $media->getGeneratedConversions()->map(fn ($el, $key) => $el = $media->getUrl($key)),
         ]);
     }

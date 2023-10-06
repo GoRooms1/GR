@@ -26,7 +26,7 @@
                         @foreach($articles AS $article)
                             <tr>
                                 <td>{{ $article->id }}</td>
-                                <td><img src="{{ asset($article->image->path) }}?w=100&h=100&fit=crop&fm=webp" alt="" class="img-fluid" style="max-width: 100px"></td>
+                                <td><img src="{{ asset($article->getFirstMediaUrl('images', 'thumb') ?? $article->getFirstMediaUrl('images')) }}" alt="" class="img-fluid" style="max-width: 100px"></td>
                                 <td>
                                     <a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a>
                                 </td>

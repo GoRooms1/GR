@@ -7,11 +7,14 @@ use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
+use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\Lk;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SiteMapController;
 use Domain\Bot\Controllers\BotController;
+use Domain\Room\DataTransferObjects\BookingData;
 use Domain\Search\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -68,3 +71,7 @@ Route::post('/'.Str::replace(':', '_', config('telegram.bots.mybot.token')).'/we
 Route::post('/'.config('telegram.bots.mybot.token').'/webhook', [BotController::class, 'index'])->name('webhook');
 
 Route::get('/api/ad_banners', [AdBannerController::class, 'getBanners']);
+
+Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy-policy.index');
+
+Route::get('/instructions', [InstructionController::class, 'index'])->name('instruction.index');

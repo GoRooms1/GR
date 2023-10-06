@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Image\Actions;
 
-use App\Models\Article;
 use Domain\AdBanner\Models\AdBanner;
+use Domain\Article\Models\Article;
 use Domain\Hotel\Models\Hotel;
 use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\Room\Models\Room;
@@ -18,13 +18,13 @@ use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\MediaLibrary\MediaCollections\FileAdder;
 
 /**
- * @method static CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection|array run(Request $request, Hotel|Room|Article $uploadTo, string $attr_name = 'image')
+ * @method static CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection|array run(Request $request, Hotel|Room|Article|AdBanner $uploadTo, string $attr_name = 'image')
  */
 final class UploadImageAction extends Action
 {
     /**
      * @param  Request  $request
-     * @param  Hotel|Room|Article  $uploadTo
+     * @param  Hotel|Room|Article|AdBanner  $uploadTo
      * @param  string  $attr_name
      * @return CursorPaginatedDataCollection|DataCollection|PaginatedDataCollection|array
      */

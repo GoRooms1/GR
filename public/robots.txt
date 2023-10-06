@@ -7,6 +7,7 @@ Disallow: /*search
 Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
+Disallow: /*?*
 
 User-agent: Yandex
 Disallow: /admin
@@ -17,6 +18,7 @@ Disallow: /*search
 Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
+Disallow: /*?*
 
 User-agent: GoogleBot
 Disallow: /admin
@@ -27,6 +29,7 @@ Disallow: /*search
 Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
+Disallow: /*?*
 
 User-agent: Mail.Ru
 Disallow: /admin
@@ -37,5 +40,6 @@ Disallow: /*search
 Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
+Disallow: /*?*
 
 Sitemap: https://gorooms.ru/sitemap.xml

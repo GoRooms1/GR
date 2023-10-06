@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
 use Carbon\Carbon;
 use Domain\Address\Models\Address;
+use Domain\Article\Models\Article;
 use Domain\Hotel\Models\Hotel;
 use Domain\Page\Models\Page;
 use Illuminate\Support\Facades\Cache;

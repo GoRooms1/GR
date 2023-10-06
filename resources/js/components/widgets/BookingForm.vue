@@ -190,8 +190,10 @@
         <h4 class="text-[1.375rem] lg:text-[28px] font-semibold">
           {{ $page.props.flash.message?.title }}
         </h4>
-        <span class="text-center mt-6 text-sm leading-4 z-[1]">
-          <span v-html="$page.props.flash.message?.body"> </span>
+        <span class="text-center mt-6 text-[16px] leading-4 z-[1]">
+          <span v-html="$page.props.flash.message?.body"></span>
+          <br><br>        
+          <span class="text-red-500" v-html="$page.props.flash.message?.notice" ></span>
           <button
             @click="close"
             class="lg:hidden mt-6 w-full flex items-center justify-center h-12 rounded-lg bg-[#6170FF] text-white"

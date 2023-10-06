@@ -46,7 +46,7 @@ final class PageDescriptionData extends \Parent\DataTransferObjects\Data
         public readonly ?Carbon $created_at,
         public readonly ?Carbon $updated_at,
         public readonly ?Image $image,
-        public readonly Collection|array $images,
+        public readonly Collection|array|null $images,
         public ?int $model_id,
     ) {
     }

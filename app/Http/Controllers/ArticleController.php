@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
-use Illuminate\View\View;
+use Domain\Article\Models\Article;
+use Domain\Article\ViewModels\ArticleListViewModel;
+use Domain\Article\ViewModels\ArticleViewModel;
+use Inertia\Inertia;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class ArticleController extends Controller
 {
-    public function index(): View
+    public function index(): Response | ResponseFactory
     {
-        $articles = Article::orderBy('created_at', 'DESC')->paginate(10);
-
-        return view('web.articles.index', compact('articles'));
+        return Inertia::render('Article/Index', new ArticleListViewModel());
     }
 
-    public function show(Article $article): View
+    public function show(Article $article): Response | ResponseFactory
     {
-        return view('web.articles.show', compact('article'));
+        return Inertia::render('Article/Show', new ArticleViewModel($article));
     }
 }

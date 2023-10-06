@@ -10,7 +10,7 @@ use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 
 /**
- * @method static PageData run()
+ * @method static PageData run(Page $page, PageDescriptionData $pageDescriptionData)
  */
 final class AttachMetaAction extends \Parent\Actions\Action
 {
@@ -19,7 +19,7 @@ final class AttachMetaAction extends \Parent\Actions\Action
         if (! $pageDescriptionData->title && ! $pageDescriptionData->meta_description && ! $pageDescriptionData->meta_keywords) {
             return PageData::fromModel($page);
         }
-
+        
         $meta = PageDescription::updateOrCreate(['url' => $pageDescriptionData->url], $pageDescriptionData->toArray());
         $meta->model_type = $page::class;
         $meta->save();

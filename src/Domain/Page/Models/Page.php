@@ -108,38 +108,7 @@ class Page extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @param  Request  $request
-     * @return $this
-     *
-     * @deprecated Use AttachMetaAction instead
-     */
-    public function attachMeta(Request $request): Page
-    {
-        if (! $request->get('meta_title', false) && ! $request->get('meta_description', false) && ! $request->get('meta_keywords', false)) {
-            return $this;
-        }
-
-        $key = $this->getRouteKeyName();
-        $url = '/'.$this->$key;
-
-        $data = [];
-        $data['title'] = $request->get('meta_title');
-        $data['meta_description'] = $request->get('meta_description');
-        $data['meta_keywords'] = $request->get('meta_keywords');
-        $data['url'] = $url;
-        $data['model_type'] = self::class;
-
-        $meta = PageDescription::updateOrCreate(['url' => $url], $data);
-        $meta->model_type = self::class;
-        $meta->save();
-
-        $this->meta()->save($meta);
-
-        return $this;
-    }
+    }    
 
     public function getRouteKeyName(): string
     {

@@ -22,7 +22,8 @@ final class PhoneNumberCast implements CastsAttributes
         if (! $value) {
             return null;
         }
-        if (! $model->hide_phone && ! \Request::is('admin/*') && ! \Request::is('lk/*') && ! \Request::is('moderator/*')) {
+        
+        if (! $model->hide_phone && ! \Request::is('admin/*') && ! \Request::is('lk/*') && ! \Request::is('moderator/*') && !\Request::is('rooms/booking')) {
             return null;
         }
 

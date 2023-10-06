@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PageRequest;
+use Domain\Page\Actions\AttachMetaAction;
 use Domain\Page\Models\Page;
+use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +48,15 @@ class PageController extends Controller
         $validated['user_id'] = Auth::user()->id;
         $page = Page::create($validated);
         $page->save();
-        $page->attachMeta($request);
+
+        $data = [];
+        $data['title'] = $request->get('meta_title');
+        $data['meta_description'] = $request->get('meta_description');
+        $data['meta_keywords'] = $request->get('meta_keywords');
+        $data['url'] = '/'.$page->slug;
+        $data['h1'] = $request->get('title');
+        $data['type'] = 'page';
+        AttachMetaAction::run($page, PageDescriptionData::from($data));
 
         return redirect()->route('admin.pages.index');
     }
@@ -73,6 +83,15 @@ class PageController extends Controller
     {
         $validated = $request->validated();
         $page->update($validated);
+
+        $data = [];
+        $data['title'] = $request->get('meta_title');
+        $data['meta_description'] = $request->get('meta_description');
+        $data['meta_keywords'] = $request->get('meta_keywords');
+        $data['url'] = '/'.$page->slug;
+        $data['h1'] = $request->get('title');
+        $data['type'] = 'page';
+        AttachMetaAction::run($page, PageDescriptionData::from($data));
 
         return redirect()->route('admin.pages.index');
     }
