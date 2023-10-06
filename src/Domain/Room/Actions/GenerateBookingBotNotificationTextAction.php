@@ -53,7 +53,7 @@ final class GenerateBookingBotNotificationTextAction extends Action
         $text .= 'Телефон: '.$phone.PHP_EOL;
         $text .= 'Комментарий: '.$bookingData->book_comment.PHP_EOL;
         $text .= ' '.PHP_EOL;
-        $text .= '<b>Во избежание репутационных потерь, убедительная просьба незамедлительно связаться с клиентом  подтвердить или отменить бронирование!</b>'.PHP_EOL;
+        $text .= '<b>Во избежание репутационных потерь, убедительная просьба незамедлительно связаться с клиентом, подтвердить или отменить бронирование!</b>'.PHP_EOL;
 
         return $text;
     }
