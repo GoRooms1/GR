@@ -17,6 +17,6 @@ class PrivacyPolicyController extends Controller
 
         return Inertia::render('PrivacyPolicy/Index', [
             'page' => $page,
-        ]);;
+        ]);
     }
 }
