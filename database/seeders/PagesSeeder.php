@@ -14,7 +14,7 @@ class PagesSeeder extends Seeder
      */
     public function run()
     {
-        $page = Page::where('title', 'Контакты')->first();
+        $page = Page::where('slug', 'contacts')->first();
         if (! $page) {
             Page::create([
                 'title' => 'Контакты',
@@ -41,7 +41,7 @@ class PagesSeeder extends Seeder
             ]);
         }
 
-        $page = Page::where('title', 'Пользовательское соглашение')->first();
+        $page = Page::where('slug', 'privacy-policy')->first();
         if (! $page) {
             Page::create([
                 'title' => 'Пользовательское соглашение',
@@ -51,7 +51,7 @@ class PagesSeeder extends Seeder
         }
 
         Page::firstOrCreate(
-            [ 'title' => 'Статьи'],
+            [ 'slug' => 'blog'],
             [
                 'title' => 'Статьи',
                 'slug' => 'blog',
@@ -62,7 +62,7 @@ class PagesSeeder extends Seeder
         );
 
         Page::firstOrCreate(
-            [ 'title' => 'Инструкции'],
+            [ 'slug' => 'instructions'],
             [
                 'title' => 'Инструкции',
                 'slug' => 'instructions',
