@@ -7,8 +7,9 @@
   <Footer>
     <search-control-panel v-if="has_filters"/>
     <social-links />
-    <copyright class="hidden lg:block pt-1 mx-auto lg:ml-12 lg:mr-auto" />
-    <privacy-policy class="mr-12 pt-1 hidden lg:flex" />
+    <copyright class="hidden lg:block pt-1 mx-auto text-center" />
+    <privacy-policy class="mr-2 pt-1 hidden lg:flex text-center" />
+    <instructions class="mr-2 pt-1 hidden lg:flex h-full" />
     <navigation simple classes="hidden lg:flex" />
   </Footer>
   <Modals/>
@@ -22,6 +23,7 @@ import Navigation from "./partials/Navigation.vue";
 import SocialLinks from "./partials/SocialLinks.vue";
 import Copyright from "./partials/Copyright.vue";
 import PrivacyPolicy from "./partials/PrivacyPolicy.vue";
+import Instructions from "./partials/Instructions.vue";
 import ResponsiveNav from "./partials/ResponsiveNav.vue";
 import Modals from "./partials/Modals.vue";
 export default {
@@ -32,6 +34,7 @@ export default {
     SocialLinks,    
     Copyright,
     PrivacyPolicy,
+    Instructions,
     ResponsiveNav,
     Modals,    
     SearchControlPanel: defineAsyncComponent(() =>

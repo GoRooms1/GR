@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
+use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\Lk;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PrivacyPolicyController;
@@ -72,3 +73,5 @@ Route::post('/'.config('telegram.bots.mybot.token').'/webhook', [BotController::
 Route::get('/api/ad_banners', [AdBannerController::class, 'getBanners']);
 
 Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy-policy.index');
+
+Route::get('/instructions', [InstructionController::class, 'index'])->name('instruction.index');

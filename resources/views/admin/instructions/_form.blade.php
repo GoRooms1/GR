@@ -5,7 +5,7 @@
 </div>
 <div class="form-group">
   <label for="name">Основной текст</label>
-  <textarea name="content" id="content" cols="30" rows="10">
+  <textarea name="content" id="content" class="form-control editor" cols="30" rows="10">
     {{ old('content') ?? @$instruction->content ?? '' }}
   </textarea>
 </div>
