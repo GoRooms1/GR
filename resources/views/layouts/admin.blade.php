@@ -301,9 +301,21 @@
         content = content.replaceAll(bgrColorPattern, "");
         content = content.replaceAll(bgrPattern, "");
         editor.setContent(content);
-      }
+      }      
     });
-    }
+    },
+    style_formats_merge: true,
+    content_css: '/css/editor-style.css',   
+    formats: {    
+      h1: { block: 'h1', classes: 'font-semibold text-xl lg:text-3xl' },
+      h2: { block: 'h2', classes: 'font-semibold text-xl' },
+      h3: { block: 'h3', classes: 'font-semibold text-base' }, 
+      h4: { block: 'h4', classes: 'font-semibold text-sm' },  
+    }, 
+    style_formats: [
+      {title: 'Список с точкой', selector: 'ul', styles: { 'list-style-type' : 'disc', 'margin-left' : '2rem' } },
+      {title: 'Список с нумерацией', selector: 'ol', styles: { 'list-style-type' : 'decimal', 'margin-left' : '2rem' } },
+    ],
   });
   $(function () {
     // Multiple images preview in browser
