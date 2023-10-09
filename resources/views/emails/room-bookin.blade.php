@@ -181,7 +181,7 @@
                             </tr>
                             <tr>
                                 <td style="color: rgb(29 78 216); font-size: 14px;">
-                                    E-mail используемый для входа в ЛК отельера: {{$room->hotel->user?->email}}                                
+                                    E-mail используемый для входа в ЛК отельера: {{implode(', ', $room->hotel->users->pluck('email')->toArray())}}                                
                                 </td>
                             </tr>
                         </table>
