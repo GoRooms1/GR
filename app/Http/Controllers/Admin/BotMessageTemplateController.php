@@ -80,7 +80,7 @@ class BotMessageTemplateController extends Controller
         $hotel_id = $request->get('hotel_id');       
         $users = GetSubscribedUsersOnHotelAction::run($hotel_id);
         $text = GenerateTextFromTemplateAction::run($botMessageTemplate);       
-        //dd($hotel_id, $users, $text);
+        
         foreach ($users as $user) {
             $message = new BotMessageData(
                 chat_id: $user->telegram_id,
