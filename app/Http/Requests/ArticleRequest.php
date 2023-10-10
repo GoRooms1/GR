@@ -32,6 +32,7 @@ class ArticleRequest extends FormRequest
             'meta_title' => ['required', 'string'],
             'meta_description' => ['nullable', 'string'],
             'meta_keywords' => ['nullable', 'string'],
+            'published' => ['nullable'],
         ];
     }
 }

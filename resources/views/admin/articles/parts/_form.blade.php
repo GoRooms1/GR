@@ -28,3 +28,10 @@
     <textarea name="meta_keywords" id="meta_keywords"
               class="form-control  ">{{ old('meta_keywords') ?? @$article->meta_keywords ?? '' }}</textarea>
 </div>
+<div class="form-check pb-4">
+    <input type="hidden" name="published" value="0"> 
+    <input type="checkbox" class="form-check-input" name="published" id="published" class="form-control"
+        @if (isset($article) ? $article->published : false) checked @endif
+    />
+    <label for="published" class="form-check-label">Опубликовано</label>  
+</div>
