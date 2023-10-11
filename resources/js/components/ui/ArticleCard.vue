@@ -7,7 +7,7 @@
                 <span class="text-sm font-bold">{{article?.month}}</span>
             </div>               
         </div>                               
-        <div class="bg-white rounded-bl-2xl rounded-br-2xl p-4 w-full h-52 flex flex-wrap">
+        <div class="bg-white rounded-bl-2xl rounded-br-2xl p-4 w-full h-52 flex flex-wrap flex-col">
             <span class="block font-bold text-xl leading-6 mb-2 w-full">{{ article?.title }}</span>
             <div class="text-sm mb-2 w-full overflow-hidden" style="max-height: 100px;">
               {{ article?.notice }}
