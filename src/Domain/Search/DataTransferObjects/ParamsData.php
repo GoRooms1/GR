@@ -37,7 +37,7 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
             'rooms' => $rooms,
             'room_filter' => $isRoomsFilter,
             'hotel_id' => $request->get('hotel_id'),     
-            'search' => $request->get('search'),
+            'search' => str_replace('\\', '/', $request->get('search') ?? ''),
             'filter' => filter_var($request->get('filter', false), FILTER_VALIDATE_BOOLEAN),
             'as' => $request->get('as'),         
         ]);

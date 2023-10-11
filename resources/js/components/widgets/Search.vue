@@ -116,6 +116,7 @@ export default {
       this.$eventBus.emit("filters-close");    
     },
     search() {
+      this.searchValue = (this.searchValue ?? '').replace(/\\/g, '');
       let data = _getFiltersData.call(this);
       data.search = this.searchValue;
       
