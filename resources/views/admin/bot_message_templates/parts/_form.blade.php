@@ -31,16 +31,6 @@
     @enderror
 </div>
 <div class="form-group">
-    <label for="image" class="form-label">Изображение</label>
-    <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">    
-    @if (isset($botMessageTemplate) && $botMessageTemplate->getFirstMediaUrl('images'))
-        <img src="{{$botMessageTemplate->getFirstMediaUrl('images')}}" class="img-fluid img-thumbnail mt-2"/>
-    @endif    
-    @error('image')
-        <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
-<div class="form-group">
     <label for="type">Частота отправки сообщений</label>
     <select name="frequency" id="frequency" class="form-control @error('frequency') is-invalid @enderror">
       @foreach(range(1,5) as $i)
