@@ -9,7 +9,7 @@
         </div>                               
         <div class="bg-white rounded-bl-2xl rounded-br-2xl p-4 w-full h-52 flex flex-wrap">
             <span class="block font-bold text-xl leading-6 mb-2 w-full">{{ article?.title }}</span>
-            <div class="text-sm mb-2 w-full">
+            <div class="text-sm mb-2 w-full overflow-hidden" style="max-height: 100px;">
               {{ article?.notice }}
             </div>
             <span class="font-bold text-sm leading-6 group-hover:underline text-[#6170FF] mt-auto">Подробнее</span>
