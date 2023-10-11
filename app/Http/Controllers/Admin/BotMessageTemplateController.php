@@ -80,7 +80,7 @@ class BotMessageTemplateController extends Controller
         $hotel_id = $request->get('hotel_id');       
         $users = GetSubscribedUsersOnHotelAction::run($hotel_id);
         $text = GenerateTextFromTemplateAction::run($botMessageTemplate);       
-        
+       
         foreach ($users as $user) {
             $message = new BotMessageData(
                 chat_id: $user->telegram_id,
@@ -115,7 +115,7 @@ class BotMessageTemplateController extends Controller
                 disable_web_page_preview: false,
               );
               
-            BotNotificationJob::dispatchSync($message);
+            BotNotificationJob::dispatch($message);
         }
 
         UpdateTemplateCountersAction::run($botMessageTemplate);
