@@ -18,9 +18,13 @@ class StartCommand extends Command
     {
         $telegram_id = intval($this->getUpdate()->getMessage()->from->id);
 
-        $this->replyWithMessage([
-            'text' => 'Добро пожаловать в бот GoRooms!',
-        ]);
+        try {
+            $this->replyWithMessage([
+                'text' => 'Добро пожаловать в бот GoRooms!',
+            ]);
+        } catch (\Throwable $th) {
+            \Log::error($th->getMessage().' ChatID '.$telegram_id);
+        }        
 
         $user = User::withoutGlobalScopes()->where('telegram_id', $telegram_id)->first();
         
