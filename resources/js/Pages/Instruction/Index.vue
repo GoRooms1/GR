@@ -55,7 +55,7 @@ export default {
 
     for (let iframe of iframes) {
       iframe.parentElement.classList.add('w-full');      
-      iframe.classList.add('mx-auto', 'w-full',  'md:w-[70%]');
+      iframe.classList.add('mx-auto', '!w-full',  'md:!w-[70%]');
     }
   },
   methods: {
