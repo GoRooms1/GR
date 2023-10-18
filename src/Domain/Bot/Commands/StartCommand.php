@@ -30,7 +30,7 @@ class StartCommand extends Command
                 'text' => "Пожалуйста, укажите ID отеля :".PHP_EOL."Вы можете увидеть его в шапке Вашего отеля в ЛК GoRooms.",            
             ]);
 
-            Redis::set('bot:'.$telegram_id.':sub', (new SubscribeData(null, null, null))->toJson());
+            Redis::set('bot:'.$telegram_id.':sub', (new SubscribeData(null, null))->toJson());
 
             return;
         }
