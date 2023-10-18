@@ -17,7 +17,7 @@ class BotController extends Controller
         $update = Telegram::getWebhookUpdate();
 
         //If update contains command - remove last actions data with chat
-        $hasCommand = $update->getMessage()->hasCommand();
+        $hasCommand = $update->hasCommand();        
         
         if ($hasCommand) {
             try {
