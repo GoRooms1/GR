@@ -24,6 +24,7 @@ class StartCommand extends Command
             ]);
         } catch (\Throwable $th) {
             \Log::error($th->getMessage().' ChatID '.$telegram_id);
+            return;
         }        
 
         $user = User::withoutGlobalScopes()->where('telegram_id', $telegram_id)->first();
