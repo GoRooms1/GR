@@ -177,16 +177,14 @@ class StaffController extends Controller
      * @return RedirectResponse|void
      */
     public function update(StaffRequest $request, int $staff_id)
-    {
+    {        
         try {
             $user = User::findOrFail($staff_id);
 
             $user->update($request->except('password'));
             //      If user writen password, update )
-            if ($request->has('password')) {
-                if ($request->get('password') !== '') {
-                    $user->password = Hash::make($request->get('password'));
-                }
+            if (!empty(trim($request->get('password', '')))) {
+                $user->password = Hash::make($request->get('password'));
             }
 
             $user->save();
