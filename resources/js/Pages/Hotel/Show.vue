@@ -57,11 +57,19 @@
     <div class="relative">
       <Search v-if="$page.props.modals.search === true" for-modal/>
     </div>
-  </div>
+  </div>  
 
-  <div class="container mx-auto md:px-4 px-0 md:mt-[113px] mt-0" @mousedown="loadMapImmediate()" @touchstart="loadMapImmediate()">
+  <div class="container mx-auto md:px-4 px-0 md:mt-[113px] mt-0" @mousedown="loadMapImmediate()" @touchstart="loadMapImmediate()">       
     <div>
       <div class="flex md:flex-col flex-col-reverse">
+        <div v-if="$page.props?.is_moderator === true" class="w-full md:w-[376px] md:px-0 px-[16px] py-2">
+          <a :href="'/moderator/hotel/' + hotel?.id"
+            target="_blank"
+            class="w-full h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 bg-blue-500 hover:bg-blue-800"
+          >
+            {{ (hotel?.moderate === true || hasImagesToModerate) ? 'Перейти в ЛК' : 'Редактировать'}}
+          </a>
+        </div> 
         <div
           class="w-full flex sm:items-center items-start sm:gap-[10px] gap-[32px] justify-between flex-col sm:flex-row md:px-0 px-4 md:mb-0"
         >
@@ -262,6 +270,11 @@ export default {
         },
       }, 
     };
+  },
+  computed: {
+    hasImagesToModerate() {
+      return (this.hotel?.images ?? []).filter(el => el.moderate === true).length > 0;
+    }
   },
   mounted() {
     this.loadMapLazy();

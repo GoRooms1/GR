@@ -160,11 +160,9 @@ class StaffController extends Controller
             $user = User::findOrFail($id);
 
             $user->update($request->except('password'));
-//      If user writen password, update )
-            if ($request->has('password')) {
-                if ($request->get('password') !== '') {
-                    $user->password = Hash::make($request->get('password'));
-                }
+            //If user writen password, update )
+            if (!empty(trim($request->get('password', '')))) {
+                $user->password = Hash::make($request->get('password'));
             }
 
             $user->save();
