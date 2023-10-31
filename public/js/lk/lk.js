@@ -861,29 +861,30 @@ function showPeriodsInShadow(shadow) {
  */
 function blockSaveRoom (shadow) {
   let flag = true;
-  console.log(shadow)
+  
   $(shadow).find('input').each( function () {
     if ($(this).val().trim() === '') {
       flag = false
-    }
+    }    
   })
+  
   if ( $(shadow).data('attributes') === undefined ) {
     flag = false
-
   } else if ($(shadow).data('attributes').split(',').length < 3) {
     flag = false
-  }
-
+  }  
 
   if( $(shadow).find('.visualizacao').find('li').length < 1) {
     flag = false
-  }
+  }  
 
   if (flag) {
     $(shadow).find('#saveRoom').removeAttr('disabled');
   } else {
     $(shadow).find('#saveRoom').prop("disabled", true);
   }
+
+  //console.log(shadow, flag);
 }
 
 let arrow_up = $('.arrow-up')
