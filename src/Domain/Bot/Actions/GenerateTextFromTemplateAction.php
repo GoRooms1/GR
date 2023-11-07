@@ -33,7 +33,7 @@ final class GenerateTextFromTemplateAction extends Action
 
         if (!empty($template->url) && empty($image)) {
             $text .= ''.PHP_EOL;
-            $text .= $template->url.PHP_EOL;
+            $text .= '['.$template->url.']('.$template->url.')'.PHP_EOL;
         }
 
         return $text;

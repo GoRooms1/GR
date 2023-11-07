@@ -14,7 +14,7 @@ use Telegram\Bot\Objects\Update;
  */
 final class HandleBotCallbackAction extends Action
 {
-    const ALLOWED_COMMANDS = [ 'unsub' ];
+    const ALLOWED_COMMANDS = [ '2' ];
     public function handle(Update|array $update)
     {  
         $query = $update->getCallbackQuery();

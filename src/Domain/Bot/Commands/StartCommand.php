@@ -18,9 +18,14 @@ class StartCommand extends Command
     {
         $telegram_id = intval($this->getUpdate()->getMessage()->from->id);
 
-        $this->replyWithMessage([
-            'text' => 'Добро пожаловать в бот GoRooms!',
-        ]);
+        try {
+            $this->replyWithMessage([
+                'text' => 'Добро пожаловать в бот GoRooms!',
+            ]);
+        } catch (\Throwable $th) {
+            \Log::error($th->getMessage().' ChatID '.$telegram_id);
+            return;
+        }        
 
         $user = User::withoutGlobalScopes()->where('telegram_id', $telegram_id)->first();
         
@@ -30,7 +35,7 @@ class StartCommand extends Command
                 'text' => "Пожалуйста, укажите ID отеля :".PHP_EOL."Вы можете увидеть его в шапке Вашего отеля в ЛК GoRooms.",            
             ]);
 
-            Redis::set('bot:'.$telegram_id.':sub', (new SubscribeData(null, null, null))->toJson());
+            Redis::set('bot:'.$telegram_id.':sub', (new SubscribeData(null, null))->toJson());
 
             return;
         }

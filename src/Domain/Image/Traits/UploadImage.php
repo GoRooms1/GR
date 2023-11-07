@@ -8,7 +8,9 @@ use App\Helpers\Json;
 use App\Parents\Model;
 use Carbon\Carbon;
 use Domain\AdBanner\Models\AdBanner;
+use Domain\Hotel\Models\Hotel;
 use Domain\Image\Actions\UploadImageAction;
+use Domain\Room\Models\Room;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -93,15 +95,15 @@ trait UploadImage
         /** @var class-string<Model> $model */
         $model = $image->model_type;
 
-        if ($model == AdBanner::class)
-            return false;
+        if ($model == Hotel::class || $model == Room::class) {
+            $object = $model::find($image->model_id);
+            return $object->getMedia('images')->count() === 1;
+        }
 
-        $object = $model::find($image->model_id);
-
-        return $object->getMedia('images')->count() === 1;
+        return false;
     }
 
-    private function checkLimit($model): bool 
+    private function checkLimit($model): bool
     {
         if (get_class($model) != AdBanner::class)
             return false;

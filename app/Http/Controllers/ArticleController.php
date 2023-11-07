@@ -17,7 +17,10 @@ class ArticleController extends Controller
     }
 
     public function show(Article $article): Response | ResponseFactory
-    {
+    {        
+        if (!$article->published)
+            abort(404);
+
         return Inertia::render('Article/Show', new ArticleViewModel($article));
     }
 }

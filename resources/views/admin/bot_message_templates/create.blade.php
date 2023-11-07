@@ -10,7 +10,11 @@
                 <button class="btn btn-success" type="submit">Создать</button>
                 <a href="{{ route('admin.bot_message_templates.index') }}" class="btn btn-warning">Отмена</a>
             </div>
-            <div class="col-4">
+            <div class="col-4">    
+                @include('admin.parts._images-single', [])  
+                @error('image')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror              
             </div>
         </form>
     </div>

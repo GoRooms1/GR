@@ -28,7 +28,7 @@ class BotMessageTemplateUpdateRequest extends FormRequest
             'header' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],
             'url' => ['nullable', 'url'],
-            'frequency' => ['required', 'integer', 'min:1'],
+            'sort' => ['required', 'integer', 'min:1'],
             'is_active' => ['nullable'],
             'image' => ['image'],
         ];

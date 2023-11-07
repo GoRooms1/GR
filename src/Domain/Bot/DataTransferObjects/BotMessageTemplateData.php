@@ -15,7 +15,7 @@ final class BotMessageTemplateData extends \Parent\DataTransferObjects\Data
         public ?string $header,
         public ?string $body,
         public ?string $url,
-        public int $frequency,
+        public int $sort,
         public bool $is_active,
     ) {
     }
@@ -27,7 +27,7 @@ final class BotMessageTemplateData extends \Parent\DataTransferObjects\Data
             'header' => $request->get('header'),
             'body' => $request->get('body'),
             'url' => $request->get('url'),
-            'frequency' => $request->get('frequency', 1),
+            'sort' => $request->get('sort', 1),
             'is_active' => $request->boolean('is_active'),
         ]);
     }

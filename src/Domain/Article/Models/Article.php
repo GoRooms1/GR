@@ -67,9 +67,11 @@ class Article extends Model implements HasMedia
         'meta_title',
         'meta_description',
         'meta_keywords',
+        'published',
     ];
 
     protected $casts = [
+        'published' => 'boolean',
         'deleted_at' => 'datetime:Y-m-d\TH:i:sP',     
         'created_at' => 'datetime:Y-m-d\TH:i:sP',
         'updated_at' => 'datetime:Y-m-d\TH:i:sP',

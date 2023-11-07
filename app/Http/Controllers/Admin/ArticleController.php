@@ -43,7 +43,9 @@ class ArticleController extends Controller
     public function store(ArticleRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $article = Article::create(Article::getFillableData($validated));
+        $validated = Article::getFillableData($validated);
+        $validated['published'] = $request->boolean('published', false);
+        $article = Article::create($validated);
         $article->user()->associate(Auth::user()->id);
         $article->save();
 
@@ -76,8 +78,9 @@ class ArticleController extends Controller
      */
     public function update(ArticleRequest $request, Article $article): RedirectResponse
     {
-        $validated = $request->validated();
+        $validated = $request->validated();       
         $validated = Article::getFillableData($validated);
+        $validated['published'] = $request->boolean('published', false);
         $article->update($validated);
 
         if ($request->file('image')) {

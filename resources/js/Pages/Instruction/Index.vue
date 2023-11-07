@@ -24,7 +24,7 @@
       <section v-for="i in instructions" class="part part_text mb-4" :id="'partText' + i.id">
         <div class="">
           <h2 class="font-semibold text-xl px-2 text-[#6170FF]">{{ i?.header }}</h2>
-          <div class="mt-2" v-html="i?.content"></div>
+          <div class="mt-2 flex flex-wrap items-center" v-html="i?.content"></div>
         </div>
       </section>      
     </div>
@@ -43,11 +43,19 @@ export default {
   props: {
     page: Object,
     instructions: [Object],   
-  },
+  },  
   data() {
     return {
       inMove: false,
       activeSection: null,
+    }
+  },
+  mounted() {
+    let iframes = document.getElementsByTagName("iframe");
+
+    for (let iframe of iframes) {
+      iframe.parentElement.classList.add('w-full');      
+      iframe.classList.add('mx-auto', '!w-full',  'md:!w-[70%]');
     }
   },
   methods: {

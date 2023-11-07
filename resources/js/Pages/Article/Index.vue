@@ -14,7 +14,7 @@
     </div>   
   </div>
   <div class="container mx-auto px-4 lg:px-6 min-[1920px]:px-[10vw] z-10">    
-    <div class="flex flex-wrap w-full">
+    <div class="flex flex-wrap w-full items-stretch">
       <ArticleCard v-for="article in articles.data" :key="article.id" :article="article"/>
     </div>
     <div class="mx-auto mt-8 w-full text-center"> 

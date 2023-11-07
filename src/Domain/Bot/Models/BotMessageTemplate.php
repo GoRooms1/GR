@@ -21,7 +21,7 @@ class BotMessageTemplate extends Model implements HasMedia
         'header',
         'body',
         'url',
-        'frequency',
+        'sort',
         'is_active',
         'users_count',
         'hotels_count',

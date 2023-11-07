@@ -84,7 +84,7 @@
 
       <div id="rooms">
         @foreach($rooms as $room)
-          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-moderate="moderate">
+          <div class="shadow shadow-complete" data-id="{{ $room->id }}" data-moderate="moderate" data-attributes="{{ $room->attrs->pluck('id')->implode(',') }}">
             <input type="hidden"
                    name="url"
                    value="{{ route('moderator.room.update') }}">

@@ -123,10 +123,11 @@ function createRoom ()
  * Сохранение комнаты, запрос backend
  */
 function saveRoom ()
-{
-  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0) {
+{ 
+  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0 || $(this).parents('.shadow').attr('data-moderate') === 'moderate') {
     let shadow = $(this).parents('.shadow').get(0)
 
+    $(shadow).find('input[name=url]').val()
     let category = $(shadow).find('input[name=category_id]').val()
     axios.post($(shadow).find('input[name=url]').val(), {
       id: shadow.dataset.id,
@@ -139,7 +140,7 @@ function saveRoom ()
         }
       }).get()
     })
-      .then(response => {
+      .then(response => {        
         if (response.data.success) {
           saveFrontData.call(this)
           if (response.data.room.moderate) {
@@ -163,8 +164,7 @@ function saveRoom ()
           afterSaveRoom(response.data.room)
         }
       })
-      .catch(error => {
-        console.log(error)
+      .catch(error => {        
         if (error.response.data.errors) {
           let str = '';
           Object.keys(error.response.data.errors).forEach(key => {
@@ -187,7 +187,10 @@ function saveRoom ()
  */
 function saveFrontData (save = false)
 {
-  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0 || save) {
+  if ($(this).parents('.shadow').find('.dz-image-preview').length !== 0 || 
+    $(this).parents('.shadow').attr('data-moderate') === 'moderate' ||
+    save
+  ) {
     let shadow = $(this).parents('.shadow')
     $(shadow).find('.remove-btn').hide()
     $(this).hide()

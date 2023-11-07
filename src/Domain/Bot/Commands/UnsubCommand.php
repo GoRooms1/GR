@@ -39,7 +39,7 @@ class UnsubCommand extends Command
         foreach($hotels as $hotel) 
         {
             $inlineLayout[] = [
-                Keyboard::inlineButton(['text' => $hotel->name, 'callback_data' => 'unsub '.$hotel->id]),
+                Keyboard::inlineButton(['text' => $hotel->name, 'callback_data' => '2 '.$hotel->id]),
             ];
         }
         
