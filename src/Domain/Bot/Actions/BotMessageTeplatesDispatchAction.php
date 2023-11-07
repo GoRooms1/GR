@@ -19,30 +19,32 @@ final class BotMessageTeplatesDispatchAction extends Action
     public function handle(int $hotel_id)
     {        
         $bookingsCount = Booking::whereIn('room_id', Room::where('hotel_id', $hotel_id)->pluck('id'))->count();
-        $templates = BotMessageTemplate::where('is_active', true)->get();
+        $templates = BotMessageTemplate::where('is_active', true)->orderBy('sort', 'asc')->get();
 
-        foreach ($templates as $template) {
-            $frequency = $template->frequency > 0 ? $template->frequency : 1;
-            $is_allow_send = intdiv($bookingsCount, $frequency) == $bookingsCount/$frequency;            
-            
-            if (!$is_allow_send)
-                continue;
+        if ($templates->count() == 0)
+            return;
+        
+        $currentQueue = $bookingsCount;
 
-            $users = GetSubscribedUsersOnHotelAction::run($hotel_id);
-            $text = GenerateTextFromTemplateAction::run($template);
-
-            foreach ($users as $user) {
-                $message = new BotMessageData(
-                    chat_id: $user->telegram_id,
-                    text: $text,
-                    parse_mode: 'markdown',
-                    disable_web_page_preview: false,
-                  );
-                
-                BotNotificationJob::dispatch($message)->onQueue(null)->delay(now()->addSeconds(config('telegram.job_delay')));                
-            }
-
-            UpdateTemplateCountersAction::run($template, $hotel_id);
+        while (($currentQueue - $templates->count()) >= 1) {
+            $currentQueue = $currentQueue - $templates->count();
         }
+
+        $template = $templates->all()[$currentQueue - 1];
+        $users = GetSubscribedUsersOnHotelAction::run($hotel_id);
+        $text = GenerateTextFromTemplateAction::run($template);
+
+        foreach ($users as $user) {
+            $message = new BotMessageData(
+                chat_id: $user->telegram_id,
+                text: $text,
+                parse_mode: 'markdown',
+                disable_web_page_preview: false,
+              );
+            
+            BotNotificationJob::dispatch($message)->onQueue(null)->delay(now()->addSeconds(config('telegram.job_delay')));                
+        }
+
+        UpdateTemplateCountersAction::run($template, $hotel_id);
     }
 }

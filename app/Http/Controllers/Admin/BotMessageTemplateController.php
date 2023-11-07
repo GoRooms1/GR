@@ -25,7 +25,7 @@ class BotMessageTemplateController extends Controller
 {
     public function index(): View
     {
-        $botMessageTemplates = BotMessageTemplate::all();
+        $botMessageTemplates = BotMessageTemplate::orderBy('sort')->get();
 
         return view('admin.bot_message_templates.index', compact('botMessageTemplates'));
     }

@@ -16,6 +16,7 @@
                         <tr>
                             <th>#</th>
                             <th>Наименование</th>
+                            <th>Порядок</th>
                             <th>Активно</th>
                             <th>Действия</th>                      
                         </tr>
@@ -25,6 +26,7 @@
                             <tr class="{{$template->is_active === true ? '' : 'table-active'}}">
                                 <td>{{ $template->id }}</td>
                                 <td>{{ $template->name }}</td>
+                                <td>{{ $template->sort }}</td>
                                 <td>{{ $template->is_active === true ? 'Да' : 'Нет'}}</td>                          
                                 <td>
                                     <div class="btn-group btn-group-sm">

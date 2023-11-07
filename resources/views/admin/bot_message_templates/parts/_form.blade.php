@@ -31,19 +31,10 @@
     @enderror
 </div>
 <div class="form-group">
-    <label for="type">Частота отправки сообщений</label>
-    <select name="frequency" id="frequency" class="form-control @error('frequency') is-invalid @enderror">
-      @foreach(range(1,5) as $i)
-        <option value="{{ $i }}"
-            @if ( (old('frequency') ?? @$botMessageTemplate->frequency) == $i)
-                selected
-            @endif
-        >
-        Отправлять при каждом {{ $i > 1 ? $i.'м' : ''}} бронировании
-        </option>
-      @endforeach
-    </select>
-    @error('frequency')
+    <label for="sort">Порядок отправки сообщений</label>
+    <input type="number" name="sort" id="sort" value="{{ old('sort') ?? @$botMessageTemplate->sort ?? '' }}" 
+        class="form-control @error('sort') is-invalid @enderror"/>      
+    @error('sort')
       <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
