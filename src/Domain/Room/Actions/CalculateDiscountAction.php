@@ -32,6 +32,7 @@ final class CalculateDiscountAction extends Action
         }
         
         $costsCalendar->discount = $discount;
+        $costsCalendar->avg_value = $avg_value;
         $costsCalendar->save();
 
         return $costsCalendar;

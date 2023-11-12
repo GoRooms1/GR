@@ -15,6 +15,7 @@ class CostsCalendar extends Model
     protected $fillable = [
         'cost_id',
         'value',
+        'avg_value',
         'discount',
         'date_from',
         'date_to',       
