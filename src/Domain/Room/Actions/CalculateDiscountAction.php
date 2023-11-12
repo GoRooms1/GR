@@ -20,13 +20,12 @@ final class CalculateDiscountAction extends Action
      */
     public function handle(CostsCalendar $costsCalendar, int $value): CostsCalendar
     {
-        $cost = Cost::where('id', $costsCalendar->cost_id)->first();        
+        $cost = Cost::where('id', $costsCalendar->cost_id)->first();    
         $avg_value = $cost->avg_value ?? $cost->value;
-
-        if ($avg_value === 0 || $value === 0)
-            return $costsCalendar;
-
-        $discount = 100 - floor($value*100/$avg_value);
+        $discount = 0;
+        
+        if ($avg_value != 0 && $value != 0)
+            $discount = 100 - floor($value*100/$avg_value);       
         
         if ($discount < 0 || $discount >= 100) {
             $discount = 0;
