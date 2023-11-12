@@ -13,6 +13,7 @@ final class CostData extends \Parent\DataTransferObjects\Data
     public function __construct(
         public ?int $id,
         public float|string|null $value,
+        public float|string|null $avg_value,
         public int $room_id,
         public int $period_id,
         public ?Carbon $created_at,

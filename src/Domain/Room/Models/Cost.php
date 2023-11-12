@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\WithData;
@@ -52,6 +53,7 @@ final class Cost extends Model
      */
     protected $fillable = [
         'value',
+        'avg_value',
         'room_id',
         'period_id',
     ];
@@ -70,6 +72,12 @@ final class Cost extends Model
     {
         return $this->hasOneThrough(Period::class, CostType::class);
     }
+
+    public function costsCalendars(): HasMany
+    {
+        return $this->hasMany(CostsCalendar::class, 'cost_id', 'id');
+    }    
+
 
     protected static function newFactory(): CostFactory
     {
