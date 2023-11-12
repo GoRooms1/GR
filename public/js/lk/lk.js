@@ -1007,10 +1007,12 @@ function addToCostsCalendar() {
     isValid = false;
   }
 
-  var fromDate = new Date($('#costs_calendar_date_from').val());
-  var toDate = new Date($('#costs_calendar_date_to').val());
+  let fromDate = new Date($('#costs_calendar_date_from').val());
+  let toDate = new Date($('#costs_calendar_date_to').val());
+  let currentDate = new Date();
+  currentDate.setUTCHours(0, 0, 0, 0);
 
-  if( toDate < fromDate) {
+  if( toDate < fromDate || (url_prefix == 'lk' && fromDate < currentDate)) {
     $('#costs_calendar_date_from').addClass('is-invalid');
     $('#costs_calendar_date_to').addClass('is-invalid');
     isValid = false;
@@ -1108,11 +1110,6 @@ function fillCostCalendarList(list) {
     +'</div>');
   });  
 }
-
-//Test
-// let popup = $('#popupCostsCalendar');
-// popup.addClass('open')
-// $('.overlay').addClass('open')
 
 /**
  * Закрывает модалку с периодами цен
