@@ -23,15 +23,11 @@ class CostsCalendarCreateRequest extends FormRequest
      */
     public function rules(): array
     {        
-        if ($this->routeIs('*.cost-calendar.create')) {
-           return [
+        return [
             'cost_id'=> ['required', 'exists:costs,id'],
             'value'=> ['required', 'numeric', 'min:0'],
             'date_from' => ['required', 'date'],
             'date_to' => ['required', 'date'],
-           ];
-        }
-
-        return [];
+        ];
     }
 }

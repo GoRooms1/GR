@@ -23,6 +23,7 @@ final class CreateCostsCalendarAction extends Action
             ["date_from","=", $data["date_from"]],
             ["date_to", "=", $data["date_to"]],
             ["cost_id","=", $data["cost_id"]],
+            ["is_active","=", true],
         ])->first();
 
         if ($costCalendar !== null)
