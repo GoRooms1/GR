@@ -23,6 +23,7 @@ function allowedEditRoom()
   $(this).parents('.shadow').find('.sortable').sortable('enable');
   $(this).parents('.shadow').find('.uploud-photo').show()
   $(this).parents('.shadow').find('.save-room').show()
+  $(this).parents('.shadow').find('.costs_calendar__open').parent().removeClass('d-none').addClass('d-flex')
   $(this).hide()
 
   let shadow = $(this).parents('.shadow')
@@ -209,6 +210,7 @@ function saveFrontData (save = false)
     $(shadow).find('.upload__remove').hide()
     $(shadow).find('.sortable').sortable('disable');
     $(shadow).find('.uploud-photo').hide()
+    $(shadow).find('.costs_calendar__open').parent().removeClass('d-flex').addClass('d-none')
 
     hidePeriodsInShadow(shadow);
   }

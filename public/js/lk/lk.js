@@ -945,3 +945,179 @@ function updateOrderPhotos () {
       }
     })
 }
+
+/**
+ * Открывает модалку с периодами цен
+ */
+$('.costs_calendar__open').bind('click', openPopupCostCalendar);
+
+function openPopupCostCalendar () {
+  let popup = $('#popupCostsCalendar');
+  popup.addClass('open');
+  $('.overlay').addClass('open');
+
+  let url_prefix = popup.attr('data-url-prefix');
+  let cost_id = $(this).attr('data-cost-id');
+  let room_name = $(this).attr('data-room-name');
+  let period = $(this).attr('data-period');
+  let category = $(this).attr('data-category-name') ? ' категории ' + $(this).attr('data-category-name') : '';
+  let avg_value = $(this).attr('data-avg-value');
+  
+  popup.attr('data-cost-id', cost_id);
+  popup.attr('data-avg-value', avg_value);
+  $('#costs_calendar_value').attr('placeholder', avg_value);
+  popup.find('.title').text('Настрока периодов для номера ' + room_name + category + ', ' + period.toLowerCase());
+
+  axios.get("/"+url_prefix+"/cost/"+cost_id+"/costs-calendar")
+  .then(response => {
+    let costsCalendars = response.data.costsCalendars;         
+    console.log(costsCalendars);
+    fillCostCalendarList(costsCalendars);
+  })
+  .catch(e => {
+    alert('Ошибка отображение периодов цен!')
+  })
+};
+
+/**
+ * Добавление периода цены
+ */
+$('#addCostCalendar').bind('click', addToCostsCalendar);
+
+function addToCostsCalendar() {
+  let popup = $('#popupCostsCalendar');
+  let cost_id = popup.attr('data-cost-id');
+  let url_prefix = popup.attr('data-url-prefix');
+
+  //validate
+  popup.find('input').removeClass('is-invalid');
+  let isValid = true;
+  if( !$('#costs_calendar_value').val() ) {
+    $('#costs_calendar_value').addClass('is-invalid');
+    isValid = false;
+  }
+
+  if( !$('#costs_calendar_date_from').val() ) {
+    $('#costs_calendar_date_from').addClass('is-invalid');
+    isValid = false;
+  }
+
+  if( !$('#costs_calendar_date_to').val() ) {
+    $('#costs_calendar_date_to').addClass('is-invalid');
+    isValid = false;
+  }
+
+  var fromDate = new Date($('#costs_calendar_date_from').val());
+  var toDate = new Date($('#costs_calendar_date_to').val());
+
+  if( toDate < fromDate) {
+    $('#costs_calendar_date_from').addClass('is-invalid');
+    $('#costs_calendar_date_to').addClass('is-invalid');
+    isValid = false;
+  }
+
+  if (!isValid)
+    return;
+  
+  let btn = $('#addCostCalendar');
+  btn.prop("disabled", true);
+
+  axios.post("/"+url_prefix+"/costs-calendar", {
+    cost_id: cost_id,
+    value: $('#costs_calendar_value').val(),
+    date_from: $('#costs_calendar_date_from').val(),
+    date_to: $('#costs_calendar_date_to').val(),
+  })
+  .then(response => {
+    btn.prop("disabled", false);
+    let costsCalendars = response.data.costsCalendars;
+    fillCostCalendarList(costsCalendars);
+  })
+  .catch(e => {
+    btn.prop("disabled", false);
+    alert('Ошибка при добавлении!')
+  })
+};
+
+
+/**
+ * Калькуляция скидки
+ */
+$('#costs_calendar_value').bind('input', calculateDiscount);
+
+function calculateDiscount() {
+  let cost = $(this).val();
+  let avg_cost = $('#popupCostsCalendar').attr('data-avg-value');
+  let discount = 0;
+
+  if (avg_cost != 0 && cost != 0)
+    discount = 100 - Math.floor(cost*100/avg_cost);
+
+  if (discount >= 100 || discount < 0)
+    discount = 0;
+
+  $('#costs_calendar_discount').text(discount + "%");
+};
+
+/**
+ * Удаление периода цены
+ */
+$(document).on('click', '.costs_calendar__delete', deleteCostsCalendar);
+
+function deleteCostsCalendar() {  
+  let popup = $('#popupCostsCalendar');
+  let costs_calendar_id = $(this).attr('data-costs-calendar-id');
+  let url_prefix = popup.attr('data-url-prefix');  
+
+  axios.delete("/"+url_prefix+"/costs-calendar/"+costs_calendar_id)
+  .then(response => {
+    let costsCalendars = response.data.costsCalendars;    
+    fillCostCalendarList(costsCalendars);
+  })
+  .catch(e => {
+    alert('Ошибка при удалении!')
+  })
+};
+
+
+/**
+ * Очистка и заполнение списка периодов цен 
+ */
+
+function fillCostCalendarList(list) {
+  let listContainer = $('#popupCostsCalendarList');
+  listContainer.empty();
+ 
+  list.forEach(el => {
+    listContainer.append('<div class="row">'
+      + '<div class="form-group col"> '       
+      +   '<input type="date" class="form-control pointer-none" value="'+el.date_from+'">'
+      + '</div>'
+      + '<div class="form-group col">'       
+      +   '<input type="date" class="form-control pointer-none" value="'+el.date_to+'">'      
+      + '</div>'
+      + '<div class="form-group col">'        
+      +   '<span class="form-control">'+el.value+'</span>'
+      + '</div>'
+      + '<div class="form-group col">'
+      +   '<span class="form-control">' + (el.discount ? (el.discount + '%') : '') +'</span>'
+      + '</div>'
+      + '<div class="form-group col">'      
+      +   '<button type="button" class="btn btn-outline-danger w-100 costs_calendar__delete" data-costs-calendar-id="'+el.id+'">Удалить</button>'
+      + '</div>'
+    +'</div>');
+  });  
+}
+
+//Test
+// let popup = $('#popupCostsCalendar');
+// popup.addClass('open')
+// $('.overlay').addClass('open')
+
+/**
+ * Закрывает модалку с периодами цен
+ */
+$('.popup__button_cost_calendar').bind('click', () => {
+  $('#popupCostsCalendar').removeClass('open')
+  $('.overlay').removeClass('open')
+});
