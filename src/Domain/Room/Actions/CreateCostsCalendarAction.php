@@ -50,9 +50,7 @@ final class CreateCostsCalendarAction extends Action
                 });                
             })
             ->orderBy("date_from", "asc")
-            ->get();
-
-        \Log::info($costCalendar->toArray());
+            ->get();       
 
         foreach ($costCalendars as $cost) {
             if ($cost->date_from->greaterThanOrEqualTo($dateFrom) && $cost->date_to->lessThanOrEqualTo($dateTo)) {

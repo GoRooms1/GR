@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Lk\CategoryController;
+use App\Http\Controllers\Lk\CostsCalendarController;
 use App\Http\Controllers\Lk\InstructionController;
 use App\Http\Controllers\Lk\ObjectController;
 use App\Http\Controllers\Lk\StaffController;
@@ -64,3 +65,7 @@ Route::delete('staff/remove/{id}', [StaffController::class, 'remove'])->name('st
 Route::post('staff/create', [StaffController::class, 'create'])->name('staff.create');
 Route::put('staff/update/{id}', [StaffController::class, 'update'])->name('staff.update');
 Route::post('staff/update/{id}/password', [StaffController::class, 'generatePassword'])->name('staff.update.password');
+
+Route::get('/cost/{id}/costs-calendar', [CostsCalendarController::class, 'getCostsCalendarByCostId'])->name('cost-calendar.get');
+Route::post('/costs-calendar', [CostsCalendarController::class, 'create'])->name('cost-calendar.create');
+Route::delete('/costs-calendar/{id}', [CostsCalendarController::class, 'destroy'])->name('cost-calendar.destroy');
