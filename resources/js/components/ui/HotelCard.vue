@@ -68,6 +68,7 @@
             :name="cost.name"
             :info="cost.info"
             :description="cost.description"
+            :cost_period="cost.cost_period"
           />
         </div>
         <div v-if="$page.props?.is_moderator === true" class="w-full">

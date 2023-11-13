@@ -99,6 +99,7 @@
           :name="cost.name"
           :info="cost.info"
           :description="cost.description"
+          :cost_period="cost.cost_period"
         />
       </div>
       <div class="">

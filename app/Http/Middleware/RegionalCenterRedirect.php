@@ -30,7 +30,7 @@ class RegionalCenterRedirect
         if (session()->get('location', false))
             return $next($request);
         
-        $geoLocation = GetLocationFromSession::run($request->ip());        
+        $geoLocation = GetLocationFromSession::run($request->ip());
         
         /**Skip for Moscow */
         if ($geoLocation->city == 'Москва' || $geoLocation->region == 'Московская')

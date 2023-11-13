@@ -54,6 +54,7 @@ final class MinimumCostsCalculation extends Action
                 value: $value,
                 description: $value > 0 ? '' : 'Не предоставляется',
                 period: null,
+                cost_period: null,
             );
         }
 

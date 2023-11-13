@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Domain\Address\Actions\GetRegionalCenterByIpAction;
 use Domain\Object\ViewModels\ObjectsViewModel;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Room\Actions\CreateBookingFromDataAction;
@@ -40,8 +41,17 @@ class RoomController extends Controller
 
     public function hot(Request $request): Response | ResponseFactory
     {
-        $paramsData = ParamsData::fromRequest($request);
-        $paramsData->rooms->is_hot = true;
-        return Inertia::render('Objects/Index', new ObjectsViewModel($paramsData, '/rooms/hot'));
+        $params = ParamsData::fromRequest($request);        
+
+        if (!$params->filter) {           
+            $params->rooms->is_hot = true;
+            $params->room_filter = true;
+
+            if (empty($params->hotels->city)) {
+                $params->hotels->city = GetRegionalCenterByIpAction::run($request->ip());
+            }
+        }
+
+        return Inertia::render('Objects/Index', new ObjectsViewModel($params, '/hot'));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Room\Builders;
 
+use Carbon\Carbon;
 use Domain\Hotel\Builders\HotelBuilder;
 use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Search\DataTransferObjects\RoomParamsData;
@@ -22,7 +23,17 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
 {
     public function hot(): self
     {
-        return $this->where('is_hot', true);
+        return $this->whereHas('costs', function ($query) {
+            $query
+                ->where('value', '!=', '0')
+                ->whereHas('cost_periods', function ($query) {
+                    $query
+                        ->where('is_active', true)
+                        ->where('date_from', '<=', Carbon::now()->startOfDay())
+                        ->where('date_to', '>=', Carbon::now()->startOfDay())
+                        ->where('discount', '>=', 3);
+                });            
+        });
     }
 
     public function moderated(): self

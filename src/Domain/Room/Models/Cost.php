@@ -73,7 +73,7 @@ final class Cost extends Model
         return $this->hasOneThrough(Period::class, CostType::class);
     }
 
-    public function costPeriods(): HasMany
+    public function cost_periods(): HasMany
     {
         return $this->hasMany(CostPeriod::class, 'cost_id', 'id');
     }    
