@@ -15,6 +15,7 @@ use Domain\Image\Traits\UploadImage;
 use Domain\Room\Actions\SetRoomAsModerate;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Period;
 use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -97,13 +98,16 @@ class RoomController extends Controller
             $room = $this->saveDataTypeRoom($request->all(), $room);
         }
 
-        $room->category()->associate($request->get('category'));       
+        $room->category()->associate($request->get('category'));
 
         foreach ($request->get('types') as $type) {
-            $cost = Cost::where('period_id', $type['data'])->where('room_id', $room->id)->first();
+            $period = Period::find($type['data']);
+            $samePeriods = Period::where('cost_type_id','=', $period->cost_type_id)->pluck('id');
+            $cost = Cost::whereIn('period_id', $samePeriods)->where('room_id', $room->id)->first();
             
             if ($cost) {
                 $cost->value = $type['value'];
+                $cost->period()->associate($type['data']);
                 $cost->save();
                 continue;
             }
