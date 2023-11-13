@@ -60,10 +60,17 @@ class RoomController extends Controller
             $room = $this->saveDataTypeRoom($request->all(), $room);
         }
 
-        $room->category()->associate($request->get('category'));
-        $room->costs()->delete();
+        $room->category()->associate($request->get('category'));        
 
         foreach ($request->get('types') as $type) {
+            $cost = Cost::where('period_id', $type['data'])->where('room_id', $room->id)->first();
+            
+            if ($cost) {
+                $cost->value = $type['value'];
+                $cost->save();
+                continue;
+            }
+
             $cost = new Cost();
             $cost->value = $type['value'];
             $cost->period()->associate($type['data']);
