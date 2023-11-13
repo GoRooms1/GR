@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
-use Domain\Room\Models\CostsCalendar;
+use Domain\Room\Models\CostPeriod;
 use Lorisleiva\Actions\Action;
 
 /**
  * @method static mixed run(int $cost_id)
  */
-final class GetCostCalendarsByCostIdAction extends Action
+final class GetCostPeriodsByCostIdAction extends Action
 {    
     /**     
      * @param int $cost_id
@@ -18,6 +18,6 @@ final class GetCostCalendarsByCostIdAction extends Action
      */
     public function handle(int $cost_id): mixed
     {
-        return CostsCalendar::where("cost_id", $cost_id)->where('is_active', true)->orderBy('date_from', 'desc')->get();
+        return CostPeriod::where("cost_id", $cost_id)->where('is_active', true)->orderBy('date_from', 'desc')->get();
     }
 }

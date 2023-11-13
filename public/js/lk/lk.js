@@ -949,10 +949,10 @@ function updateOrderPhotos () {
 /**
  * Открывает модалку с периодами цен
  */
-$('.costs_calendar__open').bind('click', openPopupCostCalendar);
+$('.cost_periods__open').bind('click', openPopupCostPeriods);
 
-function openPopupCostCalendar () {
-  let popup = $('#popupCostsCalendar');
+function openPopupCostPeriods () {
+  let popup = $('#popupCostPeriods');
   popup.addClass('open');
   $('.overlay').addClass('open');
 
@@ -965,14 +965,13 @@ function openPopupCostCalendar () {
   
   popup.attr('data-cost-id', cost_id);
   popup.attr('data-avg-value', avg_value);
-  $('#costs_calendar_value').attr('placeholder', avg_value);
+  $('#cost_periods_value').attr('placeholder', avg_value);
   popup.find('.title').text('Настрока периодов для номера ' + room_name + category + ', ' + period.toLowerCase());
 
-  axios.get("/"+url_prefix+"/cost/"+cost_id+"/costs-calendar")
+  axios.get("/"+url_prefix+"/cost/"+cost_id+"/cost-periods")
   .then(response => {
-    let costsCalendars = response.data.costsCalendars;         
-    console.log(costsCalendars);
-    fillCostCalendarList(costsCalendars);
+    let costPeriods = response.data.costPeriods;    
+    fillCostPeriodsList(costPeriods);
   })
   .catch(e => {
     alert('Ошибка отображение периодов цен!')
@@ -982,58 +981,58 @@ function openPopupCostCalendar () {
 /**
  * Добавление периода цены
  */
-$('#addCostCalendar').bind('click', addToCostsCalendar);
+$('#addCostPeriod').bind('click', addToCostPeriods);
 
-function addToCostsCalendar() {
-  let popup = $('#popupCostsCalendar');
+function addToCostPeriods() {
+  let popup = $('#popupCostPeriods');
   let cost_id = popup.attr('data-cost-id');
   let url_prefix = popup.attr('data-url-prefix');
 
   //validate
   popup.find('input').removeClass('is-invalid');
   let isValid = true;
-  if( !$('#costs_calendar_value').val() ) {
-    $('#costs_calendar_value').addClass('is-invalid');
+  if( !$('#cost_periods_value').val() ) {
+    $('#cost_periods_value').addClass('is-invalid');
     isValid = false;
   }
 
-  if( !$('#costs_calendar_date_from').val() ) {
-    $('#costs_calendar_date_from').addClass('is-invalid');
+  if( !$('#cost_periods_date_from').val() ) {
+    $('#cost_periods_date_from').addClass('is-invalid');
     isValid = false;
   }
 
-  if( !$('#costs_calendar_date_to').val() ) {
-    $('#costs_calendar_date_to').addClass('is-invalid');
+  if( !$('#cost_periods_date_to').val() ) {
+    $('#cost_periods_date_to').addClass('is-invalid');
     isValid = false;
   }
 
-  let fromDate = new Date($('#costs_calendar_date_from').val());
-  let toDate = new Date($('#costs_calendar_date_to').val());
+  let fromDate = new Date($('#cost_periods_date_from').val());
+  let toDate = new Date($('#cost_periods_date_to').val());
   let currentDate = new Date();
   currentDate.setUTCHours(0, 0, 0, 0);
 
   if( toDate < fromDate || (url_prefix == 'lk' && fromDate < currentDate)) {
-    $('#costs_calendar_date_from').addClass('is-invalid');
-    $('#costs_calendar_date_to').addClass('is-invalid');
+    $('#cost_periods_date_from').addClass('is-invalid');
+    $('#cost_periods_date_to').addClass('is-invalid');
     isValid = false;
   }
 
   if (!isValid)
     return;
   
-  let btn = $('#addCostCalendar');
+  let btn = $('#addCostPeriod');
   btn.prop("disabled", true);
 
-  axios.post("/"+url_prefix+"/costs-calendar", {
+  axios.post("/"+url_prefix+"/cost-periods", {
     cost_id: cost_id,
-    value: $('#costs_calendar_value').val(),
-    date_from: $('#costs_calendar_date_from').val(),
-    date_to: $('#costs_calendar_date_to').val(),
+    value: $('#cost_periods_value').val(),
+    date_from: $('#cost_periods_date_from').val(),
+    date_to: $('#cost_periods_date_to').val(),
   })
   .then(response => {
     btn.prop("disabled", false);
-    let costsCalendars = response.data.costsCalendars;
-    fillCostCalendarList(costsCalendars);
+    let costPeriods = response.data.costPeriods;
+    fillCostPeriodsList(costPeriods);
   })
   .catch(e => {
     btn.prop("disabled", false);
@@ -1045,11 +1044,11 @@ function addToCostsCalendar() {
 /**
  * Калькуляция скидки
  */
-$('#costs_calendar_value').bind('input', calculateDiscount);
+$('#cost_periods_value').bind('input', calculateDiscount);
 
 function calculateDiscount() {
   let cost = $(this).val();
-  let avg_cost = $('#popupCostsCalendar').attr('data-avg-value');
+  let avg_cost = $('#popupCostPeriods').attr('data-avg-value');
   let discount = 0;
 
   if (avg_cost != 0 && cost != 0)
@@ -1058,23 +1057,23 @@ function calculateDiscount() {
   if (discount >= 100 || discount < 0)
     discount = 0;
 
-  $('#costs_calendar_discount').text(discount + "%");
+  $('#cost_periods_discount').text(discount + "%");
 };
 
 /**
  * Удаление периода цены
  */
-$(document).on('click', '.costs_calendar__delete', deleteCostsCalendar);
+$(document).on('click', '.cost_periods__delete', deleteCostPeriod);
 
-function deleteCostsCalendar() {  
-  let popup = $('#popupCostsCalendar');
-  let costs_calendar_id = $(this).attr('data-costs-calendar-id');
+function deleteCostPeriod() {  
+  let popup = $('#popupCostPeriods');
+  let cost_period_id = $(this).attr('data-cost-period-id');
   let url_prefix = popup.attr('data-url-prefix');  
 
-  axios.delete("/"+url_prefix+"/costs-calendar/"+costs_calendar_id)
+  axios.delete("/"+url_prefix+"/cost-periods/"+cost_period_id)
   .then(response => {
-    let costsCalendars = response.data.costsCalendars;    
-    fillCostCalendarList(costsCalendars);
+    let costPeriods = response.data.costPeriods;    
+    fillCostPeriodsList(costPeriods);
   })
   .catch(e => {
     alert('Ошибка при удалении!')
@@ -1086,8 +1085,8 @@ function deleteCostsCalendar() {
  * Очистка и заполнение списка периодов цен 
  */
 
-function fillCostCalendarList(list) {
-  let listContainer = $('#popupCostsCalendarList');
+function fillCostPeriodsList(list) {
+  let listContainer = $('#popupCostPeriodsList');
   listContainer.empty();
  
   list.forEach(el => {
@@ -1105,7 +1104,7 @@ function fillCostCalendarList(list) {
       +   '<span class="form-control">' + (el.discount ? (el.discount + '%') : '') +'</span>'
       + '</div>'
       + '<div class="form-group col">'      
-      +   '<button type="button" class="btn btn-outline-danger w-100 costs_calendar__delete" data-costs-calendar-id="'+el.id+'">Удалить</button>'
+      +   '<button type="button" class="btn btn-outline-danger w-100 cost_periods__delete" data-cost-period-id="'+el.id+'">Удалить</button>'
       + '</div>'
     +'</div>');
   });  
@@ -1114,7 +1113,7 @@ function fillCostCalendarList(list) {
 /**
  * Закрывает модалку с периодами цен
  */
-$('.popup__button_cost_calendar').bind('click', () => {
-  $('#popupCostsCalendar').removeClass('open')
+$('.popup__button_cost_periods').bind('click', () => {
+  $('#popupCostPeriods').removeClass('open')
   $('.overlay').removeClass('open')
 });

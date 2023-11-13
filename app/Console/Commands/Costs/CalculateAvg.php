@@ -4,11 +4,11 @@ namespace App\Console\Commands\Costs;
 
 use Carbon\Carbon;
 use Domain\Room\Models\Cost;
-use Domain\Room\Models\CostsCalendar;
+use Domain\Room\Models\CostPeriod;
 use Domain\Settings\Models\Settings;
 use Illuminate\Console\Command;
 
-class RemoveDuplicates extends Command
+class CalculateAvg extends Command
 {
     /**
      * The name and signature of the console command.
@@ -35,17 +35,17 @@ class RemoveDuplicates extends Command
         $this->output->progressStart($costs->count());
 
         foreach ($costs as $cost) {
-           $cost->avg_value = $this->getAvgValue($cost, $avg_period);
+           $cost->avg_value = $cost->value > 0 ? $this->getAvgValue($cost, $avg_period) : 0;
            $cost->save();
            $this->output->progressAdvance();
         }
 
-        $costsCalendars = CostsCalendar::where('date_to', '<', Carbon::now()->startOfDay()->subDays($avg_period))
+        $costPeriods = CostPeriod::where('date_to', '<', Carbon::now()->startOfDay()->subDays($avg_period))
                 ->where('is_active', false)
                 ->get();
-                
-        foreach ($costsCalendars as $calendar) {
-            $calendar->delete();
+
+        foreach ($costPeriods as $costPeriod) {
+            $costPeriod->delete();
         }
 
         $this->output->progressFinish();
@@ -59,11 +59,11 @@ class RemoveDuplicates extends Command
         $sum_value = 0;
         $count_value = 0;
 
-        if (CostsCalendar::where('cost_id', $cost->id)->count() == 0)
+        if (CostPeriod::where('cost_id', $cost->id)->count() == 0)
             return $avg_value;
 
         for ($i = 1; $i <= $avg_period; $i++) {
-            $value = CostsCalendar::where('cost_id', $cost->id)
+            $value = CostPeriod::where('cost_id', $cost->id)
                 ->where('date_from', '<=', $date)
                 ->where('date_to', '>=', $date)
                 ->where('value','>', 0)

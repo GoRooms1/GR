@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
-use Domain\Room\Models\CostsCalendar;
+use Domain\Room\Models\CostPeriod;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static CostsCalendar run(array $data)
+ * @method static CostPeriod run(array $data)
  */
-final class CreateCostsCalendarAction extends Action
+final class CreateCostPeriodAction extends Action
 {   
     /**    
      * @param array $data
-     * @return \Domain\Room\Models\CostsCalendar
+     * @return \Domain\Room\Models\CostPeriod
      */
-    public function handle(array $data): CostsCalendar
-    {        
-        $costCalendar = CostsCalendar::where([
+    public function handle(array $data): CostPeriod
+    {
+        $costPeriod = CostPeriod::where([
             ["value", "=", $data["value"]],
             ["date_from","=", $data["date_from"]],
             ["date_to", "=", $data["date_to"]],
@@ -26,17 +26,17 @@ final class CreateCostsCalendarAction extends Action
             ["is_active","=", true],
         ])->first();
 
-        if ($costCalendar !== null)
-            return $costCalendar;
+        if ($costPeriod !== null)
+            return $costPeriod;
         
-        $costCalendar = CostsCalendar::create($data);
-        $costCalendar = CalculateDiscountAction::run($costCalendar, intval($data["value"]));
-        $dateFrom = $costCalendar->date_from;
-        $dateTo = $costCalendar->date_to;
+        $costPeriod = CostPeriod::create($data);
+        $costPeriod = CalculateDiscountAction::run($costPeriod, intval($data["value"]));
+        $dateFrom = $costPeriod->date_from;
+        $dateTo = $costPeriod->date_to;
 
-        $costCalendars = CostsCalendar::where("cost_id", $costCalendar->cost_id)
+        $costPeriods = CostPeriod::where("cost_id", $costPeriod->cost_id)
             ->where("is_active", true)
-            ->where("id", "!=", $costCalendar->id)
+            ->where("id", "!=", $costPeriod->id)
             ->where(function ($query) use ($dateFrom, $dateTo) {
                 $query->whereBetween("date_from", [$dateFrom, $dateTo])
                 ->orWhereBetween("date_to", [$dateFrom, $dateTo])
@@ -52,7 +52,7 @@ final class CreateCostsCalendarAction extends Action
             ->orderBy("date_from", "asc")
             ->get();       
 
-        foreach ($costCalendars as $cost) {
+        foreach ($costPeriods as $cost) {
             if ($cost->date_from->greaterThanOrEqualTo($dateFrom) && $cost->date_to->lessThanOrEqualTo($dateTo)) {
                 $cost->is_active = false;
                 $cost->save();
@@ -87,6 +87,6 @@ final class CreateCostsCalendarAction extends Action
 
         }
 
-        return $costCalendar;
+        return $costPeriod;
     }
 }

@@ -21,7 +21,7 @@ function allowedEditRoom ()  {
   $(this).parents('.shadow').find('.sortable').sortable('enable');
   $(this).parents('.shadow').find('.uploud-photo').show()
   $(this).parents('.shadow').find('.save-room').show()
-  $(this).parents('.shadow').find('.costs_calendar__open').parent().removeClass('d-none').addClass('d-flex')
+  $(this).parents('.shadow').find('.cost_periods__open').parent().removeClass('d-none').addClass('d-flex')
 
   let shadow = $(this).parents('.shadow')
   showPeriodsInShadow(shadow)
@@ -117,7 +117,7 @@ function saveFrontData (save = false) {
     $(shadow).find('.upload__remove').hide()
     $(shadow).find('.sortable').sortable('disable');
     $(shadow).find('.uploud-photo').hide()
-    $(shadow).find('.costs_calendar__open').parent().removeClass('d-flex').addClass('d-none')
+    $(shadow).find('.cost_periods__open').parent().removeClass('d-flex').addClass('d-none')
 
     let number = $(shadow).find('input[name=number]').val()
     let order = $(shadow).find('input[name=order]').val()

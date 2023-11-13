@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('costs_calendars', function (Blueprint $table) {
+        Schema::table('cost_periods', function (Blueprint $table) {
             $table->double('avg_value')->nullable();
         });
     }
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('costs_calendars', function (Blueprint $table) {
+        Schema::table('cost_periods', function (Blueprint $table) {
             $table->dropColumn(['avg_value']);
         });
     }

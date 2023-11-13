@@ -276,7 +276,7 @@
                     </div>
                     </div>
                     <div class="align-items-center pt-4 pb-3 d-none">
-                      <button class="costs_calendar__open mx-auto"                        
+                      <button class="cost_periods__open mx-auto"                        
                         data-cost-id="{{ $costRoom->id }}"
                         data-room-name="{{ $room->name }}"
                         data-category-name="{{ $room->category->name }}"
@@ -546,7 +546,7 @@
 
 
   @include('lk.room.__popup_attributes', [$attribute_categories])
-  @include('lk.room.__popup_costs_calendar')
+  @include('lk.room.__popup_cost_periods')
 
 
 @endsection

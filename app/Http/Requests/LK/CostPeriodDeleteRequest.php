@@ -4,9 +4,10 @@ namespace App\Http\Requests\LK;
 
 use Auth;
 use DB;
+use Domain\Room\Models\CostPeriod;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CostsCalendarGetAllRequest extends FormRequest
+class CostPeriodDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,15 +16,17 @@ class CostsCalendarGetAllRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->route('id') == null)
-            return false;   
+        $costPeriod = CostPeriod::where('id', $this->route('id'))->first();
+
+        if (!$costPeriod)
+            return false;
 
         $checkedUser = DB::table('users')
             ->join('hotel_user','users.id','=','hotel_user.user_id')
             ->join('hotels','hotel_user.hotel_id','=','hotels.id')
             ->join('rooms','hotels.id','=','rooms.hotel_id')
             ->join('costs','rooms.id','=','costs.room_id')
-            ->where('costs.id', $this->route('id'))
+            ->where('costs.id', $costPeriod->cost_id)
             ->where('users.id', Auth::user()->id)
             ->get();
 

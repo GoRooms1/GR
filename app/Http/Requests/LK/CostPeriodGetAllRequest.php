@@ -6,7 +6,7 @@ use Auth;
 use DB;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CostsCalendarCreateRequest extends FormRequest
+class CostPeriodGetAllRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,13 +14,16 @@ class CostsCalendarCreateRequest extends FormRequest
      * @return bool
      */
     public function authorize(): bool
-    {        
+    {
+        if ($this->route('id') == null)
+            return false;   
+
         $checkedUser = DB::table('users')
             ->join('hotel_user','users.id','=','hotel_user.user_id')
             ->join('hotels','hotel_user.hotel_id','=','hotels.id')
             ->join('rooms','hotels.id','=','rooms.hotel_id')
             ->join('costs','rooms.id','=','costs.room_id')
-            ->where('costs.id', $this->get('cost_id', 0))
+            ->where('costs.id', $this->route('id'))
             ->where('users.id', Auth::user()->id)
             ->get();
 
@@ -37,11 +40,6 @@ class CostsCalendarCreateRequest extends FormRequest
      */
     public function rules(): array
     {        
-        return [
-            'cost_id'=> ['required', 'exists:costs,id'],
-            'value'=> ['required', 'numeric', 'min:0'],
-            'date_from' => ['required', 'date', 'after_or_equal:'.Date('Y-m-d')],
-            'date_to' => ['required', 'date', 'after_or_equal:'.Date('Y-m-d'), 'after_or_equal:date_from'],
-        ];
+        return [];
     }
 }

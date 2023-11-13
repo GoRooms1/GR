@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Moderator\CostsCalendarController;
 use App\Http\Controllers\Moderator\ImageController;
 use App\Http\Controllers\Moderator\CategoryController;
+use App\Http\Controllers\Moderator\CostPeriodsController;
 use App\Http\Controllers\Moderator\InstructionController;
 use App\Http\Controllers\Moderator\ObjectController;
 use App\Http\Controllers\Moderator\StaffController;
@@ -49,6 +49,6 @@ Route::delete('staff/remove/{staff_id}', [StaffController::class, 'remove'])->na
 Route::put('staff/update/{staff_id}', [StaffController::class, 'update'])->name('staff.update');
 Route::post('staff/update/{staff_id}/password', [StaffController::class, 'generatePassword'])->name('staff.update.password');
 
-Route::get('/cost/{id}/costs-calendar', [CostsCalendarController::class, 'getCostsCalendarByCostId'])->name('cost-calendar.get');
-Route::post('/costs-calendar', [CostsCalendarController::class, 'create'])->name('cost-calendar.create');
-Route::delete('/costs-calendar/{id}', [CostsCalendarController::class, 'destroy'])->name('cost-calendar.destroy');
+Route::get('/cost/{id}/cost-periods', [CostPeriodsController::class, 'getCostPeriodsByCostId'])->name('cost-periods.get');
+Route::post('/cost-periods', [CostPeriodsController::class, 'create'])->name('cost-periods.create');
+Route::delete('/cost-periods/{id}', [CostPeriodsController::class, 'destroy'])->name('cost-periods.destroy');

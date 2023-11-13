@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace Domain\Room\Actions;
 
 use Domain\Room\Models\Cost;
-use Domain\Room\Models\CostsCalendar;
+use Domain\Room\Models\CostPeriod;
 use Lorisleiva\Actions\Action;
 
 /**
- * @method static CostsCalendar run(CostsCalendar $costsCalendar)
+ * @method static CostPeriod run(CostPeriod $costPeriod)
  */
 final class CalculateDiscountAction extends Action
 {    
     /**
      * Calculae discount for Costs Calendar
-     * @param \Domain\Room\Models\CostsCalendar $costsCalendar
-     * @return \Domain\Room\Models\CostsCalendar
+     * @param \Domain\Room\Models\CostPeriod $costPeriod
+     * @return \Domain\Room\Models\CostPeriod
      */
-    public function handle(CostsCalendar $costsCalendar, int $value): CostsCalendar
+    public function handle(CostPeriod $costPeriod, int $value): CostPeriod
     {
-        $cost = Cost::where('id', $costsCalendar->cost_id)->first();    
+        $cost = Cost::where('id', $costPeriod->cost_id)->first();    
         $avg_value = $cost->avg_value ?? $cost->value;
         $discount = 0;
         
@@ -31,10 +31,10 @@ final class CalculateDiscountAction extends Action
             $discount = 0;
         }
         
-        $costsCalendar->discount = $discount;
-        $costsCalendar->avg_value = $avg_value;
-        $costsCalendar->save();
+        $costPeriod->discount = $discount;
+        $costPeriod->avg_value = $avg_value;
+        $costPeriod->save();
 
-        return $costsCalendar;
+        return $costPeriod;
     }
 }
