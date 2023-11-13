@@ -8,6 +8,8 @@
  * Редактирование комнаты по кнопке
  */
 function allowedEditRoom ()  {
+  let shadow = $(this).parents('.shadow')
+
   $(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled').removeClass('d-none')
   $(this).parents('.shadow').find('.quote__read').show()
   $(this).parents('.shadow').find('.quote__status').hide()
@@ -22,10 +24,18 @@ function allowedEditRoom ()  {
   $(this).parents('.shadow').find('.uploud-photo').show()
   $(this).parents('.shadow').find('.save-room').show()
   $(this).parents('.shadow').find('.cost_periods__open').parent().removeClass('d-none').addClass('d-flex')
+  $(this).parents('.shadow').find('input[name^=type]').each(function() {
+    let period = $(this).val() ?? 0;
+    let value = $('#value-' + shadow.attr('data-id') + '-' +$(this).attr('data-id')).val() ?? 0;
+    let costPeriodsBtn = $(this).parents('li.hour').find('.cost_periods__open');
 
-  let shadow = $(this).parents('.shadow')
+    if (period != 0 && value != 0)
+      costPeriodsBtn.removeClass('invisible')
+    else
+      costPeriodsBtn.addClass('invisible')
+  })
+  
   showPeriodsInShadow(shadow)
-
 
   blockSaveRoom(shadow)
 
