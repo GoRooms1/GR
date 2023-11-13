@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Moderator;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Moderate\CostPeriodCreateRequest;
+use Cache;
 use Domain\Room\Actions\CreateCostPeriodAction;
 use Domain\Room\Actions\GetCostPeriodsByCostIdAction;
 use Domain\Room\Models\CostPeriod;
@@ -28,6 +29,7 @@ class CostPeriodsController extends Controller
         $costPeriod = CostPeriod::findOrFail($id);
         $costPeriod->is_active = false;
         $costPeriod->save();
+        Cache::flush();
 
         return response()->json(['costPeriods' => GetCostPeriodsByCostIdAction::run($costPeriod->cost_id)]);
     }    

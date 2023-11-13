@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
+use Cache;
 use Domain\Room\Models\CostPeriod;
 use Lorisleiva\Actions\Action;
 
@@ -86,6 +87,8 @@ final class CreateCostPeriodAction extends Action
             }
 
         }
+
+        Cache::flush();
 
         return $costPeriod;
     }
