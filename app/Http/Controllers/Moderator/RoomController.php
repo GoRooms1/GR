@@ -61,7 +61,8 @@ class RoomController extends Controller
             $room = $this->saveDataTypeRoom($request->all(), $room);
         }
 
-        $room->category()->associate($request->get('category'));        
+        $room->category()->associate($request->get('category'));       
+        $costs = collect();
 
         foreach ($request->get('types') as $type) {
             $period = Period::find($type['data']);
@@ -70,7 +71,9 @@ class RoomController extends Controller
             
             if ($cost) {
                 $cost->value = $type['value'];
+                $cost->period()->associate($type['data']);
                 $cost->save();
+                $costs->push($cost);
                 continue;
             }
 
@@ -79,11 +82,12 @@ class RoomController extends Controller
             $cost->period()->associate($type['data']);
             $cost->room()->associate($room->id);
             $cost->save();
+            $costs->push($cost);
         }
 
         $room->save();
 
-        return response()->json(['success' => true, 'room' => $room]);
+        return response()->json(['success' => true, 'room' => $room, 'category' => $room->category, 'costs' => $costs]);
     }
 
     /**

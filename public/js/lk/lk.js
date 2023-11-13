@@ -949,7 +949,7 @@ function updateOrderPhotos () {
 /**
  * Открывает модалку с периодами цен
  */
-$('.cost_periods__open').bind('click', openPopupCostPeriods);
+$(document).on('click', '.cost_periods__open', openPopupCostPeriods);
 
 function openPopupCostPeriods () {
   let popup = $('#popupCostPeriods');
@@ -958,7 +958,7 @@ function openPopupCostPeriods () {
 
   let url_prefix = popup.attr('data-url-prefix');
   let cost_id = $(this).attr('data-cost-id');
-  let room_name = $(this).attr('data-room-name');
+  let room_name = $(this).attr('data-room-name') ?? '';
   let period = $(this).attr('data-period');
   let category = $(this).attr('data-category-name') ? ' категории ' + $(this).attr('data-category-name') : '';
   let avg_value = $(this).attr('data-avg-value');

@@ -429,7 +429,18 @@
               <span class="hours__after">
                 Период
               </span>
-            </div>            
+            </div>
+            <div class="align-items-center pt-4 pb-3 d-none">
+              <button class="cost_periods__open mx-auto"                     
+                data-cost-id=""
+                data-room-name=""
+                data-category-name=""
+                data-period=""
+                data-avg-value=""
+              >                      
+                <span class="plus">+</span>
+              </button>
+            </div>              
           </li>
         @endforeach
       </ul>

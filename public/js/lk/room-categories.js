@@ -108,10 +108,34 @@ function afterRemoveCategory (id)
 /**
  * После сохранения комнаты
  *
+ * @param shadow
  * @param {Element} room
+ * @param {Element} category
+ * @param {Element} costs
+ * 
  */
-function afterSaveRoom (room) {
-  console.log(room)
+function afterSaveRoom (shadow, room, category, costs) {
+  console.log(room, category, costs);
+
+  $(shadow).find('li.hour').each(function () {   
+    let periodsButton = $(this).find('.cost_periods__open');
+    
+    if (periodsButton.attr('data-cost-id'))
+      return;
+
+    let period_id = $(this).find('input[name^=type]').val();
+    let cost = costs.find(el => el.period_id == period_id);
+
+    if (!cost)
+      return;
+    
+    periodsButton.attr('data-cost-id', cost.id);
+    periodsButton.attr('data-room-name', room.name);
+    periodsButton.attr('data-category-name', category.name);
+    periodsButton.attr('data-period', $(this).find('p.hours__heading').text().trim());
+    periodsButton.attr('data-category-name', category.name);
+    periodsButton.attr('data-avg-value', cost.avg_value ?? cost.value);    
+  })
 }
 
 /**
@@ -173,7 +197,7 @@ function saveRoom ()
               .addClass('quote__status_blue')
           }
 
-          afterSaveRoom(response.data.room)
+          afterSaveRoom(shadow, response.data.room, response.data.category, response.data.costs)
         }
       })
       .catch(error => {        
