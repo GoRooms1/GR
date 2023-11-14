@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Address\Actions;
 
-use Domain\Address\DataTransferObjects\GeolocationData;
 use Domain\Address\Models\RegionalCenter;
 use Domain\Hotel\Models\Hotel;
 use Lorisleiva\Actions\Action;
@@ -21,20 +20,21 @@ final class GetRegionalCenterByIpAction extends Action
      */
     public function handle(?string $ip): string
     {
+        $defaultCity = 'Москва и МО';
         $geoLocationData = GetLocationFromSession::run($ip);
         $regionalCenter = RegionalCenter::where('region', $geoLocationData->region)->first();
 
         if (is_null($regionalCenter))
-            return  $geoLocationData->city;
+            return  $defaultCity;
         
         $region = $regionalCenter->region;
         $hotelInRegion = Hotel::whereHas('address', function ($q) use ($region) {
             $q->where('region', $region);
-        })->count();    
+        })->count(); 
         
-        if ($hotelInRegion == 0)
-            return  $geoLocationData->city;
+        if ($hotelInRegion > 0)
+            return  $regionalCenter->city;
 
-        return $regionalCenter->city;
+        return $defaultCity;
     }
 }
