@@ -9,6 +9,7 @@ use Domain\Address\DataTransferObjects\MetroSimpleData;
 use Domain\Hotel\Actions\MinimumCostsCalculation;
 use Domain\Hotel\Models\Hotel;
 use Domain\Media\DataTransferObjects\MediaImageData;
+use Domain\Room\Actions\GetMaxDiscountAction;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Lazy;
@@ -28,11 +29,13 @@ final class HotelCardData extends \Parent\DataTransferObjects\Data
         public readonly null|DataCollection $metros,       
         #[DataCollectionOf(MinCostsData::class)]
         public readonly null|DataCollection $min_costs,
+        public readonly ?int $max_discount,
     ) {
     }
 
     public static function fromModel(Hotel $hotel): self
     {
+        $minCosts = MinimumCostsCalculation::run($hotel);
         return self::from([
             'id' => $hotel->id,
             'name' => $hotel->name,
@@ -42,7 +45,8 @@ final class HotelCardData extends \Parent\DataTransferObjects\Data
             'address' => AddressSimpleData::from($hotel->address),
             'type' => HotelTypeSimpleData::from($hotel->type),                        
             'metros' => MetroSimpleData::collectionWithAddressSlug($hotel->metros, $hotel->address),            
-            'min_costs' => MinimumCostsCalculation::run($hotel),
+            'min_costs' => $minCosts,
+            'max_discount' => GetMaxDiscountAction::run($minCosts),
         ]);
     }
 }

@@ -13,6 +13,7 @@ use Domain\Hotel\DataTransferObjects\RoomHotelData;
 use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\GetAllRoomCosts;
+use Domain\Room\Actions\GetMaxDiscountAction;
 use Domain\Room\Models\Room;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -39,11 +40,13 @@ final class RoomCardData extends \Parent\DataTransferObjects\Data
         public Lazy|CategoryData|null $category,
         #[DataCollectionOf(MinCostsData::class)]
         public readonly null|Lazy|DataCollection $costs,
+        public readonly ?int $max_discount,
     ) {
     }
 
     public static function fromModel(Room $room): self
     {
+        $costs = GetAllRoomCosts::run($room);        
         return self::from([
             ...$room->toArray(),
             'created_at' => $room->created_at,
@@ -52,7 +55,8 @@ final class RoomCardData extends \Parent\DataTransferObjects\Data
             'attrs' => AttributeSimpleData::collection($room->attrs),            
             'hotel' => RoomHotelData::fromModel($room->hotel),
             'category' => $room->category ? CategoryData::fromModel($room->category) : null,
-            'costs' => GetAllRoomCosts::run($room),
+            'costs' => $costs,
+            'max_discount' => GetMaxDiscountAction::run($costs),
         ]);
     }
 }
