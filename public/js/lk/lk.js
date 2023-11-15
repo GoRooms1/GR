@@ -947,6 +947,17 @@ function updateOrderPhotos () {
 }
 
 /**
+ * Очистка формы периодов цен
+ */
+
+function clearCostPeriodsForm() {
+  $('#cost_periods_value').val('')
+  $('#cost_periods_date_from').val('')
+  $('#cost_periods_date_to').val('')
+  $('#cost_periods_discount').text('')  
+}
+
+/**
  * Открывает модалку с периодами цен
  */
 $(document).on('click', '.cost_periods__open', openPopupCostPeriods);
@@ -955,6 +966,7 @@ function openPopupCostPeriods () {
   let popup = $('#popupCostPeriods');
   popup.addClass('open');
   $('.overlay').addClass('open');
+  clearCostPeriodsForm();
 
   let url_prefix = popup.attr('data-url-prefix');
   let cost_id = $(this).attr('data-cost-id');
@@ -1033,6 +1045,7 @@ function addToCostPeriods() {
     btn.prop("disabled", false);
     let costPeriods = response.data.costPeriods;
     fillCostPeriodsList(costPeriods);
+    clearCostPeriodsForm();
   })
   .catch(e => {
     btn.prop("disabled", false);
