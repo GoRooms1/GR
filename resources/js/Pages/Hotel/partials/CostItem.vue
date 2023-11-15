@@ -5,7 +5,7 @@
   >
     <div
       v-if="cost_period"
-      class="font-bold text-sm xs:text-base flex items-center xl:static top-2 pl-4 xl:pl-0"
+      class="font-bold text-sm xs:text-base flex items-center w-full justify-center xl:static top-2 pl-4 xl:pl-0"
     >
       <div class="mr-2">
         <img src="/img/red_bolt.svg" alt="bolt"/>
