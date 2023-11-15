@@ -33,7 +33,17 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
                         ->where('date_to', '>=', Carbon::now()->startOfDay())
                         ->where('discount', '>=', 3);
                 });            
-        });
+            })
+            ->orderByRaw(
+                '(
+                    SELECT max(cp.discount) 
+                    FROM cost_periods as cp 
+                    WHERE cp.cost_id IN (SELECT c.id FROM costs as c WHERE c.room_id = rooms.id) 
+                    AND cp.is_active = 1 
+                    AND cp.date_from <= CURDATE()
+                    AND cp.date_to >= CURDATE()
+                ) DESC'
+            );
     }
 
     public function moderated(): self
