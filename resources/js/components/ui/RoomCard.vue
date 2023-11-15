@@ -19,6 +19,9 @@
       <div
         class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px] swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"
       ></div>
+      <div v-if="room.max_discount > 0" class="absolute left-0 top-0 bg-red-700 text-white flex flex-col justify-center text-center w-12 rounded-tl-2xl rounded-br-2xl z-10">                
+        <span class="text-xl font-bold py-2">{{room.max_discount}}%</span>
+      </div>
     </swiper>
     <div
       class="bg-white rounded-2xl p-5 xl:p-6 shadow-xl relative z-10 xl:w-full xl:h-96 overflow-hidden"
@@ -100,6 +103,7 @@
           :info="cost.info"
           :description="cost.description"
           :cost_period="cost.cost_period"
+          :is_room="true"
         />
       </div>
       <div class="">

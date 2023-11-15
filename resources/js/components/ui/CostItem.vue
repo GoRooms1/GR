@@ -2,7 +2,8 @@
   <div v-if="value > 0" class="xl:mb-2">
     <div
       v-if="cost_period"
-      class="font-bold text-sm xs:text-base !leading-6 flex items-center xl:static top-2 pl-4 xl:pl-0"
+      class="font-bold text-sm xs:text-base !leading-6 flex items-center top-2 w-full"
+      :class="is_room ? 'justify-center lg:justify-start' : 'justify-center'"
     >
       <div class="mr-2">
        <img src="/img/red_bolt.svg" alt="bolt"/>
@@ -36,6 +37,10 @@ export default {
     info: String,
     description: String,
     cost_period: Object,
+    is_room: {
+      type: Boolean,
+      default: false
+    }
   },
 };
 </script>

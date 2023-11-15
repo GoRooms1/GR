@@ -28,6 +28,9 @@
         <div
           class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px]"
         ></div>
+        <div v-if="hotel.max_discount > 0" class="absolute left-0 top-0 bg-red-700 text-white flex flex-col justify-center text-center w-12 rounded-tl-2xl rounded-br-2xl z-10">                
+          <span class="text-xl font-bold py-2">{{hotel.max_discount}}%</span>
+        </div>
       </swiper>
       <div class="bg-white rounded-2xl p-5 shadow-xl relative z-10">
         <div class="flex mb-4">
