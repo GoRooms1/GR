@@ -14,6 +14,7 @@ use Domain\Room\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
 use Parent\Filters\Filter;
+use Schema;
 
 /**
  * @template TModelClass of \Domain\Room\Models\Room
@@ -146,4 +147,27 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
 
         return $result;
     }
+
+    /**    
+     * @return RoomBuilder
+     */
+    public function sort(?String $sort = null): self
+    {     
+        if (empty($sort))
+            return $this;
+
+        $sort = strtolower($sort);
+        $sortField = 'created_at';
+        $sortDirection = 'desc';
+
+        $sortArray = explode(',', $sort);
+        
+        if (in_array($sortArray[0], Schema::getColumnListing('rooms')))
+            $sortField = $sortArray[0];
+
+        if (isset($sortArray[1]) && in_array($sortArray[1], ['asc','desc']))
+            $sortDirection = $sortArray[1];
+
+        return $this->orderBy($sortField, $sortDirection);                        
+    }    
 }

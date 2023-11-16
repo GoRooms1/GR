@@ -7,6 +7,7 @@ use Domain\Object\ViewModels\ObjectsViewModel;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Room\Actions\CreateBookingFromDataAction;
 use Domain\Room\Actions\GenerateBookingMessageAction;
+use Domain\Room\Actions\GenerateRoomsRandomSortAction;
 use Domain\Room\DataTransferObjects\BookingData;
 use Domain\Room\Jobs\BookRoomJob;
 use Domain\Room\Requests\BookingRequest;
@@ -41,7 +42,7 @@ class RoomController extends Controller
 
     public function hot(Request $request): Response | ResponseFactory
     {
-        $params = ParamsData::fromRequest($request);        
+        $params = ParamsData::fromRequest($request);
 
         if (!$params->filter) {           
             $params->rooms->is_hot = true;
@@ -49,6 +50,10 @@ class RoomController extends Controller
 
             if (empty($params->hotels->city)) {
                 $params->hotels->city = GetRegionalCenterByIpAction::run($request->ip());
+            }
+
+            if(empty($params->sort) && $request->get('page', 1) == 1) {
+                $params->sort = GenerateRoomsRandomSortAction::run();
             }
         }
 

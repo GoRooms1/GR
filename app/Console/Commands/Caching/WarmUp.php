@@ -123,7 +123,7 @@ class WarmUp extends Command
         $page = 1;
         
         //Rooms
-        $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params->rooms, $params->hotels))); 
+        $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params))); 
         $this->output->progressAdvance();
 
         //jacuzzi
@@ -131,7 +131,7 @@ class WarmUp extends Command
         $params->rooms->attrs = [
             optional(Attribute::forRooms()->where('name', 'Джакузи')->first())->id ?? 0
         ];
-        $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params->rooms, $params->hotels))); 
+        $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params))); 
         $this->output->progressAdvance();
         
         //centre
@@ -157,7 +157,7 @@ class WarmUp extends Command
         $params->room_filter = true;
         $params->hotels->city = 'Москва';
         $params->rooms->low_cost = true;
-        $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params->rooms, $params->hotels))); 
+        $this->getCahchedData($params, $page, 'rooms', fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params))); 
         $this->output->progressAdvance();     
     }
 

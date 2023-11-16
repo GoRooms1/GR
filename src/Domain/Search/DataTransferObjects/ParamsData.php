@@ -23,6 +23,7 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
         public ?bool $filter,
         public ?string $as,
         public bool $room_filter = false,
+        public ?string $sort,        
     ) {
     }
 
@@ -39,7 +40,8 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
             'hotel_id' => $request->get('hotel_id'),     
             'search' => str_replace('\\', '/', $request->get('search') ?? ''),
             'filter' => filter_var($request->get('filter', false), FILTER_VALIDATE_BOOLEAN),
-            'as' => $request->get('as'),         
+            'as' => $request->get('as'),
+            'sort' => $request->get('as') != 'map' ? $request->get('sort') : null,
         ]);
     }
 

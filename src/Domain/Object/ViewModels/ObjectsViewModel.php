@@ -175,7 +175,7 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
             $params, 
             $page,
             'rooms',
-            fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params->rooms, $params->hotels))
+            fn() => RoomCardData::collection(FilterRoomsPaginateAction::run($params))
         );
     }
 }
