@@ -49,6 +49,7 @@ class CalculateAvg extends Command
         }
 
         $this->output->progressFinish();
+        \Cache::flush();
         return 0;
     }
 

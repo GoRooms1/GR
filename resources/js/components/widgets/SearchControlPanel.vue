@@ -67,8 +67,11 @@
       img="/img/bolt.svg"
       toggle-img="/img/bolt2.svg"
       initial-value="true"
-      :model-value="null"     
-      disabled
+      :model-value="$page.props?.filters?.rooms?.is_hot ?? null"
+      @update:modelValue="
+        (event) =>
+          filterValueHandler('rooms', false, 'is_hot', event)
+      "
     />
     <button
       class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
@@ -85,7 +88,7 @@
 
 <script>
 import FilterAttrToggle from "@/components/ui/FilterAttrToggle.vue";
-import {_getFiltersData, _getData} from "@/Services/filterUtils.js";
+import {_getFiltersData, _getData, _updateFilterValue} from "@/Services/filterUtils.js";
 
 export default {
   components: {
@@ -101,13 +104,17 @@ export default {
     getDataOnMap() {
       let data = _getFiltersData.call(this);
       data.as = 'map';
-      _getData.call(this, '/search', data, () => {this.$eventBus.emit("data-received")});       
+      _getData.call(this, '/search', data, () => {this.$eventBus.emit("data-received")});     
     },    
     openFilters() {
       this.$eventBus.emit("filters-open");
     },
     toggleSearchPanel() {
       this.$page.props.modals.search = !this.$page.props.modals.search;
+    },
+    filterValueHandler(model, isAttr = false, key, value) {
+      _updateFilterValue.call(this, model, isAttr, key, value);
+      this.$eventBus.emit("filters-changed");
     },
   },
 };

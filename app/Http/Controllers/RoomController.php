@@ -44,7 +44,7 @@ class RoomController extends Controller
     {
         $params = ParamsData::fromRequest($request);
 
-        if (!$params->filter) {           
+        if (!$params->filter) {          
             $params->rooms->is_hot = true;
             $params->room_filter = true;
 

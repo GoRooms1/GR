@@ -64,16 +64,13 @@
               (event) => filterValueHandler('rooms', true, 'attr_68', event)
             "
           />
-          <filter-attr-toggle
-            title="Горящие"
-            type="small"
-            initial-value="true"
-            :model-value="null"
-            @update:modelValue="
-              (event) => filterValueHandler('rooms', false, 'is_hot', event)
-            "
-            disabled
-          />
+          <Link 
+            href="/hot"
+            class="px-[12px] h-[32px] flex items-center gap-[8px] justify-center md:hover:outline outline-solid outline-[#6170FF] transition duration-150 rounded-[8px] "
+            :class="($page.props?.filters?.rooms?.is_hot ?? false) ? 'bg-[#6170FF] text-white' : 'bg-white'"
+          >            
+            <span class="text-[14px] leading-[16px] whitespace-nowrap">Горящие</span>
+          </Link>          
           <filter-attr-toggle title="Кешбэк" type="small" disabled />
           <filter-attr-toggle
             title="Арт дизайн"
@@ -163,6 +160,7 @@ import FilterTag from "@/components/ui/FilterTag.vue";
 import CityFilterTag from "@/components/ui/CityFilterTag.vue";
 import Search from "./Search.vue";
 import {_updateFilterValue} from "@/Services/filterUtils.js";
+import { Link } from "@inertiajs/vue3";
 
 export default {
   components: {
@@ -170,6 +168,7 @@ export default {
     FilterTag,
     CityFilterTag,
     Search,
+    Link,
   },
   mounted() {
     if (typeof window !== "undefined") {

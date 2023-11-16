@@ -116,7 +116,7 @@ final class ObjectsViewModel extends \Parent\ViewModels\ViewModel
         $city = $this->params->hotels->city;
         $page_type = $this->list_type();
 
-        if ($this->url == '/rooms/hot')
+        if ($this->url == '/hot')
             $page_type = 'hot';
 
         return [

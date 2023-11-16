@@ -24,8 +24,8 @@ final class MinimumCostFilteredValueCalculation extends Action
     {
         $filters =  $paramsData->rooms;
         
-        $minCost = Cost::selectRaw('min(costs.value) as value')        
-        ->whereIn('room_id', Room::filterForHotels($filters)->withoutGlobalScopes()->where('hotel_id', $hotel->id)->select('id'))
+        $minCost = Cost::selectRaw('min(costs.value) as value')
+        ->whereIn('room_id', Room::filterForHotels($filters)->withoutGlobalScopes()->where('hotel_id', $hotel->id)->where('moderate', false)->select('id'))        
         ->where('value', '>', 0)
         ->first();
         
