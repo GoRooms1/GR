@@ -33,7 +33,7 @@ final class MinimumCostsCalculation extends Action
             cost_types.name, 
             periods.start_at as start_at, 
             periods.end_at as end_at, 
-            LEAST(costs.value, cost_periods.value) AS value,
+            LEAST(IFNULL(costs.value, cost_periods.value), IFNULL(cost_periods.value,costs.value)) AS value,
             costs.id as cost_id'          
         )
         ->leftJoin('periods','cost_types.id','=','periods.cost_type_id')
