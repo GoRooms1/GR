@@ -21,7 +21,7 @@ class CostPeriodsController extends Controller
     {
         $costPeriod = CreateCostPeriodAction::run($request->all());
 
-        return response()->json(['costPeriods' => GetCostPeriodsByCostIdAction::run($request->all('cost_id', 0))]);
+        return response()->json(['costPeriods' => GetCostPeriodsByCostIdAction::run($request->get('cost_id', 0))]);
     }
 
     public function destroy(int $id): JsonResponse
