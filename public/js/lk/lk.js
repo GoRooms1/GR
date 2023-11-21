@@ -955,7 +955,7 @@ function clearCostPeriodsForm() {
   $('#cost_periods_date_from').val('')
   $('#cost_periods_date_to').val('')
   $('#cost_periods_discount').text('')
-  popup.find('input').removeClass('is-invalid') 
+  $('#popupCostPeriods').find('input').removeClass('is-invalid') 
 }
 
 /**
