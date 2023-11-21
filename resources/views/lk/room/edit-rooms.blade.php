@@ -273,8 +273,7 @@
                       <span class="hours__after">
                         {{ $costRoom->period->info ?? 'Период' }}
                       </span>
-                    </div>
-                    </div>
+                    </div>                    
                     <div class="align-items-center pt-4 pb-3 d-none">
                       <button class="cost_periods__open mx-auto"                        
                         data-cost-id="{{ $costRoom?->id }}"
