@@ -67,5 +67,5 @@ Route::put('staff/update/{id}', [StaffController::class, 'update'])->name('staff
 Route::post('staff/update/{id}/password', [StaffController::class, 'generatePassword'])->name('staff.update.password');
 
 Route::get('/cost/{id}/cost-periods', [CostPeriodsController::class, 'getCostPeriodsByCostId'])->name('cost-periods.get');
-Route::post('/cost-periods', [CostPeriodsController::class, 'create'])->name('cost-periods.create');
+Route::post('/cost-periods', [CostPeriodsController::class, 'create'])->middleware('api')->name('cost-periods.create');
 Route::delete('/cost-periods/{id}', [CostPeriodsController::class, 'destroy'])->name('cost-periods.destroy');
