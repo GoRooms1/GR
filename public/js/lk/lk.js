@@ -954,7 +954,8 @@ function clearCostPeriodsForm() {
   $('#cost_periods_value').val('')
   $('#cost_periods_date_from').val('')
   $('#cost_periods_date_to').val('')
-  $('#cost_periods_discount').text('')  
+  $('#cost_periods_discount').text('')
+  popup.find('input').removeClass('is-invalid') 
 }
 
 /**
@@ -966,7 +967,7 @@ function openPopupCostPeriods () {
   let popup = $('#popupCostPeriods');
   popup.addClass('open');
   $('.overlay').addClass('open');
-  clearCostPeriodsForm();
+  clearCostPeriodsForm(); 
 
   let url_prefix = popup.attr('data-url-prefix');
   let cost_id = $(this).attr('data-cost-id');

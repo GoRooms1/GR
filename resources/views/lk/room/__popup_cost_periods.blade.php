@@ -5,11 +5,11 @@
   <div class="row">
     <div class="form-group col">
       <span class="h5 d-block text-center text-dark pb-2">C</span>
-      <input type="date" class="form-control" id="cost_periods_date_from">   
+      <input type="date" class="form-control" id="cost_periods_date_from" min="{{Date('Y-m-d')}}">   
     </div>
     <div class="form-group col">
       <span class="h5 d-block text-center text-dark pb-2">По</span>
-      <input type="date" class="form-control" id="cost_periods_date_to">      
+      <input type="date" class="form-control" id="cost_periods_date_to" min="{{Date('Y-m-d')}}">      
     </div>
     <div class="form-group col">
       <span class="h5 d-block text-center text-dark pb-2">Цена</span>
