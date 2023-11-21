@@ -278,7 +278,7 @@
                       <button class="cost_periods__open mx-auto"                        
                         data-cost-id="{{ $costRoom?->id }}"
                         data-room-name="{{ $room->name }}"
-                        data-category-name="{{ $room->category->name }}"
+                        data-category-name="{{ $room?->category?->name }}"
                         data-period="{{ $type->name }}"
                         data-avg-value="{{ $costRoom?->avg_value ?? $costRoom?->value}}"
                       >                      
