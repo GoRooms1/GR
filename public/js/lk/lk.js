@@ -1043,6 +1043,7 @@ function addToCostPeriods() {
   })
   .then(response => {
     btn.prop("disabled", false);
+    console.log(response.data);
     let costPeriods = response.data.costPeriods;
     fillCostPeriodsList(costPeriods);
     clearCostPeriodsForm();
