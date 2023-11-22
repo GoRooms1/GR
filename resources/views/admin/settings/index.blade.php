@@ -214,6 +214,15 @@
                         <button class="btn btn-success">Обновить</button>
                     </div>
                 </form>
+                <form action="{{ route('admin.settings.store') }}" method="POST" class="row mb-3">
+                    @csrf
+                    <div class="{{ $first_col }}">Расчет средней цены</div>
+                    <div class="{{ $second_col }}"><input type="text" class="form-control" name="avg_cost_period"
+                                                          value="{{ Domain\Settings\Models\Settings::option('avg_cost_period') }}"></div>
+                    <div class="{{ $third_col }}">
+                        <button class="btn btn-success">Обновить</button>
+                    </div>
+                </form>
                 @foreach( $pages as $page)
                     <form class="row" action="{{ route('admin.settings.seo.update', $page) }}" method="POST" enctype="multipart/form-data">
                         @csrf

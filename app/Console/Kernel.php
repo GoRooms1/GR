@@ -22,6 +22,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('ad-banner:notify-ending')
             ->dailyAt('10:00')
             ->runInBackground();
+
+            $schedule->command('costs:calculate-avg')
+            ->dailyAt('00:00')
+            ->runInBackground();
     }
 
     /**

@@ -1,16 +1,17 @@
 <template>
   <div v-if="value > 0" class="xl:mb-2">
     <div
-      v-if="discount"
-      class="font-bold text-sm xs:text-base !leading-6 flex items-center absolute xl:static top-2 pl-4 xl:pl-0"
+      v-if="cost_period"
+      class="font-bold text-sm xs:text-base !leading-6 flex items-center top-2 w-full"
+      :class="is_room ? 'justify-center lg:justify-start' : 'justify-center'"
     >
       <div class="mr-2">
        <img src="/img/red_bolt.svg" alt="bolt"/>
       </div>
-      <div class="text-red-700">{{ discount }} ₽</div>
+      <div class="text-red-700">{{ cost_period.value }} ₽</div>
     </div>
     <div class="text-sm xs:text-base !leading-6 font-bold">
-      <span :class="discount ? 'line-through' : ''">{{ value }}</span> ₽/{{
+      <span :class="cost_period ? 'line-through' : ''">{{ cost_period ? cost_period.avg_value : value }}</span> ₽/{{
         name
       }}
     </div>
@@ -35,7 +36,11 @@ export default {
     name: String,
     info: String,
     description: String,
-    discount: [Number, String],
+    cost_period: Object,
+    is_room: {
+      type: Boolean,
+      default: false
+    }
   },
 };
 </script>

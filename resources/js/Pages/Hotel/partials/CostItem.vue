@@ -4,16 +4,16 @@
     class="border border-[#6170FF] border-solid rounded-[8px] py-[13px] px-[5px] grow sm:border-0 sm:py-[5px]"
   >
     <div
-      v-if="discount"
-      class="font-bold text-sm xs:text-base flex items-center absolute xl:static top-2 pl-4 xl:pl-0"
+      v-if="cost_period"
+      class="font-bold text-sm xs:text-base flex items-center w-full justify-center xl:static top-2 pl-4 xl:pl-0"
     >
       <div class="mr-2">
         <img src="/img/red_bolt.svg" alt="bolt"/>
       </div>
-      <div class="text-red-700">{{ discount }} ₽</div>
+      <div class="text-red-700">{{ cost_period.value }} ₽</div>
     </div>
     <p class="text-[16px] leading-[19px] font-semibold text-center">
-      <span :class="discount ? 'line-through' : ''">{{ value }}</span> ₽/{{
+      <span :class="cost_period ? 'line-through' : ''">{{ cost_period ? cost_period.avg_value : value }}</span> ₽/{{
         name
       }}
     </p>
@@ -41,7 +41,7 @@ export default {
     name: String,
     info: String,
     description: String,
-    discount: [Number, String],
+    cost_period: Object,
   },
 };
 </script>

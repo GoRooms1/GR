@@ -24,7 +24,7 @@ final class GetFilterTagTitleAction extends Action
         $title = $value;
 
         if ($key === 'is_hot')
-                return 'Горящие';
+            return 'Горящие';
 
         if ($key === 'cashback')
             return 'Кэшбэк';

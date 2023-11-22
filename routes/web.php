@@ -38,7 +38,7 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
 
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
-Route::get('/rooms/hot', [RoomController::class, 'hot'])->name('rooms.hot');
+Route::get('/hot', [RoomController::class, 'hot'])->name('rooms.hot');
 Route::post('/rooms/booking', [RoomController::class, 'booking'])->name('rooms.booking');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search.index')->middleware('seo');

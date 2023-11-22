@@ -253,6 +253,17 @@
                         {{ $costRoom->period->info ?? 'Период' }}
                       </span>
                     </div>
+                    <div class="align-items-center pt-4 pb-3 d-none">
+                      <button class="cost_periods__open mx-auto"
+                        data-cost-id="{{ $costRoom?->id }}"
+                        data-room-name="{{ $room->name }}"
+                        data-category-name="{{ $room->category->name }}"
+                        data-period="{{ $type->name }}"
+                        data-avg-value="{{ $costRoom?->avg_value ?? $costRoom?->value}}"
+                      >                      
+                        <span class="plus">+</span>
+                      </button>
+                    </div>                    
                   </li>
                 @endforeach
               </ul>
@@ -303,12 +314,12 @@
   </section>
 
   @include('moderator.room.__popup_attributes', [$attribute_categories])
-
+  @include('moderator.room.__popup_cost_periods')
 
 @endsection
 
 @section('header-js')
-  <script src="{{ asset('js/lk/room-categories.js') }}"></script>
+  <script src="{{ asset('js/lk/room-categories.js') }}"></script> 
 @endsection
 
 @section('js')

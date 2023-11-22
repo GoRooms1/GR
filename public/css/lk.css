@@ -1516,3 +1516,8 @@ textarea.form-control {
 .swal2-no-war {
 	display: none !important;
 }
+
+.pointer-none {
+    pointer-events: none!important;
+    cursor: default!important;
+}

@@ -58,8 +58,7 @@
           <a href="{{ route('lk.index') }}" class="logo-link">
             <img src="{{ asset('img/lk/logo.png') }}" alt="" class="logo">
 
-          </a>
-          {{ isset($hotel) ? $hotel->id : '' }}
+          </a>          
         </div>
         <div class="col-4">
         {{ isset($hotel) ? 'ID Отеля '.$hotel->id : '' }}

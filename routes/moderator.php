@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Moderator\ImageController;
 use App\Http\Controllers\Moderator\CategoryController;
+use App\Http\Controllers\Moderator\CostPeriodsController;
 use App\Http\Controllers\Moderator\InstructionController;
 use App\Http\Controllers\Moderator\ObjectController;
 use App\Http\Controllers\Moderator\StaffController;
@@ -38,6 +39,7 @@ Route::delete('category/delete/{category}', [CategoryController::class, 'delete'
 Route::get('room/attrs/{id}', [RoomController::class, 'getAttributes'])->name('room.attr.get');
 Route::put('room/attrs/{id}', [RoomController::class, 'putAttributes'])->name('room.attr.put');
 Route::post('room/published/{id}', [RoomController::class, 'published'])->name('room.published');
+Route::get('room/attrs/{id}', [RoomController::class, 'getAttributes'])->name('room.attr.get');
 
 Route::get('instruction/{id}', [InstructionController::class, 'index'])->name('instruction.index');
 
@@ -46,3 +48,7 @@ Route::get('hotel/{id}/staff', [StaffController::class, 'index'])->name('staff.i
 Route::delete('staff/remove/{staff_id}', [StaffController::class, 'remove'])->name('staff.remove');
 Route::put('staff/update/{staff_id}', [StaffController::class, 'update'])->name('staff.update');
 Route::post('staff/update/{staff_id}/password', [StaffController::class, 'generatePassword'])->name('staff.update.password');
+
+Route::get('/cost/{id}/cost-periods', [CostPeriodsController::class, 'getCostPeriodsByCostId'])->name('cost-periods.get');
+Route::post('/cost-periods', [CostPeriodsController::class, 'create'])->name('cost-periods.create');
+Route::delete('/cost-periods/{id}', [CostPeriodsController::class, 'destroy'])->name('cost-periods.destroy');

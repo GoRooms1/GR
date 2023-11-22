@@ -41,8 +41,11 @@
                 title="Горящие"
                 type="small"
                 initial-value="true"
-                :model-value="null"                
-                disabled
+                :model-value="$page.props?.filters?.rooms?.is_hot ?? null"
+                @update:modelValue="
+                  (event) =>
+                    filterValueHandler('rooms', false, 'is_hot', event)
+                "
               />
               <filter-attr-toggle title="Кешбэк" type="small" disabled />
               <filter-attr-toggle
@@ -128,7 +131,12 @@
                     img="/img/flash.svg"
                     toggle-img="/img/flash2.svg"
                     type="vertical"
-                    disabled
+                    initial-value="true"
+                    :model-value="$page.props?.filters?.rooms?.is_hot ?? null"
+                    @update:modelValue="
+                      (event) =>
+                        filterValueHandler('rooms', false, 'is_hot', event)
+                    "                    
                   />
                 </div>
               </div>

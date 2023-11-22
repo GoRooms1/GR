@@ -15,6 +15,7 @@ use Domain\Image\Traits\UploadImage;
 use Domain\Room\Actions\SetRoomAsModerate;
 use Domain\Room\Models\Cost;
 use Domain\Room\Models\CostType;
+use Domain\Room\Models\Period;
 use Domain\Room\Models\Room;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -98,19 +99,32 @@ class RoomController extends Controller
         }
 
         $room->category()->associate($request->get('category'));
-        $room->costs()->delete();
+        $costs = collect();
 
         foreach ($request->get('types') as $type) {
+            $period = Period::find($type['data']);
+            $samePeriods = Period::where('cost_type_id','=', $period->cost_type_id)->pluck('id');
+            $cost = Cost::whereIn('period_id', $samePeriods)->where('room_id', $room->id)->first();
+            
+            if ($cost) {
+                $cost->value = $type['value'];
+                $cost->period()->associate($type['data']);
+                $cost->save();
+                $costs->push($cost);
+                continue;
+            }
+            
             $cost = new Cost();
             $cost->value = $type['value'];
             $cost->period()->associate($type['data']);
             $cost->room()->associate($room->id);
             $cost->save();
+            $costs->push($cost);
         }
 
         $room->save();
 
-        return response()->json(['success' => true, 'room' => $room]);
+        return response()->json(['success' => true, 'room' => $room, 'category' => $room->category, 'costs' => $costs]);
     }
 
     /**

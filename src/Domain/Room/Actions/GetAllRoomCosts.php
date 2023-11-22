@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
-use Carbon\Carbon;
+
 use Domain\Hotel\DataTransferObjects\MinCostsData;
-use Domain\Room\DataTransferObjects\CostData;
 use Domain\Room\DataTransferObjects\PeriodData;
 use Domain\Room\Models\CostType;
 use Domain\Room\Models\Room;
@@ -32,11 +31,14 @@ final class GetAllRoomCosts extends Action
                 periods.start_at, 
                 periods.end_at, 
                 IFNULL(costs.value, 0) as value,
-                periods.id as period_id'
+                periods.id as period_id,
+                costs.id as cost_id'
             )        
             ->leftJoin('periods','cost_types.id','=','periods.cost_type_id')
             ->leftJoin('costs','costs.period_id','=','periods.id')
-            ->where('costs.room_id', $room->id)        
+            ->leftJoin('rooms','costs.room_id','=','rooms.id')
+            ->where('costs.room_id', $room->id)
+            ->where('rooms.moderate', false)
             ->orderBy('cost_types.sort','asc')
             ->orderBy('costs.created_at','desc')
             ->get();
@@ -44,6 +46,8 @@ final class GetAllRoomCosts extends Action
         $minCosts = $minCosts->unique('id');
         foreach ($minCosts as $minCost) {
             $value = $minCost['value'];
+            $cost_id = $minCost['cost_id'];           
+
             $result[] = new MinCostsData(
                 id: $minCost['id'],
                 name: $minCost['name'],
@@ -60,6 +64,7 @@ final class GetAllRoomCosts extends Action
                     info: null,
                     type: null,
                 ),
+                cost_period: GetCurrentCostPeriodAction::run($cost_id),
             );
         }
 

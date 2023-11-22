@@ -8,6 +8,8 @@
  * Редактирование комнаты по кнопке
  */
 function allowedEditRoom ()  {
+  let shadow = $(this).parents('.shadow')
+
   $(this).parents('.shadow').find(".show-all").removeClass('show-all_disabled').removeClass('d-none')
   $(this).parents('.shadow').find('.quote__read').show()
   $(this).parents('.shadow').find('.quote__status').hide()
@@ -21,16 +23,58 @@ function allowedEditRoom ()  {
   $(this).parents('.shadow').find('.sortable').sortable('enable');
   $(this).parents('.shadow').find('.uploud-photo').show()
   $(this).parents('.shadow').find('.save-room').show()
+  $(this).parents('.shadow').find('.cost_periods__open').parent().removeClass('d-none').addClass('d-flex')
+  $(this).parents('.shadow').find('input[name^=type]').each(function() {
+    let period = $(this).val() ?? 0;
+    let value = $('#value-' + shadow.attr('data-id') + '-' +$(this).attr('data-id')).val() ?? 0;
+    let costPeriodsBtn = $(this).parents('li.hour').find('.cost_periods__open');
 
-  let shadow = $(this).parents('.shadow')
+    if (period != 0 && value != 0)
+      costPeriodsBtn.removeClass('invisible')
+    else
+      costPeriodsBtn.addClass('invisible')
+  })
+  
   showPeriodsInShadow(shadow)
-
 
   blockSaveRoom(shadow)
 
   $(shadow).find('input').change(blockSaveRoom.bind(null, shadow))
 
   $(this).hide()
+}
+
+/**
+ * После сохранения комнаты
+ *
+ * @param shadow
+ * @param {Element} room
+ * @param {Element} category
+ * @param {Element} costs
+ * 
+ */
+function afterSaveRoom (shadow, room, category, costs) {
+  console.log(room, category, costs);
+
+  $(shadow).find('li.hour').each(function () {   
+    let periodsButton = $(this).find('.cost_periods__open');
+    
+    if (periodsButton.attr('data-cost-id'))
+      return;
+
+    let period_id = $(this).find('input[name^=type]').val();
+    let cost = costs.find(el => el.period_id == period_id);
+
+    if (!cost)
+      return;
+    
+    periodsButton.attr('data-cost-id', cost.id);
+    periodsButton.attr('data-room-name', room.name);
+    periodsButton.attr('data-category-name', category.name);
+    periodsButton.attr('data-period', $(this).find('p.hours__heading').text().trim());
+    periodsButton.attr('data-category-name', category.name);
+    periodsButton.attr('data-avg-value', cost.avg_value ?? cost.value);    
+  })
 }
 
 /**
@@ -61,6 +105,7 @@ function saveRoom () {
       .then(response => {
         if (response.data.success) {
           saveFrontData.call(this)
+          
           if (response.data.room.moderate) {
             $(shadow).find('.row__head')
               .removeClass('row__head_blue')
@@ -70,6 +115,8 @@ function saveRoom () {
               .removeClass('quote__status_blue')
               .addClass('quote__status_red')
           }
+
+          afterSaveRoom(shadow, response.data.room, response.data.category, response.data.costs)
         }
       })
       .catch(error => {
@@ -116,6 +163,7 @@ function saveFrontData (save = false) {
     $(shadow).find('.upload__remove').hide()
     $(shadow).find('.sortable').sortable('disable');
     $(shadow).find('.uploud-photo').hide()
+    $(shadow).find('.cost_periods__open').parent().removeClass('d-flex').addClass('d-none')
 
     let number = $(shadow).find('input[name=number]').val()
     let order = $(shadow).find('input[name=order]').val()

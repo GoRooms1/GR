@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Domain\Hotel\DataTransferObjects;
 
 use Domain\Room\Actions\GenerateInfoDescForPeriod;
+use Domain\Room\Actions\GetCurrentCostPeriodAction;
 use Domain\Room\DataTransferObjects\PeriodData;
 use Domain\Room\Models\Cost;
+use Domain\Room\Models\CostPeriod;
 use Spatie\LaravelData\DataCollection;
 
 final class MinCostsData extends \Parent\DataTransferObjects\Data
@@ -18,11 +20,12 @@ final class MinCostsData extends \Parent\DataTransferObjects\Data
         public readonly float|string $value,
         public readonly ?string $description,
         public readonly ?PeriodData $period,
+        public readonly CostPeriod|null $cost_period,
     ) {
     }
 
     public static function fromModel(Cost $cost): self
-    {
+    {        
         return self::from([
             'id' => $cost->period->type->id,
             'name' => $cost->value > 0 ? str_replace('на ', '', mb_strtolower($cost->period->type->name)) : $cost->period->type->name,
@@ -30,6 +33,7 @@ final class MinCostsData extends \Parent\DataTransferObjects\Data
             'value' => $cost->value,
             'description' => $cost->value > 0 ? '' : 'Не предоставляется',
             'period' => $cost->period->getData(),
+            'cost_period' => GetCurrentCostPeriodAction::run($cost->id),
         ]);
     }
 
@@ -54,6 +58,7 @@ final class MinCostsData extends \Parent\DataTransferObjects\Data
                     info: null,
                     type: null,
                 ),
+                cost_period: null,
             );
         };
 

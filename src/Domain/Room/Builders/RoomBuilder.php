@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Room\Builders;
 
+use Carbon\Carbon;
 use Domain\Hotel\Builders\HotelBuilder;
 use Domain\Search\DataTransferObjects\HotelParamsData;
 use Domain\Search\DataTransferObjects\RoomParamsData;
@@ -13,6 +14,7 @@ use Domain\Room\Filters\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
 use Parent\Filters\Filter;
+use Schema;
 
 /**
  * @template TModelClass of \Domain\Room\Models\Room
@@ -22,7 +24,27 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
 {
     public function hot(): self
     {
-        return $this->where('is_hot', true);
+        return $this->whereHas('costs', function ($query) {
+            $query
+                ->where('value', '!=', '0')
+                ->whereHas('cost_periods', function ($query) {
+                    $query
+                        ->where('is_active', true)
+                        ->where('date_from', '<=', Carbon::now()->startOfDay())
+                        ->where('date_to', '>=', Carbon::now()->startOfDay())
+                        ->where('discount', '>=', 3);
+                });            
+            })
+            ->orderByRaw(
+                '(
+                    SELECT max(cp.discount) 
+                    FROM cost_periods as cp 
+                    WHERE cp.cost_id IN (SELECT c.id FROM costs as c WHERE c.room_id = rooms.id) 
+                    AND cp.is_active = 1 
+                    AND cp.date_from <= CURDATE()
+                    AND cp.date_to >= CURDATE()
+                ) DESC'
+            );
     }
 
     public function moderated(): self
@@ -125,4 +147,27 @@ final class RoomBuilder extends \Illuminate\Database\Eloquent\Builder
 
         return $result;
     }
+
+    /**    
+     * @return RoomBuilder
+     */
+    public function sort(?String $sort = null): self
+    {     
+        if (empty($sort))
+            return $this;
+
+        $sort = strtolower($sort);
+        $sortField = 'created_at';
+        $sortDirection = 'desc';
+
+        $sortArray = explode(',', $sort);
+        
+        if (in_array($sortArray[0], Schema::getColumnListing('rooms')))
+            $sortField = $sortArray[0];
+
+        if (isset($sortArray[1]) && in_array($sortArray[1], ['asc','desc']))
+            $sortDirection = $sortArray[1];
+
+        return $this->orderBy($sortField, $sortDirection);                        
+    }    
 }
