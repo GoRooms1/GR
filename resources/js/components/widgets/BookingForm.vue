@@ -290,6 +290,9 @@ export default {
 
         this.cost = cost;
         this.price = cost.value;
+        
+        if (cost.cost_period)
+          this.price = cost.cost_period?.value ?? cost.value;
 
         if (typeId == 1) {
           this.form.from_time = moment().format("HH:mm");
