@@ -20,10 +20,16 @@
         Показано {{ objectList.length }} из
         {{ objects?.meta?.total ?? objectList.length }}
       </div>
-      <div v-if="objects?.meta?.next_page_url">
-        <Button @click="loadMore()" classes="mx-auto mt-3">
-          Показать ещё {{ type == 'rooms' ? 'номера' : 'отели' }}
-        </Button>
+      <div v-if="objects?.meta?.next_page_url">               
+        <Button @click="loadMore()" classes="mx-auto mt-3" :type="$page.props?.filters?.rooms?.is_hot ? 'red' : 'blue'">          
+          <img v-if="$page.props?.filters?.rooms?.is_hot" src="/img/flash2.svg" class="small-icon pr-2" alt="Горящие предложения">
+					<span v-if="$page.props?.filters?.rooms?.is_hot">          
+						Показать ещё горящие предложения
+					</span>					
+          <span v-if="!$page.props?.filters?.rooms?.is_hot">          
+						Показать ещё {{ type == 'rooms' ? 'номера' : 'отели' }}
+					</span>	
+        </Button>        
       </div>
     </div>
   </div>

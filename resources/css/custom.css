@@ -319,3 +319,8 @@
     transform: scale(.95);
     transition: .1s;
 }
+
+.filter-hot {
+    background: url(/img/bg-hot.svg) top;
+    background-size: cover;
+}
