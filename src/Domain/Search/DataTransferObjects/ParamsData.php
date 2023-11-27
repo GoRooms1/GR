@@ -47,7 +47,9 @@ final class ParamsData extends \Parent\DataTransferObjects\Data
 
     public static function getEmptyData(): self
     {
-        return self::from(self::empty());
+        $emptyData = self::empty();
+        $emptyData['room_filter'] = false;
+        return self::from($emptyData);
     }
 
     /**     
