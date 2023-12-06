@@ -1034,6 +1034,20 @@ input[type="radio"]:checked + label {
 	text-align: center;
 }
 
+.hours__date {
+	font-size: 18px;
+	margin-left: 7px;
+	font-weight: 900;
+	margin-bottom: 10px;
+}
+
+.hours__discount {
+	font-size: 18px;	
+	font-weight: 900;
+	color: #bf0505;
+	margin-left: 7px;	
+}
+
 input[type=number].hours__field::-webkit-outer-spin-button,
 input[type=number].hours__field::-webkit-inner-spin-button {
 	-webkit-appearance: none;

@@ -50,5 +50,6 @@ Route::put('staff/update/{staff_id}', [StaffController::class, 'update'])->name(
 Route::post('staff/update/{staff_id}/password', [StaffController::class, 'generatePassword'])->name('staff.update.password');
 
 Route::get('/cost/{id}/cost-periods', [CostPeriodsController::class, 'getCostPeriodsByCostId'])->name('cost-periods.get');
+Route::get('/cost/{id}/cost-period', [CostPeriodsController::class, 'getCostPeriodByCostId'])->name('cost-period.get');
 Route::post('/cost-periods', [CostPeriodsController::class, 'create'])->name('cost-periods.create');
 Route::delete('/cost-periods/{id}', [CostPeriodsController::class, 'destroy'])->name('cost-periods.destroy');

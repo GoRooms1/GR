@@ -194,11 +194,21 @@
                     $costRoom = $room->costs()->whereHas('period', function ($q) use($id) {
                       $q->where('cost_type_id', $id);
                     })->first();
+
+                    $costPeriod = \Domain\Room\Actions\GetCurrentCostPeriodAction::run($costRoom->id);
                   @endphp
                   <li class="hour">
-                    <p class="heading hours__heading">
-                      {{ $type->name }}
-                    </p>
+                    <div class="d-flex justify-content-between">
+                      <p class="heading hours__heading">
+                        {{ $type->name }}                      
+                      </p>
+                      <p class="hours__date">
+                        {{Carbon\Carbon::now()->translatedFormat('d F Y')}}
+                      </p>
+                    </div>
+                    <span class="hours__discount">
+                      {{ $costPeriod != null ?  $costPeriod->value.' - '.$costPeriod->discount.' %' : ' ' }}
+                    </span>                                      
                     <div class="d-flex align-items-center">
                       <input type="number"
                              min="0"
@@ -391,9 +401,16 @@
             $id = $type->id
           @endphp
           <li class="hour" data-id="{{ $type->id }}">
-            <p class="heading hours__heading">
-              {{ $type->name }}
-            </p>
+            <div class="d-flex justify-content-between">
+              <p class="heading hours__heading">
+                {{ $type->name }}                      
+              </p>
+              <p class="hours__date">
+                {{Carbon\Carbon::now()->translatedFormat('d F Y')}}
+              </p>
+            </div>
+            <span class="hours__discount">              
+            </span>            
             <div class="d-flex align-items-center">
               <input type="number"
                      min="0"
