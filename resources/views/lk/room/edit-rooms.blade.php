@@ -245,7 +245,7 @@
                         {{Carbon\Carbon::now()->translatedFormat('d F Y')}}
                       </p>
                     </div>
-                    <span class="hours__discount">
+                    <span class="hours__discount {{$costRoom->value > 0 ? '' : 'invisible'}}">
                       {{ $costPeriod != null ?  $costPeriod->value.' - '.$costPeriod->discount.' %' : ' ' }}
                     </span> 
                     <div class="d-flex align-items-center">
@@ -290,7 +290,7 @@
                         data-room-name="{{ $room->name }}"
                         data-category-name="{{ $room?->category?->name }}"
                         data-period="{{ $type->name }}"
-                        data-avg-value="{{ $costRoom?->avg_value ?? $costRoom?->value}}"
+                        data-avg-value="{{ $costRoom?->avg_value > 0 ? $costRoom?->avg_value : $costRoom?->value}}"
                       >                      
                         <span class="plus">+</span>
                       </button>
