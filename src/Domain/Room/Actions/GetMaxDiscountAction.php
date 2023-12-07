@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Domain\Room\Actions;
 
 use Domain\Hotel\DataTransferObjects\MinCostsData;
+use Domain\Room\DataTransferObjects\RoomCostsData;
 use Lorisleiva\Actions\Action;
 use Spatie\LaravelData\DataCollection;
 
 /**
- * @method static int run(DataCollection<MinCostsData> $costs)
+ * @method static int run(DataCollection<MinCostsData|RoomCostsData> $costs)
  */
 final class GetMaxDiscountAction extends Action
 {    
     /**    
-     * @param \Spatie\LaravelData\DataCollection<MinCostsData> $costs
+     * @param \Spatie\LaravelData\DataCollection<MinCostsData|RoomCostsData> $costs
      * @return int
      */
     public function handle(DataCollection $costs): int

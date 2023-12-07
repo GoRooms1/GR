@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Domain\Room\Actions;
 
-
-use Domain\Hotel\DataTransferObjects\MinCostsData;
+use Domain\Room\DataTransferObjects\CostPeriodData;
 use Domain\Room\DataTransferObjects\PeriodData;
+use Domain\Room\DataTransferObjects\RoomCostsData;
 use Domain\Room\Models\CostType;
 use Domain\Room\Models\Room;
 use Lorisleiva\Actions\Action;
 use Spatie\LaravelData\DataCollection;
 
 /**
- * @method static DataCollection<MinCostsData> run(Room $room)
+ * @method static DataCollection<RoomCostsData> run(Room $room)
  */
 final class GetAllRoomCosts extends Action
 {
     /**
      * @param  Room  $room
-     * @return DataCollection<MinCostsData>
+     * @return DataCollection<RoomCostsData>
      */
     public function handle(Room $room): DataCollection
     {
@@ -48,7 +48,7 @@ final class GetAllRoomCosts extends Action
             $value = $minCost['value'];
             $cost_id = $minCost['cost_id'];           
 
-            $result[] = new MinCostsData(
+            $result[] = new RoomCostsData(
                 id: $minCost['id'],
                 name: $minCost['name'],
                 info: GenerateInfoDescForPeriod::run($minCost['start_at'], $minCost['end_at']),
@@ -65,9 +65,10 @@ final class GetAllRoomCosts extends Action
                     type: null,
                 ),
                 cost_period: GetCurrentCostPeriodAction::run($cost_id),
+                actual_cost_periods: CostPeriodData::collection(GetActualCostPeriodsByCostIdAction::run($cost_id)),
             );
         }
 
-        return new DataCollection(MinCostsData::class, $result);
+        return new DataCollection(RoomCostsData::class, $result);
     }
 }

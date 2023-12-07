@@ -237,8 +237,7 @@ export default {
       startAtHours: 1,
       endAtHours: 6,
       hours: 0,
-      days: 0,
-      price: 0,
+      days: 0,      
       amount: 0,
       cost: null,
       form: useForm({
@@ -288,11 +287,7 @@ export default {
 
         let cost = this.room.costs.find(el => el?.id == typeId);
 
-        this.cost = cost;
-        this.price = cost.value;
-        
-        if (cost.cost_period)
-          this.price = cost.cost_period?.value ?? cost.value;
+        this.cost = cost;        
 
         if (typeId == 1) {
           this.form.from_time = moment().format("HH:mm");
@@ -341,7 +336,16 @@ export default {
           .toLocaleDateString("ru-RU");
         this.form.hours_count = this.hours;
         this.form.days_count = 0;
-        this.amount = this.price * this.hours;
+
+        let hours = 0;
+        this.amount = 0;
+
+        while (hours < this.hours) {
+          let date = moment(this.form.from_date + " " + this.form.from_time, "DD.MM.YYYY HH:mm").add(hours, "hours");
+          let price = this.getPriceOnDate(date.format("DD.MM.YYYY"));
+          this.amount += price;          
+          hours++;
+        }        
       }
 
       if (this.costType == 2) {
@@ -352,7 +356,8 @@ export default {
         this.form.to_time = this.cost.period.end_at;
         this.form.hours_count = 0;
         this.form.days_count = 0;
-        this.amount = this.price;
+
+        this.amount = this.getPriceOnDate(this.form.from_date);
       }
 
       if (this.costType == 3) {
@@ -363,11 +368,33 @@ export default {
         this.form.to_time = this.cost.period.end_at;
         this.form.days_count = this.days;
         this.form.hours_count = 0;
-        this.amount = this.price * this.days;
+
+        let days = 0;
+        this.amount = 0;
+
+        while (days < this.days) {
+          let date = moment(this.form.from_date, "DD.MM.YYYY").add(days, "days");
+          let price = this.getPriceOnDate(date.format("DD.MM.YYYY"));
+          this.amount += price;          
+          days++;
+        }
       }
 
       this.form.amount = this.amount;
-    },    
+    }, 
+    getPriceOnDate(date) {      
+      if ((this.cost?.actual_cost_periods ?? []).length === 0)
+        return this.cost?.value ?? 0;
+
+      let dateMoment = moment(date, "DD.MM.YYYY");
+
+      let periodCost = this.cost.actual_cost_periods.find((el) => dateMoment.isSameOrAfter(el.date_from, "YYYY-MM-DD") && dateMoment.isSameOrBefore(el.date_to, "YYYY-MM-DD"));
+      
+      if (periodCost?.value)
+        return periodCost?.value;
+
+      return this.cost?.value ?? 0;
+    },  
     getNumsRange(from, to) {
       let hours = [];
       for (let index = from; index < to + 1; index++) {
@@ -403,8 +430,7 @@ export default {
       this.startAtHours = 1;
       this.endAtHours = 6;
       this.hours = 0;
-      this.days = 0;
-      this.price = 0;
+      this.days = 0;      
       this.amount = 0;
       this.cost = null;
       this.form.room_id = this.room?.id;
