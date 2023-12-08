@@ -21,7 +21,7 @@
       ></div>
       <div v-if="room.max_discount > 0" class="absolute left-0 top-0 bg-red-700 text-white flex justify-center items-center text-center w-20 lg:w-24 rounded-tl-2xl rounded-br-2xl z-10">                
         <img src="/img/flash2.svg" class="h-[24px] lg:h-[28px]" alt="Hot">
-        <span class="text-xl lg:text-2xl font-bold py-2 lg:py-3">{{room.max_discount}}%</span>
+        <span class="text-xl lg:text-2xl font-bold py-2">{{room.max_discount}}%</span>
       </div>
     </swiper>
     <div
