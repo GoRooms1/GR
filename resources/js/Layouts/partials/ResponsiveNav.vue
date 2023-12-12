@@ -16,9 +16,10 @@
           classes="bg-[url(/img/link1_1.svg)] hover:bg-[url(/img/link1_2.svg)]"
         />
         <responsive-nav-link
-          disabled
+          href="/hot"        
           title="Горящие предложения"
           classes="bg-[url(/img/link2_1.svg)] hover:bg-[url(/img/link2_2.svg)]"
+          v-on:click="hide()"
         />
         <responsive-nav-link
           disabled
