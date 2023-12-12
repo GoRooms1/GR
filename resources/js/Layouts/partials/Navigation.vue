@@ -7,7 +7,7 @@
     />
     <nav-link
       v-if="simple"
-      disabled
+      href="/hot"
       classes="bg-[url(/img/link2_1.svg)] hover:bg-[url(/img/link2_2.svg)]"
     />
     <nav-link
