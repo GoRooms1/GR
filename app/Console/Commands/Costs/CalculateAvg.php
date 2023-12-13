@@ -55,13 +55,12 @@ class CalculateAvg extends Command
 
     private function getAvgValue(Cost $cost, int $avg_period)
     {
-        $avg_value = $cost->value ?? 0;
+        $cost_value = $cost->value ?? 0;
         $date = Carbon::now()->startOfDay();
-        $sum_value = 0;
-        $count_value = 0;
+        $sum_value = 0;       
 
-        if (CostPeriod::where('cost_id', $cost->id)->count() == 0)
-            return $avg_value;
+        if ($avg_period <= 0)
+            return $cost_value;
 
         for ($i = 1; $i <= $avg_period; $i++) {
             $value = CostPeriod::where('cost_id', $cost->id)
@@ -70,18 +69,11 @@ class CalculateAvg extends Command
                 ->where('value','>', 0)
                 ->min('value');
 
-            if ($value > 0) {
-                $count_value++;
-                $sum_value += $value;
-            }
-
+            $value = $value > 0 ? $value : $cost_value;
+            $sum_value += $value;
             $date = $date->subDay();
         }
 
-        if ($count_value > 0 && $sum_value > 0) {
-            $avg_value = floor($sum_value / $count_value);
-        }
-
-        return $avg_value;
+        return floor($sum_value / $avg_period);
     }
 }
