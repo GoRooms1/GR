@@ -108,7 +108,7 @@
         />
       </div>
       <div class="">
-        <Button @click="openBookingModal()" classes="w-full">
+        <Button @click="openBookingModal()" classes="booking-open w-full">
           Забронировать
         </Button>
       </div>

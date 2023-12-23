@@ -42,7 +42,7 @@
                     ? 'bg-[#6170FF] text-white'
                     : 'bg-white'
                   : 'text-white bg-slate-400 pointer-events-none'
-              "
+              "              
             >
               {{ cost?.name }}
             </button>
@@ -117,6 +117,7 @@
                 @input="v$.form.client_fio.$touch; delete form.errors.client_fio;"
                 placeholder="Как к вам обращаться"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]"
+                id="booking-client_fio"
               />
               <div v-if="room != null" class="flex mt-3">
                 <span>Телефон</span>
@@ -139,6 +140,7 @@
                 placeholder="+7 (___) ___ __ __"
                 data-maska-tokens="C:[0-9 \-\+()]"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]"
+                id="booking-client_phone"
               />
             </div>
             <div class="flex flex-col mt-4 lg:mt-0 lg:ml-4 lg:flex-1">
@@ -147,6 +149,7 @@
                 v-model="form.book_comment"
                 placeholder="Напишите ваши пожелания"
                 class="w-full px-3 py-2 lg:!h-full mt-2 bg-white rounded-[8px] resize-none h-[80px]"
+                id="booking-book_comment"
               ></textarea>
             </div>
           </div>
@@ -170,6 +173,7 @@
             class="mt-4 lg:ml-auto lg:mt-0 w-full flex items-center justify-center h-12 lg:w-[248px] rounded-lg text-white"
             :class="(form.errors ?? []).length > 0 || (v$.$errors ?? []).length > 0 ?
                'bg-slate-400 pointer-events-none' : 'bg-blue-500 hover:bg-blue-800'"
+            id="booking-submit"
           >
             Забронировать
           </button>          
@@ -178,6 +182,7 @@
       <div
         v-if="bookingSuccess === true"
         class="mt-[20vh] lg:m-0 lg:w-[800px] lg:h-[374px] flex flex-col relative items-center justify-center bg-white rounded-3xl p-6 overflow-hidden"
+        id="booking-success_msg"
       >
         <img
           src="/img/bookingSuccess.svg"
