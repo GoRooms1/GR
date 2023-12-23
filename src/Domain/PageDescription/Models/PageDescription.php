@@ -7,9 +7,11 @@ use App\Traits\CreatedAtOrdered;
 use Domain\Image\Models\Image;
 use Domain\Image\Traits\UseImages;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
+use Domain\PageDescription\Factories\PageDescriptionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Spatie\LaravelData\WithData;
@@ -55,6 +57,7 @@ class PageDescription extends Model
     use UseImages;
     use CreatedAtOrdered;
     use WithData;
+    use HasFactory;
 
     /**
      * Fill rows
@@ -99,5 +102,10 @@ class PageDescription extends Model
         self::deleting(static function (self $pageDescription) {
             Cache::forget('sitemap.2g');
         });
+    }
+
+    protected static function newFactory(): PageDescriptionFactory
+    {
+        return PageDescriptionFactory::new();
     }
 }
