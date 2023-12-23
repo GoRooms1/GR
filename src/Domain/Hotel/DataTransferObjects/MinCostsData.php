@@ -20,7 +20,7 @@ final class MinCostsData extends \Parent\DataTransferObjects\Data
         public readonly float|string $value,
         public readonly ?string $description,
         public readonly ?PeriodData $period,
-        public readonly CostPeriod|null $cost_period,
+        public readonly CostPeriod|null $cost_period,        
     ) {
     }
 

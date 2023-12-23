@@ -158,7 +158,7 @@ const closeThanks = () => {
           <a class="underline" href="#">политикой конфиденциальности</a>.
         </div>
         <div class="lg:w-1/2 lg:pl-2">
-          <Button type="submit" classes="w-full"> Отправить </Button>
+          <Button type="submit" classes="w-full" @click="submit()"> Отправить </Button>
         </div>
       </div>
     </div>

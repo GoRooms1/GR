@@ -5,11 +5,13 @@ namespace Domain\Article\Models;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use App\User;
+use Domain\Article\Factories\ArticleFactory;
 use Domain\Image\Models\Image;
 use Domain\Image\Traits\UseImages;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -57,6 +59,7 @@ class Article extends Model implements HasMedia
     use RusMonth;
     use ClearValidated;
     use CreatedAtOrdered;
+    use HasFactory;
 
     protected $fillable = [
         'title',
@@ -113,5 +116,10 @@ class Article extends Model implements HasMedia
             ->nonQueued()
             ->format(Manipulations::FORMAT_WEBP)
             ->crop(Manipulations::CROP_CENTER, 624, 306);
+    }
+
+    protected static function newFactory(): ArticleFactory
+    {
+        return ArticleFactory::new();
     }
 }

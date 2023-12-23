@@ -212,11 +212,21 @@
                     $costRoom = $room->costs()->whereHas('period', function ($q) use($id) {
                       $q->where('cost_type_id', $id);
                     })->first();
+
+                    $costPeriod = \Domain\Room\Actions\GetCurrentCostPeriodAction::run($costRoom->id);
                   @endphp
                   <li class="hour">
-                    <p class="heading hours__heading">
-                      {{ $type->name }}
-                    </p>
+                    <div class="d-flex justify-content-between">
+                      <p class="heading hours__heading">
+                        {{ $type->name }}                      
+                      </p>
+                      <p class="hours__date">
+                        {{Carbon\Carbon::now()->translatedFormat('d F Y')}}
+                      </p>
+                    </div>
+                    <span class="hours__discount {{$costRoom->value > 0 ? '' : 'invisible'}}">
+                      {{ $costPeriod != null ?  $costPeriod->value.' - '.$costPeriod->discount.' %' : ' ' }}
+                    </span>
                     <div class="d-flex align-items-center">
                       <input type="number"
                              min="0"
@@ -259,7 +269,7 @@
                         data-room-name="{{ $room->name }}"
                         data-category-name="{{ $room->category->name }}"
                         data-period="{{ $type->name }}"
-                        data-avg-value="{{ $costRoom?->avg_value ?? $costRoom?->value}}"
+                        data-avg-value="{{ $costRoom?->avg_value > 0 ? $costRoom?->avg_value : $costRoom?->value}}"
                       >                      
                         <span class="plus">+</span>
                       </button>

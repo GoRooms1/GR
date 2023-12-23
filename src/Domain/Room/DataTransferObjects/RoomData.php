@@ -8,7 +8,6 @@ use Domain\Attribute\DataTransferObjects\AttributeData;
 use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Hotel\DataTransferObjects\HotelCardData;
 use Domain\Hotel\DataTransferObjects\HotelData;
-use Domain\Hotel\DataTransferObjects\MinCostsData;
 use Domain\Media\DataTransferObjects\MediaImageData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\Room\Actions\GetAllRoomCosts;
@@ -39,7 +38,7 @@ final class RoomData extends \Parent\DataTransferObjects\Data
         public Lazy|PageDescriptionData|null $meta,
         public Lazy|HotelCardData|null $hotel,
         public Lazy|CategoryData|null $category,
-        #[DataCollectionOf(MinCostsData::class)]
+        #[DataCollectionOf(RoomCostsData::class)]
         public readonly null|Lazy|DataCollection $costs,
     ) {
     }

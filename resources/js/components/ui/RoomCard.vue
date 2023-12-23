@@ -19,8 +19,9 @@
       <div
         class="swiper-pagination abosolute left-[50%] transform translate-[50%] bottom-[16px] swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"
       ></div>
-      <div v-if="room.max_discount > 0" class="absolute left-0 top-0 bg-red-700 text-white flex flex-col justify-center text-center w-12 rounded-tl-2xl rounded-br-2xl z-10">                
-        <span class="text-xl font-bold py-2">{{room.max_discount}}%</span>
+      <div v-if="room.max_discount > 0" class="absolute left-0 top-0 bg-red-700 text-white flex justify-center items-center text-center w-20 lg:w-24 rounded-tl-2xl rounded-br-2xl z-10">                
+        <img src="/img/flash2.svg" class="h-[24px] lg:h-[28px]" alt="Hot">
+        <span class="text-xl lg:text-2xl font-bold py-2">{{room.max_discount}}%</span>
       </div>
     </swiper>
     <div
@@ -107,7 +108,7 @@
         />
       </div>
       <div class="">
-        <Button @click="openBookingModal()" classes="w-full">
+        <Button @click="openBookingModal()" classes="booking-open w-full">
           Забронировать
         </Button>
       </div>

@@ -15,6 +15,7 @@ class HotelFactory extends Factory
     {
         return [
             'name' => $this->faker->company(),
+            'slug' => $this->faker->slug(),
             'description' => $this->faker->realText(50),
             'phone' => $this->faker->phoneNumber(),
             'user_id' => User::first()?->id,

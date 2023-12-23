@@ -253,7 +253,12 @@
                   img="/img/flash.svg"
                   toggle-img="/img/flash2.svg"
                   type="small"
-                  disabled
+                  initial-value="true"
+                  :model-value="$page.props?.filters?.rooms?.is_hot ?? null"
+                  @update:modelValue="
+                    (event) =>
+                      filterValueHandler('rooms', false, 'is_hot', event)
+                    "
                 />
               </div>
             </div>

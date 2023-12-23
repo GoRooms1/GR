@@ -1,14 +1,17 @@
 <template>
-  <div class="filter h-32 xl:h-40 pt-4 -mb-16 xl:pt-8">
+  <div class="h-32 xl:h-40 pt-4 -mb-16 xl:pt-8"
+    :class="($page.props?.filters?.rooms?.is_hot ?? false) ? 'filter-hot' : 'filter'"
+  >
     <div class="container mx-auto px-4 min-[1920px]:px-[10vw]">
-      <div class="flex justify-between items-center">        
-        <span v-if="title" class="text-white font-bold xl:text-3xl">
+      <div class="flex justify-between items-center">       
+        <span v-if="title" class="text-white font-bold xl:text-3xl">          
           {{ title }}
         </span>
-        <h1 v-else-if="h1" 
-          class="text-white font-bold xl:text-3xl"
+        <h1 v-else-if="h1"
+          class="text-white font-bold xl:text-3xl flex items-center"
           :class="$page.props?.is_loading == true ? 'invisible' : ''"
         >
+          <img v-if="$page.props?.path === '/hot'" src="/img/flash2.svg" class="small-icon pr-2" alt="Горящие предложения">    
           {{ h1 }}
         </h1>
         <button class="xl:hidden">

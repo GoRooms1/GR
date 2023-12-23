@@ -41,6 +41,7 @@
         "barryvdh/laravel-ide-helper": "^2.12",
         "composer/composer": "^2.4",
         "fakerphp/faker": "^1.9.1",
+        "laravel/dusk": "^7.12",
         "laravel/pint": "^1.2",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.3",

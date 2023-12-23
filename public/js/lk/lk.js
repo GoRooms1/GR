@@ -1129,6 +1129,35 @@ function fillCostPeriodsList(list) {
  * Закрывает модалку с периодами цен
  */
 $('.popup__button_cost_periods').bind('click', () => {
-  $('#popupCostPeriods').removeClass('open')
-  $('.overlay').removeClass('open')
+  closeCostPeriods();
 });
+
+$('#popupCostPeriods').find('.close-this').bind('click', () => {
+  closeCostPeriods();
+});
+
+function closeCostPeriods() {
+  let popup = $('#popupCostPeriods');
+  let url_prefix = popup.attr('data-url-prefix');
+  let cost_id = popup.attr('data-cost-id');
+  
+  axios.get("/"+url_prefix+"/cost/"+cost_id+"/cost-period")
+  .then(response => {    
+    $('#popupCostPeriods').removeClass('open');
+    $('.overlay').removeClass('open');
+    
+    let costPeriod = response.data?.costPeriod;
+    let discount = '';
+
+    if (costPeriod)
+      discount = costPeriod.value + " - " + costPeriod.discount + " %";
+    
+    $('.cost_periods__open[data-cost-id=' + cost_id + ']').parents('.hour').find('.hours__discount').text(discount);
+  })
+  .catch(e => {
+    $('#popupCostPeriods').removeClass('open');
+    $('.overlay').removeClass('open');
+  })
+
+}
+

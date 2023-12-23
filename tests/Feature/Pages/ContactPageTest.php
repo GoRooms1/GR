@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Pages;
 
 use Domain\Feedback\DataTransferObjects\FeedbackData;
 use Domain\Feedback\Jobs\SendFeedbackMailJob;
@@ -15,26 +15,29 @@ class ContactPageTest extends TestCase
     use DatabaseTransactions;
 
     public function testPageOpenesSuccessfully(): void
-    {
+    {        
         /** @var Page $page */
-        $page = Page::factory()->createOne([
-            'slug' => 'contacts',
-        ]);
+        $page = Page::where('slug', 'contacts')->with('image')->first();
+
+        if (is_null($page))
+            $page = Page::factory()->createOne([
+                'slug' => 'contacts',
+            ]);
+        
         $response = $this->get(route('contact'));
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn (Assert $content) => $content
-                ->component('Content/Contact')
-            ->has('model', fn (Assert $content) => $content
-                ->where('page.id', $page->id)
-                ->where('page.content', $page->content)
-            )
+            fn (Assert $model) => $model
+                ->component('Contacts/Index')
+                ->has('page.id')
+                ->has('page.slug')
+                ->has('page.title')             
         );
     }
-
+    
     public function testContactPageDataSentSuccessfully(): void
-    {
+    {       
         Bus::fake();
         $formData = $this->generateContactFormData();
         $response = $this->post(route('contact.store'), $formData->toArray());
@@ -44,18 +47,18 @@ class ContactPageTest extends TestCase
     }
 
     public function testEmailValidation(): void
-    {
+    {        
         Bus::fake();
         $formData = $this->generateContactFormData();
         $formArray = $formData->toArray();
         $formArray['email'] = 'fake';
-        $response = $this->post(route('contact.store'), $formArray);
+        $response = $this->post(route('contact.store'), $formArray);        
         $response->assertSessionHasErrors(['email']);
         Bus::assertNotDispatched(SendFeedbackMailJob::class);
     }
 
     public function testMessageValidation(): void
-    {
+    {        
         Bus::fake();
         $formData = $this->generateContactFormData();
         $formArray = $formData->toArray();

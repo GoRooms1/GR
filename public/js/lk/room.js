@@ -58,22 +58,27 @@ function afterSaveRoom (shadow, room, category, costs) {
 
   $(shadow).find('li.hour').each(function () {   
     let periodsButton = $(this).find('.cost_periods__open');
-    
-    if (periodsButton.attr('data-cost-id'))
-      return;
-
     let period_id = $(this).find('input[name^=type]').val();
     let cost = costs.find(el => el.period_id == period_id);
 
-    if (!cost)
+    if (!cost){
+      $(this).find('.hours__discount').addClass('invisible');
       return;
+    }
+
+    if (cost.value == 0){
+      $(this).find('.hours__discount').addClass('invisible');
+    }
+    else {
+      $(this).find('.hours__discount').removeClass('invisible');
+    }
     
     periodsButton.attr('data-cost-id', cost.id);
     periodsButton.attr('data-room-name', room.name);
     periodsButton.attr('data-category-name', category.name);
     periodsButton.attr('data-period', $(this).find('p.hours__heading').text().trim());
     periodsButton.attr('data-category-name', category.name);
-    periodsButton.attr('data-avg-value', cost.avg_value ?? cost.value);    
+    periodsButton.attr('data-avg-value', cost?.avg_value > 0 ? cost.avg_value : cost.value);
   })
 }
 

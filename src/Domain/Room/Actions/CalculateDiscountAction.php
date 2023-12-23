@@ -21,7 +21,7 @@ final class CalculateDiscountAction extends Action
     public function handle(CostPeriod $costPeriod, int $value): CostPeriod
     {
         $cost = Cost::where('id', $costPeriod->cost_id)->first();    
-        $avg_value = $cost->avg_value ?? $cost->value;
+        $avg_value = $cost->avg_value > 0 ? $cost->avg_value : $cost->value;
         $discount = 0;
         
         if ($avg_value != 0 && $value != 0)
