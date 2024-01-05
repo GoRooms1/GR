@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Api\AdBannerController;
 use App\Http\Controllers\ArticleController;
@@ -75,3 +76,5 @@ Route::get('/api/ad_banners', [AdBannerController::class, 'getBanners']);
 Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy-policy.index');
 
 Route::get('/instructions', [InstructionController::class, 'index'])->name('instruction.index');
+
+Route::get('/about', [AboutController::class, 'index'])->name('about.index');
