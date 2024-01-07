@@ -2,8 +2,8 @@
   <AppHead :title="page?.meta?.title ?? page?.title" :url="$page.props.app_url + page?.meta?.url"
     :meta_keywords="page?.meta?.meta_keywords" :meta_description="page?.meta?.meta_description"
     :canonical="$page.props?.app_url + page?.meta?.url" />
-  <div class="wrapper mt-20">
-    <div class="page">
+  <div class="about-page">
+    <div class="wrapper mt-20">
       <div class="top">
         <div class="_container">
           <div class="top__inner flex flex-col items-center gap-5 lg:flex-row-reverse lg:items-start lg:justify-between">
@@ -49,7 +49,7 @@
                 управляющим партнером компании GoRooms. Мы создали первый и самый большой сервис
                 почасовых бронирований отелей и гостиниц и я хочу рассказать Вам кто мы такие, какие
                 преимущества дает Вам наша платформа и почему Вы обязательно должны воспользоваться
-                нашим ресурсом )<br><br> Сегодня, рынок суточных бронирований успешно работает по
+                нашим ресурсом)<br><br> Сегодня, рынок суточных бронирований успешно работает по
                 высоким современным стандартам, а вот сегмент почасовых размещений до сих пор остается
                 низкокачественным в плане сервиса и технологий.</p>
             </div>
@@ -207,6 +207,3 @@ export default {
   },
 };
 </script>
-
-<style scoped src="/resources/css/about.css">
-</style>
