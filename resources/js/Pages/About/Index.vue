@@ -1,7 +1,7 @@
 <template>
   <AppHead :title="page?.meta?.title ?? page?.title" :url="$page.props.app_url + page?.meta?.url"
     :meta_keywords="page?.meta?.meta_keywords" :meta_description="page?.meta?.meta_description"
-    :canonical="$page.props?.app_url + page?.meta?.url" />
+    :canonical="$page.props?.app_url + '/' + page?.slug" />
   <div class="about-page">
     <div class="wrapper mt-20">
       <div class="top">
