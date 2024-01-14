@@ -33,6 +33,12 @@
           Добавить объект
         </a>
         <responsive-nav-link
+          title="О нас"
+          href="/about"
+          classes="bg-[url(/img/about_1.svg)] hover:bg-[url(/img/about_2.svg)]"
+          v-on:click="hide()"
+        />
+        <responsive-nav-link
           title="Контакты"
           href="/contacts"
           classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"

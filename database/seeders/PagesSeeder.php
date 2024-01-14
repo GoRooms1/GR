@@ -71,5 +71,16 @@ class PagesSeeder extends Seeder
                 'footer' => '',
             ]
         );
+        
+        Page::firstOrCreate(
+            [ 'slug' => 'about'],
+            [
+                'title' => 'О GoRooms',
+                'slug' => 'about',
+                'content' => 'О GoRooms',
+                'header' => '',
+                'footer' => '',
+            ]
+        );
     }
 }
