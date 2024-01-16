@@ -42,8 +42,8 @@
                 </svg>
               </a>
             </div>
-            <div class="top__text text-center lg:text-left">
-              <h1 class="top__title">О GoRooms.</h1>
+            <div class="top__text text-left">
+              <h1 class="top__title text-center lg:text-left">О GoRooms.</h1>
               <p class="top__desc font-normal text-lg sm:text-md md:text-lg lg:text-2xl"> Привет, Друзья! Меня зовут Иван,
                 я являюсь основателем и
                 управляющим партнером компании GoRooms. Мы создали первый и самый большой сервис
