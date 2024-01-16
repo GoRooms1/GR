@@ -5,7 +5,7 @@
     >
       <div class="flex items-center gap-[8px]">
         <img src="/img/star.svg" alt="star"/>
-        <span select-text="" class="text-[14px] leading-[16px]">Любой</span>
+        <span class="text-[14px] leading-[16px]">Любой</span>
       </div>
       <img src="/img/select_arrow.svg" alt="arrow" width="12" height="12"/>    
     </button>

@@ -7,7 +7,7 @@
       <span class="text-[0.875rem] leading-[1rem]">
         {{ selectedTime }}
       </span>
-      <img src="/img/clock.svg" class="ml-1 min-[300px]:ml-2 w-5" />
+      <img src="/img/clock.svg" alt="clock" class="ml-1 min-[300px]:ml-2 w-5" />
     </button>
     <div
       class="absolute top-[2rem] sm:left-0 left-[-1rem] z-10"

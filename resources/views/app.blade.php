@@ -3,20 +3,18 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE">
   <meta name="format-detection" content="telephone=no">
-  <meta name="format-detection" content="address=no">
-  <meta http-equiv="x-rim-auto-match" content="none">
+  <meta name="format-detection" content="address=no">  
 
   <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="shortcut icon" href="{{ asset('favicon.svg') }}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" as="style">
-  <link rel="canonical" href="{{ url(Request::url()) }}" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" as="style">  
 
   @vite
   @inertiaHead

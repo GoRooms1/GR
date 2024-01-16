@@ -138,9 +138,9 @@
                 </div>
               </div>
               <div class="about__video"><iframe width="560" height="315"
-                  src="https://youtube.com/embed/MNA05qF-IQo?si=LlmZCYITpLnvh9QT" title="YouTube video player" frameborder="0"
+                  src="https://youtube.com/embed/MNA05qF-IQo?si=LlmZCYITpLnvh9QT" title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen="" class="about__video-link block h-full w-full"></iframe></div>
+                  allowfullscreen="" class="about__video-link block h-full w-full border-none"></iframe></div>
             </div>
             <div class="about__middle">
               <h3 class="about__middle-title text-lg sm:text-md md:text-lg lg:text-2xl"> Но давайте представим что вы

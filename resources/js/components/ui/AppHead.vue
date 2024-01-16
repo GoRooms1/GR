@@ -22,7 +22,7 @@
       property="og:site_name"
       :content="$page.props.app_url + '/'"
     />
-    <link v-if="canonical" rel="canonical" :href="canonical" />
+    <link v-if="canonical" rel="canonical" :href="canonical">
     <slot />
   </Head>
 </template>

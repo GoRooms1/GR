@@ -1,8 +1,8 @@
 <template>
   <div class="relative z-[5] mt-2">
     <button @click="toggleMenu()" class="w-full px-[12px] h-8 bg-white rounded-[8px] flex items-center justify-between">
-      <span select-text="" class="text-[0.875rem] leading-[1rem]">{{ date }}</span>
-      <img src="/img/calendar.svg" class="ml-1 min-[300px]:ml-2 w-5">
+      <span class="text-[0.875rem] leading-[1rem]">{{ date }}</span>
+      <img src="/img/calendar.svg" alt="calendar" class="ml-1 min-[300px]:ml-2 w-5">
     </button>
     <div v-if="isArrowOpen === true" class="absolute top-[2rem] left-0 z-10 w-full block">
       <div class="flex items-center justify-between bg-white w-full">
