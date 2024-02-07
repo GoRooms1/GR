@@ -104,6 +104,9 @@ export default {
       this.removeFixed(); 
       this.$page.props.modals.auth = false;
       this.$page.props.flash.message = null;
+
+      if (this.$refs?.auth?.resetForms)
+        this.$refs.auth.resetForms();
     },
   } 
 };

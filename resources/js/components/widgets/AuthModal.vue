@@ -6,7 +6,7 @@
 				class="absolute top-[12px] right-[16px] lg:static lg:w-[32px] lg:h-[32px] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
 			<img src="/img/close.svg" alt="close">
 			</button>
-			<div class="bg-white rounded-3xl mx-6 lg:mx-0">
+			<div v-if="tab !== 'reset'" class="bg-white rounded-3xl mx-6 lg:mx-0">
 				<div class="flex bg-[#6170FF] rounded-t-3xl">
 					<button
 						class="p-2 my-4 ml-4 mr-2 flex w-full items-center justify-center rounded-lg bg-[#6170FF] text-white border-white border-2">Вход</button>
@@ -55,9 +55,9 @@
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
 					<div class="flex mt-4 text-sm">
 						<span>Забыли пароль?&nbsp;</span>
-						<a href="#" class="underline">Восстановить пароль через email</a>
+						<button type="button" @click="tab = 'reset'" class="underline">Восстановить пароль через email</button>
 					</div>
-					<Button class="mt-4" submit="true">Войти</Button>
+					<Button class="mt-4" submit="true" :disabled="login.processing">Войти</Button>
 				</form>
 
 				<form id="registration-form" class="flex flex-col p-6 lg:p-4 hidden">
@@ -100,29 +100,32 @@
 						class="p-2 mt-4 w-full flex items-center justify-center rounded-lg bg-[#AAB4D1] text-white">Зарегистрироваться</button>
 				</form>
 			</div>
-			<div class="bg-white rounded-3xl mx-6 lg:mx-0 hidden">
+
+			<div v-if="tab === 'reset'" class="bg-white rounded-3xl mx-6 lg:mx-0 block">
 				<div class=" bg-[#6170FF] rounded-t-3xl text-white p-4 text-center">
 					Сброс пароля
 				</div>
-				<form id="password-reset-form" class="flex flex-col p-6 lg:p-4 hidden">
+				<form v-if="!reset.wasSuccessful" id="password-reset-form" class="flex flex-col p-6 lg:p-4" @submit.prevent="submitReset">
 					<div class="flex mt-2">
 						<span>Email</span>
+            <div v-if="reset?.errors?.email" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
+              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
+              {{ reset?.errors?.email }}
+						</div>
 					</div>
-					<input name="email" type="email" placeholder="Ваша@почта"
+					<input name="email" type="email" placeholder="Ваша@почта" v-model="reset.email"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
-					<button class="p-2 mt-4 w-full flex items-center justify-center rounded-lg bg-[#AAB4D1] text-white">Отправить
-					ссылку для сброса пароля</button>
+					<Button class="p-2 mt-4" submit="true" :disabled="reset.processing">Отправить ссылку для сброса пароля</Button>
 				</form>
-				<div class="flex flex-col p-6 lg:p-4">
+
+				<div v-if="reset.wasSuccessful" class="flex flex-col p-6 lg:p-4">
 					<span class="text-center leading-4 z-[1] p-2">
-					Ссылка на сброс пароля была отправлена!
+					  Ссылка на сброс пароля была отправлена!
 					</span>
-					<button class="p-2 mt-4 w-full flex items-center justify-center rounded-lg bg-[#6170FF] text-white">На
-					главную</button>
+					<Link href="/" @click="$eventBus.emit('auth-close')" class="p-2 mt-4 h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-blue-500 hover:bg-blue-800">На главную</Link>
 				</div>
 			</div>
-		</div>
-		{{  }}
+		</div>		
 	</div>
 </template>
 
@@ -130,10 +133,12 @@
 import { useForm } from "@inertiajs/vue3";
 import Button from "@/components/ui/Button.vue"
 import { vMaska } from "maska";
+import { Link } from "@inertiajs/vue3";
 export default {
   components: {
     useForm,
     Button,
+    Link
   },
   directives: {
     maska: vMaska,
@@ -143,16 +148,35 @@ export default {
   },
   data() {
     return {
+      tab: "login",
       phoneMask: "+7 (###) ### ##-##",
       login: useForm({
         phone: null,
         email: null,
         password: null,
         hotelier: false,        
-      })
+      }),
+      reset: useForm({
+        email: null,       
+      }),
     }
   },
   methods: {
+    resetForms() {
+      this.tab = "login";
+      this.login = useForm({
+        phone: null,
+        email: null,
+        password: null,
+        hotelier: false,        
+      });
+      this.login.clearErrors();
+      this.reset = useForm({
+        email: null,       
+      });
+      this.reset.wasSuccessful = false;
+      this.reset.clearErrors();
+    },
     phoneHandle(e) {
       let value = e.target.value ?? "";
       //Handle Ru phone number
@@ -171,8 +195,19 @@ export default {
         preserveState: true,
         preserveScroll: true,
         only: ['flash', 'auth', 'errors'],
+        onSuccess: () => {
+          this.resetForms();
+        }
       });
-    }
+    },
+    submitReset() {
+      console.log('submit reset');
+      this.reset.post("/password/email", {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['flash', 'auth', 'errors'],
+      });
+    },
   }
 };
 </script>
