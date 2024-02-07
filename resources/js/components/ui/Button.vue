@@ -1,7 +1,7 @@
 <template>
   <button
     v-bind="$attrs"
-    type="button"
+    :type="submit ? 'submit' : 'button'"
     class="h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150"
     :class="classes + ' ' + style"
   >
@@ -17,7 +17,8 @@ export default {
     type: {
       type: String,
       default: 'blue'
-    }
+    },
+    submit: false
   },
   computed: {
     style() {

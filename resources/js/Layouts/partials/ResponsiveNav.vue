@@ -50,12 +50,12 @@
           classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
           
         />
-        <a 
-          href="/login"
+        <button 
+          @click="$eventBus.emit('auth-open'); hide()"
           class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left mb-2"
         >
           Личный кабинет
-        </a>
+        </button>
         <responsive-nav-link        
           title="Статьи"
           href="/blog"

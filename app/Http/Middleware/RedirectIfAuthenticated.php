@@ -7,6 +7,7 @@ use App\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class RedirectIfAuthenticated
 {
@@ -23,11 +24,11 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
             $user = User::find(auth()->id());
             if ($user->is_admin) {                              
-                return redirect(route('admin.index'));
+                return Inertia::location(route('admin.index'));
             }
 
             if ($user->personal_hotel) {
-                return redirect(route('lk.index'));
+                return Inertia::location(route('lk.index'));
             }
 
             if ($user->is_moderate) {                              

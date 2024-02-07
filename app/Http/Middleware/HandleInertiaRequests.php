@@ -62,7 +62,8 @@ class HandleInertiaRequests extends Middleware
             'path' => rtrim(Str::start($request->path(), '/'), '/'),
             'is_moderator' => fn() => $isModerator,
             'yandex_api_key' => fn() => config('services.yandex.map.key'),      
-            'is_loading' => false,            
+            'is_loading' => false,
+            'auth' => fn() => !is_null(auth()->user()),        
         ]);
     }
 }

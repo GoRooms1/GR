@@ -36,8 +36,8 @@
       disabled
       classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
     />
-    <a href="/login" class="nav-link flex items-center w-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]">
-    </a>   
+    <button @click="$eventBus.emit('auth-open')" class="nav-link flex items-center w-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]">
+    </button>   
   </div>  
 </template>
 

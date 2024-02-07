@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LoginController extends Controller
 {
@@ -40,14 +41,19 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function showLoginForm()
+    {
+        return Inertia::render('Auth/Login');
+    }
+   
     protected function authenticated(Request $request, User $user)
     {
-        if ($user->personal_hotel) {
-            return redirect()->route('lk.start');
+        if ($user->personal_hotel) {            
+            return Inertia::location(route('lk.start'));
         }
 
-        if ($user->is_admin) {                              
-            return redirect(route('admin.index'));
+        if ($user->is_admin) {            
+            return Inertia::location(route('admin.index'));
         }
 
         if ($user->is_moderate) {                              
@@ -55,5 +61,14 @@ class LoginController extends Controller
         }
 
         return redirect($this->redirectTo);
+    }    
+
+    public function username()
+    {
+        if(request()->get('hotelier', false)) {
+            return 'email';
+        }            
+
+        return 'phone';
     }
 }
