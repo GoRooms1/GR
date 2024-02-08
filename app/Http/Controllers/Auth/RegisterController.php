@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class RegisterController extends Controller
 {
@@ -40,6 +41,11 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
+    
+    public function showRegistrationForm()
+    {
+        return Inertia::render('Auth/Index');
+    }
 
     /**
      * Get a validator for an incoming registration request.
@@ -48,11 +54,13 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
+    {        
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'phone' => ['required', 'string', 'min:7', 'max:25', 'unique:users'],
+            'gender' => ['required', 'string', 'in:m,f'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],            
         ]);
     }
 
@@ -67,6 +75,9 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
+            'gender' => $data['gender'],
+            'is_client' => true,
             'password' => Hash::make($data['password']),
         ]);
     }

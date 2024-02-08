@@ -99,11 +99,33 @@ class User extends Authenticatable
      */
     public const POSITIONS_LANGUAGE = [self::POSITION_STAFF => 'STAFF', self::POSITION_GENERAL => 'GENERAL'];
 
-    protected $fillable = ['name', 'email', 'password', 'is_admin', 'phone', 'position', 'code', 'position', 'is_moderate', 'telegram_id'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'is_admin',
+        'phone',
+        'position',
+        'code',
+        'position',
+        'is_moderate',
+        'telegram_id',
+        'gender',
+        'is_client',
+        'notify_hot',
+        'notify_review'
+    ];
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $casts = ['email_verified_at' => 'datetime', 'is_admin' => 'boolean', 'is_moderate' => 'boolean'];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
+        'is_moderate' => 'boolean',
+        'is_client' => 'boolean',
+        'notify_hot' => 'boolean',
+        'notify_review' => 'boolean'
+    ];
 
     /**
      * Get personal hotel.

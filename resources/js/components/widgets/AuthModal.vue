@@ -8,12 +8,14 @@
 			</button>
 			<div v-if="tab !== 'reset'" class="bg-white rounded-3xl mx-6 lg:mx-0">
 				<div class="flex bg-[#6170FF] rounded-t-3xl">
-					<button
-						class="p-2 my-4 ml-4 mr-2 flex w-full items-center justify-center rounded-lg bg-[#6170FF] text-white border-white border-2">Вход</button>
-					<button
-						class="p-2 my-4 mr-4 ml-2 flex w-full items-center justify-center rounded-lg bg-white text-[#6170FF]">Регистрация</button>
+					<button @click="tab = 'login'"
+						class="p-2 my-4 ml-4 mr-2 flex w-full items-center justify-center rounded-lg"
+            :class="tab === 'login' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2'">Вход</button>
+					<button @click="tab = 'register'"
+						class="p-2 my-4 mr-4 ml-2 flex w-full items-center justify-center rounded-lg"
+            :class="tab === 'register' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2'">Регистрация</button>
 				</div>
-				<form id="login-form" class="flex flex-col p-6 lg:p-4" @submit.prevent="submitLogin">
+				<form v-if="tab === 'login'" id="login-form" class="flex flex-col p-6 lg:p-4" @submit.prevent="submitLogin">
 					<div class="flex ml-auto items-center">
 						<span class="flex mr-2">
 						  Отельер
@@ -60,44 +62,77 @@
 					<Button class="mt-4" submit="true" :disabled="login.processing">Войти</Button>
 				</form>
 
-				<form id="registration-form" class="flex flex-col p-6 lg:p-4 hidden">
+				<form v-if="tab === 'register'" id="register-form" class="flex flex-col p-6 lg:p-4"  @submit.prevent="submitRegister">
 					<div class="flex mt-2">
 						<span>Имя</span>
+            <div v-if="register?.errors?.name" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
+              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
+              {{ register?.errors?.name }}
+						</div>
 					</div>
-					<input name="name" type="text" placeholder="Как к вам обращаться"
+					<input name="name" type="text" placeholder="Как к вам обращаться" v-model="register.name"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
 					<div class="flex mt-2">
 						<span>Телефон</span>
+            <div v-if="register?.errors?.phone" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
+              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
+              {{ register?.errors?.phone }}
+						</div>
 					</div>
-					<input name="phone" type="text" placeholder="+7 (___) ___ __-__"
+					<input name="phone" type="text"
+            @input="phoneHandle"
+            v-maska
+            :data-maska="phoneMask"
+            placeholder="+7 (___) ___ __-__"
+            data-maska-tokens="C:[0-9 \-\+()]" 
+            v-model="register.phone"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
 					<div class="flex mt-2">
 						<span>Email</span>
+            <div v-if="register?.errors?.email" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
+              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
+              {{ register?.errors?.email }}
+						</div>
 					</div>
-					<input name="email" type="email" placeholder="Ваша@почта"
+					<input name="email" type="email" placeholder="Ваша@почта" v-model="register.email"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
 					<div class="flex mt-2">
 						<span>Пол</span>
+            <div v-if="register?.errors?.gender" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
+              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
+              {{ register?.errors?.gender }}
+						</div>
 					</div>
-					<input name="gender" type="text" class="hidden" value="m">
+					<input name="gender" type="text" class="hidden" v-model="register.gender">
 					<div class="flex w-full">
-						<button
-							class="mr-4 flex-1 lg:flex-none text-[0.875rem] leading-[1rem] px-[19px] h-[2rem] flex items-center justify-center rounded-[8px] md:hover:outline outline-solid hover:outline-[#6170FF] outline transition duration-150 bg-[#6170FF] text-white outline-[#6170FF]">М</button>
-						<button
-							class="mr-4 flex-1 lg:flex-none text-[0.875rem] leading-[1rem] px-[19px] h-[2rem] flex items-center justify-center rounded-[8px] md:hover:outline outline-solid hover:outline-[#6170FF] outline transition duration-150 bg-white outline-[#AAB4D1]">Ж</button>
+						<button type="button"
+              @click="register.gender = 'm'"
+							class="mr-4 flex-1 lg:flex-none text-[0.875rem] leading-[1rem] px-[19px] h-[2rem] flex items-center justify-center rounded-[8px] md:hover:outline outline-solid hover:outline-[#6170FF] outline transition duration-150"
+              :class="register.gender === 'm' ? 'bg-[#6170FF] text-white outline-[#6170FF]' : ' bg-white outline-[#AAB4D1]'">М</button>
+						<button type="button"
+              @click="register.gender = 'f'"
+							class="mr-4 flex-1 lg:flex-none text-[0.875rem] leading-[1rem] px-[19px] h-[2rem] flex items-center justify-center rounded-[8px] md:hover:outline outline-solid hover:outline-[#6170FF] outline transition duration-150"
+              :class="register.gender === 'f' ? 'bg-[#6170FF] text-white outline-[#6170FF]' : ' bg-white outline-[#AAB4D1]'">Ж</button>
 					</div>
 					<div class="flex mt-2">
 						<span>Пароль</span>
+            <div v-if="register?.errors?.password" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
+              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
+              {{ register?.errors?.password }}
+						</div>
 					</div>
-					<input name="password" type="password" placeholder="*******"
+					<input name="password" type="password" placeholder="*******" v-model="register.password"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
 					<div class="flex mt-2">
 						<span>Повторите пароль</span>
+            <div v-if="register?.errors?.password_confirmation" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
+              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
+              {{ register?.errors?.password_confirmation }}
+						</div>
 					</div>
-					<input name="password-confirm" type="password" placeholder="*******"
+					<input name="password_confirmation" type="password" placeholder="*******" v-model="register.password_confirmation"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
-					<button
-						class="p-2 mt-4 w-full flex items-center justify-center rounded-lg bg-[#AAB4D1] text-white">Зарегистрироваться</button>
+          <Button class="mt-4" submit="true" :disabled="register.processing">Зарегистрироваться</Button>					
 				</form>
 			</div>
 
@@ -125,8 +160,8 @@
 					<Link href="/" @click="$eventBus.emit('auth-close')" class="p-2 mt-4 h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-blue-500 hover:bg-blue-800">На главную</Link>
 				</div>
 			</div>
-		</div>		
-	</div>
+		</div>    
+	</div> 
 </template>
 
 <script>
@@ -142,13 +177,10 @@ export default {
   },
   directives: {
     maska: vMaska,
-  },
-  mounted() {
-    console.log("Auth mounted.");
-  },
+  }, 
   data() {
     return {
-      tab: "login",
+      tab: this.$page.props.path === "/register" ? "register" : "login",
       phoneMask: "+7 (###) ### ##-##",
       login: useForm({
         phone: null,
@@ -159,9 +191,17 @@ export default {
       reset: useForm({
         email: null,       
       }),
+      register: useForm({
+        name: null,
+        phone: null,
+        email: null,
+        gender: 'm',
+        password: null,
+        password_confirmation: null,
+      }),
     }
   },
-  methods: {
+  methods: {     
     resetForms() {
       this.tab = "login";
       this.login = useForm({
@@ -171,11 +211,22 @@ export default {
         hotelier: false,        
       });
       this.login.clearErrors();
+
       this.reset = useForm({
         email: null,       
       });
       this.reset.wasSuccessful = false;
       this.reset.clearErrors();
+
+      this.register = useForm({
+        name: null,
+        phone: null,
+        email: null,
+        gender: 'm',
+        password: null,
+        password_confirmation: null,
+      });
+      this.register.clearErrors();
     },
     phoneHandle(e) {
       let value = e.target.value ?? "";
@@ -189,8 +240,7 @@ export default {
         this.phoneMask = "C".repeat(25);
       }
     },
-    submitLogin() {
-      console.log('submit login');
+    submitLogin() {      
       this.login.post("/login", {
         preserveState: true,
         preserveScroll: true,
@@ -200,12 +250,21 @@ export default {
         }
       });
     },
-    submitReset() {
-      console.log('submit reset');
+    submitReset() {      
       this.reset.post("/password/email", {
         preserveState: true,
         preserveScroll: true,
         only: ['flash', 'auth', 'errors'],
+      });
+    },
+    submitRegister() {      
+      this.register.post("/register", {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['flash', 'auth', 'errors'],
+        onSuccess: () => {
+          this.resetForms();
+        }
       });
     },
   }

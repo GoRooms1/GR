@@ -7,6 +7,7 @@ use App\Http\Middleware\SeoPathRedirect;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
+use App\Http\Middleware\Client;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\Lk;
 use App\Http\Middleware\Moderator;
@@ -94,6 +95,7 @@ class Kernel extends HttpKernel
         'verified' => EnsureEmailIsVerified::class,        
         'admin' => Admin::class,
         'lk' => Lk::class,
+        'client' => Client::class,
         'moderator' => Moderator::class,
         'regional_center' => RegionalCenterRedirect::class,
         'seo' => SeoPathRedirect::class,

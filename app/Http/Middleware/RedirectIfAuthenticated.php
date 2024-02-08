@@ -23,6 +23,11 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             $user = User::find(auth()->id());
+            
+            if ($user->is_client) {                              
+                return redirect(route('client.index'));
+            }
+            
             if ($user->is_admin) {                              
                 return Inertia::location(route('admin.index'));
             }

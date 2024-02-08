@@ -76,14 +76,7 @@ export default {
     },
 
     openAuth() {
-      this.$page.props.flash.message = null;
-
-      if (this.$page.props.path === '/login') {
-        this.setFixed();     
-        this.$page.props.modals.auth = true;
-
-        return;
-      }
+      this.$page.props.flash.message = null;      
       
       this.$inertia.get(this.$page.props.path, {}, {
           preserveState: true,

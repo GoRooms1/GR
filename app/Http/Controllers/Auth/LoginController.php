@@ -43,11 +43,15 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Auth/Index');
     }
    
     protected function authenticated(Request $request, User $user)
     {
+        if ($user->is_client) {                              
+            return redirect(route('client.index'));
+        }
+        
         if ($user->personal_hotel) {            
             return Inertia::location(route('lk.start'));
         }
@@ -61,7 +65,22 @@ class LoginController extends Controller
         }
 
         return redirect($this->redirectTo);
-    }    
+    }
+    
+    
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        $creditnails = $request->only($this->username(), 'password');
+        $creditnails['is_client'] = $this->username() === 'phone' ? true : false;
+        
+        return $creditnails;
+    }
 
     public function username()
     {

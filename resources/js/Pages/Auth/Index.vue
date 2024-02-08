@@ -14,7 +14,7 @@ export default {
   mounted() {
     document.body.classList.add("fixed");
     this.$page.props.flash.message = null;
-    this.$page.props.modals.auth = true;
+    this.$page.props.modals.auth = true;    
   }
 };
 </script>

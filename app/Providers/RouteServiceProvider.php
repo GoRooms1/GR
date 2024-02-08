@@ -22,6 +22,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected string $moderator_namespace = 'App\Http\Controllers\Moderator';
 
+    protected string $client_namespace = 'App\Http\Controllers\Client';
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -46,6 +48,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapLkRoutes();       
         $this->mapWebRoutes();
         $this->mapModeratorRoutes();
+        $this->mapClientRoutes();
     }
 
     /**
@@ -115,5 +118,20 @@ class RouteServiceProvider extends ServiceProvider
           ->prefix('moderator')
           ->name('moderator.')
           ->group(base_path('routes/moderator.php'));
+    }
+
+    /**
+     * Define the "Client" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapClientRoutes(): void
+    {
+        Route::middleware(['web', 'auth', 'client'])
+          ->prefix('client')
+          ->name('client.')
+          ->group(base_path('routes/client.php'));
     }
 }
