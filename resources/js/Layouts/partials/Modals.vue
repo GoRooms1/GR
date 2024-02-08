@@ -107,6 +107,9 @@ export default {
 
       if (this.$refs?.auth?.resetForms)
         this.$refs.auth.resetForms();
+
+      if (this.$page.component.startsWith('Auth'))
+        this.$inertia.get("/");
     },
   } 
 };

@@ -5,7 +5,7 @@
 		<div class="max-w-[432px] w-full flex flex-col">
       <Link as="button" href="/"
 				class="absolute top-[12px] right-[16px] lg:static lg:w-[32px] lg:h-[32px] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
-			<img src="/img/close.svg" alt="close">
+			  <img src="/img/close.svg" alt="close">
 			</Link>			
 			<div class="bg-white rounded-3xl mx-6 lg:mx-0 block">
 				<div class=" bg-[#6170FF] rounded-t-3xl text-white p-4 text-center">
