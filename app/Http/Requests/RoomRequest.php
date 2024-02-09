@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ExistWhere;
 use Illuminate\Foundation\Http\FormRequest;
+use Support\Rules\ExistWhere;
 
 class RoomRequest extends FormRequest
 {
