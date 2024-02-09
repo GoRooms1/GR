@@ -1,0 +1,20 @@
+<template>
+  <AppHead title="Gorooms.ru" />  
+</template>
+
+<script>
+import AppHead from "@/components/ui/AppHead.vue";
+import Layout from "@/Layouts/Layout.vue";
+
+export default {
+  components: {
+    AppHead,
+    Layout,    
+  },
+  mounted() {
+    document.body.classList.add("fixed");
+    this.$page.props.flash.message = null;
+    this.$page.props.modals.auth = true;    
+  }
+};
+</script>
