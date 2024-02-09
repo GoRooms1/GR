@@ -37,6 +37,10 @@ class ObjectController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (auth()->check() && auth()->user()->is_client) {
+            return redirect()->route('client.settings');
+        }
+
         $request->validate([
             'name' => 'required|string|min:0',
             'password' => 'string|min:3',

@@ -16,7 +16,7 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        return view('lk.index');
+       return view('lk.index');
     }
 
     /**
@@ -26,6 +26,10 @@ class HomeController extends Controller
      */
     public function start()
     {
+        if (auth()->check() && auth()->user()->is_client) {
+            return redirect()->route('client.settings');
+        }
+
         if (auth()->check() && auth()->user()->personal_hotel) {
             return redirect()->route('lk.index');
         }
