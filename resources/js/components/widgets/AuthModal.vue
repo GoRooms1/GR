@@ -84,7 +84,7 @@
             v-maska
             :data-maska="phoneMask"
             placeholder="+7 (___) ___ __-__"
-            data-maska-tokens="C:[0-9 \-\+()]" 
+            data-maska-tokens="C:[0-9 \-\+()]"
             v-model="register.phone"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
 					<div class="flex mt-2">
