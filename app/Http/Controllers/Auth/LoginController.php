@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use Domain\User\ValueObjects\ClientsPhoneNumberValueObject;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -77,7 +78,12 @@ class LoginController extends Controller
     protected function credentials(Request $request)
     {
         $creditnails = $request->only($this->username(), 'password');
-        $creditnails['is_client'] = $this->username() === 'phone' ? true : false;
+        $creditnails['is_client'] = false;
+
+        if ($this->username() === 'phone') {
+            $creditnails['is_client'] = true;
+            $creditnails['phone'] = ClientsPhoneNumberValueObject::fromNative($creditnails['phone'])->toNative();
+        }        
         
         return $creditnails;
     }

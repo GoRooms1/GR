@@ -2,24 +2,19 @@
 
 namespace Support\Rules;
 
+use App\User;
+use Domain\User\ValueObjects\ClientsPhoneNumberValueObject;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Facades\DB;
 
-class UniquePhone implements Rule
-{
-    private $table;
-
-    private $column;
-
+class UniqueClientPhone implements Rule
+{  
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($table, $column = null)
-    {
-        $this->table = $table;
-        $this->column = $column;        
+    public function __construct()
+    {       
     }
 
     /**
@@ -30,10 +25,9 @@ class UniquePhone implements Rule
      * @return bool
      */
     public function passes($attribute, $value)
-    {
-        $column = $this->column ?? $attribute;       
-        return !DB::table($this->table)
-            ->whereRaw("REGEXP_REPLACE(".$column.", '[^0-9]+', '') = ".preg_replace("/[^0-9]/", "", $value))
+    {        
+        return !User::where('is_clien', true)
+            ->where('phone', ClientsPhoneNumberValueObject::fromNative($value)->toNative())
             ->exists();
     }
 
