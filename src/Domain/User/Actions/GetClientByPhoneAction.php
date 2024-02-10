@@ -16,7 +16,7 @@ final class GetClientByPhoneAction extends Action
     public function handle(string $phone): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|object|null
     {
         return User::where('is_client', true)
-            ->where('phone', ClientsPhoneNumberValueObject::fromNative($phone)->toNative())
+            ->where('phone', (new ClientsPhoneNumberValueObject($phone))->toNative())
             ->first();
     }
 }

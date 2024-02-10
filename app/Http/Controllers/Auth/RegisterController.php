@@ -77,7 +77,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'phone' => ClientsPhoneNumberValueObject::fromNative($data['phone'])->toNative(),
+            'phone' => (new ClientsPhoneNumberValueObject($data['phone']))->toNative(),
             'gender' => $data['gender'],
             'is_client' => true,
             'password' => Hash::make($data['password']),

@@ -82,7 +82,7 @@ class LoginController extends Controller
 
         if ($this->username() === 'phone') {
             $creditnails['is_client'] = true;
-            $creditnails['phone'] = ClientsPhoneNumberValueObject::fromNative($creditnails['phone'])->toNative();
+            $creditnails['phone'] = (new ClientsPhoneNumberValueObject($creditnails['phone']))->toNative();
         }        
         
         return $creditnails;
