@@ -7,6 +7,8 @@
 
 namespace  Domain\Room\Models;
 
+use App\Models\Review;
+use App\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -64,7 +66,8 @@ class Booking extends Model
         'from-date',
         'to-date',
         'hours_count',
-        'on_show',
+        'on_show',        
+        'status',
     ];
 
     protected $casts = [
@@ -77,6 +80,16 @@ class Booking extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function review(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Review::class);
+    } 
 
     /**
      * @return string|null

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\RegisterClientFromBooking;
+use App\User;
 use Domain\Address\Actions\GetRegionalCenterByIpAction;
+use Domain\Auth\Actions\RegisterClientFromBookingAction;
 use Domain\Object\ViewModels\ObjectsViewModel;
 use Domain\Search\DataTransferObjects\ParamsData;
 use Domain\Room\Actions\CreateBookingFromDataAction;
@@ -32,10 +35,14 @@ class RoomController extends Controller
     }
 
     public function booking(BookingRequest $request): RedirectResponse
-    {
+    {        
         $bookingData = BookingData::fromRequest($request);
         $booking = CreateBookingFromDataAction::run($bookingData);
-        BookRoomJob::dispatchSync($bookingData);
+        BookRoomJob::dispatchSync($bookingData);       
+        
+        if (!$booking->user_id) {
+            RegisterClientFromBookingAction::run($booking);
+        }
 
         return Redirect::back()->with(['message' => GenerateBookingMessageAction::run($bookingData)]);
     }

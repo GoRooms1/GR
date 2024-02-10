@@ -137,7 +137,7 @@
                 @input="phoneHandle(); v$.form.client_phone.$touch; delete form.errors.client_phone;"
                 v-maska
                 :data-maska="phoneMask"
-                placeholder="+7 (___) ___ __ __"
+                placeholder="+7 (___) ___ __-__"
                 data-maska-tokens="C:[0-9 \-\+()]"
                 class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]"
                 id="booking-client_phone"
@@ -260,7 +260,7 @@ export default {
         amount: 0,
       }),
       bookingSuccess: false,
-      phoneMask: "+7 (###) ### ## ##",
+      phoneMask: "+7 (###) ### ##-##",
     };
   },
   validations () {
@@ -278,7 +278,7 @@ export default {
       this.v$.$validate(); 
     },
     phoneValidator(value) {
-      if (this.phoneMask === '+7 (###) ### ## ##') return value.length == this.phoneMask.length;
+      if (this.phoneMask === '+7 (###) ### ##-##') return value.length == this.phoneMask.length;
       return value.length >= 7;
     },
     close() {      
@@ -414,7 +414,7 @@ export default {
       let value = this.form.client_phone ?? "";
       //Handle Ru phone number
       if (value == null || value == '' || value.startsWith("+7")) {
-        this.phoneMask = "+7 (###) ### ## ##";
+        this.phoneMask = "+7 (###) ### ##-##";
       }
 
       //Handle other countries phone number
@@ -426,7 +426,7 @@ export default {
       this.form.post("/rooms/booking", {
         preserveState: true,
         preserveScroll: true,
-        only: ['flash'],
+        only: ['flash', 'errors'],
         onSuccess: () => {this.bookingSuccess = true;},        
       });
     },
@@ -450,7 +450,7 @@ export default {
       this.form.hours_count = null;
       this.form.days_count = null;
       this.form.bookingSuccess = false;
-      this.form.phoneMask = "+7 (###) ### ## ##";
+      this.form.phoneMask = "+7 (###) ### ##-##";
       this.form.amount = 0;    
     },
   },

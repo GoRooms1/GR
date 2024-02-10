@@ -6,6 +6,7 @@ namespace Domain\Room\Actions;
 
 use Domain\Room\DataTransferObjects\BookingData;
 use Domain\Room\Models\Booking;
+use Domain\User\Actions\GetClientByPhoneAction;
 use Lorisleiva\Actions\Action;
 
 /**
@@ -18,17 +19,25 @@ final class CreateBookingFromDataAction extends Action
      * @return Booking
      */
     public function handle(BookingData $data): Booking
-    {
+    {        
         $booking = Booking::create(
             array_merge(
                 $data->toArray(),
                 [
                     'from-date' => $data->from_date,
                     'to-date' => $data->to_date,
+                    'status' => 'wait',
                 ]
             )
         );
-        $booking->room()->associate($data->room_id);
+
+        $user = GetClientByPhoneAction::run($data->client_phone);
+        
+        if ($user) {
+            $booking->user()->associate($user->id);
+        }
+
+        $booking->room()->associate($data->room_id);               
         $booking->save();
 
         return $booking;
