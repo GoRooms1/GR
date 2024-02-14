@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use Domain\Room\Actions\SyncFavoritesAction;
 use Domain\User\ValueObjects\ClientsPhoneNumberValueObject;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -49,7 +50,8 @@ class LoginController extends Controller
    
     protected function authenticated(Request $request, User $user)
     {
-        if ($user->is_client) {                              
+        if ($user->is_client) {
+            SyncFavoritesAction::run();                              
             return redirect(route('client.index'));
         }
         
@@ -95,5 +97,5 @@ class LoginController extends Controller
         }            
 
         return 'phone';
-    }
+    }    
 }

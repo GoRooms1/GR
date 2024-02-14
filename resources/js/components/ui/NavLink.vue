@@ -1,7 +1,7 @@
 <template>
   <Link   
     :href="href"
-    class="nav-link flex items-center mr-4 pl-[24px] h-[24px] bg-left bg-no-repeat bg-contain"
+    class="nav-link flex items-center mr-2 pl-[24px] h-[24px] bg-left bg-no-repeat bg-contain"
     :class="classes + (disabled ? ' btn-disabled pointer-events-none' : '')"
   >
     <span v-if="title" class="pl-2">

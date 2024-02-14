@@ -38,18 +38,13 @@
           classes="bg-[url(/img/about_1.svg)] hover:bg-[url(/img/about_2.svg)]"
           v-on:click="hide()"
         />
-        <responsive-nav-link
-          title="Контакты"
-          href="/contacts"
-          classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"
-          v-on:click="hide()"
-        />
-        <responsive-nav-link
-          disabled
-          title="Избранное"
-          classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
-          
-        />
+        <button          
+          class="flex hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[left_10px_center] text-left mb-2"
+          :class="$page.props.favorites.length == 0 ? 'bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]' : 'bg-[url(/img/heartMenu.svg)]'"
+          v-on:click="hide(); $eventBus.emit('favorites-open')"
+        >
+          Избранное
+        </button>       
         <button 
           @click="$eventBus.emit('auth-open'); hide()"
           class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)] bg-[left_10px_center] text-left mb-2"

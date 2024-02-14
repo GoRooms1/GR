@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\FavoritesController;
 use App\Http\Controllers\Client\SettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,6 @@ Route::redirect('/', 'client/settings')
 
 Route::get('settings', [SettingsController::class, 'index'])
   ->name('settings');
+
+  Route::get('favorites', [FavoritesController::class, 'index'])
+  ->name('favorites');

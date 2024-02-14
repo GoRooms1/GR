@@ -5,7 +5,8 @@
       :pagination="pagination"
       :navigation="navigation"
       :breakpoints="breakpoints"
-      class="swiper-image2 overflow-hidden relative mx-4 xl:mx-0 xl:w-full h-60 xl:h-80 xl:rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl xl:rounded-tr-none xl:max-w-[550px] swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
+      class="swiper-image2 overflow-hidden relative mx-4 xl:mx-0 xl:w-full h-60 xl:rounded-bl-2xl rounded-tl-2xl rounded-tr-2xl xl:rounded-tr-none xl:max-w-[550px] swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
+      :class="shortView ? 'lg:h-[256px]' : 'xl:h-80'"
     >
       <swiper-slide v-for="(image, index) in (room?.images ?? []).filter(el => el.moderate === false)">
         <Image class="w-full h-full object-cover" :src="image?.conversions?.card ?? image.url" :lazy="index > 0"/>
@@ -25,7 +26,8 @@
       </div>
     </swiper>
     <div
-      class="bg-white rounded-2xl p-5 xl:p-6 shadow-xl relative z-10 xl:w-full xl:h-96 overflow-hidden"
+      class="flex flex-col bg-white rounded-2xl p-5 xl:p-6 shadow-xl relative z-10 xl:w-full overflow-hidden"
+      :class="shortView ? 'lg:h-[298px]' : 'xl:h-96'"
     >
       <div class="flex mb-4">
         <button         
@@ -37,14 +39,15 @@
             (0)
           </span>
         </button>        
-        <button          
-          class="btn-disabled flex py-1 px-2 rounded-md bg-sky-100"
+        <button @click="toggleFavorite()"         
+          class="flex py-1 px-2 rounded-md bg-sky-100"
+          :class="favProcessing ? 'btn-disabled' : ''"
         >
-          <img src="/img/heartCard.svg" alt="heart" width="20" height="20"/>
+          <img :src="isFavorite ? '/img/heartCard2.svg' : '/img/heartCard.svg'" alt="heart" width="20" height="20"/>
         </button>
         <cashback-tag />
       </div>
-      <div class="block mb-6">
+      <div class="block mb-6">        
         <div class="font-bold text-xl leading-6">
           {{ room.number ? room.number + " / " : "" }}
           {{ room?.name?.length > 1 ? room.name : "" }}
@@ -64,7 +67,7 @@
           >
         </div>
       </div>
-      <div class="flex flex-wrap items-center text-xs mb-4">
+      <div v-if="!shortView" class="flex flex-wrap items-center text-xs mb-4">
         <div v-for="(attr, index) in room.attrs" class="flex items-center">
           <div>{{ attr.name }}</div>
           &nbsp;
@@ -85,13 +88,23 @@
         <hotel-address :address="room.hotel.address" class="flex mb-2" />
         <div class="grid grid-cols-[fit-content(100%)_1fr]">
           <hotel-metro-item
+            v-if="!shortView"
             v-for="metro in room.hotel.metros"            
             :metro="metro"
           />
+          <hotel-metro-item
+            v-if="shortView && room.hotel.metros.length > 0"
+            :metro="room.hotel.metros[0]"
+          />
         </div>
       </div>
-    </div>
-    <div
+      <div v-if="shortView" class="mt-auto ">
+        <Button @click="openBookingModal()" classes="booking-open w-full lg:w-auto">
+          Забронировать
+        </Button>
+      </div>
+    </div>    
+    <div v-if="!shortView"
       class="relative bg-white rounded-bl-2xl rounded-br-2xl xl:rounded-bl-none xl:rounded-tr-2xl px-4 pb-4 pt-4 mx-4 xl:mx-0 xl:w-1/3 xl:h-80 flex flex-col justify-between"
     >
       <div
@@ -117,6 +130,7 @@
 </template>
 
 <script>
+import { usePage } from '@inertiajs/vue3'
 import CashbackTag from "@/components/ui/CashbackTag.vue";
 import Image from "@/components/ui/Image.vue";
 import Button from "@/components/ui/Button.vue";
@@ -142,6 +156,7 @@ export default {
   props: {
     room: Object,
     classes: String,
+    shortView: false,
   },
   mounted() {},
   data() {
@@ -167,12 +182,31 @@ export default {
           noSwipingClass: "swiper-slide",
         },
       },
+      favProcessing: false,           
     };
+  },
+  computed: {
+    isFavorite() {
+      return usePage().props.favorites.find((el) => el.id === this.room.id);
+    }
   },
   methods: {
     openBookingModal() {
       this.$eventBus.emit("booking-open", this.room);
     },
+    toggleFavorite() {      
+      this.$inertia.put('/client/favorites/toggle/' + this.room.id, {}, {
+          preserveState: true,
+          preserveScroll: true,
+          only: ["favorites"],
+          onStart: () => {
+            this.favProcessing = true;
+          },
+          onFinish: () => {
+            this.favProcessing = false;
+          },               
+      });
+    }
   },
   watch: {},
 };

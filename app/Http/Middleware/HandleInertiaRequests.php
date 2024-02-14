@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
+use Domain\Room\Actions\GetFavoriteRoomsAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
 use Domain\User\Actions\GetLoggedUserModeratorStatusAction;
 use Illuminate\Http\Request;
@@ -63,7 +64,8 @@ class HandleInertiaRequests extends Middleware
             'is_moderator' => fn() => $isModerator,
             'yandex_api_key' => fn() => config('services.yandex.map.key'),      
             'is_loading' => false,
-            'auth' => fn() => !is_null(auth()->user()),        
+            'auth' => fn() => !is_null(auth()->user()),
+            'favorites' => fn() => GetFavoriteRoomsAction::run()->flatten(),
         ]);
     }
 }

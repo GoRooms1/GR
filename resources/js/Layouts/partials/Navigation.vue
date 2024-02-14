@@ -32,12 +32,15 @@
       href="/contacts"
       classes="bg-[url(/img/link5_1.svg)] hover:bg-[url(/img/link5_2.svg)]"
     />    
-    <nav-link
-      disabled
-      classes="bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]"
-    />
+    <button
+      @click="$eventBus.emit('favorites-open')"
+      class="nav-link flex items-center w-[24px] h-[24px] mr-2 bg-left bg-no-repeat bg-contain"
+      :class="$page.props.favorites.length == 0 ? 'bg-[url(/img/link6_1.svg)] hover:bg-[url(/img/link6_2.svg)]' : ''"
+    >
+      <img v-if="$page.props.favorites.length > 0" src="/img/heartCard2.svg" alt="heart" width="24" height="24"/>
+    </button>
     <button @click="$eventBus.emit('auth-open')" class="nav-link flex items-center w-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link7_1.svg)] hover:bg-[url(/img/link7_2.svg)]">
-    </button>   
+    </button>
   </div>  
 </template>
 

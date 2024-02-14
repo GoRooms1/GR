@@ -8,6 +8,7 @@
 namespace App;
 
 use Domain\Hotel\Models\Hotel;
+use Domain\Room\Models\Room;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -149,5 +150,10 @@ class User extends Authenticatable
         return Hotel::withoutGlobalScopes()->whereHas('users', function ($q) use ($user) {
             $q->where('users.id', $user->id);
         })->first();
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Room::class, 'favorites', 'user_id', 'room_id');
     }
 }

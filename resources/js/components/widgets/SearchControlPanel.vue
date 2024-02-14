@@ -78,10 +78,11 @@
     >
       <img src="/img/footer-cashback.svg" alt="footer-cashback" width="24" height="24"/>
     </button>
-    <button
-      class="btn-disabled pointer-events-none p-2.5 rounded-lg mx-[1.7%] bg-[#EAEFFD]"
+    <button @click="$eventBus.emit('favorites-open')"
+      class="p-2.5 rounded-lg mx-[1.7%]"
+      :class="$page.props.modals.favorites === true ? 'bg-[#6170FF]' : 'bg-[#EAEFFD]'"
     >
-      <img src="/img/heart.svg" alt="heart" width="24" height="24"/>
+      <img :src="$page.props.modals.favorites === true ? '/img/heart2.svg' : '/img/heart.svg'" alt="heart" width="24" height="24"/>
     </button>
   </div>
 </template>

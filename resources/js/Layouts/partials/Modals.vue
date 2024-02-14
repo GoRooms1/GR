@@ -3,16 +3,19 @@
  <booking-form ref="booking" v-show="$page?.props?.modals?.booking === true" :room="bookingRoom" />
  <search-filter-modal ref="filters" v-if="$page.props?.has_filters && $page.props?.modals?.filters === true"/>
  <auth-modal ref="auth" v-show="$page.props?.modals?.auth === true"/>
+ <favorites ref="favorites" v-if="$page.props?.modals?.favorites === true"/>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
 import BookingForm from '@/components/widgets/BookingForm.vue'
 import AuthModal from '@/components/widgets/AuthModal.vue'
+import Favorites from '@/components/widgets/Favorites.vue'
 export default {
   components: {    
     BookingForm,
-    AuthModal,        
+    AuthModal,
+    Favorites,        
     SearchFilterModal: defineAsyncComponent(() =>
       import('@/components/widgets/SearchFilterModal.vue')
     ),
@@ -26,6 +29,9 @@ export default {
 
     this.$eventBus.on("auth-open", (e) => this.openAuth());
     this.$eventBus.on("auth-close", (e) => this.closeAuth());
+
+    this.$eventBus.on("favorites-open", (e) => this.openFavorites());
+    this.$eventBus.on("favorites-close", (e) => this.closeFavorites());
   },
   unmounted() {
     this.$eventBus.off("booking-open");
@@ -36,6 +42,9 @@ export default {
 
     this.$eventBus.off("auth-open");
     this.$eventBus.off("auth-close");
+
+    this.$eventBus.off("favorites-open");
+    this.$eventBus.off("favorites-close");
   },
   data() {
     return {
@@ -103,6 +112,14 @@ export default {
 
       if (this.$page.component.startsWith('Auth'))
         this.$inertia.get("/");
+    },
+    openFavorites() {
+      this.setFixed();
+      this.$page.props.modals.favorites = true;                 
+    },
+    closeFavorites() {
+      this.removeFixed(); 
+      this.$page.props.modals.favorites = false;
     },
   } 
 };

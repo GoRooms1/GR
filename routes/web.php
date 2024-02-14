@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Api\AdBannerController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\Client\FavoritesController;
 use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
@@ -78,3 +79,7 @@ Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('
 Route::get('/instructions', [InstructionController::class, 'index'])->name('instruction.index');
 
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
+
+//favorites
+Route::put('client/favorites/toggle/{id}', [FavoritesController::class, 'toggle'])->name('client.favorites.toggle');
+Route::post('client/favorites/deleteAll', [FavoritesController::class, 'deleteAll'])->name('client.favorites.deleteAll');
