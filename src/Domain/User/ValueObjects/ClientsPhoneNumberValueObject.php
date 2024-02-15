@@ -58,6 +58,11 @@ final class ClientsPhoneNumberValueObject implements ValueObject
         return trim(ltrim($this->toNative(), '+'));
     }
 
+    public function toHiddenDisplayValue(): string
+    {
+        return preg_replace("/^.*(?=\d{2}[\s,-]*\d{2}$)/", "************", $this->toDisplayValue());
+    }
+
     public function __toString(): string
     {
         return $this->toNative();

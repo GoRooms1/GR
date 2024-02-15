@@ -19,7 +19,10 @@ Route::redirect('/', 'client/settings')
   ->name('index');
 
 Route::get('settings', [SettingsController::class, 'index'])
-  ->name('settings');
+  ->name('settings.index');
 
-  Route::get('favorites', [FavoritesController::class, 'index'])
+Route::post('settings', [SettingsController::class, 'update'])
+  ->name('settings.update');
+
+Route::get('favorites', [FavoritesController::class, 'index'])
   ->name('favorites');
