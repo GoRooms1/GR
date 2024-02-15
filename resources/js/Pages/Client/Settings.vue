@@ -11,7 +11,7 @@
                 <div class="flex-wrap lg:flex text-sm leading-4">
                   <div class="flex my-2">
                       <span>Почта</span>
-                      <div v-if="!user.verified && !userForm?.errors?.email" class="text-[#E1183D] flex items-start text-sm">
+                      <div v-if="!user.email_verified && !userForm?.errors?.email" class="text-[#E1183D] flex items-start text-sm">
                           <img src="/img/attentionRed.svg" class="flex mx-2 w-4">
                           Подтвердите e-mail чтобы оставлять отзывы
                       </div>
@@ -25,8 +25,11 @@
                         class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
                         :class="user.email != null ? 'bg-[#e5e7eb]' : ''"
                       >
-                      <button v-if="!user.verified" class="w-1/3 py-2 px-2 ml-2 text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-green-500 hover:bg-green-800" type="button">
-                          Подтвердить
+                      <button v-if="!user.email_verified && user.email" @click="submitEmailVerify" 
+                        class="w-1/3 py-2 px-2 ml-2 text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-green-500 hover:bg-green-800" type="button"
+                        :class="user.can_resend_verification ? '' : 'pointer-events-none btn-disabled'"
+                      >
+                        Подвердить
                       </button>
                   </div>
                   <div class="flex my-2">
@@ -123,7 +126,7 @@
                       Выйти из аккаунта
                     </button>
     
-                    <button class="w-full mt-4 h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-red-500 hover:bg-red-800" type="submit">
+                    <button @click="openDeleteUserDialog" class="w-full mt-4 h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-red-500 hover:bg-red-800" type="submit">
                       Удалить аккаунт
                     </button>
                 </div>
@@ -161,8 +164,9 @@ export default {
         password_confirmation: null,
         notify_review: this.user.notify_review,
         notify_hot: this.user.notify_hot
-      }),
-      saveSuccess: false
+      }),      
+      saveSuccess: false,
+      verifyProcessing: false,
     }
   },
   mounted() {
@@ -177,7 +181,7 @@ export default {
       if (!this.userForm.name) this.userForm.errors.name = "Не заполнено";
     },
     submitUpdate() {      
-      this.userForm.post("/client/settings", {
+      this.userForm.post("/client/settings/update", {
         preserveState: true,
         preserveScroll: true,
         only: ['flash', 'user', 'errors'],
@@ -189,10 +193,37 @@ export default {
       });
     },
     submitEmailVerify() {
-
+      this.$inertia.post("/email/resend", {}, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['flash', 'auth', 'user', 'errors'],
+        onStart: () => {
+          this.verifyProcessing = true;
+        },
+        onFinish: () => {
+          this.verifyProcessing = false;          
+        },
+        onSuccess: () => {          
+          this.saveSuccess = true;
+        }        
+      });
+    },
+    openDeleteUserDialog() {
+      if (confirm("Вы уверены что хотите полностью удалить аккаунт "+this.user.name+", без возможности восстановления?")) {
+        this.deleteUser();
+      }
     },
     deleteUser() {
-
+      this.$inertia.post("/client/settings/delete", {}, {
+        preserveState: true,
+        preserveScroll: true,        
+        onError: () => {
+          alert("Ошибка во время удаления!");
+        },
+        onSuccess() {
+          alert("Вам на почту отправлено письмо со ссылкой, пройдя по которой Ваш аккаунт будем полностью удален. Спасибо.");
+        }         
+      })
     }
   }
 };

@@ -21,8 +21,11 @@ Route::redirect('/', 'client/settings')
 Route::get('settings', [SettingsController::class, 'index'])
   ->name('settings.index');
 
-Route::post('settings', [SettingsController::class, 'update'])
+Route::post('settings/update', [SettingsController::class, 'update'])
   ->name('settings.update');
+
+Route::post('settings/delete', [SettingsController::class, 'delete'])
+  ->name('settings.delete');
 
 Route::get('favorites', [FavoritesController::class, 'index'])
   ->name('favorites');

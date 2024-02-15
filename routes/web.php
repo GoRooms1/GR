@@ -5,6 +5,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Api\AdBannerController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Client\FavoritesController;
+use App\Http\Controllers\Client\SettingsController;
 use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
@@ -34,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('regional_center');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
@@ -83,3 +84,7 @@ Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 //favorites
 Route::put('client/favorites/toggle/{id}', [FavoritesController::class, 'toggle'])->name('client.favorites.toggle');
 Route::post('client/favorites/deleteAll', [FavoritesController::class, 'deleteAll'])->name('client.favorites.deleteAll');
+
+//delete clients user by id and hash token
+Route::post('client/settings/delete/verify/{id}/{hash}', [SettingsController::class, 'verifyDelete'])
+  ->name('settings.delete.verify');

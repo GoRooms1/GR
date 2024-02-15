@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Inertia\Inertia;
-use Log;
 
 class Handler extends ExceptionHandler
 {
@@ -53,6 +52,10 @@ class Handler extends ExceptionHandler
                 ])
                 ->toResponse($request)
                 ->setStatusCode($response->getStatusCode());
+        } elseif($request->routeIs('verification.resend') && $response->getStatusCode() === 429) {           
+            return back()->with([
+                'message' => trans('error.429.description'),
+            ]);
         } elseif ($response->getStatusCode() === 419) {
             return back()->with([
                 'message' => trans('error.419.description'),

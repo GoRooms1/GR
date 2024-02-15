@@ -114,13 +114,15 @@ class User extends Authenticatable
         'gender',
         'is_client',
         'notify_hot',
-        'notify_review'
+        'notify_review',
+        'verification_sent_at'
     ];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'verification_sent_at' => 'datetime',
         'is_admin' => 'boolean',
         'is_moderate' => 'boolean',
         'is_client' => 'boolean',

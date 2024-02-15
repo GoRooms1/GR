@@ -24,6 +24,10 @@ return [
         'title' => 'Page Expired',
         'description' => 'The page expired, please try again.'
     ],
+    '429' => [
+        'title' => 'Too many requests',
+        'description' => 'Too many requests, please try again later.'
+    ],
     '500' => [
         'title' => 'Server Error',
         'description' => 'Whoops, something went wrong on our servers.'

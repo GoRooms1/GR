@@ -51,7 +51,7 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [            
             'modals' => fn() => [],
             'flash' => [
-                'message' => fn () => $request->session()->get('message'),
+                'message' => fn () => $request->session()->get('message'),                
             ],
             'count' => [
                 'hotels' => fn() => GetAvailibleHotelsCountAction::run(),
@@ -65,7 +65,7 @@ class HandleInertiaRequests extends Middleware
             'yandex_api_key' => fn() => config('services.yandex.map.key'),      
             'is_loading' => false,
             'auth' => fn() => !is_null(auth()->user()),
-            'favorites' => fn() => GetFavoriteRoomsAction::run()->flatten(),
+            'favorites' => fn() => GetFavoriteRoomsAction::run()->flatten(),            
         ]);
     }
 }
