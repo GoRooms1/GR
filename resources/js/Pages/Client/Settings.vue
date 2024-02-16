@@ -214,7 +214,7 @@ export default {
       }
     },
     deleteUser() {
-      this.$inertia.post("/client/settings/delete", {}, {
+      this.$inertia.post("/client/delete/resend", {}, {
         preserveState: true,
         preserveScroll: true,        
         onError: () => {

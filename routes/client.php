@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\DeleteController;
 use App\Http\Controllers\Client\FavoritesController;
 use App\Http\Controllers\Client\SettingsController;
 use Illuminate\Support\Facades\Route;
@@ -24,8 +25,8 @@ Route::get('settings', [SettingsController::class, 'index'])
 Route::post('settings/update', [SettingsController::class, 'update'])
   ->name('settings.update');
 
-Route::post('settings/delete', [SettingsController::class, 'delete'])
-  ->name('settings.delete');
+Route::post('/delete/resend', [DeleteController::class, 'resend'])
+  ->name('delete.resend');
 
 Route::get('favorites', [FavoritesController::class, 'index'])
   ->name('favorites');

@@ -4,8 +4,8 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Api\AdBannerController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\Client\DeleteController;
 use App\Http\Controllers\Client\FavoritesController;
-use App\Http\Controllers\Client\SettingsController;
 use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\HomeController;
@@ -86,5 +86,5 @@ Route::put('client/favorites/toggle/{id}', [FavoritesController::class, 'toggle'
 Route::post('client/favorites/deleteAll', [FavoritesController::class, 'deleteAll'])->name('client.favorites.deleteAll');
 
 //delete clients user by id and hash token
-Route::post('client/settings/delete/verify/{id}/{hash}', [SettingsController::class, 'verifyDelete'])
-  ->name('settings.delete.verify');
+Route::get('client/delete/verify/{id}/{hash}', [DeleteController::class, 'verify'])
+  ->name('client.delete.verify');

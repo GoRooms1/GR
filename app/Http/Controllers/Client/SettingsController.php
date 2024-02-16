@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use Request;
 
 class SettingsController extends Controller
 {
@@ -43,19 +42,5 @@ class SettingsController extends Controller
         $user->save();
 
         return Redirect::back()->with(['message' => "Данные успешно сохранены!"]);
-    }
-
-    public function delete(Request $request)
-    {       
-        $user = User::find(auth()->user()->id);
-
-        return Redirect::back()->with([
-            'message' => "Вам на почту отправлено письмо со ссылкой, пройдя по которой Ваш аккаунт будем полностью удален. Спасибо."
-        ]);
-    }
-
-    public function verifyDelete(Request $request, int $id, string $hash)
-    {
-        return Redirect::route('home');
-    }
+    }    
 }

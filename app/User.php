@@ -115,7 +115,8 @@ class User extends Authenticatable
         'is_client',
         'notify_hot',
         'notify_review',
-        'verification_sent_at'
+        'verification_sent_at',
+        'delete_token'
     ];
 
     protected $hidden = ['password', 'remember_token'];
