@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\BookingsController;
 use App\Http\Controllers\Client\DeleteController;
 use App\Http\Controllers\Client\FavoritesController;
 use App\Http\Controllers\Client\SettingsController;
@@ -7,12 +8,12 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Client Web Routes
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| contains the "lk" middleware group. Now create something great!
+| contains the "client" middleware group. Now create something great!
 |
 */
 
@@ -30,3 +31,6 @@ Route::post('/delete/resend', [DeleteController::class, 'resend'])
 
 Route::get('favorites', [FavoritesController::class, 'index'])
   ->name('favorites');
+
+Route::get('bookings', [BookingsController::class, 'index'])
+  ->name('bookings');

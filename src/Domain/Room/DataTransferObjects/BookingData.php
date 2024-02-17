@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Domain\Room\DataTransferObjects;
 
 use Domain\Room\Actions\GenerateBookingNumberAction;
+use Domain\Room\Enums\BookingStatus;
+use Domain\Room\Models\Booking;
 use Domain\Room\Requests\BookingRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\Attributes\WithTransformer;
+use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 
 final class BookingData extends \Parent\DataTransferObjects\Data
 {
@@ -17,15 +22,21 @@ final class BookingData extends \Parent\DataTransferObjects\Data
         public string $client_phone,
         public string $book_type,
         public ?string $book_comment,
+        #[WithTransformer(DateTimeInterfaceTransformer::class, format: 'd.m.Y - H:i')]
         public Carbon $from_date,
+        #[WithTransformer(DateTimeInterfaceTransformer::class, format: 'd.m.Y - H:i')]
         public Carbon $to_date,
         public ?int $hours_count,
         public ?int $days_count,
-        public ?Carbon $created_at,
+        #[WithTransformer(DateTimeInterfaceTransformer::class, format: 'd.m.Y - H:i')]
+        public ?Carbon $created_at,        
         public ?Carbon $updated_at,
         public ?int $room_id,
         public int $on_show,
         public ?float $amount,
+        public ?int $review_id,
+        public ?array $status,
+        public ?RoomBookingData $room,       
     ) {
     }
 
@@ -50,4 +61,21 @@ final class BookingData extends \Parent\DataTransferObjects\Data
             'amount' => floatval($request->get('amount', 0)),
         ]);
     }
+
+    /**
+     * @param  Booking  $booking
+     * @return BookingData
+     */
+    public static function fromModel(Booking $booking): self
+    {       
+        return self::from([
+            ...Arr::except($booking->toArray(), ['book_type', 'from-date', 'to-date', 'status']),
+            'book_type' => $booking->GetTypeAttribute(),
+            'from_date' => $booking['from-date'],
+            'to_date' => $booking['to-date'],
+            'status' => BookingStatus::from($booking->status)->toKeyValue(),
+            'room' =>  $booking->room_id ? RoomBookingData::fromModel($booking->room) : null,
+        ]);
+    }
+
 }

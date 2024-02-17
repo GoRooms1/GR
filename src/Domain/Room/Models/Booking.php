@@ -55,7 +55,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Booking whereOnShow($value)
  */
 class Booking extends Model
-{
+{   
     protected $fillable = [
         'id',
         'book_number',
@@ -72,8 +72,10 @@ class Booking extends Model
 
     protected $casts = [
         'on_show' => 'boolean',
-        'from-date' => 'datetime',
-        'to-date' => 'datetime',
+        'from-date' => 'datetime:Y-m-d\TH:i:sP',
+        'to-date' => 'datetime:Y-m-d\TH:i:sP',
+        'created_at' => 'datetime:Y-m-d\TH:i:sP',
+        'updated_at' => 'datetime:Y-m-d\TH:i:sP',
     ];
 
     public function room(): \Illuminate\Database\Eloquent\Relations\BelongsTo
