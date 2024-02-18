@@ -3,6 +3,7 @@
 use App\Http\Controllers\Client\BookingsController;
 use App\Http\Controllers\Client\DeleteController;
 use App\Http\Controllers\Client\FavoritesController;
+use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Client\SettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +35,6 @@ Route::get('favorites', [FavoritesController::class, 'index'])
 
 Route::get('bookings', [BookingsController::class, 'index'])
   ->name('bookings');
+
+  Route::post('/review', [ReviewController::class, 'create'])
+  ->name('review.create');

@@ -7,8 +7,8 @@
 
 namespace  Domain\Room\Models;
 
-use App\Models\Review;
 use App\User;
+use Domain\Review\Models\Review;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

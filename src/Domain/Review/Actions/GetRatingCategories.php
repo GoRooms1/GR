@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\RatingCategory;
+namespace Domain\Review\Actions;
 
-use App\Models\RatingCategory;
+use DB;
+use Domain\Review\Models\RatingCategory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Parent\Actions\Action;

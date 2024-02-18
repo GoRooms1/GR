@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace  Domain\Review\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\RatingCategory
+ *  Domain\Review\Models\RatingCategory
  *
  * @property int         $id
  * @property string      $name

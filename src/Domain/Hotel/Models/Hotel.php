@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Hotel\Models;
 
-use App\Models\Rating;
-use App\Models\Review;
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
 use App\User;
@@ -28,6 +26,8 @@ use Domain\Page\Actions\GenerateSeoDataContent;
 use Domain\Page\DataTransferObjects\SeoData;
 use Domain\PageDescription\DataTransferObjects\PageDescriptionData;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Review\Models\Rating;
+use Domain\Review\Models\Review;
 use Domain\Room\Models\Room;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

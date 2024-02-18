@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Review\Models;
 
 use App\Parents\Model;
 use App\Traits\CreatedAtOrdered;
@@ -11,10 +11,14 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Support\DataProcessing\Traits\ClearValidated;
 
 /**
- * App\Models\Review
+ *  Domain\Review\Models\Review
  *
  * @property int                      $id
  * @property string                   $name
@@ -43,10 +47,11 @@ use Support\DataProcessing\Traits\ClearValidated;
  * @method static Builder|Review whereUserId($value)
  * @mixin Eloquent
  */
-class Review extends Model
+class Review extends Model implements HasMedia
 {
     use ClearValidated;
-    use CreatedAtOrdered;
+    use CreatedAtOrdered;    
+    use InteractsWithMedia;
 
     public const PER_PAGE = 6;
 
@@ -56,6 +61,8 @@ class Review extends Model
         'room',
         'text',
         'hotel_id',
+        'room_id',
+        'book_number',        
     ];
 
     public function ratings(): HasMany
@@ -68,5 +75,13 @@ class Review extends Model
     public function hotel(): BelongsTo
     {
         return $this->belongsTo(Hotel::class);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {       
+        $this->addMediaConversion('card')
+            ->nonQueued()
+            ->format(Manipulations::FORMAT_WEBP)
+            ->crop(Manipulations::CROP_CENTER, 624, 306);
     }
 }

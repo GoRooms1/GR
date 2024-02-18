@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace  Domain\Review\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * App\Models\Rating
+ *  Domain\Review\Models\Rating
  *
  * @property int                 $id
  * @property int                 $value
