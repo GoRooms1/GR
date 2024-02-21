@@ -84,6 +84,9 @@
               <a href="{{ route('admin.moderators.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.moderators.*') ? 'active' : '' }}">Модераторы</a>
             </li>
             <li class="nav-item">
+              <a href="{{ route('admin.clients.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.clients.*') ? 'active' : '' }}">Клиенты</a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('admin.cost_types.index') }}" class="nav-link {{ Route::currentRouteNamed('admin.cost_types.*') ? 'active' : '' }}">Типы цен</a>
             </li>
             <li class="nav-item">

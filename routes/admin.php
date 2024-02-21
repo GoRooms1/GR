@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\BotMessageTemplateController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CostTypeController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HotelController;
@@ -101,3 +102,5 @@ Route::post('bot_message_templates/{botMessageTemplate}/send_test', [BotMessageT
 Route::post('bot_message_templates/{botMessageTemplate}/send_onetime', [BotMessageTemplateController::class, 'sendOnetime'])->name('bot_message_templates.send-onetime');
 
 Route::resource('ad_banners', AdBannerController::class)->except('show');
+
+Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
