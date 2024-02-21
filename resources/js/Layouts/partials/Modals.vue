@@ -4,6 +4,7 @@
  <search-filter-modal ref="filters" v-if="$page.props?.has_filters && $page.props?.modals?.filters === true"/>
  <auth-modal ref="auth" v-show="$page.props?.modals?.auth === true"/>
  <favorites ref="favorites" v-if="$page.props?.modals?.favorites === true"/>
+ <reviews-modal ref="reviews" v-if="$page.props?.modals?.reviews === true" :reviews="reviews" :loading="reviewsLoading"/>
 </template>
 
 <script>
@@ -11,11 +12,15 @@ import { defineAsyncComponent } from 'vue'
 import BookingForm from '@/components/widgets/BookingForm.vue'
 import AuthModal from '@/components/widgets/AuthModal.vue'
 import Favorites from '@/components/widgets/Favorites.vue'
+import ReviewsModal from '@/components/widgets/ReviewsModal.vue'
+import axios from 'axios';
 export default {
-  components: {    
+  components: {
+    axios,    
     BookingForm,
     AuthModal,
-    Favorites,        
+    Favorites,
+    ReviewsModal,       
     SearchFilterModal: defineAsyncComponent(() =>
       import('@/components/widgets/SearchFilterModal.vue')
     ),
@@ -32,6 +37,9 @@ export default {
 
     this.$eventBus.on("favorites-open", (e) => this.openFavorites());
     this.$eventBus.on("favorites-close", (e) => this.closeFavorites());
+
+    this.$eventBus.on("reviews-open", (e) => this.openReviews(e));
+    this.$eventBus.on("reviews-close", (e) => this.closeReviews());
   },
   unmounted() {
     this.$eventBus.off("booking-open");
@@ -45,27 +53,31 @@ export default {
 
     this.$eventBus.off("favorites-open");
     this.$eventBus.off("favorites-close");
+
+    this.$eventBus.off("reviews-open");
+    this.$eventBus.off("reviews-close");
   },
   data() {
     return {
-      bookingRoom: null,      
+      bookingRoom: null,
+      reviews: [],
+      reviewsLoading: false,      
     }
   },
   methods: {
-    setFixed() {
-      document.body.classList.add("fixed");
+    removeBodyScroll() {
+      document.body.classList.add("overflow-hidden");
     },
-    removeFixed() {
-      if (this.$page.props?.filters?.as != 'map')
-        document.body.classList.remove("fixed");   
+    returnBodyScroll() {
+      document.body.classList.remove("overflow-hidden");
     },
     openBookingModal(e) {
-      this.setFixed();
+      this.removeBodyScroll();
       this.bookingRoom = e;      
       this.$page.props.modals.booking = true;      
     },
     closeBookingModal() {
-      this.removeFixed();    
+      this.returnBodyScroll();    
       this.bookingRoom = null;
       setTimeout(() => {
         this.$page.props.modals.booking = false;
@@ -73,12 +85,12 @@ export default {
     },
 
     openFilters() {
-      this.setFixed();     
+      this.removeBodyScroll();     
       this.$page.props.modals.filters = true;
     },
     closeFilters() {
-      this.removeFixed(); 
-      if (this.$refs?.filters?.close)              
+      this.returnBodyScroll(); 
+      if (this.$refs?.filters?.close)
         this.$refs.filters.close();
       else
         this.$page.props.modals.filters = false;    
@@ -93,7 +105,7 @@ export default {
           only: ["auth"],          
           onFinish: () => {
             if (this.$page.props?.auth === false) {
-              this.setFixed();     
+              this.removeBodyScroll();     
               this.$page.props.modals.auth = true;
             }
             else {
@@ -103,7 +115,7 @@ export default {
         });             
     },
     closeAuth() {
-      this.removeFixed(); 
+      this.returnBodyScroll(); 
       this.$page.props.modals.auth = false;
       this.$page.props.flash.message = null;
 
@@ -113,13 +125,38 @@ export default {
       if (this.$page.component.startsWith('Auth'))
         this.$inertia.get("/");
     },
+
     openFavorites() {
-      this.setFixed();
+      this.removeBodyScroll();
       this.$page.props.modals.favorites = true;                 
     },
     closeFavorites() {
-      this.removeFixed(); 
+      this.returnBodyScroll(); 
       this.$page.props.modals.favorites = false;
+    },
+
+    openReviews(e) {
+      this.$page.props.modals.reviews = true;
+      this.removeBodyScroll();
+      this.reviewsLoading = true;
+
+      axios
+        .get('/api/reviews', {
+          params: e,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })        
+        .then(response => {        
+          let data = response?.data?.payload?.reviews;
+          if (data) this.reviews = data;
+          this.reviewsLoading = false;         
+        });
+    },
+    closeReviews() {
+      this.returnBodyScroll(); 
+      this.$page.props.modals.reviews = false;
+      this.reviews = [];
     },
   } 
 };

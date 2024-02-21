@@ -141,10 +141,8 @@ export default {
   },
   methods: {    
     hide() {
-      this.$page.props.modals.menu = false;
-
-      if (this.$page.props?.filters?.as != 'map')
-        document.body.classList.remove("fixed");     
+      this.$page.props.modals.menu = false;      
+      document.body.classList.remove("overflow-hidden");     
     },    
     handleResize() {      
       if (typeof window !== "undefined") this.screenWidth = window.innerWidth;

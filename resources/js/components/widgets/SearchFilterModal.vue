@@ -483,11 +483,9 @@ export default {
 
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", this.handleResize);        
-      }
+      }      
       
-      if (this.$page.props?.filters?.as != 'map')
-        document.body.classList.remove("fixed");
-      
+      document.body.classList.remove("overflow-hidden");      
       this.$page.props.modals.filters = false;    
     },    
     updateFoundMessage() {
