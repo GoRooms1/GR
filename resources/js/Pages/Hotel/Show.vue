@@ -90,8 +90,8 @@
               >
               <img src="/img/star2.svg" alt="star" width="20" height="20"/>
               <p class="text-[14px] leading-[16px]">
-                <span class="font-semibold">0</span>
-                (0)
+                <span class="font-semibold">{{ hotel.avg_rating }}</span>
+                ({{ hotel.reviews_count }})
               </p>
             </div>
             <cashback-tag :with-chashback="hotel?.is_cashback ?? false" />
@@ -135,8 +135,84 @@
               >
                 <div id="map" class="w-full" style="height: 416px"></div>
               </tab>
-              <tab title="Отзывы" disabled="true">
-                
+              <tab title="Отзывы">
+                <div class="overflow-hidden">
+                  <div class="min-h-[416px] rounded-[24px] overflow-hidden bg-[#6170FF] sm:pt-[41px] pb-[41px] pt-[90px] sm:px-[20px] px-[10px]">
+                    <div class="swiper-feed-wrapper relative overflow-hidden w-full h-[100%]">
+                      <button class="swiper-feed-button-prev cursor-pointer absolute top-[50%] transform translate-1/2 left-0 w-[32px] h-[32px] bg-white rounded-[8px] sm:flex hidden  items-center justify-center">
+                        <svg width="20" height="20" viewbox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12.084 5.75037L7.91732 9.91703L12.084 14.0837" stroke="#515561" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                      <swiper 
+                        class="swiper-feed overflow-hidden sm:mx-[52px] mx-0 h-[100%]"
+                        :loop="false"
+                        :space-between="32"
+                        :slides-per-view="2"
+                        :slides-per-group="2"
+                        :navigation="{
+                          nextEl: '.swiper-feed-button-next',
+                          prevEl: '.swiper-feed-button-prev',
+                          enabled: true,
+                        }"
+                        :breakpoints="{
+                          320: {
+                            slidesPerView: 1.2,
+                            slidesPerGroup: 1,
+                            spaceBetween: 16,
+                            navigation: {
+                              enabled: false,
+                            },
+                          },
+                          600: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,                          
+                          },
+                          761: {
+                            slidesPerView: 1,
+                            slidesPerGroup: 1
+                          },
+                          1200: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2
+                          },
+                        }"
+                      >
+                        <swiper-slide v-for="review in hotel.reviews">
+                          <div class="bg-white p-[24px] rounded-[24px]">
+                            <div class="flex items-center justify-between py-[6px] mb-[24px]">
+                              <div class="flex items-center gap-[8px]">
+                                <svg width="20" height="20" viewbox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M10 14.1667L5 16.6667L6.25 11.6667L2.5 7.5L7.91667 7.08333L10 2.5L12.0833 7.08333L17.5 7.5L13.75 11.6667L15 16.6667L10 14.1667Z" stroke="#6170FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span class="text-[14px] leading-[16px] font-semibold">{{ review.avg_rating }}</span>
+                              </div>
+                              <span class="text-[16px] leading-[19px] font-semibold">{{ review.name }}</span>
+                              <span class="text-[12px] leading-[14px]">{{ (new Date(review.created_at)).toLocaleDateString('ru', {day: 'numeric', month: 'long', year: 'numeric',}) }}</span>
+                            </div>
+                            <p class="text-[14px] leading-[16px] mb-[24px]">{{ review.text }}</p>
+                            <div class="grid grid-cols-2 gap-x-[24px] gap-[16px]">
+                              <div v-for="rating in review.ratings">
+                                <div class="flex items-center justify-between mb-[8px]">
+                                  <span class="text-[12px] leading-[14px]">{{ rating.category_name }}</span>
+                                  <span class="text-[12px] leading-[14px]">{{ rating.value }}</span>
+                                </div>
+                                <div class="w-full h-[4px] bg-[#EAEFFD] rounded-[2px] overflow-hidden">
+                                  <div class="h-full bg-[#6170FF] rounded-[2px]" :style="'width: '+(rating.value*10)+'%;'"></div>
+                                </div>
+                              </div>                              
+                            </div>
+                          </div>
+                        </swiper-slide>
+                      </swiper>
+                      <button class="swiper-feed-button-next cursor-pointer absolute top-[50%] transform translate-1/2 right-0 w-[32px] h-[32px] bg-white rounded-[8px] sm:flex hidden items-center justify-center">
+                        <svg width="20" height="20" viewbox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7.91602 14.2496L12.0827 10.083L7.91602 5.9163" stroke="#515561" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>                
               </tab>
             </tabs>
           </div>

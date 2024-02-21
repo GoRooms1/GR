@@ -10,8 +10,13 @@ use Domain\Attribute\DataTransferObjects\AttributeSimpleData;
 use Domain\Hotel\Actions\MinimumCostsCalculation;
 use Domain\Hotel\Models\Hotel;
 use Domain\Media\DataTransferObjects\MediaImageData;
+use Domain\Review\Actions\GetHotelAvgRatingsAction;
+use Domain\Review\Actions\GetHotelAvgRatingValueAction;
+use Domain\Review\DataTransferObjects\RatingAvgData;
+use Domain\Review\DataTransferObjects\ReviewCardData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\Lazy;
 
 final class HotelShowData extends \Parent\DataTransferObjects\Data
 {
@@ -30,7 +35,11 @@ final class HotelShowData extends \Parent\DataTransferObjects\Data
         #[DataCollectionOf(AttributeSimpleData::class)]
         public readonly null|DataCollection $attrs,    
         #[DataCollectionOf(MinCostsData::class)]
-        public readonly null|DataCollection $min_costs,
+        public readonly null|DataCollection $min_costs,       
+        public ?int $reviews_count,
+        public float|int $avg_rating,
+        #[DataCollectionOf(ReviewCardData::class)]
+        public null|Lazy|DataCollection $reviews,
     ) {
     }
 
@@ -47,7 +56,10 @@ final class HotelShowData extends \Parent\DataTransferObjects\Data
             'type' => HotelTypeSimpleData::from($hotel->type),                        
             'metros' => MetroSimpleData::collectionWithAddressSlug($hotel->metros, $hotel->address),
             'attrs' => AttributeSimpleData::collection($hotel->attrs),        
-            'min_costs' => MinimumCostsCalculation::run($hotel),
+            'min_costs' => MinimumCostsCalculation::run($hotel),            
+            'reviews_count' => $hotel->reviews->count(),
+            'avg_rating' => GetHotelAvgRatingValueAction::run($hotel),
+            'reviews' => ReviewCardData::collection($hotel->reviews)
         ]);
     }
 }

@@ -11,6 +11,7 @@ use Domain\Hotel\Models\Hotel;
 use Domain\Image\Models\Image;
 use Domain\Image\Traits\UseImages;
 use Domain\PageDescription\Models\PageDescription;
+use Domain\Review\Models\Review;
 use Domain\Room\Actions\GetAllRoomCosts;
 use Domain\Room\Builders\RoomBuilder;
 use Domain\Room\DataTransferObjects\RoomData;
@@ -140,6 +141,13 @@ final class Room extends Model implements HasMedia
     public function attrs(): BelongsToMany
     {
         return $this->belongsToMany(Attribute::class, 'attribute_room', 'room_id', 'attribute_id');
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this
+            ->hasMany(Review::class)
+            ->with('ratings');
     }
 
     /**

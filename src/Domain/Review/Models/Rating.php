@@ -39,8 +39,7 @@ class Rating extends Model
         'value',
     ];
 
-    protected $with = [
-        'review',
+    protected $with = [       
         'category',
     ];
 

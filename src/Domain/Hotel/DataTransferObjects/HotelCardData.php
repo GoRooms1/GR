@@ -9,6 +9,9 @@ use Domain\Address\DataTransferObjects\MetroSimpleData;
 use Domain\Hotel\Actions\MinimumCostsCalculation;
 use Domain\Hotel\Models\Hotel;
 use Domain\Media\DataTransferObjects\MediaImageData;
+use Domain\Review\Actions\GetHotelAvgRatingsAction;
+use Domain\Review\Actions\GetHotelAvgRatingValueAction;
+use Domain\Review\DataTransferObjects\RatingAvgData;
 use Domain\Room\Actions\GetMaxDiscountAction;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\DataCollection;
@@ -30,6 +33,10 @@ final class HotelCardData extends \Parent\DataTransferObjects\Data
         #[DataCollectionOf(MinCostsData::class)]
         public readonly null|DataCollection $min_costs,
         public readonly ?int $max_discount,
+        #[DataCollectionOf(RatingAvgData::class)]
+        public null|Lazy|DataCollection $ratings,
+        public ?int $reviews_count,
+        public float|int $avg_rating,
     ) {
     }
 
@@ -47,6 +54,9 @@ final class HotelCardData extends \Parent\DataTransferObjects\Data
             'metros' => MetroSimpleData::collectionWithAddressSlug($hotel->metros, $hotel->address),            
             'min_costs' => $minCosts,
             'max_discount' => GetMaxDiscountAction::run($minCosts),
+            'ratings' => RatingAvgData::collection(GetHotelAvgRatingsAction::run($hotel)),
+            'reviews_count' => $hotel->reviews->count(),
+            'avg_rating' => GetHotelAvgRatingValueAction::run($hotel),
         ]);
     }
 }

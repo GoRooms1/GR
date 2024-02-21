@@ -32,13 +32,14 @@
           <span class="text-xl font-bold py-2">{{hotel.max_discount}}%</span>
         </div>
       </swiper>
-      <div class="bg-white rounded-2xl p-5 shadow-xl relative z-10">
+      <div v-if="!ratingOpened" class="bg-white rounded-2xl p-5 shadow-xl relative z-10">
         <div class="flex mb-4">
-          <button           
-            class="btn-disabled flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"
+          <button @click="if (hotel.reviews_count > 0) ratingOpened = true;"
+            class="flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"
           >
             <img class="mr-2 block" src="/img/star.svg" alt="star" width="20" height="20"/>
-            <span><b>0</b> (0)</span>
+            <b>{{hotel.avg_rating}}</b>
+            ({{ hotel.reviews_count }})
           </button>          
           <cashback-tag :with-chashback="hotel.is_cashback ?? false" />
         </div>
@@ -61,6 +62,35 @@
           </div>
         </div>
       </div>
+
+      <div v-if="ratingOpened"
+        class="bg-white rounded-2xl p-5 shadow-xl relative z-10"       
+      >
+        <div class="flex mb-4">
+          <button @click="ratingOpened = false" class="flex text-sm py-1 px-2 rounded-md mr-2">
+            <div class="mr-2">
+              <img src="/img/star2.svg">
+            </div>
+            <div>
+              <b>{{hotel.avg_rating}}</b>
+              ({{ hotel.reviews_count }})
+            </div>
+          </button>          
+          <button @click="$eventBus.emit('reviews-open', {hotel_id: hotel.id})" class="ml-auto flex py-1.5 px-3 rounded-lg text-white bg-[#6170FF] text-sm">
+            Прочитать отзывы
+          </button>        
+        </div>
+        <h4 class="text-xl font-semibold mb-6">Рейтинг</h4>
+        <div class="grid grid-cols-2 grid-rows-3 gap-[24px]">
+          <div v-for="rating in hotel.ratings" class="flex h-[26px] justify-between relative">
+            <div class="text-xs">{{ rating.category_name }}</div>
+            <div class="text-xs">{{ rating.value }}</div>
+            <div class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"></div>
+            <div class="absolute bottom-0 left-0 h-[4px] bg-[#6170FF] rounded-[2px]" :style="'width: '+(rating.value*10)+'%;'"></div>
+          </div>        
+        </div>
+      </div>
+
       <div
         class="relative bg-white rounded-bl-2xl rounded-br-2xl px-4 pb-4 pt-6 mx-4 flex flex-col"
       >
@@ -136,6 +166,8 @@ export default {
           noSwipingClass: "swiper-slide",
         },
       },
+      favProcessing: false,
+      ratingOpened: false,
     };
   },
   computed: {

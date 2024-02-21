@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Api\AdBannerController;
+use App\Http\Controllers\Api\ReviewsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Client\DeleteController;
 use App\Http\Controllers\Client\FavoritesController;
@@ -88,3 +89,5 @@ Route::post('client/favorites/deleteAll', [FavoritesController::class, 'deleteAl
 //delete clients user by id and hash token
 Route::get('client/delete/verify/{id}/{hash}', [DeleteController::class, 'verify'])
   ->name('client.delete.verify');
+
+Route::get('/api/reviews', [ReviewsController::class, 'getReviews']);

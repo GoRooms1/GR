@@ -25,18 +25,18 @@
         <span class="text-xl lg:text-2xl font-bold py-2">{{room.max_discount}}%</span>
       </div>
     </swiper>
-    <div
+    <div  v-if="!ratingOpened"
       class="flex flex-col bg-white rounded-2xl p-5 xl:p-6 shadow-xl relative z-10 xl:w-full overflow-hidden"
       :class="shortView ? 'lg:h-[298px]' : 'xl:h-96'"
     >
       <div class="flex mb-4">
-        <button         
-          class="btn-disabled flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"
+        <button @click="if (room.reviews_count > 0) ratingOpened = true;"      
+          class="flex text-sm py-1 px-2 rounded-md bg-sky-100 mr-2"                   
         >
           <img class="mr-2 block" src="/img/star.svg" alt="star" width="20" height="20"/>
           <span>
-            <b>0</b>
-            (0)
+            <b>{{room.avg_rating}}</b>
+            ({{ room.reviews_count }})
           </span>
         </button>        
         <button @click="toggleFavorite()"         
@@ -103,7 +103,36 @@
           Забронировать
         </Button>
       </div>
-    </div>    
+    </div>
+    <div v-if="ratingOpened"
+      class="flex flex-col bg-white rounded-2xl p-5 xl:p-6 shadow-xl relative z-10 xl:w-full overflow-hidden"
+      :class="shortView ? 'lg:h-[298px]' : 'xl:h-96'"
+    >
+      <div class="flex mb-4">
+        <button @click="ratingOpened = false" class="flex text-sm py-1 px-2 rounded-md mr-2">
+          <div class="mr-2">
+            <img src="/img/star2.svg">
+          </div>
+          <div>
+            <b>{{room.avg_rating}}</b>
+            ({{ room.reviews_count }})
+          </div>
+        </button>          
+        <button @click="$eventBus.emit('reviews-open', {room_id: room.id})" class="ml-auto flex py-1.5 px-3 rounded-lg text-white bg-[#6170FF] text-sm">
+          Прочитать отзывы
+        </button>        
+      </div>
+      <h4 class="text-xl font-semibold mb-6">Рейтинг</h4>
+      <div class="grid grid-cols-2 grid-rows-3 gap-[24px]">
+        <div v-for="rating in room.ratings" class="flex h-[26px] justify-between relative">
+          <div class="text-xs">{{ rating.category_name }}</div>
+          <div class="text-xs">{{ rating.value }}</div>
+          <div class="absolute bottom-0 left-0 h-[4px] w-full bg-[#EAEFFD] rounded-[2px]"></div>
+          <div class="absolute bottom-0 left-0 h-[4px] bg-[#6170FF] rounded-[2px]" :style="'width: '+(rating.value*10)+'%;'"></div>
+        </div>        
+      </div>
+    </div>
+    
     <div v-if="!shortView"
       class="relative bg-white rounded-bl-2xl rounded-br-2xl xl:rounded-bl-none xl:rounded-tr-2xl px-4 pb-4 pt-4 mx-4 xl:mx-0 xl:w-1/3 xl:h-80 flex flex-col justify-between"
     >
@@ -182,7 +211,8 @@ export default {
           noSwipingClass: "swiper-slide",
         },
       },
-      favProcessing: false,           
+      favProcessing: false,
+      ratingOpened: false,
     };
   },
   computed: {

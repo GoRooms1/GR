@@ -8,6 +8,9 @@ use Domain\Attribute\DataTransferObjects\AttributeSimpleData;
 use Domain\Category\DataTransferObjects\CategoryData;
 use Domain\Hotel\DataTransferObjects\RoomHotelData;
 use Domain\Media\DataTransferObjects\MediaImageData;
+use Domain\Review\Actions\GetRoomAvgRatingsAction;
+use Domain\Review\Actions\GetRoomAvgRatingValueAction;
+use Domain\Review\DataTransferObjects\RatingAvgData;
 use Domain\Room\Actions\GetAllRoomCosts;
 use Domain\Room\Actions\GetMaxDiscountAction;
 use Domain\Room\Models\Room;
@@ -36,11 +39,15 @@ final class RoomCardData extends \Parent\DataTransferObjects\Data
         #[DataCollectionOf(RoomCostsData::class)]
         public readonly null|Lazy|DataCollection $costs,
         public readonly ?int $max_discount,
+        #[DataCollectionOf(RatingAvgData::class)]
+        public null|Lazy|DataCollection $ratings,
+        public ?int $reviews_count,
+        public float|int $avg_rating,
     ) {
     }
 
     public static function fromModel(Room $room): self
-    {
+    {        
         $costs = GetAllRoomCosts::run($room);        
         return self::from([
             ...$room->toArray(),
@@ -52,6 +59,9 @@ final class RoomCardData extends \Parent\DataTransferObjects\Data
             'category' => $room->category ? CategoryData::fromModel($room->category) : null,
             'costs' => $costs,
             'max_discount' => GetMaxDiscountAction::run($costs),
+            'ratings' => RatingAvgData::collection(GetRoomAvgRatingsAction::run($room)),
+            'reviews_count' => $room->reviews->count(),
+            'avg_rating' => GetRoomAvgRatingValueAction::run($room),
         ]);
     }
 }

@@ -65,6 +65,15 @@ class Review extends Model implements HasMedia
         'book_number',        
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d\TH:i:sP',
+        'updated_at' => 'datetime:Y-m-d\TH:i:sP',
+    ];
+
+    protected $with = [
+        'ratings',
+    ];
+
     public function ratings(): HasMany
     {
         return $this
