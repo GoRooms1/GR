@@ -25,4 +25,13 @@ enum BookingStatus: string
             'value' => $this->trans(),
         ];
     }
+
+    public static function array(): array
+    {
+        return array_combine(
+            array_column(self::cases(), 'value'), 
+            array_map(fn($el) => $el->trans(), self::cases())
+        );
+    }
+
 }

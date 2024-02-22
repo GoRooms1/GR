@@ -48,7 +48,7 @@ Route::resource('attribute_categories', AttributeCategoriesController::class);
 Route::resource('hotels/{hotel?}/categories', CategoryController::class)->except('index');
 Route::resource('cost_types', CostTypeController::class)->except('show');
 
-Route::resource('bookings', BookingController::class)->except('destroy', 'create', 'update', 'edit', 'store');
+Route::resource('bookings', BookingController::class)->except('destroy', 'create', 'edit', 'store');
 
 Route::resource('hotel_types', HotelTypeController::class)->except('show');
 Route::resource('ratings', RatingCategoryController::class)->except('show');
