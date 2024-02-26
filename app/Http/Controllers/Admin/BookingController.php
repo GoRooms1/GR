@@ -29,7 +29,7 @@ class BookingController extends Controller
                 $q->where('client_fio', 'like', '%'.$q_name.'%');
             })
             ->when($q_phone, function ($q) use ($q_phone) {
-                $q->where('clien_phone', 'like', '%'.$q_phone.'%');
+                $q->where('client_phone', 'like', '%'.$q_phone.'%');
             })
             ->when($q_date, function ($q) use ($q_date) {
                 $q->whereDate('created_at', '=', $q_date);
