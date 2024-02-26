@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Moderator\BookingController;
 use App\Http\Controllers\Moderator\ImageController;
 use App\Http\Controllers\Moderator\CategoryController;
 use App\Http\Controllers\Moderator\CostPeriodsController;
@@ -20,6 +21,9 @@ Route::post('/hotel/{id}', [ObjectController::class, 'update'])->name('object.up
 
 Route::post('/hotel/{id}/upload', [ObjectController::class, 'upload'])->name('object.upload');
 Route::post('/hotel/{id}/unupload', [ObjectController::class, 'unupload'])->name('object.unupload');
+
+Route::get('/hotel/{id}/bookings', [BookingController::class, 'index'])->name('bookings.index');
+Route::put('/bookings/{booking}/update', [BookingController::class, 'update'])->name('bookings.update');
 
 Route::delete('/image/{image}', [ImageController::class, 'delete'])->name('image.delete');
 Route::post('/image/moderate/{image}', [ImageController::class, 'moderate'])->name('image.moderate');

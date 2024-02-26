@@ -88,9 +88,10 @@
                class="menu__item mr-3">
               Календарь цен
             </a>
-            <a href="#"
-               class="menu__item mr-3">
-              Маркетинг
+            <a href="{{ route('moderator.bookings.index', $hotel->id) }}"
+              class="menu__item mr-3 {{ Route::currentRouteNamed('moderator.bookings.index') ? 'active' : '' }}"
+            >
+              Бронирования
             </a>
             <a href="{{ route('moderator.object.edit', $hotel->id) }}"
                class="menu__item mr-3 {{ Route::currentRouteNamed('moderator.object.*') ? 'active' : '' }}"
