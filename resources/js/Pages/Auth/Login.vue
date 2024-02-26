@@ -11,8 +11,7 @@ export default {
     AppHead,
     Layout,    
   },
-  mounted() {
-    document.body.classList.add("fixed");
+  mounted() {    
     this.$page.props.flash.message = null;
     this.$page.props.modals.auth = true;    
   }

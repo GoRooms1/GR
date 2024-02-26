@@ -80,8 +80,7 @@ export default {
     }
   },
   methods: {
-    submitReset() {
-      console.log('submit reset');
+    submitReset() {      
       this.reset.post("/password/reset", {
         preserveState: true,
         preserveScroll: true,
