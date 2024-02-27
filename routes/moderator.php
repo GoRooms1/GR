@@ -6,6 +6,7 @@ use App\Http\Controllers\Moderator\CategoryController;
 use App\Http\Controllers\Moderator\CostPeriodsController;
 use App\Http\Controllers\Moderator\InstructionController;
 use App\Http\Controllers\Moderator\ObjectController;
+use App\Http\Controllers\Moderator\ReviewController;
 use App\Http\Controllers\Moderator\StaffController;
 use App\Http\Controllers\Moderator\RoomController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,11 @@ Route::post('/hotel/{id}/unupload', [ObjectController::class, 'unupload'])->name
 
 Route::get('/hotel/{id}/bookings', [BookingController::class, 'index'])->name('bookings.index');
 Route::put('/bookings/{booking}/update', [BookingController::class, 'update'])->name('bookings.update');
+
+Route::get('/hotel/{id}/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+Route::delete('/reviews/{review}', [ReviewController::class, 'delete'])->name('reviews.delete');
+Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
 
 Route::delete('/image/{image}', [ImageController::class, 'delete'])->name('image.delete');
 Route::post('/image/moderate/{image}', [ImageController::class, 'moderate'])->name('image.moderate');
