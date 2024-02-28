@@ -24,7 +24,7 @@ Route::post('/hotel/{id}/upload', [ObjectController::class, 'upload'])->name('ob
 Route::post('/hotel/{id}/unupload', [ObjectController::class, 'unupload'])->name('object.unupload');
 
 Route::get('/hotel/{id}/bookings', [BookingController::class, 'index'])->name('bookings.index');
-Route::put('/bookings/{booking}/update', [BookingController::class, 'update'])->name('bookings.update');
+Route::put('/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');
 
 Route::get('/hotel/{id}/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::delete('/reviews/{review}', [ReviewController::class, 'delete'])->name('reviews.delete');
