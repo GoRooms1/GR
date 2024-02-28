@@ -79,7 +79,7 @@
           </form>          
         </div>        
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-hover">
             <thead class="row__head_blue text-light">
             <tr>
               <th>Дата создания</th>
@@ -147,7 +147,9 @@
                       </option>
                     @endforeach
                     </select>
-                    <button disabled data="booking-save" data-action-url="{{ route('moderator.bookings.update', $booking) }}" class="btn btn-primary">Сохранить</button>
+                    <button disabled data="booking-save" data-action-url="{{ route('moderator.bookings.update', $booking) }}" class="btn btn-primary">
+                      <i class="fa fa-floppy-o"></i>
+                    </button>
                   </div>                  
                 </td>
               </tr>
