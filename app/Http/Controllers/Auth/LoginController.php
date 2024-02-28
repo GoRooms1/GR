@@ -64,7 +64,7 @@ class LoginController extends Controller
         }
 
         if ($user->is_moderate) {                              
-            return redirect(route('hotels.index'));
+            return Inertia::location(route('hotels.index'));
         }
 
         return redirect($this->redirectTo);
