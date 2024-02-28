@@ -10,10 +10,10 @@
 				<div class="flex bg-[#6170FF] rounded-t-3xl">
 					<button @click="tab = 'login'"
 						class="p-2 my-4 ml-4 mr-2 flex w-full items-center justify-center rounded-lg"
-            :class="tab === 'login' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2'">Вход</button>
+            :class="tab === 'login' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2 hover:bg-white hover:text-[#6170FF]'">Вход</button>
 					<button @click="tab = 'register'"
 						class="p-2 my-4 mr-4 ml-2 flex w-full items-center justify-center rounded-lg"
-            :class="tab === 'register' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2'">Регистрация</button>
+            :class="tab === 'register' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2 hover:bg-white hover:text-[#6170FF]'">Регистрация</button>
 				</div>
 				<form v-if="tab === 'login'" id="login-form" class="flex flex-col p-6 lg:p-4" @submit.prevent="submitLogin">
 					<div class="flex ml-auto items-center">
