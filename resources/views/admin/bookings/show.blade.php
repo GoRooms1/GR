@@ -22,7 +22,7 @@
             <h5 class="card-title font-weight-bold">Данные отеля</h5>
 
             <p>Отель: <b>{{ $booking->room ? $booking->room->hotel->name : null }}</b></p>
-            <p>Комната: <b>{{ $booking->room ? $booking->room->name ?? $booking->room->category->name : null  }}</b></p>
+            <p>Комната: <b>{{ $booking->room ? \Domain\Room\Actions\GetRoomFullNameAction::run($booking->room) : ''  }}</b></p>
 
             <p>Тип бронирования: <b>{{ $booking->type }}</b></p>
             @if($booking->book_type === 'hour')
@@ -32,6 +32,7 @@
             @if($booking['to-date'] !== null)
               <p>Выезд: <b>{{ $booking['to-date']->format('d.m.Y H:i') }}</b></p>
             @endif
+            <p>Статус: <b>{{ $booking->status ? \Domain\Room\Enums\BookingStatus::from($booking->status)->trans() : null }}</b></p>
           </div>
         </div>
       </div>
