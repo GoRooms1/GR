@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\RegisterClientFromBooking;
-use App\User;
 use Domain\Address\Actions\GetRegionalCenterByIpAction;
 use Domain\Auth\Actions\RegisterClientFromBookingAction;
 use Domain\Object\ViewModels\ObjectsViewModel;
@@ -38,11 +36,8 @@ class RoomController extends Controller
     {        
         $bookingData = BookingData::fromRequest($request);
         $booking = CreateBookingFromDataAction::run($bookingData);
-        BookRoomJob::dispatchSync($bookingData);       
-        
-        if (!$booking->user_id) {
-            RegisterClientFromBookingAction::run($booking);
-        }
+        BookRoomJob::dispatchSync($bookingData);
+        RegisterClientFromBookingAction::run($booking);
 
         return Redirect::back()->with(['message' => GenerateBookingMessageAction::run($bookingData)]);
     }

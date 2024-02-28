@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use Carbon\Carbon;
 use Domain\User\ValueObjects\ClientsPhoneNumberValueObject;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -81,6 +82,9 @@ class RegisterController extends Controller
             'gender' => $data['gender'],
             'is_client' => true,
             'password' => Hash::make($data['password']),
+            'notify_hot' => true,
+            'notify_review' => true,
+            'register_sent_at' => Carbon::now(),
         ]);
     }
 }

@@ -116,7 +116,8 @@ class User extends Authenticatable
         'notify_hot',
         'notify_review',
         'verification_sent_at',
-        'delete_token'
+        'delete_token',
+        'register_sent_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -124,11 +125,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'verification_sent_at' => 'datetime',
+        'register_sent_at' => 'datetime',
         'is_admin' => 'boolean',
         'is_moderate' => 'boolean',
         'is_client' => 'boolean',
         'notify_hot' => 'boolean',
-        'notify_review' => 'boolean'
+        'notify_review' => 'boolean',        
     ];
 
     /**
