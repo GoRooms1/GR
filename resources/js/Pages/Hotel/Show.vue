@@ -135,7 +135,7 @@
               >
                 <div id="map" class="w-full" style="height: 416px"></div>
               </tab>
-              <tab title="Отзывы">
+              <tab title="Отзывы" :disabled="(hotel?.reviews ?? []).length > 0 ? 'false' : 'true'">
                 <div class="overflow-hidden">
                   <div class="min-h-[416px] rounded-[24px] overflow-hidden bg-[#6170FF] sm:pt-[41px] pb-[41px] pt-[90px] sm:px-[20px] px-[10px]">
                     <div class="swiper-feed-wrapper relative overflow-hidden w-full h-[100%]">
