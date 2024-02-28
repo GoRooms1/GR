@@ -8,6 +8,9 @@ Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
 Disallow: /*?*
+Disallow */password/reset
+Disallow */email/verify
+Disallow */client
 
 User-agent: Yandex
 Disallow: /admin
@@ -19,6 +22,9 @@ Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
 Disallow: /*?*
+Disallow */password/reset
+Disallow */email/verify
+Disallow */client
 
 User-agent: GoogleBot
 Disallow: /admin
@@ -30,6 +36,9 @@ Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
 Disallow: /*?*
+Disallow */password/reset
+Disallow */email/verify
+Disallow */client
 
 User-agent: Mail.Ru
 Disallow: /admin
@@ -41,5 +50,8 @@ Disallow: /*?query=
 Disallow: */lk/
 Disallow: */register
 Disallow: /*?*
+Disallow */password/reset
+Disallow */email/verify
+Disallow */client
 
 Sitemap: https://gorooms.ru/sitemap.xml
