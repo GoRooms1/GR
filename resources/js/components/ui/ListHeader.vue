@@ -61,7 +61,7 @@
             >
               <button
                 
-                class="text-white h-8 pt-1 px-4 cursor-pointer text-blue-500 bg-white"
+                class="btn-disabled pointer-events-none text-white h-8 pt-1 px-4 text-blue-500 bg-white"
               >
                 <svg
                   class="img1 hidden"
@@ -97,7 +97,7 @@
                 </svg>
               </button>
               <button                
-                class="text-white h-8 pt-1 px-4 cursor-pointer"
+                class="btn-disabled pointer-events-none text-white h-8 pt-1 px-4"
               >
                 <svg
                   class="img1"
@@ -158,27 +158,27 @@
               class="flex items-center border border-white rounded-lg overflow-hidden"
             >
               <button                
-                class="text-white h-8 leading-8 px-4 border-r border-white hover:bg-white hover:text-[#6170FF] bg-white text-[#6170FF]"
+                class="btn-disabled pointer-events-none text-white h-8 leading-8 px-4 border-r border-white hover:bg-white hover:text-[#6170FF] bg-white text-[#6170FF]"
               >
                 Любой
               </button>
               <button                
-                class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
+                class="btn-disabled pointer-events-none text-white px-2 h-8 leading-8 px-4 border-r border-white  hover:bg-white hover:text-[#6170FF]"
               >
                 6+
               </button>
               <button               
-                class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
+                class="btn-disabled pointer-events-none text-white px-2 h-8 leading-8 px-4 border-r border-white  hover:bg-white hover:text-[#6170FF]"
               >
                 7+
               </button>
               <button               
-                class="text-white px-2 h-8 leading-8 px-4 border-r border-white cursor-pointer hover:bg-white hover:text-[#6170FF]"
+                class="btn-disabled pointer-events-none text-white px-2 h-8 leading-8 px-4 border-r border-white  hover:bg-white hover:text-[#6170FF]"
               >
                 8+
               </button>
               <button                
-                class="text-white px-2 h-8 leading-8 px-4 cursor-pointer hover:bg-white hover:text-[#6170FF]"
+                class="btn-disabled pointer-events-none text-white px-2 h-8 leading-8 px-4  hover:bg-white hover:text-[#6170FF]"
               >
                 9+
               </button>
