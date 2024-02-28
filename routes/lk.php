@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Lk\BookingController;
 use App\Http\Controllers\Lk\CategoryController;
 use App\Http\Controllers\Lk\CostPeriodsController;
 use App\Http\Controllers\Lk\InstructionController;
@@ -70,3 +71,6 @@ Route::get('/cost/{id}/cost-periods', [CostPeriodsController::class, 'getCostPer
 Route::get('/cost/{id}/cost-period', [CostPeriodsController::class, 'getCostPeriodByCostId'])->name('cost-period.get');
 Route::post('/cost-periods', [CostPeriodsController::class, 'create'])->name('cost-periods.create');
 Route::delete('/cost-periods/{id}', [CostPeriodsController::class, 'destroy'])->name('cost-periods.destroy');
+
+Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
+Route::put('/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');

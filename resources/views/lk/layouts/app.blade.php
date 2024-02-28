@@ -89,9 +89,10 @@
                class="menu__item">
               Календарь цен
             </a>
-            <a href="#"
-               class="menu__item">
-              Маркетинг
+            <a href="{{ route('lk.bookings.index') }}"
+              class="menu__item {{ Route::currentRouteNamed('lk.bookings.index') ? 'active' : '' }}"
+            >
+              Бронирования
             </a>
             <a href="{{ route('lk.object.edit') }}"
                class="menu__item {{ Route::currentRouteNamed('lk.object.*') ? 'active' : '' }}"
