@@ -30,20 +30,20 @@ class StatusUpdate extends Command
      */
     public function handle()
     {      
-        $bookings = Booking::whereIn('status', [BookingStatus::Wait, BookingStatus::StayinAtHotel])
+        $bookings = Booking::whereIn('status', ['wait', 'in'])
             ->whereNotNull(['from-date', 'to-date'])
             ->get();
         $now = Carbon::now('Europe/Moscow')->shiftTimezone(config('app.timezone'));
         
         foreach ($bookings as $booking) {           
             if ($booking['to-date']->lessThan($now)) {
-                $booking->status = BookingStatus::CheckOut;
+                $booking->status = 'out';
                 $booking->save();
                 continue;
             }
 
             if ($booking['from-date']->lessThan($now)) {
-                $booking->status = BookingStatus::StayinAtHotel;
+                $booking->status = 'in';
                 $booking->save();
                 continue;
             }           
