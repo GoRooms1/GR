@@ -125,7 +125,10 @@
                 <td>
                   <div class="d-flex">                   
                     <select name="status" data="booking-status-select" class="mr-2 form-control w-auto font-weight-bold">
-                    @foreach (\Domain\Room\Enums\BookingStatus::array() as $key => $value)
+                      <option value="">
+                        -
+                      </option>
+                      @foreach (\Domain\Room\Enums\BookingStatus::array() as $key => $value)
                       <option value="{{ $key }}"
                         @if ($key == $booking->status)
                             selected="selected"
@@ -151,7 +154,7 @@
                       >
                         {{ $value }}
                       </option>
-                    @endforeach
+                      @endforeach
                     </select>
                     <button disabled data="booking-save" data-action-url="{{ route('admin.bookings.update', $booking) }}" class="btn btn-primary">
                       <i class="fa fa-floppy-o"></i>
