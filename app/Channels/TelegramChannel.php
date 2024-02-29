@@ -4,7 +4,7 @@ namespace App\Channels;
 
 use Illuminate\Notifications\Notification;
 
-class LogChannel
+class TelegramChannel
 {
     /**
      * Отправить переданное уведомление.
@@ -15,6 +15,6 @@ class LogChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        $message = $notification->toLog($notifiable);
+        $message = $notification->toTelegram($notifiable);        
     }
 }

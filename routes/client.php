@@ -36,5 +36,8 @@ Route::get('favorites', [FavoritesController::class, 'index'])
 Route::get('bookings', [BookingsController::class, 'index'])
   ->name('bookings');
 
-  Route::post('/review', [ReviewController::class, 'create'])
+Route::put('bookings/{booking}/cancel', [BookingsController::class, 'cancel'])
+  ->name('bookings.cancel');
+
+Route::post('/review', [ReviewController::class, 'create'])
   ->name('review.create');

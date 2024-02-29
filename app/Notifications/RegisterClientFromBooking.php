@@ -2,11 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Channels\SmsChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
 /**
- * Notify user when created general User-Hotel
+ * Notify user when Client regetered frim booking
  */
 class RegisterClientFromBooking extends Notification
 {
@@ -22,9 +23,8 @@ class RegisterClientFromBooking extends Notification
      * @return array
      */
     public function via($notifiable): array
-    {
-        $registerChannel = config('client.notifications.register');       
-        return [config('client.notifications.channels.'.$registerChannel)];
+    {             
+        return [SmsChannel::class];
     }
 
     /**     
@@ -43,6 +43,7 @@ class RegisterClientFromBooking extends Notification
     public function toSms($notifiable)
     {
         //TODO
+        $this->toLog($notifiable);
     }
 
     /**     
@@ -52,6 +53,7 @@ class RegisterClientFromBooking extends Notification
     public function toWhatsap($notifiable)
     {
         //TODO
+        $this->toLog($notifiable);
     }
 
     /**     
@@ -60,6 +62,7 @@ class RegisterClientFromBooking extends Notification
      */
     public function toMail($notifiable)
     {
+        //TODO
         $this->toLog($notifiable);
     }
 

@@ -97,7 +97,7 @@
               {{ booking?.status?.value }}
             </td>
             <td scope="col" class="px-6 py-3">
-              <Button v-if="booking?.status?.key != 'cc' && booking?.status?.key !='ch'" classes="w-full py-2 px-2 ml-2 h-auto" type="red">
+              <Button v-if="booking?.status?.key != 'cc' && booking?.status?.key !='ch'" @click="cancelBooking(booking.id)" :disabled="inProgress" classes="w-full py-2 px-2 ml-2 h-auto" type="red">
                 Отменить
               </Button>
             </td>
@@ -132,6 +132,7 @@ export default {
     return {
       reviewOpened: false,
       bookingForReview: null,
+      inProgress: false,
     }
   },
   methods: {
@@ -156,7 +157,23 @@ export default {
     closeReviewForm() {
       document.body.classList.remove("fixed");
       this.reviewOpened = false;
-    },       
+    },
+    cancelBooking(booking_id) {
+      this.$inertia.put('/client/bookings/'+booking_id+'/cancel', {}, {
+        preserveState: false,
+        preserveScroll: false,
+        only: ['errors', 'message', 'bookings'],
+        onStart: () => {
+          this.inProgress = true;
+        },
+        onError: () => {
+          alert("Ошибка!");
+        },
+        onFinish: () => {
+          this.inProgress = false;
+        },
+      });
+    }    
   }
 };
 </script>
