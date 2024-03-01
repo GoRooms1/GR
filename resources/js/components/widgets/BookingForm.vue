@@ -247,8 +247,8 @@ export default {
       cost: null,
       form: useForm({
         room_id: this.room?.id,
-        client_fio: null,
-        client_phone: null,
+        client_fio: this.$page.props?.user?.name ?? null,
+        client_phone: this.$page.props?.user?.phone ?? null,
         from_date: moment().format("DD.MM.YYYY"),
         from_time: null,
         to_date: null,
@@ -439,8 +439,8 @@ export default {
       this.amount = 0;
       this.cost = null;
       this.form.room_id = this.room?.id;
-      this.form.client_fio = null;
-      this.form.client_phone = null;
+      this.form.client_fio = this.$page.props?.user?.name ?? null;
+      this.form.client_phone = this.$page.props?.user?.phone ?? null;
       this.form.from_date = moment().format("DD.MM.YYYY");
       this.form.from_time = null;
       this.form.to_date = null;

@@ -8,6 +8,7 @@ use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Room\Actions\GetFavoriteRoomsAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
 use Domain\User\Actions\GetLoggedUserModeratorStatusAction;
+use Domain\User\DataTransferObjects\ClientUserData;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Str;
@@ -65,6 +66,7 @@ class HandleInertiaRequests extends Middleware
             'yandex_api_key' => fn() => config('services.yandex.map.key'),      
             'is_loading' => false,
             'auth' => fn() => !is_null(auth()->user()),
+            'user' => fn() => !is_null(auth()->user()) && auth()->user()?->is_client ? (ClientUserData::fromModel(auth()->user())) : null,
             'favorites' => fn() => GetFavoriteRoomsAction::run()->flatten(),            
         ]);
     }

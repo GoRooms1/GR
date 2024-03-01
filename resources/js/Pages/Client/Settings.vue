@@ -43,7 +43,7 @@
                   <div class="flex my-2">
                       <span>Телефон</span>                           
                   </div>
-                  <span class="flex w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500 bg-[#e5e7eb]">{{ user.phone }}</span>
+                  <span class="flex w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500 bg-[#e5e7eb]">{{ user.phone_hidden }}</span>
                   <div class="flex my-2">
                     <span>Пол</span>
                     <div v-if="userForm?.errors?.gender" class="text-[#E1183D] flex items-start text-sm">

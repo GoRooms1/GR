@@ -15,6 +15,7 @@ final class ClientUserData extends \Parent\DataTransferObjects\Data
     public function __construct(        
         public string $name,
         public ?string $phone,
+        public ?string $phone_hidden,
         public ?string $email,
         public ?string $gender,
         public bool $email_verified,
@@ -31,8 +32,9 @@ final class ClientUserData extends \Parent\DataTransferObjects\Data
         $phone = new ClientsPhoneNumberValueObject($user->phone);
         $email = filter_var($user->email, FILTER_VALIDATE_EMAIL) ? $user->email : null;
         return self::from([
-            'name' => $user->name,
-            'phone' => $phone->toHiddenDisplayValue(),
+            'name' => $user->name,            
+            'phone' => $phone->toDisplayValue(),
+            'phone_hidden' => $phone->toHiddenDisplayValue(),
             'email' => $email,
             'gender' => $user->gender,
             'email_verified' => $user->hasVerifiedEmail(),
