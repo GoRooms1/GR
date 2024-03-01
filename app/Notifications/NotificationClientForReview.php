@@ -3,19 +3,23 @@
 namespace App\Notifications;
 
 use App\Channels\SmsChannel;
+use Domain\Room\Models\Booking;
 use Domain\Room\Models\Room;
 use Domain\User\ValueObjects\ClientsPhoneNumberValueObject;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
 /**
- * Notify user when Client regetered frim booking
+ * Notify user when booking can be reviewed
  */
-class RegisterClientFromBooking extends Notification
+class NotificationClientForReview extends Notification
 {
     use Queueable;
-    public function __construct()
+
+    protected Booking $booking;
+    public function __construct(Booking $booking)
     {
+        $this->booking = $booking;
     }
 
     /**
@@ -25,7 +29,7 @@ class RegisterClientFromBooking extends Notification
      * @return array
      */
     public function via($notifiable): array
-    {             
+    {
         return [SmsChannel::class];
     }
 
@@ -44,27 +48,7 @@ class RegisterClientFromBooking extends Notification
      */
     public function toSms($notifiable)
     {
-        //TODO
-        $this->toLog($notifiable);
-    }
-
-    /**     
-     *
-     * @param  mixed  $notifiable    
-     */
-    public function toWhatsap($notifiable)
-    {
-        //TODO
-        $this->toLog($notifiable);
-    }
-
-    /**     
-     *
-     * @param  mixed  $notifiable    
-     */
-    public function toMail($notifiable)
-    {
-        //TODO
+       //TODO
         $this->toLog($notifiable);
     }
 
@@ -80,8 +64,14 @@ class RegisterClientFromBooking extends Notification
     }
 
     private function getMessageText($notifiable) {
-        $phone = new ClientsPhoneNumberValueObject($notifiable->phone);
-        $text = "Добро пожаловать в GoRooms.ru. Логин ЛК: ".$phone->toDisplayValue().", Пароль: ".$notifiable->code;
+        $room = Room::where('id', $this->booking->room_id)->first();
+        $hotel = $room->hotel;
+        $text = "Для начисления кэшбека, не забудьте оставить отзыв о «".$hotel->name."».";
+
+        if (!empty($notifiable->code) && password_verify($notifiable->code, $notifiable->password)) {
+            $phone = new ClientsPhoneNumberValueObject($notifiable->phone);
+            $text .= " Логин ЛК: ".$phone->toDisplayValue().", Пароль: ".$notifiable->code;
+        }
 
         return $text;
     }

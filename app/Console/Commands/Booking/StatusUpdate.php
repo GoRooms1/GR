@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands\Booking;
 
+use App\Notifications\NotificationClientForReview;
+use App\User;
 use Carbon\Carbon;
 use DateTimeZone;
 use Domain\Room\Enums\BookingStatus;
@@ -39,6 +41,9 @@ class StatusUpdate extends Command
             if ($booking['to-date']->lessThan($now)) {
                 $booking->status = 'out';
                 $booking->save();
+
+                $this->notifyClientForReview($booking);
+
                 continue;
             }
 
@@ -47,6 +52,23 @@ class StatusUpdate extends Command
                 $booking->save();
                 continue;
             }           
+        }
+    }
+
+    private function notifyClientForReview(Booking $booking)
+    {
+        if (!$booking->user_id) {
+            return;
+        }
+
+        try {
+            $user = User::find($booking->user_id);
+
+            if ($user->notify_review) {
+                $user->notify(new NotificationClientForReview($booking));
+            }
+        } catch (\Throwable $th) {
+            \Log::error("Error in client notification for review. Booking #".$booking->book_number);
         }
     }
 }
