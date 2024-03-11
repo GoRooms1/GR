@@ -26,7 +26,7 @@ class UniqueClientPhone implements Rule
      */
     public function passes($attribute, $value)
     {        
-        return !User::where('is_clien', true)
+        return !User::where('is_client', true)
             ->where('phone', ClientsPhoneNumberValueObject::fromNative($value)->toNative())
             ->exists();
     }
