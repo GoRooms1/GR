@@ -25,10 +25,12 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('costs:calculate-avg')
             ->dailyAt('00:00')
+            ->withoutOverlapping()
             ->runInBackground();
 
         $schedule->command('booking:status-update')
             ->everyMinute()
+            ->withoutOverlapping()
             ->runInBackground();
     }
 
