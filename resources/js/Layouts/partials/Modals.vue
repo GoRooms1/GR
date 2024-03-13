@@ -74,7 +74,7 @@ export default {
     openBookingModal(e) {
       this.removeBodyScroll();
       this.bookingRoom = e;      
-      this.$page.props.modals.booking = true;      
+      this.$page.props.modals.booking = true;
     },
     closeBookingModal() {
       this.returnBodyScroll();    
@@ -110,6 +110,7 @@ export default {
             }
             else {
               this.$inertia.get("/login");
+              this.returnBodyScroll();
             }
           },
         });             

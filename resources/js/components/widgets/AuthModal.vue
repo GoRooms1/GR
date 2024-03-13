@@ -247,6 +247,7 @@ export default {
         only: ['flash', 'auth', 'errors'],
         onSuccess: () => {
           this.resetForms();
+          document.body.classList.remove("overflow-hidden");
         }
       });
     },
@@ -254,7 +255,7 @@ export default {
       this.reset.post("/password/email", {
         preserveState: true,
         preserveScroll: true,
-        only: ['flash', 'auth', 'errors'],
+        only: ['flash', 'auth', 'errors'],       
       });
     },
     submitRegister() {      
@@ -264,6 +265,7 @@ export default {
         only: ['flash', 'auth', 'errors'],
         onSuccess: () => {
           this.resetForms();
+          document.body.classList.remove("overflow-hidden");
         }
       });
     },
