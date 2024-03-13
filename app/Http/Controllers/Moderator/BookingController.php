@@ -30,7 +30,7 @@ class BookingController extends Controller
                 $q->where('client_fio', 'like', '%'.$q_name.'%');
             })
             ->when($q_phone, function ($q) use ($q_phone) {
-                $q->where('client_phone', 'like', '%'.$q_phone.'%');
+                $q->whereRaw("REGEXP_REPLACE(client_phone, '[^0-9\+]+', '') like '%".preg_replace("/[^0-9\+]/", "", $q_phone)."%'");
             })
             ->when($q_date, function ($q) use ($q_date) {
                 $q->whereDate('created_at', '=', $q_date);
