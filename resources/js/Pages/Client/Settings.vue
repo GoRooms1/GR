@@ -21,9 +21,8 @@
                       </div>
                   </div>
                   <div class="w-full flex">
-                      <input :disabled="user.email != null" name="email" type="email" placeholder="Ваша@почта" v-model="userForm.email" 
-                        class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"
-                        :class="user.email != null ? 'bg-[#e5e7eb]' : ''"
+                      <input name="email" type="email" placeholder="Ваша@почта" v-model="userForm.email" 
+                        class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500"                        
                       >
                       <button v-if="!user.email_verified && user.email" @click="submitEmailVerify" 
                         class="w-1/3 py-2 px-2 ml-2 text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-green-500 hover:bg-green-800" type="button"

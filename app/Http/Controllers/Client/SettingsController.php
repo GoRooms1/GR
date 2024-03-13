@@ -30,8 +30,9 @@ class SettingsController extends Controller
             $user->password = Hash::make($request->get('password'));
         }
 
-        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL) || $request->get('email') !== $user->email) {
             $user->email = $request->get('email');
+            $user->email_verified_at = null;
         }
 
         $user->name = $request->get('name');

@@ -30,7 +30,7 @@ class UpdateUserSettingsRequest extends FormRequest
             'gender' => ['required', 'string', 'in:m,f'],
         ];
 
-        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL) || $this->get('email') !== $user->email) {
             $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users'];
         }
 
