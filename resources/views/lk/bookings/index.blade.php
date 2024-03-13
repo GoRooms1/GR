@@ -117,12 +117,18 @@
                 <td>{{ $booking->client_phone }}</td>
                 <td>{{ $booking->book_comment }}</td>
                 <td>
+                  @if (in_array($booking->status, ['ch', 'out']))
+                      
+                  @endif
                   <div class="d-flex">                   
                     <select name="status" data="booking-status-select" class="mr-2 form-control w-auto font-weight-bold">
                     @foreach (\Domain\Room\Enums\BookingStatus::array() as $key => $value)
                       <option value="{{ $key }}"
                         @if ($key == $booking->status)
-                            selected="selected"
+                          selected
+                        @endif
+                        @if (!in_array($key, ['ch', 'out']))
+                          hidden
                         @endif
                         @switch($key)
                           @case('wait')
@@ -146,7 +152,7 @@
                         {{ $value }}
                       </option>
                     @endforeach
-                    </select>
+                    </select>                    
                     <button disabled data="booking-save" data-action-url="{{ route('lk.bookings.update', $booking) }}" class="btn btn-primary">
                       <i class="fa fa-floppy-o"></i>
                     </button>

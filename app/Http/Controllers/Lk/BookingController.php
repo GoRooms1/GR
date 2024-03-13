@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LK\BookingUpdateRequest;
 use Auth;
 use Domain\Room\Models\Booking;
 use Illuminate\Http\Request;
@@ -65,7 +66,7 @@ class BookingController extends Controller
         ));
     }    
 
-    public function update(Request $request, Booking $booking)
+    public function update(BookingUpdateRequest $request, Booking $booking)
     {       
         if ($booking->room->hotel->id !== Auth::user()->personal_hotel->id) {
             throw new UnauthorizedException();
