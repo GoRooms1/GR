@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Inertia\Inertia;
 
 /**
  * edit Hotel
@@ -33,9 +34,9 @@ class ObjectController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return RedirectResponse
+     * @return RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         if (auth()->check() && auth()->user()->is_client) {
             return redirect()->route('client.settings');
@@ -89,7 +90,7 @@ class ObjectController extends Controller
 
         $hotel->saveAddress($request->get('address', ''));
 
-        return redirect()->route('lk.object.edit');
+        return Inertia::location(route('lk.object.edit'));
     }
 
     /**

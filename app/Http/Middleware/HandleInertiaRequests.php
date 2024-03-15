@@ -2,8 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use Cache;
 use Domain\Address\Actions\GetAvailibleCitiesCountAction;
+use Domain\Hotel\Actions\GetAllHotelTypesAction;
 use Domain\Hotel\Actions\GetAvailibleHotelsCountAction;
+use Domain\Hotel\DataTransferObjects\HotelTypeKeyNameData;
+use Domain\Hotel\Models\HotelType;
 use Domain\Room\Actions\GetAvailibleRoomsCountAction;
 use Domain\Room\Actions\GetFavoriteRoomsAction;
 use Domain\Settings\Actions\GetContactsSettingsAction;
@@ -65,9 +69,14 @@ class HandleInertiaRequests extends Middleware
             'is_moderator' => fn() => $isModerator,
             'yandex_api_key' => fn() => config('services.yandex.map.key'),      
             'is_loading' => false,
-            'auth' => fn() => !is_null(auth()->user()),
+            'auth' => fn() => !is_null(auth()->user()),            
             'user' => fn() => !is_null(auth()->user()) && auth()->user()?->is_client ? (ClientUserData::fromModel(auth()->user())) : null,
-            'favorites' => fn() => GetFavoriteRoomsAction::run()->flatten(),            
+            'favorites' => fn() => GetFavoriteRoomsAction::run()->flatten(),
+            'hotel_types' => Cache::remember('params_hotel_types', now()->addDays(30), function () {            
+                return HotelTypeKeyNameData::collection(GetAllHotelTypesAction::run());
+            }),
+            'dadata_token' => fn() => config('dadata.token'),
+            'dadata_suggest_url' => fn() => config('dadata.suggest_url'),
         ]);
     }
 }

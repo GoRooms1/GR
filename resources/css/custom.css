@@ -324,3 +324,19 @@
     background: url(/img/bg-hot.svg) top;
     background-size: cover;
 }
+
+.vue-dadata__suggestions {
+    max-height: 254px;
+    bottom: 36px;
+    -webkit-box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
+    -moz-box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
+    box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
+}
+
+.vue-dadata__suggestion-item:first-child {
+   margin-top: 12px;
+}
+
+.vue-dadata__suggestion-item:last-child {
+    margin-bottom: 12px;
+ }

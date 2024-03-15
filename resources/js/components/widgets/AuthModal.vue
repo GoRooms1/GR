@@ -6,31 +6,19 @@
 				class="absolute top-[12px] right-[16px] lg:static lg:w-[32px] lg:h-[32px] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
 			<img src="/img/close.svg" alt="close">
 			</button>
-			<div v-if="tab !== 'reset'" class="bg-white rounded-3xl mx-6 lg:mx-0">
-				<div class="flex bg-[#6170FF] rounded-t-3xl">
-					<button @click="tab = 'login'"
-						class="p-2 my-4 ml-4 mr-2 flex w-full items-center justify-center rounded-lg"
-            :class="tab === 'login' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2 hover:bg-white hover:text-[#6170FF]'">Вход</button>
-					<button @click="tab = 'register'"
-						class="p-2 my-4 mr-4 ml-2 flex w-full items-center justify-center rounded-lg"
-            :class="tab === 'register' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2 hover:bg-white hover:text-[#6170FF]'">Регистрация</button>
+			<div v-if="tab !== 'reset'" class="bg-white rounded-3xl mx-6 lg:mx-0">        
+				<div class="bg-[#6170FF] rounded-t-3xl">
+          <div class="w-100 text-xl text-white text-center p-2">Гость</div>
+          <div class="flex">
+            <button @click="tab = 'login'"
+              class="p-2 my-2 mb-4 ml-4 mr-2 flex w-full items-center justify-center rounded-lg"
+              :class="tab === 'login' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2 hover:bg-white hover:text-[#6170FF]'">Вход</button>
+            <button @click="tab = 'register'"
+              class="p-2 my-2 mb-4 mr-4 ml-2 flex w-full items-center justify-center rounded-lg"
+              :class="tab === 'register' ? 'bg-white text-[#6170FF]' : 'bg-[#6170FF] text-white border-white border-2 hover:bg-white hover:text-[#6170FF]'">Регистрация</button>
+          </div>
 				</div>
-				<form v-if="tab === 'login'" id="login-form" class="flex flex-col p-6 lg:p-4" @submit.prevent="submitLogin">
-					<div class="flex ml-auto items-center">
-						<span class="flex mr-2">
-						  Отельер
-						</span>
-						<input v-model="login.hotelier" name="is_otel" type="checkbox" class="flex w-5 h-5 accent-[#6170FF]">
-					</div>
-					<div class="flex mt-2 items-start" v-if="login?.hotelier">
-						<span>Email</span>
-						<div v-if="login?.errors?.email" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
-              <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
-              {{ login?.errors?.email }}
-						</div>						
-					</div>
-					<input v-if="login?.hotelier" name="email" type="email" placeholder="Ваша@почта" v-model="login.email"
-						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
+				<form v-if="tab === 'login'" id="login-form" class="flex flex-col p-6 lg:p-4" @submit.prevent="submitLogin">					
 					<div class="flex mt-2" v-if="!login?.hotelier">
 						<span>Телефон</span>
 						<div v-if="login?.errors?.phone" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
@@ -43,7 +31,7 @@
             v-maska
             :data-maska="phoneMask"
             placeholder="+7 (___) ___ __-__"
-            data-maska-tokens="C:[0-9 \-\+()]" 
+            data-maska-tokens="C:[0-9 \-\+()]"
             v-model="login.phone"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500 ">
 					<div class="flex mt-2">
@@ -60,6 +48,7 @@
 						<button type="button" @click="tab = 'reset'" class="underline">Восстановить пароль через email</button>
 					</div>
 					<Button class="mt-4" submit="true" :disabled="login.processing">Войти</Button>
+          <span class="mt-4 text-sm">Нажимая "Регистрация", вы <Link href="/privacy-policy" class="underline">соглашаетесь с политикой хранения и обработкой персональных данных.</Link></span>
 				</form>
 
 				<form v-if="tab === 'register'" id="register-form" class="flex flex-col p-6 lg:p-4"  @submit.prevent="submitRegister">
@@ -132,8 +121,8 @@
 					</div>
 					<input name="password_confirmation" type="password" placeholder="*******" v-model="register.password_confirmation"
 						class="w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500">
-          <Button class="mt-4" submit="true" :disabled="register.processing">Зарегистрироваться</Button>					
-				</form>
+          <Button class="mt-4" submit="true" :disabled="register.processing">Зарегистрироваться</Button>          					
+				</form>        
 			</div>
 
 			<div v-if="tab === 'reset'" class="bg-white rounded-3xl mx-6 lg:mx-0 block">

@@ -69,6 +69,7 @@ Route::get('/rules', [PageController::class, 'show']);
 
 Route::get('lk/start', [Lk\HomeController::class, 'start'])->name('lk.start');
 Route::post('lk/object/store', [Lk\ObjectController::class, 'store'])->name('lk.object.store');
+Route::get('lk/login', [Lk\HomeController::class, 'login'])->name('lk.login');
 
 //Telegram Webhook
 Route::post('/'.Str::replace(':', '_', config('telegram.bots.mybot.token')).'/webhook', [BotController::class, 'index'])->name('webhook-win');

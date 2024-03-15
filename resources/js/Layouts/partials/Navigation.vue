@@ -14,12 +14,12 @@
       disabled
       :title="simple ? '' : 'Бонусная программа'"
       classes="bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]"
-    />
-    <a href="/lk/start" class="nav-link flex items-center mr-4 pl-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]">      
+    />   
+    <button v-if="!$page.props.user" @click="$eventBus.emit('auth-extranet-open')" class="nav-link flex items-center mr-2 pl-[24px] h-[24px] bg-left bg-no-repeat bg-contain bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)]]">
       <span v-if="!simple"  class="pl-2">
-          {{simple ? '' : 'Добавить объект'}}
+          {{simple ? '' : 'Отельеру'}}
       </span>
-    </a>
+    </button>
     <Link v-if="!simple" href="/blog" class="nav-link flex items-center mr-4 h-[24px]">      
       Статьи
     </Link>

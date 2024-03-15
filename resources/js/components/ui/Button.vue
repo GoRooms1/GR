@@ -31,7 +31,10 @@ export default {
           break;
         case "red":
           return 'bg-red-500 hover:bg-red-800';
-          break;        
+          break;
+        case "orange":
+          return 'bg-orange-400 hover:bg-orange-500';
+          break;      
         default:
           return 'bg-blue-500 hover:bg-blue-800';
       }

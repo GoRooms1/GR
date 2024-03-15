@@ -163,5 +163,9 @@ return [
         'year' => 'Год',
         'comment' => 'Kомментарий',
         'photo' => 'Фото',
+        'position' => 'Должность',
+        'hotel.name' => 'Объект',
+        'hotel.type' => 'Тип объекта',
+        'code' => 'Код'
     ],
 ];

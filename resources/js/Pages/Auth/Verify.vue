@@ -11,7 +11,7 @@
 				<div class=" bg-[#6170FF] rounded-t-3xl text-white p-4 text-center">
 					Подтверждение Вашего Email адреса
 				</div>
-				<div id="password-reset-form" class="p-6 lg:p-4" @submit.prevent="submitResend">
+				<div id="email-verify-form" class="p-6 lg:p-4" @submit.prevent="submitResend">
           <div v-if="!wasSuccessful" class="flex flex-col">
             <span v-if="user.can_resend_verification" class="text-center leading-4 z-[1] p-2">Прежде чем продолжить, пожалуйста, проверьте свою электронную почту на наличие ссылки для подтверждения.</span>
             <span v-if="user.can_resend_verification" class="text-center leading-4 z-[1] p-2">Если вы не получили электронное письмо, нажмите кнопку ниже.</span>

@@ -8,9 +8,8 @@
 namespace App\Http\Controllers\Lk;
 
 use App\Http\Controllers\Controller;
-use Domain\Hotel\Models\HotelType;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Inertia\Inertia;
 
 class HomeController extends Controller
 {
@@ -22,20 +21,27 @@ class HomeController extends Controller
     /**
      * Create Object
      *
-     * @return RedirectResponse|View
+     * @return \Inertia\Response|\Symfony\Component\HttpFoundation\Response
      */
-    public function start()
+    public function start(): \Inertia\Response|\Symfony\Component\HttpFoundation\Response
     {
+        if (auth()->check() && auth()->user()->is_admin) {
+            return Inertia::location(route('admin.index'));
+        }
+        
         if (auth()->check() && auth()->user()->is_client) {
-            return redirect()->route('client.settings');
+            return Inertia::location(route('client.settings'));
         }
 
         if (auth()->check() && auth()->user()->personal_hotel) {
-            return redirect()->route('lk.index');
-        }
+            return Inertia::location(route('lk.index'));
+        }       
 
-        $types = HotelType::all();
+        return Inertia::render('AuthExtranet/Register');
+    }
 
-        return view('lk.start', compact('types'));
+    public function login(): \Inertia\Response
+    {
+       return Inertia::render('AuthExtranet/Login');
     }
 }

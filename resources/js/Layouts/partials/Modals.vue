@@ -3,6 +3,7 @@
  <booking-form ref="booking" v-show="$page?.props?.modals?.booking === true" :room="bookingRoom" />
  <search-filter-modal ref="filters" v-if="$page.props?.has_filters && $page.props?.modals?.filters === true"/>
  <auth-modal ref="auth" v-show="$page.props?.modals?.auth === true"/>
+ <auth-extranet-modal ref="auth_extranet" v-show="$page.props?.modals?.auth_extranet === true"/>
  <favorites ref="favorites" v-if="$page.props?.modals?.favorites === true"/>
  <reviews-modal ref="reviews" v-if="$page.props?.modals?.reviews === true" :reviews="reviews" :loading="reviewsLoading"/>
 </template>
@@ -11,6 +12,7 @@
 import { defineAsyncComponent } from 'vue'
 import BookingForm from '@/components/widgets/BookingForm.vue'
 import AuthModal from '@/components/widgets/AuthModal.vue'
+import AuthExtranetModal from '@/components/widgets/AuthExtranetModal.vue'
 import Favorites from '@/components/widgets/Favorites.vue'
 import ReviewsModal from '@/components/widgets/ReviewsModal.vue'
 import axios from 'axios';
@@ -19,6 +21,7 @@ export default {
     axios,    
     BookingForm,
     AuthModal,
+    AuthExtranetModal,
     Favorites,
     ReviewsModal,       
     SearchFilterModal: defineAsyncComponent(() =>
@@ -35,6 +38,9 @@ export default {
     this.$eventBus.on("auth-open", (e) => this.openAuth());
     this.$eventBus.on("auth-close", (e) => this.closeAuth());
 
+    this.$eventBus.on("auth-extranet-open", (e) => this.openAuthExtranet());
+    this.$eventBus.on("auth-extranet-close", (e) => this.closeAuthExtranet());
+
     this.$eventBus.on("favorites-open", (e) => this.openFavorites());
     this.$eventBus.on("favorites-close", (e) => this.closeFavorites());
 
@@ -50,6 +56,9 @@ export default {
 
     this.$eventBus.off("auth-open");
     this.$eventBus.off("auth-close");
+
+    this.$eventBus.off("auth-extranet-open");
+    this.$eventBus.off("auth-extranet-close");
 
     this.$eventBus.off("favorites-open");
     this.$eventBus.off("favorites-close");
@@ -124,6 +133,37 @@ export default {
         this.$refs.auth.resetForms();
 
       if (this.$page.component.startsWith('Auth'))
+        this.$inertia.get("/");
+    },
+
+    openAuthExtranet() {
+      this.$page.props.flash.message = null;      
+      
+      this.$inertia.get(this.$page.props.path, {}, {
+          preserveState: true,
+          preserveScroll: true,
+          only: ["auth"],          
+          onFinish: () => {
+            if (this.$page.props?.auth === false) {
+              this.removeBodyScroll();     
+              this.$page.props.modals.auth_extranet = true;
+            }
+            else {
+              this.$inertia.get("/login");
+              this.returnBodyScroll();
+            }
+          },
+        });             
+    },
+    closeAuthExtranet() {
+      this.returnBodyScroll(); 
+      this.$page.props.modals.auth_extranet = false;
+      this.$page.props.flash.message = null;
+
+      if (this.$refs?.auth_extranet?.resetForms)
+        this.$refs.auth_extranet.resetForms();
+
+      if (this.$page.component.startsWith('AuthExtranet'))
         this.$inertia.get("/");
     },
 

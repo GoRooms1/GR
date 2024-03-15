@@ -14,4 +14,6 @@ return [
 
     'iplocate_url' =>env('DADATA_IPLOCATE_URL', 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address'),
 
+    'suggest_url' =>env('DADATA_SUGGEST_URL', 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address'),
+
 ];

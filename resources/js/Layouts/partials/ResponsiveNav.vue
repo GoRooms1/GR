@@ -25,13 +25,14 @@
           disabled
           title="Бонусная программа"
           classes="bg-[url(/img/link3_1.svg)] hover:bg-[url(/img/link3_2.svg)]"
-        />
-        <a 
-          href="/lk/start"
-          class="nav-link hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)] bg-[left_10px_center] text-left mb-2"
+        />        
+        <button 
+          v-if="!$page.props.user"
+          @click="$eventBus.emit('auth-extranet-open'); hide()"
+          class="hover:outline outline-solid outline-[#6170FF] rounded-lg py-1 pl-[42px] bg-no-repeat bg-[url(/img/link4_1.svg)] hover:bg-[url(/img/link4_2.svg)] bg-[left_10px_center] text-left mb-2"
         >
-          Добавить объект
-        </a>
+          Отельеру
+        </button>
         <responsive-nav-link
           title="О нас"
           href="/about"
