@@ -2,12 +2,14 @@
 
 namespace App\Notifications;
 
-use App\Channels\SmsChannel;
+use App\Channels\LogChannel;
+use App\Channels\WhatsappChannel;
 use Domain\Room\Models\Booking;
 use Domain\Room\Models\Room;
 use Domain\User\ValueObjects\ClientsPhoneNumberValueObject;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Support\Actions\SendWappiMessageAction;
 
 /**
  * Notify user when booking can be reviewed
@@ -30,7 +32,11 @@ class NotificationClientForReview extends Notification
      */
     public function via($notifiable): array
     {
-        return [SmsChannel::class];
+        if (config('services.whatsapp.provider') === 'log') {
+            return [LogChannel::class];
+        }
+
+        return [WhatsappChannel::class];
     }
 
     /**     
@@ -47,9 +53,17 @@ class NotificationClientForReview extends Notification
      * @param  mixed  $notifiable    
      */
     public function toSms($notifiable)
-    {
-       //TODO
+    {       
         $this->toLog($notifiable);
+    }
+
+    /**     
+     *
+     * @param  mixed  $notifiable    
+     */
+    public function toWhatsapp($notifiable)
+    {        
+        SendWappiMessageAction::run($notifiable->phone, $this->getMessageText($notifiable));
     }
 
     /**

@@ -37,4 +37,13 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'provider' => env('WHATSAP_PROVIDER', 'log'),
+        
+        'wappi' => [
+            'token' => env('WAPPI_TOKEN'),
+            'profile' => env('WAPPI_POFILE'),
+        ]
+    ]
+
 ];

@@ -2,14 +2,17 @@
 
 namespace App\Notifications;
 
+use App\Channels\LogChannel;
 use App\Channels\SmsChannel;
+use App\Channels\WhatsappChannel;
 use Domain\Room\Models\Room;
 use Domain\User\ValueObjects\ClientsPhoneNumberValueObject;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Support\Actions\SendWappiMessageAction;
 
 /**
- * Notify user when Client regetered frim booking
+ * Notify user when Client registered from booking
  */
 class RegisterClientFromBooking extends Notification
 {
@@ -25,8 +28,12 @@ class RegisterClientFromBooking extends Notification
      * @return array
      */
     public function via($notifiable): array
-    {             
-        return [SmsChannel::class];
+    {        
+        if (config('services.whatsapp.provider') === 'log') {
+            return [LogChannel::class];
+        }
+
+        return [WhatsappChannel::class];
     }
 
     /**     
@@ -43,8 +50,7 @@ class RegisterClientFromBooking extends Notification
      * @param  mixed  $notifiable    
      */
     public function toSms($notifiable)
-    {
-        //TODO
+    {       
         $this->toLog($notifiable);
     }
 
@@ -52,10 +58,9 @@ class RegisterClientFromBooking extends Notification
      *
      * @param  mixed  $notifiable    
      */
-    public function toWhatsap($notifiable)
-    {
-        //TODO
-        $this->toLog($notifiable);
+    public function toWhatsapp($notifiable)
+    {        
+        SendWappiMessageAction::run($notifiable->phone, $this->getMessageText($notifiable));
     }
 
     /**     
@@ -63,8 +68,7 @@ class RegisterClientFromBooking extends Notification
      * @param  mixed  $notifiable    
      */
     public function toMail($notifiable)
-    {
-        //TODO
+    {       
         $this->toLog($notifiable);
     }
 
