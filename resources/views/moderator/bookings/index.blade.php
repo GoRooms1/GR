@@ -98,7 +98,7 @@
             <tbody>
             @foreach ($bookings as $booking)
               <tr id="booking_{{$booking->id}}">
-                <td>{{ $booking->created_at->format('d.m.Y - H:i') }}</td>
+                <td>{{ $booking->created_at->setTimezone(config('app.fallback_timezone'))->format('d.m.Y - H:i') }}</td>
                 <td>
                   {{ $booking->book_number }}
                 </td>

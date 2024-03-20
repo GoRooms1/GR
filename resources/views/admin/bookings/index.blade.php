@@ -102,7 +102,7 @@
             <tbody>
             @foreach ($bookings as $booking)
               <tr id="booking_{{$booking->id}}">
-                <td>{{ $booking->created_at->format('d.m.Y - H:i') }}</td>
+                <td>{{ $booking->created_at->setTimezone(config('app.fallback_timezone'))->format('d.m.Y - H:i') }}</td>
                 <td>
                   <a href="{{ route('admin.bookings.show', $booking->id) }}">
                     {{ $booking->book_number }}

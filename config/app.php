@@ -69,7 +69,7 @@ return [
   |
   */
 
-    'timezone' => 'UTC',
+    'timezone' => 'UTC',    
 
     /*
   |--------------------------------------------------------------------------
@@ -253,5 +253,6 @@ return [
     ],
 
     'adminEmail' => 'Go@Gorooms.ru',
+    'fallback_timezone' => 'Europe/Moscow',
 
 ];

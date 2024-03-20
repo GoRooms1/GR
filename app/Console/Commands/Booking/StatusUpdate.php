@@ -35,7 +35,7 @@ class StatusUpdate extends Command
         $bookings = Booking::whereIn('status', ['wait', 'in'])
             ->whereNotNull(['from-date', 'to-date'])
             ->get();
-        $now = Carbon::now('Europe/Moscow')->shiftTimezone(config('app.timezone'));
+        $now = Carbon::now(config('app.fallback_timezone'))->shiftTimezone(config('app.timezone'));
         
         foreach ($bookings as $booking) {           
             if ($booking['to-date']->lessThan($now)) {

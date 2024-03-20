@@ -69,7 +69,8 @@ final class BookingData extends \Parent\DataTransferObjects\Data
     public static function fromModel(Booking $booking): self
     {       
         return self::from([
-            ...Arr::except($booking->toArray(), ['book_type', 'from-date', 'to-date', 'status']),
+            ...Arr::except($booking->toArray(), ['book_type', 'from-date', 'to-date', 'status', 'created_at']),
+            'created_at' => $booking->created_at->setTimezone(config('app.fallback_timezone')),
             'book_type' => $booking->GetTypeAttribute(),
             'from_date' => $booking['from-date'],
             'to_date' => $booking['to-date'],
