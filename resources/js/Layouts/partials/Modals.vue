@@ -15,10 +15,12 @@ import AuthModal from '@/components/widgets/AuthModal.vue'
 import AuthExtranetModal from '@/components/widgets/AuthExtranetModal.vue'
 import Favorites from '@/components/widgets/Favorites.vue'
 import ReviewsModal from '@/components/widgets/ReviewsModal.vue'
+import { usePage } from "@inertiajs/vue3";
 import axios from 'axios';
 export default {
   components: {
-    axios,    
+    axios,
+    usePage,    
     BookingForm,
     AuthModal,
     AuthExtranetModal,
@@ -70,7 +72,8 @@ export default {
     return {
       bookingRoom: null,
       reviews: [],
-      reviewsLoading: false,      
+      reviewsLoading: false,  
+      m: usePage().props,    
     }
   },
   methods: {
@@ -80,25 +83,21 @@ export default {
     returnBodyScroll() {
       document.body.classList.remove("overflow-hidden");
     },
-    openBookingModal(e) {
-      this.removeBodyScroll();
+    openBookingModal(e) {      
       this.bookingRoom = e;      
       this.$page.props.modals.booking = true;
     },
-    closeBookingModal() {
-      this.returnBodyScroll();    
+    closeBookingModal() {      
       this.bookingRoom = null;
       setTimeout(() => {
         this.$page.props.modals.booking = false;
       }, 50);      
     },
 
-    openFilters() {
-      this.removeBodyScroll();     
+    openFilters() {      
       this.$page.props.modals.filters = true;
     },
-    closeFilters() {
-      this.returnBodyScroll(); 
+    closeFilters() {      
       if (this.$refs?.filters?.close)
         this.$refs.filters.close();
       else
@@ -113,19 +112,16 @@ export default {
           preserveScroll: true,
           only: ["auth"],          
           onFinish: () => {
-            if (this.$page.props?.auth === false) {
-              this.removeBodyScroll();     
+            if (this.$page.props?.auth === false) {              
               this.$page.props.modals.auth = true;
             }
             else {
-              this.$inertia.get("/login");
-              this.returnBodyScroll();
+              this.$inertia.get("/login");              
             }
           },
         });             
     },
-    closeAuth() {
-      this.returnBodyScroll(); 
+    closeAuth() {      
       this.$page.props.modals.auth = false;
       this.$page.props.flash.message = null;
 
@@ -144,19 +140,16 @@ export default {
           preserveScroll: true,
           only: ["auth"],          
           onFinish: () => {
-            if (this.$page.props?.auth === false) {
-              this.removeBodyScroll();     
+            if (this.$page.props?.auth === false) {              
               this.$page.props.modals.auth_extranet = true;
             }
             else {
-              this.$inertia.get("/login");
-              this.returnBodyScroll();
+              this.$inertia.get("/login");              
             }
           },
         });             
     },
-    closeAuthExtranet() {
-      this.returnBodyScroll(); 
+    closeAuthExtranet() {      
       this.$page.props.modals.auth_extranet = false;
       this.$page.props.flash.message = null;
 
@@ -167,18 +160,15 @@ export default {
         this.$inertia.get("/");
     },
 
-    openFavorites() {
-      this.removeBodyScroll();
+    openFavorites() {      
       this.$page.props.modals.favorites = true;                 
     },
-    closeFavorites() {
-      this.returnBodyScroll(); 
+    closeFavorites() {      
       this.$page.props.modals.favorites = false;
     },
 
     openReviews(e) {
-      this.$page.props.modals.reviews = true;
-      this.removeBodyScroll();
+      this.$page.props.modals.reviews = true;      
       this.reviewsLoading = true;
 
       axios
@@ -194,11 +184,38 @@ export default {
           this.reviewsLoading = false;         
         });
     },
-    closeReviews() {
-      this.returnBodyScroll(); 
+    closeReviews() {      
       this.$page.props.modals.reviews = false;
       this.reviews = [];
     },
-  } 
+  },
+  computed: {
+    modals() {      
+      return Object.fromEntries(
+          Object.entries(usePage().props?.modals ?? {})
+            .filter(([key, value]) => key !== 'search')
+        );
+    },    
+  },
+  watch: {
+    modals: {
+      handler(newValue, oldValue) {
+        let opened = false;
+
+        Object.entries(newValue)         
+        .forEach(([key, value]) => {          
+          if (value === true) opened = true;
+        });
+
+        if (opened === true) {          
+          this.removeBodyScroll();
+        }
+        else {          
+          this.returnBodyScroll();
+        }
+      },
+      deep: true,      
+    }
+  }
 };
 </script>

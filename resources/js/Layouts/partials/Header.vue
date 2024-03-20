@@ -32,8 +32,7 @@ export default {
   },
   methods: {
     openMenu() {
-      this.$page.props.modals.menu = true;
-      document.body.classList.add("overflow-hidden");
+      this.$page.props.modals.menu = true;      
     }
   }
 };

@@ -142,8 +142,7 @@ export default {
   },
   methods: {    
     hide() {
-      this.$page.props.modals.menu = false;      
-      document.body.classList.remove("overflow-hidden");     
+      this.$page.props.modals.menu = false;          
     },    
     handleResize() {      
       if (typeof window !== "undefined") this.screenWidth = window.innerWidth;

@@ -1,7 +1,7 @@
 <template>
 	<div id="auth-extranet"
-		class="fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] backdrop-blur-[2.5px] flex flex-col justify-center items-center pt-[70px] pb-[104px]">
-		<div class="w-full flex flex-col" :style="'max-width: ' + (tab === 'register' ? '900px' : '432px') + ' ;'">
+		class="fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] backdrop-blur-[2.5px] flex flex-col justify-center items-center" style="padding-top: 40px;">
+		<div class="w-full flex flex-col pb-2 overflow-y-auto lg:overflow-visible" :style="'max-width: ' + (tab === 'register' ? '900px' : '432px') + ' ;'">
 			<button @click="$eventBus.emit('auth-extranet-close')"
 				class="absolute top-[12px] right-[16px] lg:static lg:w-[32px] lg:h-[32px] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
 			<img src="/img/close.svg" alt="close">
@@ -333,8 +333,7 @@ export default {
         preserveScroll: true,
         only: ['flash', 'auth', 'errors'],
         onSuccess: () => {
-          this.resetForms();
-          document.body.classList.remove("overflow-hidden");
+          this.resetForms();          
         }
       });
     },
@@ -351,8 +350,7 @@ export default {
         preserveScroll: true,
         only: ['flash', 'auth', 'errors'],
         onSuccess: () => {
-          this.resetForms();
-          document.body.classList.remove("overflow-hidden");
+          this.resetForms();          
         }
       });
     },

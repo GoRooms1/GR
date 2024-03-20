@@ -15,6 +15,7 @@ use Domain\User\Actions\GetLoggedUserModeratorStatusAction;
 use Domain\User\DataTransferObjects\ClientUserData;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use stdClass;
 use Str;
 
 class HandleInertiaRequests extends Middleware
@@ -52,9 +53,9 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {        
         $isModerator = GetLoggedUserModeratorStatusAction::run();
-        
+       
         return array_merge(parent::share($request), [            
-            'modals' => fn() => [],
+            'modals' => fn() => (object)[],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),                
             ],

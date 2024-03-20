@@ -484,8 +484,7 @@ export default {
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", this.handleResize);        
       }      
-      
-      document.body.classList.remove("overflow-hidden");      
+          
       this.$page.props.modals.filters = false;    
     },    
     updateFoundMessage() {

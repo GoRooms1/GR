@@ -13,7 +13,7 @@ export default {
   },
   mounted() {    
     this.$page.props.flash.message = null;
-    this.$page.props.modals.auth_extranet = true;    
+    this.$page.props.modals.auth_extranet = true;
   }
 };
 </script>
