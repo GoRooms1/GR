@@ -87,4 +87,13 @@ class RegisterController extends Controller
             'register_sent_at' => Carbon::now(),
         ]);
     }
+
+    protected function redirectTo()
+    {
+        if (auth()->user()->is_client) {
+            return route('client.settings.index');
+        }
+
+        return RouteServiceProvider::HOME;
+    }
 }
