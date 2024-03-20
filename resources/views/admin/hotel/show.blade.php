@@ -79,7 +79,7 @@
                 <div class="dropdown-divider"></div>
                 <div class="pt-5">
                     <div class="h4">Рейтинг</div>
-                    @foreach(\App\Models\RatingCategory::orderBy('sort')->get() AS $category)
+                    @foreach(\Domain\Review\Models::orderBy('sort')->get() AS $category)
                         <dl class="d-flex justify-content-between border-bottom">
                             <dt><strong>{{ $category->name }} :</strong></dt>
                             <dd>{{ round($hotel->ratings()->where('category_id', $category->id)->avg('value'), 1) }}</dd>

@@ -54,11 +54,13 @@ class ReviewController extends Controller
             'name' => $request->get('name'),
             'book_number' => $request->get('book_number'),
             'text' => $request->get('comment'),
-            'room' => GetRoomFullNameAction::run($room),
-            'user_id' => $user->id,
+            'room' => GetRoomFullNameAction::run($room),            
             'room_id' => $room->id,
             'hotel_id' => $room->hotel_id,            
         ]);
+
+        $review->user_id = $user->id;
+        $review->save();
         
         $booking->review_id = $review->id;
         $booking->save();

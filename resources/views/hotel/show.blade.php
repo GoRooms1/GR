@@ -235,7 +235,7 @@ use App\Models\Hotel;
                                     <p class="rating-dropdown-header">{{ round($hotel->ratings()->avg('value'), 1) }}
                                         Превосходно <span>({{ $hotel->reviews()->count() }})</span></p>
                                     <ul class="rating-dropdown-content">
-                                        @foreach(\App\Models\RatingCategory::orderBy('sort')->get() AS $category)
+                                        @foreach(\Domain\Review\Models::orderBy('sort')->get() AS $category)
                                             @php
                                                 $rating = $hotel->ratings()->where('category_id', $category->id)->avg('value')
                                             @endphp
@@ -321,7 +321,7 @@ use App\Models\Hotel;
                                 <p class="rating-dropdown-header">{{ round($hotel->ratings()->avg('value'), 1) }}
                                     Превосходно <span>({{ $hotel->reviews()->count() }})</span></p>
                                 <ul class="rating-dropdown-content">
-                                    @foreach(\App\Models\RatingCategory::orderBy('sort')->get() AS $category)
+                                    @foreach(\Domain\Review\Models::orderBy('sort')->get() AS $category)
                                         @php
                                             $rating = $hotel->ratings()->where('category_id', $category->id)->avg('value')
                                         @endphp
@@ -420,7 +420,7 @@ use App\Models\Hotel;
                             <span>рейтинг</span>
                         </div>
                         <ul class="total-rating-list">
-                            @foreach(\App\Models\RatingCategory::orderBy('sort')->get() AS $category)
+                            @foreach(\Domain\Review\Models::orderBy('sort')->get() AS $category)
                                 <li class="total-rating-item">{{ $category->name }}
                                     <span>{{ round($hotel->ratings()->where('category_id', $category->id)->avg('value'), 1) }}</span>
                                     ({{ $hotel->reviews->count() }})

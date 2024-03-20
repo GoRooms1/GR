@@ -5,7 +5,7 @@
         <div class="rating-dropdown-in">
             <p class="rating-dropdown-header">{{ round($room->hotel->ratings()->avg('value'), 1) }} Превосходно <span>({{ $room->hotel->reviews()->count() }})</span></p>
             <ul class="rating-dropdown-content">
-                @foreach(\App\Models\RatingCategory::orderBy('sort')->get() AS $category)
+                @foreach(\Domain\Review\Models::orderBy('sort')->get() AS $category)
                     @php
                         $rating = $room->hotel->ratings()->where('category_id', $category->id)->avg('value');
                     @endphp
