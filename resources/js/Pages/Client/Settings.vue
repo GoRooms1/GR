@@ -11,7 +11,7 @@
                 <div class="flex-wrap lg:flex text-sm leading-4">
                   <div class="flex my-2">
                       <span>Почта</span>
-                      <div v-if="!user.email_verified && !userForm?.errors?.email" class="text-[#E1183D] flex items-start text-sm">
+                      <div v-if="!user.email_verified && !userForm?.errors?.email && !userForm?.hasErrors" class="text-[#E1183D] flex items-start text-sm">
                           <img src="/img/attentionRed.svg" class="flex mx-2 w-4">
                           Подтвердите e-mail чтобы оставлять отзывы
                       </div>
