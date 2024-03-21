@@ -1,9 +1,9 @@
 <template>
 	<div id="auth-extranet"
-		class="fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] backdrop-blur-[2.5px] flex flex-col justify-center items-center" style="padding-top: 40px;">
-		<div class="w-full flex flex-col pb-2 overflow-y-auto lg:overflow-visible" :style="'max-width: ' + (tab === 'register' ? '900px' : '432px') + ' ;'">
+		class="fixed top-0 left-0 z-50 bg-[#D2DAF0B3] w-full h-[100%] backdrop-blur-[2.5px] flex flex-col justify-center items-center">
+		<div class="w-full flex flex-col lg:overflow-visible overflow-y-auto relative pb-2 pt-[70px]" :style="'max-width: ' + (tab === 'register' ? '900px' : '432px') + ' ;'">
 			<button @click="$eventBus.emit('auth-extranet-close')"
-				class="absolute top-[12px] right-[16px] lg:static lg:w-[32px] lg:h-[32px] lg:p-2 lg:bg-white lg:rounded-lg lg:ml-auto lg:mr-[-48px]">
+				class="absolute lg:static lg:ml-auto top-[12px] right-[16px] lg:w-[32px] lg:h-[32px] p-2 lg:bg-white lg:rounded-lg lg:mr-[-48px]">
 			<img src="/img/close.svg" alt="close">
 			</button>
 			<div v-if="tab !== 'reset'" class="bg-white rounded-3xl mx-6 lg:mx-0">        
