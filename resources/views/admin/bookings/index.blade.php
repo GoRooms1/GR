@@ -125,7 +125,7 @@
                 <td>
                   <div class="d-flex">                   
                     <select name="status" data="booking-status-select" class="mr-2 form-control w-auto font-weight-bold">
-                      <option value="">
+                      <option value="" hidden>
                         -
                       </option>
                       @foreach (\Domain\Room\Enums\BookingStatus::array() as $key => $value)
