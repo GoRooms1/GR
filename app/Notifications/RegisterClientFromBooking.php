@@ -85,7 +85,10 @@ class RegisterClientFromBooking extends Notification
 
     private function getMessageText($notifiable) {
         $phone = new ClientsPhoneNumberValueObject($notifiable->phone);
-        $text = "Добро пожаловать в GoRooms.ru. Логин ЛК: ".$phone->toDisplayValue().", Пароль: ".$notifiable->code;
+        $text = "Добро пожаловать в GoRooms.ru. Чтобы получать кешбэк и оставлять отзывы, пожалуйста, завершите регистрацию в Личном Кабинете:".PHP_EOL;
+        $text .= "GoRooms.ru/login".PHP_EOL;        
+        $text .= "Логин: ".$phone->toDisplayValue().PHP_EOL;
+        $text .= "Пароль: ".$notifiable->code;
 
         return $text;
     }

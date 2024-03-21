@@ -79,13 +79,21 @@ class NotificationClientForReview extends Notification
 
     private function getMessageText($notifiable) {
         $room = Room::where('id', $this->booking->room_id)->first();
-        $hotel = $room->hotel;
-        $text = "Для начисления кэшбека, не забудьте оставить отзыв о «".$hotel->name."».";
+        $hotel = $room->hotel;        
+        $phone = new ClientsPhoneNumberValueObject($notifiable->phone);
 
-        if (!empty($notifiable->code) && password_verify($notifiable->code, $notifiable->password)) {
-            $phone = new ClientsPhoneNumberValueObject($notifiable->phone);
-            $text .= " Логин ЛК: ".$phone->toDisplayValue().", Пароль: ".$notifiable->code;
+        if (!empty($notifiable->code) && password_verify($notifiable->code, $notifiable->password)) {            
+            $text = "Для начисления кэшбека и возможности оставлять отзывы необходимо завершить регистрацию в Личном Кабинете".PHP_EOL;
+            $text .= "GoRooms.ru/login".PHP_EOL;
+            $$text .= "Логин: ".$phone->toDisplayValue().PHP_EOL;
+            $text .= "Пароль: ".$notifiable->code;
+            
+            return $text;
         }
+
+        $text = "Для начисления кэшбека, не забудьте оставить отзыв о Вашем проживании в «".$hotel->name."».";
+        $text .= "GoRooms.ru/login".PHP_EOL;
+        $$text .= "Логин: ".$phone->toDisplayValue();       
 
         return $text;
     }
