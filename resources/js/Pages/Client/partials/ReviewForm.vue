@@ -25,13 +25,9 @@
               </div>
               <input v-model="reviewForm.name" placeholder="Как к вам обращаться" class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
               <div class="flex mt-2">
-                <span>Номер бронирования</span>
-                <div v-if="reviewForm?.errors?.book_number" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
-                  <img src="/img/attentionRed.svg" class="flex mx-2 w-4" style="margin-top: 1px;">
-                  {{ reviewForm?.errors?.book_number }}
-                </div>
+                <span>Номер бронирования</span>                
               </div>
-              <input v-model="reviewForm.book_number" placeholder="Номер" class="w-full px-[12px] h-8 mt-2 bg-white rounded-[8px]">
+              <span class="flex w-full h-8 rounded-md py-2 px-2 placeholder-zinc-500 bg-[#e5e7eb]">{{ booking.book_number }}</span>             
               <div class="flex mt-2">
                 <span>Комментарий</span>
                 <div v-if="reviewForm?.errors?.comment" class="text-[#E1183D] flex items-start text-sm" style="margin-top: 2px;">
@@ -100,7 +96,6 @@ export default {
       reviewForm: useForm({
         rating: this.getDefRatingValues(),
         booking_id: this.booking.id,        
-        book_number: this.booking.book_number,
         comment: null,
         name: this.$page.props.user.name,
         photo: null,

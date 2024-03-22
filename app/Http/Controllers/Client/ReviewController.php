@@ -52,7 +52,7 @@ class ReviewController extends Controller
         
         $review = Review::create([
             'name' => $request->get('name'),
-            'book_number' => $request->get('book_number'),
+            'book_number' => $booking->book_number,
             'text' => $request->get('comment'),
             'room' => GetRoomFullNameAction::run($room),            
             'room_id' => $room->id,
