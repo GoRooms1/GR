@@ -88,7 +88,7 @@
                   
                   <Button 
                     class="w-full mt-4" 
-                    :disabled="userForm.processing"
+                    :disabled="userForm.processing || saveDisabled"
                     submit="true"
                   >
                     Сохранить
@@ -121,13 +121,13 @@
                     <h3 class="font-semibold text-base mb-4">
                         Действия с аккаунтом
                     </h3>
-                    <button @click="$inertia.post('/logout')" class="w-full mt-4 h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-blue-500 hover:bg-blue-800" type="submit">
+                    <Button @click="$inertia.post('/logout')" class="w-full mt-4" type="blue">
                       Выйти из аккаунта
-                    </button>
+                    </Button>
     
-                    <button @click="openDeleteUserDialog" class="w-full mt-4 h-[48px] px-[16px] text-center flex items-center justify-center flex-grow gap-[8px] text-white rounded-md transition duration-150 undefined bg-red-500 hover:bg-red-800" type="submit">
+                    <Button @click="openDeleteUserDialog" class="w-full mt-4" type="red" :disabled="!user.email_verified">
                       Удалить аккаунт
-                    </button>
+                    </Button>
                 </div>
             </div>            
         </div>   
@@ -166,6 +166,11 @@ export default {
       }),      
       saveSuccess: false,
       verifyProcessing: false,
+    }
+  },
+  computed: {
+    saveDisabled() {
+      return !this.userForm.name || !this.userForm.email || !this.userForm.gender || (this.userForm.password && !this.userForm.password_confirmation) || (!this.userForm.password && this.userForm.password_confirmation);
     }
   },
   mounted() {

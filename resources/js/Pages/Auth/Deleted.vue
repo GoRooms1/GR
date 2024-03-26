@@ -14,8 +14,8 @@
         <div class="flex flex-col p-6 lg:p-4">
           <span class="text-center leading-4 z-[1] p-2">Удаление аккаунта прошло успешно! Спасибо, что всё это время Вы были с нами!</span>
           <span class="text-center leading-4 z-[1] p-2">С уважением, команда GoRooms</span>
-          <Link as="button" class="w-full h-12 text-center bg-blue-500 text-white rounded-md mt-3 hover:bg-blue-800">На главную</Link>          
-        </div>			
+          <Link as="button" href="/" class="w-full h-12 text-center bg-blue-500 text-white rounded-md mt-3 hover:bg-blue-800">На главную</Link>          
+        </div>
       </div>
     </div>				
 	</div>

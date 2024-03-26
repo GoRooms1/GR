@@ -60,7 +60,7 @@ class StatusUpdate extends Command
         if (!$booking->user_id) {
             return;
         }
-
+       
         try {
             $user = User::find($booking->user_id);
 

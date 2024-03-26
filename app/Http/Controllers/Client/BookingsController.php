@@ -23,7 +23,7 @@ class BookingsController extends Controller
     public function index(): Response | ResponseFactory
     {        
         return Inertia::render('Client/Bookings', [
-            'bookings' => BookingData::collection(Booking::with('room')->where('user_id', auth()->user()->id)->get()),
+            'bookings' => BookingData::collection(Booking::with('room')->where('user_id', auth()->user()->id)->orderByDesc('book_number')->paginate(20)),
             'rating_categories' => GetRatingCategories::run(),
             'user' => ClientUserData::fromModel(User::findOrFail(auth()->user()->id)),
         ]);

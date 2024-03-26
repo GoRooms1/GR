@@ -17,6 +17,11 @@ class DeleteController extends Controller
     public function resend(Request $request)
     {       
         $user = User::find(auth()->user()->id);
+        
+        if (!$user->email_verified_at) {
+            return Redirect::back()->withErrors("Почта не подтвержедна!");
+        }
+        
         $user->delete_token = Str::random(32);
         $user->save();
 

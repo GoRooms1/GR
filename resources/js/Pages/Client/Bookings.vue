@@ -8,7 +8,7 @@
       </div>
     </div>
   </div>
-  <div class="container mx-auto px-4 relative z-10 min-[1920px]:px-[10vw]">
+  <div class="container mx-auto px-4 relative z-10 min-[1920px]:px-[10vw] pb-[41px]">
     <div class="scrollbar relative overflow-x-auto shadow-md rounded-xl">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class=" text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -52,7 +52,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="booking in bookings" :key="booking.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <tr v-for="booking in (bookings?.data ?? [])" :key="booking.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             <td scope="col" class="px-6 py-3">
               {{ booking.created_at }}
             </td>
@@ -105,6 +105,9 @@
         </tbody>
       </table>
     </div>
+    <div class="mx-auto mt-8 w-full text-center"> 
+      <Pagination :links="bookings.links" :meta="bookings.meta"/>
+    </div>
   </div>
   <ReviewForm v-if="reviewOpened" :booking="bookingForReview" :ratingCategories="rating_categories" @form-closed="closeReviewForm"/>  
 </template>
@@ -115,6 +118,7 @@ import Layout from "@/Layouts/Layout.vue";
 import Menu from "./partials/Menu.vue";
 import ReviewForm from "./partials/ReviewForm.vue";
 import Button from "@/components/ui/Button.vue";
+import Pagination from "@/components/ui/Pagination.vue";
 
 export default {
   components: {
@@ -122,10 +126,11 @@ export default {
     Layout,
     Menu,
     ReviewForm,
-    Button, 
+    Button,
+    Pagination, 
   },
   props: {
-    bookings: [Object],
+    bookings: Object,
     rating_categories: [Object]
   },
   data() {

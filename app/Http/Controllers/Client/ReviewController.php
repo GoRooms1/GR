@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\CreateReviewRequest;
 use App\User;
+use Cache;
 use Domain\Review\Models\Rating;
 use Domain\Review\Models\Review;
 use Domain\Room\Actions\GetRoomFullNameAction;
@@ -78,6 +79,8 @@ class ReviewController extends Controller
             $rating->category_id = $ratingData['id'];
             $rating->save();            
         }
+
+        Cache::flush();
 
         return Redirect::back()->with([
             'message' => "Вы успешно оставили отзыв! Спасибо!"

@@ -85,7 +85,7 @@ class NotificationClientForReview extends Notification
         if (!empty($notifiable->code) && password_verify($notifiable->code, $notifiable->password)) {            
             $text = "Для начисления кэшбека и возможности оставлять отзывы необходимо завершить регистрацию в Личном Кабинете".PHP_EOL;
             $text .= "GoRooms.ru/login".PHP_EOL;
-            $$text .= "Логин: ".$phone->toDisplayValue().PHP_EOL;
+            $text .= "Логин: ".$phone->toDisplayValue().PHP_EOL;
             $text .= "Пароль: ".$notifiable->code;
             
             return $text;
@@ -93,7 +93,7 @@ class NotificationClientForReview extends Notification
 
         $text = "Для начисления кэшбека, не забудьте оставить отзыв о Вашем проживании в «".$hotel->name."».";
         $text .= "GoRooms.ru/login".PHP_EOL;
-        $$text .= "Логин: ".$phone->toDisplayValue();       
+        $text .= "Логин: ".$phone->toDisplayValue();       
 
         return $text;
     }
