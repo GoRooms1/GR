@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\UpdateUserSettingsRequest;
 use App\User;
+use Carbon\Carbon;
 use Domain\User\DataTransferObjects\ClientUserData;
 use Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -42,6 +43,18 @@ class SettingsController extends Controller
 
         $user->save();
 
-        return Redirect::back()->with(['message' => "Данные успешно сохранены!"]);
+        $message = "Данные успешно сохранены!";
+
+        if (!$user->email_verified_at && !$user->verification_sent_at) {           
+            $message .= PHP_EOL."Для завершения регистрации необходимо подтвердить почту.";
+
+            try {
+                $user->sendEmailVerificationNotification();
+                $user->verification_sent_at = Carbon::now();
+                $user->save();
+            } catch (\Throwable $th) {}            
+        }
+
+        return Redirect::back()->with(['message' => $message]);
     }    
 }
