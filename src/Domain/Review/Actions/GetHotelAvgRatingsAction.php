@@ -18,7 +18,7 @@ final class GetHotelAvgRatingsAction extends Action
     {
         return Rating::join('rating_categories', 'rating_categories.id', '=', 'ratings.category_id')
             ->groupBy('category_id', 'rating_categories.name')
-            ->selectRaw('ratings.category_id, rating_categories.name as category_name, avg(ratings.value) as value')
+            ->selectRaw('ratings.category_id, rating_categories.name as category_name, round(avg(ratings.value), 1) as value')
             ->whereIn('ratings.review_id', function($query) use ($hotel) {
                 $query->select('id')->from('reviews')->where('hotel_id', $hotel->id);
             })
