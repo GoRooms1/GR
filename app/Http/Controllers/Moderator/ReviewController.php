@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Moderator;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Moderate\UpdateReviewRequest;
+use Cache;
 use Domain\Hotel\Models\Hotel;
 use Domain\Review\Models\Rating;
 use Domain\Review\Models\RatingCategory;
@@ -61,6 +62,8 @@ class ReviewController extends Controller
             $rating->save();            
         }
 
+        Cache::flush();
+
         return redirect()->back()->with(["message" => "Отзыв успешно сохранен!"]);
     }
 
@@ -68,6 +71,8 @@ class ReviewController extends Controller
     {
         $hotel = Hotel::find($review->hotel_id);
         $review->delete();
+        Cache::flush();
+        
         return redirect()->route('moderator.reviews.index', $hotel->id);
     }
 }
